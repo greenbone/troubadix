@@ -23,91 +23,86 @@ import sys
 
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "configs"
 
+
 def parse_args(args: Namespace = None):
     """Parsing args for greenbone-docker"""
 
     parser = ArgumentParser(
-        description=(
-            'Greenbone NASL File Linter.'
-        ),
-        prog='naslinter',
+        description=("Greenbone NASL File Linter."),
+        prog="naslinter",
     )
 
     parser.add_argument(
-        '-f',
-        '--full',
-        action='store_true',
+        "-f",
+        "--full",
+        action="store_true",
         help=(
-            'Checking the complete VT directory and '
-            'not only the added/changed scripts'
+            "Checking the complete VT directory and "
+            "not only the added/changed scripts"
         ),
     )
 
     what_group = parser.add_mutually_exclusive_group()
 
     what_group.add_argument(
-        '-d',
-        '--dirs',
+        "-d",
+        "--dirs",
         nargs="+",
-        type=FileType('r'),
-        help='List of directories that should be linted'
+        type=FileType("r"),
+        help="List of directories that should be linted",
     )
 
     what_group.add_argument(
-        '--files',
+        "--files",
         nargs="+",
-        type=FileType('r'),
-        help='List of files that should be linted'
+        type=FileType("r"),
+        help="List of files that should be linted",
     )
 
     what_group.add_argument(
-        '--commit-range',
+        "--commit-range",
         nargs="+",
         type=str,
         help=(
-            'Allows to specify a git commit range '
+            "Allows to specify a git commit range "
             '(e.g. "$commit-hash1 $commit-hash2" or '
             '"HEAD~1") to run the QA test against.'
         ),
     )
 
     what_group.add_argument(
-        '--staged-only',
-        action='store_true',
-        help=(
-            'Only run against files which are "staged/added" in git'
-        ),
+        "--staged-only",
+        action="store_true",
+        help=('Only run against files which are "staged/added" in git'),
     )
 
     parser.add_argument(
-        '--debug',
-        action='store_true',
-        help=(
-            'Enables the DEBUG output'
-        ),
+        "--debug",
+        action="store_true",
+        help=("Enables the DEBUG output"),
     )
 
     parser.add_argument(
-        '--non-recursive',
+        "--non-recursive",
         action="store_true",
         help='Don\'t run the script recursive. Only usable with "-f"/"--full"',
     )
 
     parser.add_argument(
-        '--include-regex',
+        "--include-regex",
         type=str,
         help=(
-            'Allows to specify a regex (glob) to '
+            "Allows to specify a regex (glob) to "
             'limit the "full" run to specific file names. '
             'Only usable with "-f"/"--full"'
         ),
     )
 
     parser.add_argument(
-        '--exclude-regex',
+        "--exclude-regex",
         type=str,
         help=(
-            'Allows to specify a regex (glob) to '
+            "Allows to specify a regex (glob) to "
             'exclude specific file names from the "full" run. '
             'Only usable with "-f"/"--full"'
         ),
@@ -116,27 +111,23 @@ def parse_args(args: Namespace = None):
     tests_group = parser.add_mutually_exclusive_group(required=False)
 
     tests_group.add_argument(
-        '--include-tests',
+        "--include-tests",
         type=str,
-        nargs='+',
-        help=(
-            'Allows to choose which tests should be run in this lint.'
-        ),
+        nargs="+",
+        help=("Allows to choose which tests should be run in this lint."),
     )
 
     tests_group.add_argument(
-        '--exclude-tests',
+        "--exclude-tests",
         type=str,
-        nargs='+',
-        help=(
-            'Allows to exclude tests from this lint'
-        ),
+        nargs="+",
+        help=("Allows to exclude tests from this lint"),
     )
 
     parser.add_argument(
-        '--skip-duplicated-oids',
+        "--skip-duplicated-oids",
         action="store_true",
-        help=' Disables the check for duplicated OIDs in VTs'
+        help=" Disables the check for duplicated OIDs in VTs",
     )
 
     if len(sys.argv) == 1:

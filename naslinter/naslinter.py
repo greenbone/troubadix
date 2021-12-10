@@ -33,6 +33,5 @@ def main(args=None):
             print("Running in not recursive mode ... ")
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
