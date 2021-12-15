@@ -19,8 +19,9 @@ from typing import Iterable
 
 from naslinter.plugin import Plugin
 
+from .copyright_year import CheckCopyRightYearPlugin
 
-_PLUGINS = []
+_PLUGINS = [CheckCopyRightYearPlugin]
 
 
 class Plugins:
