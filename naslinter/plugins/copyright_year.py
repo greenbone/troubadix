@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
 import re
 
 from ..plugin import LinterError, LineContentPlugin
@@ -29,7 +30,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
     name = "check_copyright_year"
 
     @staticmethod
-    def run(file_name: str, lines: str):
+    def run(nasl_file: Path, lines: str):
         report = ""
         copyright_date = ""
         copyright_dict = {}
@@ -39,7 +40,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
                 expre = re.search(r'value\s*:\s*"(.*)"', line)
                 if expre is not None and expre.group(1) is not None:
                     copyright_date = expre.group(1)
-                    expre = re.search("^([0-9]+)-", copyright_date)
+                    expre = re.search(r"^([0-9]+)-", copyright_date)
                     if expre is not None and expre.group(1) is not None:
                         copyright_year = expre.group(1)
 
@@ -50,9 +51,10 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
             if (
                 copyright_match is not None
                 and copyright_match.group(2) is not None
-                and "sw_telnet_os_detection.nasl" not in file_name
-                and "gb_hp_comware_platform_detect_snmp.nasl" not in file_name
-                and "gb_hirschmann_telnet_detect.nasl" not in file_name
+                and "sw_telnet_os_detection.nasl" not in nasl_file.name
+                and "gb_hp_comware_platform_detect_snmp.nasl"
+                not in nasl_file.name
+                and "gb_hirschmann_telnet_detect.nasl" not in nasl_file.name
             ):
                 copyright_dict[line] = copyright_match.group(2)
 
@@ -63,7 +65,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
         # within that line
         for key, value in copyright_dict.items():
             if value != copyright_year:
-                report += "\n" + key.strip() + "\n"
+                report += f"\n{key.strip()}\n"
 
         if len(report) > 0:
             yield LinterError(
