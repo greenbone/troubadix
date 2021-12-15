@@ -21,7 +21,7 @@ import re
 from ..plugin import LinterError, FileContentPlugin
 
 
-class CheckCopyRightYearPlugin(FileContentPlugin):
+class CheckVTPlacement(FileContentPlugin):
     """The script checks if the passed VT is using one of the
     two following families:
 

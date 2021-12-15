@@ -21,7 +21,7 @@ import re
 from ..plugin import LinterError, FileContentPlugin
 
 
-class CheckCopyRightYearPlugin(FileContentPlugin):
+class CheckValidScriptTagNames(FileContentPlugin):
     """This step checks if the name of the following script tag:
 
     - script_tag(name:"", value:"");
