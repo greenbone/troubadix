@@ -54,7 +54,8 @@ class Runner:
                 if not file_path.exists():
                     self._report_warning("File does not exist.")
                     continue
-                if not file_path.name.endswith(".nasl"):
+                # some scripts are not executed on include (.inc) files
+                if file_path.suffix != ".nasl" or file_path.suffix != ".inc":
                     self._report_warning("Not a NASL file.")
                     continue
 
