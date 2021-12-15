@@ -36,7 +36,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
 
         for line in lines:
             if "creation_date" in line:
-                expre = re.search('value\s*:\s*"(.*)"', line)
+                expre = re.search(r'value\s*:\s*"(.*)"', line)
                 if expre is not None and expre.group(1) is not None:
                     copyright_date = expre.group(1)
                     expre = re.search("^([0-9]+)-", copyright_date)
@@ -44,7 +44,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
                         copyright_year = expre.group(1)
 
             copyright_match = re.search(
-                "(# |script_copyright.*)[Cc]opyright \([Cc]\) ([0-9]+)",
+                r"(# |script_copyright.*)[Cc]opyright \([Cc]\) ([0-9]+)",
                 line,
             )
             if (
