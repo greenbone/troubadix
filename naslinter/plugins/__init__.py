@@ -19,11 +19,13 @@ from typing import Iterable
 
 from naslinter.plugin import Plugin
 
+from .badwords import CheckBadwords
 from .copyright_year import CheckCopyRightYearPlugin
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 
 _PLUGINS = [
+    CheckBadwords,
     CheckCopyRightYearPlugin,
     CheckValidScriptTagNames,
     CheckVTPlacement,

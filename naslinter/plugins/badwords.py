@@ -73,7 +73,7 @@ STARTS_WITH_EXCEPTIONS = [
 COMBINED = [("find_service3.nasl", "OpenVAS-")]
 
 
-class CheckBadword(LineContentPlugin):
+class CheckBadwords(LineContentPlugin):
     """This steps checks if a VT contains a Copyright statement containing a
     year not matching the year defined in the creation_date statement like
     script_tag(name:"creation_date", value:"2017-

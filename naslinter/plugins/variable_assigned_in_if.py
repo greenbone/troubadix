@@ -33,6 +33,8 @@ class CheckVariableAssignedInIf(FileContentPlugin):
     if( variable == "content" ) {}
     """
 
+    name = "check_variable_assigned_in_if"
+
     @staticmethod
     def has_var_assign_in_if(nasl_file: Path, file_content: str) -> str:
         """

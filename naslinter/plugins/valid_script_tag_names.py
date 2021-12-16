@@ -48,6 +48,8 @@ class CheckValidScriptTagNames(FileContentPlugin):
     # nb: Not fully implemented in GVM yet (further implementation "on hold").
     """
 
+    name = "check_valid_script_tag_names"
+
     @staticmethod
     def run(nasl_file: Path, file_content: str):
         """

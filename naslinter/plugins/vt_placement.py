@@ -31,6 +31,8 @@ class CheckVTPlacement(FileContentPlugin):
     and is correctly placed into the "root" of the VTs directory.
     """
 
+    name = "check_vt_placement"
+
     @staticmethod
     def run(nasl_file: Path, file_content: str):
         """
