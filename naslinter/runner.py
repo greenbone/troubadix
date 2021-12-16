@@ -43,11 +43,10 @@ class Runner:
     def _report_info(self, message: str):
         self._term.info(message)
 
-    def run(self, files: Iterable[str]):
+    def run(self, files: Iterable[Path]):
         plugins = Plugins()
-        for file in files:
-            file_path = Path(file)
-            file_name = file_path.absolute()
+        for file_path in files:
+            file_name = str(file_path.absolute())
             self._report_info(f"Checking {file_name}")
 
             with self._term.indent():
