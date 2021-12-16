@@ -63,6 +63,7 @@ class Runner:
                     self._report_info(f"Running plugin {plugin.name}")
                     with self._term.indent():
                         if isinstance(plugin, LineContentPlugin):
+                        if issubclass(plugin, LineContentPlugin):
                             f = file_path.open("r", encoding=CURRENT_ENCODING)
                             results = plugin.run(file_name, f)
                         else:
