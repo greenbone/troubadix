@@ -27,7 +27,7 @@ CURRENT_ENCODING = "latin1"
 
 
 class Runner:
-    def __init__(self, terminal: Terminal) -> None:
+    def __init__(self, terminal: Terminal = None) -> None:
         self._term = terminal or Terminal()
 
     def _report_results(self, results: Iterable[LinterResult]):
