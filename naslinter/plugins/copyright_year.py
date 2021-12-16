@@ -16,8 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from typing import Iterable
 
 from ..plugin import LinterError, LineContentPlugin
+
+_IGNORE_FILES = (
+    "sw_telnet_os_detection.nasl",
+    "gb_hp_comware_platform_detect_snmp.nasl",
+    "gb_hirschmann_telnet_detect.nasl",
+)
+
+
+def _is_ignore_file(file_name: str) -> bool:
+    for ignore_file in _IGNORE_FILES:
+        if ignore_file in file_name:
+            return True
+    return False
 
 
 class CheckCopyRightYearPlugin(LineContentPlugin):
@@ -29,9 +43,10 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
     name = "check_copyright_year"
 
     @staticmethod
-    def run(file_name: str, lines: str):
+    def run(file_name: str, lines: Iterable[str]):
         report = ""
         copyright_date = ""
+        copyright_year = ""
         copyright_dict = {}
 
         for line in lines:
@@ -50,9 +65,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
             if (
                 copyright_match is not None
                 and copyright_match.group(2) is not None
-                and "sw_telnet_os_detection.nasl" not in file_name
-                and "gb_hp_comware_platform_detect_snmp.nasl" not in file_name
-                and "gb_hirschmann_telnet_detect.nasl" not in file_name
+                and not _is_ignore_file(file_name)
             ):
                 copyright_dict[line] = copyright_match.group(2)
 
