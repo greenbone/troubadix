@@ -11,14 +11,10 @@ Python 3.7 and later is supported.
 
 pip 19.0 or later is required.
 
-> **Note**: All commands listed here use the general tool names. If some of
-> these tools are provided by your distribution, you may need to explicitly use
-> the Python 3 version of the tool, e.g. **`pip3`**.
-
 You can install the latest stable release of **naslinter** from the Python
 Package Index (pypi) using [pip]
 
-    pip install --user naslinter
+    python3 -m pip install --user naslinter
 
 ### Install using poetry
 
@@ -40,7 +36,7 @@ process.
 
 First install poetry via pip
 
-    pip install --user poetry
+    python3 -m pip install --user poetry
 
 Afterwards run
 
