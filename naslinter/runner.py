@@ -68,5 +68,5 @@ class Runner:
                             results = plugin.run(file_name, lines)
                         else:
                             results = plugin.run(file_name, file_content)
-                        
+
                         self._report_results(results)
