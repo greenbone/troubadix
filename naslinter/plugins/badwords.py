@@ -24,7 +24,13 @@ from ..plugin import LinterError, LineContentPlugin, LinterWarning
 
 # hexstr(OpenVAS) = '4f70656e564153'
 # hexstr(openvas) = '6f70656e766173'
-DEFAULT_BADWORDS = ["cracker", "openvas", "4f70656e564153", "6f70656e766173"]
+DEFAULT_BADWORDS = [
+    "cracker",
+    "openvas",
+    "OpenVAS",
+    "4f70656e564153",
+    "6f70656e766173",
+]
 
 IGNORE_FILES = [
     "gb_openvas",
@@ -34,7 +40,7 @@ IGNORE_FILES = [
 ]
 
 EXCEPTIONS = [
-    "opvenas-nasl",
+    "openvas-nasl",
     "openvas-smb",
     "openvas-scanner",
     "openvas-libraries",
@@ -86,21 +92,20 @@ class CheckBadwords(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ):
-        if any(ignore in nasl_file for ignore in IGNORE_FILES):
+        if any(ignore in nasl_file.name for ignore in IGNORE_FILES):
             yield LinterWarning(f"Ignoring file {nasl_file.name}")
-        line_number = 0
+        line_number = 1
         badword_found = False
-        output = f"Badword(s) found in {nasl_file}\n"
+        output = f"Badword(s) found in {nasl_file}:\n"
         for line in lines:
-            if (
-                any(badword in line for badword in DEFAULT_BADWORDS)
-                and not any(exception in line for exception in EXCEPTIONS)
-                and not any(
+            if any(badword in line for badword in DEFAULT_BADWORDS):
+                if not any(
+                    exception in line for exception in EXCEPTIONS
+                ) and not any(
                     line.startswith(start) for start in STARTS_WITH_EXCEPTIONS
-                )
-            ):
-                output += f"line {line_number:5}: {line}\n"
-                badword_found = True
+                ):
+                    output += f"line {line_number:5}: {line}\n"
+                    badword_found = True
             line_number = line_number + 1
         if badword_found:
             yield LinterError(output)
