@@ -63,9 +63,10 @@ class Runner:
                 for plugin in plugins:
                     self._report_info(f"Running plugin {plugin.name}")
                     with self._term.indent():
-                        if isinstance(plugin, LineContentPlugin):
+                        if issubclass(plugin, LineContentPlugin):
                             lines = file_content.split("\n")
                             results = plugin.run(file_name, lines)
                         else:
                             results = plugin.run(file_name, file_content)
-                            self._report_results(results)
+                        
+                        self._report_results(results)
