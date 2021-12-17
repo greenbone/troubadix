@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "naslinter"
 version = "0.1.0"
-description = "A GitHub Template for Python Projects"
+description = "A linter for NASL files"
 authors = ["Greenbone <info@greenbone.net>"]
-license = "AGPL-3.0-or-later"
+license = "GPL-3.0-or-later"
 readme = "README.md"
 
 classifiers=[
