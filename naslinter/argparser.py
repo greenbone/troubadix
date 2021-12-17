@@ -18,10 +18,7 @@
 """ Argument parser for naslinter """
 
 from argparse import ArgumentParser, FileType, Namespace
-from pathlib import Path
 import sys
-
-DEFAULT_CONFIG_PATH = Path(__file__).parent / "configs"
 
 
 def parse_args(args: Namespace = None):
