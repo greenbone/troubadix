@@ -36,7 +36,7 @@ class CheckVariableAssignedInIf(FileContentPlugin):
     name = "check_variable_assigned_in_if"
 
     @staticmethod
-    def has_var_assign_in_if(nasl_file: Path, file_content: str) -> str:
+    def run(nasl_file: Path, file_content: str) -> str:
         """
         Args:
             file: The VT/Include that is going to be checked
@@ -57,7 +57,7 @@ class CheckVariableAssignedInIf(FileContentPlugin):
             r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE
         )
         if matches is None:
-            return (0,)
+            return
 
         lint_error = False
         output = (
