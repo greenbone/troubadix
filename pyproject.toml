@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "naslinter"
+name = "NASLinter"
 version = "0.1.0"
 description = "A GitHub Template for Python Projects"
 authors = ["Greenbone <info@greenbone.net>"]
