@@ -27,7 +27,7 @@ CURRENT_ENCODING = "latin1"
 
 
 class Runner:
-    def __init__(self, terminal: Terminal) -> None:
+    def __init__(self, terminal: Terminal = None) -> None:
         self._term = terminal or Terminal()
 
     def _report_results(self, results: Iterable[LinterResult]):
@@ -43,11 +43,10 @@ class Runner:
     def _report_info(self, message: str):
         self._term.info(message)
 
-    def run(self, files: Iterable[str]):
+    def run(self, files: Iterable[Path]):
         plugins = Plugins()
-        for file in files:
-            file_path = Path(file)
-            file_name = file_path.absolute()
+        for file_path in files:
+            file_name = str(file_path.absolute())
             self._report_info(f"Checking {file_name}")
 
             with self._term.indent():
@@ -69,5 +68,4 @@ class Runner:
                             results = plugin.run(file_name, lines)
                         else:
                             results = plugin.run(file_name, file_content)
-
-                        self._report_results(results)
+                            self._report_results(results)
