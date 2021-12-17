@@ -20,7 +20,8 @@
 from pathlib import Path
 from typing import Iterable
 
-from ..plugin import LinterError, LineContentPlugin, LinterWarning
+from ..plugin import LinterError, LineContentPlugin
+from ..helper import is_ignore_file
 
 # hexstr(OpenVAS) = '4f70656e564153'
 # hexstr(openvas) = '6f70656e766173'
@@ -32,7 +33,7 @@ DEFAULT_BADWORDS = [
     "6f70656e766173",
 ]
 
-IGNORE_FILES = [
+_IGNORE_FILES = [
     "gb_openvas",
     "gb_gsa_",
     "http_func.inc",
@@ -92,8 +93,8 @@ class CheckBadwords(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ):
-        if any(ignore in nasl_file.name for ignore in IGNORE_FILES):
-            yield LinterWarning(f"Ignoring file {nasl_file.name}")
+        if is_ignore_file(nasl_file, _IGNORE_FILES):
+            return
         line_number = 1
         badword_found = False
         output = f"Badword(s) found in {nasl_file}:\n"

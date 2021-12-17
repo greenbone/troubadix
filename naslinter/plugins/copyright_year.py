@@ -19,19 +19,13 @@ import re
 from typing import Iterable
 
 from ..plugin import LinterError, LineContentPlugin
+from ..helper import is_ignore_file
 
 _IGNORE_FILES = (
     "sw_telnet_os_detection.nasl",
     "gb_hp_comware_platform_detect_snmp.nasl",
     "gb_hirschmann_telnet_detect.nasl",
 )
-
-
-def _is_ignore_file(file_name: str) -> bool:
-    for ignore_file in _IGNORE_FILES:
-        if ignore_file in file_name:
-            return True
-    return False
 
 
 class CheckCopyRightYearPlugin(LineContentPlugin):
@@ -65,7 +59,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
             if (
                 copyright_match is not None
                 and copyright_match.group(2) is not None
-                and not _is_ignore_file(nasl_file)
+                and not is_ignore_file(nasl_file, _IGNORE_FILES)
             ):
                 copyright_dict[line] = copyright_match.group(2)
 
