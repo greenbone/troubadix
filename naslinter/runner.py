@@ -46,7 +46,7 @@ class Runner:
     def run(self, files: Iterable[Path]):
         plugins = Plugins()
         for file_path in files:
-            file_name = str(file_path.absolute())
+            file_name = file_path.absolute()
             self._report_info(f"Checking {file_name}")
 
             with self._term.indent():
