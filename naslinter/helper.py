@@ -16,10 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 
-def is_ignore_file(file_name: str, ignore_files: List[Path | str]) -> bool:
+def is_ignore_file(
+    file_name: str, ignore_files: Union[List[Path], List[str]]
+) -> bool:
     for ignore_file in ignore_files:
         if ignore_file in file_name:
             return True
