@@ -17,19 +17,34 @@
 
 """ Argument parser for naslinter """
 
-from argparse import ArgumentParser, FileType, Namespace
-from pathlib import Path
 import sys
+
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
+
 
 DEFAULT_CONFIG_PATH = Path(__file__).parent / "configs"
 
 
-def parse_args(args: Namespace = None):
-    """Parsing args for greenbone-docker"""
+def directory_type(string: str) -> Path:
+    directory_path = Path(string)
+    if not directory_path.is_dir():
+        raise ValueError(f"{string} is not a directory")
+    return directory_path
+
+
+def file_type(string: str) -> Path:
+    file_path = Path(string)
+    if not file_path.is_file():
+        raise ValueError(f"{string} is not a directory")
+    return file_path
+
+
+def parse_args(args: Namespace = None) -> Namespace:
+    """Parsing args for nasl-lint"""
 
     parser = ArgumentParser(
-        description=("Greenbone NASL File Linter."),
-        prog="naslinter",
+        description="Greenbone NASL File Linter.",
     )
 
     parser.add_argument(
@@ -48,14 +63,14 @@ def parse_args(args: Namespace = None):
         "-d",
         "--dirs",
         nargs="+",
-        type=FileType("r"),
+        type=directory_type,
         help="List of directories that should be linted",
     )
 
     what_group.add_argument(
         "--files",
         nargs="+",
-        type=FileType("r"),
+        type=file_type,
         help="List of files that should be linted",
     )
 
