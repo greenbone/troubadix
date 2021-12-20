@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
+from pathlib import Path
 from typing import Iterable
 
 from ..plugin import LinterError, LineContentPlugin
@@ -37,7 +39,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
     name = "check_copyright_year"
 
     @staticmethod
-    def run(nasl_file: str, lines: Iterable[str]):
+    def run(nasl_file: Path, lines: Iterable[str]):
         report = ""
         copyright_date = ""
         copyright_year = ""
