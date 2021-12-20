@@ -20,9 +20,9 @@ from typing import List, Union
 
 
 def is_ignore_file(
-    file_name: str, ignore_files: Union[List[Path], List[str]]
+    file_name: Union[Path, str], ignore_files: Union[List[Path], List[str]]
 ) -> bool:
     for ignore_file in ignore_files:
-        if ignore_file in file_name:
+        if str(ignore_file) in str(file_name):
             return True
     return False
