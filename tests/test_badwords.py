@@ -15,23 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Iterable
-
-from naslinter.plugin import Plugin
-
-from .badwords import CheckBadwords
-from .copyright_year import CheckCopyRightYearPlugin
-from .valid_script_tag_names import CheckValidScriptTagNames
-from .vt_placement import CheckVTPlacement
-
-_PLUGINS = [
-    CheckBadwords,
-    CheckCopyRightYearPlugin,
-    CheckValidScriptTagNames,
-    CheckVTPlacement,
-]
+from pathlib import Path
+import unittest
+from naslinter.plugin import LinterError
+from naslinter.plugins.badwords import CheckBadwords
 
 
-class Plugins:
-    def __iter__(self) -> Iterable[Plugin]:
-        return iter(_PLUGINS)
+class TestBadwords(unittest.TestCase):
+    def test_files(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+
+        lines = nasl_file.read_text().split("\n")
+
+        expected_warning = LinterError(
+            f"Badword(s) found in {nasl_file.absolute()}:\n"
+            "line     2: openvas is a bad word\n"
+            "line    10: OpenVAS is a scanner\n"
+        )
+
+        output = CheckBadwords.run(nasl_file=nasl_file, lines=lines)
+
+        self.assertEqual(next(output), expected_warning)

@@ -46,14 +46,15 @@ class Runner:
     def run(self, files: Iterable[Path]):
         plugins = Plugins()
         for file_path in files:
-            file_name = str(file_path.absolute())
+            file_name = file_path.absolute()
             self._report_info(f"Checking {file_name}")
 
             with self._term.indent():
                 if not file_path.exists():
                     self._report_warning("File does not exist.")
                     continue
-                if not file_path.name.endswith(".nasl"):
+                # some scripts are not executed on include (.inc) files
+                if file_path.suffix != ".nasl" or file_path.suffix != ".inc":
                     self._report_warning("Not a NASL file.")
                     continue
 
@@ -63,11 +64,9 @@ class Runner:
                     self._report_info(f"Running plugin {plugin.name}")
                     with self._term.indent():
                         if issubclass(plugin, LineContentPlugin):
-                            with file_path.open(
-                                "rt", encoding=CURRENT_ENCODING
-                            ) as f:
-                                results = plugin.run(file_name, f)
-                                self._report_results(results)
+                            lines = file_content.split("\n")
+                            results = plugin.run(file_name, lines)
                         else:
                             results = plugin.run(file_name, file_content)
-                            self._report_results(results)
+
+                        self._report_results(results)

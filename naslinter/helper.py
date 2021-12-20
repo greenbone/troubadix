@@ -15,23 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Iterable
-
-from naslinter.plugin import Plugin
-
-from .badwords import CheckBadwords
-from .copyright_year import CheckCopyRightYearPlugin
-from .valid_script_tag_names import CheckValidScriptTagNames
-from .vt_placement import CheckVTPlacement
-
-_PLUGINS = [
-    CheckBadwords,
-    CheckCopyRightYearPlugin,
-    CheckValidScriptTagNames,
-    CheckVTPlacement,
-]
+from pathlib import Path
+from typing import List, Union
 
 
-class Plugins:
-    def __iter__(self) -> Iterable[Plugin]:
-        return iter(_PLUGINS)
+def is_ignore_file(
+    file_name: Union[Path, str], ignore_files: Union[List[Path], List[str]]
+) -> bool:
+    for ignore_file in ignore_files:
+        if str(ignore_file) in str(file_name):
+            return True
+    return False

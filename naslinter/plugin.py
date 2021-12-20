@@ -17,6 +17,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable, Iterator
 
 
@@ -41,12 +42,12 @@ class Plugin(ABC):
 class FileContentPlugin(Plugin):
     @staticmethod
     @abstractmethod
-    def run(file_name: str, file_content: str) -> Iterator[LinterResult]:
+    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
         pass
 
 
 class LineContentPlugin(Plugin):
     @staticmethod
     @abstractmethod
-    def run(file_name: str, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
         pass

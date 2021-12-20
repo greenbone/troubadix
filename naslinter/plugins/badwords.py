@@ -18,13 +18,22 @@
 """ checking badwords in NASL scripts with the NASLinter """
 
 from pathlib import Path
-from typing import List
+from typing import Iterable
+
+from ..plugin import LinterError, LineContentPlugin
+from ..helper import is_ignore_file
 
 # hexstr(OpenVAS) = '4f70656e564153'
 # hexstr(openvas) = '6f70656e766173'
-DEFAULT_BADWORDS = ["cracker", "openvas", "4f70656e564153", "6f70656e766173"]
+DEFAULT_BADWORDS = [
+    "cracker",
+    "openvas",
+    "OpenVAS",
+    "4f70656e564153",
+    "6f70656e766173",
+]
 
-IGNORE_FILES = [
+_IGNORE_FILES = [
     "gb_openvas",
     "gb_gsa_",
     "http_func.inc",
@@ -32,7 +41,7 @@ IGNORE_FILES = [
 ]
 
 EXCEPTIONS = [
-    "opvenas-nasl",
+    "openvas-nasl",
     "openvas-smb",
     "openvas-scanner",
     "openvas-libraries",
@@ -71,48 +80,33 @@ STARTS_WITH_EXCEPTIONS = [
 COMBINED = [("find_service3.nasl", "OpenVAS-")]
 
 
-def _badwords(
-    nasl_file: Path,
-    badwords: List[str],
-):
-    # ignore files
-    lines = nasl_file.read_text(encoding="utf-8").split("\n")
-    line_number = 0
-    badword_found = False
-    output = f"Badword(s) found in {nasl_file}\n"
-    for line in lines:
-        if any(badword in line for badword in badwords) and not any(
-            exception in line for exception in EXCEPTIONS
-        ):
-            output += f"line {line_number:5}: {line}\n"
-            badword_found = True
-        line_number = line_number + 1
-    if badword_found:
-        print(output)
+class CheckBadwords(LineContentPlugin):
+    """This steps checks if a VT contains a Copyright statement containing a
+    year not matching the year defined in the creation_date statement like
+    script_tag(name:"creation_date", value:"2017-
+    """
 
+    name = "check_badwords"
 
-def find_badwords(
-    nasl_files: List[str],
-    badwords: List[str] = None,
-    ignore_files: List[str] = None,
-):
-    if not badwords:
-        badwords = DEFAULT_BADWORDS
-    if not ignore_files:
-        ignore_files = IGNORE_FILES
-    for nasl_file in nasl_files:
-        if any(ignore in str(nasl_file) for ignore in ignore_files):
-            print(f"Ignoring file {nasl_file}")
-        else:
-            _badwords(
-                nasl_file=nasl_file,
-                badwords=badwords,
-            )
-
-
-def main():
-    find_badwords([Path(__file__), Path("foo/gb_gsa_bla.nasl")])
-
-
-if __name__ == "__main__":
-    main()
+    @staticmethod
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+    ):
+        if is_ignore_file(nasl_file, _IGNORE_FILES):
+            return
+        line_number = 1
+        badword_found = False
+        output = f"Badword(s) found in {nasl_file}:\n"
+        for line in lines:
+            if any(badword in line for badword in DEFAULT_BADWORDS):
+                if not any(
+                    exception in line for exception in EXCEPTIONS
+                ) and not any(
+                    line.startswith(start) for start in STARTS_WITH_EXCEPTIONS
+                ):
+                    output += f"line {line_number:5}: {line}\n"
+                    badword_found = True
+            line_number = line_number + 1
+        if badword_found:
+            yield LinterError(output)

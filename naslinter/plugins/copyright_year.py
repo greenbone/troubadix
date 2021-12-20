@@ -16,22 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
+from pathlib import Path
 from typing import Iterable
 
 from ..plugin import LinterError, LineContentPlugin
+from ..helper import is_ignore_file
 
 _IGNORE_FILES = (
     "sw_telnet_os_detection.nasl",
     "gb_hp_comware_platform_detect_snmp.nasl",
     "gb_hirschmann_telnet_detect.nasl",
 )
-
-
-def _is_ignore_file(file_name: str) -> bool:
-    for ignore_file in _IGNORE_FILES:
-        if ignore_file in file_name:
-            return True
-    return False
 
 
 class CheckCopyRightYearPlugin(LineContentPlugin):
@@ -43,7 +39,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
     name = "check_copyright_year"
 
     @staticmethod
-    def run(file_name: str, lines: Iterable[str]):
+    def run(nasl_file: Path, lines: Iterable[str]):
         report = ""
         copyright_date = ""
         copyright_year = ""
@@ -54,7 +50,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
                 expre = re.search(r'value\s*:\s*"(.*)"', line)
                 if expre is not None and expre.group(1) is not None:
                     copyright_date = expre.group(1)
-                    expre = re.search("^([0-9]+)-", copyright_date)
+                    expre = re.search(r"^([0-9]+)-", copyright_date)
                     if expre is not None and expre.group(1) is not None:
                         copyright_year = expre.group(1)
 
@@ -65,7 +61,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
             if (
                 copyright_match is not None
                 and copyright_match.group(2) is not None
-                and not _is_ignore_file(file_name)
+                and not is_ignore_file(nasl_file, _IGNORE_FILES)
             ):
                 copyright_dict[line] = copyright_match.group(2)
 
@@ -76,7 +72,7 @@ class CheckCopyRightYearPlugin(LineContentPlugin):
         # within that line
         for key, value in copyright_dict.items():
             if value != copyright_year:
-                report += "\n" + key.strip() + "\n"
+                report += f"\n{key.strip()}\n"
 
         if len(report) > 0:
             yield LinterError(
