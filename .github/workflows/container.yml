@@ -13,7 +13,7 @@ env:
 
 jobs:
   images:
-    name: Build and upload ospd-openvas container
+    name: Build and upload old-linter container
     runs-on: ubuntu-latest
 
     steps:
@@ -41,5 +41,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/${{ steps.container.outputs.image-tags }}
-          file: .docker/prod.Dockerfile
+          tags: ${{ env.REGISTRY }}/greenbone/old-linter
+          file: .docker/Dockerfile
