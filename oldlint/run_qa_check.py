@@ -352,6 +352,7 @@ if FULL:
     print(stats_report)
 
     if no_files_found:
+        print("No files Found ...")
         exit(0)
 
 else:
