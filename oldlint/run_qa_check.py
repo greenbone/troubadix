@@ -271,14 +271,14 @@ if not vt_var_set:
     foundvtdir = False
     for root, dirs, files in os.walk(cwd):
         for dir_ in dirs:
-            if dir_ == "scripts":
+            if dir_ == "nasl":
                 vtdir = cwd + "/" + dir_
-                print("Scripts directory found under: " + vtdir)
+                print("NASL directory found under: " + vtdir)
                 foundvtdir = True
                 break
     if not foundvtdir:
         print(
-            "Global '$VTDIR' variable is not set and scripts folder not found manually. Exiting..."
+            "Global '$VTDIR' variable is not set and nasl folder not found manually. Exiting..."
         )
         exit(-1)
 
@@ -362,21 +362,21 @@ else:
     if staged_only:
         added = (
             subprocess_cmd(
-                "git --no-pager diff --cached --name-status | egrep '\.(nasl|inc)$' | awk '/^\s*A/ { print $NF ; }' | sed 's/^scripts\///'"
+                "git --no-pager diff --cached --name-status | egrep '\.(nasl|inc)$' | awk '/^\s*A/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
         )
         modified = (
             subprocess_cmd(
-                "git --no-pager diff --cached --name-status | egrep '\.(nasl|inc)$' | awk '/^\s*M/ { print $NF ; }' | sed 's/^scripts\///'"
+                "git --no-pager diff --cached --name-status | egrep '\.(nasl|inc)$' | awk '/^\s*M/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
         )
         renamed = (
             subprocess_cmd(
-                "git --no-pager diff --cached --name-status | egrep '\.(nasl|inc)$' | awk '/^\s*R/ { print $NF ; }' | sed 's/^scripts\///'"
+                "git --no-pager diff --cached --name-status | egrep '\.(nasl|inc)$' | awk '/^\s*R/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
@@ -386,7 +386,7 @@ else:
             subprocess_cmd(
                 "git --no-pager diff --name-status "
                 + passed_commit_range
-                + " | egrep '\.(nasl|inc)$' | awk '/^\s*A/ { print $NF ; }' | sed 's/^scripts\///'"
+                + " | egrep '\.(nasl|inc)$' | awk '/^\s*A/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
@@ -395,7 +395,7 @@ else:
             subprocess_cmd(
                 "git --no-pager diff --name-status "
                 + passed_commit_range
-                + " | egrep '\.(nasl|inc)$' | awk '/^\s*M/ { print $NF ; }' | sed 's/^scripts\///'"
+                + " | egrep '\.(nasl|inc)$' | awk '/^\s*M/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
@@ -404,7 +404,7 @@ else:
             subprocess_cmd(
                 "git --no-pager diff --name-status "
                 + passed_commit_range
-                + " | egrep '\.(nasl|inc)$' | awk '/^\s*R/ { print $NF ; }' | sed 's/^scripts\///'"
+                + " | egrep '\.(nasl|inc)$' | awk '/^\s*R/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
@@ -412,21 +412,21 @@ else:
     else:
         added = (
             subprocess_cmd(
-                "git -c color.status=false --no-pager status --short | egrep '\.(nasl|inc)$' | awk '/^\s*A/ { print $NF ; }' | sed 's/^scripts\///'"
+                "git -c color.status=false --no-pager status --short | egrep '\.(nasl|inc)$' | awk '/^\s*A/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
         )
         modified = (
             subprocess_cmd(
-                "git -c color.status=false --no-pager status --short | egrep '\.(nasl|inc)$' | awk '/^\s*M/ { print $NF ; }' | sed 's/^scripts\///'"
+                "git -c color.status=false --no-pager status --short | egrep '\.(nasl|inc)$' | awk '/^\s*M/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
         )
         renamed = (
             subprocess_cmd(
-                "git -c color.status=false --no-pager status --short | egrep '\.(nasl|inc)$' | awk '/^\s*R/ { print $NF ; }' | sed 's/^scripts\///'"
+                "git -c color.status=false --no-pager status --short | egrep '\.(nasl|inc)$' | awk '/^\s*R/ { print $NF ; }' | sed 's/^nasl\///'"
             )
             .decode("latin-1")
             .splitlines()
