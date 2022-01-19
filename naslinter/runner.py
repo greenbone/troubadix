@@ -47,7 +47,7 @@ class Runner:
         self,
         files: Iterable[Path],
         excluded_plugins: List[str] = None,
-        included_plugins: List[str] = None
+        included_plugins: List[str] = None,
     ) -> None:
         plugins = Plugins()
         for file_path in files:

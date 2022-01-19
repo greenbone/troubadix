@@ -21,6 +21,7 @@ from naslinter.plugin import Plugin
 
 from .badwords import CheckBadwords
 from .copyright_year import CheckCopyRightYearPlugin
+from .update_modification_date import UpdateModificationDate
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 
@@ -29,6 +30,7 @@ _PLUGINS = [
     CheckCopyRightYearPlugin,
     CheckValidScriptTagNames,
     CheckVTPlacement,
+    UpdateModificationDate,
 ]
 
 
