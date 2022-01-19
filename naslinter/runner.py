@@ -27,7 +27,13 @@ CURRENT_ENCODING = "latin1"
 
 
 class Runner:
-    def __init__(self, terminal: Terminal = None) -> None:
+    def __init__(
+        self,
+        excluded_plugins: List[str] = None,
+        included_plugins: List[str] = None,
+        terminal: Terminal = None,
+    ) -> None:
+        self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = terminal or Terminal()
 
     def _report_results(self, results: Iterable[LinterResult]):
@@ -46,10 +52,8 @@ class Runner:
     def run(
         self,
         files: Iterable[Path],
-        excluded_plugins: List[str] = None,
-        included_plugins: List[str] = None,
     ) -> None:
-        plugins = Plugins()
+
         for file_path in files:
             file_name = file_path.absolute()
             self._report_info(f"Checking {file_name}")
@@ -65,7 +69,7 @@ class Runner:
 
                 file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
-                for plugin in plugins:
+                for plugin in self.plugins:
                     self._report_info(f"Running plugin {plugin.name}")
                     with self._term.indent():
                         if issubclass(plugin, LineContentPlugin):

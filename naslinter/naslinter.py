@@ -25,7 +25,10 @@ def main(args=None):
     """Main process of greenbone-docker"""
     parsed_args = parse_args(args=args)
 
-    runner = Runner()
+    runner = Runner(
+        excluded_plugins=parsed_args.excluded_plugins,
+        included_plugins=parsed_args.included_plugins,
+    )
 
     if parsed_args.full:
         print("Full run")

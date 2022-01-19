@@ -125,6 +125,7 @@ def parse_args(args: Namespace = None) -> Namespace:
         "--include-tests",
         type=str,
         nargs="+",
+        dest="included_plugins",
         help=(
             "Allows to choose which tests should be run in this lint. "
             "Only the given tests will run."
@@ -135,6 +136,7 @@ def parse_args(args: Namespace = None) -> Namespace:
         "--exclude-tests",
         type=str,
         nargs="+",
+        dest="excluded_plugins",
         help=(
             "Allows to exclude tests from this lint. "
             "All tests excluding the given will run."
