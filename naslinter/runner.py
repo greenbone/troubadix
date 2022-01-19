@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -43,7 +43,12 @@ class Runner:
     def _report_info(self, message: str):
         self._term.info(message)
 
-    def run(self, files: Iterable[Path]):
+    def run(
+        self,
+        files: Iterable[Path],
+        excluded_plugins: List[str] = None,
+        included_plugins: List[str] = None
+    ) -> None:
         plugins = Plugins()
         for file_path in files:
             file_name = file_path.absolute()
