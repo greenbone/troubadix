@@ -30,18 +30,18 @@ def main(args=None):
     if parsed_args.full:
         print("Full run")
 
-        if parsed_args.dirs:
-            print("Running dirs ... ")
-            if parsed_args.non_recursive:
-                print("Running in not recursive mode ... ")
-                for directory in parsed_args.dirs:
-                    runner.run(directory.glob("*.nasl"))
-            else:
-                for directory in parsed_args.dirs:
-                    runner.run(directory.glob("**/*.nasl"))
-        elif parsed_args.files:
-            print("Running files ... ")
-            runner.run(parsed_args.files)
+    if parsed_args.dirs:
+        print("Running dirs ... ")
+        if parsed_args.non_recursive:
+            print("Running in not recursive mode ... ")
+            for directory in parsed_args.dirs:
+                runner.run(directory.glob("*.nasl"))
+        else:
+            for directory in parsed_args.dirs:
+                runner.run(directory.glob("**/*.nasl"))
+    elif parsed_args.files:
+        print("Running files ... ")
+        runner.run(parsed_args.files)
 
 
 if __name__ == "__main__":
