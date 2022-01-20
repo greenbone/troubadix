@@ -29,8 +29,8 @@ class TestBadwords(unittest.TestCase):
 
         expected_warning = LinterError(
             f"Badword(s) found in {nasl_file.absolute()}:\n"
-            "line     2: openvas is a bad word\n"
-            "line    10: OpenVAS is a scanner\n"
+            "line    50: openvas is a bad word\n"
+            "line    58: OpenVAS is a scanner\n"
         )
 
         output = CheckBadwords.run(nasl_file=nasl_file, lines=lines)
