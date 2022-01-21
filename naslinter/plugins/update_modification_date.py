@@ -29,19 +29,21 @@ class UpdateModificationDate(FileContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, file_content: str):
-
+        # update modification date
         tag_template = 'script_tag(name:"last_modification", value:"{date}");'
-
-        pattern = r"script_tag\(name:\"last_modification\", value:\"(.*)\"\);"
+        mod_pattern = (
+            r"script_tag\(name:\"last_modification\", value:\"(.*)\"\);"
+        )
 
         match = re.search(
-            pattern=pattern,
+            pattern=mod_pattern,
             string=file_content,
         )
         if not match:
             yield LinterError(
                 "File is not containing a modification day script tag."
             )
+            return
 
         old_datetime = match.groups()[0]
 
@@ -56,9 +58,30 @@ class UpdateModificationDate(FileContentPlugin):
             f"{tag_template.format(date=correctly_formated_datetime)}",
         )
 
+        # update script version
+        version_template = 'script_version("{date}");'
+        vers_template = r"script_version\(\"(.*)\"\);"
+
+        match = re.search(
+            pattern=vers_template,
+            string=file_content,
+        )
+        if not match:
+            yield LinterError("File is not containing a script version.")
+            return
+
+        old_version = match.groups()[0]
+        # get that stinky date formatted correctly
+        correctly_formated_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
+
+        file_content = file_content.replace(
+            f"{version_template.format(date=old_version)}",
+            f"{version_template.format(date=correctly_formated_version)}",
+        )
         nasl_file.write_text(file_content, encoding="latin1")
 
         yield LinterResult(
-            f"Sucessfully replaced modification date {old_datetime} "
-            f"with {correctly_formated_datetime}"
+            f"Replaced modification_date {old_datetime} "
+            f"with {correctly_formated_datetime} and script_version "
+            f"{old_version} with {correctly_formated_version}."
         )
