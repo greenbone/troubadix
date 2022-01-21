@@ -18,22 +18,15 @@
 import unittest
 
 from pathlib import Path
-from naslinter.plugin import LinterResult
+from naslinter.plugin import LinterError, LinterResult
 from naslinter.plugins.update_modification_date import UpdateModificationDate
 
 
 class TestUpdateModificationDate(unittest.TestCase):
-    def test_files(self):
+    def test_change_date(self):
         nasl_file = Path(__file__).parent / "test.nasl"
 
         content = nasl_file.read_text(encoding="latin1")
-
-        # old_datetime = "2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)"
-
-        # expected_result = LinterResult(
-        #     f"Sucessfully replaced modification date {old_datetime} "
-        #     f"with {correctly_formated_datetime}"
-        # )
 
         output = UpdateModificationDate.run(
             nasl_file=nasl_file, file_content=content
@@ -44,4 +37,43 @@ class TestUpdateModificationDate(unittest.TestCase):
         new_content = nasl_file.read_text(encoding="latin1")
         self.assertNotEqual(content, new_content)
 
+        # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
+
+    def test_fail_modification_date(self):
+        nasl_file = Path(__file__).parent / "fail.nasl"
+
+        content = nasl_file.read_text(encoding="latin1")
+
+        output = UpdateModificationDate.run(
+            nasl_file=nasl_file, file_content=content
+        )
+
+        expected_error = LinterError(
+            "File is not containing a modification day script tag."
+        )
+
+        error = next(output)
+        self.assertIsInstance(error, LinterError)
+        self.assertEqual(error, expected_error)
+
+        new_content = nasl_file.read_text(encoding="latin1")
+        self.assertEqual(content, new_content)
+
+    def test_fail_script_version(self):
+        nasl_file = Path(__file__).parent / "fail2.nasl"
+
+        content = nasl_file.read_text(encoding="latin1")
+
+        output = UpdateModificationDate.run(
+            nasl_file=nasl_file, file_content=content
+        )
+
+        expected_error = LinterError("File is not containing a script version.")
+
+        error = next(output)
+        self.assertIsInstance(error, LinterError)
+        self.assertEqual(error, expected_error)
+
+        new_content = nasl_file.read_text(encoding="latin1")
+        self.assertEqual(content, new_content)
