@@ -48,7 +48,8 @@ class UpdateModificationDate(FileContentPlugin):
         old_datetime = match.groups()[0]
 
         now = datetime.datetime.now(datetime.timezone.utc)
-        # get that stinky date formatted correctly
+        # get that date formatted correctly:
+        # "2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)"
         correctly_formated_datetime = (
             f"{now:%Y-%m-%d %H:%M:%S %z (%a, %d %b %Y)}"
         )
@@ -71,7 +72,8 @@ class UpdateModificationDate(FileContentPlugin):
             return
 
         old_version = match.groups()[0]
-        # get that stinky date formatted correctly
+        # get that date formatted correctly:
+        # "2021-03-24T10:08:26+0000"
         correctly_formated_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
 
         file_content = file_content.replace(
