@@ -55,8 +55,8 @@ class UpdateModificationDate(FileContentPlugin):
         )
 
         file_content = file_content.replace(
-            f"{tag_template.format(date=old_datetime)}",
-            f"{tag_template.format(date=correctly_formated_datetime)}",
+            tag_template.format(date=old_datetime),
+            tag_template.format(date=correctly_formated_datetime),
         )
 
         # update script version
@@ -77,8 +77,8 @@ class UpdateModificationDate(FileContentPlugin):
         correctly_formated_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
 
         file_content = file_content.replace(
-            f"{version_template.format(date=old_version)}",
-            f"{version_template.format(date=correctly_formated_version)}",
+            version_template.format(date=old_version),
+            version_template.format(date=correctly_formated_version),
         )
         nasl_file.write_text(file_content, encoding="latin1")
 
