@@ -50,7 +50,7 @@ class TestUpdateModificationDate(unittest.TestCase):
         )
 
         expected_error = LinterError(
-            "File is not containing a modification day script tag."
+            f"{nasl_file} does not contain a modification day script tag."
         )
 
         error = next(output)
@@ -69,7 +69,9 @@ class TestUpdateModificationDate(unittest.TestCase):
             nasl_file=nasl_file, file_content=content
         )
 
-        expected_error = LinterError("File is not containing a script version.")
+        expected_error = LinterError(
+            f"{nasl_file} does not contain a script version."
+        )
 
         error = next(output)
         self.assertIsInstance(error, LinterError)
