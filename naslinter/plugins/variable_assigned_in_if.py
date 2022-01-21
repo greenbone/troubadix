@@ -61,7 +61,7 @@ class CheckVariableAssignedInIf(FileContentPlugin):
 
         lint_error = False
         output = (
-            f"VT/Include '{str(nasl_file.name)}' is using a variable assignment"
+            f"VT/Include '{nasl_file.name}' is using a variable assignment"
             " within an if() call in the following line(s):\n"
         )
 
