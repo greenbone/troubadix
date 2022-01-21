@@ -14,25 +14,3 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-from pathlib import Path
-import unittest
-from naslinter.plugin import LinterError
-from naslinter.plugins.badwords import CheckBadwords
-
-
-class TestBadwords(unittest.TestCase):
-    def test_files(self):
-        nasl_file = Path(__file__).parent / "test.nasl"
-
-        lines = nasl_file.read_text().split("\n")
-
-        expected_warning = LinterError(
-            f"Badword(s) found in {nasl_file.absolute()}:\n"
-            "line     2: openvas is a bad word\n"
-            "line    10: OpenVAS is a scanner\n"
-        )
-
-        output = CheckBadwords.run(nasl_file=nasl_file, lines=lines)
-
-        self.assertEqual(next(output), expected_warning)

@@ -125,14 +125,22 @@ def parse_args(args: Namespace = None) -> Namespace:
         "--include-tests",
         type=str,
         nargs="+",
-        help=("Allows to choose which tests should be run in this lint."),
+        dest="included_plugins",
+        help=(
+            "Allows to choose which tests should be run in this lint. "
+            "Only the given tests will run."
+        ),
     )
 
     tests_group.add_argument(
         "--exclude-tests",
         type=str,
         nargs="+",
-        help=("Allows to exclude tests from this lint"),
+        dest="excluded_plugins",
+        help=(
+            "Allows to exclude tests from this lint. "
+            "All tests excluding the given will run."
+        ),
     )
 
     parser.add_argument(

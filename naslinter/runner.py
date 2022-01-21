@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -27,7 +27,13 @@ CURRENT_ENCODING = "latin1"
 
 
 class Runner:
-    def __init__(self, terminal: Terminal = None) -> None:
+    def __init__(
+        self,
+        excluded_plugins: List[str] = None,
+        included_plugins: List[str] = None,
+        terminal: Terminal = None,
+    ) -> None:
+        self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = terminal or Terminal()
 
     def _report_results(self, results: Iterable[LinterResult]):
@@ -43,8 +49,11 @@ class Runner:
     def _report_info(self, message: str):
         self._term.info(message)
 
-    def run(self, files: Iterable[Path]):
-        plugins = Plugins()
+    def run(
+        self,
+        files: Iterable[Path],
+    ) -> None:
+
         for file_path in files:
             file_name = file_path.absolute()
             self._report_info(f"Checking {file_name}")
@@ -54,13 +63,13 @@ class Runner:
                     self._report_warning("File does not exist.")
                     continue
                 # some scripts are not executed on include (.inc) files
-                if file_path.suffix != ".nasl" or file_path.suffix != ".inc":
+                if file_path.suffix != ".nasl" and file_path.suffix != ".inc":
                     self._report_warning("Not a NASL file.")
                     continue
 
                 file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
-                for plugin in plugins:
+                for plugin in self.plugins:
                     self._report_info(f"Running plugin {plugin.name}")
                     with self._term.indent():
                         if issubclass(plugin, LineContentPlugin):
