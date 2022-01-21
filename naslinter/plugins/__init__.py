@@ -45,15 +45,13 @@ class Plugins:
             self.plugins = [
                 plugin
                 for plugin in _PLUGINS
-                for excluded_plugin in excluded_plugins
-                if plugin.__name__ != excluded_plugin
+                if plugin.__name__ not in excluded_plugins
             ]
         if included_plugins:
             self.plugins = [
                 plugin
                 for plugin in _PLUGINS
-                for included_plugin in included_plugins
-                if plugin.__name__ == included_plugin
+                if plugin.__name__ in included_plugins
             ]
 
     def __iter__(self) -> Iterable[Plugin]:
