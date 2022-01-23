@@ -20,7 +20,14 @@ from typing import Iterable, List
 
 from pontos.terminal.terminal import Terminal
 
-from naslinter.plugin import LineContentPlugin, LinterResult
+from naslinter.plugin import (
+    FileContentPlugin,
+    LineContentPlugin,
+    LinterError,
+    LinterMessage,
+    LinterResult,
+    LinterWarning,
+)
 from naslinter.plugins import Plugins
 
 CURRENT_ENCODING = "latin1"
@@ -36,9 +43,14 @@ class Runner:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = terminal or Terminal()
 
-    def _report_results(self, results: Iterable[LinterResult]):
+    def _report_results(self, results: Iterable[LinterMessage]):
         for result in results:
-            self._report_error(result.message)
+            if isinstance(result, LinterResult):
+                self._report_ok(result.message)
+            elif isinstance(result, LinterError):
+                self._report_error(result.message)
+            elif isinstance(result, LinterWarning):
+                self._report_warning(result.message)
 
     def _report_warning(self, message: str):
         self._term.warning(message)
@@ -48,6 +60,9 @@ class Runner:
 
     def _report_info(self, message: str):
         self._term.info(message)
+
+    def _report_ok(self, message: str):
+        self._term.ok(message)
 
     def run(
         self,
@@ -75,7 +90,11 @@ class Runner:
                         if issubclass(plugin, LineContentPlugin):
                             lines = file_content.split("\n")
                             results = plugin.run(file_name, lines)
-                        else:
+                        elif issubclass(plugin, FileContentPlugin):
                             results = plugin.run(file_name, file_content)
+                        else:
+                            self._report_error(
+                                f"Plugin {plugin.__name__} can not be read."
+                            )
 
                         self._report_results(results)
