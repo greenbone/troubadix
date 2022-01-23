@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 from naslinter.plugins import _PLUGINS
 from naslinter.runner import Runner
@@ -55,3 +57,38 @@ class TestRunner(unittest.TestCase):
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin.__name__, included_plugins)
+
+    def test_runner_run_ok(self):
+        included_plugins = [
+            "UpdateModificationDate",
+        ]
+        nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
+        content = nasl_file.read_text(encoding="latin1")
+
+        with patch.object(Runner, "_report_ok") as ok_mock:
+            runner = Runner(included_plugins=included_plugins)
+
+            runner.run([nasl_file])
+
+            new_content = nasl_file.read_text(encoding="latin1")
+            self.assertNotEqual(content, new_content)
+            ok_mock.assert_called_once()
+
+        # revert changes for the next time
+        nasl_file.write_text(content, encoding="latin1")
+
+    def test_runner_run_error(self):
+        included_plugins = [
+            "UpdateModificationDate",
+        ]
+        nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
+        content = nasl_file.read_text(encoding="latin1")
+
+        with patch.object(Runner, "_report_error") as ok_mock:
+            runner = Runner(included_plugins=included_plugins)
+
+            runner.run([nasl_file])
+
+            new_content = nasl_file.read_text(encoding="latin1")
+            self.assertEqual(content, new_content)
+            ok_mock.assert_called_once()
