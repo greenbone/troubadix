@@ -20,23 +20,24 @@
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 import sys
+from typing import List
 
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
     if not directory_path.is_dir():
-        raise ValueError(f"{string} is not a directory")
+        raise ValueError(f"{string} is not a directory.")
     return directory_path
 
 
 def file_type(string: str) -> Path:
     file_path = Path(string)
     if not file_path.is_file():
-        raise ValueError(f"{string} is not a directory")
+        raise ValueError(f"{string} is not a file.")
     return file_path
 
 
-def parse_args(args: Namespace = None) -> Namespace:
+def parse_args(args: List[str] = None) -> Namespace:
     """Parsing args for nasl-lint"""
 
     parser = ArgumentParser(
@@ -53,7 +54,7 @@ def parse_args(args: Namespace = None) -> Namespace:
         ),
     )
 
-    what_group = parser.add_mutually_exclusive_group()
+    what_group = parser.add_mutually_exclusive_group(required=False)
 
     what_group.add_argument(
         "-d",
@@ -96,7 +97,10 @@ def parse_args(args: Namespace = None) -> Namespace:
     parser.add_argument(
         "--non-recursive",
         action="store_true",
-        help='Don\'t run the script recursive. Only usable with "-f"/"--full"',
+        help=(
+            "Don't run the script recursive. "
+            'Only usable with "-f"/"--full" or "-d"/"--dirs"'
+        ),
     )
 
     parser.add_argument(
@@ -153,4 +157,24 @@ def parse_args(args: Namespace = None) -> Namespace:
         parser.print_help(sys.stdout)
         sys.exit(1)
 
-    return parser.parse_args(args=args)
+    parsed_args = parser.parse_args(args=args)
+
+    if not parsed_args.full and (
+        parsed_args.include_regex or parsed_args.exclude_regex
+    ):
+        print(
+            "The arguments '--include-regex' and '--exclude-regex' "
+            "must be used with '-f/--full'"
+        )
+        sys.exit(1)
+
+    if (
+        not parsed_args.full
+        and not parsed_args.dirs
+        and parsed_args.non_recursive
+    ):
+        print(
+            "'Argument '--non-recursive' is only usable with "
+            "'-f'/'--full' or '-d'/'--dirs'"
+        )
+    return parsed_args
