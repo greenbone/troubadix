@@ -17,34 +17,70 @@
 
 """ Main module for naslinter """
 
+from pathlib import Path
+from typing import List
+from pontos.terminal.terminal import Terminal
+
 from naslinter.argparser import parse_args
 from naslinter.runner import Runner
 
 
+def generate_file_list(
+    dirs: List[Path], excluded: List[str], dglobs: List[str]
+):
+    files: List[Path] = []
+    for directory in dirs:
+        for dglob in dglobs:
+            files.extend([f for f in directory.glob(dglob)])
+    if excluded:
+        excluded_files = []
+        for directory in dirs:
+            for exclude in excluded:
+                excluded_files.extend([f for f in directory.glob(exclude)])
+        files = [f for f in files if f not in excluded_files]
+
+    return files
+
+
 def main(args=None):
     """Main process of greenbone-docker"""
-    parsed_args = parse_args(args=args)
+    term = Terminal()
+
+    parsed_args = parse_args(term=term, args=args)
 
     runner = Runner(
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
+        terminal=term,
     )
 
-    if parsed_args.full:
-        print("Full run")
+    # Setting the globs for non-recursive/recursive:
+    # Setting the globs for include regexes:
+    if parsed_args.include_regex:
+        dglobs = [parsed_args.include_regex]
+    else:
+        # no regex, check all nasl and inc files
+        dglobs = ["*.nasl", "*.inc"]
 
-    if parsed_args.dirs:
-        print("Running dirs ... ")
-        if parsed_args.non_recursive:
-            print("Running in not recursive mode ... ")
-            for directory in parsed_args.dirs:
-                runner.run(directory.glob("*.nasl"))
-        else:
-            for directory in parsed_args.dirs:
-                runner.run(directory.glob("**/*.nasl"))
-    elif parsed_args.files:
+    if not parsed_args.non_recursive:
+        # if non-recursive (default), add recursive pattern to globs
+        dglobs = [f"**/{dglob}" for dglob in dglobs]
+        if parsed_args.exclude_regex:
+            parsed_args.exclude_regex = [
+                f"**/{excl}" for excl in parsed_args.exclude_regex
+            ]
+    else:
+        term.warning("Running in not recurive mode!")
+
+    parsed_args.files = generate_file_list(
+        dirs=parsed_args.dirs, excluded=parsed_args.exclude_regex, dglobs=dglobs
+    )
+
+    if parsed_args.files:
         print("Running files ... ")
         runner.run(parsed_args.files)
+    else:
+        term.warning("No files given/found.")
 
 
 if __name__ == "__main__":
