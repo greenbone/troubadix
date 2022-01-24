@@ -32,14 +32,14 @@ class TestArgparsing(unittest.TestCase):
         # reset old arguments
         sys.argv = self.old_args
 
-    def test_parse_full(self):
-        sys.argv = ["naslinter", "-f"]
+    def test_parse_full_debug_staged(self):
+        sys.argv = ["naslinter", "-f", "--debug", "--staged-only"]
 
         parsed_args = parse_args()
 
         expected_args = Namespace(
             commit_range=None,
-            debug=False,
+            debug=True,
             dirs=None,
             exclude_regex=None,
             excluded_plugins=None,
@@ -49,7 +49,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
-            staged_only=False,
+            staged_only=True,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -84,8 +84,15 @@ class TestArgparsing(unittest.TestCase):
 
         self.assertEqual(parsed_args, expected_args)
 
-    def test_parse_dir(self):
-        sys.argv = ["naslinter", "--dirs", "tests", "naslinter"]
+    def test_parse_dir_skip_duplicate(self):
+        sys.argv = [
+            "naslinter",
+            "--dirs",
+            "tests",
+            "naslinter",
+            "--skip-duplicated-oids",
+            "--non-recursive",
+        ]
 
         parsed_args = parse_args()
 
@@ -99,8 +106,8 @@ class TestArgparsing(unittest.TestCase):
             full=False,
             include_regex=None,
             included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            non_recursive=True,
+            skip_duplicated_oids=True,
             staged_only=False,
         )
 
@@ -206,6 +213,18 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_include_regex_fail(self):
         sys.argv = ["naslinter", "--include-regex", "naslinter/*"]
+
+        with self.assertRaises(SystemExit):
+            parse_args()
+
+    def test_parse_files_non_recursive_fail(self):
+        sys.argv = [
+            "naslinter",
+            "--files",
+            "tests/plugins/test.nasl",
+            "tests/plugins/fail2.nasl",
+            "non-recursive",
+        ]
 
         with self.assertRaises(SystemExit):
             parse_args()
