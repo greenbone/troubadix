@@ -16,9 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import Namespace
+import os
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import Mock
 
 from naslinter.argparser import parse_args
 
@@ -27,6 +29,7 @@ class TestArgparsing(unittest.TestCase):
     def setUp(self):
         # store old arguments
         self.old_args = sys.argv
+        self.term = Mock()
 
     def tearDown(self) -> None:
         # reset old arguments
@@ -34,13 +37,14 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_full_debug_staged(self):
         sys.argv = ["naslinter", "-f", "--debug", "--staged-only"]
+        expcected_dirs = [Path(os.getcwd())]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
             debug=True,
-            dirs=None,
+            dirs=expcected_dirs,
             exclude_regex=None,
             excluded_plugins=None,
             files=None,
@@ -62,11 +66,11 @@ class TestArgparsing(unittest.TestCase):
             "tests/plugins/fail2.nasl",
         ]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
-            debug=False,  #
+            debug=False,
             dirs=None,
             exclude_regex=None,
             excluded_plugins=None,
@@ -94,7 +98,7 @@ class TestArgparsing(unittest.TestCase):
             "--non-recursive",
         ]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
@@ -116,7 +120,7 @@ class TestArgparsing(unittest.TestCase):
     def test_parse_commit_range(self):
         sys.argv = ["naslinter", "--commit-range", "0123456", "7abcdef"]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=["0123456", "7abcdef"],
@@ -143,7 +147,7 @@ class TestArgparsing(unittest.TestCase):
             "UpdateModificationDate",
         ]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
@@ -170,7 +174,7 @@ class TestArgparsing(unittest.TestCase):
             "UpdateModificationDate",
         ]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
@@ -191,18 +195,19 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_include_regex(self):
         sys.argv = ["naslinter", "-f", "--include-regex", "naslinter/*"]
+        expcected_dirs = [Path(os.getcwd())]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
             debug=False,
-            dirs=None,
+            dirs=expcected_dirs,
             exclude_regex=None,
             excluded_plugins=None,
             files=None,
             full=True,
-            include_regex="naslinter/*",
+            include_regex=["naslinter/*"],
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -215,7 +220,7 @@ class TestArgparsing(unittest.TestCase):
         sys.argv = ["naslinter", "--include-regex", "naslinter/*"]
 
         with self.assertRaises(SystemExit):
-            parse_args()
+            parse_args(term=self.term)
 
     def test_parse_files_non_recursive_fail(self):
         sys.argv = [
@@ -223,22 +228,23 @@ class TestArgparsing(unittest.TestCase):
             "--files",
             "tests/plugins/test.nasl",
             "tests/plugins/fail2.nasl",
-            "non-recursive",
+            "--non-recursive",
         ]
 
         with self.assertRaises(SystemExit):
-            parse_args()
+            parse_args(term=self.term)
 
     def test_parse_exclude_regex(self):
         sys.argv = ["naslinter", "-f", "--exclude-regex", "naslinter/*"]
+        expcected_dirs = [Path(os.getcwd())]
 
-        parsed_args = parse_args()
+        parsed_args = parse_args(term=self.term)
 
         expected_args = Namespace(
             commit_range=None,
             debug=False,
-            dirs=None,
-            exclude_regex="naslinter/*",
+            dirs=expcected_dirs,
+            exclude_regex=["naslinter/*"],
             excluded_plugins=None,
             files=None,
             full=True,

@@ -19,8 +19,11 @@
 
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
+import os
+
 import sys
 from typing import List
+
 
 from pontos.terminal.terminal import Terminal
 
@@ -40,8 +43,9 @@ def file_type(string: str) -> Path:
 
 
 def parse_args(
-    args: List[str],
     term: Terminal,
+    *,
+    args: List[str] = None,
 ) -> Namespace:
     """Parsing args for nasl-lint
 
@@ -172,12 +176,18 @@ def parse_args(
 
     parsed_args = parser.parse_args(args=args)
 
-    if not parsed_args.full and (
+    # Full will run in the root directory of executing. (Like pwd)
+    if parsed_args.full:
+        cwd = Path(os.getcwd())
+        term.info(f"Running full lint from {cwd}")
+        parsed_args.dirs = [Path(cwd)]
+
+    if not parsed_args.dirs and (
         parsed_args.include_regex or parsed_args.exclude_regex
     ):
         term.warning(
             "The arguments '--include-regex' and '--exclude-regex' "
-            "must be used with '-f/--full'"
+            "must be used with '-f/--full' or '-d'/'--dirs'"
         )
         sys.exit(1)
 
