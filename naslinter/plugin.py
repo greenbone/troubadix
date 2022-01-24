@@ -22,15 +22,19 @@ from typing import Iterable, Iterator
 
 
 @dataclass
-class LinterResult:
+class LinterMessage:
     message: str
 
 
-class LinterWarning(LinterResult):
+class LinterResult(LinterMessage):
     pass
 
 
-class LinterError(LinterResult):
+class LinterWarning(LinterMessage):
+    pass
+
+
+class LinterError(LinterMessage):
     pass
 
 
