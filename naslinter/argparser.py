@@ -22,6 +22,8 @@ from pathlib import Path
 import sys
 from typing import List
 
+from pontos.terminal.terminal import Terminal
+
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
@@ -37,8 +39,15 @@ def file_type(string: str) -> Path:
     return file_path
 
 
-def parse_args(args: List[str] = None) -> Namespace:
-    """Parsing args for nasl-lint"""
+def parse_args(
+    args: List[str],
+    term: Terminal,
+) -> Namespace:
+    """Parsing args for nasl-lint
+
+    Arguments:
+    args        The programm arguments passed by exec
+    term        The terminal to print"""
 
     parser = ArgumentParser(
         description="Greenbone NASL File Linter.",
@@ -106,20 +115,24 @@ def parse_args(args: List[str] = None) -> Namespace:
     parser.add_argument(
         "--include-regex",
         type=str,
+        nargs="+",
         help=(
             "Allows to specify a regex (glob) to "
-            'limit the "full" run to specific file names. '
-            'Only usable with "-f"/"--full"'
+            'limit the "--full"/"--dirs" run to specific file names. '
+            'e.g. "gb_*.nasl", or "*some_vt*.nasl" or "some_dir/gb_*nasl". '
+            'Only usable with "-f"/"--full" or "-d"/"--dirs".'
         ),
     )
 
     parser.add_argument(
         "--exclude-regex",
         type=str,
+        nargs="+",
         help=(
             "Allows to specify a regex (glob) to "
-            'exclude specific file names from the "full" run. '
-            'Only usable with "-f"/"--full"'
+            'exclude specific file names from the "--full"/"--dirs" run. '
+            'e.g. "some_dir/*.nasl", "gb_*nasl", "*/anything.*'
+            'Only usable with "-f"/"--full" or "-d"/"--dirs".'
         ),
     )
 
@@ -162,19 +175,17 @@ def parse_args(args: List[str] = None) -> Namespace:
     if not parsed_args.full and (
         parsed_args.include_regex or parsed_args.exclude_regex
     ):
-        print(
+        term.warning(
             "The arguments '--include-regex' and '--exclude-regex' "
             "must be used with '-f/--full'"
         )
         sys.exit(1)
 
-    if (
-        not parsed_args.full
-        and not parsed_args.dirs
-        and parsed_args.non_recursive
-    ):
-        print(
+    if not parsed_args.dirs and parsed_args.non_recursive:
+        term.warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"
         )
+        sys.exit(1)
+
     return parsed_args
