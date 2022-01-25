@@ -23,6 +23,9 @@ import sys
 from typing import List
 
 
+from pontos.terminal.terminal import Terminal
+
+
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
     if not directory_path.is_dir():
@@ -37,8 +40,16 @@ def file_type(string: str) -> Path:
     return file_path
 
 
-def parse_args(args: List[str] = None) -> Namespace:
-    """Parsing args for nasl-lint"""
+def parse_args(
+    term: Terminal,
+    *,
+    args: List[str] = None,
+) -> Namespace:
+    """Parsing args for nasl-lint
+
+    Arguments:
+    args        The programm arguments passed by exec
+    term        The terminal to print"""
 
     parser = ArgumentParser(
         description="Greenbone NASL File Linter.",
@@ -104,22 +115,26 @@ def parse_args(args: List[str] = None) -> Namespace:
     )
 
     parser.add_argument(
-        "--include-regex",
+        "--include-patterns",
         type=str,
+        nargs="+",
         help=(
-            "Allows to specify a regex (glob) to "
-            'limit the "full" run to specific file names. '
-            'Only usable with "-f"/"--full"'
+            "Allows to specify pattern(s) (glob) to "
+            'limit the "--full"/"--dirs" run to specific file names. '
+            'e.g. "gb_*.nasl", or "*some_vt*.nasl" or "some_dir/gb_*nasl". '
+            'Only usable with "-f"/"--full" or "-d"/"--dirs".'
         ),
     )
 
     parser.add_argument(
-        "--exclude-regex",
+        "--exclude-patterns",
         type=str,
+        nargs="+",
         help=(
-            "Allows to specify a regex (glob) to "
-            'exclude specific file names from the "full" run. '
-            'Only usable with "-f"/"--full"'
+            "Allows to specify pattern(s) (glob) to "
+            'exclude specific file names from the "--full"/"--dirs" run. '
+            'e.g. "some_dir/*.nasl", "gb_*nasl", "*/anything.*'
+            'Only usable with "-f"/"--full" or "-d"/"--dirs".'
         ),
     )
 
@@ -159,22 +174,26 @@ def parse_args(args: List[str] = None) -> Namespace:
 
     parsed_args = parser.parse_args(args=args)
 
-    if not parsed_args.full and (
-        parsed_args.include_regex or parsed_args.exclude_regex
+    # Full will run in the root directory of executing. (Like pwd)
+    if parsed_args.full:
+        cwd = Path.cwd()
+        term.info(f"Running full lint from {cwd}")
+        parsed_args.dirs = [cwd]
+
+    if not parsed_args.dirs and (
+        parsed_args.include_patterns or parsed_args.exclude_patterns
     ):
-        print(
-            "The arguments '--include-regex' and '--exclude-regex' "
-            "must be used with '-f/--full'"
+        term.warning(
+            "The arguments '--include-patterns' and '--exclude-patterns' "
+            "must be used with '-f/--full' or '-d'/'--dirs'"
         )
         sys.exit(1)
 
-    if (
-        not parsed_args.full
-        and not parsed_args.dirs
-        and parsed_args.non_recursive
-    ):
-        print(
+    if not parsed_args.dirs and parsed_args.non_recursive:
+        term.warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"
         )
+        sys.exit(1)
+
     return parsed_args
