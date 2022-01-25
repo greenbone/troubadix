@@ -39,12 +39,30 @@ class TestNASLinter(unittest.TestCase):
             excluded=["**/test.nasl", "**/templates/*/*.nasl"],
             dglobs=["**/*.nasl", "**/*.inc"],
         )
+
+        self.assertEqual(
+            files,
+            [
+                Path(f"{cwd}/tests/plugins/fail.nasl"),
+                Path(f"{cwd}/tests/plugins/fail2.nasl"),
+            ],
+        )
+
+    def test_generate_file_list_with_include_regex(self):
+        cwd = Path(os.getcwd())
+        files = generate_file_list(
+            dirs=[cwd],
+            excluded=None,
+            dglobs=["**/tests/*/*.nasl", "**/tests/*/*.inc"],
+        )
+
         print(files)
 
         self.assertEqual(
             files,
             [
                 Path(f"{cwd}/tests/plugins/fail.nasl"),
+                Path(f"{cwd}/tests/plugins/test.nasl"),
                 Path(f"{cwd}/tests/plugins/fail2.nasl"),
             ],
         )
