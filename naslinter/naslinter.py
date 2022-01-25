@@ -18,7 +18,7 @@
 """ Main module for naslinter """
 
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 from pontos.terminal.terminal import Terminal
 
 from naslinter.argparser import parse_args
@@ -59,7 +59,7 @@ def generate_patterns(
     exclude_patterns: List[str],
     non_recursive: bool,
     term: Terminal,
-) -> List[str]:
+) -> Tuple[List[str], List[str]]:
     """Generates the include and exclude patterns
 
     Arguments:
@@ -68,7 +68,7 @@ def generate_patterns(
     non_recursive       Wether to include all subdirs to the patterns or not
 
     Returns
-    List of Path objects"""
+    Corrected tuple of lists of include and exclude patterns"""
     # Setting the globs for non-recursive/recursive:
     # Setting the globs for include regexes:
     if not include_patterns:
