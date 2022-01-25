@@ -36,7 +36,7 @@ class TestNASLinter(unittest.TestCase):
         cwd = Path(os.getcwd())
         files = generate_file_list(
             dirs=[cwd],
-            excluded=["**/test.nasl", "**/templates/*/*.nasl"],
+            exclude_regex=["**/test.nasl", "**/templates/*/*.nasl"],
             dglobs=["**/*.nasl", "**/*.inc"],
         )
 
@@ -52,7 +52,7 @@ class TestNASLinter(unittest.TestCase):
         cwd = Path(os.getcwd())
         files = generate_file_list(
             dirs=[cwd],
-            excluded=None,
+            exclude_regex=None,
             dglobs=["**/tests/*/*.nasl", "**/tests/*/*.inc"],
         )
 

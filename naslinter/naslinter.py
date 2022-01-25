@@ -26,13 +26,13 @@ from naslinter.runner import Runner
 
 
 def generate_file_list(
-    dirs: List[Path], excluded: List[str], dglobs: List[str]
+    dirs: List[Path], exclude_regex: List[str], dglobs: List[str]
 ) -> List[Path]:
     """Generates a files list under respect of several given arguments
 
     Arguments:
     dirs            List of dirs, within looking for files
-    excluded        List of glob patterns, exclude files that fit the pattern
+    exclude_regex   List of glob patterns, exclude files that fit the pattern
     dglobs          List of glob patterns, include files that fit the pattern
                     with respect of excluded files
 
@@ -42,14 +42,48 @@ def generate_file_list(
     for directory in dirs:
         for dglob in dglobs:
             files.extend([f for f in directory.glob(dglob)])
-    if excluded:
+    if exclude_regex:
         excluded_files = []
         for directory in dirs:
-            for exclude in excluded:
+            for exclude in exclude_regex:
                 excluded_files.extend([f for f in directory.glob(exclude)])
         files = [f for f in files if f not in excluded_files]
 
     return files
+
+
+def generate_patterns(
+    include_regex: List[str],
+    exclude_regex: List[str],
+    non_recursive: bool,
+    term: Terminal,
+) -> List[str]:
+    """Generates the include and exclude patterns
+
+    Arguments:
+    include_regex   List of glob patterns to filter files with
+    exclude_regex   List of glob patterns of files that will excluded
+    non_recursive   Wether to include all subdirs to the patterns or not
+
+    Returns
+    List of Path objects"""
+    # Setting the globs for non-recursive/recursive:
+    # Setting the globs for include regexes:
+    if include_regex:
+        dglobs = [include_regex]
+    else:
+        # no regex, check all nasl and inc files
+        dglobs = ["*.nasl", "*.inc"]
+
+    if not non_recursive:
+        # if non-recursive (default), add recursive pattern to globs
+        dglobs = [f"**/{dglob}" for dglob in dglobs]
+        if exclude_regex:
+            exclude_regex = [f"**/{excl}" for excl in exclude_regex]
+    else:
+        term.warning("Running in not recurive mode!")
+
+    return dglobs, exclude_regex
 
 
 def main(args=None):
@@ -64,26 +98,17 @@ def main(args=None):
         terminal=term,
     )
 
-    # Setting the globs for non-recursive/recursive:
-    # Setting the globs for include regexes:
-    if parsed_args.include_regex:
-        dglobs = [parsed_args.include_regex]
-    else:
-        # no regex, check all nasl and inc files
-        dglobs = ["*.nasl", "*.inc"]
-
-    if not parsed_args.non_recursive:
-        # if non-recursive (default), add recursive pattern to globs
-        dglobs = [f"**/{dglob}" for dglob in dglobs]
-        if parsed_args.exclude_regex:
-            parsed_args.exclude_regex = [
-                f"**/{excl}" for excl in parsed_args.exclude_regex
-            ]
-    else:
-        term.warning("Running in not recurive mode!")
+    dglobs, parsed_args.exclude_regex = generate_patterns(
+        include_regex=parsed_args.include_regex,
+        exclude_regex=parsed_args.exclude_regex,
+        non_recursive=parsed_args.non_recursive,
+        term=term,
+    )
 
     parsed_args.files = generate_file_list(
-        dirs=parsed_args.dirs, excluded=parsed_args.exclude_regex, dglobs=dglobs
+        dirs=parsed_args.dirs,
+        exclude_regex=parsed_args.exclude_regex,
+        dglobs=dglobs,
     )
 
     if parsed_args.files:
