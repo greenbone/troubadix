@@ -27,7 +27,17 @@ from naslinter.runner import Runner
 
 def generate_file_list(
     dirs: List[Path], excluded: List[str], dglobs: List[str]
-):
+) -> List[Path]:
+    """Generates a files list under respect of several given arguments
+
+    Arguments:
+    dirs            List of dirs, within looking for files
+    excluded        List of glob patterns, exclude files that fit the pattern
+    dglobs          List of glob patterns, include files that fit the pattern
+                    with respect of excluded files
+
+    Returns
+    List of Path objects"""
     files: List[Path] = []
     for directory in dirs:
         for dglob in dglobs:
