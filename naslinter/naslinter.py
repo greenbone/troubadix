@@ -115,7 +115,7 @@ def main(args=None):
         )
 
     if parsed_args.files:
-        print("Running files ... ")
+        term.info("Start linting files ... ")
         runner.run(parsed_args.files)
     else:
         term.warning("No files given/found.")
