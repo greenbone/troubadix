@@ -69,8 +69,8 @@ def generate_patterns(
 
     Returns
     Corrected tuple of lists of include and exclude patterns"""
-    # Setting the globs for non-recursive/recursive:
-    # Setting the globs for include regexes:
+    # Setting the globs for include all nasl and inc files, if no include
+    # pattern given
     if not include_patterns:
         include_patterns = ["*.nasl", "*.inc"]
 
