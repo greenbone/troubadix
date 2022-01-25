@@ -32,12 +32,12 @@ class TestNASLinter(unittest.TestCase):
         # reset old arguments
         sys.argv = self.old_args
 
-    def test_generate_file_list_with_exclude_regex(self):
+    def test_generate_file_list_with_exclude_patterns(self):
         cwd = Path(os.getcwd())
         files = generate_file_list(
             dirs=[cwd],
-            exclude_regex=["**/test.nasl", "**/templates/*/*.nasl"],
-            dglobs=["**/*.nasl", "**/*.inc"],
+            exclude_patterns=["**/test.nasl", "**/templates/*/*.nasl"],
+            include_patterns=["**/*.nasl", "**/*.inc"],
         )
 
         self.assertEqual(
@@ -48,12 +48,12 @@ class TestNASLinter(unittest.TestCase):
             ],
         )
 
-    def test_generate_file_list_with_include_regex(self):
+    def test_generate_file_list_with_include_patterns(self):
         cwd = Path(os.getcwd())
         files = generate_file_list(
             dirs=[cwd],
-            exclude_regex=None,
-            dglobs=["**/tests/*/*.nasl", "**/tests/*/*.inc"],
+            exclude_patterns=None,
+            include_patterns=["**/tests/*/*.nasl", "**/tests/*/*.inc"],
         )
 
         print(files)

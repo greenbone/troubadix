@@ -45,11 +45,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=True,
             dirs=expcected_dirs,
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=None,
             files=None,
             full=True,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -72,14 +72,14 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=False,
             dirs=None,
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=None,
             files=[
                 Path("tests/plugins/test.nasl"),
                 Path("tests/plugins/fail2.nasl"),
             ],
             full=False,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -104,11 +104,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=False,
             dirs=[Path("tests"), Path("naslinter")],
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=None,
             files=None,
             full=False,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=None,
             non_recursive=True,
             skip_duplicated_oids=True,
@@ -126,11 +126,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=["0123456", "7abcdef"],
             debug=False,
             dirs=None,
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=None,
             files=None,
             full=False,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -153,11 +153,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=False,
             dirs=None,
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=None,
             files=None,
             full=False,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=["CheckBadwords", "UpdateModificationDate"],
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -180,11 +180,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=False,
             dirs=None,
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=["CheckBadwords", "UpdateModificationDate"],
             files=None,
             full=False,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -193,8 +193,8 @@ class TestArgparsing(unittest.TestCase):
 
         self.assertEqual(parsed_args, expected_args)
 
-    def test_parse_include_regex(self):
-        sys.argv = ["naslinter", "-f", "--include-regex", "naslinter/*"]
+    def test_parse_include_patterns(self):
+        sys.argv = ["naslinter", "-f", "--include-patterns", "naslinter/*"]
         expcected_dirs = [Path(os.getcwd())]
 
         parsed_args = parse_args(term=self.term)
@@ -203,11 +203,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=False,
             dirs=expcected_dirs,
-            exclude_regex=None,
+            exclude_patterns=None,
             excluded_plugins=None,
             files=None,
             full=True,
-            include_regex=["naslinter/*"],
+            include_patterns=["naslinter/*"],
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,
@@ -216,8 +216,8 @@ class TestArgparsing(unittest.TestCase):
 
         self.assertEqual(parsed_args, expected_args)
 
-    def test_parse_include_regex_fail(self):
-        sys.argv = ["naslinter", "--include-regex", "naslinter/*"]
+    def test_parse_include_patterns_fail(self):
+        sys.argv = ["naslinter", "--include-patterns", "naslinter/*"]
 
         with self.assertRaises(SystemExit):
             parse_args(term=self.term)
@@ -234,8 +234,8 @@ class TestArgparsing(unittest.TestCase):
         with self.assertRaises(SystemExit):
             parse_args(term=self.term)
 
-    def test_parse_exclude_regex(self):
-        sys.argv = ["naslinter", "-f", "--exclude-regex", "naslinter/*"]
+    def test_parse_exclude_patterns(self):
+        sys.argv = ["naslinter", "-f", "--exclude-patterns", "naslinter/*"]
         expcected_dirs = [Path(os.getcwd())]
 
         parsed_args = parse_args(term=self.term)
@@ -244,11 +244,11 @@ class TestArgparsing(unittest.TestCase):
             commit_range=None,
             debug=False,
             dirs=expcected_dirs,
-            exclude_regex=["naslinter/*"],
+            exclude_patterns=["naslinter/*"],
             excluded_plugins=None,
             files=None,
             full=True,
-            include_regex=None,
+            include_patterns=None,
             included_plugins=None,
             non_recursive=False,
             skip_duplicated_oids=False,

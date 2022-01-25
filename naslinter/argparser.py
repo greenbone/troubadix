@@ -117,7 +117,7 @@ def parse_args(
     )
 
     parser.add_argument(
-        "--include-regex",
+        "--include-patterns",
         type=str,
         nargs="+",
         help=(
@@ -129,7 +129,7 @@ def parse_args(
     )
 
     parser.add_argument(
-        "--exclude-regex",
+        "--exclude-patterns",
         type=str,
         nargs="+",
         help=(
@@ -183,10 +183,10 @@ def parse_args(
         parsed_args.dirs = [Path(cwd)]
 
     if not parsed_args.dirs and (
-        parsed_args.include_regex or parsed_args.exclude_regex
+        parsed_args.include_patterns or parsed_args.exclude_patterns
     ):
         term.warning(
-            "The arguments '--include-regex' and '--exclude-regex' "
+            "The arguments '--include-patterns' and '--exclude-patterns' "
             "must be used with '-f/--full' or '-d'/'--dirs'"
         )
         sys.exit(1)
