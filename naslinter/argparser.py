@@ -121,7 +121,7 @@ def parse_args(
         type=str,
         nargs="+",
         help=(
-            "Allows to specify a regex (glob) to "
+            "Allows to specify pattern(s) (glob) to "
             'limit the "--full"/"--dirs" run to specific file names. '
             'e.g. "gb_*.nasl", or "*some_vt*.nasl" or "some_dir/gb_*nasl". '
             'Only usable with "-f"/"--full" or "-d"/"--dirs".'
@@ -133,7 +133,7 @@ def parse_args(
         type=str,
         nargs="+",
         help=(
-            "Allows to specify a regex (glob) to "
+            "Allows to specify pattern(s) (glob) to "
             'exclude specific file names from the "--full"/"--dirs" run. '
             'e.g. "some_dir/*.nasl", "gb_*nasl", "*/anything.*'
             'Only usable with "-f"/"--full" or "-d"/"--dirs".'
