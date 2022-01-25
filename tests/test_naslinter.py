@@ -49,7 +49,7 @@ class TestNASLinter(unittest.TestCase):
         )
 
     def test_generate_file_list_with_include_patterns(self):
-        cwd = Path(os.getcwd())
+        cwd = Path.cwd()
         files = generate_file_list(
             dirs=[cwd],
             exclude_patterns=None,

@@ -36,7 +36,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_full_debug_staged(self):
         sys.argv = ["naslinter", "-f", "--debug", "--staged-only"]
-        expcected_dirs = [Path(os.getcwd())]
+        expcected_dirs = [Path.cwd()]
 
         parsed_args = parse_args(term=self.term)
 
