@@ -97,21 +97,22 @@ def main(args=None):
         terminal=term,
     )
 
-    (
-        parsed_args.include_patterns,
-        parsed_args.exclude_patterns,
-    ) = generate_patterns(
-        include_patterns=parsed_args.include_patterns,
-        exclude_patterns=parsed_args.exclude_patterns,
-        non_recursive=parsed_args.non_recursive,
-        term=term,
-    )
+    if parsed_args.dirs:
+        (
+            parsed_args.include_patterns,
+            parsed_args.exclude_patterns,
+        ) = generate_patterns(
+            include_patterns=parsed_args.include_patterns,
+            exclude_patterns=parsed_args.exclude_patterns,
+            non_recursive=parsed_args.non_recursive,
+            term=term,
+        )
 
-    parsed_args.files = generate_file_list(
-        dirs=parsed_args.dirs,
-        exclude_patterns=parsed_args.exclude_patterns,
-        include_patterns=parsed_args.include_patterns,
-    )
+        parsed_args.files = generate_file_list(
+            dirs=parsed_args.dirs,
+            exclude_patterns=parsed_args.exclude_patterns,
+            include_patterns=parsed_args.include_patterns,
+        )
 
     if parsed_args.files:
         print("Running files ... ")
