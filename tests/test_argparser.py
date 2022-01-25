@@ -194,7 +194,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_include_patterns(self):
         sys.argv = ["naslinter", "-f", "--include-patterns", "naslinter/*"]
-        expcected_dirs = [Path(os.getcwd())]
+        expcected_dirs = [Path.cwd()]
 
         parsed_args = parse_args(term=self.term)
 
@@ -235,7 +235,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_exclude_patterns(self):
         sys.argv = ["naslinter", "-f", "--exclude-patterns", "naslinter/*"]
-        expcected_dirs = [Path(os.getcwd())]
+        expcected_dirs = [Path.cwd()]
 
         parsed_args = parse_args(term=self.term)
 
