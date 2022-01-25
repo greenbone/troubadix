@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 from pathlib import Path
 import unittest
 import sys
@@ -34,7 +33,7 @@ class TestNASLinter(unittest.TestCase):
         sys.argv = self.old_args
 
     def test_generate_file_list_with_exclude_patterns(self):
-        cwd = Path(os.getcwd())
+        cwd = Path.cwd()
         files = generate_file_list(
             dirs=[cwd],
             exclude_patterns=["**/test.nasl", "**/templates/*/*.nasl"],

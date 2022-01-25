@@ -43,12 +43,12 @@ def generate_file_list(
     files: List[Path] = []
     for directory in dirs:
         for pattern in include_patterns:
-            files.extend([f for f in directory.glob(pattern)])
+            files.extend(directory.glob(pattern))
     if exclude_patterns:
         excluded_files = []
         for directory in dirs:
             for pattern in exclude_patterns:
-                excluded_files.extend([f for f in directory.glob(pattern)])
+                excluded_files.extend(directory.glob(pattern))
         files = [f for f in files if f not in excluded_files]
 
     return files
@@ -80,7 +80,7 @@ def generate_patterns(
         if exclude_patterns:
             exclude_patterns = [f"**/{pattern}" for pattern in exclude_patterns]
     else:
-        term.warning("Running in not recurive mode!")
+        term.warning("Running in not recursive mode!")
 
     return include_patterns, exclude_patterns
 

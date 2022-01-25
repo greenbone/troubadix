@@ -19,8 +19,6 @@
 
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-import os
-
 import sys
 from typing import List
 
@@ -178,9 +176,9 @@ def parse_args(
 
     # Full will run in the root directory of executing. (Like pwd)
     if parsed_args.full:
-        cwd = Path(os.getcwd())
+        cwd = Path.cwd()
         term.info(f"Running full lint from {cwd}")
-        parsed_args.dirs = [Path(cwd)]
+        parsed_args.dirs = [cwd]
 
     if not parsed_args.dirs and (
         parsed_args.include_patterns or parsed_args.exclude_patterns

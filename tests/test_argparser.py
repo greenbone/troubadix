@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from argparse import Namespace
-import os
 from pathlib import Path
 import sys
 import unittest
