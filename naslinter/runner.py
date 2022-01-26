@@ -18,13 +18,12 @@
 import functools
 from io import StringIO
 import sys
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 
 from pathlib import Path
 from typing import Iterable, List
 
 from pontos.terminal.terminal import Terminal
-
 
 from naslinter.plugin import (
     FileContentPlugin,
@@ -102,8 +101,9 @@ class Runner:
         files: Iterable[Path],
     ) -> None:
         files_list = list(files)
+        number_of_processes = cpu_count() - 2
 
-        with Pool(processes=5) as pool:
+        with Pool(processes=number_of_processes) as pool:
             res = pool.map(self.parallel_run, files_list)
         for elem in res:
             print(elem[0])
