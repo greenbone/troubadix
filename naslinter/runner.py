@@ -101,7 +101,7 @@ class Runner:
         files: Iterable[Path],
     ) -> None:
         files_list = list(files)
-        number_of_processes = cpu_count() - 2
+        number_of_processes = int(cpu_count() / 2)
 
         with Pool(processes=number_of_processes) as pool:
             res = pool.map(self.parallel_run, files_list)
