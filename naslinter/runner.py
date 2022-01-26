@@ -52,10 +52,12 @@ def std_wrapper(func):
             )  # call our wrapped process function
         except TypeError as te:
             print(te)
-        except OSError as oe:
+        except OSError as oe:  # FileNotFound will be caught here too
             print(
                 oe
             )  # StringIO raises OSError instead of IOError from v3.3 onwards
+        except RuntimeError as rune:
+            print(rune)
         # rewind our buffers:
         sys.stdout.seek(0)
         sys.stderr.seek(0)
