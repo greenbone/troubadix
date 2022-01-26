@@ -37,7 +37,7 @@ from naslinter.plugins import Plugins
 
 CURRENT_ENCODING = "latin1"
 
-
+# This wrapper is necessary in order to enforce a correct grouping of the output
 def std_wrapper(func):
     @functools.wraps(func)  # we need this to unravel the target function name
     def caller(*args, **kwargs):  # and now for the wrapper, nothing new here
@@ -50,13 +50,13 @@ def std_wrapper(func):
             response = func(
                 *args, **kwargs
             )  # call our wrapped process function
-        except TypeError as te:
+        except TypeError as te:  # StringIO()
             print(te)
-        except OSError as oe:  # FileNotFound will be caught here too
+        except OSError as oe:  # FileNotFound+StringIO()
             print(
                 oe
             )  # StringIO raises OSError instead of IOError from v3.3 onwards
-        except RuntimeError as rune:
+        except RuntimeError as rune:  # absolute()
             print(rune)
         # rewind our buffers:
         sys.stdout.seek(0)
@@ -109,10 +109,13 @@ class Runner:
             res = pool.map(self.parallel_run, files_list)
         for elem in res:
             print(elem[0])
+        # print(len(res))
 
     @std_wrapper
-    def parallel_run(self, file_path):
+    def parallel_run(self, file_path) -> List:
         file_name = file_path.absolute()
+        # absolute is undocumented: assuming exceptions of resolve() method
+        # ->RuntimeError and FilenotFoundError
         self._report_info(f"Checking {file_name}")
 
         with self._term.indent():
