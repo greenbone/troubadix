@@ -56,8 +56,6 @@ def std_wrapper(func):
             print(
                 oe
             )  # StringIO raises OSError instead of IOError from v3.3 onwards
-        except RuntimeError as rune:  # absolute()
-            print(rune)
         # rewind our buffers:
         sys.stdout.seek(0)
         sys.stderr.seek(0)
@@ -113,9 +111,7 @@ class Runner:
 
     @std_wrapper
     def parallel_run(self, file_path) -> List:
-        file_name = file_path.absolute()
-        # absolute is undocumented: assuming exceptions of resolve() method
-        # ->RuntimeError and FilenotFoundError
+        file_name = file_path.absolute()  # absolute is undocumented
         self._report_info(f"Checking {file_name}")
 
         with self._term.indent():
