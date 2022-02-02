@@ -83,6 +83,16 @@ def parse_args(
     )
 
     what_group.add_argument(
+        "--from-file",
+        type=file_type,
+        help=(
+            "Pass a file that contains a List of files "
+            "containing pathes to files, that should be "
+            "checked. Files should be seperated by newline"
+        ),
+    )
+
+    what_group.add_argument(
         "--commit-range",
         nargs="+",
         type=str,

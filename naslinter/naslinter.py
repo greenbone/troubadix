@@ -18,6 +18,7 @@
 """ Main module for naslinter """
 
 from pathlib import Path
+import sys
 from typing import List, Tuple
 from pontos.terminal.terminal import Terminal
 
@@ -85,6 +86,17 @@ def generate_patterns(
     return include_patterns, exclude_patterns
 
 
+def from_file(include_file: Path, term: Terminal):
+    try:
+        return [
+            Path(f)
+            for f in include_file.read_text(encoding="utf-8").split("\n")
+        ]
+    except FileNotFoundError:
+        term.error(f"File {include_file} containing the file list not found.")
+        sys.exit(1)
+
+
 def main(args=None):
     """Main process of greenbone-docker"""
     term = Terminal()
@@ -112,6 +124,11 @@ def main(args=None):
             dirs=parsed_args.dirs,
             exclude_patterns=parsed_args.exclude_patterns,
             include_patterns=parsed_args.include_patterns,
+        )
+
+    if parsed_args.from_file:
+        parsed_args.files = from_file(
+            include_file=parsed_args.from_file, term=term
         )
 
     if parsed_args.files:
