@@ -50,8 +50,8 @@ def std_wrapper(func):
             response = func(
                 *args, **kwargs
             )  # call our wrapped process function
-        except TypeError as te:  # StringIO()
-            print(te)
+        except TypeError as e:  # StringIO()
+            print(e)
         except OSError as oe:  # FileNotFound+StringIO()
             print(
                 oe
