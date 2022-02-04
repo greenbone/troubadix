@@ -28,14 +28,14 @@ from pontos.terminal.terminal import Terminal
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
-    if not directory_path.is_dir():
+    if directory_path.exists() and not directory_path.is_dir():
         raise ValueError(f"{string} is not a directory.")
     return directory_path
 
 
 def file_type(string: str) -> Path:
     file_path = Path(string)
-    if not file_path.is_file():
+    if file_path.exists() and not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
     return file_path
 
