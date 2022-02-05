@@ -21,6 +21,7 @@ from pathlib import Path
 import sys
 from typing import List, Tuple
 from pontos.terminal.terminal import Terminal
+from pontos.terminal import info, warning, _set_terminal
 
 from naslinter.argparser import parse_args
 from naslinter.runner import Runner
@@ -59,7 +60,6 @@ def generate_patterns(
     include_patterns: List[str],
     exclude_patterns: List[str],
     non_recursive: bool,
-    term: Terminal,
 ) -> Tuple[List[str], List[str]]:
     """Generates the include and exclude patterns
 
@@ -81,7 +81,7 @@ def generate_patterns(
         if exclude_patterns:
             exclude_patterns = [f"**/{pattern}" for pattern in exclude_patterns]
     else:
-        term.warning("Running in not recursive mode!")
+        warning("Running in not recursive mode!")
 
     return include_patterns, exclude_patterns
 
@@ -100,14 +100,15 @@ def from_file(include_file: Path, term: Terminal):
 def main(args=None):
     """Main process of greenbone-docker"""
     term = Terminal()
+    _set_terminal(term)
 
-    parsed_args = parse_args(term=term, args=args)
+    parsed_args = parse_args(args=args)
 
     runner = Runner(
         n_jobs=parsed_args.n_jobs,
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
-        terminal=term,
+        term=term,
     )
 
     if parsed_args.dirs:
@@ -118,7 +119,6 @@ def main(args=None):
             include_patterns=parsed_args.include_patterns,
             exclude_patterns=parsed_args.exclude_patterns,
             non_recursive=parsed_args.non_recursive,
-            term=term,
         )
 
         parsed_args.files = generate_file_list(
@@ -133,10 +133,10 @@ def main(args=None):
         )
 
     if parsed_args.files:
-        term.info("Start linting files ... ")
+        info("Start linting files ... ")
         runner.run(parsed_args.files)
     else:
-        term.warning("No files given/found.")
+        warning("No files given/found.")
 
 
 if __name__ == "__main__":

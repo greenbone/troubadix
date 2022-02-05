@@ -41,21 +41,16 @@ CURRENT_ENCODING = "latin1"
 def std_wrapper(func):
     @functools.wraps(func)  # we need this to unravel the target function name
     def caller(*args, **kwargs):  # and now for the wrapper, nothing new here
-        sys.stdout, sys.stderr = (
-            StringIO(),
-            StringIO(),
-        )  # use our buffers instead
+        # use our buffers instead
+        sys.stdout, sys.stderr = StringIO(), StringIO()
         response = None  # in case a call fails
         try:
-            response = func(
-                *args, **kwargs
-            )  # call our wrapped process function
-        except TypeError as e:  # StringIO()
+            # call our wrapped process function
+            response = func(*args, **kwargs)
+        except TypeError as e:
             print(e)
-        except OSError as oe:  # FileNotFound+StringIO()
-            print(
-                oe
-            )  # StringIO raises OSError instead of IOError from v3.3 onwards
+        except OSError as e:
+            print(e)
         # rewind our buffers:
         sys.stdout.seek(0)
         sys.stderr.seek(0)
@@ -69,12 +64,12 @@ class Runner:
     def __init__(
         self,
         n_jobs: int,
+        term: Terminal,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
-        terminal: Terminal = None,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
-        self._term = terminal or Terminal()
+        self._term = term
         self._n_jobs = n_jobs
 
     def _report_results(self, results: Iterable[LinterMessage]):
@@ -107,8 +102,7 @@ class Runner:
         with Pool(processes=self._n_jobs) as pool:
             res = pool.map(self.parallel_run, files_list)
         for elem in res:
-            print(elem[0])
-        # print(len(res))
+            self._report_results(elem[0])
 
     @std_wrapper
     def parallel_run(self, file_path) -> List:

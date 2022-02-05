@@ -24,7 +24,7 @@ import sys
 from typing import List
 
 
-from pontos.terminal.terminal import Terminal
+from pontos.terminal import info, warning
 
 
 def directory_type(string: str) -> Path:
@@ -55,15 +55,13 @@ def check_cpu_count(number: str) -> int:
 
 
 def parse_args(
-    term: Terminal,
     *,
     args: List[str] = None,
 ) -> Namespace:
     """Parsing args for nasl-lint
 
     Arguments:
-    args        The programm arguments passed by exec
-    term        The terminal to print"""
+    args        The programm arguments passed by exec"""
 
     parser = ArgumentParser(
         description="Greenbone NASL File Linter.",
@@ -214,20 +212,20 @@ def parse_args(
     # Full will run in the root directory of executing. (Like pwd)
     if parsed_args.full:
         cwd = Path.cwd()
-        term.info(f"Running full lint from {cwd}")
+        info(f"Running full lint from {cwd}")
         parsed_args.dirs = [cwd]
 
     if not parsed_args.dirs and (
         parsed_args.include_patterns or parsed_args.exclude_patterns
     ):
-        term.warning(
+        warning(
             "The arguments '--include-patterns' and '--exclude-patterns' "
             "must be used with '-f/--full' or '-d'/'--dirs'"
         )
         sys.exit(1)
 
     if not parsed_args.dirs and parsed_args.non_recursive:
-        term.warning(
+        warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"
         )

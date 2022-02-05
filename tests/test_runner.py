@@ -19,14 +19,21 @@ from multiprocessing import cpu_count
 from pathlib import Path
 import unittest
 from unittest.mock import patch
+from pontos.terminal.terminal import Terminal
+from pontos.terminal import _set_terminal
 
 from naslinter.plugins import _PLUGINS
 from naslinter.runner import Runner
 
 
 class TestRunner(unittest.TestCase):
+    def setUp(self):
+        # store old arguments
+        self._term = Terminal()
+        _set_terminal(self._term)
+
     def test_runner_with_all_plugins(self):
-        runner = Runner(n_jobs=cpu_count() // 2)
+        runner = Runner(n_jobs=cpu_count() // 2, term=self._term)
 
         plugins = _PLUGINS
 
@@ -45,7 +52,9 @@ class TestRunner(unittest.TestCase):
             if plugin.__name__ not in excluded_plugins
         ]
         runner = Runner(
-            n_jobs=cpu_count() // 2, excluded_plugins=excluded_plugins
+            n_jobs=cpu_count() // 2,
+            term=self._term,
+            excluded_plugins=excluded_plugins,
         )
 
         for plugin in runner.plugins.plugins:
@@ -57,7 +66,9 @@ class TestRunner(unittest.TestCase):
             "CheckCopyRightYearPlugin",
         ]
         runner = Runner(
-            n_jobs=cpu_count() // 2, included_plugins=included_plugins
+            n_jobs=cpu_count() // 2,
+            term=self._term,
+            included_plugins=included_plugins,
         )
 
         for plugin in runner.plugins.plugins:
@@ -72,7 +83,9 @@ class TestRunner(unittest.TestCase):
 
         with patch.object(Runner, "_report_results") as ok_mock:
             runner = Runner(
-                n_jobs=cpu_count() // 2, included_plugins=included_plugins
+                n_jobs=cpu_count() // 2,
+                term=self._term,
+                included_plugins=included_plugins,
             )
 
             runner.run([nasl_file])
@@ -93,7 +106,9 @@ class TestRunner(unittest.TestCase):
 
         with patch.object(Runner, "_report_results") as ok_mock:
             runner = Runner(
-                n_jobs=cpu_count() // 2, included_plugins=included_plugins
+                n_jobs=cpu_count() // 2,
+                term=self._term,
+                included_plugins=included_plugins,
             )
 
             runner.run([nasl_file])
