@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from multiprocessing import cpu_count
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -25,7 +26,7 @@ from naslinter.runner import Runner
 
 class TestRunner(unittest.TestCase):
     def test_runner_with_all_plugins(self):
-        runner = Runner()
+        runner = Runner(n_jobs=cpu_count() // 2)
 
         plugins = _PLUGINS
 
@@ -43,7 +44,9 @@ class TestRunner(unittest.TestCase):
             for plugin in _PLUGINS
             if plugin.__name__ not in excluded_plugins
         ]
-        runner = Runner(excluded_plugins=excluded_plugins)
+        runner = Runner(
+            n_jobs=cpu_count() // 2, excluded_plugins=excluded_plugins
+        )
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin.__name__, included_plugins)
@@ -53,7 +56,9 @@ class TestRunner(unittest.TestCase):
             "CheckBadwords",
             "CheckCopyRightYearPlugin",
         ]
-        runner = Runner(included_plugins=included_plugins)
+        runner = Runner(
+            n_jobs=cpu_count() // 2, included_plugins=included_plugins
+        )
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin.__name__, included_plugins)
@@ -65,8 +70,10 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_ok") as ok_mock:
-            runner = Runner(included_plugins=included_plugins)
+        with patch.object(Runner, "_report_results") as ok_mock:
+            runner = Runner(
+                n_jobs=cpu_count() // 2, included_plugins=included_plugins
+            )
 
             runner.run([nasl_file])
 
@@ -84,8 +91,10 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_error") as ok_mock:
-            runner = Runner(included_plugins=included_plugins)
+        with patch.object(Runner, "_report_results") as ok_mock:
+            runner = Runner(
+                n_jobs=cpu_count() // 2, included_plugins=included_plugins
+            )
 
             runner.run([nasl_file])
 
