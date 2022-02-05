@@ -18,6 +18,7 @@
 """ Argument parser for naslinter """
 
 from argparse import ArgumentParser, Namespace
+from multiprocessing import cpu_count
 from pathlib import Path
 import sys
 from typing import List
@@ -38,6 +39,19 @@ def file_type(string: str) -> Path:
     if file_path.exists() and not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
     return file_path
+
+
+def check_cpu_count(number: str) -> int:
+    """Make sure this value is valid"""
+    max_count = cpu_count()
+    if not number:
+        return max_count // 2
+    number = int(number)
+    if number > max_count:
+        return max_count
+    if number < 1:
+        return max_count // 2
+    return number
 
 
 def parse_args(
@@ -178,11 +192,24 @@ def parse_args(
         help=" Disables the check for duplicated OIDs in VTs",
     )
 
+    parser.add_argument(
+        "-j",
+        "--n-jobs",
+        dest="n_jobs",
+        default=cpu_count() // 2,
+        type=int,
+        help=(
+            "Define number of jobs, that should run simultaniously" "Default"
+        ),
+    )
+
     if len(sys.argv) == 1:
         parser.print_help(sys.stdout)
         sys.exit(1)
 
     parsed_args = parser.parse_args(args=args)
+
+    parsed_args.n_jobs = check_cpu_count(parsed_args.n_jobs)
 
     # Full will run in the root directory of executing. (Like pwd)
     if parsed_args.full:

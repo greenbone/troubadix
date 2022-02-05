@@ -104,6 +104,7 @@ def main(args=None):
     parsed_args = parse_args(term=term, args=args)
 
     runner = Runner(
+        n_jobs=parsed_args.n_jobs,
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
         terminal=term,

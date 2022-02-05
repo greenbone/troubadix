@@ -18,7 +18,7 @@
 import functools
 from io import StringIO
 import sys
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool
 
 from pathlib import Path
 from typing import Iterable, List
@@ -68,12 +68,14 @@ def std_wrapper(func):
 class Runner:
     def __init__(
         self,
+        n_jobs: int,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
         terminal: Terminal = None,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = terminal or Terminal()
+        self._n_jobs = n_jobs
 
     def _report_results(self, results: Iterable[LinterMessage]):
         for result in results:
@@ -101,9 +103,8 @@ class Runner:
         files: Iterable[Path],
     ) -> None:
         files_list = list(files)
-        number_of_processes = int(cpu_count() / 2)
 
-        with Pool(processes=number_of_processes) as pool:
+        with Pool(processes=self._n_jobs) as pool:
             res = pool.map(self.parallel_run, files_list)
         for elem in res:
             print(elem[0])
@@ -111,7 +112,7 @@ class Runner:
 
     @std_wrapper
     def parallel_run(self, file_path) -> List:
-        file_name = file_path.absolute()  # absolute is undocumented
+        file_name = file_path.resolve()
         self._report_info(f"Checking {file_name}")
 
         with self._term.indent():
