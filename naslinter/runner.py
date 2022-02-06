@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 import functools
 from io import StringIO
 import sys
@@ -24,6 +25,7 @@ from pathlib import Path
 from typing import Iterable, List
 
 from pontos.terminal.terminal import Terminal
+from pontos.terminal import info
 
 from naslinter.plugin import (
     FileContentPlugin,
@@ -35,6 +37,7 @@ from naslinter.plugin import (
 )
 from naslinter.plugins import Plugins
 
+CHUNKSIZE = 1  # default 1
 CURRENT_ENCODING = "latin1"
 
 # This wrapper is necessary in order to enforce a correct grouping of the output
@@ -99,10 +102,13 @@ class Runner:
     ) -> None:
         files_list = list(files)
 
+        start = datetime.datetime.now()
         with Pool(processes=self._n_jobs) as pool:
-            res = pool.map(self.parallel_run, files_list)
-        for elem in res:
-            self._report_results(elem[0])
+            for result in pool.imap_unordered(
+                self.parallel_run, files_list, chunksize=CHUNKSIZE
+            ):
+                print(result[0])
+        info(f"Time elapsed: {datetime.datetime.now() - start}")
 
     @std_wrapper
     def parallel_run(self, file_path) -> List:
@@ -118,6 +124,7 @@ class Runner:
                 self._report_warning("Not a NASL file.")
                 return
 
+            # maybe we need to re-read filecontent, if an Plugin changes it
             file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
             for plugin in self.plugins:
