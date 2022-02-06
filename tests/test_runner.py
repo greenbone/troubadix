@@ -81,14 +81,14 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_results") as ok_mock:
+        with patch.object(Runner, "_report_ok", autospec=True) as ok_mock:
             runner = Runner(
                 n_jobs=cpu_count() // 2,
                 term=self._term,
                 included_plugins=included_plugins,
             )
 
-            runner.run([nasl_file])
+            runner.parallel_run(nasl_file)
 
             new_content = nasl_file.read_text(encoding="latin1")
             self.assertNotEqual(content, new_content)
@@ -104,15 +104,15 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_results") as ok_mock:
+        with patch.object(Runner, "_report_error", autospec=True) as error_mock:
             runner = Runner(
                 n_jobs=cpu_count() // 2,
                 term=self._term,
                 included_plugins=included_plugins,
             )
 
-            runner.run([nasl_file])
+            runner.parallel_run(nasl_file)
 
             new_content = nasl_file.read_text(encoding="latin1")
             self.assertEqual(content, new_content)
-            ok_mock.assert_called_once()
+            error_mock.assert_called_once()
