@@ -187,7 +187,6 @@ class TestArgparsing(unittest.TestCase):
         ]
 
         parsed_args = parse_args()
-        print(parsed_args)
 
         expected_args = Namespace(
             full=False,
