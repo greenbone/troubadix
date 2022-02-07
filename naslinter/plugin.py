@@ -39,11 +39,15 @@ class LinterError(LinterMessage):
 
 
 class Plugin(ABC):
+    """A linter plugin"""
+
     name: str = None
     description: str = None
 
 
 class FileContentPlugin(Plugin):
+    """A plugin that does checks on the whole file content"""
+
     @staticmethod
     @abstractmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
@@ -51,6 +55,8 @@ class FileContentPlugin(Plugin):
 
 
 class LineContentPlugin(Plugin):
+    """A plugin that checks file content line by line"""
+
     @staticmethod
     @abstractmethod
     def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
