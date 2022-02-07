@@ -43,7 +43,8 @@ def file_type(string: str) -> Path:
 
 
 def check_cpu_count(number: str) -> int:
-    """Make sure this value is valid"""
+    """Make sure this value is valid
+    Default: use half of the available cores to not block the machine"""
     max_count = cpu_count()
     if not number:
         return max_count // 2
@@ -198,7 +199,8 @@ def parse_args(
         default=cpu_count() // 2,
         type=int,
         help=(
-            "Define number of jobs, that should run simultaniously" "Default: %(default)s"
+            "Define number of jobs, that should run simultaniously"
+            "Default: %(default)s"
         ),
     )
 
