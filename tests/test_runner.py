@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from multiprocessing import cpu_count
-from pathlib import Path
 import unittest
-from unittest.mock import patch
+
+from pathlib import Path
+
 from pontos.terminal.terminal import Terminal
 from pontos.terminal import _set_terminal
+from naslinter.plugin import LinterError, LinterResult
 
 from naslinter.plugins import _PLUGINS
 from naslinter.runner import Runner
@@ -33,7 +34,7 @@ class TestRunner(unittest.TestCase):
         _set_terminal(self._term)
 
     def test_runner_with_all_plugins(self):
-        runner = Runner(n_jobs=cpu_count() // 2, term=self._term)
+        runner = Runner(n_jobs=1, term=self._term)
 
         plugins = _PLUGINS
 
@@ -52,7 +53,7 @@ class TestRunner(unittest.TestCase):
             if plugin.__name__ not in excluded_plugins
         ]
         runner = Runner(
-            n_jobs=cpu_count() // 2,
+            n_jobs=1,
             term=self._term,
             excluded_plugins=excluded_plugins,
         )
@@ -66,7 +67,7 @@ class TestRunner(unittest.TestCase):
             "CheckCopyRightYearPlugin",
         ]
         runner = Runner(
-            n_jobs=cpu_count() // 2,
+            n_jobs=1,
             term=self._term,
             included_plugins=included_plugins,
         )
@@ -81,18 +82,25 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_ok", autospec=True) as ok_mock:
-            runner = Runner(
-                n_jobs=cpu_count() // 2,
-                term=self._term,
-                included_plugins=included_plugins,
-            )
+        runner = Runner(
+            n_jobs=1,
+            term=self._term,
+            included_plugins=included_plugins,
+        )
 
-            runner.parallel_run(nasl_file)
+        results = runner.check_file(nasl_file)
 
-            new_content = nasl_file.read_text(encoding="latin1")
-            self.assertNotEqual(content, new_content)
-            ok_mock.assert_called_once()
+        new_content = nasl_file.read_text(encoding="latin1")
+        self.assertNotEqual(content, new_content)
+
+        self.assertEqual(len(results.generic_results), 0)
+        self.assertEqual(len(results.plugin_results), 1)
+        self.assertEqual(
+            len(results.plugin_results["update_modification_date"]), 1
+        )
+        self.assertIsInstance(
+            results.plugin_results["update_modification_date"][0], LinterResult
+        )
 
         # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
@@ -104,15 +112,26 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_error", autospec=True) as error_mock:
-            runner = Runner(
-                n_jobs=cpu_count() // 2,
-                term=self._term,
-                included_plugins=included_plugins,
-            )
+        runner = Runner(
+            n_jobs=1,
+            term=self._term,
+            included_plugins=included_plugins,
+        )
 
-            runner.parallel_run(nasl_file)
+        results = runner.check_file(nasl_file)
 
-            new_content = nasl_file.read_text(encoding="latin1")
-            self.assertEqual(content, new_content)
-            error_mock.assert_called_once()
+        new_content = nasl_file.read_text(encoding="latin1")
+        self.assertEqual(content, new_content)
+
+        self.assertEqual(len(results.generic_results), 0)
+        self.assertEqual(len(results.plugin_results), 1)
+        self.assertEqual(
+            len(results.plugin_results["update_modification_date"]), 1
+        )
+
+        error = results.plugin_results["update_modification_date"][0]
+        self.assertIsInstance(error, LinterError)
+        self.assertIn(
+            "fail.nasl does not contain a modification day script tag.",
+            error.message,
+        )
