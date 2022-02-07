@@ -210,8 +210,6 @@ def parse_args(
 
     parsed_args = parser.parse_args(args=args)
 
-    parsed_args.n_jobs = check_cpu_count(parsed_args.n_jobs)
-
     # Full will run in the root directory of executing. (Like pwd)
     if parsed_args.full:
         cwd = Path.cwd()
