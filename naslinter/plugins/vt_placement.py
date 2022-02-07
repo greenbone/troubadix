@@ -15,10 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
 import re
 
-from ..plugin import LinterError, FileContentPlugin
+from pathlib import Path
+from typing import Iterator
+
+from ..plugin import LinterError, FileContentPlugin, LinterResult
 
 
 class CheckVTPlacement(FileContentPlugin):
@@ -34,7 +36,7 @@ class CheckVTPlacement(FileContentPlugin):
     name = "check_vt_placement"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str):
+    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
         """
         Args:
             nasl_file: The VT that shall be checked
