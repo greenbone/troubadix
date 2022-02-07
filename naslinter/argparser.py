@@ -17,10 +17,11 @@
 
 """ Argument parser for naslinter """
 
+import sys
+
 from argparse import ArgumentParser, Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
-import sys
 from typing import List
 
 
@@ -197,7 +198,7 @@ def parse_args(
         default=cpu_count() // 2,
         type=int,
         help=(
-            "Define number of jobs, that should run simultaniously" "Default"
+            "Define number of jobs, that should run simultaniously" "Default: %(default)s"
         ),
     )
 

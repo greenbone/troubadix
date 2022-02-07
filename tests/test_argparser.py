@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+import unittest
+
 from argparse import Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
-import sys
-import unittest
 from unittest.mock import Mock
 
 from pontos.terminal import _set_terminal

@@ -17,10 +17,10 @@
 
 import datetime
 import functools
-from io import StringIO
 import sys
-from multiprocessing import Pool
 
+from io import StringIO
+from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable, List
 
@@ -111,7 +111,7 @@ class Runner:
         info(f"Time elapsed: {datetime.datetime.now() - start}")
 
     @std_wrapper
-    def parallel_run(self, file_path) -> List:
+    def parallel_run(self, file_path) -> None:
         file_name = file_path.resolve()
         self._report_info(f"Checking {file_name}")
 
