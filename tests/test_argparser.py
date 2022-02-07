@@ -15,12 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from argparse import Namespace
-from pathlib import Path
 import sys
 import unittest
+
+from argparse import Namespace
+from multiprocessing import cpu_count
+from pathlib import Path
 from unittest.mock import Mock
 
+from pontos.terminal import _set_terminal
 from naslinter.argparser import parse_args
 
 
@@ -28,7 +31,7 @@ class TestArgparsing(unittest.TestCase):
     def setUp(self):
         # store old arguments
         self.old_args = sys.argv
-        self.term = Mock()
+        _set_terminal(Mock())
 
     def tearDown(self) -> None:
         # reset old arguments
@@ -38,22 +41,23 @@ class TestArgparsing(unittest.TestCase):
         sys.argv = ["naslinter", "-f", "--debug", "--staged-only"]
         expcected_dirs = [Path.cwd()]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=True,
+            full=True,
             dirs=expcected_dirs,
-            exclude_patterns=None,
-            excluded_plugins=None,
             files=None,
             from_file=None,
-            full=True,
-            include_patterns=None,
-            included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=None,
             staged_only=True,
+            debug=True,
+            non_recursive=False,
+            include_patterns=None,
+            exclude_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -66,25 +70,26 @@ class TestArgparsing(unittest.TestCase):
             "tests/plugins/fail2.nasl",
         ]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=False,
+            full=False,
             dirs=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
             files=[
                 Path("tests/plugins/test.nasl"),
                 Path("tests/plugins/fail2.nasl"),
             ],
             from_file=None,
-            full=False,
-            include_patterns=None,
-            included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=None,
             staged_only=False,
+            debug=False,
+            non_recursive=False,
+            include_patterns=None,
+            exclude_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -99,22 +104,23 @@ class TestArgparsing(unittest.TestCase):
             "--non-recursive",
         ]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=False,
+            full=False,
             dirs=[Path("tests"), Path("naslinter")],
-            exclude_patterns=None,
-            excluded_plugins=None,
             files=None,
             from_file=None,
-            full=False,
-            include_patterns=None,
-            included_plugins=None,
-            non_recursive=True,
-            skip_duplicated_oids=True,
+            commit_range=None,
             staged_only=False,
+            debug=False,
+            non_recursive=True,
+            include_patterns=None,
+            exclude_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=True,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -122,22 +128,23 @@ class TestArgparsing(unittest.TestCase):
     def test_parse_commit_range(self):
         sys.argv = ["naslinter", "--commit-range", "0123456", "7abcdef"]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=["0123456", "7abcdef"],
-            debug=False,
+            full=False,
             dirs=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
             files=None,
             from_file=None,
-            full=False,
-            include_patterns=None,
-            included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=["0123456", "7abcdef"],
             staged_only=False,
+            debug=False,
+            non_recursive=False,
+            include_patterns=None,
+            exclude_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -150,22 +157,23 @@ class TestArgparsing(unittest.TestCase):
             "UpdateModificationDate",
         ]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=False,
+            full=False,
             dirs=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
             files=None,
             from_file=None,
-            full=False,
-            include_patterns=None,
-            included_plugins=["CheckBadwords", "UpdateModificationDate"],
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=None,
             staged_only=False,
+            debug=False,
+            non_recursive=False,
+            include_patterns=None,
+            exclude_patterns=None,
+            excluded_plugins=None,
+            included_plugins=["CheckBadwords", "UpdateModificationDate"],
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -178,22 +186,24 @@ class TestArgparsing(unittest.TestCase):
             "UpdateModificationDate",
         ]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
+        print(parsed_args)
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=False,
+            full=False,
             dirs=None,
-            exclude_patterns=None,
-            excluded_plugins=["CheckBadwords", "UpdateModificationDate"],
             files=None,
             from_file=None,
-            full=False,
-            include_patterns=None,
-            included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=None,
             staged_only=False,
+            debug=False,
+            non_recursive=False,
+            include_patterns=None,
+            exclude_patterns=None,
+            excluded_plugins=["CheckBadwords", "UpdateModificationDate"],
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -202,22 +212,23 @@ class TestArgparsing(unittest.TestCase):
         sys.argv = ["naslinter", "-f", "--include-patterns", "naslinter/*"]
         expcected_dirs = [Path.cwd()]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=False,
+            full=True,
             dirs=expcected_dirs,
-            exclude_patterns=None,
-            excluded_plugins=None,
             files=None,
             from_file=None,
-            full=True,
-            include_patterns=["naslinter/*"],
-            included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=None,
             staged_only=False,
+            debug=False,
+            non_recursive=False,
+            include_patterns=["naslinter/*"],
+            exclude_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -226,7 +237,7 @@ class TestArgparsing(unittest.TestCase):
         sys.argv = ["naslinter", "--include-patterns", "naslinter/*"]
 
         with self.assertRaises(SystemExit):
-            parse_args(term=self.term)
+            parse_args()
 
     def test_parse_files_non_recursive_fail(self):
         sys.argv = [
@@ -238,28 +249,93 @@ class TestArgparsing(unittest.TestCase):
         ]
 
         with self.assertRaises(SystemExit):
-            parse_args(term=self.term)
+            parse_args()
 
     def test_parse_exclude_patterns(self):
         sys.argv = ["naslinter", "-f", "--exclude-patterns", "naslinter/*"]
         expcected_dirs = [Path.cwd()]
 
-        parsed_args = parse_args(term=self.term)
+        parsed_args = parse_args()
 
         expected_args = Namespace(
-            commit_range=None,
-            debug=False,
+            full=True,
             dirs=expcected_dirs,
-            exclude_patterns=["naslinter/*"],
-            excluded_plugins=None,
             files=None,
             from_file=None,
-            full=True,
-            include_patterns=None,
-            included_plugins=None,
-            non_recursive=False,
-            skip_duplicated_oids=False,
+            commit_range=None,
             staged_only=False,
+            debug=False,
+            non_recursive=False,
+            exclude_patterns=["naslinter/*"],
+            include_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
+        )
+
+        self.assertEqual(parsed_args, expected_args)
+
+    def test_parse_max_cpu(self):
+        sys.argv = [
+            "naslinter",
+            "-f",
+            "--exclude-patterns",
+            "naslinter/*",
+            "-j",
+            "1337",
+        ]
+        expcected_dirs = [Path.cwd()]
+
+        parsed_args = parse_args()
+
+        expected_args = Namespace(
+            full=True,
+            dirs=expcected_dirs,
+            files=None,
+            from_file=None,
+            commit_range=None,
+            staged_only=False,
+            debug=False,
+            non_recursive=False,
+            exclude_patterns=["naslinter/*"],
+            include_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count(),
+        )
+
+        self.assertEqual(parsed_args, expected_args)
+
+    def test_parse_min_cpu(self):
+        sys.argv = [
+            "naslinter",
+            "-f",
+            "--exclude-patterns",
+            "naslinter/*",
+            "-j",
+            "-1337",
+        ]
+        expcected_dirs = [Path.cwd()]
+
+        parsed_args = parse_args()
+
+        expected_args = Namespace(
+            full=True,
+            dirs=expcected_dirs,
+            files=None,
+            from_file=None,
+            commit_range=None,
+            staged_only=False,
+            debug=False,
+            non_recursive=False,
+            exclude_patterns=["naslinter/*"],
+            include_patterns=None,
+            excluded_plugins=None,
+            included_plugins=None,
+            skip_duplicated_oids=False,
+            n_jobs=cpu_count() // 2,
         )
 
         self.assertEqual(parsed_args, expected_args)

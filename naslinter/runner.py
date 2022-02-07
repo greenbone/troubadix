@@ -15,10 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+import functools
+import sys
+
+from io import StringIO
+from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable, List
 
 from pontos.terminal.terminal import Terminal
+from pontos.terminal import info
 
 from naslinter.plugin import (
     FileContentPlugin,
@@ -30,18 +37,43 @@ from naslinter.plugin import (
 )
 from naslinter.plugins import Plugins
 
+CHUNKSIZE = 1  # default 1
 CURRENT_ENCODING = "latin1"
+
+# This wrapper is necessary in order to enforce a correct grouping of the output
+def std_wrapper(func):
+    @functools.wraps(func)  # we need this to unravel the target function name
+    def caller(*args, **kwargs):  # and now for the wrapper, nothing new here
+        # use our buffers instead
+        sys.stdout, sys.stderr = StringIO(), StringIO()
+        response = None  # in case a call fails
+        try:
+            # call our wrapped process function
+            response = func(*args, **kwargs)
+        except TypeError as e:
+            print(e)
+        except OSError as e:
+            print(e)
+        # rewind our buffers:
+        sys.stdout.seek(0)
+        sys.stderr.seek(0)
+        # return everything packed as STDOUT, STDERR, PROCESS_RESPONSE | NONE
+        return sys.stdout.read(), sys.stderr.read(), response
+
+    return caller
 
 
 class Runner:
     def __init__(
         self,
+        n_jobs: int,
+        term: Terminal,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
-        terminal: Terminal = None,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
-        self._term = terminal or Terminal()
+        self._term = term
+        self._n_jobs = n_jobs
 
     def _report_results(self, results: Iterable[LinterMessage]):
         for result in results:
@@ -68,33 +100,44 @@ class Runner:
         self,
         files: Iterable[Path],
     ) -> None:
+        files_list = list(files)
 
-        for file_path in files:
-            file_name = file_path.absolute()
-            self._report_info(f"Checking {file_name}")
+        start = datetime.datetime.now()
+        with Pool(processes=self._n_jobs) as pool:
+            for result in pool.imap_unordered(
+                self.parallel_run, files_list, chunksize=CHUNKSIZE
+            ):
+                print(result[0])
+        info(f"Time elapsed: {datetime.datetime.now() - start}")
 
-            with self._term.indent():
-                if not file_path.exists():
-                    self._report_warning("File does not exist.")
-                    continue
-                # some scripts are not executed on include (.inc) files
-                if file_path.suffix != ".nasl" and file_path.suffix != ".inc":
-                    self._report_warning("Not a NASL file.")
-                    continue
+    @std_wrapper
+    def parallel_run(self, file_path) -> None:
+        file_name = file_path.resolve()
+        self._report_info(f"Checking {file_name}")
 
-                file_content = file_path.read_text(encoding=CURRENT_ENCODING)
+        with self._term.indent():
+            if not file_path.exists():
+                self._report_warning("File does not exist.")
+                return
+            # some scripts are not executed on include (.inc) files
+            if file_path.suffix != ".nasl" and file_path.suffix != ".inc":
+                self._report_warning("Not a NASL file.")
+                return
 
-                for plugin in self.plugins:
-                    self._report_info(f"Running plugin {plugin.name}")
-                    with self._term.indent():
-                        if issubclass(plugin, LineContentPlugin):
-                            lines = file_content.split("\n")
-                            results = plugin.run(file_name, lines)
-                        elif issubclass(plugin, FileContentPlugin):
-                            results = plugin.run(file_name, file_content)
-                        else:
-                            self._report_error(
-                                f"Plugin {plugin.__name__} can not be read."
-                            )
+            # maybe we need to re-read filecontent, if an Plugin changes it
+            file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
-                        self._report_results(results)
+            for plugin in self.plugins:
+                self._report_info(f"Running plugin {plugin.name}")
+                with self._term.indent():
+                    if issubclass(plugin, LineContentPlugin):
+                        lines = file_content.split("\n")
+                        results = plugin.run(file_name, lines)
+                    elif issubclass(plugin, FileContentPlugin):
+                        results = plugin.run(file_name, file_content)
+                    else:
+                        self._report_error(
+                            f"Plugin {plugin.__name__} can not be read."
+                        )
+
+                    self._report_results(results)

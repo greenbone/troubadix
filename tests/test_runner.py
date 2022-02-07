@@ -15,17 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from multiprocessing import cpu_count
 from pathlib import Path
 import unittest
 from unittest.mock import patch
+from pontos.terminal.terminal import Terminal
+from pontos.terminal import _set_terminal
 
 from naslinter.plugins import _PLUGINS
 from naslinter.runner import Runner
 
 
 class TestRunner(unittest.TestCase):
+    def setUp(self):
+        # store old arguments
+        self._term = Terminal()
+        _set_terminal(self._term)
+
     def test_runner_with_all_plugins(self):
-        runner = Runner()
+        runner = Runner(n_jobs=cpu_count() // 2, term=self._term)
 
         plugins = _PLUGINS
 
@@ -43,7 +51,11 @@ class TestRunner(unittest.TestCase):
             for plugin in _PLUGINS
             if plugin.__name__ not in excluded_plugins
         ]
-        runner = Runner(excluded_plugins=excluded_plugins)
+        runner = Runner(
+            n_jobs=cpu_count() // 2,
+            term=self._term,
+            excluded_plugins=excluded_plugins,
+        )
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin.__name__, included_plugins)
@@ -53,7 +65,11 @@ class TestRunner(unittest.TestCase):
             "CheckBadwords",
             "CheckCopyRightYearPlugin",
         ]
-        runner = Runner(included_plugins=included_plugins)
+        runner = Runner(
+            n_jobs=cpu_count() // 2,
+            term=self._term,
+            included_plugins=included_plugins,
+        )
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin.__name__, included_plugins)
@@ -65,10 +81,14 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_ok") as ok_mock:
-            runner = Runner(included_plugins=included_plugins)
+        with patch.object(Runner, "_report_ok", autospec=True) as ok_mock:
+            runner = Runner(
+                n_jobs=cpu_count() // 2,
+                term=self._term,
+                included_plugins=included_plugins,
+            )
 
-            runner.run([nasl_file])
+            runner.parallel_run(nasl_file)
 
             new_content = nasl_file.read_text(encoding="latin1")
             self.assertNotEqual(content, new_content)
@@ -84,11 +104,15 @@ class TestRunner(unittest.TestCase):
         nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
-        with patch.object(Runner, "_report_error") as ok_mock:
-            runner = Runner(included_plugins=included_plugins)
+        with patch.object(Runner, "_report_error", autospec=True) as error_mock:
+            runner = Runner(
+                n_jobs=cpu_count() // 2,
+                term=self._term,
+                included_plugins=included_plugins,
+            )
 
-            runner.run([nasl_file])
+            runner.parallel_run(nasl_file)
 
             new_content = nasl_file.read_text(encoding="latin1")
             self.assertEqual(content, new_content)
-            ok_mock.assert_called_once()
+            error_mock.assert_called_once()

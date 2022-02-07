@@ -20,6 +20,8 @@ import unittest
 import sys
 from unittest.mock import Mock
 
+from pontos.terminal import _set_terminal
+
 from naslinter.naslinter import generate_file_list, generate_patterns
 
 
@@ -39,14 +41,14 @@ class TestNASLinter(unittest.TestCase):
             exclude_patterns=["**/test.nasl", "**/templates/*/*.nasl"],
             include_patterns=["**/*.nasl", "**/*.inc"],
         )
+        expected_files = [
+            Path(f"{cwd}/tests/plugins/fail.nasl"),
+            Path(f"{cwd}/tests/plugins/fail2.nasl"),
+        ]
+        expected_files.sort()
+        files.sort()
 
-        self.assertEqual(
-            files,
-            [
-                Path(f"{cwd}/tests/plugins/fail.nasl"),
-                Path(f"{cwd}/tests/plugins/fail2.nasl"),
-            ],
-        )
+        self.assertEqual(files, expected_files)
 
     def test_generate_file_list_with_include_patterns(self):
         cwd = Path.cwd()
@@ -55,20 +57,18 @@ class TestNASLinter(unittest.TestCase):
             exclude_patterns=None,
             include_patterns=["**/tests/*/*.nasl", "**/tests/*/*.inc"],
         )
+        expected_files = [
+            Path(f"{cwd}/tests/plugins/fail.nasl"),
+            Path(f"{cwd}/tests/plugins/test.nasl"),
+            Path(f"{cwd}/tests/plugins/fail2.nasl"),
+        ]
+        expected_files.sort()
+        files.sort()
 
-        print(files)
-
-        self.assertEqual(
-            files,
-            [
-                Path(f"{cwd}/tests/plugins/fail.nasl"),
-                Path(f"{cwd}/tests/plugins/test.nasl"),
-                Path(f"{cwd}/tests/plugins/fail2.nasl"),
-            ],
-        )
+        self.assertEqual(files, expected_files)
 
     def test_generate_patterns_non_recursive(self):
-        term = Mock()
+        _set_terminal(Mock())
         include_patterns = ["*.nasl", "*.inc"]
         exclude_patterns = ["test.nasl", "templates/*/*.nasl"]
 
@@ -76,14 +76,13 @@ class TestNASLinter(unittest.TestCase):
             include_patterns=include_patterns,
             exclude_patterns=exclude_patterns,
             non_recursive=True,
-            term=term,
         )
 
         self.assertEqual(new_include_patterns, include_patterns)
         self.assertEqual(new_exclude_patterns, exclude_patterns)
 
     def test_generate_patterns_recursive(self):
-        term = Mock()
+        _set_terminal(Mock())
         include_patterns = ["*.nasl", "*.inc"]
         exclude_patterns = ["test.nasl", "templates/*/*.nasl"]
 
@@ -91,7 +90,6 @@ class TestNASLinter(unittest.TestCase):
             include_patterns=include_patterns,
             exclude_patterns=exclude_patterns,
             non_recursive=False,
-            term=term,
         )
 
         expected_include_patterns = ["**/*.nasl", "**/*.inc"]
