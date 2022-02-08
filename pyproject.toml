@@ -5,6 +5,8 @@ description = "A linter for NASL files"
 authors = ["Greenbone <info@greenbone.net>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
+repository = "https://github.com/greenbone/naslinter"
+homepage = "https://github.com/greenbone/naslinter"
 
 classifiers=[
   # Full list: https://pypi.org/pypi?%3Aaction=list_classifiers
