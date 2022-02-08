@@ -36,51 +36,56 @@ class CheckCreationDate(LineContentPlugin):
                 # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
                 mod_pattern = (
                     r"script_tag\(name:\"creation_date\", "
-                    r"value:\"(([0-9:+\s-]+)\s\((.+)\))\"\);"
+                    r"value:\"(([0-9:\s-]+\+[0-9]+)\s\((.+)\))\"\);"
                 )
 
                 match = re.search(pattern=mod_pattern, string=line)
                 if match:
+                    # Check length of the datetime value
+                    if len(match.group(1)) != LENGTH:
+                        yield LinterError(
+                            "Incorrectly formatted creation_date of VT "
+                            f"'{nasl_file}' (length != {LENGTH}). Please "
+                            'use EXACTLY the following format as in: "2017'
+                            '-11-29 13:56:41 +0000 (Wed, 29 Nov 2017)"'
+                        )
+                        return
                     try:
-                        # Check length of the datetime value
-                        if len(match.group(1)) != LENGTH:
-                            yield LinterError(
-                                "Incorrectly formatted creation_date of VT "
-                                f"'{nasl_file}' (length != {LENGTH}). Please "
-                                'use EXACTLY the following format as in: "2017'
-                                '-11-29 13:56:41 +0000 (Wed, 29 Nov 2017)"'
-                            )
-                            return
-
                         date_left = datetime.strptime(
-                            match.group(2).strip(), "%Y-%m-%d %H:%M:%S %z"
+                            match.group(2), "%Y-%m-%d %H:%M:%S %z"
                         )
                         # 2017-11-29 13:56:41 +0100 (error if no timezone)
                         date_right = datetime.strptime(
-                            match.group(3).strip(), "%a, %d %b %Y"
+                            match.group(3), "%a, %d %b %Y"
                         )
-                        week_day = match.group(2).strip()[:3]
-                        # Wed, 29 Nov 2017
-                        if date_left.date() != date_right.date():
-                            yield LinterError(
-                                f"The creation_date of VT '{nasl_file}' "
-                                "consists of two different dates."
-                            )
-                        # Check correct weekday
-                        elif week_day != date_right.strftime("%a"):
-                            formatted_date = date_left.strftime("%a")
-                            yield LinterError(
-                                f"Wrong day of week in VT '{nasl_file}'. "
-                                f"Please change it from '{week_day}' to "
-                                f"'{formatted_date}'."
-                            )
-
+                        week_day_parsed = date_right.strftime("%a")
                     except ValueError:
                         yield LinterError(
                             f"False or incorrectly formatted creation_date "
                             f"of VT '{nasl_file}'"
                         )
-                    return
+                        return
+                    week_day_str = match.group(3)[:3]
+                    # Wed, 29 Nov 2017
+                    if date_left.date() != date_right.date():
+                        yield LinterError(
+                            f"The creation_date of VT '{nasl_file}' "
+                            "consists of two different dates."
+                        )
+                    # Check correct weekday
+                    elif week_day_str != week_day_parsed:
+                        formatted_date = week_day_parsed
+                        yield LinterError(
+                            f"Wrong day of week in VT '{nasl_file}'. "
+                            f"Please change it from '{week_day_str}' to "
+                            f"'{formatted_date}'."
+                        )
+                else:
+                    yield LinterError(
+                        f"False or incorrectly formatted creation_date "
+                        f"of VT '{nasl_file}'"
+                    )
+                return
 
         yield LinterError(
             f"No creation date has been found in VT '{nasl_file}'."

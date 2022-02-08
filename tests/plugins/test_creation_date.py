@@ -26,12 +26,12 @@ from naslinter.plugins.creation_date import CheckCreationDate
 class CheckCreationDateTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
-        content = (
+        content = [
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013)")'
-        )
+            '+0200 (Tue, 14 May 2013)");'
+        ]
 
-        results = list(CheckCreationDate.run(path, content.splitlines()))
+        results = list(CheckCreationDate.run(path, content))
         self.assertEqual(len(results), 0)
 
     def test_missing(self):
