@@ -32,48 +32,47 @@ class CheckCreationDate(LineContentPlugin):
     @staticmethod
     def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
         for line in lines:
-            if not "creation_date" in line:
-                continue
-
-            expression = re.search(r'value\s*:\s*"(.*)"', line)
-            if expression:
-                creation_date = expression.group(1)
+            if "creation_date" in line:
                 # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
-                if creation_date:
+                mod_pattern = (
+                    r"script_tag\(name:\"creation_date\", "
+                    r"value:\"(([0-9:+\s-]+)\s\((.+)\))\"\);"
+                )
+
+                match = re.search(pattern=mod_pattern, string=line)
+                if match:
                     try:
-                        values = re.match(r"([^\(]+)\(([^\)]+)", creation_date)
+                        # Check length of the datetime value
+                        if len(match.group(1)) != LENGTH:
+                            yield LinterError(
+                                "Incorrectly formatted creation_date of VT "
+                                f"'{nasl_file}' (length != {LENGTH}). Please "
+                                'use EXACTLY the following format as in: "2017'
+                                '-11-29 13:56:41 +0000 (Wed, 29 Nov 2017)"'
+                            )
+                            return
+
                         date_left = datetime.strptime(
-                            values.group(1).strip(), "%Y-%m-%d %H:%M:%S %z"
+                            match.group(2).strip(), "%Y-%m-%d %H:%M:%S %z"
                         )
                         # 2017-11-29 13:56:41 +0100 (error if no timezone)
                         date_right = datetime.strptime(
-                            values.group(2).strip(), "%a, %d %b %Y"
+                            match.group(3).strip(), "%a, %d %b %Y"
                         )
+                        week_day = match.group(2).strip()[:3]
                         # Wed, 29 Nov 2017
                         if date_left.date() != date_right.date():
                             yield LinterError(
                                 f"The creation_date of VT '{nasl_file}' "
                                 "consists of two different dates."
                             )
-
-                        elif values.group(2).strip()[:3] != date_right.strftime(
-                            "%a"
-                        ):
+                        # Check correct weekday
+                        elif week_day != date_right.strftime("%a"):
                             formatted_date = date_left.strftime("%a")
                             yield LinterError(
                                 f"Wrong day of week in VT '{nasl_file}'. "
-                                f"Please change it from "
-                                f"'{values.group(2).strip()[:3]}' to "
+                                f"Please change it from '{week_day}' to "
                                 f"'{formatted_date}'."
-                            )
-
-                        if len(creation_date) != LENGTH:
-                            yield LinterError(
-                                "Incorrectly formatted creation_date of "
-                                f"VT '{nasl_file}' (length != {LENGTH}). Please"
-                                " use EXACTLY the following format as in: "
-                                '"2017-11-29 13:56:41 +0000 '
-                                '(Wed, 29 Nov 2017)"'
                             )
 
                     except ValueError:
@@ -81,7 +80,6 @@ class CheckCreationDate(LineContentPlugin):
                             f"False or incorrectly formatted creation_date "
                             f"of VT '{nasl_file}'"
                         )
-
                     return
 
         yield LinterError(
