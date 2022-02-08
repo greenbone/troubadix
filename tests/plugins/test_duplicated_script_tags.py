@@ -23,7 +23,7 @@ from naslinter.plugin import LinterError
 from naslinter.plugins.duplicated_script_tags import CheckDuplicatedScriptTags
 
 
-class CheckCVSSFormatTestCase(unittest.TestCase):
+class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (

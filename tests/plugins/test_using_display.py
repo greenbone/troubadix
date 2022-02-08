@@ -23,7 +23,7 @@ from naslinter.plugin import LinterError, LinterWarning
 from naslinter.plugins.using_display import CheckUsingDisplay
 
 
-class CheckCVSSFormatTestCase(unittest.TestCase):
+class CheckUsingDisplayTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (

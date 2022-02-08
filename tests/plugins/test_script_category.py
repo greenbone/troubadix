@@ -23,7 +23,7 @@ from naslinter.plugin import LinterError
 from naslinter.plugins.script_category import CheckScriptCategory
 
 
-class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
+class CheckScriptCategoryTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = "script_category(ACT_GATHER_INFO);"

@@ -23,7 +23,7 @@ from naslinter.plugin import LinterError
 from naslinter.plugins.double_end_points import CheckDoubleEndPoints
 
 
-class CheckCVSSFormatTestCase(unittest.TestCase):
+class CheckDoubleEndPointsTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (

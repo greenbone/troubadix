@@ -23,7 +23,7 @@ from naslinter.plugin import LinterError
 from naslinter.plugins.script_copyright import CheckScriptCopyright
 
 
-class CheckScriptCopyRightTestCase(unittest.TestCase):
+class CheckScriptCopyrightTestCase(unittest.TestCase):
     def test_copyright_ok(self):
         path = Path("some/file.nasl")
         content = 'script_copyright("Copyright (C) 2020 Foo Bar")'
