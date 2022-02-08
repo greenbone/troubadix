@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+import re
 from typing import List, Union
+
+OPENVAS_OID_PREFIX = "1.3.6.1.4.1.25623.1.[0-9]+."
 
 
 def is_ignore_file(
@@ -26,3 +29,22 @@ def is_ignore_file(
         if str(ignore_file) in str(file_name):
             return True
     return False
+
+
+def find_oid(line: str) -> Union[None, str]:
+    """Find the OID in the the given line"""
+    match = re.search(r"script_id\s*\(\s*([0-9]+)\s*\)", line)
+    if match:
+        return f"{OPENVAS_OID_PREFIX}{match.group(1)}"
+    match = re.search(
+        r'SCRIPT_OID\s*=\s*(?P<quote>[\'"])(?P<oid>[0-9.]+)(?P=quote)', line
+    )
+    if match:
+        return match.group("oid")
+    match = re.search(
+        r'script_oid\s*\(\s*(?P<quote>[\'"])(?P<oid>[0-9.]+)(?P=quote)\s*\)',
+        line,
+    )
+    if match:
+        return match.group("oid")
+    return None
