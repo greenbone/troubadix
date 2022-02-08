@@ -23,6 +23,8 @@ from typing import Iterable, Iterator
 
 from ..plugin import LineContentPlugin, LinterError, LinterResult
 
+LENGTH = 44
+
 
 class CheckCreationDate(LineContentPlugin):
     name = "creation_date"
@@ -65,13 +67,13 @@ class CheckCreationDate(LineContentPlugin):
                                 f"'{formatted_date}'."
                             )
 
-                        if len(creation_date) != 44:
+                        if len(creation_date) != LENGTH:
                             yield LinterError(
-                                f"Incorrectly formatted creation_date of "
-                                f"VT '{nasl_file}' (length != 44). Please "
-                                f"use EXACTLY the following format as in: "
-                                f'"2017-11-29 13:56:41 +0000 '
-                                f'(Wed, 29 Nov 2017)"'
+                                "Incorrectly formatted creation_date of "
+                                f"VT '{nasl_file}' (length != {LENGTH}). Please"
+                                " use EXACTLY the following format as in: "
+                                '"2017-11-29 13:56:41 +0000 '
+                                '(Wed, 29 Nov 2017)"'
                             )
 
                     except ValueError:
