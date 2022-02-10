@@ -71,7 +71,7 @@ first.
 
 ## License
 
-Copyright (C) 2021 [Greenbone Networks GmbH][Greenbone Networks]
+Copyright (C) 2021-2022 [Greenbone Networks GmbH][Greenbone Networks]
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
