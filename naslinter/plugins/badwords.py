@@ -20,7 +20,7 @@
 from pathlib import Path
 from typing import Iterable
 
-from ..plugin import LinterError, LineContentPlugin
+from ..plugin import LinterError, LineContentPlugin, LinterResult
 from ..helper import is_ignore_file
 
 # hexstr(OpenVAS) = '4f70656e564153'
@@ -94,6 +94,7 @@ class CheckBadwords(LineContentPlugin):
         lines: Iterable[str],
     ):
         if is_ignore_file(nasl_file, _IGNORE_FILES):
+            yield LinterResult("Nothing to do here.")
             return
         line_number = 1
         badword_found = False
