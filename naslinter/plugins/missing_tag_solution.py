@@ -22,7 +22,8 @@ from typing import Iterator
 
 from naslinter.helper import is_ignore_file
 
-from ..plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugins import TAG_PATTERN
 
 # We don't want to touch the metadata of this older VTs...
 _IGNORE_FILES = [
@@ -30,8 +31,8 @@ _IGNORE_FILES = [
 ]
 
 
-class CheckCVEFormat(FileContentPlugin):
-    name = "check_cve_format"
+class MissingTagSolution(FileContentPlugin):
+    name = "check_missing_tag_solution"
 
     @staticmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
@@ -44,10 +45,6 @@ class CheckCVEFormat(FileContentPlugin):
         This excludes files from the (sub)dir "nmap_nse/" and deprecated
         vts.
         """
-        general_pattern = (
-            r'\s*script_tag\(\s*name\s*:\s*["\']{tag_name}["\']\s*,'
-            r"\s*value\s*:\s*{tag_value}\s*\)\s*;"
-        )
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             yield LinterResult("Nothing to do here.")
             return
@@ -57,9 +54,7 @@ class CheckCVEFormat(FileContentPlugin):
             return
         # Avoid unnecessary message against deprecated VTs.
         deprecated = re.search(
-            pattern=general_pattern.format(
-                tag_name="deprecated", tag_value="TRUE"
-            ),
+            pattern=TAG_PATTERN.format(tag_name="deprecated", tag_value="TRUE"),
             string=file_content,
         )
         if deprecated and deprecated.group(0):
@@ -67,7 +62,7 @@ class CheckCVEFormat(FileContentPlugin):
             return
 
         solution_type = re.search(
-            pattern=general_pattern.format(
+            pattern=TAG_PATTERN.format(
                 tag_name="solution_type", tag_value=r'["\'].+["\']'
             ),
             string=file_content,
@@ -76,7 +71,7 @@ class CheckCVEFormat(FileContentPlugin):
             return
 
         solution = re.search(
-            pattern=general_pattern.format(
+            pattern=TAG_PATTERN.format(
                 tag_name="solution", tag_value=r'["\'].+["\']'
             ),
             string=file_content,

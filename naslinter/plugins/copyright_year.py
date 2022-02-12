@@ -20,8 +20,8 @@ import re
 from pathlib import Path
 from typing import Iterable
 
-from ..plugin import LinterError, LineContentPlugin
-from ..helper import is_ignore_file
+from naslinter.plugin import LinterError, LineContentPlugin
+from naslinter.helper import is_ignore_file
 
 _IGNORE_FILES = (
     "sw_telnet_os_detection.nasl",

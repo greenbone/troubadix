@@ -20,8 +20,8 @@
 from pathlib import Path
 from typing import Iterable
 
-from ..plugin import LinterError, LineContentPlugin, LinterResult
-from ..helper import is_ignore_file
+from naslinter.plugin import LinterError, LineContentPlugin, LinterResult
+from naslinter.helper import is_ignore_file
 
 # hexstr(OpenVAS) = '4f70656e564153'
 # hexstr(openvas) = '6f70656e766173'
