@@ -25,6 +25,13 @@ from ..plugin import LinterError, LineContentPlugin
 # Arbitrary limit adopted from original step
 VALUE_LIMIT = 3000
 
+IGNORE_FILES = [
+    "gb_nmap6_",
+    "monstra_cms_mult_vuln",
+    "gb_huawei-sa-",
+    "lsc_options.nasl",
+]
+
 
 class CheckOverlongScriptTags(LineContentPlugin):
     """This steps checks if the script_tag summary, impact,
@@ -45,17 +52,10 @@ class CheckOverlongScriptTags(LineContentPlugin):
         if nasl_file.suffix != ".nasl":
             return
 
-        ignore_files = [
-            "gb_nmap6_",
-            "monstra_cms_mult_vuln",
-            "gb_huawei-sa-",
-            "lsc_options.nasl",
-        ]
-
-        if any(ignore in nasl_file.name for ignore in ignore_files):
+        if any(ignore in nasl_file.name for ignore in IGNORE_FILES):
             return
 
-        line_number = 0
+        line_number = 1
         for line in lines:
             # Length of value to check is found in group 3
             # Tag name is found in group 2
@@ -67,14 +67,11 @@ class CheckOverlongScriptTags(LineContentPlugin):
             )
             if expre is not None:
                 if len(expre.group(3)) > VALUE_LIMIT:
+                    print("Well say something")
                     report += (
                         f"line {line_number : 5}:"
                         f" contains overlong {expre.group(2)}"
                         f" with {len(expre.group(3))} characters"
                     )
+                    yield LinterError(report)
             line_number += 1
-
-        if len(report) > 0:
-            yield LinterError(
-                f"VT {str(nasl_file)} with limit of {VALUE_LIMIT}: \n{report}\n"
-            )
