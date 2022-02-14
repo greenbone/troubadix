@@ -20,7 +20,8 @@ import re
 from pathlib import Path
 from typing import Iterable
 
-from ..plugin import LinterError, LineContentPlugin
+from naslinter.helper import is_ignore_file
+from ..plugin import LinterError, LineContentPlugin, LinterResult
 
 # Arbitrary limit adopted from original step
 VALUE_LIMIT = 3000
@@ -47,12 +48,12 @@ class CheckOverlongScriptTags(LineContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, lines: Iterable[str]):
-        report = ""
         # Only applies to .nasl files but not to .inc
         if nasl_file.suffix != ".nasl":
             return
 
-        if any(ignore in nasl_file.name for ignore in IGNORE_FILES):
+        if is_ignore_file(nasl_file, IGNORE_FILES):
+            yield LinterResult("Nothing to do here.")
             return
 
         line_number = 1
@@ -67,11 +68,9 @@ class CheckOverlongScriptTags(LineContentPlugin):
             )
             if expre is not None:
                 if len(expre.group(3)) > VALUE_LIMIT:
-                    print("Well say something")
-                    report += (
+                    yield LinterError(
                         f"line {line_number : 5}:"
                         f" contains overlong {expre.group(2)}"
                         f" with {len(expre.group(3))} characters"
                     )
-                    yield LinterError(report)
             line_number += 1
