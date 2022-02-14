@@ -24,7 +24,7 @@ from naslinter.helper import is_ignore_file
 from ..plugin import LinterError, LineContentPlugin, LinterResult
 
 # Arbitrary limit adopted from original step
-VALUE_LIMIT = 3000
+VALUE_LIMIT = 1000
 
 IGNORE_FILES = [
     "gb_nmap6_",
@@ -36,11 +36,11 @@ IGNORE_FILES = [
 
 class CheckOverlongScriptTags(LineContentPlugin):
     """This steps checks if the script_tag summary, impact,
-    affected, insight, vuldetect or solutionof a given VT
+    affected, insight, vuldetect or solution of a given VT
     contains an overlong line within the value string.
 
-    Background for this is that e.g. auto generated LSCs
-    where are created by parsing an advisory and the whole
+    Background for this is that (e.g. auto generated LSCs)
+    are created by parsing an advisory and the whole
     content is placed in such a tag which could be quite large.
     """
 
@@ -60,17 +60,17 @@ class CheckOverlongScriptTags(LineContentPlugin):
         for line in lines:
             # Length of value to check is found in group 3
             # Tag name is found in group 2
-            expre = re.search(
+            match = re.search(
                 r"(script_tag\(\s*name\s*:\s*\""
                 r"(summary|impact|affected|insight|vuldetect|solution)"
                 r"\"\s*,\s*value\s*:\s*)(\"[^\"]+\")\)",
                 line,
             )
-            if expre is not None:
-                if len(expre.group(3)) > VALUE_LIMIT:
+            if match is not None:
+                if len(match.group(3)) > VALUE_LIMIT:
                     yield LinterError(
                         f"line {line_number : 5}:"
-                        f" contains overlong {expre.group(2)}"
-                        f" with {len(expre.group(3))} characters"
+                        f" contains overlong {match.group(2)}"
+                        f" with {len(match.group(3))} characters"
                     )
             line_number += 1
