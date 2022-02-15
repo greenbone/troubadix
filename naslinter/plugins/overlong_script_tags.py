@@ -49,7 +49,6 @@ class CheckOverlongScriptTags(LineContentPlugin):
     @staticmethod
     def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
         if is_ignore_file(nasl_file, IGNORE_FILES):
-            yield LinterResult("Nothing to do here.")
             return
 
         line_number = 1

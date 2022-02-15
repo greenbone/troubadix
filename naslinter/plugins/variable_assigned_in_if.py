@@ -18,7 +18,7 @@
 from pathlib import Path
 import re
 
-from ..plugin import LinterError, FileContentPlugin
+from naslinter.plugin import LinterError, FileContentPlugin
 
 
 class CheckVariableAssignedInIf(FileContentPlugin):

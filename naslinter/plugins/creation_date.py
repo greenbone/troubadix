@@ -21,7 +21,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterable, Iterator
 
-from ..plugin import LineContentPlugin, LinterError, LinterResult
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 LENGTH = 44
 

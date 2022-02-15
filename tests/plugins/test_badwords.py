@@ -23,14 +23,14 @@ from naslinter.plugins.badwords import CheckBadwords
 
 class TestBadwords(unittest.TestCase):
     def test_files(self):
-        nasl_file = Path(__file__).parent / "test.nasl"
+        nasl_file = Path(__file__).parent / "test_files" / "fail_badwords.nasl"
 
-        lines = nasl_file.read_text().split("\n")
+        lines = nasl_file.read_text(encoding="latin1").splitlines()
 
         expected_warning = LinterError(
             f"Badword(s) found in {nasl_file.absolute()}:\n"
-            "line    50: openvas is a bad word\n"
-            "line    58: OpenVAS is a scanner\n"
+            "line     1: openvas is a bad word\n"
+            "line    10: OpenVAS is a scanner\n"
         )
 
         output = CheckBadwords.run(nasl_file=nasl_file, lines=lines)
