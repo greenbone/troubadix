@@ -20,104 +20,67 @@ import re
 from pathlib import Path
 from typing import Iterable, Iterator
 
-from naslinter.helper import is_ignore_file
-
 from naslinter.plugin import (
     LineContentPlugin,
-    LinterError,
     LinterResult,
     LinterWarning,
 )
 
-# We don't want to touch the metadata of this older VTs...
-_IGNORE_FILES = [
-    "nmap_nse/",
-]
 
-
-class CheckWrongNewlines(LineContentPlugin):
+class CheckNewlines(LineContentPlugin):
     name = "check_wrong_newlines"
 
-    def run(
-        self, nasl_file: Path, lines: Iterable[str]
-    ) -> Iterator[LinterResult]:
-        self.lines = lines
-        self._has_wrong_newlines()
-        self._has_unallowed_newlines_in_script_tags()
-
-        nasl_file.write_text("".join(self.lines), encoding="latin1")
-
-    def _has_wrong_newlines(self):
-        """This script checks the passed VT for the existence of CRLF and CR newlines.
-        An error will be thrown if the newlines are incorrectly formatted. Only UNIX newlines (LF) are valid.
-
-        New: This already replaces the newlines infile!!!
-
-        Args:
-            nasl_file: The VT that is going to be checked
-
-        """
-        affected = ""
-
-        for index, line in enumerate(self.lines):
-            if line[-2:] == "\r\n":
-                # remove last char
-                line = line[:-1]
-            if line[-1] == "\r":
-                # replace last char
-                line[-1] = "\n"
-                yield LinterWarning(
-                    f"Wrong newline (CR/CRLF) detected in line {index}, converted to LF"
-                )
-                break
-
-    def _has_unallowed_newlines_in_script_tags(self):
-        """This script checks the passed VT for the existence of newlines in the script_name() and script_copyright() tags.
-        An error will be thrown if newlines have been found in the aforementioned tags.
-
-        Args:
-            nasl_file: The VT that is going to be checked
-
-        Returns:
-            tuples: 0 => Success, no message
-                -1 => Error, with error message
-
+    @staticmethod
+    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+        """This script FIXES newline errors:
+        - Checking the passed VT for the existence of newlines in
+          the script_name() and script_copyright() tags.
+        - Removes wrong newline indicators (\r or \r\n).
+        - Removes whitespaces in script_name( "myname") or script_copyright
         """
 
-        err = False
-        name = ""
-        copyright = ""
+        # This "hack" guarantees, that we only have "\n" as newlines
+        # since we
+        content = "\n".join(lines)
 
-        name_tag_match = re.search(
-            r'script_name\s*\(\s*[\'"]([^\n]+)[\'"]\s*\)\s*;', content
+        # A few remaining have script_name( "myname") instead of
+        # script_name("myname").
+        # NEW: Remove whitespaces and newlines in script_name, script_copyright
+        error_string = (
+            f"'{str(nasl_file)}' contained a script_tag with an "
+            "unallowed newline.\nRemoved the newline out of the following "
+            f"tag(s):"
         )
-        name_tag_match = re.search(
-            r'script_name\s*\([\'"]([^\n]+)[\'"]\s*\)\s*;', content
-        )
-        # TODO: A few remaining have script_name( "myname"), use the following instead of
-        # the above once those where migrated to script_name("myname") and remote the
-        # "not in" handling below as well.
+        match = False
 
-        copyright_tag_macth = re.search(
-            r'script_copyright\s*\([\'"]([^\n]+)[\'"]\s*\)\s*;', content
-        )
-
-        if name_tag_match is None and "script_name(name);" not in content:
-            err = True
-            name = "- script_name()"
-        if copyright_tag_macth is None:
-            err = True
-            copyright = "- script_copyright()"
-
-        if err:
-            return (
-                -1,
-                "VT '"
-                + str(nasl_file)
-                + "' contains a script_tag with an unallowed newline.\nPlease remove the newline out of the following tag(s): "
-                + name
-                + " "
-                + copyright
-                + ".",
+        for tag in ["name", "copyright"]:
+            remove_whitespaces_match = re.search(
+                rf'script_{tag}\s*\(\s*[\'"](.*)[\'"]\)\s*\)\s*;', content
             )
-        return (0,)
+            if remove_whitespaces_match:
+                content.replace(
+                    remove_whitespaces_match.group(0),
+                    f'script_{tag}("{remove_whitespaces_match.group(1)}");',
+                )
+                yield LinterWarning(
+                    "Removed whitespaces in "
+                    f"{remove_whitespaces_match.group(0)}"
+                )
+
+            newline_match = re.search(
+                rf'(script_{tag}\([\'"][^\'"\n;]*)[\n]+\s*([^\'"\n;]*[\'"]\);)',
+                content,
+            )
+            if newline_match:
+                print(newline_match.group(1))
+                content = content.replace(
+                    newline_match.group(0),
+                    f"{newline_match.group(1)}{newline_match.group(2)}",
+                )
+                # and "script_name(name);" not in self.content:
+                error_string = f"{error_string} script_{tag}()"
+                match = True
+        if match:
+            yield LinterWarning(error_string)
+
+        nasl_file.write_text(content, encoding="latin1")
