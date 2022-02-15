@@ -25,14 +25,16 @@ from naslinter.plugins.newlines import CheckNewlines
 
 class CheckNewlinesTestCase(unittest.TestCase):
     def test_ok(self):
-        nasl_file = Path(__file__).parent / "test_files" / "test.nasl"
+        nasl_file = Path(__file__).parent / "test.nasl"
         lines = nasl_file.read_text(encoding="latin1").split("\n")
 
         results = list(CheckNewlines.run(nasl_file, lines))
         self.assertEqual(len(results), 0)
 
     def test_newline_in_name(self):
-        nasl_file = Path(__file__).parent / "fail_name_newline.nasl"
+        nasl_file = (
+            Path(__file__).parent / "test_files" / "fail_name_newline.nasl"
+        )
         lines = nasl_file.read_text(encoding="latin1").splitlines()
 
         results = list(CheckNewlines.run(nasl_file, lines))
