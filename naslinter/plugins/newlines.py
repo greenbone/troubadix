@@ -72,7 +72,6 @@ class CheckNewlines(LineContentPlugin):
                 content,
             )
             if newline_match:
-                print(newline_match.group(1))
                 content = content.replace(
                     newline_match.group(0),
                     f"{newline_match.group(1)}{newline_match.group(2)}",
