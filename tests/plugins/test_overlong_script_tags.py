@@ -19,7 +19,7 @@ from pathlib import Path
 
 import unittest
 
-from naslinter.plugin import LinterError, LinterResult
+from naslinter.plugin import LinterError
 from naslinter.plugins.overlong_script_tags import CheckOverlongScriptTags
 
 
@@ -53,10 +53,7 @@ class CheckOverlongScriptTagsTestCase(unittest.TestCase):
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
         )
         results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterResult)
-        self.assertEqual(results[0].message, "Nothing to do here.")
+        self.assertEqual(len(results), 0)
 
     def test_one_wrong_entry(self):
         path = Path("some/file.nasl")
