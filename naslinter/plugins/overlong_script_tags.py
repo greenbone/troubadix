@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterator, Iterable
 
 from naslinter.helper import is_ignore_file
 from ..plugin import LinterError, LineContentPlugin, LinterResult
@@ -47,7 +47,11 @@ class CheckOverlongScriptTags(LineContentPlugin):
     name = "check_overlong_script_tags"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]):
+    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+        if is_ignore_file(nasl_file, IGNORE_FILES):
+            yield LinterResult("Nothing to do here.")
+            return
+
         # Only applies to .nasl files but not to .inc
         if nasl_file.suffix != ".nasl":
             return
@@ -63,7 +67,7 @@ class CheckOverlongScriptTags(LineContentPlugin):
             match = re.search(
                 r"(script_tag\(\s*name\s*:\s*\""
                 r"(summary|impact|affected|insight|vuldetect|solution)"
-                r"\"\s*,\s*value\s*:\s*)(\"[^\"]+\")\)",
+                r"\"\s*,\s*value\s*:\s*)\"([^\"]+)\"\)",
                 line,
             )
             if match is not None:
