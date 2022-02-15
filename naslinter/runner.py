@@ -140,7 +140,7 @@ class Runner:
 
         for plugin in self.plugins:
             if issubclass(plugin, LineContentPlugin):
-                lines = file_content.split("\n")
+                lines = file_content.splitlines()
                 results.add_plugin_results(plugin, plugin.run(file_name, lines))
             elif issubclass(plugin, FileContentPlugin):
                 results.add_plugin_results(
