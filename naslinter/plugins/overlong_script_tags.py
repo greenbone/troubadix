@@ -52,10 +52,6 @@ class CheckOverlongScriptTags(LineContentPlugin):
             yield LinterResult("Nothing to do here.")
             return
 
-        if is_ignore_file(nasl_file, IGNORE_FILES):
-            yield LinterResult("Nothing to do here.")
-            return
-
         line_number = 1
         for line in lines:
             # Length of value to check is found in group 3
