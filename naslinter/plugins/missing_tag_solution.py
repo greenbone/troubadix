@@ -46,11 +46,9 @@ class CheckMissingTagSolution(FileContentPlugin):
         vts.
         """
         if is_ignore_file(nasl_file, _IGNORE_FILES):
-            yield LinterResult("Nothing to do here.")
             return
         # Not all VTs have/require a solution_type text
         if "solution_type" not in file_content:
-            yield LinterResult("Nothing to do here.")
             return
         # Avoid unnecessary message against deprecated VTs.
         deprecated_match = re.search(
@@ -58,7 +56,6 @@ class CheckMissingTagSolution(FileContentPlugin):
             string=file_content,
         )
         if deprecated_match and deprecated_match.group(0):
-            yield LinterResult("Nothing to do here.")
             return
 
         solution_type_match = re.search(
