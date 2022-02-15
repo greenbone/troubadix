@@ -31,7 +31,7 @@ _IGNORE_FILES = [
 ]
 
 
-class MissingTagSolution(FileContentPlugin):
+class CheckMissingTagSolution(FileContentPlugin):
     name = "check_missing_tag_solution"
 
     @staticmethod
@@ -53,31 +53,31 @@ class MissingTagSolution(FileContentPlugin):
             yield LinterResult("Nothing to do here.")
             return
         # Avoid unnecessary message against deprecated VTs.
-        deprecated = re.search(
+        deprecated_match = re.search(
             pattern=TAG_PATTERN.format(tag_name="deprecated", tag_value="TRUE"),
             string=file_content,
         )
-        if deprecated and deprecated.group(0):
+        if deprecated_match and deprecated_match.group(0):
             yield LinterResult("Nothing to do here.")
             return
 
-        solution_type = re.search(
+        solution_type_match = re.search(
             pattern=TAG_PATTERN.format(
                 tag_name="solution_type", tag_value=r'["\'].+["\']'
             ),
             string=file_content,
         )
-        if not solution_type and solution_type.group(0):
+        if not solution_type_match and solution_type_match.group(0):
             return
 
-        solution = re.search(
+        solution_match = re.search(
             pattern=TAG_PATTERN.format(
                 tag_name="solution", tag_value=r'["\'].+["\']'
             ),
             string=file_content,
             flags=re.MULTILINE | re.DOTALL,
         )
-        if not solution or solution.group(0) is None:
+        if not solution_match or solution_match.group(0) is None:
             yield LinterError(
                 "'solution_type' script_tag but no 'solution' script_tag "
                 f"found in the description block of VT '{str(nasl_file)}'"
