@@ -52,10 +52,6 @@ class CheckOverlongScriptTags(LineContentPlugin):
             yield LinterResult("Nothing to do here.")
             return
 
-        # Only applies to .nasl files but not to .inc
-        if nasl_file.suffix != ".nasl":
-            return
-
         if is_ignore_file(nasl_file, IGNORE_FILES):
             yield LinterResult("Nothing to do here.")
             return
