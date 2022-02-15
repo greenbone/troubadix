@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Greenbone Networks GmbH
+# Copyright (C) 2021-2022 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -24,12 +24,6 @@ from .copyright_year import CheckCopyRightYearPlugin
 from .update_modification_date import UpdateModificationDate
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
-
-
-TAG_PATTERN = (
-    r'\s*script_tag\(\s*name\s*:\s*["\']{tag_name}["\']\s*,'
-    r"\s*value\s*:\s*{tag_value}\s*\)\s*;"
-)
 
 _PLUGINS = [
     CheckBadwords,
