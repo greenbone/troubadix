@@ -90,7 +90,7 @@ def from_file(include_file: Path, term: Terminal):
     try:
         return [
             Path(f)
-            for f in include_file.read_text(encoding="utf-8").split("\n")
+            for f in include_file.read_text(encoding="utf-8").splitlines()
         ]
     except FileNotFoundError:
         term.error(f"File {include_file} containing the file list not found.")
