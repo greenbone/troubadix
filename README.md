@@ -3,6 +3,12 @@
 # NASLinter
 A linting tool for NASL files
 
+[![GitHub releases](https://img.shields.io/github/release/greenbone/naslinter.svg)](https://github.com/greenbone/naslinter/releases)
+[![PyPI release](https://img.shields.io/pypi/v/naslinter.svg)](https://pypi.org/project/naslinter/)
+[![codecov](https://codecov.io/gh/greenbone/naslinter/branch/main/graph/badge.svg?token=FFMmVmAmtb)](https://codecov.io/gh/greenbone/naslinter)
+[![Build and test](https://github.com/greenbone/naslinter/actions/workflows/ci-python.yml/badge.svg)](https://github.com/greenbone/naslinter/actions/workflows/ci-python.yml)
+
+
 ## Installation
 
 ### Requirements
@@ -71,7 +77,7 @@ first.
 
 ## License
 
-Copyright (C) 2021 [Greenbone Networks GmbH][Greenbone Networks]
+Copyright (C) 2021-2022 [Greenbone Networks GmbH][Greenbone Networks]
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
