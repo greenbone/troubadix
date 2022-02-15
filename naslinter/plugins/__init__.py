@@ -20,14 +20,36 @@ from typing import Iterable, List
 from naslinter.plugin import Plugin
 
 from .badwords import CheckBadwords
-from .copyright_year import CheckCopyRightYearPlugin
+from .copyright_year import CheckCopyrightYear
+from .creation_date import CheckCreationDate
+from .cve_format import CheckCVEFormat
+from .cvss_format import CheckCVSSFormat
+from .double_end_points import CheckDoubleEndPoints
+from .duplicated_script_tags import CheckDuplicatedScriptTags
+from .newlines import CheckNewlines
+from .missing_tag_solution import CheckMissingTagSolution
+from .script_category import CheckScriptCategory
+from .script_copyright import CheckScriptCopyright
 from .update_modification_date import UpdateModificationDate
+from .using_display import CheckUsingDisplay
+from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 
 _PLUGINS = [
     CheckBadwords,
-    CheckCopyRightYearPlugin,
+    CheckCopyrightYear,
+    CheckCreationDate,
+    CheckCVEFormat,
+    CheckCVSSFormat,
+    CheckDoubleEndPoints,
+    CheckDuplicatedScriptTags,
+    CheckNewlines,
+    CheckMissingTagSolution,
+    CheckScriptCategory,
+    CheckScriptCopyright,
+    CheckUsingDisplay,
+    CheckValidOID,
     CheckValidScriptTagNames,
     CheckVTPlacement,
     UpdateModificationDate,

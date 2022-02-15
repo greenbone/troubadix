@@ -30,7 +30,7 @@ _IGNORE_FILES = (
 )
 
 
-class CheckCopyRightYearPlugin(LineContentPlugin):
+class CheckCopyrightYear(LineContentPlugin):
     """This steps checks if a VT contains a Copyright statement containing a
     year not matching the year defined in the creation_date statement like
     script_tag(name:"creation_date", value:"2017-
