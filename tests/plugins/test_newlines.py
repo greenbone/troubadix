@@ -42,9 +42,7 @@ class CheckNewlinesTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            f"'{nasl_file}' contained a script_tag with an unallowed "
-            "newline.\nRemoved the newline out of the following tag(s): "
-            "script_name()",
+            "Removed a newline within the tag script_name.",
             results[0].message,
         )
 
@@ -64,13 +62,16 @@ class CheckNewlinesTestCase(unittest.TestCase):
 
         results = list(CheckNewlines.run(nasl_file, lines))
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            f"'{nasl_file}' contained a script_tag with an unallowed "
-            "newline.\nRemoved the newline out of the following tag(s): "
-            "script_name() script_copyright()",
+            "Removed a newline within the tag script_name.",
             results[0].message,
+        )
+        self.assertIsInstance(results[1], LinterWarning)
+        self.assertEqual(
+            "Removed a newline within the tag script_copyright.",
+            results[1].message,
         )
 
         new_lines = nasl_file.read_text(encoding="latin1")

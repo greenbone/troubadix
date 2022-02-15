@@ -46,13 +46,6 @@ class CheckNewlines(LineContentPlugin):
         # A few remaining have script_name( "myname") instead of
         # script_name("myname").
         # NEW: Remove whitespaces and newlines in script_name, script_copyright
-        error_string = (
-            f"'{str(nasl_file)}' contained a script_tag with an "
-            "unallowed newline.\nRemoved the newline out of the following "
-            f"tag(s):"
-        )
-        match = False
-
         for tag in ["name", "copyright"]:
             remove_whitespaces_match = re.search(
                 rf'script_{tag}\s*\(\s*[\'"](.*)[\'"]\)\s*\)\s*;', content
@@ -76,10 +69,8 @@ class CheckNewlines(LineContentPlugin):
                     newline_match.group(0),
                     f"{newline_match.group(1)}{newline_match.group(2)}",
                 )
-                # and "script_name(name);" not in self.content:
-                error_string = f"{error_string} script_{tag}()"
-                match = True
-        if match:
-            yield LinterWarning(error_string)
+                yield LinterWarning(
+                    f"Removed a newline within the tag script_{tag}."
+                )
 
         nasl_file.write_text(content, encoding="latin1")
