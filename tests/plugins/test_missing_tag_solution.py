@@ -19,7 +19,7 @@ from pathlib import Path
 
 import unittest
 
-from naslinter.plugin import LinterError, LinterResult
+from naslinter.plugin import LinterError
 from naslinter.plugins.missing_tag_solution import CheckMissingTagSolution
 
 
@@ -44,12 +44,7 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
         )
 
         results = list(CheckMissingTagSolution.run(path, content))
-        self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterResult)
-        self.assertEqual(
-            "Nothing to do here.",
-            results[0].message,
-        )
+        self.assertEqual(len(results), 0)
 
     def test_missing_solution(self):
         path = Path("some/file.nasl")
