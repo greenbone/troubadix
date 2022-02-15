@@ -61,6 +61,11 @@ class TestNASLinter(unittest.TestCase):
             Path(f"{cwd}/tests/plugins/fail.nasl"),
             Path(f"{cwd}/tests/plugins/test.nasl"),
             Path(f"{cwd}/tests/plugins/fail2.nasl"),
+            Path(f"{cwd}/tests/plugins/test_files/fail_name_newline.nasl"),
+            Path(
+                f"{cwd}/tests/plugins/test_files/"
+                "fail_name_and_copyright_newline.nasl"
+            ),
         ]
         expected_files.sort()
         files.sort()
