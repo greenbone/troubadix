@@ -32,7 +32,7 @@ _IGNORE_FILES = [
 
 
 class CheckTodoTbd(LineContentPlugin):
-    """This step checks if a given VT contains the words TODO,TBD
+    """This step checks if a given VT contains the words TODO, TBD
     or @todo as a comment.
     """
 
