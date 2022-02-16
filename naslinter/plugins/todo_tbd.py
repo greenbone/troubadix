@@ -42,11 +42,10 @@ class CheckTodoTbd(LineContentPlugin):
     def run(nasl_file: Path, lines: Iterable[str]):
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
-        for index, line in enumerate(lines):
+        for index, line in enumerate(lines, start=1):
             match = re.search("##? *(TODO|TBD|@todo):?", line)
             if match is not None:
                 yield LinterError(
                     f"VT {nasl_file} contains #TODO/TBD/@todo"
-                    f" keywords at line {index+1}"
+                    f" keywords at line {index}"
                 )
-            index += 1
