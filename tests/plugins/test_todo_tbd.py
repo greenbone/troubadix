@@ -31,7 +31,7 @@ class CheckTodoTbdTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"TODO");\n'
             'script_tag(name:"impact", value:"@todo");\n'
         )
-        results = list(CheckTodoTbd.run(path, content.split("\n")))
+        results = list(CheckTodoTbd.run(path, content.splitlines()))
         self.assertEqual(len(results), 0)
 
     def test_ignore(self):
@@ -42,7 +42,7 @@ class CheckTodoTbdTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        results = list(CheckTodoTbd.run(path, content.split("\n")))
+        results = list(CheckTodoTbd.run(path, content.splitlines()))
         self.assertEqual(len(results), 0)
 
     def test_tbd(self):
@@ -53,7 +53,7 @@ class CheckTodoTbdTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        results = list(CheckTodoTbd.run(path, content.split("\n")))
+        results = list(CheckTodoTbd.run(path, content.splitlines()))
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -76,7 +76,7 @@ class CheckTodoTbdTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        results = list(CheckTodoTbd.run(path, content.split("\n")))
+        results = list(CheckTodoTbd.run(path, content.splitlines()))
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -99,7 +99,7 @@ class CheckTodoTbdTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        results = list(CheckTodoTbd.run(path, content.split("\n")))
+        results = list(CheckTodoTbd.run(path, content.splitlines()))
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -122,7 +122,7 @@ class CheckTodoTbdTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");##@todo\n'
         )
-        results = list(CheckTodoTbd.run(path, content.split("\n")))
+        results = list(CheckTodoTbd.run(path, content.splitlines()))
         self.assertEqual(len(results), 3)
 
         self.assertIsInstance(results[0], LinterError)
