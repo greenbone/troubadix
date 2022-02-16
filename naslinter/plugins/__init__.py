@@ -24,7 +24,7 @@ from .copyright_year import CheckCopyRightYearPlugin
 from .update_modification_date import UpdateModificationDate
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
-from .todo_tbd import TodoTbd
+from .todo_tbd import CheckTodoTbd
 
 _PLUGINS = [
     CheckBadwords,
@@ -32,7 +32,7 @@ _PLUGINS = [
     CheckValidScriptTagNames,
     CheckVTPlacement,
     UpdateModificationDate,
-    TodoTbd,
+    CheckTodoTbd,
 ]
 
 

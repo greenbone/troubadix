@@ -31,7 +31,7 @@ _IGNORE_FILES = [
 ]
 
 
-class TodoTbd(LineContentPlugin):
+class CheckTodoTbd(LineContentPlugin):
     """This step checks if a given VT contains the words TODO,TBD
     or @todo as a comment.
     """
@@ -42,16 +42,11 @@ class TodoTbd(LineContentPlugin):
     def run(nasl_file: Path, lines: Iterable[str]):
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
-        line_number = 1
-        report = ""
-        for line in lines:
-            expre = re.search("##? *(TODO|TBD|@todo):?", line)
-            if expre is not None:
-                report += f"line {line_number:5}: {expre.group(0)}\n"
-            line_number += 1
-
-        if len(report) > 0:
-            yield LinterError(
-                f"VT {str(nasl_file)} contains #TODO/TBD/@todo keywords:\n"
-                f"{report}"
-            )
+        for index, line in enumerate(lines):
+            match = re.search("##? *(TODO|TBD|@todo):?", line)
+            if match is not None:
+                yield LinterError(
+                    f"VT {nasl_file} contains #TODO/TBD/@todo"
+                    f" keywords at line {index+1}"
+                )
+            index += 1
