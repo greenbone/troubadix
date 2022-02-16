@@ -38,7 +38,11 @@ class TestNASLinter(unittest.TestCase):
         cwd = Path.cwd()
         files = generate_file_list(
             dirs=[cwd],
-            exclude_patterns=["**/test.nasl", "**/templates/*/*.nasl"],
+            exclude_patterns=[
+                "**/test.nasl",
+                "**/templates/*/*.nasl",
+                "**/test_files/*",
+            ],
             include_patterns=["**/*.nasl", "**/*.inc"],
         )
         expected_files = [

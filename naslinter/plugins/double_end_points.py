@@ -20,7 +20,7 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from ..plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
 class CheckDoubleEndPoints(FileContentPlugin):

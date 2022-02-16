@@ -20,8 +20,8 @@ import re
 from pathlib import Path
 from typing import Iterable
 
-from ..plugin import LinterError, LineContentPlugin
-from ..helper import is_ignore_file
+from naslinter.plugin import LinterError, LineContentPlugin
+from naslinter.helper import is_ignore_file
 
 _IGNORE_FILES = (
     "sw_telnet_os_detection.nasl",
@@ -30,7 +30,7 @@ _IGNORE_FILES = (
 )
 
 
-class CheckCopyRightYearPlugin(LineContentPlugin):
+class CheckCopyrightYear(LineContentPlugin):
     """This steps checks if a VT contains a Copyright statement containing a
     year not matching the year defined in the creation_date statement like
     script_tag(name:"creation_date", value:"2017-

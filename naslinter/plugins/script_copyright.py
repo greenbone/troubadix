@@ -20,7 +20,7 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from ..plugin import FileContentPlugin, LinterError, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckScriptCopyright(FileContentPlugin):
