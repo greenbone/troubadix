@@ -1,10 +1,30 @@
-#!/usr/bin/env python3
+# Copyright (C) 2022 Greenbone Networks GmbH
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
 from pathlib import Path
 from typing import Iterator
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+
+CORRECT_COPYRIGHT_PHRASE = (
+    "# Some text descriptions might be excerpted from (a) referenced\n"
+    "# source(s), and are Copyright (C) by the respective right holder(s)."
+)
 
 
 class CheckCopyrightText(FileContentPlugin):
@@ -52,11 +72,11 @@ class CheckCopyrightText(FileContentPlugin):
             yield LinterError(
                 "The VT is using an incorrect syntax for its copyright "
                 "statement. Please start (EXACTLY) with:\n"
-                "'script_copyright(\"Copyright (C)' followed by the year "
+                "'script_copyright(\"Copyright (C) followed by the year "
                 "(matching the one in creation_date) and the author/company."
             )
 
-        if re.search(
+        match = re.search(
             r"^# (Text descriptions are largely excerpted from the referenced"
             r"\n# advisory, and are Copyright \([cC]\) (of )?(the|their) resp"
             r"ective author\(s\)|Some text descriptions might be excerpted from"
@@ -64,11 +84,15 @@ class CheckCopyrightText(FileContentPlugin):
             r"respective right holder\(s\))",
             file_content,
             re.MULTILINE,
-        ):
+        )
+        if match:
+            file_content = file_content.replace(
+                match.group(0),
+                CORRECT_COPYRIGHT_PHRASE,
+            )
+
+            nasl_file.write_text(data=file_content, encoding="latin1")
             yield LinterError(
-                "The VT is using an incorrect copyright statement. Please "
-                "use (EXACTLY):\n\n"
-                "# Some text descriptions might be excerpted from (a) "
-                "referenced\n# source(s), and are Copyright (C) by the "
-                "respective right holder(s).\n"
+                "The VT was using an incorrect copyright statement. Replaced "
+                f"with:\n{CORRECT_COPYRIGHT_PHRASE}"
             )
