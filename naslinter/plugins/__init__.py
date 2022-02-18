@@ -35,6 +35,7 @@ from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
+from .todo_tbd import CheckTodoTbd
 
 _PLUGINS = [
     CheckBadwords,
@@ -53,6 +54,7 @@ _PLUGINS = [
     CheckValidScriptTagNames,
     CheckVTPlacement,
     UpdateModificationDate,
+    CheckTodoTbd,
 ]
 
 
