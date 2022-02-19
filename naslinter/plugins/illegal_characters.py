@@ -69,7 +69,6 @@ class CheckIllegalCharacters(FileContentPlugin):
         changes: bool = False
         pattern = get_tag_pattern(
             name=r"summary|impact|affected|insight|vuldetect|solution",
-            value=r".+",
         )
 
         tag_matches: List[re.Match] = pattern.finditer(file_content)

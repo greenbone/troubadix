@@ -29,15 +29,15 @@ _SPECIAL_TAG_PATTERN = (
 
 
 def get_tag_pattern(
-    name: str, value: str, *, flags: re.RegexFlag = 0
+    name: str, *, value: str = r".+", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
     The returned pattern catchs all `script_tags(name="", value="");`
 
     Arguments:
         name        script tag name
-        value       script tag value
-        flags       regex flags for compile
+        value       script tag value (default: at least on char)
+        flags       regex flags for compile (default: 0)
 
     The returned `Match`s by this pattern will have group strings
     .group('name') and .group('value')

@@ -58,14 +58,14 @@ class CheckMissingTagSolution(FileContentPlugin):
         if deprecated_match and deprecated_match.group("value"):
             return
 
-        solution_type_match = get_tag_pattern(
-            name="solution_type", value=r".+"
-        ).search(string=file_content)
+        solution_type_match = get_tag_pattern(name="solution_type").search(
+            string=file_content
+        )
         if not solution_type_match and solution_type_match.group(0):
             return
 
         solution_match = get_tag_pattern(
-            name="solution", value=r".+", flags=re.MULTILINE | re.DOTALL
+            name="solution", flags=re.MULTILINE | re.DOTALL
         ).search(string=file_content)
 
         if not solution_match or solution_match.group(0) is None:
