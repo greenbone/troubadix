@@ -17,9 +17,14 @@
 
 import re
 
+# regex patterns for script tags
 _TAG_PATTERN = (
     r'script_tag\(\s*name\s*:\s*["\'](?P<name>{name})["\']\s*,'
     r"\s*value\s*:\s*(?P<value>{value})\s*\)\s*;"
+)
+
+_SPECIAL_TAG_PATTERN = (
+    r'script_(?P<name>{name})\s*\(["\'](?P<value>{})["\']\s*\)\s*;'
 )
 
 
@@ -40,3 +45,24 @@ def get_tag_pattern(
         `re.Pattern` object
     """
     return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
+
+
+def get_special_tag_pattern(
+    name: str, *, value: str = r".+", flags: re.RegexFlag = 0
+) -> re.Pattern:
+    """
+    The returned pattern catchs all `script_<name>("<value>");`
+
+    Arguments:
+        name        script tag name
+        value       script tag value (default: at least on char)
+        flags       regex flags for compile (default: 0)
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
+    return re.compile(
+        _SPECIAL_TAG_PATTERN.format(name=name, value=value), flags=flags
+    )

@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Greenbone Networks GmbH
+# Copyright (C) 2022 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -16,4 +16,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .helper import is_ignore_file
-from .patterns import get_tag_pattern
+from .patterns import get_tag_pattern, get_special_tag_pattern
