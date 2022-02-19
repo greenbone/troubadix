@@ -26,7 +26,7 @@ from naslinter.plugin import (
     LinterResult,
     LinterWarning,
 )
-from naslinter.plugins.patterns import get_tag_pattern
+from naslinter.helper.patterns import get_tag_pattern
 
 # ;                 can not be displayed in GSA, within
 #                   (summary|impact|affected|insight|vuldetect|solution)

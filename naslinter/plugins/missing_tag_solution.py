@@ -23,7 +23,7 @@ from typing import Iterator
 from naslinter.helper import is_ignore_file
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
-from naslinter.plugins.patterns import get_tag_pattern
+from naslinter.helper.patterns import get_tag_pattern
 
 # We don't want to touch the metadata of this older VTs...
 _IGNORE_FILES = [
