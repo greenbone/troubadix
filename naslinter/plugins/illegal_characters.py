@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, Union
+from typing import Iterator, List, Union
 
 # import magic
 
@@ -26,7 +26,7 @@ from naslinter.plugin import (
     LinterResult,
     LinterWarning,
 )
-from naslinter.plugins.patterns import TAG_PATTERN
+from naslinter.plugins.patterns import get_tag_pattern
 
 # ;                 can not be displayed in GSA, within
 #                   (summary|impact|affected|insight|vuldetect|solution)
@@ -67,20 +67,17 @@ class CheckIllegalCharacters(FileContentPlugin):
         """
 
         changes: bool = False
-        tag_name: str = r"summary|impact|affected|insight|vuldetect|solution"
-        tag_value: str = r".+"
-        tag_matches: re.Match = re.finditer(
-            TAG_PATTERN.format(name=tag_name, value=tag_value),
-            file_content,
+        pattern = get_tag_pattern(
+            name=r"summary|impact|affected|insight|vuldetect|solution",
+            value=r".+",
         )
 
+        tag_matches: List[re.Match] = pattern.finditer(file_content)
         if tag_matches:
             for match in tag_matches:
                 if match and match.group(0) is not None:
-                    print(match.group(0))
                     new_tag = check_match(match)
                     if new_tag:
-                        print(new_tag)
                         changes = True
                         yield LinterWarning(
                             f"Found illegal character in {match.group(0)}"

@@ -23,7 +23,7 @@ from typing import Iterator
 from naslinter.helper import is_ignore_file
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
-from naslinter.plugins.patterns import TAG_PATTERN
+from naslinter.plugins.patterns import get_tag_pattern
 
 # We don't want to touch the metadata of this older VTs...
 _IGNORE_FILES = [
@@ -51,29 +51,23 @@ class CheckMissingTagSolution(FileContentPlugin):
         if "solution_type" not in file_content:
             return
         # Avoid unnecessary message against deprecated VTs.
-        deprecated_match = re.search(
-            pattern=TAG_PATTERN.format(tag_name="deprecated", tag_value="TRUE"),
-            string=file_content,
-        )
-        if deprecated_match and deprecated_match.group(0):
+        deprecated_match = get_tag_pattern(
+            name="deprecated", value="TRUE"
+        ).search(string=file_content)
+
+        if deprecated_match and deprecated_match.group("value"):
             return
 
-        solution_type_match = re.search(
-            pattern=TAG_PATTERN.format(
-                tag_name="solution_type", tag_value=r'["\'].+["\']'
-            ),
-            string=file_content,
-        )
+        solution_type_match = get_tag_pattern(
+            name="solution_type", value=r".+"
+        ).search(string=file_content)
         if not solution_type_match and solution_type_match.group(0):
             return
 
-        solution_match = re.search(
-            pattern=TAG_PATTERN.format(
-                tag_name="solution", tag_value=r'["\'].+["\']'
-            ),
-            string=file_content,
-            flags=re.MULTILINE | re.DOTALL,
-        )
+        solution_match = get_tag_pattern(
+            name="solution", value=r".+", flags=re.MULTILINE | re.DOTALL
+        ).search(string=file_content)
+
         if not solution_match or solution_match.group(0) is None:
             yield LinterError(
                 "'solution_type' script_tag but no 'solution' script_tag "

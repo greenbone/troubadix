@@ -15,7 +15,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-TAG_PATTERN = (
-    r'\s*script_tag\(\s*name\s*:\s*["\']{tag_name}["\']\s*,'
-    r"\s*value\s*:\s*{tag_value}\s*\)\s*;"
+import re
+
+_TAG_PATTERN = (
+    r'script_tag\(\s*name\s*:\s*["\'](?P<name>{name})["\']\s*,'
+    r"\s*value\s*:\s*(?P<value>{value})\s*\)\s*;"
 )
+
+
+def get_tag_pattern(
+    name: str, value: str, *, flags: re.RegexFlag = 0
+) -> re.Pattern:
+    """
+    The returned pattern catchs all `script_tags(name="", value="");`
+
+    Arguments:
+        name        script tag name
+        value       script tag value
+        flags       regex flags for compile
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
+    return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
