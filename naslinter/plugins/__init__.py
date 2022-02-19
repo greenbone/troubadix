@@ -20,6 +20,7 @@ from typing import Iterable, List
 from naslinter.plugin import Plugin
 
 from .badwords import CheckBadwords
+from .copyright_text import CheckCopyrightText
 from .copyright_year import CheckCopyrightYear
 from .creation_date import CheckCreationDate
 from .cve_format import CheckCVEFormat
@@ -29,10 +30,13 @@ from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
 from .get_kb_on_services import CheckGetKBOnServices
 from .forking_nasl_funcs import CheckForkingNaslFuncs
+from .encoding import CheckEncoding
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
+
+# from .tabs import CheckTabs
 from .update_modification_date import UpdateModificationDate
 from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
@@ -42,8 +46,9 @@ from .overlong_script_tags import CheckOverlongScriptTags
 from .solution_type import CheckSolutionType
 from .todo_tbd import CheckTodoTbd
 
-_PLUGINS = [
+_NASL_ONLY_PLUGINS = [
     CheckBadwords,
+    CheckCopyrightText,
     CheckCopyrightYear,
     CheckCreationDate,
     CheckCVEFormat,
@@ -67,6 +72,11 @@ _PLUGINS = [
     CheckTodoTbd,
 ]
 
+_PLUGINS = [
+    CheckEncoding,
+    # CheckTabs,
+]
+
 
 class Plugins:
     def __init__(
@@ -74,17 +84,17 @@ class Plugins:
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
     ) -> None:
-        self.plugins = _PLUGINS
+        self.plugins = _NASL_ONLY_PLUGINS
         if excluded_plugins:
             self.plugins = [
                 plugin
-                for plugin in _PLUGINS
+                for plugin in _NASL_ONLY_PLUGINS
                 if plugin.__name__ not in excluded_plugins
             ]
         if included_plugins:
             self.plugins = [
                 plugin
-                for plugin in _PLUGINS
+                for plugin in _NASL_ONLY_PLUGINS
                 if plugin.__name__ in included_plugins
             ]
 
