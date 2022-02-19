@@ -25,6 +25,8 @@ from .copyright_year import CheckCopyrightYear
 from .creation_date import CheckCreationDate
 from .cve_format import CheckCVEFormat
 from .cvss_format import CheckCVSSFormat
+from .dependencies import CheckDependencies
+from .dependency_category_order import CheckDependencyCategoryOrder
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
@@ -53,6 +55,8 @@ _NASL_ONLY_PLUGINS = [
     CheckCreationDate,
     CheckCVEFormat,
     CheckCVSSFormat,
+    CheckDependencies,
+    CheckDependencyCategoryOrder,
     CheckDoubleEndPoints,
     CheckDuplicateOID,
     CheckDuplicatedScriptTags,
