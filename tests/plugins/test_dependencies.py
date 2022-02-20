@@ -20,14 +20,15 @@ from pathlib import Path
 import unittest
 
 from naslinter.plugin import LinterError
-from naslinter.plugins.dependencies import CheckDependencies, ROOT
+from naslinter.helper.helper import _ROOT
+from naslinter.plugins.dependencies import CheckDependencies
 
 here = Path.cwd()
 
 
 class CheckDoubleEndPointsTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.dir = here / ROOT
+        self.dir = here / _ROOT
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.touch()
@@ -71,7 +72,7 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"The script dependency {dependency} could "
-            "not be found on the local filesystem.",
+            "not be found within the VTs.",
             results[0].message,
         )
 

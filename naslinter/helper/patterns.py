@@ -24,7 +24,7 @@ _TAG_PATTERN = (
 )
 
 _SPECIAL_TAG_PATTERN = (
-    r'script_(?P<name>{name})\s*\(["\'](?P<value>{})["\']\s*\)\s*;'
+    r'script_(?P<name>{name})\s*\(["\'](?P<value>{value})["\']\s*\)\s*;'
 )
 
 
