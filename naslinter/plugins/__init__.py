@@ -35,6 +35,8 @@ from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
+from .overlong_script_tags import CheckOverlongScriptTags
+from .solution_type import CheckSolutionType
 from .todo_tbd import CheckTodoTbd
 
 _PLUGINS = [
@@ -54,6 +56,8 @@ _PLUGINS = [
     CheckValidScriptTagNames,
     CheckVTPlacement,
     UpdateModificationDate,
+    CheckOverlongScriptTags,
+    CheckSolutionType,
     CheckTodoTbd,
 ]
 
