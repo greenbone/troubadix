@@ -24,6 +24,8 @@ from naslinter.plugins.copyright_text import (
     CheckCopyrightText,
     CORRECT_COPYRIGHT_PHRASE,
 )
+
+
 WRONG_TEXTS = [
     "# Text descriptions are largely excerpted from the referenced\n"
     "# advisory, and are Copyright (C) the respective author(s)\n",
