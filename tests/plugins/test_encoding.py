@@ -35,9 +35,9 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             "abcdefghijklmnopqrstuvwxyz{|}~",
             encoding="utf-8",
         )
-        content = path.read_text(encoding="latin1")
+        lines = path.read_text(encoding="latin1").splitlines()
 
-        results = list(CheckEncoding.run(path, content))
+        results = list(CheckEncoding.run(path, lines))
 
         self.assertEqual(len(results), 0)
 
@@ -52,9 +52,9 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             "ÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ",
             encoding="utf-8",
         )
-        content = path.read_text(encoding="latin1")
+        lines = path.read_text(encoding="latin1").splitlines()
 
-        results = list(CheckEncoding.run(path, content))
+        results = list(CheckEncoding.run(path, lines))
         self.assertEqual(len(results), 3)
 
         self.assertIsInstance(results[0], LinterError)
@@ -70,7 +70,6 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             "Found invalid character in line 1",
             results[2].message,
         )
-        # self.assertEqual(path.read_text(encoding="latin1"), expected_content)
 
         if path.exists():
             path.unlink()

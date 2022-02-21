@@ -18,11 +18,11 @@
 import subprocess
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterable, Iterator
 
 # import magic
 
-from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 # Only the ASCII and extended ASCII for now... # https://www.ascii-code.com/
 # CHAR_SET = r"[^\x00-\xFF]"
@@ -36,27 +36,18 @@ def subprocess_cmd(command: str) -> bytes:
     return proc_stdout
 
 
-class CheckEncoding(FileContentPlugin):
+class CheckEncoding(LineContentPlugin):
     name = "check_encoding"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
-        # Looking for VTs with wrong encoding...
-        # m = magic.Magic(mime_encoding=True)
-        # encoding = m.from_buffer(file_content)
-        # if not encoding == "latin-1" and not encoding == "us-ascii":
-        #     yield LinterError(f"VT '{nasl_file}' has a wrong encoding.")
-
-        # nb: The above code currently has some issues to detect the encoding so
-        # it is currently temporary replaced by this function.
+    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+        # Looking for VTs with wrong encoding... (maybe find a better way
+        # to do this in future ...)
         encoding = subprocess_cmd(
             f"LC_ALL=C file {nasl_file} | grep 'UTF-8'"
         ).decode("latin-1")
         if len(encoding) > 0:
             yield LinterError(f"VT '{nasl_file}' has a wrong encoding.")
-
-        # Checking characters line by line
-        lines = file_content.splitlines()
 
         for index, line in enumerate(lines):
             encoding = re.search(CHAR_SET, line)
