@@ -20,7 +20,6 @@ import re
 from pathlib import Path
 from typing import Iterable, Iterator
 
-# import magic
 
 from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
