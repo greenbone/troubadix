@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Greenbone Networks GmbH
+# Copyright (C) 2022 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -24,7 +24,6 @@ from naslinter.plugins.copyright_text import (
     CheckCopyrightText,
     CORRECT_COPYRIGHT_PHRASE,
 )
-
 WRONG_TEXTS = [
     "# Text descriptions are largely excerpted from the referenced\n"
     "# advisory, and are Copyright (C) the respective author(s)\n",
