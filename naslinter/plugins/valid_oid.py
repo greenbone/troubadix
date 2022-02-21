@@ -282,26 +282,26 @@ class CheckValidOID(FileContentPlugin):
         # nb: Those are using invalid OID ranges but are already in
         # the feed since longer time and can't be fixed / changed.
         if (
-            "ossim_server_detect.nasl" in nasl_file.name
+            "ossim_server_detect.nasl" in nasl_file
             or (
                 "gsf/2018/vmware/gb_vmware_fusion"
                 "_vmxnet3_stack_memory_usage_vuln_macosx.nasl"
             )
-            in nasl_file.name
-            or "2008/asterisk_sdp_header_overflow.nasl" in nasl_file.name
-            or "2008/cisco_ios_ftp_server_auth_bypass.nasl" in nasl_file.name
-            or "2008/qk_smtp_server_dos.nasl" in nasl_file.name
-            or "2008/asterisk_pbx_guest_access_enabled.nasl" in nasl_file.name
-            or "2008/asterisk_null_pointer_dereference.nasl" in nasl_file.name
-            or "2008/goaheadwebserver_source_disclosure.nasl" in nasl_file.name
+            in nasl_file
+            or "2008/asterisk_sdp_header_overflow.nasl" in nasl_file
+            or "2008/cisco_ios_ftp_server_auth_bypass.nasl" in nasl_file
+            or "2008/qk_smtp_server_dos.nasl" in nasl_file
+            or "2008/asterisk_pbx_guest_access_enabled.nasl" in nasl_file
+            or "2008/asterisk_null_pointer_dereference.nasl" in nasl_file
+            or "2008/goaheadwebserver_source_disclosure.nasl" in nasl_file
             or "2011/secpod_ibm_lotus_domino_rpc_auth_dos_vuln.nasl"
-            in nasl_file.name
+            in nasl_file
             or "2011/secpod_cubecart_mult_xss_and_sql_inj_vuln.nasl"
-            in nasl_file.name
-            or "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl" in nasl_file.name
-            or "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl" in nasl_file.name
-            or "2017/gb_openssh_mult_vuln_jan17_lin.nasl" in nasl_file.name
-            or "2017/gb_xenserver_ctx219378.nasl" in nasl_file.name
+            in nasl_file
+            or "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl" in nasl_file
+            or "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl" in nasl_file
+            or "2017/gb_openssh_mult_vuln_jan17_lin.nasl" in nasl_file
+            or "2017/gb_xenserver_ctx219378.nasl" in nasl_file
         ):
             return
 
