@@ -37,6 +37,7 @@ from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 from .overlong_script_tags import CheckOverlongScriptTags
 from .solution_type import CheckSolutionType
+from .todo_tbd import CheckTodoTbd
 
 _PLUGINS = [
     CheckBadwords,
@@ -57,6 +58,7 @@ _PLUGINS = [
     UpdateModificationDate,
     CheckOverlongScriptTags,
     CheckSolutionType,
+    CheckTodoTbd,
 ]
 
 
