@@ -61,6 +61,8 @@ class CheckValidOID(FileContentPlugin):
             yield LinterError(
                 f"No valid script_oid() call found in VT '{str(nasl_file)}'",
             )
+            # If oid_match is None and not returned then the following checks
+            # will exit with an Attribute error.
             return
 
         oid = oid_match.group(1)
