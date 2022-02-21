@@ -59,6 +59,9 @@ class CheckValidOID(FileContentPlugin):
             yield LinterError(
                 "No valid script_oid() call found" f" in VT '{nasl_file.name}'",
             )
+            # If oid_match is None and not returned then the following checks
+            # will exit with an Attribute error.
+            return
 
         oid = oid_match.group(1)
         family_template = "Local Security Checks"
@@ -84,6 +87,7 @@ class CheckValidOID(FileContentPlugin):
                 yield LinterError(
                     f"VT '{nasl_file.name}' is missing a script family!"
                 )
+                return
             family = family_match.group(1)
 
             # Fixed OID-scheme for (Huawei) Euler OS OIDs
@@ -139,6 +143,7 @@ class CheckValidOID(FileContentPlugin):
                         f"script_oid() in VT '{nasl_file.name}' "
                         f"{invalid_oid} '{str(oid)}' (last digits)",
                     )
+                    return
 
                 # link is too long.
                 # https://gitlab.greenbone.net/tpassfeld/next-gen-lsc-poc/blob
@@ -232,7 +237,7 @@ class CheckValidOID(FileContentPlugin):
                 else:
                     yield LinterError(
                         f"VT '{nasl_file.name}' {invalid_oid} "
-                        "'{str(oid)}' (Vendor OID with unknown Vendor-Prefix)",
+                        f"'{str(oid)}' (Vendor OID with unknown Vendor-Prefix)",
                     )
 
                 return
@@ -248,6 +253,7 @@ class CheckValidOID(FileContentPlugin):
                 yield LinterError(
                     f"VT '{nasl_file.name}' is missing a script name!"
                 )
+                return
             name = name_match.group(1)
 
             # Fixed OID-scheme for Mozilla Firefox OIDs
@@ -278,6 +284,7 @@ class CheckValidOID(FileContentPlugin):
                 f"script_oid() in VT '{nasl_file.name}' "
                 f"{invalid_oid} '{str(oid)}' (last digits)",
             )
+            return
 
         # nb: Those are using invalid OID ranges but are already in
         # the feed since longer time and can't be fixed / changed.
