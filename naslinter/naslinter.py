@@ -109,6 +109,7 @@ def main(args=None):
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
         term=term,
+        commit_range=parsed_args.commit_range,
     )
 
     if parsed_args.dirs:

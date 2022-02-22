@@ -18,7 +18,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, List
 
 
 @dataclass
@@ -51,6 +51,15 @@ class FileContentPlugin(Plugin):
     @staticmethod
     @abstractmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+        pass
+
+
+class GitCommitRangePlugin(Plugin):
+    """A plugin that checks the file for changes between git commits"""
+
+    @staticmethod
+    @abstractmethod
+    def run(nasl_file: Path, commit_range: List[str]) -> Iterator[LinterResult]:
         pass
 
 

@@ -25,6 +25,7 @@ from .creation_date import CheckCreationDate
 from .cve_format import CheckCVEFormat
 from .cvss_format import CheckCVSSFormat
 from .double_end_points import CheckDoubleEndPoints
+from .changed_oid import CheckChangedOid
 from .duplicated_script_tags import CheckDuplicatedScriptTags
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
@@ -46,6 +47,7 @@ _PLUGINS = [
     CheckCVEFormat,
     CheckCVSSFormat,
     CheckDoubleEndPoints,
+    CheckChangedOid,
     CheckDuplicatedScriptTags,
     CheckNewlines,
     CheckMissingTagSolution,

@@ -27,6 +27,7 @@ from pontos.terminal import info
 
 from naslinter.plugin import (
     FileContentPlugin,
+    GitCommitRangePlugin,
     LineContentPlugin,
     LinterError,
     LinterMessage,
@@ -64,10 +65,12 @@ class Runner:
         term: Terminal,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
+        commit_range: List[str] = None,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = term
         self._n_jobs = n_jobs
+        self._commit_range = commit_range
 
     def _report_results(self, results: Iterable[LinterMessage]):
         for result in results:
@@ -135,7 +138,7 @@ class Runner:
                 LinterWarning(f"{file_path} is not a NASL file.")
             )
 
-        # maybe we need to re-read filecontent, if an Plugin changes it
+        # maybe we need to re-read file-content, if a Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
         for plugin in self.plugins:
@@ -145,6 +148,10 @@ class Runner:
             elif issubclass(plugin, FileContentPlugin):
                 results.add_plugin_results(
                     plugin, plugin.run(file_name, file_content)
+                )
+            elif issubclass(plugin, GitCommitRangePlugin):
+                results.add_plugin_results(
+                    plugin, plugin.run(file_name, self._commit_range)
                 )
             else:
                 results.add_plugin_results(
