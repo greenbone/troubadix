@@ -51,7 +51,7 @@ class CheckValidOID(FileContentPlugin):
         """
 
         oid_match = re.search(
-            r'^\s*script_oid\s*\(\s*["\']([0-9.]+)["\']\s*\)\s*;',
+            r'\s*script_oid\s*\(\s*["\']([0-9.]+)["\']\s*\)\s*;',
             file_content,
             re.MULTILINE,
         )
@@ -84,7 +84,6 @@ class CheckValidOID(FileContentPlugin):
                 re.MULTILINE,
             )
             if family_match is None or family_match.group(1) is None:
-                print(f"family_mathc: {family_match}")
                 yield LinterError(
                     f"VT '{nasl_file.name}' is missing a script family!"
                 )
@@ -246,7 +245,7 @@ class CheckValidOID(FileContentPlugin):
         # product-specific OIDs
         if oid.startswith("1.3.6.1.4.1.25623.1.2."):
             name_match = re.search(
-                r'^\s*script_name\s*\(\s*["\']([\w ()-]+)["\']\s*\)\s*;',
+                r'\s*script_name\s*\(\s*["\']([\w ()-]+)["\']\s*\)\s*;',
                 file_content,
                 re.MULTILINE,
             )
