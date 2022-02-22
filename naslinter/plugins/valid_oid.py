@@ -110,27 +110,6 @@ class CheckValidOID(FileContentPlugin):
                         "[ADVISORY_ID])",
                     )
                 return
-            # Fixed OID-scheme for SUSE SLES OS OIDs
-            elif "1.3.6.1.4.1.25623.1.1.4." in oid:
-                if family != f"SuSE {family_template}":
-                    yield LinterError(
-                        f"VT '{nasl_file.name}' {is_using} "
-                        f"SUSE SLES VTs "
-                        f"'{str(oid)}'",
-                    )
-                sles_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.20[0-4]"
-                    r"[0-9]\.[0-9]{4,5}\.[0-9]$",
-                    oid,
-                )
-                if sles_sa_match is None:
-                    yield LinterError(
-                        f"script_oid() in VT '{nasl_file.name}' "
-                        f"{invalid_oid} '{str(oid)}' (SLES pattern: 1.3.6.1.4."
-                        "1.25623.1.1.4.[ADVISORY_YEAR].[ADVISORY_ID]."
-                        "[ADVISORY_REVISION])",
-                    )
-                return
             else:
                 vendor_number_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid
@@ -153,7 +132,7 @@ class CheckValidOID(FileContentPlugin):
 
                 if vendor_number == "1":
                     if family != f"Debian {family_template}":
-                        return (
+                        yield LinterError(
                             f"VT '{nasl_file.name}' {is_using} "
                             f" Debian VTs'{str(oid)}'",
                         )
@@ -164,13 +143,43 @@ class CheckValidOID(FileContentPlugin):
                             f"VT '{nasl_file.name}' {is_using} "
                             f"CentOS VTs '{str(oid)}'",
                         )
-
+                # Special handling required as both SUSE SLES and CentOS_CR have
+                # vendor_number 4
+                # Fixed OID-scheme for SUSE SLES OS OIDs
                 elif vendor_number == "4":
-                    if family != f"CentOS {family_template}":
-                        yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
-                            f"CentOS_CR VTs '{str(oid)}'",
+                    # Check if ADVISORY_YEAR:SLES or ADVISORY_ID:CentOS follows
+                    sles_year_match = re.search(
+                        r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.(20[0-4][0-9])",
+                        oid,
+                    )
+                    if (
+                        sles_year_match is not None
+                        and sles_year_match.group(1) is not None
+                    ):
+                        if family != f"SuSE {family_template}":
+                            yield LinterError(
+                                f"VT '{nasl_file.name}' {is_using} "
+                                f"SUSE SLES VTs "
+                                f"'{str(oid)}'"
+                            )
+                        sles_sa_match = re.search(
+                            r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.20[0-4]"
+                            r"[0-9]\.[0-9]{4,5}\.[0-9]$",
+                            oid,
                         )
+                        if sles_sa_match is None:
+                            yield LinterError(
+                                f"script_oid() in VT '{nasl_file.name}' "
+                                f"{invalid_oid} '{str(oid)}' (SLES pattern:"
+                                " 1.3.6.1.4.1.25623.1.1.4.[ADVISORY_YEAR]."
+                                "[ADVISORY_ID].[ADVISORY_REVISION])",
+                            )
+                    else:
+                        if family != f"CentOS {family_template}":
+                            yield LinterError(
+                                f"VT '{nasl_file.name}' {is_using} "
+                                f"CentOS_CR VTs '{str(oid)}'",
+                            )
 
                 elif vendor_number == "5":
                     if family != f"Fedora {family_template}":
