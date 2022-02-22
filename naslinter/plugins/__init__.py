@@ -28,6 +28,7 @@ from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
 from .get_kb_on_services import CheckGetKBOnServices
+from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
 from .script_category import CheckScriptCategory
@@ -51,6 +52,7 @@ _PLUGINS = [
     CheckDuplicateOID,
     CheckDuplicatedScriptTags,
     CheckGetKBOnServices,
+    CheckForkingNaslFuncs,
     CheckNewlines,
     CheckMissingTagSolution,
     CheckScriptCategory,
