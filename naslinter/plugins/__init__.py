@@ -33,6 +33,7 @@ from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .encoding import CheckEncoding
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
+from .http_links_in_tags import CheckHttpLinksInTags
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
 from .overlong_script_tags import CheckOverlongScriptTags
@@ -61,6 +62,7 @@ _NASL_ONLY_PLUGINS = [
     CheckForkingNaslFuncs,
     CheckGetKBOnServices,
     CheckGrammar,
+    CheckHttpLinksInTags,
     CheckNewlines,
     CheckMissingTagSolution,
     CheckOverlongScriptTags,

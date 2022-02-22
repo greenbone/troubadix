@@ -1,0 +1,267 @@
+#  Copyright (c) 2022 Greenbone Networks GmbH
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import re
+
+from pathlib import Path
+from typing import Iterator
+
+from itertools import chain
+from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+
+
+class CheckHttpLinksInTags(FileContentPlugin):
+    name = "check_http_links_in_tags"
+
+    @staticmethod
+    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+        return chain(
+            CheckHttpLinksInTags.contains_nvd_mitre_link_in_xref(
+                nasl_file, file_content
+            ),
+            CheckHttpLinksInTags.contains_http_link_in_tag(
+                nasl_file, file_content
+            ),
+        )
+
+    @staticmethod
+    def contains_http_link_in_tag(
+        nasl_file: Path, file_content: str
+    ) -> Iterator[LinterResult]:
+        """Checks a given file if any of the
+        script_tag(name:"(summary|impact|affected|insight|vuldetect|
+        solution)", value:"")
+        contains a http(s)://, ftp:(s)://, ftp. and/or www. link which
+        should be moved to the following tag instead:
+
+        script_xref(name:"URL", value:"");
+
+        Args:
+                nasl_file: The VT that is going to be checked
+                file_content: The content of the file that is going to be
+                            checked
+        """
+        # Does only apply to NASL files.
+        if not nasl_file.suffix == ".nasl":
+            return
+
+        nasl_file_str = str(nasl_file)
+
+        tag_matches = re.finditer(
+            r'(script_tag\(name\s*:\s*"('
+            r'summary|impact|affected|insight|vuldetect|solution)"\s*,'
+            r'\s*value\s*:\s*")([^"]+)"',
+            file_content,
+        )
+        http_link_tags = ""
+        if tag_matches is not None:
+            for tag_match in tag_matches:
+                if tag_match is not None and tag_match.group(3) is not None:
+                    http_link_matches = re.finditer(
+                        r'.*((http|ftp)s?://|(www|\s+ftp)\.).*',
+                        tag_match.group(3),
+                    )
+                    if http_link_matches is not None:
+                        for http_link_match in http_link_matches:
+                            if (
+                                http_link_match is not None
+                                and http_link_match.group(1) is not None
+                            ):
+                                if (
+                                    "The payloads try to open a connection to "
+                                    "www.google.com" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "The script attempts to connect to www."
+                                    "google.com" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "to retrieve a web page from www.google"
+                                    ".com" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "Subject: commonName=www.paypal.com"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "Terms of use at https://www.veris"
+                                    "ign.com/rpa" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if "example.com" in http_link_match.group(
+                                    0
+                                ) or "example.org" in http_link_match.group(0):
+                                    continue
+                                if "www.exam" in http_link_match.group(0):
+                                    continue
+                                if (
+                                    "sampling the resolution of a name "
+                                    "(www.google.com)"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "once with 'www.' and once without"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "wget http://www.javaop.com/~ron/tmp/nc"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "Ncat: Version 5.30BETA1 (http://nmap.org/"
+                                    "ncat)" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "as www.windowsupdate.com. (BZ#506016)"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "located at http://sambarserver/session/p"
+                                    "agecount." in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "http://rest.modx.com"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "ftp:// " in http_link_match.group(0)
+                                    or "ftp://'" in http_link_match.group(0)
+                                    or "ftp://)" in http_link_match.group(0)
+                                    or "ftp.c" in http_link_match.group(0)
+                                    or "ftp.exe" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "using special ftp://"
+                                    in http_link_match.group(0)
+                                    or "running ftp."
+                                    in http_link_match.group(0)
+                                    or "ftp. The vulnerability"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "'http://' protocol"
+                                    in http_link_match.group(0)
+                                    or "handle <a href='http://...'> pro"
+                                    "perly" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "Switch to git+https://"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "wget https://compromised-domain.com/impo"
+                                    "rtant-file" in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "the https:// scheme"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                if (
+                                    "https://www.phishingtarget.com@evil.com"
+                                    in http_link_match.group(0)
+                                ):
+                                    continue
+                                http_link_tags += (
+                                    "\n\t"
+                                    + tag_match.group(0).partition(',')[0]
+                                    + ", link: "
+                                    + http_link_match.group(0)
+                                )
+
+        if len(http_link_tags) > 0:
+            yield LinterError(
+                f"The following script_tags of VT '{nasl_file_str}' are using "
+                "an HTTP Link/URL which should be moved to a separate "
+                "'script_xref(name:\"URL\", value:\"\");' tag "
+                f"instead:{http_link_tags}"
+            )
+            return
+
+        return
+
+    @staticmethod
+    def contains_nvd_mitre_link_in_xref(
+        nasl_file: Path, file_content: str
+    ) -> Iterator[LinterResult]:
+        """
+        Checks a given file if the script_xref(name:"URL", value:""); contains
+        a link to an URL including any of this occurrence:
+
+        - https://nvd.nist.gov/vuln/detail/CVE-
+
+        - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-
+
+        Background: Both links are already covered by the script_cve_id() tag
+        and the Link is just a redundant information.
+
+        Args:
+                nasl_file: The VT that is going to be checked
+                file_content: The content of the file that is going to be
+                                checked
+        """
+        # Does only apply to NASL files.
+        if not nasl_file.suffix == ".nasl":
+            return
+
+        nasl_file_str = str(nasl_file)
+
+        tag_matches = re.finditer(
+            r'(script_xref\(name\s*:\s*"URL"\s*,\s*value\s*:\s*")([^"]+)"',
+            file_content,
+        )
+        nvd_mitre_link_tags = ""
+        if tag_matches is not None:
+            for match in tag_matches:
+                if match is not None and match.group(2) is not None:
+
+                    if (
+                        # fmt: off
+                        "nvd.nist.gov/vuln/detail/CVE-" in match.group(2) \
+                        or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-" \
+                        in match.group(2)
+                        # fmt: on
+                    ):
+                        nvd_mitre_link_tags += "\n\t" + match.group(0)
+
+        if len(nvd_mitre_link_tags) > 0:
+            yield LinterError(
+                "The following script_xref of VT "
+                f"'{nasl_file_str}' is pointing to Mitre/NVD "
+                "which is already covered by the script_cve_id. "
+                "This is a redundant info and the "
+                f"script_xref needs to be removed: {nvd_mitre_link_tags}"
+            )
+            return
+
+        return
