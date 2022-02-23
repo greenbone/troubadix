@@ -23,7 +23,7 @@ from pontos.terminal.terminal import Terminal
 from pontos.terminal import _set_terminal
 from naslinter.plugin import LinterError, LinterResult
 
-from naslinter.plugins import _PLUGINS
+from naslinter.plugins import _NASL_ONLY_PLUGINS
 from naslinter.runner import Runner
 
 
@@ -36,7 +36,7 @@ class TestRunner(unittest.TestCase):
     def test_runner_with_all_plugins(self):
         runner = Runner(n_jobs=1, term=self._term)
 
-        plugins = _PLUGINS
+        plugins = _NASL_ONLY_PLUGINS
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin, plugins)
@@ -49,7 +49,7 @@ class TestRunner(unittest.TestCase):
         ]
         included_plugins = [
             plugin.__name__
-            for plugin in _PLUGINS
+            for plugin in _NASL_ONLY_PLUGINS
             if plugin.__name__ not in excluded_plugins
         ]
         runner = Runner(

@@ -15,7 +15,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-TAG_PATTERN = (
-    r'\s*script_tag\(\s*name\s*:\s*["\']{tag_name}["\']\s*,'
-    r"\s*value\s*:\s*{tag_value}\s*\)\s*;"
-)
+from .helper import is_ignore_file, get_root, subprocess_cmd
+from .patterns import get_tag_pattern, get_special_tag_pattern

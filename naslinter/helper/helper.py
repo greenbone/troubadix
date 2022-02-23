@@ -17,7 +17,11 @@
 
 from subprocess import Popen, PIPE
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
+
+
+# Root directory of nasl files
+_ROOT = "nasl/common"
 
 
 def is_ignore_file(
@@ -33,3 +37,15 @@ def subprocess_cmd(command: str) -> str:
     process = Popen(command, stdout=PIPE, shell=True)
     proc_stdout = process.communicate()[0].strip()
     return proc_stdout.decode("utf-8")
+
+
+def get_root(root: str = _ROOT) -> Optional[Path]:
+    """Get the root directory of the VTs
+    Arguments:
+        root        Pass a root directory
+    Returns:
+    """
+    _root = Path(root)
+    if _root.exists():
+        return _root
+    return None
