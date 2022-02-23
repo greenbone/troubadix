@@ -22,7 +22,7 @@ from typing import Iterator, AnyStr
 
 from itertools import chain
 
-from naslinter.helper import get_tag_pattern
+from naslinter.helper import get_tag_pattern, get_special_tag_pattern
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -63,35 +63,34 @@ class CheckHttpLinksInTags(FileContentPlugin):
         )
         tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
-        if tag_matches:
-            for tag_match in tag_matches:
-                if tag_match:
-                    http_link_matches = re.finditer(
-                        r".*((http|ftp)s?://|(www|\s+ftp)\.).*",
-                        tag_match.group(2),
-                    )
-                    if http_link_matches is not None:
-                        for http_link_match in http_link_matches:
-                            if http_link_match:
-                                if CheckHttpLinksInTags.check_to_continue(
-                                    http_link_match.group(0)
-                                ):
-                                    continue
+        for tag_match in tag_matches:
+            if tag_match:
+                http_link_matches = re.finditer(
+                    r".*((http|ftp)s?://|(www|\s+ftp)\.).*",
+                    tag_match.group(2),
+                )
+                if http_link_matches is not None:
+                    for http_link_match in http_link_matches:
+                        if http_link_match:
+                            if CheckHttpLinksInTags.check_to_continue(
+                                http_link_match.group(0)
+                            ):
+                                continue
 
-                                http_link_tag = (
-                                    "\n\t"
-                                    + tag_match.group(0).partition(",")[0]
-                                    + ", link: "
-                                    + http_link_match.group(0)
-                                )
-                                yield LinterError(
-                                    f"The following script_tags of VT "
-                                    f"'{nasl_file}' are using "
-                                    "an HTTP Link/URL which should be moved "
-                                    "to a separate "
-                                    '\'script_xref(name:"URL", value:"");\' '
-                                    f"tag instead:{http_link_tag}"
-                                )
+                            http_link_tag = (
+                                "\n\t"
+                                + tag_match.group(0).partition(",")[0]
+                                + ", link: "
+                                + http_link_match.group(0)
+                            )
+                            yield LinterError(
+                                f"The following script_tags of VT "
+                                f"'{nasl_file}' are using "
+                                "an HTTP Link/URL which should be moved "
+                                "to a separate "
+                                '\'script_xref(name:"URL", value:"");\' '
+                                f"tag instead:{http_link_tag}"
+                            )
 
     @staticmethod
     def contains_nvd_mitre_link_in_xref(
@@ -114,29 +113,27 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 checked
         """
 
-        tag_matches = re.finditer(
-            r'(script_xref\(name\s*:\s*"URL"\s*,\s*value\s*:\s*")([^"]+)"',
-            file_content,
+        pattern = get_special_tag_pattern(
+            name=r"xref", value=r'name\s*:\s*"URL"\s*,\s*value\s*:\s*"([^"]+)"'
         )
+        tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
-        if tag_matches is not None:
-            for match in tag_matches:
-                if match:
-                    if (
-                        # fmt: off
-                        "nvd.nist.gov/vuln/detail/CVE-" in match.group(2)
-                        or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-"
-                        in match.group(2)
-                        # fmt: on
-                    ):
-                        nvd_mitre_link_tag = "\n\t" + match.group(0)
-                        yield LinterError(
-                            "The following script_xref of VT "
-                            f"'{nasl_file}' is pointing to Mitre/NVD "
-                            "which is already covered by the script_cve_id. "
-                            "This is a redundant info and the script_xref "
-                            f"needs to be removed: {nvd_mitre_link_tag}"
-                        )
+        for match in tag_matches:
+            if match:
+                if (
+                    # fmt: off
+                    "nvd.nist.gov/vuln/detail/CVE-" in match.group(2)
+                    or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-"
+                    in match.group(2)
+                    # fmt: on
+                ):
+                    yield LinterError(
+                        "The following script_xref of VT "
+                        f"'{nasl_file}' is pointing to Mitre/NVD "
+                        "which is already covered by the script_cve_id. "
+                        "This is a redundant info and the script_xref "
+                        f"needs to be removed: {match.group(0)}"
+                    )
 
     @staticmethod
     def check_to_continue(http_link_match_group: AnyStr) -> bool:

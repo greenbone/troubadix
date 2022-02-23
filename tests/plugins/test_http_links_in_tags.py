@@ -78,7 +78,7 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
             f"The following script_xref of VT '{str(path)}' is pointing "
             "to Mitre/NVD which is already covered by the script_cve_id. "
             "This is a redundant info and the script_xref needs to be "
-            'removed: \n\tscript_xref(name:"URL", '
-            'value:"https://nvd.nist.gov/vuln/detail/CVE-1234"',
+            'removed: script_xref(name:"URL", '
+            'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");',
             results[0].message,
         )

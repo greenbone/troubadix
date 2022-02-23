@@ -24,7 +24,7 @@ _TAG_PATTERN = (
 )
 
 _SPECIAL_TAG_PATTERN = (
-    r'script_(?P<name>{name})\s*\(["\'](?P<value>{value})["\']\s*\)\s*;'
+    r'script_(?P<name>{name})\s*\((?P<value>["\']?{value}["\']?)\s*\)\s*;'
 )
 
 
@@ -51,7 +51,7 @@ def get_special_tag_pattern(
     name: str, *, value: str = r".+", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
-    The returned pattern catchs all `script_<name>("<value>");`
+    The returned pattern catchs all `script_<name>(<value>);`
 
     Arguments:
         name        script tag name
