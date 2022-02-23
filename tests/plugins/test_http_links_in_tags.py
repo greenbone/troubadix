@@ -55,8 +55,8 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
             f"The following script_tags of VT '{str(path)}' are using an "
             "HTTP Link/URL which should be moved to a separate "
             '\'script_xref(name:"URL", value:"");\' tag instead:'
-            '\n\tscript_tag(name:"summary", link: Foo Bar. '
-            "https://www.website.de/demo",
+            '\n\tscript_tag(name:"summary", link: "Foo Bar. '
+            'https://www.website.de/demo"',
             results[0].message,
         )
 

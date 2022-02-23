@@ -21,6 +21,8 @@ from pathlib import Path
 from typing import Iterator, AnyStr
 
 from itertools import chain
+
+from naslinter.helper import get_tag_pattern
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -56,19 +58,17 @@ class CheckHttpLinksInTags(FileContentPlugin):
                             checked
         """
 
-        tag_matches = re.finditer(
-            r'(script_tag\(name\s*:\s*"('
-            r'summary|impact|affected|insight|vuldetect|solution)"\s*,'
-            r'\s*value\s*:\s*")([^"]+)"',
-            file_content,
+        pattern = get_tag_pattern(
+            name=r"summary|impact|affected|insight|vuldetect|solution",
         )
+        tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
-        if tag_matches is not None:
+        if tag_matches:
             for tag_match in tag_matches:
-                if tag_match is not None and tag_match.group(3) is not None:
+                if tag_match:
                     http_link_matches = re.finditer(
                         r".*((http|ftp)s?://|(www|\s+ftp)\.).*",
-                        tag_match.group(3),
+                        tag_match.group(2),
                     )
                     if http_link_matches is not None:
                         for http_link_match in http_link_matches:
@@ -124,8 +124,8 @@ class CheckHttpLinksInTags(FileContentPlugin):
                 if match:
                     if (
                         # fmt: off
-                        "nvd.nist.gov/vuln/detail/CVE-" in match.group(2) \
-                        or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-" \
+                        "nvd.nist.gov/vuln/detail/CVE-" in match.group(2)
+                        or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-"
                         in match.group(2)
                         # fmt: on
                     ):
