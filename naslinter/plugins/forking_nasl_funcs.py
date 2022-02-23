@@ -72,31 +72,22 @@ class CheckForkingNaslFuncs(FileContentPlugin):
             file_content: The content of the file that is going to be checked
         """
 
-        # Does only apply to NASL files.
-        if not nasl_file.suffix == ".nasl":
-            return
-
-        nasl_file_str = str(nasl_file)
-        found_tags = ""
-
         # Those two are only calling http_get_port() if get_app_port() was
         # "empty".
-        if (
-            "sw_magento_magmi_detect.nasl" in nasl_file_str
-            or "2014/gb_apache_struts_classloader_vuln.nasl" in nasl_file_str
-        ):
+        if "sw_magento_magmi_detect.nasl" in str(
+            nasl_file
+        ) or "2014/gb_apache_struts_classloader_vuln.nasl" in str(nasl_file):
             return
 
         # Those two are using if/else calls between
         # smtp_get_port/imap_get_port or get_app_port/service_get_port calls.
-        if (
-            "2009/zabbix_37308.nasl" in nasl_file_str
-            or "pre2008/mailenable_imap_rename_dos.nasl" in nasl_file_str
-        ):
+        if "2009/zabbix_37308.nasl" in str(
+            nasl_file
+        ) or "pre2008/mailenable_imap_rename_dos.nasl" in str(nasl_file):
             return
 
         # This one is using if/else calls similar to the examples above.
-        if "2013/gb_sap_netweaver_portal_rce_04_13.nasl" in nasl_file_str:
+        if "2013/gb_sap_netweaver_portal_rce_04_13.nasl" in str(nasl_file):
             return
 
         match = re.findall(
@@ -109,20 +100,15 @@ class CheckForkingNaslFuncs(FileContentPlugin):
         if match and len(match) > 1:
             for tag in match:
                 if tag[0] is not None:
-                    found_tags += "\n\t" + tag[0]
-
-        if len(found_tags) > 0:
-            report = (
-                f"The VT '{nasl_file_str}' is using the following functions "
-                "multiple times or in conjunction with other forking "
-                "functions. Please either use get_app_port_from_list() from "
-                "host_details.inc or split your VT into several VTs for each "
-                f"covered protocol. {found_tags}"
-            )
-            yield LinterError(report)
+                    found_tag = "\n\t" + tag[0]
+                    yield LinterError(
+                        f"The VT '{str(nasl_file)}' is using the following "
+                        "functions multiple times or in conjunction with other "
+                        "forking functions. Please either use get_app_port_from"
+                        "_list() from host_details.inc or split your VT into "
+                        f"several VTs for each covered protocol. {found_tag}"
+                    )
             return
-
-        found_tags = ""
 
         match = re.findall(
             r"\s*[=!]\s*(get_app_(version|location|version_from_list"
@@ -138,25 +124,23 @@ class CheckForkingNaslFuncs(FileContentPlugin):
                     # with nofork:TRUE which returns a list instead of doing
                     # a fork.
                     if (
-                        "2018/phpunit/gb_phpunit_rce.nasl" in nasl_file_str
+                        "2018/phpunit/gb_phpunit_rce.nasl" in str(nasl_file)
                         or "2018/gb_unprotected_web_app_installers.nasl"
-                        in nasl_file_str
+                        in str(nasl_file)
                         or "2018/gb_sensitive_file_disclosures_http.nasl"
-                        in nasl_file_str
+                        in str(nasl_file)
                     ):
                         if "nofork:TRUE" in tag[0]:
                             continue
-                    found_tags += "\n\t" + tag[0]
-
-        if len(found_tags) > 0:
-            report = (
-                f"The VT '{nasl_file_str}' is using the following functions "
-                "multiple times or in conjunction with other forking functions."
-                " Please use e.g. get_app_version_and_location(), "
-                "get_app_version_and_location_from_list() or similar functions "
-                f"from host_details.inc. {found_tags}"
-            )
-            yield LinterError(report)
+                    found_tag = "\n\t" + tag[0]
+                    yield LinterError(
+                        f"The VT '{nasl_file}' is using the following functions"
+                        " multiple times or in conjunction with other forking "
+                        "functions. Please use e.g. "
+                        "get_app_version_and_location(), "
+                        "get_app_version_and_location_from_list() or similar "
+                        f"functions from host_details.inc. {found_tag}"
+                    )
             return
 
         return

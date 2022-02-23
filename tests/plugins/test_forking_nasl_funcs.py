@@ -52,16 +52,14 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
         )
 
         results = list(CheckForkingNaslFuncs.run(path, content))
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"The VT '{str(path)}' is using the following functions "
             "multiple times or in conjunction with other forking functions. "
             "Please either use get_app_port_from_list() from host_details.inc "
             "or split your VT into several VTs for each covered protocol. \n\t"
-            'get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, service:"www" ) )'
-            '\n\tget_app_port_from_cpe_prefix( cpe:CPE_PREFIX, service:"www" '
-            ") )",
+            'get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, service:"www" ) )',
             results[0].message,
         )
 
@@ -79,7 +77,7 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
         )
 
         results = list(CheckForkingNaslFuncs.run(path, content))
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"The VT '{str(path)}' is using the following functions "
@@ -87,7 +85,6 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             "Please use e.g. get_app_version_and_location(), "
             "get_app_version_and_location_from_list() or similar functions "
             "from host_details.inc. \n\tget_app_full(cpe:CPE, port:port, "
-            "exit_no_version:TRUE))\n\tget_app_full(cpe:CPE, port:port, "
             "exit_no_version:TRUE))",
             results[0].message,
         )
