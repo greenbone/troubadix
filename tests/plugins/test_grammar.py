@@ -47,8 +47,29 @@ class CheckNewlinesTestCase(unittest.TestCase):
         )
 
         results = list(CheckGrammar.run(nasl_file, content))
-
         self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"VT/Include '{str(nasl_file)}' is having grammar problems in the "
+            "following line(s):\nHit: is prone to a security bypass "
+            "vulnerabilities\nFull line:\n# is prone to a security bypass "
+            "vulnerabilities\n",
+            results[0].message,
+        )
+
+    def test_grammar2(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            '# is prone to a security bypass vulnerabilities\n'
+            '# refer the Reference\n'
+        )
+
+        results = list(CheckGrammar.run(nasl_file, content))
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"VT/Include '{str(nasl_file)}' is having grammar problems in the "

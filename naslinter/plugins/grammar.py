@@ -88,7 +88,6 @@ class CheckGrammar(FileContentPlugin):
             f"VT/Include '{nasl_file_str}' is having "
             "grammar problems in the following line(s):\n"
         )
-        grammar_problems_found = False
 
         grammar_problem_match = re.finditer(
             grammar_problems_pattern, file_content, re.IGNORECASE
@@ -96,7 +95,7 @@ class CheckGrammar(FileContentPlugin):
 
         if grammar_problem_match is not None:
             for line in grammar_problem_match:
-                if line is not None and line.group(0) is not None:
+                if line:
 
                     # Exclude a few known false positives
                     if (
@@ -158,7 +157,7 @@ class CheckGrammar(FileContentPlugin):
                     if re.search(r'(\s+|")[Aa]\s+multiple\s+of', line.group(0)):
                         continue
 
-                    grammar_problems_report = (
+                    yield LinterError(
                         grammar_problems_report
                         + "Hit: "
                         + line.group(1)
@@ -168,10 +167,6 @@ class CheckGrammar(FileContentPlugin):
                         + line.group(0)
                         + '\n'
                     )
-                    grammar_problems_found = True
-
-        if grammar_problems_found:
-            yield LinterError(grammar_problems_report)
             return
 
         return
