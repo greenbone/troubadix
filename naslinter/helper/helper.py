@@ -17,7 +17,7 @@
 
 from subprocess import Popen, PIPE
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 
 # Root directory of nasl files
@@ -39,7 +39,7 @@ def subprocess_cmd(command: str) -> str:
     return proc_stdout.decode("utf-8")
 
 
-def get_root(root: str = _ROOT) -> Union[Path, None]:
+def get_root(root: str = _ROOT) -> Optional[Path]:
     """Get the root directory of the VTs
     Arguments:
         root        Pass a root directory

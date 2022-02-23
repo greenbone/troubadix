@@ -76,20 +76,3 @@ class CheckIllegalCharactersTestCase(unittest.TestCase):
 
         if path.exists():
             path.unlink()
-
-    # def test_missing_solution(self):
-    #     path = Path("some/file.nasl")
-    #     content = (
-    #         'script_tag(name:"cvss_base", value:"4.0");\n'
-    #         'script_tag(name:"summary", value:"Foo Bar...");'
-    #         'script_tag(name:"solution_type", value:"VendorFix");\n'
-    #     )
-
-    #     results = list(CheckIllegalCharacters.run(path, content))
-    #     self.assertEqual(len(results), 1)
-    #     self.assertIsInstance(results[0], LinterError)
-    #     self.assertEqual(
-    #         "'solution_type' script_tag but no 'solution' script_tag "
-    #         f"found in the description block of VT '{str(path)}'",
-    #         results[0].message,
-    #     )

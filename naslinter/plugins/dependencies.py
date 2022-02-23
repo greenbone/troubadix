@@ -58,7 +58,7 @@ class CheckDependencies(FileContentPlugin):
                 ).split(",")
 
                 for dep in dependencies:
-                    if not Path(root / dep).exists():
+                    if not (root / dep).exists():
                         yield LinterError(
                             f"The script dependency {dep} could not "
                             "be found within the VTs."

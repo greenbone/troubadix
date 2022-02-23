@@ -75,21 +75,3 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             "not be found within the VTs.",
             results[0].message,
         )
-
-    # def test_invalid(self):
-    #     path = Path("some/file.nasl")
-    #     content = (
-    #         'script_tag(name:"cvss_base", value:"4.0");\n'
-    #         'script_tag(name:"summary", value:"Foo Bar...");\n'
-    #         'script_dependencies("example.inc")\n'
-    #     )
-
-    #     results = list(CheckDependencies.run(path, content))
-    #     self.assertEqual(len(results), 1)
-    #     self.assertIsInstance(results[0], LinterError)
-    #     self.assertEqual(
-    #         "The script tag 'script_tag(name:\"summary\"' of VT "
-    #         "'some/file.nasl' is ending with two or more end points: "
-    #         "'Foo Bar...\");'.",
-    #         results[0].message,
-    #     )

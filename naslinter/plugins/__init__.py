@@ -26,8 +26,6 @@ from .creation_date import CheckCreationDate
 from .cve_format import CheckCVEFormat
 from .cvss_format import CheckCVSSFormat
 from .dependencies import CheckDependencies
-
-# from .dependency_category_order import CheckDependencyCategoryOrder
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
@@ -36,18 +34,17 @@ from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .encoding import CheckEncoding
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
+from .overlong_script_tags import CheckOverlongScriptTags
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
-
-# from .tabs import CheckTabs
+from .solution_type import CheckSolutionType
+from .tabs import CheckTabs
+from .todo_tbd import CheckTodoTbd
 from .update_modification_date import UpdateModificationDate
 from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
-from .overlong_script_tags import CheckOverlongScriptTags
-from .solution_type import CheckSolutionType
-from .todo_tbd import CheckTodoTbd
 
 _NASL_ONLY_PLUGINS = [
     CheckBadwords,
@@ -57,7 +54,6 @@ _NASL_ONLY_PLUGINS = [
     CheckCVEFormat,
     CheckCVSSFormat,
     CheckDependencies,
-    # CheckDependencyCategoryOrder,
     CheckDoubleEndPoints,
     CheckDuplicateOID,
     CheckDuplicatedScriptTags,
@@ -65,6 +61,7 @@ _NASL_ONLY_PLUGINS = [
     CheckForkingNaslFuncs,
     CheckNewlines,
     CheckMissingTagSolution,
+    CheckOverlongScriptTags,
     CheckScriptCategory,
     CheckScriptCopyright,
     CheckUsingDisplay,
@@ -72,14 +69,13 @@ _NASL_ONLY_PLUGINS = [
     CheckValidScriptTagNames,
     CheckVTPlacement,
     UpdateModificationDate,
-    CheckOverlongScriptTags,
     CheckSolutionType,
     CheckTodoTbd,
 ]
 
 _PLUGINS = [
     CheckEncoding,
-    # CheckTabs,
+    CheckTabs,
 ]
 
 
