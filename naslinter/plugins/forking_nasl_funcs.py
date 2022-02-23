@@ -99,14 +99,13 @@ class CheckForkingNaslFuncs(FileContentPlugin):
         )
         if match and len(match) > 1:
             for tag in match:
-                if tag[0] is not None:
-                    found_tag = "\n\t" + tag[0]
+                if tag[0]:
                     yield LinterError(
-                        f"The VT '{str(nasl_file)}' is using the following "
-                        "functions multiple times or in conjunction with other "
+                        f"The VT '{str(nasl_file)}' is using the {tag[0]} "
+                        "multiple times or in conjunction with other "
                         "forking functions. Please either use get_app_port_from"
                         "_list() from host_details.inc or split your VT into "
-                        f"several VTs for each covered protocol. {found_tag}"
+                        f"several VTs for each covered protocol."
                     )
             return
 
@@ -119,7 +118,7 @@ class CheckForkingNaslFuncs(FileContentPlugin):
         )
         if match and len(match) > 1:
             for tag in match:
-                if tag[0] is not None:
+                if tag[0]:
                     # some special cases, these are calling get_app_location
                     # with nofork:TRUE which returns a list instead of doing
                     # a fork.
@@ -132,14 +131,13 @@ class CheckForkingNaslFuncs(FileContentPlugin):
                     ):
                         if "nofork:TRUE" in tag[0]:
                             continue
-                    found_tag = "\n\t" + tag[0]
                     yield LinterError(
-                        f"The VT '{nasl_file}' is using the following functions"
-                        " multiple times or in conjunction with other forking "
+                        f"The VT '{nasl_file}' is using the {tag[0]} "
+                        "multiple times or in conjunction with other forking "
                         "functions. Please use e.g. "
                         "get_app_version_and_location(), "
                         "get_app_version_and_location_from_list() or similar "
-                        f"functions from host_details.inc. {found_tag}"
+                        f"functions from host_details.inc."
                     )
             return
 
