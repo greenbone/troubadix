@@ -86,6 +86,3 @@ class CheckGetKBOnServices(FileContentPlugin):
                         "function instead of a direct access to the "
                         f"'Services/' KB key:{services_kb_accessed}"
                     )
-            return
-
-        return
