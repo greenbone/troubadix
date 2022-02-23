@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, AnyStr
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -97,64 +97,9 @@ class CheckGrammar(FileContentPlugin):
             for line in grammar_problem_match:
                 if line:
 
-                    # Exclude a few known false positives
-                    if (
-                        "a few " in line.group(0)
-                        or "A few " in line.group(0)
-                        or "a multiple keyboard " in line.group(0)
+                    if CheckGrammar.check_for_false_positives(
+                        line.group(0), str(nasl_file)
                     ):
-                        continue
-
-                    if "A A S Application Access Server" in line.group(0):
-                        continue
-
-                    if "a Common Vulnerabilities and Exposures" in line.group(
-                        0
-                    ):
-                        continue
-
-                    if "Multiple '/' Vulnerability" in line.group(0):
-                        continue
-
-                    if "an attackers choise" in line.group(0):
-                        continue
-
-                    if (
-                        "2012/gb_VMSA-2010-0007.nasl" in nasl_file_str
-                        and "e. VMware VMnc Codec heap overflow vulner"
-                        "abilities\n\n  Vulnerabilities in the" in line.group(0)
-                    ):
-                        continue
-
-                    # nb: Valid sentence
-                    if (
-                        "gb_opensuse_2018_1900_1.nasl" in nasl_file_str
-                        and "(Note that" in line.group(0)
-                    ):
-                        continue
-
-                    # same as above
-                    if (
-                        "gb_sles_2021_3215_1.nasl" in nasl_file_str
-                        and "with\n WITH" in line.group(0)
-                    ):
-                        continue
-
-                    # same as above
-                    if (
-                        "gb_sles_2021_2320_1.nasl" in nasl_file_str
-                        and "with WITH" in line.group(0)
-                    ):
-                        continue
-
-                    # same
-                    if "multiple error handling vulnerabilities" in line.group(
-                        0
-                    ):
-                        continue
-
-                    # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
-                    if re.search(r'(\s+|")[Aa]\s+multiple\s+of', line.group(0)):
                         continue
 
                     yield LinterError(
@@ -170,3 +115,65 @@ class CheckGrammar(FileContentPlugin):
             return
 
         return
+
+    @staticmethod
+    def check_for_false_positives(line_group: AnyStr, nasl_file: str) -> bool:
+        """
+        Checks for false positives in the findings.
+        """
+        # Exclude a few known false positives
+        if (
+            "a few " in line_group
+            or "A few " in line_group
+            or "a multiple keyboard " in line_group
+        ):
+            return True
+
+        if "A A S Application Access Server" in line_group:
+            return True
+
+        if "a Common Vulnerabilities and Exposures" in line_group:
+            return True
+
+        if "Multiple '/' Vulnerability" in line_group:
+            return True
+
+        if "an attackers choise" in line_group:
+            return True
+
+        if (
+            "2012/gb_VMSA-2010-0007.nasl" in nasl_file
+            and "e. VMware VMnc Codec heap overflow vulner"
+            "abilities\n\n  Vulnerabilities in the" in line_group
+        ):
+            return True
+
+        # nb: Valid sentence
+        if (
+            "gb_opensuse_2018_1900_1.nasl" in nasl_file
+            and "(Note that" in line_group
+        ):
+            return True
+
+        # same as above
+        if (
+            "gb_sles_2021_3215_1.nasl" in nasl_file
+            and "with\n WITH" in line_group
+        ):
+            return True
+
+        # same as above
+        if (
+            "gb_sles_2021_2320_1.nasl" in nasl_file
+            and "with WITH" in line_group
+        ):
+            return True
+
+        # same
+        if "multiple error handling vulnerabilities" in line_group:
+            return True
+
+        # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
+        if re.search(r'(\s+|")[Aa]\s+multiple\s+of', line_group):
+            return True
+        return False
