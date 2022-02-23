@@ -29,9 +29,10 @@ from .dependencies import CheckDependencies
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
-from .get_kb_on_services import CheckGetKBOnServices
 from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .encoding import CheckEncoding
+from .get_kb_on_services import CheckGetKBOnServices
+from .grammar import CheckGrammar
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
 from .overlong_script_tags import CheckOverlongScriptTags
@@ -57,8 +58,9 @@ _NASL_ONLY_PLUGINS = [
     CheckDoubleEndPoints,
     CheckDuplicateOID,
     CheckDuplicatedScriptTags,
-    CheckGetKBOnServices,
     CheckForkingNaslFuncs,
+    CheckGetKBOnServices,
+    CheckGrammar,
     CheckNewlines,
     CheckMissingTagSolution,
     CheckOverlongScriptTags,
