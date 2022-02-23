@@ -112,9 +112,6 @@ class CheckGrammar(FileContentPlugin):
                         + line.group(0)
                         + "\n"
                     )
-            return
-
-        return
 
     @staticmethod
     def check_for_false_positives(line_group: AnyStr, nasl_file: str) -> bool:
