@@ -1,4 +1,4 @@
-# Copyright (C) 2021 Greenbone Networks GmbH
+# Copyright (C) 2021-2022 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from subprocess import Popen, PIPE
 from pathlib import Path
 from typing import List, Union
 
@@ -26,3 +27,9 @@ def is_ignore_file(
         if str(ignore_file) in str(file_name):
             return True
     return False
+
+
+def subprocess_cmd(command: str) -> str:
+    process = Popen(command, stdout=PIPE, shell=True)
+    proc_stdout = process.communicate()[0].strip()
+    return proc_stdout.decode("utf-8")
