@@ -52,11 +52,11 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The following script_tags of VT '{str(path)}' are using an "
+            f"One script_tag in VT '{str(path)}' is using an "
             "HTTP Link/URL which should be moved to a separate "
-            '\'script_xref(name:"URL", value:"");\' tag instead:'
-            '\n\tscript_tag(name:"summary", link: "Foo Bar. '
-            'https://www.website.de/demo"',
+            '\'script_xref(name:"URL", value:"");\' tag instead: '
+            '\'script_tag(name:"summary", value:"Foo Bar. '
+            "https://www.website.de/demo\");'",
             results[0].message,
         )
 

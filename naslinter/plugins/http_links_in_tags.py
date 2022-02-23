@@ -67,7 +67,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
             if tag_match:
                 http_link_matches = re.finditer(
                     r".*((http|ftp)s?://|(www|\s+ftp)\.).*",
-                    tag_match.group(2),
+                    tag_match.group("value"),
                 )
                 if http_link_matches is not None:
                     for http_link_match in http_link_matches:
@@ -77,19 +77,12 @@ class CheckHttpLinksInTags(FileContentPlugin):
                             ):
                                 continue
 
-                            http_link_tag = (
-                                "\n\t"
-                                + tag_match.group(0).partition(",")[0]
-                                + ", link: "
-                                + http_link_match.group(0)
-                            )
                             yield LinterError(
-                                f"The following script_tags of VT "
-                                f"'{nasl_file}' are using "
-                                "an HTTP Link/URL which should be moved "
-                                "to a separate "
+                                f"One script_tag in VT '{nasl_file}' is using "
+                                "an HTTP Link/URL which should be moved to a "
+                                "separate "
                                 '\'script_xref(name:"URL", value:"");\' '
-                                f"tag instead:{http_link_tag}"
+                                f"tag instead: '{tag_match.group(0)}'"
                             )
 
     @staticmethod
@@ -122,9 +115,9 @@ class CheckHttpLinksInTags(FileContentPlugin):
             if match:
                 if (
                     # fmt: off
-                    "nvd.nist.gov/vuln/detail/CVE-" in match.group(2)
+                    "nvd.nist.gov/vuln/detail/CVE-" in match.group('value')
                     or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-"
-                    in match.group(2)
+                    in match.group('value')
                     # fmt: on
                 ):
                     yield LinterError(
