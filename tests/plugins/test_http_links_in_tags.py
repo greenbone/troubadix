@@ -52,11 +52,11 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f'The following script_tags of VT \'{str(path)}\' are using an '
-            'HTTP Link/URL which should be moved to a separate '
+            f"The following script_tags of VT '{str(path)}' are using an "
+            "HTTP Link/URL which should be moved to a separate "
             '\'script_xref(name:"URL", value:"");\' tag instead:'
             '\n\tscript_tag(name:"summary", link: Foo Bar. '
-            'https://www.website.de/demo',
+            "https://www.website.de/demo",
             results[0].message,
         )
 
@@ -75,9 +75,9 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f'The following script_xref of VT \'{str(path)}\' is pointing '
-            'to Mitre/NVD which is already covered by the script_cve_id. '
-            'This is a redundant info and the script_xref needs to be '
+            f"The following script_xref of VT '{str(path)}' is pointing "
+            "to Mitre/NVD which is already covered by the script_cve_id. "
+            "This is a redundant info and the script_xref needs to be "
             'removed: \n\tscript_xref(name:"URL", '
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234"',
             results[0].message,

@@ -67,7 +67,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
             for tag_match in tag_matches:
                 if tag_match is not None and tag_match.group(3) is not None:
                     http_link_matches = re.finditer(
-                        r'.*((http|ftp)s?://|(www|\s+ftp)\.).*',
+                        r".*((http|ftp)s?://|(www|\s+ftp)\.).*",
                         tag_match.group(3),
                     )
                     if http_link_matches is not None:
@@ -189,7 +189,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                     continue
                                 http_link_tag = (
                                     "\n\t"
-                                    + tag_match.group(0).partition(',')[0]
+                                    + tag_match.group(0).partition(",")[0]
                                     + ", link: "
                                     + http_link_match.group(0)
                                 )
@@ -198,7 +198,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                     f"'{nasl_file}' are using "
                                     "an HTTP Link/URL which should be moved "
                                     "to a separate "
-                                    "'script_xref(name:\"URL\", value:\"\");' "
+                                    '\'script_xref(name:"URL", value:"");\' '
                                     f"tag instead:{http_link_tag}"
                                 )
             return
