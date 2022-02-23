@@ -23,7 +23,7 @@ from naslinter.plugin import LinterError
 from naslinter.plugins.get_kb_on_services import CheckGetKBOnServices
 
 
-class CheckDuplicatedOidTestCase(unittest.TestCase):
+class CheckGetKBOnServicesTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
