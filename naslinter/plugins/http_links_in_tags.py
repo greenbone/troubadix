@@ -55,11 +55,6 @@ class CheckHttpLinksInTags(FileContentPlugin):
                 file_content: The content of the file that is going to be
                             checked
         """
-        # Does only apply to NASL files.
-        if not nasl_file.suffix == ".nasl":
-            return
-
-        nasl_file_str = str(nasl_file)
 
         tag_matches = re.finditer(
             r'(script_tag\(name\s*:\s*"('
@@ -67,7 +62,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
             r'\s*value\s*:\s*")([^"]+)"',
             file_content,
         )
-        http_link_tags = ""
+
         if tag_matches is not None:
             for tag_match in tag_matches:
                 if tag_match is not None and tag_match.group(3) is not None:
@@ -192,20 +187,20 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                     in http_link_match.group(0)
                                 ):
                                     continue
-                                http_link_tags += (
+                                http_link_tag = (
                                     "\n\t"
                                     + tag_match.group(0).partition(',')[0]
                                     + ", link: "
                                     + http_link_match.group(0)
                                 )
-
-        if len(http_link_tags) > 0:
-            yield LinterError(
-                f"The following script_tags of VT '{nasl_file_str}' are using "
-                "an HTTP Link/URL which should be moved to a separate "
-                "'script_xref(name:\"URL\", value:\"\");' tag "
-                f"instead:{http_link_tags}"
-            )
+                                yield LinterError(
+                                    f"The following script_tags of VT "
+                                    f"'{nasl_file}' are using "
+                                    "an HTTP Link/URL which should be moved "
+                                    "to a separate "
+                                    "'script_xref(name:\"URL\", value:\"\");' "
+                                    f"tag instead:{http_link_tag}"
+                                )
             return
 
         return
@@ -240,7 +235,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
             r'(script_xref\(name\s*:\s*"URL"\s*,\s*value\s*:\s*")([^"]+)"',
             file_content,
         )
-        nvd_mitre_link_tags = ""
+
         if tag_matches is not None:
             for match in tag_matches:
                 if match is not None and match.group(2) is not None:
@@ -252,16 +247,14 @@ class CheckHttpLinksInTags(FileContentPlugin):
                         in match.group(2)
                         # fmt: on
                     ):
-                        nvd_mitre_link_tags += "\n\t" + match.group(0)
-
-        if len(nvd_mitre_link_tags) > 0:
-            yield LinterError(
-                "The following script_xref of VT "
-                f"'{nasl_file_str}' is pointing to Mitre/NVD "
-                "which is already covered by the script_cve_id. "
-                "This is a redundant info and the "
-                f"script_xref needs to be removed: {nvd_mitre_link_tags}"
-            )
+                        nvd_mitre_link_tag = "\n\t" + match.group(0)
+                        yield LinterError(
+                            "The following script_xref of VT "
+                            f"'{nasl_file_str}' is pointing to Mitre/NVD "
+                            "which is already covered by the script_cve_id. "
+                            "This is a redundant info and the script_xref "
+                            f"needs to be removed: {nvd_mitre_link_tag}"
+                        )
             return
 
         return
