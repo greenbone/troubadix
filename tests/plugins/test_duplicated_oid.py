@@ -62,7 +62,6 @@ class CheckDuplicatedOidTestCase(unittest.TestCase):
         )
 
         results = list(CheckDuplicatedOID.run(path, content))
-        print(results)
         self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
