@@ -42,33 +42,26 @@ class CheckDuplicatedOID(FileContentPlugin):
             file_content: The content of the file
 
         """
-        # Does only apply to NASL files.
-        if not nasl_file.suffix == ".nasl":
-            return
-
-        nasl_file_str = str(nasl_file)
 
         oid = re.search(r'script_oid\("([0-9.]+)"\);', file_content)
 
-        if oid is not None and oid.group(1) is not None:
+        if oid:
             files = subprocess_cmd(
-                "grep -R 'script_oid(\""
-                + oid.group(1)
-                + "\");' . --include=*.nasl"
+                f"grep -R 'script_oid(\"{oid.group(1)}\");' . --include=*.nasl"
             ).splitlines()
             file_count = len(files)
             if file_count == 1:
                 return
             else:
                 output_text = (
-                    f"OID '{oid.group(1)}' of VT '{nasl_file_str}'"
+                    f"Duplicated OID '{oid.group(1)}' in VT '{nasl_file}'"
                     " already in use in following files:"
                 )
                 for i in range(0, file_count):
-                    if re.search(nasl_file_str, files[i]) is None:
-                        output_text += "\r\n- '" + str(files[i])
+                    if re.search(str(nasl_file), files[i]) is None:
+                        output_text += f"\r\n- {files[i]}"
                 yield LinterError(output_text)
                 return
         else:
-            yield LinterMessage(f"No OID found in VT '{nasl_file_str}'")
+            yield LinterMessage(f"No OID found in VT '{nasl_file}'")
             return
