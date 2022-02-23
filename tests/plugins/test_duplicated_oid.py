@@ -20,10 +20,10 @@ from pathlib import Path
 import unittest
 
 from naslinter.plugin import LinterError, LinterMessage
-from naslinter.plugins.duplicated_oid import CheckDuplicatedOID
+from naslinter.plugins.duplicate_oid import CheckDuplicateOID
 
 
-class CheckDuplicatedOidTestCase(unittest.TestCase):
+class CheckDuplicateOIDTestCase(unittest.TestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -33,7 +33,7 @@ class CheckDuplicatedOidTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckDuplicatedOID.run(path, content))
+        results = list(CheckDuplicateOID.run(path, content))
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
@@ -44,7 +44,7 @@ class CheckDuplicatedOidTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckDuplicatedOID.run(path, content))
+        results = list(CheckDuplicateOID.run(path, content))
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
@@ -61,19 +61,17 @@ class CheckDuplicatedOidTestCase(unittest.TestCase):
             'script_name("Foo Bar");\n'
         )
 
-        results = list(CheckDuplicatedOID.run(path, content))
+        results = list(CheckDuplicateOID.run(path, content))
         self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"Duplicated OID '1.2.3.4.5.6.78909.8.7.654321' in VT '{str(path)}'"
-            " already in use in following file:\r\n- "
+            "The OID '1.2.3.4.5.6.78909.8.7.654321' is also used in "
             "./tests/plugins/fail2.nasl:  "
             'script_oid("1.2.3.4.5.6.78909.8.7.654321");',
             results[0].message,
         )
         self.assertEqual(
-            f"Duplicated OID '1.2.3.4.5.6.78909.8.7.654321' in VT '{str(path)}'"
-            " already in use in following file:\r\n- "
+            "The OID '1.2.3.4.5.6.78909.8.7.654321' is also used in "
             "./tests/plugins/test_files/fail_name_newline.nasl:  "
             'script_oid("1.2.3.4.5.6.78909.8.7.654321");',
             results[3].message,

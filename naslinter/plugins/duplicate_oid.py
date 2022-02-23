@@ -29,7 +29,7 @@ from naslinter.plugin import (
 )
 
 
-class CheckDuplicatedOID(FileContentPlugin):
+class CheckDuplicateOID(FileContentPlugin):
     name = "check_duplicate_oid"
 
     @staticmethod
@@ -53,15 +53,14 @@ class CheckDuplicatedOID(FileContentPlugin):
             file_count = len(files)
             if file_count == 1:
                 return
-            else:
-                output_text = (
-                    f"Duplicated OID '{oid.group(1)}' in VT '{nasl_file}'"
-                    " already in use in following file:"
-                )
-                for i in range(0, file_count):
-                    if not str(nasl_file) in files[i]:
-                        yield LinterError(output_text + f"\r\n- {files[i]}")
-                return
+
+            for dup_file in files:
+                if not str(nasl_file) in dup_file:
+                    yield LinterError(
+                        f"The OID '{oid.group(1)}' is also used "
+                        f"in {dup_file}"
+                    )
+            return
         else:
             yield LinterMessage(f"No OID found in VT '{nasl_file}'")
             return
