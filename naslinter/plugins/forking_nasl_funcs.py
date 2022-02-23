@@ -139,6 +139,3 @@ class CheckForkingNaslFuncs(FileContentPlugin):
                         "get_app_version_and_location_from_list() or similar "
                         f"functions from host_details.inc."
                     )
-            return
-
-        return
