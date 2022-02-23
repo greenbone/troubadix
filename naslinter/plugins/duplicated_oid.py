@@ -56,12 +56,11 @@ class CheckDuplicatedOID(FileContentPlugin):
             else:
                 output_text = (
                     f"Duplicated OID '{oid.group(1)}' in VT '{nasl_file}'"
-                    " already in use in following files:"
+                    " already in use in following file:"
                 )
                 for i in range(0, file_count):
-                    if re.search(str(nasl_file), files[i]) is None:
-                        output_text += f"\r\n- {files[i]}"
-                yield LinterError(output_text)
+                    if not str(nasl_file) in files[i]:
+                        yield LinterError(output_text + f"\r\n- {files[i]}")
                 return
         else:
             yield LinterMessage(f"No OID found in VT '{nasl_file}'")

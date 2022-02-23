@@ -62,16 +62,20 @@ class CheckDuplicatedOidTestCase(unittest.TestCase):
         )
 
         results = list(CheckDuplicatedOID.run(path, content))
-        self.assertEqual(len(results), 1)
+        print(results)
+        self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'Duplicated OID \'1.2.3.4.5.6.78909.8.7.654321\' in VT '
-            f"'{str(path)}' already in use in following files:\r\n- "
-            './tests/plugins/fail2.nasl:  script_oid("1.2.3.4.5.6.78909.'
-            '8.7.654321");\r\n- ./tests/plugins/test.nasl:  script_oid("1.2'
-            '.3.4.5.6.78909.8.7.654321");\r\n- ./tests/plugins/test_files/fail'
-            '_name_and_copyright_newline.nasl:  script_oid("1.2.3.4.5.6.78909.'
-            '8.7.654321");\r\n- ./tests/plugins/test_files/fail_name_newli'
-            'ne.nasl:  script_oid("1.2.3.4.5.6.78909.8.7.654321");',
+            f"Duplicated OID '1.2.3.4.5.6.78909.8.7.654321' in VT '{str(path)}'"
+            " already in use in following file:\r\n- "
+            "./tests/plugins/fail2.nasl:  "
+            'script_oid("1.2.3.4.5.6.78909.8.7.654321");',
             results[0].message,
+        )
+        self.assertEqual(
+            f"Duplicated OID '1.2.3.4.5.6.78909.8.7.654321' in VT '{str(path)}'"
+            " already in use in following file:\r\n- "
+            "./tests/plugins/test_files/fail_name_newline.nasl:  "
+            'script_oid("1.2.3.4.5.6.78909.8.7.654321");',
+            results[3].message,
         )
