@@ -121,8 +121,8 @@ class CheckGrammar(FileContentPlugin):
 
                     if (
                         "2012/gb_VMSA-2010-0007.nasl" in nasl_file_str
-                        and 'e. VMware VMnc Codec heap overflow vulner'
-                        'abilities\n\n  Vulnerabilities in the' in line.group(0)
+                        and "e. VMware VMnc Codec heap overflow vulner"
+                        "abilities\n\n  Vulnerabilities in the" in line.group(0)
                     ):
                         continue
 
@@ -136,14 +136,14 @@ class CheckGrammar(FileContentPlugin):
                     # same as above
                     if (
                         "gb_sles_2021_3215_1.nasl" in nasl_file_str
-                        and 'with\n WITH' in line.group(0)
+                        and "with\n WITH" in line.group(0)
                     ):
                         continue
 
                     # same as above
                     if (
                         "gb_sles_2021_2320_1.nasl" in nasl_file_str
-                        and 'with WITH' in line.group(0)
+                        and "with WITH" in line.group(0)
                     ):
                         continue
 
@@ -161,11 +161,11 @@ class CheckGrammar(FileContentPlugin):
                         grammar_problems_report
                         + "Hit: "
                         + line.group(1)
-                        + '\n'
+                        + "\n"
                         + "Full line:"
-                        + '\n'
+                        + "\n"
                         + line.group(0)
-                        + '\n'
+                        + "\n"
                     )
             return
 
