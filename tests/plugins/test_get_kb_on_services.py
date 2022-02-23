@@ -43,5 +43,5 @@ class CheckDuplicatedOidTestCase(unittest.TestCase):
         )
 
         results = list(CheckGetKBOnServices.run(path, content))
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)

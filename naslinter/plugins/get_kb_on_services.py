@@ -48,11 +48,6 @@ class CheckGetKBOnServices(FileContentPlugin):
 
         """
 
-        # Does only apply to NASL files.
-        if not nasl_file.suffix == ".nasl":
-            return
-
-        nasl_file_str = str(nasl_file)
         services_kb_accessed = ""
 
         kb_matches = re.finditer(
@@ -71,27 +66,25 @@ class CheckGetKBOnServices(FileContentPlugin):
                     # another special case, the find_service*.nasl need to
                     # access "Services/unknown" directly.
                     # The same is valid for unknown_services.nasl as well.
-                    if "unknown_services.nasl" in nasl_file_str or re.search(
+                    if "unknown_services.nasl" in str(nasl_file) or re.search(
                         r"find_service([0-9]+|_("
                         r"3digits|spontaneous|nmap|nmap_wrapped))?\.nasl",
-                        nasl_file_str,
+                        str(nasl_file),
                     ):
                         continue
 
                     # an additional special case, this needs to access the
                     # KB key directly
-                    if "2017/gb_hp_printer_rce_vuln.nasl" in nasl_file_str:
+                    if "2017/gb_hp_printer_rce_vuln.nasl" in str(nasl_file):
                         continue
 
-                    services_kb_accessed += "\n\t" + kb_match.group(1)
-
-        if len(services_kb_accessed) > 0:
-            yield LinterError(
-                "The following get_kb_item() / get_kb_list() "
-                f"call(s) of VT '{nasl_file_str}' should use a "
-                "function instead of a direct access to the "
-                f"'Services/' KB key:{services_kb_accessed}"
-            )
+                    services_kb_accessed = "\n\t" + kb_match.group(1)
+                    yield LinterError(
+                        "The following get_kb_item() / get_kb_list() "
+                        f"call(s) of VT '{nasl_file}' should use a "
+                        "function instead of a direct access to the "
+                        f"'Services/' KB key:{services_kb_accessed}"
+                    )
             return
 
         return
