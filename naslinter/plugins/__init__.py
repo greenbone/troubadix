@@ -29,13 +29,14 @@ from .dependencies import CheckDependencies
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
-from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .encoding import CheckEncoding
+from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
-from .newlines import CheckNewlines
+from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_tag_solution import CheckMissingTagSolution
+from .newlines import CheckNewlines
 from .overlong_script_tags import CheckOverlongScriptTags
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
@@ -50,11 +51,11 @@ from .vt_placement import CheckVTPlacement
 
 _NASL_ONLY_PLUGINS = [
     CheckBadwords,
+    CheckCVEFormat,
+    CheckCVSSFormat,
     CheckCopyrightText,
     CheckCopyrightYear,
     CheckCreationDate,
-    CheckCVEFormat,
-    CheckCVSSFormat,
     CheckDependencies,
     CheckDoubleEndPoints,
     CheckDuplicateOID,
@@ -63,18 +64,19 @@ _NASL_ONLY_PLUGINS = [
     CheckGetKBOnServices,
     CheckGrammar,
     CheckHttpLinksInTags,
-    CheckNewlines,
+    CheckMisplacedCompareInIf,
     CheckMissingTagSolution,
+    CheckNewlines,
     CheckOverlongScriptTags,
     CheckScriptCategory,
     CheckScriptCopyright,
-    CheckUsingDisplay,
-    CheckValidOID,
-    CheckValidScriptTagNames,
-    CheckVTPlacement,
-    UpdateModificationDate,
     CheckSolutionType,
     CheckTodoTbd,
+    CheckUsingDisplay,
+    CheckVTPlacement,
+    CheckValidOID,
+    CheckValidScriptTagNames,
+    UpdateModificationDate,
 ]
 
 _PLUGINS = [
