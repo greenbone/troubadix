@@ -60,6 +60,9 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
             r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE
         )
 
+        if not if_matches:
+            return
+
         misplaced_compare_report = (
             f"VT/Include '{str(nasl_file)}' is using a"
             " misplaced compare within an if() call in"
