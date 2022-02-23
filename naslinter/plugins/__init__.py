@@ -27,6 +27,7 @@ from .cvss_format import CheckCVSSFormat
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
+from .get_kb_on_services import CheckGetKBOnServices
 from .newlines import CheckNewlines
 from .missing_tag_solution import CheckMissingTagSolution
 from .script_category import CheckScriptCategory
@@ -49,6 +50,7 @@ _PLUGINS = [
     CheckDoubleEndPoints,
     CheckDuplicateOID,
     CheckDuplicatedScriptTags,
+    CheckGetKBOnServices,
     CheckNewlines,
     CheckMissingTagSolution,
     CheckScriptCategory,
