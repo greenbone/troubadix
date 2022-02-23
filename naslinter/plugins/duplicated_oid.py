@@ -49,6 +49,7 @@ class CheckDuplicatedOID(FileContentPlugin):
             files = subprocess_cmd(
                 f"grep -R 'script_oid(\"{oid.group(1)}\");' . --include=*.nasl"
             ).splitlines()
+            files.sort()
             file_count = len(files)
             if file_count == 1:
                 return
