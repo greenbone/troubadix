@@ -45,6 +45,8 @@ class CheckValidOID(FileContentPlugin):
 
         Args:
             nasl_file: The VT that is going to be checked
+            file_content: The content of the file
+
         Returns:
             tuples: 0 => Success, no message
                 -1 => Error, with error message
@@ -57,8 +59,9 @@ class CheckValidOID(FileContentPlugin):
         )
         if oid_match is None or oid_match.group(1) is None:
             yield LinterError(
-                "No valid script_oid() call found" f" in VT '{nasl_file.name}'",
+                f"No valid script_oid() call found in VT '{str(nasl_file)}'",
             )
+            return
 
         oid = oid_match.group(1)
         family_template = "Local Security Checks"
@@ -67,10 +70,11 @@ class CheckValidOID(FileContentPlugin):
 
         if "1.3.6.1.4.1.25623.1." not in oid:
             yield LinterError(
-                f"script_oid() in VT '{nasl_file.name}' "
+                f"script_oid() in VT '{str(nasl_file)}' "
                 f"{invalid_oid} "
                 f"'{str(oid)}'",
             )
+            return
 
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1" in oid:
@@ -82,15 +86,16 @@ class CheckValidOID(FileContentPlugin):
             )
             if family_match is None or family_match.group(1) is None:
                 yield LinterError(
-                    f"VT '{nasl_file.name}' is missing a script family!"
+                    f"VT '{str(nasl_file)}' is missing a script family!"
                 )
+                return
             family = family_match.group(1)
 
             # Fixed OID-scheme for (Huawei) Euler OS OIDs
             if "1.3.6.1.4.1.25623.1.1.2." in oid:
                 if family != f"Huawei EulerOS {family_template}":
                     yield LinterError(
-                        f"VT '{nasl_file.name}' {is_using} EulerOS VTs "
+                        f"VT '{str(nasl_file)}' {is_using} EulerOS VTs "
                         f"'{str(oid)}'",
                     )
                 euler_sa_match = re.search(
@@ -100,7 +105,7 @@ class CheckValidOID(FileContentPlugin):
                 )
                 if euler_sa_match is None:
                     yield LinterError(
-                        f"script_oid() in VT '{nasl_file.name}' "
+                        f"script_oid() in VT '{str(nasl_file)}' "
                         f"{invalid_oid} '{str(oid)}' (EulerOS pattern: "
                         "1.3.6.1.4.1.25623.1.1.2.[ADVISORY_YEAR]."
                         "[ADVISORY_ID])",
@@ -110,7 +115,7 @@ class CheckValidOID(FileContentPlugin):
             elif "1.3.6.1.4.1.25623.1.1.4." in oid:
                 if family != f"SuSE {family_template}":
                     yield LinterError(
-                        f"VT '{nasl_file.name}' {is_using} "
+                        f"VT '{str(nasl_file)}' {is_using} "
                         f"SUSE SLES VTs "
                         f"'{str(oid)}'",
                     )
@@ -121,9 +126,9 @@ class CheckValidOID(FileContentPlugin):
                 )
                 if sles_sa_match is None:
                     yield LinterError(
-                        f"script_oid() in VT '{nasl_file.name}' "
-                        f"{invalid_oid} '{str(oid)}' (SLES pattern: 1.3.6.1.4."
-                        "1.25623.1.1.4.[ADVISORY_YEAR].[ADVISORY_ID]."
+                        f"script_oid() in VT '{str(nasl_file)}' "
+                        f"{invalid_oid} '{str(oid)}' (SLES pattern: 1.3.6."
+                        "1.4.1.25623.1.1.4.[ADVISORY_YEAR].[ADVISORY_ID]."
                         "[ADVISORY_REVISION])",
                     )
                 return
@@ -136,9 +141,10 @@ class CheckValidOID(FileContentPlugin):
                     or vendor_number_match.group(1) is None
                 ):
                     yield LinterError(
-                        f"script_oid() in VT '{nasl_file.name}' "
+                        f"script_oid() in VT '{str(nasl_file)}' "
                         f"{invalid_oid} '{str(oid)}' (last digits)",
                     )
+                    return
 
                 # link is too long.
                 # https://gitlab.greenbone.net/tpassfeld/next-gen-lsc-poc/blob
@@ -149,90 +155,90 @@ class CheckValidOID(FileContentPlugin):
                 if vendor_number == "1":
                     if family != f"Debian {family_template}":
                         return (
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f" Debian VTs'{str(oid)}'",
                         )
 
                 elif vendor_number == "3":
                     if family != f"CentOS {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"CentOS VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "4":
                     if family != f"CentOS {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"CentOS_CR VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "5":
                     if family != f"Fedora {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"Fedora VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "6":
                     if family != f"Gentoo {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"Gentoo VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "7":
                     if family != f"HP-UX {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} HP-UX VTs "
+                            f"VT '{str(nasl_file)}' {is_using} HP-UX VTs "
                             f"'{str(oid)}'",
                         )
 
                 elif vendor_number == "8":
                     if family != f"Mandrake {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"Mandrake/Mandriva VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "9":
                     if family != f"SuSE {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"openSUSE VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "10":
                     if family != f"Red Hat {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"Red Hat VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "11":
                     if family != f"Solaris {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"Solaris VTs '{str(oid)}'",
                         )
 
                 elif vendor_number == "12":
                     if family != f"SuSE {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} SUSE VTs "
+                            f"VT '{str(nasl_file)}' {is_using} SUSE VTs "
                             f"'{str(oid)}'",
                         )
 
                 elif vendor_number == "13":
                     if family != f"Ubuntu {family_template}":
                         yield LinterError(
-                            f"VT '{nasl_file.name}' {is_using} "
+                            f"VT '{str(nasl_file)}' {is_using} "
                             f"Ubuntu VTs '{str(oid)}'",
                         )
                 else:
                     yield LinterError(
-                        f"VT '{nasl_file.name}' {invalid_oid} "
-                        "'{str(oid)}' (Vendor OID with unknown Vendor-Prefix)",
+                        f"VT '{str(nasl_file)}' {invalid_oid} '{str(oid)}'"
+                        " (Vendor OID with unknown Vendor-Prefix)",
                     )
 
                 return
@@ -246,15 +252,16 @@ class CheckValidOID(FileContentPlugin):
             )
             if not name_match or not name_match.group(1):
                 yield LinterError(
-                    f"VT '{nasl_file.name}' is missing a script name!"
+                    f"VT '{str(nasl_file)}' is missing a script name!"
                 )
+                return
             name = name_match.group(1)
 
             # Fixed OID-scheme for Mozilla Firefox OIDs
             if oid.startswith("1.3.6.1.4.1.25623.1.2.1."):
                 if not name.startswith("Mozilla Firefox Security Advisory"):
                     yield LinterError(
-                        f"VT '{nasl_file.name}' {is_using} Firefox VTs "
+                        f"VT '{str(nasl_file)}' {is_using} Firefox VTs "
                         f"'{str(oid)}'",
                     )
                 firefox_sa_match = re.search(
@@ -264,7 +271,7 @@ class CheckValidOID(FileContentPlugin):
                 )
                 if not firefox_sa_match:
                     yield LinterError(
-                        f"script_oid() in VT '{nasl_file.name}' "
+                        f"script_oid() in VT '{str(nasl_file)}' "
                         f"{invalid_oid} '{str(oid)}' (Firefox pattern: 1."
                         "3.6.1.4.1.25623.1.2.1.[ADVISORY_YEAR].[ADVISORY_ID])",
                     )
@@ -275,33 +282,34 @@ class CheckValidOID(FileContentPlugin):
         )
         if oid_digit_match is None or oid_digit_match.group(1) is None:
             yield LinterError(
-                f"script_oid() in VT '{nasl_file.name}' "
+                f"script_oid() in VT '{str(nasl_file)}' "
                 f"{invalid_oid} '{str(oid)}' (last digits)",
             )
+            return
 
         # nb: Those are using invalid OID ranges but are already in
         # the feed since longer time and can't be fixed / changed.
         if (
-            "ossim_server_detect.nasl" in nasl_file
+            "ossim_server_detect.nasl" in str(nasl_file)
             or (
                 "gsf/2018/vmware/gb_vmware_fusion"
                 "_vmxnet3_stack_memory_usage_vuln_macosx.nasl"
             )
-            in nasl_file
-            or "2008/asterisk_sdp_header_overflow.nasl" in nasl_file
-            or "2008/cisco_ios_ftp_server_auth_bypass.nasl" in nasl_file
-            or "2008/qk_smtp_server_dos.nasl" in nasl_file
-            or "2008/asterisk_pbx_guest_access_enabled.nasl" in nasl_file
-            or "2008/asterisk_null_pointer_dereference.nasl" in nasl_file
-            or "2008/goaheadwebserver_source_disclosure.nasl" in nasl_file
+            in str(nasl_file)
+            or "2008/asterisk_sdp_header_overflow.nasl" in str(nasl_file)
+            or "2008/cisco_ios_ftp_server_auth_bypass.nasl" in str(nasl_file)
+            or "2008/qk_smtp_server_dos.nasl" in str(nasl_file)
+            or "2008/asterisk_pbx_guest_access_enabled.nasl" in str(nasl_file)
+            or "2008/asterisk_null_pointer_dereference.nasl" in str(nasl_file)
+            or "2008/goaheadwebserver_source_disclosure.nasl" in str(nasl_file)
             or "2011/secpod_ibm_lotus_domino_rpc_auth_dos_vuln.nasl"
-            in nasl_file
+            in str(nasl_file)
             or "2011/secpod_cubecart_mult_xss_and_sql_inj_vuln.nasl"
-            in nasl_file
-            or "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl" in nasl_file
-            or "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl" in nasl_file
-            or "2017/gb_openssh_mult_vuln_jan17_lin.nasl" in nasl_file
-            or "2017/gb_xenserver_ctx219378.nasl" in nasl_file
+            in str(nasl_file)
+            or "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl" in str(nasl_file)
+            or "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl" in str(nasl_file)
+            or "2017/gb_openssh_mult_vuln_jan17_lin.nasl" in str(nasl_file)
+            or "2017/gb_xenserver_ctx219378.nasl" in str(nasl_file)
         ):
             return
 
@@ -310,24 +318,24 @@ class CheckValidOID(FileContentPlugin):
         # See https://confluence.greenbone.net/display/GSFDEV/OID+Assignment
         # for a list of valid/currently assigned OID ranges
         if (
-            (oid_digit >= 10000 and oid_digit <= 29999)
-            or (oid_digit >= 50000 and oid_digit <= 118999)
-            or (oid_digit >= 120000 and oid_digit <= 123999)
-            or (oid_digit >= 130000 and oid_digit <= 169999)
-            or (oid_digit >= 200000 and oid_digit <= 209999)
-            or (oid_digit >= 700000 and oid_digit <= 919999)
-            or (oid_digit >= 1020000 and oid_digit <= 1029999)
+            (10000 <= oid_digit <= 29999)
+            or (50000 <= oid_digit <= 118999)
+            or (120000 <= oid_digit <= 123999)
+            or (130000 <= oid_digit <= 169999)
+            or (200000 <= oid_digit <= 209999)
+            or (700000 <= oid_digit <= 919999)
+            or (1020000 <= oid_digit <= 1029999)
         ):
             return
 
-        if oid_digit >= 300000 and oid_digit <= 309999:
+        if 300000 <= oid_digit <= 309999:
             yield LinterError(
-                f"script_oid() in VT '{nasl_file.name}' "
+                f"script_oid() in VT '{str(nasl_file)}' "
                 f"{invalid_oid} '{str(oid)}' (reserved OID range "
                 "not part of the official Feed)",
             )
 
         yield LinterError(
-            f"script_oid() in VT '{nasl_file.name}'  {invalid_oid} "
+            f"script_oid() in VT '{str(nasl_file)}'  {invalid_oid} "
             f"'{str(oid)}' (unassigned OID range)",
         )
