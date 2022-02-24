@@ -51,6 +51,26 @@ class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
         self.assertEqual(
             f"VT/Include '{str(nasl_file)}' is using a misplaced compare "
             "within an if() call in the following line: "
-            'if( variable >< "text" ',
+            'if( variable >< "text" ) {',
+            results[0].message,
+        )
+
+    def test_nok2(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            'if( variable >< "text" )\nexit(1);\n'
+        )
+
+        results = list(CheckMisplacedCompareInIf.run(nasl_file, content))
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"VT/Include '{str(nasl_file)}' is using a misplaced compare "
+            "within an if() call in the following line: "
+            'if( variable >< "text" )\nexit(1);',
             results[0].message,
         )

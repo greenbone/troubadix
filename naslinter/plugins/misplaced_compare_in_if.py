@@ -56,8 +56,14 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
         #
         # if((foo =~ "bar || bar =~ "foo") || foobar = "foo")
         #   bar = "foo"; (no ending {)
+        # maybe this regex fixes this:
+        #   r"^\s*(if|}?\s*else if)\s*\((?P<condition>.*)\)\s*({|(.*|.*\n.*);)"
+        # original regex:
+        #   r"^\s*(if|}?\s*else if)\s*\(([^)]+)"
         if_matches = re.finditer(
-            r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE
+            r"^\s*(if|}?\s*else if)\s*\((?P<condition>.*)\)\s*({|(.*|.*\n.*);)",
+            file_content,
+            re.MULTILINE,
         )
 
         if not if_matches:
@@ -73,7 +79,7 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
             if if_match:
                 misplaced_compare_match = re.search(
                     r"((if|}?\s*else if)\s*\("
-                    r"\s*?|\|\|\s*|&&\s*)["
+                    r"\s*|\|\|\s*|&&\s*)["
                     r"a-zA-Z_]+\s*>\!?<\s*("
                     r'"|\')',
                     if_match.group(0),
