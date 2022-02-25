@@ -34,11 +34,16 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
             if( variable >< 'text' ) {}
             if( variable >!< "text" ) {}
             if( variable >!< 'text' ) {}
+            if( variable == 'text' ) {}
+            if( variable = 'text' ) {}
+            if( variable =~ 'text' ) {}
 
             instead of:
 
             if( "text" >< variable ) {}
             if( "text" >!< variable ) {}
+            if( "text" == variable ) {}
+            if( "text" =~ variable ) {}
 
         Args:
             nasl_file: The VT/Include that is going to be checked
@@ -77,12 +82,25 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
 
         for if_match in if_matches:
             if if_match:
+
+                # original regex:
+                # r"((if|}?\s*else if)\s*\(\s*|\|\|\s*|&&\s*)[a-zA-Z_]+\s*"
+                # r">\!?<\s*(\"|')"
+                # replaced by following regex:
+                # that will catch also the following cases:
+                #   if(foo >< "bar"){}
+                #   if(foo >!< "bar"){}
+                #   if(foo = 'bar'){}
+                #   if(foo[0] =! 'bar'){}
+                #   if(foo[0] != 'bar'){}
+                #   if(foo[0] =~ 'bar'){}
+                #   if(foo[0] !~ 'bar'){}
+                # r"(\s*\(\s*|\|\|\s*|&&\s*)\(?\s*[a-zA-Z_][\w]+(\[[\w]+\])?
+                # r"\s*(>\!?<|=|==|!=|=!|=~|~=|!~|~!)\s*(\"|')",
                 misplaced_compare_match = re.search(
-                    r"((if|}?\s*else if)\s*\("
-                    r"\s*|\|\|\s*|&&\s*)["
-                    r"a-zA-Z_]+\s*>\!?<\s*("
-                    r'"|\')',
-                    if_match.group(0),
+                    r"(\s*\(\s*|\|\|\s*|&&\s*)\(?\s*[a-zA-Z_][\w]+(\[[\w]+\])?"
+                    r"\s*(>\!?<|=|==|!=|=!|=~|~=|!~|~!)\s*(\"|')",
+                    if_match.group("condition"),
                 )
                 if misplaced_compare_match:
                     yield LinterError(
