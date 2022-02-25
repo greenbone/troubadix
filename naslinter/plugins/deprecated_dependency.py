@@ -17,11 +17,10 @@
 
 # pylint: disable=fixme
 
-from enum import IntEnum
 import re
 
 from pathlib import Path
-from typing import Iterator, Union
+from typing import Iterator
 
 from naslinter.plugin import (
     LinterError,
@@ -30,69 +29,18 @@ from naslinter.plugin import (
 )
 from naslinter.helper import get_root, get_special_tag_pattern
 
-# See https://shorturl.at/jBGJT for a list of the category numbers.
-class VTCategory(IntEnum):
-    ACT_INIT = 0
-    ACT_SCANNER = 1
-    ACT_SETTINGS = 2
-    ACT_GATHER_INFO = 3
-    ACT_ATTACK = 4
-    ACT_MIXED_ATTACK = 5
-    ACT_DESTRUCTIVE_ATTACK = 6
-    ACT_DENIAL = 7
-    ACT_KILL_HOST = 8
-    ACT_FLOOD = 9
-    ACT_END = 10
 
-
-def check_category(
-    content: str, script: str = ""
-) -> Union[LinterError, VTCategory]:
-    """Check if the content contains a script category
-    Arguments:
-        content         the content to check
-
-    Returns:
-        LinterError     if no category found or category invalid
-        VTCategory      else
-    """
-    match = get_special_tag_pattern(name="category", flags=re.MULTILINE).search(
-        content
-    )
-
-    if not match:
-        return LinterError(f"{script}: Script category is missing.")
-
-    category_value = match.group("value")
-    if category_value not in dir(VTCategory):
-        return LinterError(
-            f"{script}: Script category {category_value} is unsupported."
-        )
-
-    return VTCategory[category_value]
-
-
-class CheckDependencyCategoryOrder(FileContentPlugin):
-    name = "check_dependency_category_order"
+class CheckDeprecatedDependency(FileContentPlugin):
+    name = "check_deprecated_dependency"
 
     @staticmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
-        """No VT N should depend on scripts that are in a category that
-        normally would be executed after the category of VT M.
-        e.g. a VT N within the ACT_GATHER_INFO category (3) is
-        not allowed to depend on a VT M within the ACT_ATTACK category (4).
-        See https://shorturl.at/jBGJT for a list of such category numbers.
-
-        In addition it is not allowed for VTs to have a direct dependency
-        to VTs from within the ACT_SCANNER category.
-        """
-        root = get_root()
         """No VT should depend on other VTs that are marked as deprecated via:
 
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
-
         """
+        root = get_root()
 
         matches = get_special_tag_pattern(
             name="dependencies", flags=re.MULTILINE
@@ -105,87 +53,42 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
             r"deprecated[\"']\s*,\s*value\s*:\s*TRUE\s*\)\s*;",
             re.MULTILINE,
         )
-        deprecated = re.search(deprecated_pattern, file_content)
+        deprecated = deprecated_pattern.search(file_content)
         if deprecated:
             return
 
-        error = ""
-        debug = ""
-
-        for dependencies_match in matches:
-            if (
-                dependencies_match is not None
-                and dependencies_match.group(1) is not None
-            ):
-
-                dependencies = dependencies_match.group(1)
-
+        for match in matches:
+            if match:
                 # Remove single and/or double quotes, spaces
                 # and create a list by using the comma as a separator
-                # TODO: find a better way for this as it would miss something like the following broken dependencies:
-                # script_dependencies("redax  script_detect.nasl");
-                # script_dependencies("redax'script_detect.nasl");
-                dep_list = re.sub(r'[\'"\s]', "", dependencies).split(",")
-                for dep in dep_list:
+                dependencies = re.sub(
+                    r'[\'"\s]', "", match.group("value")
+                ).split(",")
 
-                    # TODO: gsf/PCIDSS/PCI-DSS.nasl, gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl and GSHB/EL15/GSHB.nasl
-                    # are using a variable which we currently can't handle.
-                    if "+d+.nasl" in dep:
-                        continue
-
-                    if not os.path.exists(
-                        os.path.join("scripts", dep)
-                    ) and not os.path.exists(dep):
-                        debug += (
-                            "\n\t"
-                            + str(dep)
-                            + " (dependency of "
-                            + str(file)
-                            + " missing on the filesystem)"
+                for dep in dependencies:
+                    dependency_path = Path(root / dep)
+                    if not dependency_path.exists():
+                        yield LinterError(
+                            f"The script dependency {dep} could not "
+                            "be found within the VTs."
                         )
-                        continue
-
-                    dep_text = ""
-
-                    if os.path.exists(os.path.join("scripts", dep)):
-                        dep_text = open(
-                            os.path.join("scripts", dep), encoding="latin-1"
-                        ).read()
-                    elif os.path.exists(dep):
-                        dep_text = open(dep, encoding="latin-1").read()
                     else:
-                        continue
+                        # TODO: gsf/PCIDSS/PCI-DSS.nasl,
+                        # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
+                        # and GSHB/EL15/GSHB.nasl
+                        # are using a variable which we currently can't handle.
+                        if "+d+.nasl" in dep:
+                            continue
 
-                    dep_deprecated_matches = re.finditer(
-                        deprecated_re, dep_text
-                    )
-                    if dep_deprecated_matches is not None:
-                        tmp_error = ""
-                        for dep_deprecated_match in dep_deprecated_matches:
-                            if (
-                                dep_deprecated_match is not None
-                                and dep_deprecated_match.group(1) is not None
-                            ):
-                                tmp_error += "\n\t" + str(
-                                    dep_deprecated_match.group(0)
-                                )
+                        dependency_content = dependency_path.read_text(
+                            encoding="latin1"
+                        )
 
-                        if tmp_error:
-                            error += (
-                                "\n\t"
-                                + str(file)
-                                + " depends on "
-                                + str(dep)
-                                + " which is marked as deprecated in the following line(s):"
-                                + tmp_error
+                        dependency_deprecated = deprecated_pattern.search(
+                            dependency_content
+                        )
+                        if dependency_deprecated:
+                            yield LinterError(
+                                f"VT depends on {dep}, which is marked"
+                                "as deprecated."
                             )
-
-        if error:
-            return -1, str(error)
-
-        if debug:
-            return (
-                1,
-                "No check for deprecated dependencies possible due to VTs using a dependency which doesn't exist on the local filesystem:"
-                + str(debug),
-            )
