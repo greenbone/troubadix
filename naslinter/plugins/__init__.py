@@ -40,6 +40,7 @@ from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
 from .overlong_script_tags import CheckOverlongScriptTags
+from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .solution_type import CheckSolutionType
@@ -72,6 +73,7 @@ _NASL_ONLY_PLUGINS = [
     CheckMissingTagSolution,
     CheckNewlines,
     CheckOverlongScriptTags,
+    CheckProdSvcDetectInVulnvt,
     CheckScriptCategory,
     CheckScriptCopyright,
     CheckSolutionType,
