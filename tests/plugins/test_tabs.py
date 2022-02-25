@@ -45,7 +45,6 @@ class CheckTabsTestCase(unittest.TestCase):
 
         results = list(CheckTabs.run(path, content))
         self.assertEqual(len(results), 1)
-        print(results)
 
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(

@@ -78,7 +78,6 @@ class CheckLogMessagesTestCase(unittest.TestCase):
         )
 
         results = list(CheckLogMessages.run(nasl_file, content))
-        print(results)
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
