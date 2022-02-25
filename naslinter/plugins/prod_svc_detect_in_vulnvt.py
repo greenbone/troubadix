@@ -68,9 +68,7 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             name="family",
             value=r'\s*"(?P<family>(Product|Service) detection)"\s*',
         ).search(file_content)
-        if (
-            match_family and match_family.group("family")
-        ):
+        if match_family and match_family.group("family"):
             yield LinterError(
                 f"VT '{str(nasl_file)}' has a severity but is "
                 "placed in the following family which is "
