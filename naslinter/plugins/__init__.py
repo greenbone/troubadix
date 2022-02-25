@@ -36,6 +36,7 @@ from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
 from .log_messages import CheckLogMessages
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
+from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
 from .overlong_script_tags import CheckOverlongScriptTags
@@ -67,6 +68,7 @@ _NASL_ONLY_PLUGINS = [
     CheckHttpLinksInTags,
     CheckLogMessages,
     CheckMisplacedCompareInIf,
+    CheckMissingDescExit,
     CheckMissingTagSolution,
     CheckNewlines,
     CheckOverlongScriptTags,
