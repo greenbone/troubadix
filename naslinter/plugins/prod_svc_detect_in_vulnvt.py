@@ -69,8 +69,7 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             value=r'\s*"(?P<family>(Product|Service) detection)"\s*',
         ).search(file_content)
         if (
-            match_family is not None
-            and match_family.group("family") is not None
+            match_family and match_family.group("family")
         ):
             yield LinterError(
                 f"VT '{str(nasl_file)}' has a severity but is "
@@ -89,7 +88,7 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             file_content,
             re.MULTILINE,
         )
-        if match_funcs is not None:
+        if match_funcs:
             for match_func in match_funcs:
                 if "detected_by" not in match_func.group(
                     0
