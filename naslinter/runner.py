@@ -62,12 +62,15 @@ class Runner:
         self,
         n_jobs: int,
         term: Terminal,
+        *,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
+        debug: bool = False,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = term
         self._n_jobs = n_jobs
+        self.debug = debug
 
     def _report_results(self, results: Iterable[LinterMessage]):
         for result in results:
@@ -110,7 +113,8 @@ class Runner:
                         plugin_name,
                         plugin_results,
                     ) in results.plugin_results.items():
-                        self._report_info(f"Running plugin {plugin_name}")
+                        if plugin_results or self.debug:
+                            self._report_info(f"Running plugin {plugin_name}")
 
                         with self._term.indent():
                             self._report_results(plugin_results)

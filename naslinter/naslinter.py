@@ -106,9 +106,10 @@ def main(args=None):
 
     runner = Runner(
         n_jobs=parsed_args.n_jobs,
+        term=term,
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
-        term=term,
+        debug=parsed_args.debug,
     )
 
     if parsed_args.dirs:
