@@ -103,7 +103,13 @@ class Runner:
             for results in pool.imap_unordered(
                 self.check_file, files_list, chunksize=CHUNKSIZE
             ):
-                self._report_info(f"Checking {results.file_path}")
+                # only print the part "common/some_nasl.nasl" by
+                # splitting at the nasl/ dir in
+                # /root/vts-repo/nasl/common/some_nasl.nasl
+                self._report_info(
+                    "Checking "
+                    f"{str(results.file_path).split('nasl/', maxsplit=1)[-1]}"
+                )
 
                 with self._term.indent():
                     self._report_results(results.generic_results)
