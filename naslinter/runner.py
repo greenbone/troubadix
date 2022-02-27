@@ -31,7 +31,6 @@ from naslinter.plugin import (
     LinterMessage,
     LinterResult,
     LinterWarning,
-    Plugin,
 )
 from naslinter.plugins import Plugins
 
@@ -50,9 +49,9 @@ class FileResults:
         return self
 
     def add_plugin_results(
-        self, plugin: Plugin, results: Iterator[LinterResult]
+        self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
-        self.plugin_results[plugin.name] = list(results)
+        self.plugin_results[plugin_name] = list(results)
         return self
 
 
@@ -139,14 +138,16 @@ class Runner:
         for plugin in self.plugins:
             if issubclass(plugin, LineContentPlugin):
                 lines = file_content.splitlines()
-                results.add_plugin_results(plugin, plugin.run(file_name, lines))
+                results.add_plugin_results(
+                    plugin.name, plugin.run(file_name, lines)
+                )
             elif issubclass(plugin, FileContentPlugin):
                 results.add_plugin_results(
-                    plugin, plugin.run(file_name, file_content)
+                    plugin.name, plugin.run(file_name, file_content)
                 )
             else:
                 results.add_plugin_results(
-                    plugin,
+                    plugin.__name__,
                     [LinterError(f"Plugin {plugin.__name__} can not be read.")],
                 )
 
