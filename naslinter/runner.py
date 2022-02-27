@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Iterable, Iterator, List
 
 from pontos.terminal.terminal import Terminal
-from pontos.terminal import info
 
 from naslinter.plugin import (
     FileContentPlugin,
@@ -72,7 +71,7 @@ class Runner:
         self._n_jobs = n_jobs
         self.debug = debug
 
-    def _report_results(self, results: Iterable[LinterMessage]):
+    def _report_results(self, results: List[LinterMessage]):
         for result in results:
             if isinstance(result, LinterResult):
                 self._report_ok(result.message)
@@ -87,7 +86,7 @@ class Runner:
     def _report_error(self, message: str):
         self._term.error(message)
 
-    def _report_info(self, message: str):
+    def _report_info(self, message: str = ""):
         self._term.info(message)
 
     def _report_ok(self, message: str):
@@ -114,15 +113,15 @@ class Runner:
                         plugin_results,
                     ) in results.plugin_results.items():
                         if plugin_results or self.debug:
+                            # this should print the newline correctly
+                            # and only if results are available/debug
+                            self._report_info()
                             self._report_info(f"Running plugin {plugin_name}")
 
                         with self._term.indent():
                             self._report_results(plugin_results)
 
-                # add newline
-                print()
-
-        info(f"Time elapsed: {datetime.datetime.now() - start}")
+        self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
 
     def check_file(self, file_path: Path) -> FileResults:
         file_name = file_path.resolve()
