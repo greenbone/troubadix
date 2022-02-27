@@ -133,17 +133,6 @@ class Runner:
         file_name = file_path.resolve()
         results = FileResults(file_path)
 
-        if not file_path.exists():
-            return results.add_generic_result(
-                LinterWarning(f"{file_path} does not exist.")
-            )
-
-        # some scripts are not executed on include (.inc) files
-        if file_path.suffix != ".nasl" and file_path.suffix != ".inc":
-            return results.add_generic_result(
-                LinterWarning(f"{file_path} is not a NASL file.")
-            )
-
         # maybe we need to re-read filecontent, if an Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
