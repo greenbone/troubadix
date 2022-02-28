@@ -15,5 +15,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .helper import is_ignore_file, get_root, subprocess_cmd
+from .helper import get_root, is_ignore_file, Root, subprocess_cmd
 from .patterns import get_tag_pattern, get_special_tag_pattern

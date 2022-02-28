@@ -40,7 +40,10 @@ class CheckDeprecatedDependency(FileContentPlugin):
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
         """
-        root = get_root()
+        if not "script_dependencies(" in file_content:
+            return
+
+        root = get_root(nasl_file)
 
         matches = get_special_tag_pattern(
             name="dependencies", flags=re.MULTILINE

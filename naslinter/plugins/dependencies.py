@@ -41,14 +41,15 @@ class CheckDependencies(FileContentPlugin):
         An error will be thrown if a dependency could not be found.
         """
 
+        if not "script_dependencies(" in file_content:
+            return
+
         matches = get_special_tag_pattern(
             name="dependencies", flags=re.MULTILINE
         ).finditer(file_content)
 
-        root = get_root()
+        root = get_root(nasl_file)
 
-        if not matches:
-            return
         for match in matches:
             if match:
                 # Remove single and/or double quotes, spaces
