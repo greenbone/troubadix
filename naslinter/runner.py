@@ -85,8 +85,11 @@ class Runner:
     def _report_error(self, message: str):
         self._term.error(message)
 
-    def _report_info(self, message: str = ""):
+    def _report_info(self, message: str):
         self._term.info(message)
+
+    def _report_bold_info(self, message: str):
+        self._term.bold_info(message)
 
     def _report_ok(self, message: str):
         self._term.ok(message)
@@ -105,7 +108,7 @@ class Runner:
                 # only print the part "common/some_nasl.nasl" by
                 # splitting at the nasl/ dir in
                 # /root/vts-repo/nasl/common/some_nasl.nasl
-                self._report_info(
+                self._report_bold_info(
                     "Checking "
                     f"{str(results.file_path).split('nasl/', maxsplit=1)[-1]}"
                 )
@@ -120,7 +123,6 @@ class Runner:
                         if plugin_results or self.debug:
                             # this should print the newline correctly
                             # and only if results are available/debug
-                            self._report_info()
                             self._report_info(f"Running plugin {plugin_name}")
 
                         with self._term.indent():
