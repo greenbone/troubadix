@@ -20,7 +20,7 @@ import datetime
 from collections import OrderedDict
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Iterable, Iterator, List
+from typing import Iterator, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -96,14 +96,15 @@ class Runner:
 
     def run(
         self,
-        files: Iterable[Path],
+        files: List[Path],
     ) -> None:
-        files_list = list(files)
+        files_count = len(files)
+        i = 0
 
         start = datetime.datetime.now()
         with Pool(processes=self._n_jobs) as pool:
             for results in pool.imap_unordered(
-                self.check_file, files_list, chunksize=CHUNKSIZE
+                self.check_file, files, chunksize=CHUNKSIZE
             ):
                 # only print the part "common/some_nasl.nasl" by
                 # splitting at the nasl/ dir in
@@ -111,7 +112,9 @@ class Runner:
                 self._report_bold_info(
                     "Checking "
                     f"{str(results.file_path).split('nasl/', maxsplit=1)[-1]}"
+                    f" ({i}/{files_count})"
                 )
+                i = i + 1
 
                 with self._term.indent():
                     self._report_results(results.generic_results)

@@ -143,7 +143,7 @@ def main(args=None):
                 f"{parsed_args.files[0].resolve()}"
             )
             sys.exit(1)
-        info("Start linting files ... ")
+        info(f"Start linting {len(parsed_args.files)} files ... ")
         runner.run(parsed_args.files)
     else:
         warning("No files given/found.")
