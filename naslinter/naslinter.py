@@ -21,9 +21,10 @@ from pathlib import Path
 import sys
 from typing import List, Tuple
 from pontos.terminal.terminal import Terminal
-from pontos.terminal import info, warning, _set_terminal
+from pontos.terminal import error, info, warning, _set_terminal
 
 from naslinter.argparser import parse_args
+from naslinter.helper import get_root
 from naslinter.runner import Runner
 
 
@@ -81,12 +82,13 @@ def generate_patterns(
         if exclude_patterns:
             exclude_patterns = [f"**/{pattern}" for pattern in exclude_patterns]
     else:
-        warning("Running in not recursive mode!")
+        warning("Running in non-recursive mode!")
 
     return include_patterns, exclude_patterns
 
 
 def from_file(include_file: Path, term: Terminal):
+    """Parse the given file containing a list of files into"""
     try:
         return [
             Path(f)
@@ -134,6 +136,13 @@ def main(args=None):
         )
 
     if parsed_args.files:
+        # Get the root of the nasl files
+        if not get_root(parsed_args.files[0].absolute()):
+            error(
+                "Root directory of VTs not found. Looked for "
+                f"{parsed_args.files[0].absolute()}"
+            )
+            sys.exit(1)
         info("Start linting files ... ")
         runner.run(parsed_args.files)
     else:

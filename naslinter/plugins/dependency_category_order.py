@@ -86,7 +86,10 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         In addition it is not allowed for VTs to have a direct dependency
         to VTs from within the ACT_SCANNER category.
         """
-        root = get_root()
+        if not "script_dependencies(" in file_content:
+            return
+
+        root = get_root(nasl_file)
 
         category = check_category(content=file_content, script=nasl_file.name)
         if isinstance(category, LinterError):
