@@ -20,6 +20,7 @@ import re
 from pathlib import Path
 from typing import Iterator
 
+from naslinter.helper import get_root
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -45,6 +46,7 @@ class CheckVTPlacement(FileContentPlugin):
         Returns:
             if no problem
         """
+        root = get_root(nasl_file)
 
         match = re.search(
             r'^\s*script_family\s*\(\s*"(Product|Service) detection"\s*\)\s*;',
@@ -66,18 +68,9 @@ class CheckVTPlacement(FileContentPlugin):
         # nb: Path depends on the way the check
         # is called (FULL/part run, CI run, ...)
         if (
-            nasl_file.name == nasl_file
-            or Path(f"./{nasl_file.name}") == nasl_file
-            or Path(f"scripts/{nasl_file.name}") == nasl_file
-            or Path(f"./scripts/{nasl_file.name}") == nasl_file
-            or Path(f"gsf/{nasl_file.name}") == nasl_file
-            or Path(f"./gsf/{nasl_file.name}") == nasl_file
-            or Path(f"scripts/gsf/{nasl_file.name}") == nasl_file
-            or Path(f"./scripts/gsf/{nasl_file.name}") == nasl_file
-            or Path(f"attic/{nasl_file.name}") == nasl_file
-            or Path(f"./attic/{nasl_file.name}") == nasl_file
-            or Path(f"scripts/attic/{nasl_file.name}") == nasl_file
-            or Path(f"./scripts/attic/{nasl_file.name}") == nasl_file
+            root / nasl_file.name == nasl_file
+            or root / "gsf" / nasl_file.name == nasl_file
+            or root / "attic" / nasl_file.name == nasl_file
         ):
             return
 
