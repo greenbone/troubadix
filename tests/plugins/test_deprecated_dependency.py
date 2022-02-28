@@ -30,7 +30,7 @@ here = Path.cwd()
 
 class CheckDeprecatedDependencyTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.dir = here / _ROOT
+        self.dir = here / _ROOT / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text("script_category(ACT_ATTACK);\n exit(66);")
@@ -40,7 +40,7 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
         self.dir.rmdir()
 
     def test_ok(self):
-        path = Path("some/file.nasl")
+        path = Path(f"{self.dir}/file.nasl")
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
@@ -51,7 +51,7 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
         self.assertEqual(len(results), 0)
 
     def test_no_dependency(self):
-        path = Path("some/file.nasl")
+        path = Path(f"{self.dir}/file.nasl")
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
@@ -62,7 +62,7 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
         self.assertEqual(len(results), 0)
 
     def test_deprecated(self):
-        path = Path("some/file.nasl")
+        path = Path(f"{self.dir}/file.nasl")
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
@@ -74,7 +74,7 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
         self.assertEqual(len(results), 0)
 
     def test_deprecated2(self):
-        path = Path("some/file.nasl")
+        path = Path(f"{self.dir}/file.nasl")
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
@@ -87,7 +87,7 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
 
     def test_dependency_missing(self):
         dependency = "example2.inc"
-        path = Path("some/file.nasl")
+        path = Path(f"{self.dir}/file.nasl")
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -106,7 +106,7 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
         )
 
     def test_deprecated_dependency(self):
-        path = Path("some/file.nasl")
+        path = Path(f"{self.dir}/file.nasl")
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
