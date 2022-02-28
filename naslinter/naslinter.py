@@ -140,7 +140,7 @@ def main(args=None):
         if not get_root(parsed_args.files[0].absolute()):
             error(
                 "Root directory of VTs not found. Looked for "
-                f"{parsed_args.files[0].absolute()}"
+                f"{parsed_args.files[0].resolve()}"
             )
             sys.exit(1)
         info("Start linting files ... ")
