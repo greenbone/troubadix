@@ -15,13 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from subprocess import Popen, PIPE
 from pathlib import Path
 from typing import List, Optional, Union
 
 
 # Root directory of nasl files
-_ROOT = "nasl/common"
+_ROOT = "nasl"
 
 
 def is_ignore_file(
@@ -39,13 +40,25 @@ def subprocess_cmd(command: str) -> str:
     return proc_stdout.decode("utf-8")
 
 
-def get_root(root: str = _ROOT) -> Optional[Path]:
-    """Get the root directory of the VTs
-    Arguments:
-        root        Pass a root directory
-    Returns:
-    """
-    _root = Path(root)
-    if _root.exists():
-        return _root
-    return None
+class Root:
+    instance = False
+
+    def __init__(self, path: Path, root: str = _ROOT) -> None:
+        match = re.search(
+            rf"(?P<path>/([a-zA-Z0-9\-\_\.]+/)+{root}/[a-zA-Z0-9\-\_]+/)",
+            str(path),
+        )
+        if match:
+            self.root = Path(match.group("path"))
+            if not self.root.exists():
+                self.root = None
+            self.instance = self
+        else:
+            self.root = None
+
+
+def get_root(path: Path) -> Optional[Path]:
+    """Get the root directory of the VTs"""
+    if Root.instance:
+        return Root.instance.root
+    return Root(path).root

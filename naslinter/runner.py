@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Iterable, Iterator, List
 
 from pontos.terminal.terminal import Terminal
-from pontos.terminal import info
 
 from naslinter.plugin import (
     FileContentPlugin,
@@ -32,7 +31,6 @@ from naslinter.plugin import (
     LinterMessage,
     LinterResult,
     LinterWarning,
-    Plugin,
 )
 from naslinter.plugins import Plugins
 
@@ -51,9 +49,9 @@ class FileResults:
         return self
 
     def add_plugin_results(
-        self, plugin: Plugin, results: Iterator[LinterResult]
+        self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
-        self.plugin_results[plugin.name] = list(results)
+        self.plugin_results[plugin_name] = list(results)
         return self
 
 
@@ -62,14 +60,17 @@ class Runner:
         self,
         n_jobs: int,
         term: Terminal,
+        *,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
+        debug: bool = False,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = term
         self._n_jobs = n_jobs
+        self.debug = debug
 
-    def _report_results(self, results: Iterable[LinterMessage]):
+    def _report_results(self, results: List[LinterMessage]):
         for result in results:
             if isinstance(result, LinterResult):
                 self._report_ok(result.message)
@@ -87,6 +88,9 @@ class Runner:
     def _report_info(self, message: str):
         self._term.info(message)
 
+    def _report_bold_info(self, message: str):
+        self._term.bold_info(message)
+
     def _report_ok(self, message: str):
         self._term.ok(message)
 
@@ -101,7 +105,13 @@ class Runner:
             for results in pool.imap_unordered(
                 self.check_file, files_list, chunksize=CHUNKSIZE
             ):
-                self._report_info(f"Checking {results.file_path}")
+                # only print the part "common/some_nasl.nasl" by
+                # splitting at the nasl/ dir in
+                # /root/vts-repo/nasl/common/some_nasl.nasl
+                self._report_bold_info(
+                    "Checking "
+                    f"{str(results.file_path).split('nasl/', maxsplit=1)[-1]}"
+                )
 
                 with self._term.indent():
                     self._report_results(results.generic_results)
@@ -110,30 +120,19 @@ class Runner:
                         plugin_name,
                         plugin_results,
                     ) in results.plugin_results.items():
-                        self._report_info(f"Running plugin {plugin_name}")
+                        if plugin_results or self.debug:
+                            # this should print the newline correctly
+                            # and only if results are available/debug
+                            self._report_info(f"Running plugin {plugin_name}")
 
                         with self._term.indent():
                             self._report_results(plugin_results)
 
-                # add newline
-                print()
-
-        info(f"Time elapsed: {datetime.datetime.now() - start}")
+        self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
 
     def check_file(self, file_path: Path) -> FileResults:
         file_name = file_path.resolve()
         results = FileResults(file_path)
-
-        if not file_path.exists():
-            return results.add_generic_result(
-                LinterWarning(f"{file_path} does not exist.")
-            )
-
-        # some scripts are not executed on include (.inc) files
-        if file_path.suffix != ".nasl" and file_path.suffix != ".inc":
-            return results.add_generic_result(
-                LinterWarning(f"{file_path} is not a NASL file.")
-            )
 
         # maybe we need to re-read filecontent, if an Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
@@ -141,14 +140,16 @@ class Runner:
         for plugin in self.plugins:
             if issubclass(plugin, LineContentPlugin):
                 lines = file_content.splitlines()
-                results.add_plugin_results(plugin, plugin.run(file_name, lines))
+                results.add_plugin_results(
+                    plugin.name, plugin.run(file_name, lines)
+                )
             elif issubclass(plugin, FileContentPlugin):
                 results.add_plugin_results(
-                    plugin, plugin.run(file_name, file_content)
+                    plugin.name, plugin.run(file_name, file_content)
                 )
             else:
                 results.add_plugin_results(
-                    plugin,
+                    plugin.__name__,
                     [LinterError(f"Plugin {plugin.__name__} can not be read.")],
                 )
 
