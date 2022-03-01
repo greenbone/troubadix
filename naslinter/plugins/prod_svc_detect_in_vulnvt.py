@@ -70,36 +70,35 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
 
         match_family = get_special_tag_pattern(
             name=SpecialScriptTag.FAMILY,
-            value=r'\s*"(?P<family>(Product|Service) detection)"\s*',
+            value=r"(Product|Service) detection",
         ).search(file_content)
-        if match_family and match_family.group("family"):
+        if match_family and match_family.group("value"):
             yield LinterError(
-                f"VT '{str(nasl_file)}' has a severity but is "
-                "placed in the following family which is "
-                "disallowed for such a "
-                f"VT:\n\n{match_family.group(0)}\n\n"
-                "Please split this VT into a separate Product / "
-                "Service detection and Vulnerability-VT.\n"
+                "VT has a severity but is placed in the family '"
+                f"{match_family.group('value')}' which is not allowed for this "
+                "VT. Please split this VT into a separate Product/Service "
+                "detection and Vulnerability-VT."
             )
 
-        match_funcs = re.finditer(
-            r"(register_(product|and_report(os|cpe)|host_detail)|service_("
-            r"register|report)|build_(cpe|detection_report)|"
-            r"report_(host_(detail_single|details)|best_os_(cpe|txt)))"
-            r"\s*\([^)]*\)\s*;",
+        matches = re.finditer(
+            r"(?P<function>"
+            r"register_(product|and_report_(os|cpe)|host_detail)|"
+            r"service_(register|report)|"
+            r"build_(cpe|detection_report)|"
+            r"report_(host_(detail_single|details)|best_os_(cpe|txt))"
+            r")\s*\((?P<body>[^)]+)\)\s*;",
             file_content,
             re.MULTILINE,
         )
-        if match_funcs:
-            for match_func in match_funcs:
-                if "detected_by" not in match_func.group(
-                    0
-                ) and "detected_at" not in match_func.group(0):
+        if matches:
+            for match in matches:
+                if any(
+                    det not in match.group("body")
+                    for det in ["detected_by", "detected_at"]
+                ):
                     yield LinterError(
-                        f"VT '{str(nasl_file)}' has a severity but is "
-                        "using the following functions which is "
-                        "disallowed for such a VT:\n\n"
-                        f"{match_func.group(0)}\n\nPlease split this "
-                        "VT into a separate Product / Service detection and "
-                        "Vulnerability-VT.\n"
+                        "VT has a severity but is using the function '"
+                        f"{match.group('function')}' which is not allowed for "
+                        "this VT. Please split this VT into a separate "
+                        "Product/Service detection and Vulnerability-VT."
                     )

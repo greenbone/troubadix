@@ -47,7 +47,7 @@ class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT 'some/file.nasl' is using the script function "
+            "The VT is using the script function "
             "'script_name' multiple number of times.",
             results[0].message,
         )
@@ -63,7 +63,7 @@ class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT 'some/file.nasl' is using the script tag "
+            "The VT is using the script tag "
             "'script_tag(name:\"cvss_base\"' multiple number of times.",
             results[0].message,
         )

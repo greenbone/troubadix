@@ -53,8 +53,7 @@ class CheckMissingDescExitTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "No mandatory exit(0); found in the description block of VT "
-            f"'{str(nasl_file)}'",
+            "No mandatory exit(0); found in the description block.",
             results[0].message,
         )
 
@@ -71,6 +70,6 @@ class CheckMissingDescExitTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"No description block extracted/found in VT '{str(nasl_file)}'",
+            "No description block extracted/found.",
             results[0].message,
         )

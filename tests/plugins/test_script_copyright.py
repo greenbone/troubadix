@@ -39,7 +39,7 @@ class CheckScriptCopyrightTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertIn(
-            "The VT 'some/file.nasl' is using an incorrect syntax for its "
+            "The VT is using an incorrect syntax for its "
             "copyright statement.",
             results[0].message,
         )

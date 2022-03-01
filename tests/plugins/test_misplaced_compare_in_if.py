@@ -49,8 +49,8 @@ class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT/Include '{str(nasl_file)}' is using a misplaced compare "
-            "within an if() call in the following line: "
+            "VT/Include is using a misplaced compare "
+            "within an if() call in "
             'if( variable >< "text" ) {',
             results[0].message,
         )
@@ -69,8 +69,8 @@ class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT/Include '{str(nasl_file)}' is using a misplaced compare "
-            "within an if() call in the following line: "
+            "VT/Include is using a misplaced compare "
+            "within an if() call in "
             'if( variable >< "text" )\nexit(1);',
             results[0].message,
         )

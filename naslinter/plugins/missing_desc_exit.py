@@ -59,12 +59,9 @@ class CheckMissingDescExit(FileContentPlugin):
             )
             if not submatch:
                 yield LinterError(
-                    "No mandatory exit(0); found in the "
-                    f"description block of VT '{str(nasl_file)}'"
+                    "No mandatory exit(0); found in the description block."
                 )
 
             return
 
-        yield LinterError(
-            "No description block extracted/found in VT " f"'{str(nasl_file)}'"
-        )
+        yield LinterError("No description block extracted/found.")

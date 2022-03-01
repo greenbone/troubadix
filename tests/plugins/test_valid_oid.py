@@ -50,7 +50,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
-            f"No valid script_oid() call found in VT '{str(path)}'",
+            "No valid script_oid() call found.",
             results[0].message,
         )
 
@@ -67,7 +67,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"script_oid() in VT '{str(path)}' is using an invalid OID "
+            "script_oid() is using an invalid OID "
             "'1.3.6.1.4.1.25623.1.7.654321' (last digits)",
             results[0].message,
         )

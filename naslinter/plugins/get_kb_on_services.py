@@ -48,8 +48,6 @@ class CheckGetKBOnServices(FileContentPlugin):
 
         """
 
-        services_kb_accessed = ""
-
         kb_matches = re.finditer(
             r'(get_kb_(?P<type>item|list)\s*\(\s*["\'](?P<value>Services/['
             r"^)]+)\))",
@@ -79,10 +77,8 @@ class CheckGetKBOnServices(FileContentPlugin):
                     if "2017/gb_hp_printer_rce_vuln.nasl" in str(nasl_file):
                         continue
 
-                    services_kb_accessed = "\n\t" + kb_match.group("value")
                     yield LinterError(
-                        f"The following get_kb_{kb_match.group('type')}() "
-                        f"call in VT '{nasl_file}' should use a "
-                        "function instead of a direct access to the "
-                        f"'Services/' KB key:{services_kb_accessed}"
+                        f"The following get_kb_{kb_match.group('type')}() call"
+                        " should use a function instead of a direct access to "
+                        f"the Services/KB key: {kb_match.group('value')}"
                     )

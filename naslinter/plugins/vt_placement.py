@@ -73,6 +73,5 @@ class CheckVTPlacement(FileContentPlugin):
             return
 
         yield LinterError(
-            f"VT '{str(nasl_file)}' should be placed "
-            f"in the root directory ({root}).",
+            "VT should be placed in the root directory.",
         )

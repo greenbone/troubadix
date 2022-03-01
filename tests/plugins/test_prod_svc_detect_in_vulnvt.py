@@ -51,12 +51,12 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' has a severity but is "
+            "VT has a severity but is "
             "placed in the following family which is "
             "disallowed for such a "
-            'VT:\n\nscript_family("Product detection");\n\n'
+            'VT:script_family("Product detection");'
             "Please split this VT into a separate Product / "
-            "Service detection and Vulnerability-VT.\n",
+            "Service detection and Vulnerability-VT.",
             results[0].message,
         )
 
@@ -75,20 +75,16 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' has a severity but is "
-            "placed in the following family which is "
-            "disallowed for such a "
-            'VT:\n\nscript_family("Product detection");\n\n'
+            "VT has a severity but is placed in the family "
+            "'Product detection' which is not allowed for this "
+            "VT."
             "Please split this VT into a separate Product / "
             "Service detection and Vulnerability-VT.\n",
             results[0].message,
         )
         self.assertEqual(
-            f"VT '{str(nasl_file)}' has a severity but is "
-            "using the following functions which is "
-            "disallowed for such a VT:\n\n"
-            "register_product();\n\nPlease split this "
-            "VT into a separate Product / Service detection and "
-            "Vulnerability-VT.\n",
+            "VT has a severity but is using the function 'register_product' "
+            "which is not allowed for this VT. Please split this VT into a "
+            "separate Product/Service detection and Vulnerability-VT.",
             results[1].message,
         )

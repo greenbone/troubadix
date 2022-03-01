@@ -64,6 +64,5 @@ class CheckLogMessages(FileContentPlugin):
         )
         if log_match:
             yield LinterError(
-                f"VT '{str(nasl_file)}' is using a "
-                f"log_message in a VT with a severity"
+                "The VT is using a log_message in a VT with a severity"
             )
