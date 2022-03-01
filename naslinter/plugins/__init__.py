@@ -43,6 +43,7 @@ from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
+from .security_messages import CheckSecurityMessages
 from .solution_type import CheckSolutionType
 from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
@@ -76,6 +77,7 @@ _NASL_ONLY_PLUGINS = [
     CheckProdSvcDetectInVulnvt,
     CheckScriptCategory,
     CheckScriptCopyright,
+    CheckSecurityMessages,
     CheckSolutionType,
     CheckTodoTbd,
     CheckUsingDisplay,
