@@ -40,7 +40,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "No valid script_oid() call found in VT 'file.nasl'",
+            f"No valid script_oid() call found in VT '{str(path)}'",
             results[0].message,
         )
 
@@ -49,21 +49,12 @@ class CheckValidOIDTestCase(unittest.TestCase):
         content = 'script_oid("1.3.6.1.4.1.25623.2.0.100376");'
 
         results = list(CheckValidOID.run(path, content))
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "script_oid() in VT 'file.nasl' is using an invalid"
-                " OID '1.3.6.1.4.1.25623.2.0.100376'"
-            ),
-            results[0].message,
-        )
-
-        self.assertIsInstance(results[1], LinterError)
-        self.assertEqual(
-            (
-                "script_oid() in VT 'file.nasl' is using an invalid"
+                f"script_oid() in VT '{str(path)}' is using an invalid"
                 " OID '1.3.6.1.4.1.25623.2.0.100376'"
             ),
             results[0].message,
@@ -78,7 +69,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'file.nasl' is missing a script family!", results[0].message
+            f"VT '{str(path)}' is missing a script family!", results[0].message
         )
 
     def test_euler_family_ok(self):
@@ -104,7 +95,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "script_oid() in VT 'file.nasl' is using an invalid OID "
+                f"script_oid() in VT '{str(path)}' is using an invalid OID "
                 "'1.3.6.1.4.1.25623.1.1.2.2055.5555' (EulerOS pattern:"
                 " 1.3.6.1.4.1.25623.1.1.2.[ADVISORY_YEAR].[ADVISORY_ID])"
             ),
@@ -134,7 +125,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "script_oid() in VT 'file.nasl' "
+                f"script_oid() in VT '{str(path)}' "
                 "is using an invalid OID '1.3.6.1.4.1.25623.1.1.4.2025.555755"
                 ".5' (SLES pattern: 1.3.6.1.4.1.25623.1.1.4.[ADVISORY_YEAR]."
                 "[ADVISORY_ID].[ADVISORY_REVISION])"
@@ -165,7 +156,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 " Debian VTs'1.3.6.1.4.1.25623.1.1.1.2256'"
             ),
             results[0].message,
@@ -194,7 +185,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "CentOS VTs '1.3.6.1.4.1.25623.1.1.3.2256'"
             ),
             results[0].message,
@@ -223,7 +214,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "CentOS_CR VTs '1.3.6.1.4.1.25623.1.1.4.2256'"
             ),
             results[0].message,
@@ -252,7 +243,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "Fedora VTs '1.3.6.1.4.1.25623.1.1.5.2256'"
             ),
             results[0].message,
@@ -281,7 +272,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "Gentoo VTs '1.3.6.1.4.1.25623.1.1.6.2256'"
             ),
             results[0].message,
@@ -310,7 +301,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "HP-UX VTs '1.3.6.1.4.1.25623.1.1.7.2256'"
             ),
             results[0].message,
@@ -339,7 +330,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "Mandrake/Mandriva VTs '1.3.6.1.4.1.25623.1.1.8.2256'"
             ),
             results[0].message,
@@ -368,7 +359,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "openSUSE VTs '1.3.6.1.4.1.25623.1.1.9.2256'"
             ),
             results[0].message,
@@ -397,7 +388,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "Red Hat VTs '1.3.6.1.4.1.25623.1.1.10.2256'"
             ),
             results[0].message,
@@ -426,7 +417,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "Solaris VTs '1.3.6.1.4.1.25623.1.1.11.2256'"
             ),
             results[0].message,
@@ -455,7 +446,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "SUSE VTs '1.3.6.1.4.1.25623.1.1.12.2256'"
             ),
             results[0].message,
@@ -484,7 +475,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an OID that is reserved for "
+                f"VT '{str(path)}' is using an OID that is reserved for "
                 "Ubuntu VTs '1.3.6.1.4.1.25623.1.1.13.2256'"
             ),
             results[0].message,
@@ -503,7 +494,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                "VT 'file.nasl' is using an invalid OID '1.3.6.1.4.1.25623."
+                f"VT '{str(path)}' is using an invalid OID '1.3.6.1.4.1.25623."
                 "1.1.14.2256' (Vendor OID with unknown Vendor-Prefix)"
             ),
             results[0].message,

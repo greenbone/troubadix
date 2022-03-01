@@ -161,7 +161,7 @@ class CheckValidOID(FileContentPlugin):
                     ):
                         if family != f"SuSE {family_template}":
                             yield LinterError(
-                                f"VT '{nasl_file.name}' {is_using} "
+                                f"VT '{str(nasl_file)}' {is_using} "
                                 f"SUSE SLES VTs "
                                 f"'{str(oid)}'"
                             )
@@ -172,7 +172,7 @@ class CheckValidOID(FileContentPlugin):
                         )
                         if sles_sa_match is None:
                             yield LinterError(
-                                f"script_oid() in VT '{nasl_file.name}' "
+                                f"script_oid() in VT '{str(nasl_file)}' "
                                 f"{invalid_oid} '{str(oid)}' (SLES pattern:"
                                 " 1.3.6.1.4.1.25623.1.1.4.[ADVISORY_YEAR]."
                                 "[ADVISORY_ID].[ADVISORY_REVISION])",
