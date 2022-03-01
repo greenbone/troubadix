@@ -59,6 +59,6 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "'solution_type' script_tag but no 'solution' script_tag "
-            f"found in the description block of VT '{str(path)}'",
+            "found in the description block.",
             results[0].message,
         )

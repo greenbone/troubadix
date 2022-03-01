@@ -19,7 +19,29 @@ from pathlib import Path
 import re
 
 from naslinter.plugin import LinterError, FileContentPlugin
-from naslinter.helper import get_tag_pattern
+
+
+class AllScriptTagsPattern:
+    instance = False
+
+    def __init__(self) -> None:
+
+        self.pattern = re.compile(
+            pattern=(
+                r'script_tag\(\s*name\s*:\s*["\']'
+                r'(?P<name>[a-zA-Z0-9\s\+\-\_]+)["\']\s*.+\s*\)\s*;'
+            ),
+            # flags=re.MULTILINE, # It seems that there is no multiline
+            # script_tag here
+        )
+        self.instance = self
+
+
+def get_all_tag_patterns() -> re.Pattern:
+    """Get all script tags **without** matching the value!!!"""
+    if AllScriptTagsPattern.instance:
+        return AllScriptTagsPattern.instance.pattern
+    return AllScriptTagsPattern().pattern
 
 
 class CheckValidScriptTagNames(FileContentPlugin):
@@ -56,13 +78,9 @@ class CheckValidScriptTagNames(FileContentPlugin):
         """
         Args:
             nasl_file: The VT that is going to be checked
-
-        Returns:
-            tuples: 0 => Success, no message
-                -1 => Error, with error message
         """
-
-        found_tags = ""
+        if nasl_file.suffix == ".inc":
+            return
 
         allowed_script_tag_names = [
             "solution",
@@ -85,14 +103,12 @@ class CheckValidScriptTagNames(FileContentPlugin):
             "solution_method",
         ]
 
-        matches = get_tag_pattern(name=r".+", flags=re.MULTILINE).finditer(
-            file_content
-        )
+        matches = get_all_tag_patterns().finditer(file_content)
 
         if matches:
             for match in matches:
+                # print(match)
                 if match.group("name") not in allowed_script_tag_names:
-                    found_tags += f"\n\t{match.group(0)}"
                     yield LinterError(
                         f"The script_tag name '{match.group('name')}' "
                         "is not allowed.",

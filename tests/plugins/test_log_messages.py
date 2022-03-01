@@ -60,8 +60,7 @@ class CheckLogMessagesTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[0].message,
         )
 
@@ -81,8 +80,7 @@ class CheckLogMessagesTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[0].message,
         )
 

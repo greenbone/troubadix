@@ -26,7 +26,9 @@ from naslinter.plugin import (
     LinterResult,
     LinterWarning,
 )
-from naslinter.helper.patterns import get_tag_pattern
+from naslinter.helper.patterns import (
+    get_common_tag_patterns,
+)
 
 # ;                 can not be displayed in GSA, within
 #                   (summary|impact|affected|insight|vuldetect|solution)
@@ -67,9 +69,7 @@ class CheckIllegalCharacters(FileContentPlugin):
         """
 
         changes: bool = False
-        pattern = get_tag_pattern(
-            name=r"summary|impact|affected|insight|vuldetect|solution",
-        )
+        pattern = get_common_tag_patterns()
 
         tag_matches: List[re.Match] = pattern.finditer(file_content)
         if tag_matches:

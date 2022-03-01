@@ -31,6 +31,9 @@ class CheckCreationDate(LineContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+        if nasl_file.suffix == ".inc":
+            return
+
         for line in lines:
             if "creation_date" in line:
                 # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"

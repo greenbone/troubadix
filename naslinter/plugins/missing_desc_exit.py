@@ -47,9 +47,11 @@ class CheckMissingDescExit(FileContentPlugin):
             file_content: The content of the file that is going to be checked
 
         """
+        if nasl_file.suffix == ".inc":
+            return
 
         match = re.search(
-            r"^if\s*\(\s*description *\)\s*\{(.*?)(?=^})",
+            r"^if\s*\(\s*description\s*\)\s*\{(.+?)^\}",
             file_content,
             re.MULTILINE | re.DOTALL,
         )
@@ -59,12 +61,9 @@ class CheckMissingDescExit(FileContentPlugin):
             )
             if not submatch:
                 yield LinterError(
-                    "No mandatory exit(0); found in the "
-                    f"description block of VT '{str(nasl_file)}'"
+                    "No mandatory exit(0); found in the description block."
                 )
 
             return
 
-        yield LinterError(
-            "No description block extracted/found in VT " f"'{str(nasl_file)}'"
-        )
+        yield LinterError("No description block extracted/found.")

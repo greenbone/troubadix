@@ -45,8 +45,8 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The script tag 'script_tag(name:\"summary\"' of VT "
-            "'some/file.nasl' is ending with two or more end points: "
-            "'Foo Bar...\");'.",
+            "The script tag 'summary' "
+            "is ending with two or more points: "
+            "'Foo Bar...'.",
             results[0].message,
         )

@@ -19,6 +19,7 @@ import re
 
 from pathlib import Path
 from typing import Iterator
+from naslinter.helper.patterns import get_common_tag_patterns
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -28,24 +29,28 @@ class CheckDoubleEndPoints(FileContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
-        tag_matches = re.finditer(
-            r'(script_tag\(name\s*:\s*"'
-            r'(summary|impact|affected|insight|vuldetect|solution)"'
-            r'\s*,\s*value\s*:\s*")([^"]+"\s*\)\s*;)',
-            file_content,
-            re.MULTILINE,
-        )
+        """This script checks if a VT is using one or more doubled end point
+        in a script_tag like e.g.:
+
+            script_tag(name:"insight", value:"My insight..");
+
+            or:
+
+            script_tag(name:"insight", value:"My insight.
+            .");
+        """
+
+        tag_matches = get_common_tag_patterns().finditer(file_content)
 
         if tag_matches is not None:
             for tag_match in tag_matches:
-                if tag_match is not None and tag_match.group(3) is not None:
+                if tag_match:
                     doubled_end_points_match = re.search(
-                        r'.*\.\s*\."\s*\)\s*;', tag_match.group(3), re.MULTILINE
+                        r'\.\s*\.["\']\s*\)\s*;',
+                        tag_match.group(0),
+                        re.MULTILINE,
                     )
-                    if (
-                        doubled_end_points_match is not None
-                        and doubled_end_points_match.group(0) is not None
-                    ):
+                    if doubled_end_points_match:
 
                         # Valid string used in a few VTs.
                         if (
@@ -54,9 +59,10 @@ class CheckDoubleEndPoints(FileContentPlugin):
                         ):
                             continue
 
-                        script_tag = tag_match.group(0).partition(",")[0]
+                        # phpix.nasl has ..%2F..&2F.. in summary
+
                         yield LinterError(
-                            f"The script tag '{script_tag}' of VT '{nasl_file}'"
-                            f" is ending with two or more end points: "
-                            f"'{doubled_end_points_match.group(0)}'."
+                            f"The script tag '{tag_match.group('name')}' "
+                            "is ending with two or more points: "
+                            f"'{tag_match.group('value')}'."
                         )

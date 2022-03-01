@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from naslinter.helper import get_tag_pattern
+from naslinter.helper import get_tag_pattern, ScriptTag
 from naslinter.plugin import (
     LinterError,
     FileContentPlugin,
@@ -59,11 +59,11 @@ class CheckLogMessages(FileContentPlugin):
 
         # don't need to check detection scripts since they are for sure using
         # a log_message. all detection scripts have a cvss of 0.0
-        cvss_detect = get_tag_pattern(
-            name="cvss_base", value=r'"(?P<score>\d{1,2}\.\d)"'
-        ).search(file_content)
+        cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE).search(
+            file_content
+        )
 
-        if cvss_detect is not None and cvss_detect.group("score") == "0.0":
+        if cvss_detect is not None and cvss_detect.group("value") == "0.0":
             return
 
         # jf: Bugfix for https://jira.greenbone.net/browse/FE-1004 ?!
@@ -77,6 +77,5 @@ class CheckLogMessages(FileContentPlugin):
         )
         if log_match:
             yield LinterError(
-                f"VT '{str(nasl_file)}' is using a "
-                f"log_message in a VT with a severity"
+                "The VT is using a log_message in a VT with a severity"
             )

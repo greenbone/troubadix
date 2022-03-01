@@ -21,7 +21,7 @@ from enum import Enum
 
 from pathlib import Path
 from typing import Iterator
-from naslinter.helper.patterns import get_special_tag_pattern
+from naslinter.helper.patterns import SpecialScriptTag, get_special_tag_pattern
 
 from naslinter.plugin import (
     LinterError,
@@ -61,7 +61,7 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
             return
 
         preferences_matches = get_special_tag_pattern(
-            name="add_preference",
+            name=SpecialScriptTag.ADD_PREFERENCE,
             value=r'type\s*:\s*[\'"](?P<type>[^\'"]+)[\'"]\s*[^)]*',
         ).finditer(file_content)
 

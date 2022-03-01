@@ -80,7 +80,7 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
 
                 function = match[0].partition("(")[0]
                 yield LinterError(
-                    f"The VT '{nasl_file}' is using the script function "
+                    f"The VT is using the script function "
                     f"'{function}' multiple number of times."
                 )
 
@@ -95,6 +95,6 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
             if match and len(match) > 1:
                 tag = match[0].partition(",")[0]
                 yield LinterError(
-                    f"The VT '{nasl_file}' is using the script tag '{tag}' "
+                    f"The VT is using the script tag '{tag}' "
                     "multiple number of times."
                 )

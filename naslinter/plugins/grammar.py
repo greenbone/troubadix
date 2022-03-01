@@ -27,21 +27,11 @@ from naslinter.plugin import (
 )
 
 
-class CheckGrammar(LineContentPlugin):
-    name = "check_grammar"
+class GrammerPattern:
+    instance = False
 
-    @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
-        """This script checks the passed VT / Include for common grammar
-        problems
-
-        Args:
-            nasl_file:    The VT / Include that is going to be checked
-            file_content: The content of the file that is going to be
-                          checked
-        """
-
-        pattern = re.compile(
+    def __init__(self) -> None:
+        self.pattern = re.compile(
             r"refer\s+(the\s+)?Reference|"
             r"\s+an?\s+(multiple|errors)|"
             r"the\s+(References?\s+link|multiple\s+flaw)|"
@@ -84,6 +74,30 @@ class CheckGrammar(LineContentPlugin):
             r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities",
             re.IGNORECASE,
         )
+        self.instance = self
+
+
+def get_grammer_pattern() -> re.Pattern:
+    if GrammerPattern.instance:
+        return GrammerPattern.instance.pattern
+    return GrammerPattern().pattern
+
+
+class CheckGrammar(LineContentPlugin):
+    name = "check_grammar"
+
+    @staticmethod
+    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+        """This script checks the passed VT / Include for common grammar
+        problems
+
+        Args:
+            nasl_file:    The VT / Include that is going to be checked
+            file_content: The content of the file that is going to be
+                          checked
+        """
+
+        pattern = get_grammer_pattern()
 
         for line in lines:
             match = pattern.search(line)

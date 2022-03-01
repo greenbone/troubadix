@@ -40,14 +40,14 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
         content = (
             'script_tag(name:"cvss_base", value:"a12");\n'
             'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
+            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
 
         results = list(CheckCVSSFormat.run(path, content))
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
 
@@ -62,7 +62,7 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
 
@@ -78,8 +78,7 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base_vector "
-            "value.",
+            "VT has a missing or invalid cvss_base_vector " "value.",
             results[0].message,
         )
 
@@ -91,7 +90,6 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base_vector "
-            "value.",
+            "VT has a missing or invalid cvss_base_vector " "value.",
             results[0].message,
         )

@@ -52,9 +52,9 @@ class Root:
             self.root = Path(match.group("path"))
             if not self.root.exists():
                 self.root = None
-            self.instance = self
         else:
             self.root = None
+        self.instance = self
 
 
 def get_root(path: Path) -> Optional[Path]:

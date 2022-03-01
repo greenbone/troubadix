@@ -16,4 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .helper import get_root, is_ignore_file, Root, subprocess_cmd
-from .patterns import get_tag_pattern, get_special_tag_pattern
+from .patterns import (
+    get_tag_pattern,
+    get_special_tag_pattern,
+    get_common_tag_patterns,
+    ScriptTag,
+    SpecialScriptTag,
+)

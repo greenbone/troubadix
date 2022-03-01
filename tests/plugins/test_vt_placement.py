@@ -96,7 +96,6 @@ class CheckVTPlacementTestCase(unittest.TestCase):
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                f"VT '{str(path)}' should be "
-                f"placed in the root directory ({self.dir}).",
+                "VT should be " f"placed in the root directory ({self.dir}).",
                 results[0].message,
             )

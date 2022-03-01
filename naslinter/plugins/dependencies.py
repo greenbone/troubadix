@@ -28,7 +28,7 @@ from naslinter.plugin import (
     LinterResult,
     LinterWarning,
 )
-from naslinter.helper import get_root, get_special_tag_pattern
+from naslinter.helper import get_root, SpecialScriptTag, get_special_tag_pattern
 
 
 class CheckDependencies(FileContentPlugin):
@@ -41,12 +41,15 @@ class CheckDependencies(FileContentPlugin):
         An error will be thrown if a dependency could not be found.
         """
 
-        if not "script_dependencies(" in file_content:
-            return
+        # if not "script_dependencies(" in file_content:
+        #     return
 
         matches = get_special_tag_pattern(
-            name="dependencies", flags=re.MULTILINE
+            name=SpecialScriptTag.DEPENDENCIES
         ).finditer(file_content)
+        # matches = get_special_tag_pattern(
+        #     name="dependencies", flags=re.MULTILINE
+        # ).finditer(file_content)
 
         root = get_root(nasl_file)
 

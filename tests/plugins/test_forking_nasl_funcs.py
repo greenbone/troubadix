@@ -55,7 +55,7 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The VT '{str(path)}' is using the "
+            "The VT is using the "
             'get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, service:"www" ) ) '
             "multiple times or in conjunction with other forking functions. "
             "Please either use get_app_port_from_list() from host_details.inc "
@@ -80,7 +80,7 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The VT '{str(path)}' is using the "
+            "The VT is using the "
             "get_app_full(cpe:CPE, port:port, exit_no_version:TRUE)) "
             "multiple times or in conjunction with other forking functions. "
             "Please use e.g. get_app_version_and_location(), "

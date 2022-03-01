@@ -294,9 +294,9 @@ class CheckValidOID(FileContentPlugin):
                 )
                 if not firefox_sa_match:
                     yield LinterError(
-                        f"script_oid() {invalid_oid} '{str(oid)}' (Firefox "
-                        "pattern: 1.3.6.1.4.1.25623.1.2.1.[ADVISORY_YEAR]"
-                        ".[ADVISORY_ID])"
+                        f"script_oid() {invalid_oid} '{str(oid)}' "
+                        "(Firefox pattern: 1.3.6.1.4.1.25623.1.2.1."
+                        "[ADVISORY_YEAR].[ADVISORY_ID])",
                     )
                     return
                 return
@@ -306,31 +306,30 @@ class CheckValidOID(FileContentPlugin):
         )
         if oid_digit_match is None or oid_digit_match.group(1) is None:
             yield LinterError(
-                f"script_oid() {invalid_oid} '{str(oid)}' (last digits)"
+                f"script_oid() {invalid_oid} '{str(oid)}' (last digits)",
             )
             return
 
-        # nb: Those are using invalid OID ranges but are already in the feed
-        # since longer time and can't be fixed / changed.
-        if (
-            "ossim_server_detect.nasl" in str(nasl_file)
-            or "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_stack_memory_usage"
-            "_vuln_macosx.nasl" in str(nasl_file)
-            or "2008/asterisk_sdp_header_overflow.nasl" in str(nasl_file)
-            or "2008/cisco_ios_ftp_server_auth_bypass.nasl" in str(nasl_file)
-            or "2008/qk_smtp_server_dos.nasl" in str(nasl_file)
-            or "2008/asterisk_pbx_guest_access_enabled.nasl" in str(nasl_file)
-            or "2008/asterisk_null_pointer_dereference.nasl" in str(nasl_file)
-            or "2008/goaheadwebserver_source_disclosure.nasl" in str(nasl_file)
-            or "2011/secpod_ibm_lotus_domino_rpc_auth_dos_vuln.nasl"
-            in str(nasl_file)
-            or "2011/secpod_cubecart_mult_xss_and_sql_inj_vuln.nasl"
-            in str(nasl_file)
-            or "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl" in str(nasl_file)
-            or "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl" in str(nasl_file)
-            or "2017/gb_openssh_mult_vuln_jan17_lin.nasl" in str(nasl_file)
-            or "2017/gb_xenserver_ctx219378.nasl" in str(nasl_file)
-        ):
+        exceptions = [
+            "ossim_server_detect.nasl",
+            "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_"
+            "stack_memory_usage_vuln_macosx.nasl",
+            "2008/asterisk_sdp_header_overflow.nasl",
+            "2008/cisco_ios_ftp_server_auth_bypass.nasl",
+            "2008/qk_smtp_server_dos.nasl",
+            "2008/asterisk_pbx_guest_access_enabled.nasl",
+            "2008/asterisk_null_pointer_dereference.nasl",
+            "2008/goaheadwebserver_source_disclosure.nasl",
+            "2011/secpod_ibm_lotus_domino_rpc_auth_dos_vuln.nasl",
+            "2011/secpod_cubecart_mult_xss_and_sql_inj_vuln.nasl",
+            "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl",
+            "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl",
+            "2017/gb_openssh_mult_vuln_jan17_lin.nasl",
+            "2017/gb_xenserver_ctx219378.nasl",
+        ]
+        # nb: Those are using invalid OID ranges but are already in
+        # the feed since longer time and can't be fixed / changed.
+        if any(e in str(nasl_file) for e in exceptions):
             return
 
         oid_digit = int(oid_digit_match.group(1))
@@ -352,9 +351,8 @@ class CheckValidOID(FileContentPlugin):
 
         if 300000 <= oid_digit <= 309999:
             yield LinterError(
-                f"script_oid() {invalid_oid} '{str(oid)}' "
-                "(reserved OID range not part of the official "
-                "Feed)"
+                f"script_oid() {invalid_oid} '{str(oid)}' (reserved OID "
+                "range not part of the official Feed)",
             )
             return
 

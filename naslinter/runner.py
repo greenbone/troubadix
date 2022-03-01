@@ -124,8 +124,6 @@ class Runner:
                         plugin_results,
                     ) in results.plugin_results.items():
                         if plugin_results or self.debug:
-                            # this should print the newline correctly
-                            # and only if results are available/debug
                             self._report_info(f"Running plugin {plugin_name}")
 
                         with self._term.indent():

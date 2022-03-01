@@ -69,12 +69,6 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
         if not if_matches:
             return
 
-        misplaced_compare_report = (
-            f"VT/Include '{str(nasl_file)}' is using a"
-            " misplaced compare within an if() call in"
-            " the following line: "
-        )
-
         for if_match in if_matches:
             if if_match:
                 misplaced_compare_match = re.search(
@@ -86,5 +80,6 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
                 )
                 if misplaced_compare_match:
                     yield LinterError(
-                        misplaced_compare_report + if_match.group(0)
+                        f"VT/Include is using a misplaced compare "
+                        f"within an if() call in {if_match.group(0)}"
                     )

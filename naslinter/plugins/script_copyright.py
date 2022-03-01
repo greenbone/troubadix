@@ -38,8 +38,8 @@ class CheckScriptCopyright(FileContentPlugin):
             r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content
         ):
             yield LinterError(
-                f"The VT '{nasl_file}' is using an incorrect syntax for its "
-                "copyright statement. Please start (EXACTLY) with:\n\n"
+                "The VT is using an incorrect syntax for its "
+                "copyright statement. Please start (EXACTLY) with: "
                 "'script_copyright(\"Copyright (C)' followed by the year "
                 "(matching the one in creation_date) and the author/company."
             )
@@ -55,8 +55,8 @@ class CheckScriptCopyright(FileContentPlugin):
             re.MULTILINE,
         ):
             yield LinterError(
-                f"The VT '{nasl_file}' is using an incorrect copyright "
-                "statement. Please use (EXACTLY):\n\n"
+                "The VT is using an incorrect copyright "
+                "statement. Please use (EXACTLY): "
                 "# Some text descriptions might be excerpted from (a) "
                 "referenced\n# source(s), and are Copyright (C) by the "
                 "respective right holder(s)."

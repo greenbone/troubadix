@@ -42,6 +42,9 @@ class CheckScriptCategory(FileContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+        if nasl_file.suffix == ".inc":
+            return
+
         own_category_match = re.search(
             r"^\s*script_category\s*\(([^)]{3,})\)\s*;",
             file_content,
@@ -49,7 +52,7 @@ class CheckScriptCategory(FileContentPlugin):
         )
 
         if own_category_match is None or own_category_match.group(1) is None:
-            yield LinterError(f"VT '{nasl_file}' is missing a script_category.")
+            yield LinterError("VT is missing a script_category.")
             return
 
         # pylint: disable=line-too-long
@@ -58,7 +61,6 @@ class CheckScriptCategory(FileContentPlugin):
         own_category = own_category_match.group(1)
         if own_category not in SCRIPT_CATEGORIES:
             yield LinterError(
-                f"VT '{nasl_file}' is using an unsupported category "
-                f"'{own_category}'."
+                f"VT is using an unsupported category '{own_category}'."
             )
             return

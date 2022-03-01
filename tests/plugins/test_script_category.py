@@ -39,7 +39,7 @@ class CheckScriptCategoryTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' is missing a script_category.",
+            "VT is missing a script_category.",
             results[0].message,
         )
 
@@ -51,6 +51,6 @@ class CheckScriptCategoryTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' is using an unsupported category 'ACT_FOO'.",
+            "VT is using an unsupported category 'ACT_FOO'.",
             results[0].message,
         )
