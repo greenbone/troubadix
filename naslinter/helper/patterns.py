@@ -20,11 +20,11 @@ import re
 # regex patterns for script tags
 _TAG_PATTERN = (
     r'script_tag\(\s*name\s*:\s*["\'](?P<name>{name})["\']\s*,'
-    r'\s*value\s*:\s*(?P<value>["\']?{value}["\']?)\s*\)\s*;'
+    r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
 )
 
 _SPECIAL_TAG_PATTERN = (
-    r'script_(?P<name>{name})\s*\((?P<value>["\']?{value}["\']?)\s*\)\s*;'
+    r'script_(?P<name>{name})\s*\(["\']?(?P<value>{value})["\']?\s*\)\s*;'
 )
 
 
