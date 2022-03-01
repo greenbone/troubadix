@@ -19,6 +19,7 @@ import re
 
 from pathlib import Path
 from typing import Iterator
+from naslinter.helper.patterns import get_common_tag_patterns
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -28,13 +29,7 @@ class CheckDoubleEndPoints(FileContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
-        tag_matches = re.finditer(
-            r'(script_tag\(name\s*:\s*"'
-            r'(summary|impact|affected|insight|vuldetect|solution)"'
-            r'\s*,\s*value\s*:\s*")([^"]+"\s*\)\s*;)',
-            file_content,
-            re.MULTILINE,
-        )
+        tag_matches = get_common_tag_patterns().finditer(file_content)
 
         if tag_matches is not None:
             for tag_match in tag_matches:

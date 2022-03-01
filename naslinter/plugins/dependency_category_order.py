@@ -28,7 +28,7 @@ from naslinter.plugin import (
     FileContentPlugin,
     LinterResult,
 )
-from naslinter.helper import get_root, get_special_tag_pattern
+from naslinter.helper import get_root, get_special_tag_pattern, SpecialScriptTag
 
 # See https://shorturl.at/jBGJT for a list of the category numbers.
 class VTCategory(IntEnum):
@@ -56,7 +56,7 @@ def check_category(
         LinterError     if no category found or category invalid
         VTCategory      else
     """
-    match = get_special_tag_pattern(name="category", flags=re.MULTILINE).search(
+    match = get_special_tag_pattern(name=SpecialScriptTag.CATEGORY).search(
         content
     )
 
@@ -97,7 +97,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
             return
 
         matches = get_special_tag_pattern(
-            name="dependencies", flags=re.MULTILINE
+            name=SpecialScriptTag.DEPENDENCIES
         ).finditer(file_content)
 
         if not matches:

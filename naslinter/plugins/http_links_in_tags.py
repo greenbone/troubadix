@@ -22,7 +22,11 @@ from typing import Iterator, AnyStr
 
 from itertools import chain
 
-from naslinter.helper import get_tag_pattern, get_special_tag_pattern
+from naslinter.helper import (
+    get_tag_pattern,
+    get_special_tag_pattern,
+    SpecialScriptTag,
+)
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -107,7 +111,8 @@ class CheckHttpLinksInTags(FileContentPlugin):
         """
 
         pattern = get_special_tag_pattern(
-            name=r"xref", value=r'name\s*:\s*"URL"\s*,\s*value\s*:\s*"([^"]+)"'
+            name=SpecialScriptTag.XREF,
+            value=r'name\s*:\s*"URL"\s*,\s*value\s*:\s*"([^"]+)"',
         )
         tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 

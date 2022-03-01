@@ -19,7 +19,11 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from naslinter.helper import get_tag_pattern, get_special_tag_pattern
+from naslinter.helper import (
+    get_tag_pattern,
+    get_special_tag_pattern,
+    SpecialScriptTag,
+)
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -65,7 +69,7 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             return
 
         match_family = get_special_tag_pattern(
-            name="family",
+            name=SpecialScriptTag.FAMILY,
             value=r'\s*"(?P<family>(Product|Service) detection)"\s*',
         ).search(file_content)
         if match_family and match_family.group("family"):

@@ -27,7 +27,7 @@ from naslinter.plugin import (
     FileContentPlugin,
     LinterResult,
 )
-from naslinter.helper import get_root, get_special_tag_pattern
+from naslinter.helper import get_root, get_special_tag_pattern, SpecialScriptTag
 
 
 class CheckDeprecatedDependency(FileContentPlugin):
@@ -46,7 +46,7 @@ class CheckDeprecatedDependency(FileContentPlugin):
         root = get_root(nasl_file)
 
         matches = get_special_tag_pattern(
-            name="dependencies", flags=re.MULTILINE
+            name=SpecialScriptTag.DEPENDENCIES
         ).finditer(file_content)
         if not matches:
             return
