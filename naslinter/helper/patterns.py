@@ -66,3 +66,19 @@ def get_special_tag_pattern(
     return re.compile(
         _SPECIAL_TAG_PATTERN.format(name=name, value=value), flags=flags
     )
+
+
+class SpecialScriptTagPatterns:
+    instance = False
+
+    def __init__(self) -> None:
+        self.dependencies = get_special_tag_pattern(
+            name="dependencies", flags=re.MULTILINE
+        )
+        self.instance = self
+
+
+def get_dependency_tag_pattern() -> SpecialScriptTagPatterns:
+    if SpecialScriptTagPatterns.instance:
+        return SpecialScriptTagPatterns.instance.dependencies
+    return SpecialScriptTagPatterns().dependencies

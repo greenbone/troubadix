@@ -31,6 +31,7 @@ from naslinter.plugin import (
     LinterMessage,
     LinterResult,
     LinterWarning,
+    Plugin,
 )
 from naslinter.plugins import Plugins
 
@@ -52,6 +53,23 @@ class FileResults:
         self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
         self.plugin_results[plugin_name] = list(results)
+        return self
+
+
+class PluginResults:
+    def __init__(self, plugin_name: str):
+        self.plugin_name = plugin_name
+        self.plugin_results = OrderedDict()
+        self.generic_results = []
+
+    def add_generic_result(self, result: LinterResult) -> "PluginResults":
+        self.generic_results.append(result)
+        return self
+
+    def add_plugin_results(
+        self, file_name: str, results: Iterator[LinterResult]
+    ) -> "PluginResults":
+        self.plugin_results[file_name] = list(results)
         return self
 
 
@@ -94,10 +112,49 @@ class Runner:
     def _report_ok(self, message: str):
         self._term.ok(message)
 
+    # def run(
+    #     self,
+    #     files: List[Path],
+    # ) -> None:
+    #     self.files = files
+    #     files_count = len(files)
+    #     i = 0
+
+    #     start = datetime.datetime.now()
+    #     with Pool(processes=self._n_jobs) as pool:
+    #         for results in pool.imap_unordered(
+    #             self.run_plugin, self.plugins.__iter__(), chunksize=CHUNKSIZE
+    #         ):
+    #             # only print the part "common/some_nasl.nasl" by
+    #             # splitting at the nasl/ dir in
+    #             # /root/vts-repo/nasl/common/some_nasl.nasl
+    #             self._report_bold_info(
+    #                 "Checking "
+    #                 f"{str(results.plugin_name)}"
+    #             )
+
+    #             with self._term.indent():
+    #                 self._report_results(results.generic_results)
+
+    #                 for (
+    #                     file_name,
+    #                     plugin_results,
+    #                 ) in results.plugin_results.items():
+    #                     if plugin_results or self.debug:
+    #                         # this should print the newline correctly
+    #                         # and only if results are available/debug
+    #                         self._report_info(f"Found in {str(file_name).split('nasl/', maxsplit=1)[-1]}")
+
+    #                     with self._term.indent():
+    #                         self._report_results(plugin_results)
+
+    #     self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
+
     def run(
         self,
         files: List[Path],
     ) -> None:
+        self.files = files
         files_count = len(files)
         i = 0
 
@@ -153,6 +210,32 @@ class Runner:
             else:
                 results.add_plugin_results(
                     plugin.__name__,
+                    [LinterError(f"Plugin {plugin.__name__} can not be read.")],
+                )
+
+        return results
+
+    def run_plugin(self, plugin: Plugin) -> PluginResults:
+        results = PluginResults(plugin.name)
+        i = 0
+        for file_path in self.files:
+            file_name = file_path.resolve()
+
+            # maybe we need to re-read filecontent, if an Plugin changes it
+            file_content = file_path.read_text(encoding=CURRENT_ENCODING)
+
+            if issubclass(plugin, LineContentPlugin):
+                lines = file_content.splitlines()
+                results.add_plugin_results(
+                    file_path, plugin.run(file_name, lines)
+                )
+            elif issubclass(plugin, FileContentPlugin):
+                results.add_plugin_results(
+                    file_path, plugin.run(file_name, file_content)
+                )
+            else:
+                results.add_plugin_results(
+                    file_path,
                     [LinterError(f"Plugin {plugin.__name__} can not be read.")],
                 )
 
