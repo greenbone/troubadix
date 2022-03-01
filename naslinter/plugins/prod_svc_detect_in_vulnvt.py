@@ -81,18 +81,18 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             )
 
         matches = re.finditer(
-            r"(?P<function>"
+            r"(?P<function>("
             r"register_(product|and_report_(os|cpe)|host_detail)|"
             r"service_(register|report)|"
             r"build_(cpe|detection_report)|"
-            r"report_(host_(detail_single|details)|best_os_(cpe|txt))"
+            r"report_(host_(detail_single|details)|best_os_(cpe|txt)))"
             r")\s*\((?P<body>[^)]+)\)\s*;",
             file_content,
             re.MULTILINE,
         )
         if matches:
             for match in matches:
-                if any(
+                if all(
                     det not in match.group("body")
                     for det in ["detected_by", "detected_at"]
                 ):

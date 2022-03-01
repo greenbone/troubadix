@@ -51,12 +51,9 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT has a severity but is "
-            "placed in the following family which is "
-            "disallowed for such a "
-            'VT:script_family("Product detection");'
-            "Please split this VT into a separate Product / "
-            "Service detection and Vulnerability-VT.",
+            "VT has a severity but is placed in the family 'Product detection' "
+            "which is not allowed for this VT. Please split this VT into a "
+            "separate Product/Service detection and Vulnerability-VT.",
             results[0].message,
         )
 
@@ -68,18 +65,16 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
             'script_family("Product detection");\n'
-            "register_product();\n"
+            "register_product(cpe:cpe);\n"
         )
 
         results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT has a severity but is placed in the family "
-            "'Product detection' which is not allowed for this "
-            "VT."
-            "Please split this VT into a separate Product / "
-            "Service detection and Vulnerability-VT.\n",
+            "VT has a severity but is placed in the family 'Product detection' "
+            "which is not allowed for this VT. Please split this VT into a "
+            "separate Product/Service detection and Vulnerability-VT.",
             results[0].message,
         )
         self.assertEqual(

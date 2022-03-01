@@ -35,7 +35,6 @@ class CheckValidOIDTestCase(unittest.TestCase):
         )
 
         results = list(CheckValidOID.run(path, content))
-        print(results)
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
