@@ -31,7 +31,7 @@ class CheckNewlinesTestCase(unittest.TestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
-        )
+        ).splitlines()
 
         results = list(CheckGrammar.run(nasl_file, content))
         self.assertEqual(len(results), 0)
@@ -44,16 +44,14 @@ class CheckNewlinesTestCase(unittest.TestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
             "# is prone to a security bypass vulnerabilities\n"
-        )
+        ).splitlines()
 
         results = list(CheckGrammar.run(nasl_file, content))
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT/Include '{str(nasl_file)}' is having grammar problems in the "
-            "following line(s):\nHit: is prone to a security bypass "
-            "vulnerabilities\nFull line:\n# is prone to a security bypass "
-            "vulnerabilities\n",
+            "VT/Include has the following grammar problem: "
+            "# is prone to a security bypass vulnerabilities",
             results[0].message,
         )
 
@@ -66,15 +64,20 @@ class CheckNewlinesTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
             "# is prone to a security bypass vulnerabilities\n"
             "# refer the Reference\n"
-        )
+        ).splitlines()
 
         results = list(CheckGrammar.run(nasl_file, content))
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT/Include '{str(nasl_file)}' is having grammar problems in the "
-            "following line(s):\nHit: is prone to a security bypass "
-            "vulnerabilities\nFull line:\n# is prone to a security bypass "
-            "vulnerabilities\n",
+            "VT/Include has the following grammar problem: "
+            "# is prone to a security bypass vulnerabilities",
             results[0].message,
+        )
+
+        self.assertIsInstance(results[1], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem: "
+            "# refer the Reference",
+            results[1].message,
         )

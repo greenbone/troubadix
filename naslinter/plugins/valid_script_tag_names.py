@@ -19,6 +19,7 @@ from pathlib import Path
 import re
 
 from naslinter.plugin import LinterError, FileContentPlugin
+from naslinter.helper import get_tag_pattern
 
 
 class CheckValidScriptTagNames(FileContentPlugin):
@@ -84,19 +85,15 @@ class CheckValidScriptTagNames(FileContentPlugin):
             "solution_method",
         ]
 
-        matches = re.finditer(
-            r'^ *script_tag *\( *name *: *["\']'
-            r'([^"\']+)["\'] *, *value *: *["\']',
-            file_content,
-            re.MULTILINE,
+        matches = get_tag_pattern(name=r".+", flags=re.MULTILINE).finditer(
+            file_content
         )
-        if matches is not None:
-            for match in matches:
-                if match.group(1) not in allowed_script_tag_names:
-                    found_tags += f"\n\t{match.group(0)}"
 
-        if len(found_tags) > 0:
-            yield LinterError(
-                f"The VT '{str(nasl_file)}' is using one or more of "
-                f"the following not allowed names:{str(found_tags)}",
-            )
+        if matches:
+            for match in matches:
+                if match.group("name") not in allowed_script_tag_names:
+                    found_tags += f"\n\t{match.group(0)}"
+                    yield LinterError(
+                        f"The script_tag name '{match.group('name')}' "
+                        "is not allowed.",
+                    )
