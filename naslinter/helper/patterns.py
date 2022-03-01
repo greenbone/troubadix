@@ -71,13 +71,13 @@ _SPECIAL_TAG_PATTERN = (
 
 
 def get_tag_pattern(
-    name: str, *, value: str = r".+", flags: re.RegexFlag = 0
+    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
 
 
 def _get_special_tag_pattern(
-    name: str, *, value: str = r".+", flags: re.RegexFlag = 0
+    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
     The returned pattern catchs all `script_<name>(<value>);`
