@@ -40,7 +40,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"No valid script_oid() call found in VT '{str(path)}'",
+            "No valid script_oid() call found",
             results[0].message,
         )
 
@@ -54,8 +54,8 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"script_oid() in VT '{str(path)}' is using an invalid"
-                " OID '1.3.6.1.4.1.25623.2.0.100376'"
+                "script_oid() is using an invalid "
+                "OID '1.3.6.1.4.1.25623.2.0.100376'"
             ),
             results[0].message,
         )
@@ -68,9 +68,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            f"VT '{str(path)}' is missing a script family!", results[0].message
-        )
+        self.assertEqual("VT is missing a script family!", results[0].message)
 
     def test_euler_family_ok(self):
         path = Path("some/file.nasl")
@@ -95,7 +93,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"script_oid() in VT '{str(path)}' is using an invalid OID "
+                "script_oid() is using an invalid OID "
                 "'1.3.6.1.4.1.25623.1.1.2.2055.5555' (EulerOS pattern:"
                 " 1.3.6.1.4.1.25623.1.1.2.[ADVISORY_YEAR].[ADVISORY_ID])"
             ),
@@ -125,10 +123,9 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"script_oid() in VT '{str(path)}' "
-                "is using an invalid OID '1.3.6.1.4.1.25623.1.1.4.2025.555755"
-                ".5' (SLES pattern: 1.3.6.1.4.1.25623.1.1.4.[ADVISORY_YEAR]."
-                "[ADVISORY_ID].[ADVISORY_REVISION])"
+                "script_oid() is using an invalid OID '1.3.6.1.4.1.25623.1.1."
+                "4.2025.555755.5' (SLES pattern: 1.3.6.1.4.1.25623.1.1.4"
+                ".[ADVISORY_YEAR].[ADVISORY_ID].[ADVISORY_REVISION])"
             ),
             results[0].message,
         )
@@ -156,23 +153,13 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                " Debian VTs'1.3.6.1.4.1.25623.1.1.1.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "Debian VTs '1.3.6.1.4.1.25623.1.1.1.2256'"
             ),
             results[0].message,
         )
 
-    def test_centos_ok(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.3.2256");'
-            'script_family("CentOS Local Security Checks");'
-        )
-
-        results = list(CheckValidOID.run(path, content))
-        self.assertEqual(len(results), 0)
-
-    def test_centos(self):
+    def test_unused_oid(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.3.2256");'
@@ -185,23 +172,23 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "CentOS VTs '1.3.6.1.4.1.25623.1.1.3.2256'"
+                "script_oid() is using an invalid OID '1.3.6.1.4.1.25623.1.1"
+                ".3.2256' (Vendor OID with unknown Vendor-Prefix)"
             ),
             results[0].message,
         )
 
-    def test_centos_or_ok(self):
+    def test_suse_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.4.2256");'
-            'script_family("CentOS Local Security Checks");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.4.2012.2256.1");'
+            'script_family("SuSE Local Security Checks");'
         )
 
         results = list(CheckValidOID.run(path, content))
         self.assertEqual(len(results), 0)
 
-    def test_centos_or(self):
+    def test_suse(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.4.2256");'
@@ -214,23 +201,23 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "CentOS_CR VTs '1.3.6.1.4.1.25623.1.1.4.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "SUSE SLES '1.3.6.1.4.1.25623.1.1.4.2256'"
             ),
             results[0].message,
         )
 
-    def test_fedora_ok(self):
+    def test_amazon_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.5.2256");'
-            'script_family("Fedora Local Security Checks");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.5.2012.2256");'
+            'script_family("Amazon Linux Local Security Checks");'
         )
 
         results = list(CheckValidOID.run(path, content))
         self.assertEqual(len(results), 0)
 
-    def test_fedora(self):
+    def test_amazon(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.5.2256");'
@@ -243,8 +230,8 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "Fedora VTs '1.3.6.1.4.1.25623.1.1.5.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "Amazon Linux '1.3.6.1.4.1.25623.1.1.5.2256'"
             ),
             results[0].message,
         )
@@ -272,23 +259,23 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
+                "script_oid() is using an OID that is reserved for "
                 "Gentoo VTs '1.3.6.1.4.1.25623.1.1.6.2256'"
             ),
             results[0].message,
         )
 
-    def test_hpux_ok(self):
+    def test_freebsd_ok(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.7.2256");'
-            'script_family("HP-UX Local Security Checks");'
+            'script_family("FreeBSD Local Security Checks");'
         )
 
         results = list(CheckValidOID.run(path, content))
         self.assertEqual(len(results), 0)
 
-    def test_hpux(self):
+    def test_freebsd(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.7.2256");'
@@ -301,23 +288,23 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "HP-UX VTs '1.3.6.1.4.1.25623.1.1.7.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "FreeBSD VTs '1.3.6.1.4.1.25623.1.1.7.2256'"
             ),
             results[0].message,
         )
 
-    def test_mandrake_ok(self):
+    def test_oracle_ok(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.8.2256");'
-            'script_family("Mandrake Local Security Checks");'
+            'script_family("Oracle Linux Local Security Checks");'
         )
 
         results = list(CheckValidOID.run(path, content))
         self.assertEqual(len(results), 0)
 
-    def test_mandrake(self):
+    def test_oracle(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.8.2256");'
@@ -330,23 +317,23 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "Mandrake/Mandriva VTs '1.3.6.1.4.1.25623.1.1.8.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "Oracle Linux VTs '1.3.6.1.4.1.25623.1.1.8.2256'"
             ),
             results[0].message,
         )
 
-    def test_opensuse_ok(self):
+    def test_fedora_ok(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.9.2256");'
-            'script_family("SuSE Local Security Checks");'
+            'script_family("Fedora Local Security Checks");'
         )
 
         results = list(CheckValidOID.run(path, content))
         self.assertEqual(len(results), 0)
 
-    def test_opensuse(self):
+    def test_fedora(self):
         path = Path("some/file.nasl")
         content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.9.2256");'
@@ -359,8 +346,37 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "openSUSE VTs '1.3.6.1.4.1.25623.1.1.9.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "Fedora VTs '1.3.6.1.4.1.25623.1.1.9.2256'"
+            ),
+            results[0].message,
+        )
+
+    def test_mageia_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.1.10.2012.2256");'
+            'script_family("Mageia Linux Local Security Checks");'
+        )
+
+        results = list(CheckValidOID.run(path, content))
+        self.assertEqual(len(results), 0)
+
+    def test_mageia(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.1.10.2256");'
+            'script_family("Debian Local Security Checks");'
+        )
+
+        results = list(CheckValidOID.run(path, content))
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for "
+                "Mageia Linux '1.3.6.1.4.1.25623.1.1.10.2256'"
             ),
             results[0].message,
         )
@@ -368,8 +384,8 @@ class CheckValidOIDTestCase(unittest.TestCase):
     def test_redhat_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.10.2256");'
-            'script_family("Red Hat Local Security Checks");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.11.2256");'
+            'script_family("RedHat Local Security Checks");'
         )
 
         results = list(CheckValidOID.run(path, content))
@@ -378,35 +394,6 @@ class CheckValidOIDTestCase(unittest.TestCase):
     def test_redhat(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.10.2256");'
-            'script_family("Debian Local Security Checks");'
-        )
-
-        results = list(CheckValidOID.run(path, content))
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "Red Hat VTs '1.3.6.1.4.1.25623.1.1.10.2256'"
-            ),
-            results[0].message,
-        )
-
-    def test_solaris_ok(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.11.2256");'
-            'script_family("Solaris Local Security Checks");'
-        )
-
-        results = list(CheckValidOID.run(path, content))
-        self.assertEqual(len(results), 0)
-
-    def test_solaris(self):
-        path = Path("some/file.nasl")
-        content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.11.2256");'
             'script_family("SUSE Local Security Checks");'
         )
@@ -417,37 +404,8 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "Solaris VTs '1.3.6.1.4.1.25623.1.1.11.2256'"
-            ),
-            results[0].message,
-        )
-
-    def test_suse_ok(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.12.2256");'
-            'script_family("SuSE Local Security Checks");'
-        )
-
-        results = list(CheckValidOID.run(path, content))
-        self.assertEqual(len(results), 0)
-
-    def test_suse(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.12.2256");'
-            'script_family("SUSE Local Security Checks");'
-        )
-
-        results = list(CheckValidOID.run(path, content))
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "SUSE VTs '1.3.6.1.4.1.25623.1.1.12.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "RedHat VTs '1.3.6.1.4.1.25623.1.1.11.2256'"
             ),
             results[0].message,
         )
@@ -455,7 +413,7 @@ class CheckValidOIDTestCase(unittest.TestCase):
     def test_ubuntu_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.13.2256");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.12.2012.2256.1");'
             'script_family("Ubuntu Local Security Checks");'
         )
 
@@ -465,6 +423,35 @@ class CheckValidOIDTestCase(unittest.TestCase):
     def test_ubuntu(self):
         path = Path("some/file.nasl")
         content = (
+            'script_oid("1.3.6.1.4.1.25623.1.1.12.2256");'
+            'script_family("SUSE Local Security Checks");'
+        )
+
+        results = list(CheckValidOID.run(path, content))
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for "
+                "Ubuntu VTs '1.3.6.1.4.1.25623.1.1.12.2256'"
+            ),
+            results[0].message,
+        )
+
+    def test_slackware_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.1.13.2256");'
+            'script_family("Slackware Local Security Checks");'
+        )
+
+        results = list(CheckValidOID.run(path, content))
+        self.assertEqual(len(results), 0)
+
+    def test_slackware(self):
+        path = Path("some/file.nasl")
+        content = (
             'script_oid("1.3.6.1.4.1.25623.1.1.13.2256");'
             'script_family("SUSE Local Security Checks");'
         )
@@ -475,8 +462,8 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an OID that is reserved for "
-                "Ubuntu VTs '1.3.6.1.4.1.25623.1.1.13.2256'"
+                "script_oid() is using an OID that is reserved for "
+                "Slackware VTs '1.3.6.1.4.1.25623.1.1.13.2256'"
             ),
             results[0].message,
         )
@@ -494,19 +481,56 @@ class CheckValidOIDTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             (
-                f"VT '{str(path)}' is using an invalid OID '1.3.6.1.4.1.25623."
-                "1.1.14.2256' (Vendor OID with unknown Vendor-Prefix)"
+                "script_oid() is using an invalid OID '1.3.6.1.4.1.25623.1.1."
+                "14.2256' (Vendor OID with unknown Vendor-Prefix)"
             ),
             results[0].message,
         )
 
-    def test_script_name_ok(self):
+    def test_script_name__product_unknown(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.2.2025.2555");'
+            'script_oid("1.3.6.1.4.1.25623.1.2.2025.2555");'
             'script_family("Huawei EulerOS Local Security Checks");'
             'script_name("AdaptBB Detection (HTTP)");'
         )
 
         results = list(CheckValidOID.run(path, content))
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an invalid OID '1.3.6.1.4.1.25623.1.2"
+                ".2025.2555' (last digits)"
+            ),
+            results[0].message,
+        )
+
+    def test_script_name__product_firefox_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.2.1.2020.255");'
+            'script_name("Mozilla Firefox Security Advisory");'
+        )
+
+        results = list(CheckValidOID.run(path, content))
+        print(results)
         self.assertEqual(len(results), 0)
+
+    def test_script_name__product_firefox(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.2.1.2020.255");'
+            'script_name("AdaptBB Detection (HTTP)");'
+        )
+
+        results = list(CheckValidOID.run(path, content))
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for 'Firefox' "
+                "(1.3.6.1.4.1.25623.1.2.1.2020.255)"
+            ),
+            results[0].message,
+        )
