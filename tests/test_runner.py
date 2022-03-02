@@ -26,6 +26,7 @@ from pontos.terminal import _set_terminal
 from naslinter.plugin import LinterError, LinterResult
 
 from naslinter.plugins import _NASL_ONLY_PLUGINS
+from naslinter.plugins.update_modification_date import UpdateModificationDate
 from naslinter.runner import Runner
 
 
@@ -90,18 +91,18 @@ class TestRunner(unittest.TestCase):
             included_plugins=included_plugins,
         )
 
-        results = runner.check_file(nasl_file)
+        runner.files = [nasl_file]
+
+        results = runner.run_plugin(UpdateModificationDate)
 
         new_content = nasl_file.read_text(encoding="latin1")
         self.assertNotEqual(content, new_content)
 
         self.assertEqual(len(results.generic_results), 0)
         self.assertEqual(len(results.plugin_results), 1)
-        self.assertEqual(
-            len(results.plugin_results["update_modification_date"]), 1
-        )
+        self.assertEqual(len(results.plugin_results[nasl_file]), 1)
         self.assertIsInstance(
-            results.plugin_results["update_modification_date"][0], LinterResult
+            results.plugin_results[nasl_file][0], LinterResult
         )
 
         # revert changes for the next time
@@ -120,18 +121,18 @@ class TestRunner(unittest.TestCase):
             included_plugins=included_plugins,
         )
 
-        results = runner.check_file(nasl_file)
+        runner.files = [nasl_file]
+
+        results = runner.run_plugin(UpdateModificationDate)
 
         new_content = nasl_file.read_text(encoding="latin1")
         self.assertEqual(content, new_content)
 
         self.assertEqual(len(results.generic_results), 0)
         self.assertEqual(len(results.plugin_results), 1)
-        self.assertEqual(
-            len(results.plugin_results["update_modification_date"]), 1
-        )
+        self.assertEqual(len(results.plugin_results[nasl_file]), 1)
 
-        error = results.plugin_results["update_modification_date"][0]
+        error = results.plugin_results[nasl_file][0]
         self.assertIsInstance(error, LinterError)
         self.assertIn(
             "fail.nasl does not contain a modification day script tag.",

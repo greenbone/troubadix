@@ -39,23 +39,6 @@ CHUNKSIZE = 1  # default 1
 CURRENT_ENCODING = "latin1"
 
 
-class FileResults:
-    def __init__(self, file_path: Path):
-        self.file_path = file_path
-        self.plugin_results = OrderedDict()
-        self.generic_results = []
-
-    def add_generic_result(self, result: LinterResult) -> "FileResults":
-        self.generic_results.append(result)
-        return self
-
-    def add_plugin_results(
-        self, plugin_name: str, results: Iterator[LinterResult]
-    ) -> "FileResults":
-        self.plugin_results[plugin_name] = list(results)
-        return self
-
-
 class PluginResults:
     def __init__(self, plugin_name: str):
         self.plugin_name = plugin_name
