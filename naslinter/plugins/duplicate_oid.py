@@ -42,6 +42,8 @@ class CheckDuplicateOID(FileContentPlugin):
             file_content: The content of the file
 
         """
+        if nasl_file.suffix == ".inc":
+            return
 
         oid = re.search(r'script_oid\("([0-9.]+)"\);', file_content)
 
@@ -63,4 +65,3 @@ class CheckDuplicateOID(FileContentPlugin):
             return
         else:
             yield LinterMessage(f"No OID found in VT '{nasl_file}'")
-            return

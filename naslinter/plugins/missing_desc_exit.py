@@ -47,9 +47,11 @@ class CheckMissingDescExit(FileContentPlugin):
             file_content: The content of the file that is going to be checked
 
         """
+        if nasl_file.suffix == ".inc":
+            return
 
         match = re.search(
-            r"^if\s*\(\s*description *\)\s*\{(.*?)(?=^})",
+            r"^if\s*\(\s*description\s*\)\s*\{(.+?)^\}",
             file_content,
             re.MULTILINE | re.DOTALL,
         )

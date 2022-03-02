@@ -51,6 +51,8 @@ class CheckValidOID(FileContentPlugin):
             tuples: 0 => Success, no message
                 -1 => Error, with error message
         """
+        if nasl_file.suffix == ".inc":
+            return
 
         oid_match = re.search(
             r'^\s*script_oid\s*\(\s*["\']([0-9.]+)["\']\s*\)\s*;',

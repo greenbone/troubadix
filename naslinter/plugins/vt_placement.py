@@ -25,6 +25,7 @@ from naslinter.helper import (
     get_special_tag_pattern,
     SpecialScriptTag,
     get_tag_pattern,
+    ScriptTag,
 )
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -61,9 +62,7 @@ class CheckVTPlacement(FileContentPlugin):
         if match is None:
             return
 
-        match = get_tag_pattern(
-            name="deprecated", value="TRUE", flags=re.MULTILINE
-        ).search(file_content)
+        match = get_tag_pattern(name=ScriptTag.DEPRECATED).search(file_content)
         if match is not None:
             return
 

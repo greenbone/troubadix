@@ -47,6 +47,8 @@ class CheckGetKBOnServices(FileContentPlugin):
                               checked
 
         """
+        if nasl_file.suffix == ".inc":
+            return
 
         kb_matches = re.finditer(
             r'(get_kb_(?P<type>item|list)\s*\(\s*["\'](?P<value>Services/['

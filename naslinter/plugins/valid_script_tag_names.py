@@ -29,9 +29,10 @@ class AllScriptTagsPattern:
         self.pattern = re.compile(
             pattern=(
                 r'script_tag\(\s*name\s*:\s*["\']'
-                r'(?P<name>[a-zA-Z0-9\s\+\-\_])["\']'
+                r'(?P<name>[a-zA-Z0-9\s\+\-\_]+)["\']\s*.+\s*\)\s*;'
             ),
-            flags=re.MULTILINE,
+            # flags=re.MULTILINE, # It seems that there is no multiline
+            # script_tag here
         )
         self.instance = self
 
@@ -78,6 +79,8 @@ class CheckValidScriptTagNames(FileContentPlugin):
         Args:
             nasl_file: The VT that is going to be checked
         """
+        if nasl_file.suffix == ".inc":
+            return
 
         allowed_script_tag_names = [
             "solution",
@@ -104,6 +107,7 @@ class CheckValidScriptTagNames(FileContentPlugin):
 
         if matches:
             for match in matches:
+                # print(match)
                 if match.group("name") not in allowed_script_tag_names:
                     yield LinterError(
                         f"The script_tag name '{match.group('name')}' "

@@ -22,6 +22,7 @@ from typing import Iterator
 from naslinter.helper import (
     get_tag_pattern,
     get_special_tag_pattern,
+    ScriptTag,
     SpecialScriptTag,
 )
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
@@ -61,11 +62,11 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
         """
 
         # Don't need to check VTs having a cvss of 0.0
-        cvss_detect = get_tag_pattern(
-            name="cvss_base", value=r'"(?P<score>\d{1,2}\.\d)"'
-        ).search(file_content)
+        cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE).search(
+            file_content
+        )
 
-        if cvss_detect is not None and cvss_detect.group("score") == "0.0":
+        if cvss_detect is not None and cvss_detect.group("value") == "0.0":
             return
 
         match_family = get_special_tag_pattern(

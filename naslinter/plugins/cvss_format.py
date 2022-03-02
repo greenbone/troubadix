@@ -15,11 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from pathlib import Path
 from typing import Iterator
 
+from naslinter.helper import ScriptTag, get_tag_pattern
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -28,25 +27,20 @@ class CheckCVSSFormat(FileContentPlugin):
 
     @staticmethod
     def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
-        score_match = re.search(
-            r'(script_tag\(\s*name\s*:\s*"cvss_base"\s*,\s*value\s*:\s*")'
-            r'\d{1,2}\.\d"\s*\)\s*;',
-            file_content,
-        )
-        if score_match is None or score_match.group(0) is None:
-            yield LinterError(
-                f"VT '{nasl_file}' has a missing or invalid cvss_base value."
-            )
+        if nasl_file.suffix == ".inc":
+            return
 
-        vector_match = re.search(
-            r'(script_tag\(\s*name\s*:\s*"cvss_base_vector"\s*,\s*value'
-            r'\s*:\s*")AV:[LAN]\/AC:[HML]\/Au:[NSM]\/C:[NPC]\/I:[NPC]\/A:[NPC]"'
-            r"\s*\)\s*;",
-            file_content,
-        )
+        cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE)
+        print(cvss_detect)
+        cvss_detect = cvss_detect.search(file_content)
+        if not cvss_detect:
+            yield LinterError("VT has a missing or invalid cvss_base value.")
 
-        if vector_match is None or vector_match.group(0) is None:
+        vector_match = get_tag_pattern(name=ScriptTag.CVSS_BASE_VECTOR)
+        print(vector_match)
+        vector_match = vector_match.search(file_content)
+
+        if not vector_match:
             yield LinterError(
-                f"VT '{nasl_file}' has a missing or invalid cvss_base_vector "
-                "value."
+                "VT has a missing or invalid cvss_base_vector value."
             )

@@ -175,7 +175,7 @@ class Runner:
 
         # maybe we need to re-read filecontent, if an Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
-
+        start = datetime.datetime.now()
         for plugin in self.plugins:
             if issubclass(plugin, LineContentPlugin):
                 lines = file_content.splitlines()
@@ -191,11 +191,12 @@ class Runner:
                     plugin.__name__,
                     [LinterError(f"Plugin {plugin.__name__} can not be read.")],
                 )
-
+        self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         return results
 
     def run_plugin(self, plugin: Plugin) -> PluginResults:
         results = PluginResults(plugin.name)
+        start = datetime.datetime.now()
         for file_path in self.files:
             file_name = file_path.resolve()
 
@@ -216,5 +217,5 @@ class Runner:
                     file_path,
                     [LinterError(f"Plugin {plugin.__name__} can not be read.")],
                 )
-
+        self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         return results

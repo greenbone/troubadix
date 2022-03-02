@@ -20,5 +20,6 @@ from .patterns import (
     get_tag_pattern,
     get_special_tag_pattern,
     get_common_tag_patterns,
+    ScriptTag,
     SpecialScriptTag,
 )
