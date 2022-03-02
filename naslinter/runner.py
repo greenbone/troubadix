@@ -137,62 +137,14 @@ class Runner:
                         plugin_results,
                     ) in results.plugin_results.items():
                         if plugin_results or self.debug:
-                            self._report_info(
-                                f"Found in {str(file_name).split('nasl/', maxsplit=1)[-1]}"
-                            )
-                        # fmt: off
-                        #         self.check_file, files, chunksize=CHUNKSIZE
-                        #     ):
-                        #         # only print the part "common/some_nasl.nasl" by
-                        #         # splitting at the nasl/ dir in
-                        #         # /root/vts-repo/nasl/common/some_nasl.nasl
-                        #         self._report_bold_info(
-                        #             "Checking "
-                        #             f"{str(results.file_path).split('nasl/', maxsplit=1)[-1]}"
-                        #             f" ({i}/{files_count})"
-                        #         )
-                        #         i = i + 1
-                        #
-                        #         with self._term.indent():
-                        #             self._report_results(results.generic_results)
-                        #
-                        #             for (
-                        #                 plugin_name,
-                        #                 plugin_results,
-                        #             ) in results.plugin_results.items():
-                        #                 if plugin_results or self.debug:
-                        #                     self._report_info(f"Running plugin {plugin_name}")
-                        # fmt: on
-
+                            file_str = str(file_name).split(
+                                "nasl/", maxsplit=1
+                            )[-1]
+                            self._report_info(f"Found in {file_str}")
                         with self._term.indent():
                             self._report_results(plugin_results)
 
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
-
-    def check_file(self, file_path: Path) -> FileResults:
-        file_name = file_path.resolve()
-        results = FileResults(file_path)
-
-        # maybe we need to re-read filecontent, if an Plugin changes it
-        file_content = file_path.read_text(encoding=CURRENT_ENCODING)
-        start = datetime.datetime.now()
-        for plugin in self.plugins:
-            if issubclass(plugin, LineContentPlugin):
-                lines = file_content.splitlines()
-                results.add_plugin_results(
-                    plugin.name, plugin.run(file_name, lines)
-                )
-            elif issubclass(plugin, FileContentPlugin):
-                results.add_plugin_results(
-                    plugin.name, plugin.run(file_name, file_content)
-                )
-            else:
-                results.add_plugin_results(
-                    plugin.__name__,
-                    [LinterError(f"Plugin {plugin.__name__} can not be read.")],
-                )
-        self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
-        return results
 
     def run_plugin(self, plugin: Plugin) -> PluginResults:
         results = PluginResults(plugin.name)
