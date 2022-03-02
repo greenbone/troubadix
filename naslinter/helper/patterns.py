@@ -17,6 +17,7 @@
 
 from enum import Enum
 import re
+import threading
 from typing import OrderedDict
 
 # regex patterns for script tags
@@ -65,11 +66,22 @@ def _get_tag_pattern(
     return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
 
 
+# https://medium.com/analytics-vidhya/how-to-create-a-thread-safe-singleton-class-in-python-822e1170a7f6
 class ScriptTagPatterns:
-    instance = False
+    _instance = None
+    _lock = threading.Lock()
+
+    @classmethod
+    def __new__(cls):
+        if not cls._instance:
+            with cls._lock:
+                if not cls._instance:
+                    cls._instance = super().__new__(cls)
+        return cls._instance
 
     def __init__(self) -> None:
         self.pattern = OrderedDict()
+        print("weeee")
         for tag in ScriptTag:
             if tag.value == "deprecated":
                 self.pattern[tag.value] = _get_tag_pattern(
@@ -91,7 +103,6 @@ class ScriptTagPatterns:
                 self.pattern[tag.value] = _get_tag_pattern(
                     name=tag.value, flags=re.MULTILINE
                 )
-        self.instance = self
 
 
 def get_tag_pattern(
@@ -113,10 +124,15 @@ def get_tag_pattern(
     Returns
         `re.Pattern` object
     """
+    # if not value:
+    # return ScriptTagPatterns().pattern[name.value]
     if not value:
-        if ScriptTagPatterns.instance:
-            return ScriptTagPatterns.instance.pattern[name.value]
-        return ScriptTagPatterns().pattern[name.value]
+        if name.value == "deprecated":
+            value = r"TRUE"
+        elif name.value == "cvss_base_vector":
+            value = r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:[NPC]/A:[NPC]"
+        elif name.value == "cvss_base":
+            value = r"(10\.0|[0-9]\.[0-9])"
     return _get_tag_pattern(name=name.value, value=value, flags=flags)
 
 
@@ -158,7 +174,16 @@ def _get_special_tag_pattern(
 
 
 class SpecialScriptTagPatterns:
-    instance = False
+    _instance = None
+    _lock = threading.Lock()
+
+    @classmethod
+    def __new__(cls):
+        if not cls._instance:
+            with cls._lock:
+                if not cls._instance:
+                    cls._instance = super().__new__(cls)
+        return cls._instance
 
     def __init__(self) -> None:
         self.pattern = OrderedDict()
@@ -166,7 +191,6 @@ class SpecialScriptTagPatterns:
             self.pattern[tag.value] = _get_special_tag_pattern(
                 name=tag.value, flags=re.MULTILINE
             )
-        self.instance = self
 
 
 def get_special_tag_pattern(
@@ -174,6 +198,7 @@ def get_special_tag_pattern(
     *,
     value: str = None,
     flags: re.RegexFlag = 0,
+    url_type: str = "URL",
 ) -> re.Pattern:
     """
     The returned pattern catchs all `script_<name>(<value>);`
@@ -188,10 +213,15 @@ def get_special_tag_pattern(
     Returns
         `re.Pattern` object
     """
-    if not value:
-        if SpecialScriptTagPatterns.instance:
-            return SpecialScriptTagPatterns.instance.pattern[name.value]
-        return SpecialScriptTagPatterns().pattern[name.value]
+    # if not value:
+    #     return SpecialScriptTagPatterns().pattern[name.value]
+    if name.value == "x_ref":
+        return re.compile(
+            _XREF_TAG_PATTERN.format(
+                name=name.value, value=value, type=url_type
+            ),
+            flags=flags,
+        )
     return _get_special_tag_pattern(name=name.value, value=value, flags=flags)
 
 
