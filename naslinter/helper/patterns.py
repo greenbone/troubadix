@@ -84,11 +84,9 @@ class ScriptTagPatterns:
                     ),
                 )
             elif tag.value == "cvss_base":
-                print("HOOOOORAY")
                 self.pattern[tag.value] = _get_tag_pattern(
                     name=tag.value, value=r"(10\.0|[0-9]\.[0-9])"
                 )
-                # print(self.pattern[tag.value])
             else:
                 self.pattern[tag.value] = _get_tag_pattern(
                     name=tag.value, flags=re.MULTILINE

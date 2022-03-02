@@ -31,13 +31,11 @@ class CheckCVSSFormat(FileContentPlugin):
             return
 
         cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE)
-        print(cvss_detect)
         cvss_detect = cvss_detect.search(file_content)
         if not cvss_detect:
             yield LinterError("VT has a missing or invalid cvss_base value.")
 
         vector_match = get_tag_pattern(name=ScriptTag.CVSS_BASE_VECTOR)
-        print(vector_match)
         vector_match = vector_match.search(file_content)
 
         if not vector_match:
