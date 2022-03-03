@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, List, Union
+from typing import Iterator, List, Union, OrderedDict
 
 # import magic
 
@@ -62,7 +62,13 @@ class CheckIllegalCharacters(FileContentPlugin):
     name = "check_illegal_characters"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Currently the following chars are not allowed in
         every script_tag(name:"", value:"") :

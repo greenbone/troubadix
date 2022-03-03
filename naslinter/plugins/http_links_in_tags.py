@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, AnyStr
+from typing import Iterator, AnyStr, OrderedDict
 
 from itertools import chain
 
@@ -34,7 +34,13 @@ class CheckHttpLinksInTags(FileContentPlugin):
     name = "check_http_links_in_tags"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         return chain(
             CheckHttpLinksInTags.contains_nvd_mitre_link_in_xref(file_content),
             CheckHttpLinksInTags.contains_http_link_in_tag(file_content),

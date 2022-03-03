@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterator
-
+from typing import Iterator, OrderedDict
+import re
 from naslinter.plugin import LinterWarning, FileContentPlugin, LinterResult
 
 TAB_TO_SPACES = 2
@@ -27,7 +27,13 @@ class CheckTabs(FileContentPlugin):
     name = "check_tabs"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or
         more tabs instead of spaces."""
 

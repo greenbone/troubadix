@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterResult, FileContentPlugin, LinterError
 
@@ -26,7 +26,13 @@ class CheckForkingNaslFuncs(FileContentPlugin):
     name = "check_forking_nasl_funcs"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if any of the following functions are used more
         than once or in conjunction with other mentioned functions within the
         same VT:

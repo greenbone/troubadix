@@ -20,7 +20,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import (
     LinterError,
@@ -33,7 +33,13 @@ class CheckDeprecatedFunctions(FileContentPlugin):
     name = "check_deprecated_functions"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Following functions / description items are outdated:
         script_summary()

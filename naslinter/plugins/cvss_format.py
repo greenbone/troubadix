@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterator
-
+from typing import Iterator, OrderedDict
+import re
 from naslinter.helper import ScriptTag, get_tag_pattern
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -26,16 +26,22 @@ class CheckCVSSFormat(FileContentPlugin):
     name = "check_cvss_format"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         if nasl_file.suffix == ".inc":
             return
 
-        cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE)
+        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value]
         cvss_detect = cvss_detect.search(file_content)
         if not cvss_detect:
             yield LinterError("VT has a missing or invalid cvss_base value.")
 
-        vector_match = get_tag_pattern(name=ScriptTag.CVSS_BASE_VECTOR)
+        vector_match = tag_pattern[ScriptTag.CVSS_BASE_VECTOR.value]
         vector_match = vector_match.search(file_content)
 
         if not vector_match:

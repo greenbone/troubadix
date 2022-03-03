@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterable, Iterator, AnyStr
+from typing import Iterable, Iterator, AnyStr, OrderedDict
 
 from naslinter.plugin import (
     LineContentPlugin,
@@ -87,7 +87,13 @@ class CheckGrammar(LineContentPlugin):
     name = "check_grammar"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks the passed VT / Include for common grammar
         problems
 

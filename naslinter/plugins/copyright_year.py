@@ -18,9 +18,11 @@
 import re
 
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, OrderedDict
 
-from naslinter.plugin import LinterError, LineContentPlugin
+from black import Iterator
+
+from naslinter.plugin import LinterError, LineContentPlugin, LinterResult
 from naslinter.helper import is_ignore_file
 
 _IGNORE_FILES = (
@@ -39,7 +41,13 @@ class CheckCopyrightYear(LineContentPlugin):
     name = "check_copyright_year"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]):
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         report = ""
         copyright_date = ""
         copyright_year = ""

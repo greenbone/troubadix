@@ -20,7 +20,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import (
     LinterError,
@@ -34,7 +34,13 @@ class CheckDeprecatedDependency(FileContentPlugin):
     name = "check_deprecated_dependency"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """No VT should depend on other VTs that are marked as deprecated via:
 
         script_tag(name:"deprecated", value:TRUE);
@@ -45,9 +51,8 @@ class CheckDeprecatedDependency(FileContentPlugin):
 
         root = get_root(nasl_file)
 
-        matches = get_special_tag_pattern(
-            name=SpecialScriptTag.DEPENDENCIES
-        ).finditer(file_content)
+        matches = special_tag_pattern[SpecialScriptTag.DEPENDENCIES.value
+        ].finditer(file_content)
         if not matches:
             return
 

@@ -17,10 +17,10 @@
 
 import re
 
-from typing import Iterable
+from typing import Iterable, Iterator, OrderedDict
 from pathlib import Path
 
-from ..plugin import LineContentPlugin, LinterError
+from ..plugin import LineContentPlugin, LinterError, LinterResult
 from ..helper import is_ignore_file
 
 _IGNORE_FILES = [
@@ -39,7 +39,13 @@ class CheckTodoTbd(LineContentPlugin):
     name = "check_todo_tbd"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]):
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
         for index, line in enumerate(lines, start=1):

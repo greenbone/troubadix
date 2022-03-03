@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, OrderedDict
 
 from naslinter.plugin import (
     LineContentPlugin,
@@ -31,7 +31,13 @@ class CheckNewlines(LineContentPlugin):
     name = "check_wrong_newlines"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script FIXES newline errors:
         - Checking the passed VT for the existence of newlines in
           the script_name() and script_copyright() tags.

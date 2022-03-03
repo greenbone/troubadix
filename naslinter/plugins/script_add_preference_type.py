@@ -20,7 +20,7 @@
 from enum import Enum
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 from naslinter.helper.patterns import SpecialScriptTag, get_special_tag_pattern
 
 from naslinter.plugin import (
@@ -42,7 +42,13 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
     name = "check_script_add_preference_type"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks the passed VT if it is using a
         script_add_preference not matching one of the following
         allowed strings passed to the 'type' function parameter:

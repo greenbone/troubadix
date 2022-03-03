@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import (
     LinterError,
@@ -32,7 +32,13 @@ class CheckUsingDisplay(FileContentPlugin):
     name = "check_using_display"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         display_matches = re.finditer(
             r".*(display\s*\([^)]+\)\s*;)", file_content
         )

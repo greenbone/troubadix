@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.helper import is_ignore_file
 
@@ -35,7 +35,13 @@ class CheckMissingTagSolution(FileContentPlugin):
     name = "check_missing_tag_solution"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if the VT has a solution_type script tag:
         script_tag(name:"solution_type", value:"");
 
@@ -51,22 +57,22 @@ class CheckMissingTagSolution(FileContentPlugin):
         if "solution_type" not in file_content:
             return
         # Avoid unnecessary message against deprecated VTs.
-        deprecated_match = get_tag_pattern(
-            name=ScriptTag.DEPRECATED, value="TRUE"
-        ).search(string=file_content)
+        deprecated_match = tag_pattern[ScriptTag.DEPRECATED.value].search(
+            string=file_content
+        )
 
         if deprecated_match and deprecated_match.group("value"):
             return
 
-        solution_type_match = get_tag_pattern(
-            name=ScriptTag.SOLUTION_TYPE
-        ).search(string=file_content)
+        solution_type_match = tag_pattern[ScriptTag.SOLUTION_TYPE.value].search(
+            string=file_content
+        )
         if not solution_type_match:
             return
 
-        solution_match = get_tag_pattern(
-            name=ScriptTag.SOLUTION, flags=re.MULTILINE | re.DOTALL
-        ).search(string=file_content)
+        solution_match = tag_pattern[ScriptTag.SOLUTION.value].search(
+            string=file_content
+        )
 
         if not solution_match or solution_match.group(0) is None:
             yield LinterError(

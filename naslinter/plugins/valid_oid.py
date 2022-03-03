@@ -19,16 +19,23 @@
 
 from pathlib import Path
 import re
+from typing import Iterator, OrderedDict
 
 from naslinter.helper import get_special_tag_pattern
-from naslinter.plugin import LinterError, FileContentPlugin
+from naslinter.plugin import LinterError, LinterResult, FileContentPlugin
 
 
 class CheckValidOID(FileContentPlugin):
     name = "check_valid_oid"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str):
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """Checks if a NASL script is using a valid script_oid() tag.
 
         Valid:

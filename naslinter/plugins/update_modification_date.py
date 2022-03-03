@@ -20,6 +20,7 @@
 import datetime
 from pathlib import Path
 import re
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -28,7 +29,13 @@ class UpdateModificationDate(FileContentPlugin):
     name = "update_modification_date"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str):
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         # update modification date
         tag_template = 'script_tag(name:"last_modification", value:"{date}");'
         mod_pattern = (

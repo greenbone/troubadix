@@ -23,6 +23,10 @@ from pathlib import Path
 from typing import Iterator, List
 
 from pontos.terminal.terminal import Terminal
+from naslinter.helper.patterns import (
+    SpecialScriptTagPatterns,
+    ScriptTagPatterns,
+)
 
 from naslinter.plugin import (
     FileContentPlugin,
@@ -69,6 +73,8 @@ class Runner:
         self._term = term
         self._n_jobs = n_jobs
         self.debug = debug
+        self.special_tag_pattern = SpecialScriptTagPatterns()
+        self.tag_pattern = ScriptTagPatterns()
 
     def _report_results(self, results: List[LinterMessage]):
         for result in results:
@@ -142,11 +148,23 @@ class Runner:
             if issubclass(plugin, LineContentPlugin):
                 lines = file_content.splitlines()
                 results.add_plugin_results(
-                    plugin.name, plugin.run(file_name, lines)
+                    plugin.name,
+                    plugin.run(
+                        file_name,
+                        lines,
+                        special_tag_pattern=self.special_tag_pattern.pattern,
+                        tag_pattern=self.tag_pattern.pattern,
+                    ),
                 )
             elif issubclass(plugin, FileContentPlugin):
                 results.add_plugin_results(
-                    plugin.name, plugin.run(file_name, file_content)
+                    plugin.name,
+                    plugin.run(
+                        file_name,
+                        file_content,
+                        special_tag_pattern=self.special_tag_pattern.pattern,
+                        tag_pattern=self.tag_pattern.pattern,
+                    ),
                 )
             else:
                 results.add_plugin_results(

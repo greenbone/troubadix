@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -26,7 +26,13 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
     name = "check_misplaced_compare_in_if"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks the passed VT/Include if it is using a misplaced
             compare within an if() call like e.g.:
 

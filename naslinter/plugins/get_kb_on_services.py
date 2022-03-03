@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterResult, FileContentPlugin, LinterError
 
@@ -26,7 +26,13 @@ class CheckGetKBOnServices(FileContentPlugin):
     name = "check_get_kb_on_services"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Checks a given file if it is accessing one or more "Services/" KB keys
         like e.g.

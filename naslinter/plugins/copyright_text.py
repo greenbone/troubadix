@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -31,7 +31,13 @@ class CheckCopyrightText(FileContentPlugin):
     name = "check_copyright_text"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This step checks a VT for the correct use of the copyright text.
 
         Prior to this step, most VTs are using

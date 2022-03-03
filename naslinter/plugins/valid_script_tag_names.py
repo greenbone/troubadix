@@ -17,8 +17,9 @@
 
 from pathlib import Path
 import re
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin
+from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
 class AllScriptTagsPattern:
@@ -74,7 +75,13 @@ class CheckValidScriptTagNames(FileContentPlugin):
     name = "check_valid_script_tag_names"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str):
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Args:
             nasl_file: The VT that is going to be checked

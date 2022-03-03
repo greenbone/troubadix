@@ -19,7 +19,7 @@ import re
 
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 from naslinter.helper import ScriptTag, get_tag_pattern
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
@@ -29,13 +29,19 @@ class CheckCVEFormat(FileContentPlugin):
     name = "check_cve_format"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         if nasl_file.suffix == ".inc":
             return
 
         # don't need to check detection scripts since they don't refer to CVEs.
         # all detection scripts have a cvss of 0.0
-        cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE).search(
+        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
             file_content
         )
         # cvss_detect = re.search(

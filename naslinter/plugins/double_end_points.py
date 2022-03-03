@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 from naslinter.helper.patterns import get_common_tag_patterns
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
@@ -28,7 +28,13 @@ class CheckDoubleEndPoints(FileContentPlugin):
     name = "check_double_end_points"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or more doubled end point
         in a script_tag like e.g.:
 

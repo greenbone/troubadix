@@ -17,10 +17,11 @@
 
 """ checking badwords in NASL scripts with the NASLinter """
 
+import re
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, LineContentPlugin
+from naslinter.plugin import LinterError, LineContentPlugin, LinterResult
 from naslinter.helper import is_ignore_file
 
 # hexstr(OpenVAS) = '4f70656e564153'
@@ -92,7 +93,10 @@ class CheckBadwords(LineContentPlugin):
     def run(
         nasl_file: Path,
         lines: Iterable[str],
-    ):
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
         line_number = 1

@@ -17,7 +17,6 @@
 
 from enum import Enum
 import re
-import threading
 from typing import OrderedDict
 
 # regex patterns for script tags
@@ -66,43 +65,26 @@ def _get_tag_pattern(
     return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
 
 
-# https://medium.com/analytics-vidhya/how-to-create-a-thread-safe-singleton-class-in-python-822e1170a7f6
 class ScriptTagPatterns:
-    _instance = None
-    _lock = threading.Lock()
-
-    @classmethod
-    def __new__(cls):
-        if not cls._instance:
-            with cls._lock:
-                if not cls._instance:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self) -> None:
         self.pattern = OrderedDict()
         print("weeee")
         for tag in ScriptTag:
+            flags = 0
             if tag.value == "deprecated":
-                self.pattern[tag.value] = _get_tag_pattern(
-                    name=tag.value, value=r"TRUE"
-                )
+                value = r"TRUE"
             elif tag.value == "cvss_base_vector":
-                self.pattern[tag.value] = _get_tag_pattern(
-                    name=tag.value,
-                    value=(
-                        r"AV:[LAN]/AC:[HML]/Au:[NSM]/"
-                        r"C:[NPC]/I:[NPC]/A:[NPC]"
-                    ),
-                )
+                value = r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:[NPC]/A:[NPC]"
             elif tag.value == "cvss_base":
-                self.pattern[tag.value] = _get_tag_pattern(
-                    name=tag.value, value=r"(10\.0|[0-9]\.[0-9])"
-                )
+                value = r"(10\.0|[0-9]\.[0-9])"
+            elif tag.value in ["creation_date", "modification_date"]:
+                value = r"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"
             else:
-                self.pattern[tag.value] = _get_tag_pattern(
-                    name=tag.value, flags=re.MULTILINE
-                )
+                value = r".+?"
+                flags = re.MULTILINE | re.DOTALL
+            self.pattern[tag.value] = _get_tag_pattern(
+                name=tag.value, value=value, flags=flags
+            )
 
 
 def get_tag_pattern(
@@ -125,7 +107,7 @@ def get_tag_pattern(
         `re.Pattern` object
     """
     # if not value:
-    # return ScriptTagPatterns().pattern[name.value]
+    #     return ScriptTagPatterns().pattern[name.value]
     if not value:
         if name.value == "deprecated":
             value = r"TRUE"
@@ -174,17 +156,6 @@ def _get_special_tag_pattern(
 
 
 class SpecialScriptTagPatterns:
-    _instance = None
-    _lock = threading.Lock()
-
-    @classmethod
-    def __new__(cls):
-        if not cls._instance:
-            with cls._lock:
-                if not cls._instance:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self) -> None:
         self.pattern = OrderedDict()
         for tag in SpecialScriptTag:

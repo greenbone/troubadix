@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -27,7 +27,13 @@ class CheckScriptCopyright(FileContentPlugin):
     name = "check_script_copyright"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Args:
             nasl_file: The VT that shall be checked

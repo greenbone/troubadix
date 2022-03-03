@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.helper import (
     get_tag_pattern,
@@ -32,7 +32,13 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
     name = "check_prod_svc_detect_in_vulnvt"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if the passed VT if it is doing a vulnerability
         reporting and a product / service detection together in a single VT.
         More specific this step is checking and reporting VTs having a severity

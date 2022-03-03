@@ -17,8 +17,9 @@
 
 from pathlib import Path
 import re
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin
+from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
 class CheckVariableAssignedInIf(FileContentPlugin):
@@ -36,7 +37,13 @@ class CheckVariableAssignedInIf(FileContentPlugin):
     name = "check_variable_assigned_in_if"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> str:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Args:
             file: The VT/Include that is going to be checked

@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -41,7 +41,13 @@ class CheckScriptCategory(FileContentPlugin):
     name = "check_script_category"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         if nasl_file.suffix == ".inc":
             return
 

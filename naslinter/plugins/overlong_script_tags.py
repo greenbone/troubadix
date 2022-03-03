@@ -18,7 +18,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, Iterable
+from typing import Iterator, Iterable, OrderedDict
 
 from naslinter.helper import is_ignore_file
 from ..plugin import LinterError, LineContentPlugin, LinterResult
@@ -47,7 +47,13 @@ class CheckOverlongScriptTags(LineContentPlugin):
     name = "check_overlong_script_tags"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         if is_ignore_file(nasl_file, IGNORE_FILES):
             return
 

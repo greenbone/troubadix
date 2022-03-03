@@ -18,7 +18,7 @@
 import subprocess
 import re
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, OrderedDict
 
 
 from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
@@ -39,7 +39,13 @@ class CheckEncoding(LineContentPlugin):
     name = "check_encoding"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         # Looking for VTs with wrong encoding... (maybe find a better way
         # to do this in future ...)
         encoding = subprocess_cmd(
