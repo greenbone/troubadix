@@ -47,6 +47,7 @@ from .script_version_and_last_modification_tags import (
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .security_messages import CheckSecurityMessages
+from .set_get_kb_calls import CheckWrongSetGetKBCalls
 from .solution_text import CheckSolutionText
 from .solution_type import CheckSolutionType
 from .tabs import CheckTabs
@@ -90,6 +91,7 @@ _NASL_ONLY_PLUGINS = [
     CheckVTPlacement,
     CheckValidOID,
     CheckValidScriptTagNames,
+    CheckWrongSetGetKBCalls,
     UpdateModificationDate,
 ]
 
