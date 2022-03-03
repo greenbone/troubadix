@@ -1,0 +1,51 @@
+# Copyright (C) 2022 Greenbone Networks GmbH
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+from pathlib import Path
+from typing import Iterator
+from naslinter.helper.patterns import (
+    get_special_tag_pattern,
+    get_tag_pattern,
+    get_xref_pattern,
+)
+
+from naslinter.plugin import FileContentPlugin, LinterError
+
+
+class CheckScriptCallsEmptyValues(FileContentPlugin):
+    name = "check_script_calls_empty_values"
+
+    @staticmethod
+    def run(_: Path, file_content: str) -> Iterator[LinterError]:
+        """
+        Checks for empty 'value:""' in script calls. Excepted from this is
+        script_add_preferences().
+        """
+        matches = get_tag_pattern(name=r".*", value=r"").finditer(file_content)
+        for match in matches:
+            yield LinterError(f"{match.group(0)} does not contain a value")
+
+        matches = get_xref_pattern(name=r".*", value=r"").finditer(file_content)
+        for match in matches:
+            yield LinterError(f"{match.group(0)} does not contain a value")
+
+        matches = get_special_tag_pattern(
+            name=r"(?!add_preferences).*", value=""
+        ).finditer(file_content)
+        for match in matches:
+            yield LinterError(f"{match.group(0)} does not contain a value")
