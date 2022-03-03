@@ -61,7 +61,7 @@ class CheckMissingTagSolution(FileContentPlugin):
         solution_type_match = get_tag_pattern(
             name=ScriptTag.SOLUTION_TYPE
         ).search(string=file_content)
-        if not solution_type_match and solution_type_match.group(0):
+        if not solution_type_match:
             return
 
         solution_match = get_tag_pattern(
