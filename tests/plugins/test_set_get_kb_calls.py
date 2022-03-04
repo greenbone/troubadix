@@ -46,18 +46,25 @@ class CheckWrongSetGetKBCallTestCase(unittest.TestCase):
         )
 
         results = list(CheckWrongSetGetKBCalls.run(nasl_file, content))
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT/Include are missing a 'name:' and/or 'value:' parameter:"
-            '\n\tset_kb_item("kbkey", value:"value");'
-            '\n\treplace_kb_item(name:"kbkey", "value");'
-            '\n\treplace_kb_item(name:"kbkey");',
+            "The VT/Include are missing a 'name:' and/or 'value:' parameter: "
+            'set_kb_item("kbkey", value:"value");',
             results[0].message,
         )
         self.assertEqual(
-            "The VT/Include are using a non-existent 'name:' and/or "
-            "'value:' parameter:"
-            '\n\tget_kb_item(name:"kbkey");',
+            "The VT/Include are missing a 'name:' and/or 'value:' parameter: "
+            'replace_kb_item(name:"kbkey", "value");',
             results[1].message,
+        )
+        self.assertEqual(
+            "The VT/Include are missing a 'name:' and/or 'value:' parameter: "
+            'replace_kb_item(name:"kbkey");',
+            results[2].message,
+        )
+        self.assertEqual(
+            "The VT/Include are using a non-existent 'name:' and/or "
+            "'value:' parameter: get_kb_item(name:\"kbkey\");",
+            results[3].message,
         )

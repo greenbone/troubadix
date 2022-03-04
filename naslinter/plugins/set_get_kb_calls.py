@@ -51,8 +51,6 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
 
         """
 
-        found_wrong_set_calls = ""
-        found_wrong_get_calls = ""
         param_re = re.compile(r"(name|value) ?:")
 
         set_matches = re.finditer(
@@ -65,7 +63,10 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
                 if set_match is not None and set_match.group(2) is not None:
                     set_param_match = re.findall(param_re, set_match.group(2))
                     if not set_param_match or len(set_param_match) != 2:
-                        found_wrong_set_calls += "\n\t" + set_match.group(0)
+                        yield LinterError(
+                            "The VT/Include are missing a 'name:' and/or "
+                            f"'value:' parameter: {set_match.group(0)}"
+                        )
 
         get_matches = re.finditer(
             r"get_kb_(item|list)\s*\(([^)]+)\)\s*;", file_content, re.MULTILINE
@@ -75,17 +76,7 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
                 if get_match is not None and get_match.group(2) is not None:
                     get_param_match = re.findall(param_re, get_match.group(2))
                     if get_param_match and len(get_param_match) > 0:
-                        found_wrong_get_calls += "\n\t" + get_match.group(0)
-
-        if len(found_wrong_set_calls) > 0:
-            yield LinterError(
-                "The VT/Include are missing a 'name:' and/or "
-                f"'value:' parameter:{found_wrong_set_calls}"
-            )
-
-        if len(found_wrong_get_calls) > 0:
-            if len(found_wrong_set_calls) > 0:
-                yield LinterError(
-                    "The VT/Include are using a non-existent 'name:' "
-                    f"and/or 'value:' parameter:{found_wrong_get_calls}"
-                )
+                        yield LinterError(
+                            "The VT/Include are using a non-existent 'name:' "
+                            f"and/or 'value:' parameter: {get_match.group(0)}"
+                        )
