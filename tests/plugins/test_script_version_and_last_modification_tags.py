@@ -73,6 +73,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
         )
         self.assertEqual(
             f"VT '{str(nasl_file)}' is missing script_tag("
-            f'name:"last_modification" or is using a wrong syntax.\n',
+            'name:"last_modification" or is using a wrong syntax.\n',
             results[1].message,
         )
