@@ -20,7 +20,8 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from naslinter.helper import get_root
+from naslinter.helper import get_root, get_special_tag_pattern
+from naslinter.helper.patterns import get_tag_pattern
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -48,20 +49,17 @@ class CheckVTPlacement(FileContentPlugin):
         """
         root = get_root(nasl_file)
 
-        match = re.search(
-            r'^\s*script_family\s*\(\s*"(Product|Service) detection"\s*\)\s*;',
-            file_content,
-            re.MULTILINE,
-        )
+        match = get_special_tag_pattern(
+            name="family",
+            value=r"(Product|Service) detection",
+            flags=re.MULTILINE,
+        ).search(file_content)
         if match is None:
             return
 
-        match = re.search(
-            r'^\s*script_tag\s*\(\s*name\s*:\s*[\'"]deprecated[\'"]'
-            r"\s*,\s*value\s*:\s*TRUE\s*\)\s*;",
-            file_content,
-            re.MULTILINE,
-        )
+        match = get_tag_pattern(
+            name="deprecated", value="TRUE", flags=re.MULTILINE
+        ).search(file_content)
         if match is not None:
             return
 
@@ -75,5 +73,6 @@ class CheckVTPlacement(FileContentPlugin):
             return
 
         yield LinterError(
-            f"VT '{str(nasl_file)}' should be placed in the root directory.",
+            f"VT '{str(nasl_file)}' should be placed "
+            f"in the root directory ({root}).",
         )

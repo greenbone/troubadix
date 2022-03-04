@@ -41,6 +41,9 @@ from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
+from .script_version_and_last_modification_tags import (
+    CheckScriptVersionAndLastModificationTags,
+)
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .security_messages import CheckSecurityMessages
@@ -78,6 +81,7 @@ _NASL_ONLY_PLUGINS = [
     CheckScriptCategory,
     CheckScriptCopyright,
     CheckSecurityMessages,
+    CheckScriptVersionAndLastModificationTags,
     CheckSolutionType,
     CheckTodoTbd,
     CheckUsingDisplay,

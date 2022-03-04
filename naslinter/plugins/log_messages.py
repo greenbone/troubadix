@@ -41,6 +41,18 @@ class CheckLogMessages(FileContentPlugin):
             file_content: The content of the VT
 
         """
+
+        log_match = re.search(
+            r"log_message\s*\([\s\n]*\)\s*(;|;\s*(\n|#))",
+            file_content,
+            re.MULTILINE,
+        )
+        if log_match:
+            yield LinterError(
+                f"VT '{str(nasl_file)}' is using an empty log_message() "
+                "function"
+            )
+
         # Policy VTs might use both, security_message and log_message
         if "Policy/" in str(nasl_file):
             return
@@ -58,9 +70,10 @@ class CheckLogMessages(FileContentPlugin):
         # log_match = re.search(r'.*(log_message[\s]*\([^)]+\)[\s]*;)',
         #                       file_content, re.MULTILINE)
         log_match = re.search(
-            r"log_message\s*\(.+\)\s*;",
+            r"log_message\s*\([\w:#\.&\-!,<>\[\]("
+            r")\s\"+\'/\\\n]+\)\s*(;|;\s*(\n|#))",
             file_content,
-            re.MULTILINE | re.DOTALL,
+            re.MULTILINE,
         )
         if log_match:
             yield LinterError(
