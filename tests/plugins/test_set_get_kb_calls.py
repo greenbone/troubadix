@@ -49,22 +49,22 @@ class CheckWrongSetGetKBCallTestCase(unittest.TestCase):
         self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT/Include are missing a 'name:' and/or 'value:' parameter: "
+            "The VT/Include is missing a 'name:' and/or 'value:' parameter: "
             'set_kb_item("kbkey", value:"value");',
             results[0].message,
         )
         self.assertEqual(
-            "The VT/Include are missing a 'name:' and/or 'value:' parameter: "
+            "The VT/Include is missing a 'name:' and/or 'value:' parameter: "
             'replace_kb_item(name:"kbkey", "value");',
             results[1].message,
         )
         self.assertEqual(
-            "The VT/Include are missing a 'name:' and/or 'value:' parameter: "
+            "The VT/Include is missing a 'name:' and/or 'value:' parameter: "
             'replace_kb_item(name:"kbkey");',
             results[2].message,
         )
         self.assertEqual(
-            "The VT/Include are using a non-existent 'name:' and/or "
+            "The VT/Include is using a non-existent 'name:' and/or "
             "'value:' parameter: get_kb_item(name:\"kbkey\");",
             results[3].message,
         )

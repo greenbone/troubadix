@@ -64,7 +64,7 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
                     set_param_match = re.findall(param_re, set_match.group(2))
                     if not set_param_match or len(set_param_match) != 2:
                         yield LinterError(
-                            "The VT/Include are missing a 'name:' and/or "
+                            "The VT/Include is missing a 'name:' and/or "
                             f"'value:' parameter: {set_match.group(0)}"
                         )
 
@@ -77,6 +77,6 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
                     get_param_match = re.findall(param_re, get_match.group(2))
                     if get_param_match and len(get_param_match) > 0:
                         yield LinterError(
-                            "The VT/Include are using a non-existent 'name:' "
+                            "The VT/Include is using a non-existent 'name:' "
                             f"and/or 'value:' parameter: {get_match.group(0)}"
                         )
