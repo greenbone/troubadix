@@ -183,7 +183,7 @@ class CheckValidOID(FileContentPlugin):
                 elif vendor_number == "4":
                     if family != f"SuSE {family_template}":
                         yield LinterError(
-                            f"script_oid() {is_using_reserved} SUSE VTs "
+                            f"script_oid() {is_using_reserved} SuSE VTs "
                             f"'{str(oid)}'"
                         )
                         return
