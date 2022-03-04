@@ -53,7 +53,7 @@ class CheckSecurityMessages(FileContentPlugin):
             name="cvss_base", value=r'"(?P<score>\d{1,2}\.\d)"'
         ).search(file_content)
 
-        if cvss_detect is not None and cvss_detect.group("score") != "0.0":
+        if cvss_detect and cvss_detect.group("score") != "0.0":
             return
 
         sec_match = re.search(
