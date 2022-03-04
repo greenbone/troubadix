@@ -58,7 +58,7 @@ class CheckSolutionTextTestCase(unittest.TestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "The VT with solution type 'NoneAvailable' is using an "
-            "incorrect syntax in the solution text. Please use (EXACTLY):\n\n"
+            "incorrect syntax in the solution text. Please use (EXACTLY):\n"
             '  script_tag(name:"solution", value:"No known solution is '
             "available as of dd(st|nd|rd|th) mmmmmmmm, yyyy.\n  Information "
             "regarding this issue will be updated once solution details "
@@ -76,7 +76,7 @@ class CheckSolutionTextTestCase(unittest.TestCase):
         self.assertEqual(
             "The VT with solution type 'WillNotFix' is using an incorrect "
             "syntax in the solution text. Please use one of these (EXACTLY):"
-            '\n\n  script_tag(name:"solution", value:"No known solution was '
+            '\n  script_tag(name:"solution", value:"No known solution was '
             "made available for at least one year\n  since the disclosure of "
             "this vulnerability. Likely none will be provided anymore. "
             "General solution\n  options are to upgrade to a newer release, "

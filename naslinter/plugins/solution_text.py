@@ -82,25 +82,16 @@ class CheckSolutionText(FileContentPlugin):
             "vulnerability. Likely none will be provided anymore. General "
             "solution\n  options are to upgrade to a newer release, disable "
             "respective features, remove the product or\n  replace the "
-            'product by another one.");'
-        )
-        correct_will_not_fix_syntax += "\n\n"
-        correct_will_not_fix_syntax += (
+            'product by another one.");\n\n'
             '  script_tag(name:"solution", '
             'value:"No solution was made '
             "available by the vendor. General solution\n  options are to "
             "upgrade to a newer release, disable respective features, remove "
-            'the product or\n  replace the product by another one.");'
-        )
-        correct_will_not_fix_syntax += "\n\n"
-        correct_will_not_fix_syntax += (
+            'the product or\n  replace the product by another one.");\n\n'
             '  script_tag(name:"solution", '
             'value:"No solution was made '
             "available by the vendor.\n\n  Note: "
-            '<add a specific note for the reason here>.");'
-        )
-        correct_will_not_fix_syntax += "\n\n"
-        correct_will_not_fix_syntax += (
+            '<add a specific note for the reason here>.");\n\n'
             '  script_tag(name:"solution", '
             'value:"No solution is required.\n\n  Note: <add a specific note '
             'for the reason here, e.g. CVE was disputed>.");'
@@ -112,7 +103,7 @@ class CheckSolutionText(FileContentPlugin):
             yield LinterError(
                 "The VT with solution type 'NoneAvailable' is using an "
                 "incorrect syntax in the solution text. Please use "
-                "(EXACTLY):\n\n" + correct_none_available_syntax,
+                f"(EXACTLY):\n{correct_none_available_syntax}",
             )
         elif get_tag_pattern(name="solution_type", value="WillNotFix").search(
             file_content
@@ -120,5 +111,5 @@ class CheckSolutionText(FileContentPlugin):
             yield LinterError(
                 "The VT with solution type 'WillNotFix' is using an incorrect "
                 "syntax in the solution text. Please use one of these "
-                "(EXACTLY):\n\n" + correct_will_not_fix_syntax,
+                f"(EXACTLY):\n{correct_will_not_fix_syntax}",
             )
