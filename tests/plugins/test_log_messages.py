@@ -85,3 +85,49 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "severity",
             results[0].message,
         )
+
+    def test_nok3(self):
+        nasl_file = Path(__file__).parent / "test2.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            "log_message(  );"
+        )
+
+        results = list(CheckLogMessages.run(nasl_file, content))
+        self.assertEqual(len(results), 2)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"VT '{str(nasl_file)}' is using an empty log_message() function",
+            results[0].message,
+        )
+        self.assertEqual(
+            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
+            "severity",
+            results[1].message,
+        )
+
+    def test_nok4(self):
+        nasl_file = Path(__file__).parent / "test2.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            "log_message(\t);\n"
+        )
+
+        results = list(CheckLogMessages.run(nasl_file, content))
+        self.assertEqual(len(results), 2)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"VT '{str(nasl_file)}' is using an empty log_message() function",
+            results[0].message,
+        )
+        self.assertEqual(
+            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
+            "severity",
+            results[1].message,
+        )
