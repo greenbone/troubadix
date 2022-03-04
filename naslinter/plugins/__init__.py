@@ -47,6 +47,7 @@ from .script_version_and_last_modification_tags import (
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .security_messages import CheckSecurityMessages
+from .solution_text import CheckSolutionText
 from .solution_type import CheckSolutionType
 from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
@@ -80,8 +81,9 @@ _NASL_ONLY_PLUGINS = [
     CheckProdSvcDetectInVulnvt,
     CheckScriptCategory,
     CheckScriptCopyright,
-    CheckSecurityMessages,
     CheckScriptVersionAndLastModificationTags,
+    CheckSecurityMessages,
+    CheckSolutionText,
     CheckSolutionType,
     CheckTodoTbd,
     CheckUsingDisplay,
