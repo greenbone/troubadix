@@ -52,6 +52,8 @@ class CheckMissingDescExit(FileContentPlugin):
             file_content: The content of the file that is going to be checked
 
         """
+        del tag_pattern, special_tag_pattern
+
         if nasl_file.suffix == ".inc":
             return
 

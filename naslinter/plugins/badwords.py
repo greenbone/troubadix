@@ -97,6 +97,7 @@ class CheckBadwords(LineContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
 

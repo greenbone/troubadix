@@ -21,8 +21,6 @@ from typing import Iterator, OrderedDict
 from naslinter.helper import (
     ScriptTag,
     SpecialScriptTag,
-    get_special_tag_pattern,
-    get_tag_pattern,
 )
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -65,16 +63,17 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the VT
         """
+        del special_tag_pattern
 
         # Don't need to check VTs having a cvss of 0.0
-        cvss_detect = get_tag_pattern(name=ScriptTag.CVSS_BASE).search(
+        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
             file_content
         )
 
         if cvss_detect is not None and cvss_detect.group("value") == "0.0":
             return
 
-        match_family = get_special_tag_pattern(
+        match_family = special_tag_pattern(
             name=SpecialScriptTag.FAMILY,
             value=r"(Product|Service) detection",
         ).search(file_content)

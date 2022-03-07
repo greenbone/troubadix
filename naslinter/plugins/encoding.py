@@ -47,6 +47,7 @@ class CheckEncoding(LineContentPlugin):
     ) -> Iterator[LinterResult]:
         # Looking for VTs with wrong encoding... (maybe find a better way
         # to do this in future ...)
+        del tag_pattern, special_tag_pattern
         encoding = subprocess_cmd(
             f"LC_ALL=C file {nasl_file} | grep 'UTF-8'"
         ).decode("latin-1")

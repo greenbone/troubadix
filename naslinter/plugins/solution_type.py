@@ -48,6 +48,7 @@ class CheckSolutionType(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         has_severity = True
         cvss_detect = re.search(
             r"script_tag\s*\(name\s*:\s*\"cvss_base\","

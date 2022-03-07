@@ -21,7 +21,7 @@ import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.helper import SpecialScriptTag, get_root, get_special_tag_pattern
+from naslinter.helper import SpecialScriptTag, get_root
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -41,6 +41,7 @@ class CheckDeprecatedDependency(FileContentPlugin):
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
         """
+        del tag_pattern
         if not "script_dependencies(" in file_content:
             return
 

@@ -50,6 +50,7 @@ class CheckDeprecatedFunctions(FileContentPlugin):
         Args:
             nasl_file: Name of the VT to be checked
         """
+        del tag_pattern, special_tag_pattern
         deprecated_functions = {
             "script_summary(), use script_tag"
             '(name:"summary", value:"") instead': r"script_summary\s*\([^)]*\)",

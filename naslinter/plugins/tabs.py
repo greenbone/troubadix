@@ -37,6 +37,7 @@ class CheckTabs(FileContentPlugin):
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or
         more tabs instead of spaces."""
+        del tag_pattern, special_tag_pattern
 
         if "\t" in file_content:
             file_content = file_content.replace("\t", " " * TAB_TO_SPACES)

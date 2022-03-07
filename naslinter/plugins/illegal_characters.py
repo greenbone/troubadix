@@ -68,6 +68,7 @@ class CheckIllegalCharacters(FileContentPlugin):
         Currently the following chars are not allowed in
         every script_tag(name:"", value:"") :
         """
+        del tag_pattern, special_tag_pattern
 
         changes: bool = False
         pattern = get_common_tag_patterns()

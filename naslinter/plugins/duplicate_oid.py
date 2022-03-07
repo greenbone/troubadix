@@ -48,6 +48,7 @@ class CheckDuplicateOID(FileContentPlugin):
             file_content: The content of the file
 
         """
+        del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

@@ -22,8 +22,7 @@ from enum import IntEnum
 from pathlib import Path
 from typing import Iterator, OrderedDict, Union
 
-from naslinter.helper import SpecialScriptTag, get_root, get_special_tag_pattern
-from naslinter.helper.patterns import SpecialScriptTagPatterns
+from naslinter.helper import SpecialScriptTag, get_root
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -87,6 +86,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         In addition it is not allowed for VTs to have a direct dependency
         to VTs from within the ACT_SCANNER category.
         """
+        del tag_pattern
         if not "script_dependencies(" in file_content:
             return
 

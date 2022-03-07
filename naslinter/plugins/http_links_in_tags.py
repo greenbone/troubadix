@@ -23,7 +23,6 @@ from typing import AnyStr, Iterator, OrderedDict
 from naslinter.helper import (
     SpecialScriptTag,
     get_common_tag_patterns,
-    get_special_tag_pattern,
 )
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -39,8 +38,11 @@ class CheckHttpLinksInTags(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del tag_pattern
         return chain(
-            CheckHttpLinksInTags.contains_nvd_mitre_link_in_xref(file_content),
+            CheckHttpLinksInTags.contains_nvd_mitre_link_in_xref(
+                file_content, special_tag_pattern
+            ),
             CheckHttpLinksInTags.contains_http_link_in_tag(file_content),
         )
 
@@ -87,6 +89,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
     @staticmethod
     def contains_nvd_mitre_link_in_xref(
         file_content: str,
+        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Checks a given file if the script_xref(name:"URL", value:""); contains
@@ -105,10 +108,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 checked
         """
 
-        pattern = get_special_tag_pattern(
-            name=SpecialScriptTag.XREF,
-            value=r'name\s*:\s*"URL"\s*,\s*value\s*:\s*"([^"]+)"',
-        )
+        pattern = special_tag_pattern[SpecialScriptTag.XREF.value]
         tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
         for match in tag_matches:

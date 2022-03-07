@@ -49,6 +49,7 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
             nasl_file: The VT/Include that is going to be checked
             file_content: The content of the VT
         """
+        del tag_pattern, special_tag_pattern
 
         # pylint: disable=W0511
         # TODO: Find a better way to parse if calls as this would miss

@@ -39,6 +39,7 @@ class CheckNewlines(LineContentPlugin):
         - Removes wrong newline indicators (\r or \r\n).
         - Removes whitespaces in script_name( "myname") or script_copyright
         """
+        del tag_pattern, special_tag_pattern
 
         # This "hack" guarantees, that we only have "\n" as newlines
         # since we

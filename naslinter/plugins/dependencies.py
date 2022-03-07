@@ -21,7 +21,7 @@ import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.helper import SpecialScriptTag, get_root, get_special_tag_pattern
+from naslinter.helper import SpecialScriptTag, get_root
 from naslinter.plugin import (
     FileContentPlugin,
     LinterError,
@@ -45,6 +45,7 @@ class CheckDependencies(FileContentPlugin):
         exist on the local filesystem.
         An error will be thrown if a dependency could not be found.
         """
+        del tag_pattern
 
         # if not "script_dependencies(" in file_content:
         #     return

@@ -158,9 +158,16 @@ class SpecialScriptTagPatterns:
     def __init__(self) -> None:
         self.pattern = OrderedDict()
         for tag in SpecialScriptTag:
-            self.pattern[tag.value] = _get_special_tag_pattern(
-                name=tag.value, flags=re.MULTILINE
-            )
+            if tag.value == "xref":
+                self.pattern[tag.value] = re.compile(
+                    _XREF_TAG_PATTERN.format(
+                        name=tag.value, value=r".+?", type="URL"
+                    ),
+                )
+            else:
+                self.pattern[tag.value] = _get_special_tag_pattern(
+                    name=tag.value, flags=re.MULTILINE
+                )
 
 
 def get_special_tag_pattern(

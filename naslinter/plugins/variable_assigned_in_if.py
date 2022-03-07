@@ -60,6 +60,8 @@ class CheckVariableAssignedInIf(FileContentPlugin):
         #
         # if((foo =~ "bar || bar =~ "foo") || foobar = "foo")
         #   bar = "foo"; (no ending {)
+        del tag_pattern, special_tag_pattern
+
         matches = re.finditer(
             r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE
         )

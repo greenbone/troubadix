@@ -20,7 +20,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.helper import ScriptTag, get_tag_pattern
+from naslinter.helper import ScriptTag
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -35,6 +35,7 @@ class CheckCVEFormat(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

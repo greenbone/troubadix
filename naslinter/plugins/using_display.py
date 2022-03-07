@@ -38,6 +38,8 @@ class CheckUsingDisplay(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
+
         display_matches = re.finditer(
             r".*(display\s*\([^)]+\)\s*;)", file_content
         )

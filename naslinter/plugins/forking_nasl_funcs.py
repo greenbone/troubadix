@@ -77,6 +77,7 @@ class CheckForkingNaslFuncs(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the file that is going to be checked
         """
+        del tag_pattern, special_tag_pattern
 
         # Those two are only calling http_get_port() if get_app_port() was
         # "empty".

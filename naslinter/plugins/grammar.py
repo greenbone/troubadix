@@ -22,60 +22,50 @@ from typing import AnyStr, Iterable, Iterator, OrderedDict
 from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 
-class GrammerPattern:
-    instance = False
-
-    def __init__(self) -> None:
-        self.pattern = re.compile(
-            r"refer\s+(the\s+)?Reference|"
-            r"\s+an?\s+(multiple|errors)|"
-            r"the\s+(References?\s+link|multiple\s+flaw)|"
-            r"multiple\s+(unknown\s+)?("
-            r"vulnerability|flaw|error|problem|issue|feature)\s+|"
-            r"\s+(with\s+with|and\s+and|this\s+this|for\s+for|as\s+as|a\s+a"
-            r"|of\s+of|to\s+to|an\s+an|the\s+the|is\s+is|in\s+in|are\s+are|have"
-            r"\s+have|has\s+has|that\s+that)\s+|"
-            r"vulnerabilit(y|ies)\s+vulnerabilit(y|ies)|"
-            r"links\s+mentioned\s+in(\s+the)?\s+reference|"
-            r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
-            r"this\s+vulnerabilities|"
-            r"these\s+vulnerability|"
-            r"\s+or\s+not\.?(\"\);)?$|"
-            r"from(\s+the)?(\s+below)?mentioned\s+References?\s+link|"
-            r"software\s+it\s+fail|"
-            r"references\s+(advisor|link)|"
-            r"The\s+multiple\s+(vulnerabilit|flaw|error|problem|issue|feature)|"
-            r"(vulnerability|flaw|error|problem|issue|feature)\s+exist\s+|"
-            r"(vulnerabilitie|flaw|error|problem|issue|feature)s\s+exists|"
-            r"multiple\s+[^\s]+((and\s+)?[^\s]+)?\s+("
-            r"vulnerability|flaw|error|problem|issue|feature)\s+|"
-            r"(\s+|^|\"|- )A\s+[^\s]*((and\s+)?[^\s]+\s+)?("
-            r"vulnerabilitie|flaw|error|problem|issue)s|"
-            r"(\s+|^|\"|- )An?\+(unspecified|multiple|unknown)\s+("
-            r"vulnerabilitie|flaw|error|problem|issue)s|"
-            r"is\s+(prone|vulnerable|affected)\s+(to|by)\s+("
-            r"unspecified|XML\s+External\s+Entity|integer\s+(und|ov)erflow|"
-            r"DLL\s+hijacking|(hardcoded?|default)\s+credentials?|open[\s-]+"
-            r"redirect(ion)?|user\s+enumeration|arbitrary\s+file\s+read|memory"
-            r"\s+corruption|use[\s-]+after[\s-]+free|man[\s-]+in[\s-]+the[\s-]"
-            r"+middle(\s+attack)?|cross[\s-]+site[\s-]+(scripting(\s+\(XSS\))?"
-            r"|request[\s-]+forgery(\s+\(CSRF\))?)|denial[\s-]+of[\s-]+service"
-            r"|information\s+disclosure|(path|directory)\s+traversal|"
-            r"(arbitrary\s+|remote\s+)?((code|command)\s+(execution|injection)"
-            r"|file\s+inclusion)|SQL\s+injection|security|(local )?privilege"
-            r"[\s-]+(escalation|elevation)|(authentication|security|access)"
-            r"\s+bypass|(buffer|heap)\s+overflow)\s+vulnerability|"
-            # e.g. "is prone to a security bypass vulnerabilities"
-            r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities",
-            re.IGNORECASE,
-        )
-        self.instance = self
-
-
 def get_grammer_pattern() -> re.Pattern:
-    if GrammerPattern.instance:
-        return GrammerPattern.instance.pattern
-    return GrammerPattern().pattern
+    return re.compile(
+        r"refer\s+(the\s+)?Reference|"
+        r"\s+an?\s+(multiple|errors)|"
+        r"the\s+(References?\s+link|multiple\s+flaw)|"
+        r"multiple\s+(unknown\s+)?("
+        r"vulnerability|flaw|error|problem|issue|feature)\s+|"
+        r"\s+(with\s+with|and\s+and|this\s+this|for\s+for|as\s+as|a\s+a"
+        r"|of\s+of|to\s+to|an\s+an|the\s+the|is\s+is|in\s+in|are\s+are|have"
+        r"\s+have|has\s+has|that\s+that)\s+|"
+        r"vulnerabilit(y|ies)\s+vulnerabilit(y|ies)|"
+        r"links\s+mentioned\s+in(\s+the)?\s+reference|"
+        r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
+        r"this\s+vulnerabilities|"
+        r"these\s+vulnerability|"
+        r"\s+or\s+not\.?(\"\);)?$|"
+        r"from(\s+the)?(\s+below)?mentioned\s+References?\s+link|"
+        r"software\s+it\s+fail|"
+        r"references\s+(advisor|link)|"
+        r"The\s+multiple\s+(vulnerabilit|flaw|error|problem|issue|feature)|"
+        r"(vulnerability|flaw|error|problem|issue|feature)\s+exist\s+|"
+        r"(vulnerabilitie|flaw|error|problem|issue|feature)s\s+exists|"
+        r"multiple\s+[^\s]+((and\s+)?[^\s]+)?\s+("
+        r"vulnerability|flaw|error|problem|issue|feature)\s+|"
+        r"(\s+|^|\"|- )A\s+[^\s]*((and\s+)?[^\s]+\s+)?("
+        r"vulnerabilitie|flaw|error|problem|issue)s|"
+        r"(\s+|^|\"|- )An?\+(unspecified|multiple|unknown)\s+("
+        r"vulnerabilitie|flaw|error|problem|issue)s|"
+        r"is\s+(prone|vulnerable|affected)\s+(to|by)\s+("
+        r"unspecified|XML\s+External\s+Entity|integer\s+(und|ov)erflow|"
+        r"DLL\s+hijacking|(hardcoded?|default)\s+credentials?|open[\s-]+"
+        r"redirect(ion)?|user\s+enumeration|arbitrary\s+file\s+read|memory"
+        r"\s+corruption|use[\s-]+after[\s-]+free|man[\s-]+in[\s-]+the[\s-]"
+        r"+middle(\s+attack)?|cross[\s-]+site[\s-]+(scripting(\s+\(XSS\))?"
+        r"|request[\s-]+forgery(\s+\(CSRF\))?)|denial[\s-]+of[\s-]+service"
+        r"|information\s+disclosure|(path|directory)\s+traversal|"
+        r"(arbitrary\s+|remote\s+)?((code|command)\s+(execution|injection)"
+        r"|file\s+inclusion)|SQL\s+injection|security|(local )?privilege"
+        r"[\s-]+(escalation|elevation)|(authentication|security|access)"
+        r"\s+bypass|(buffer|heap)\s+overflow)\s+vulnerability|"
+        # e.g. "is prone to a security bypass vulnerabilities"
+        r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities",
+        re.IGNORECASE,
+    )
 
 
 class CheckGrammar(LineContentPlugin):
@@ -97,6 +87,7 @@ class CheckGrammar(LineContentPlugin):
             file_content: The content of the file that is going to be
                           checked
         """
+        del tag_pattern, special_tag_pattern
 
         pattern = get_grammer_pattern()
 

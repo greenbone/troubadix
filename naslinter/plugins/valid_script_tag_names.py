@@ -86,6 +86,8 @@ class CheckValidScriptTagNames(FileContentPlugin):
         Args:
             nasl_file: The VT that is going to be checked
         """
+        del tag_pattern, special_tag_pattern
+
         if nasl_file.suffix == ".inc":
             return
 

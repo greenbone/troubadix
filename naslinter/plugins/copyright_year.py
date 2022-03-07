@@ -47,6 +47,7 @@ class CheckCopyrightYear(LineContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         report = ""
         copyright_date = ""
         copyright_year = ""

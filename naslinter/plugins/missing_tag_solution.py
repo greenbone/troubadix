@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Iterator, OrderedDict
 
 from naslinter.helper import is_ignore_file
-from naslinter.helper.patterns import ScriptTag, get_tag_pattern
+from naslinter.helper.patterns import ScriptTag
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 # We don't want to touch the metadata of this older VTs...
@@ -49,6 +49,8 @@ class CheckMissingTagSolution(FileContentPlugin):
         This excludes files from the (sub)dir "nmap_nse/" and deprecated
         vts.
         """
+        del tag_pattern, special_tag_pattern
+
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
         # Not all VTs have/require a solution_type text

@@ -37,6 +37,8 @@ class UpdateModificationDate(FileContentPlugin):
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         # update modification date
+        del tag_pattern, special_tag_pattern
+
         tag_template = 'script_tag(name:"last_modification", value:"{date}");'
         mod_pattern = (
             r"script_tag\(name:\"last_modification\", value:\"(.*)\"\);"

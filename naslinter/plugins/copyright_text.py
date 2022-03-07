@@ -71,6 +71,7 @@ class CheckCopyrightText(FileContentPlugin):
         # Some text descriptions might be excerpted from (a) referenced
         # source(s), and are Copyright (C) by the respective right holder(s).
         """
+        del tag_pattern, special_tag_pattern
 
         if not re.search(
             r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content

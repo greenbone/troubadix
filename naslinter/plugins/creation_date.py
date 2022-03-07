@@ -18,7 +18,7 @@
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable, Iterator, OrderedDict
+from typing import Iterator, OrderedDict
 
 from naslinter.helper.patterns import ScriptTag
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
@@ -37,11 +37,12 @@ class CheckCreationDate(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 
         if not "creation_date" in file_content:
-            yield LinterError(f"No creation date has been found.")
+            yield LinterError("No creation date has been found.")
             return
 
         # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
@@ -59,7 +60,7 @@ class CheckCreationDate(FileContentPlugin):
                 week_day_parsed = date_right.strftime("%a")
             except ValueError:
                 yield LinterError(
-                    f"False or incorrectly formatted creation_date."
+                    "False or incorrectly formatted creation_date."
                 )
                 return
             week_day_str = match.group("value")[27:30]
@@ -76,5 +77,5 @@ class CheckCreationDate(FileContentPlugin):
                     f"' to '{formatted_date}'."
                 )
         else:
-            yield LinterError(f"False or incorrectly formatted creation_date.")
+            yield LinterError("False or incorrectly formatted creation_date.")
             return

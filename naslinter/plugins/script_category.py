@@ -47,6 +47,7 @@ class CheckScriptCategory(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

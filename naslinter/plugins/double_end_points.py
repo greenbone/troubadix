@@ -44,6 +44,7 @@ class CheckDoubleEndPoints(FileContentPlugin):
             script_tag(name:"insight", value:"My insight.
             .");
         """
+        del tag_pattern, special_tag_pattern
 
         tag_matches = get_common_tag_patterns().finditer(file_content)
 

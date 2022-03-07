@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Iterator, OrderedDict
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
-
+from naslinter.helper import get_special_tag_pattern
 
 class CheckValidOID(FileContentPlugin):
     name = "check_valid_oid"
@@ -55,6 +55,10 @@ class CheckValidOID(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
+        del tag_pattern, special_tag_pattern
+
+        if nasl_file.suffix == ".inc":
+            return
         security_template = "Security Advisory"
         family_template = "Local Security Checks"
         is_using_reserved = "is using an OID that is reserved for"
