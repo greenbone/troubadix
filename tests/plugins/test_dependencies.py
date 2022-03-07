@@ -17,11 +17,11 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
-from naslinter.plugin import LinterError
 from naslinter.helper.helper import _ROOT
+from naslinter.plugin import LinterError
 from naslinter.plugins.dependencies import CheckDependencies
+
+from . import PluginTestCase
 
 here = Path.cwd()
 

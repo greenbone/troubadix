@@ -15,17 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
 from naslinter.helper import (
-    get_tag_pattern,
-    get_special_tag_pattern,
     ScriptTag,
     SpecialScriptTag,
+    get_special_tag_pattern,
+    get_tag_pattern,
 )
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckProdSvcDetectInVulnvt(FileContentPlugin):

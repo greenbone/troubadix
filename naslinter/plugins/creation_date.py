@@ -16,13 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable, Iterator, OrderedDict
 
 from naslinter.helper.patterns import ScriptTag
-
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 LENGTH = 44

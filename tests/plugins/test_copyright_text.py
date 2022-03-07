@@ -17,14 +17,13 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.copyright_text import (
-    CheckCopyrightText,
     CORRECT_COPYRIGHT_PHRASE,
+    CheckCopyrightText,
 )
 
+from . import PluginTestCase
 
 WRONG_TEXTS = [
     "# Text descriptions are largely excerpted from the referenced\n"

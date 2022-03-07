@@ -17,12 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
-from naslinter.plugins.encoding import (
-    CheckEncoding,
-)
+from naslinter.plugins.encoding import CheckEncoding
+
+from . import PluginTestCase
 
 
 class CheckEncodingTestCase(PluginTestCase):

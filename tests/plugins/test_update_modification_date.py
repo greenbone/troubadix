@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from . import PluginTestCase
-
 from pathlib import Path
+
 from naslinter.plugin import LinterError, LinterResult
 from naslinter.plugins.update_modification_date import UpdateModificationDate
+
+from . import PluginTestCase
 
 
 class TestUpdateModificationDate(PluginTestCase):

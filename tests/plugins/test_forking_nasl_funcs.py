@@ -18,10 +18,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
+
+from . import PluginTestCase
 
 
 class CheckForkingNaslFuncsTestCase(PluginTestCase):

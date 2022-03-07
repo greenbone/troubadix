@@ -17,12 +17,11 @@
 
 """ checking badwords in NASL scripts with the NASLinter """
 
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.helper import get_special_tag_pattern
-from naslinter.plugin import LinterError, LinterResult, FileContentPlugin
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckValidOID(FileContentPlugin):

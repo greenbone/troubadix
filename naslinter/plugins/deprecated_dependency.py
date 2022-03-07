@@ -18,16 +18,11 @@
 # pylint: disable=fixme
 
 import re
-
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LinterError,
-    FileContentPlugin,
-    LinterResult,
-)
-from naslinter.helper import get_root, get_special_tag_pattern, SpecialScriptTag
+from naslinter.helper import SpecialScriptTag, get_root, get_special_tag_pattern
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckDeprecatedDependency(FileContentPlugin):
@@ -51,7 +46,8 @@ class CheckDeprecatedDependency(FileContentPlugin):
 
         root = get_root(nasl_file)
 
-        matches = special_tag_pattern[SpecialScriptTag.DEPENDENCIES.value
+        matches = special_tag_pattern[
+            SpecialScriptTag.DEPENDENCIES.value
         ].finditer(file_content)
         if not matches:
             return

@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins import CheckTodoTbd
+
+from . import PluginTestCase
 
 
 class CheckTodoTbdTestCase(PluginTestCase):

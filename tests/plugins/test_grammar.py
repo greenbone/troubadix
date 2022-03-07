@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.grammar import CheckGrammar
+
+from . import PluginTestCase
 
 
 class CheckNewlinesTestCase(PluginTestCase):

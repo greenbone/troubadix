@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from enum import Enum
 import re
+from enum import Enum
 from typing import OrderedDict
 
 # regex patterns for script tags

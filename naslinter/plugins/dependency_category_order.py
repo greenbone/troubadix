@@ -17,19 +17,15 @@
 
 # pylint: disable=fixme
 
-from enum import IntEnum
 import re
-
+from enum import IntEnum
 from pathlib import Path
-from typing import Iterator, Union, OrderedDict
-from naslinter.helper.patterns import SpecialScriptTagPatterns
+from typing import Iterator, OrderedDict, Union
 
-from naslinter.plugin import (
-    LinterError,
-    FileContentPlugin,
-    LinterResult,
-)
-from naslinter.helper import get_root, get_special_tag_pattern, SpecialScriptTag
+from naslinter.helper import SpecialScriptTag, get_root, get_special_tag_pattern
+from naslinter.helper.patterns import SpecialScriptTagPatterns
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
+
 
 # See https://shorturl.at/jBGJT for a list of the category numbers.
 class VTCategory(IntEnum):

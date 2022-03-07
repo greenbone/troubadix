@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterWarning
-from naslinter.plugins.tabs import CheckTabs, TAB_TO_SPACES
+from naslinter.plugins.tabs import TAB_TO_SPACES, CheckTabs
+
+from . import PluginTestCase
 
 
 class CheckTabsTestCase(PluginTestCase):

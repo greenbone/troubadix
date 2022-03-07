@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterWarning
 from naslinter.plugins.illegal_characters import CheckIllegalCharacters
+
+from . import PluginTestCase
 
 
 class CheckIllegalCharactersTestCase(PluginTestCase):

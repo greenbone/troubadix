@@ -18,17 +18,16 @@
 # pylint: disable=fixme
 
 import re
-
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
+from naslinter.helper import SpecialScriptTag, get_root, get_special_tag_pattern
 from naslinter.plugin import (
-    LinterError,
     FileContentPlugin,
+    LinterError,
     LinterResult,
     LinterWarning,
 )
-from naslinter.helper import get_root, SpecialScriptTag, get_special_tag_pattern
 
 
 class CheckDependencies(FileContentPlugin):

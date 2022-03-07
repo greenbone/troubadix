@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_copyright import CheckScriptCopyright
+
+from . import PluginTestCase
 
 
 class CheckScriptCopyrightTestCase(PluginTestCase):

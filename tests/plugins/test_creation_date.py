@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.creation_date import CheckCreationDate
+
+from . import PluginTestCase
 
 
 class CheckCreationDateTestCase(PluginTestCase):

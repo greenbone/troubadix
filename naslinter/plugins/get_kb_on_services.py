@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterResult, FileContentPlugin, LinterError
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckGetKBOnServices(FileContentPlugin):

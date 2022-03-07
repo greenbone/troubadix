@@ -16,10 +16,10 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.missing_desc_exit import CheckMissingDescExit
+
+from . import PluginTestCase
 
 
 class CheckMissingDescExitTestCase(PluginTestCase):

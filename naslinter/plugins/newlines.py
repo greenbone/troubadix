@@ -16,15 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
 from typing import Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LineContentPlugin,
-    LinterResult,
-    LinterWarning,
-)
+from naslinter.plugin import LineContentPlugin, LinterResult, LinterWarning
 
 
 class CheckNewlines(LineContentPlugin):

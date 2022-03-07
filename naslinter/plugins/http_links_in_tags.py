@@ -16,18 +16,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
-from pathlib import Path
-from typing import Iterator, AnyStr, OrderedDict
-
 from itertools import chain
+from pathlib import Path
+from typing import AnyStr, Iterator, OrderedDict
 
 from naslinter.helper import (
+    SpecialScriptTag,
     get_common_tag_patterns,
     get_special_tag_pattern,
-    SpecialScriptTag,
 )
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckHttpLinksInTags(FileContentPlugin):

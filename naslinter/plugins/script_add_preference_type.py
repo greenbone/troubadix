@@ -17,18 +17,13 @@
 
 # pylint: disable=fixme
 
-from enum import Enum
-
-from pathlib import Path
 import re
+from enum import Enum
+from pathlib import Path
 from typing import Iterator, OrderedDict
-from naslinter.helper.patterns import SpecialScriptTag, get_special_tag_pattern
 
-from naslinter.plugin import (
-    LinterError,
-    FileContentPlugin,
-    LinterResult,
-)
+from naslinter.helper.patterns import SpecialScriptTag, get_special_tag_pattern
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class ValidType(Enum):

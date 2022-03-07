@@ -16,18 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-
 from collections import OrderedDict
 from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterator, List
 
 from pontos.terminal.terminal import Terminal
-from naslinter.helper.patterns import (
-    SpecialScriptTagPatterns,
-    ScriptTagPatterns,
-)
 
+from naslinter.helper.patterns import (
+    ScriptTagPatterns,
+    SpecialScriptTagPatterns,
+)
 from naslinter.plugin import (
     FileContentPlugin,
     LineContentPlugin,

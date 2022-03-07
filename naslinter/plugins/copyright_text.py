@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 CORRECT_COPYRIGHT_PHRASE = (
     "# Some text descriptions might be excerpted from (a) referenced\n"

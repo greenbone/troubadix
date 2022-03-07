@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.overlong_script_tags import CheckOverlongScriptTags
+
+from . import PluginTestCase
 
 
 class CheckOverlongScriptTagsTestCase(PluginTestCase):

@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.log_messages import CheckLogMessages
+
+from . import PluginTestCase
 
 
 class CheckLogMessagesTestCase(PluginTestCase):

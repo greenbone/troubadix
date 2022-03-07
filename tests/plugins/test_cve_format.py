@@ -18,10 +18,10 @@
 from datetime import datetime
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.cve_format import CheckCVEFormat
+
+from . import PluginTestCase
 
 
 class CheckCVEFormatTestCase(PluginTestCase):

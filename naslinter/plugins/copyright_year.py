@@ -16,14 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
 from typing import Iterable, OrderedDict
 
 from black import Iterator
 
-from naslinter.plugin import LinterError, LineContentPlugin, LinterResult
 from naslinter.helper import is_ignore_file
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 _IGNORE_FILES = (
     "sw_telnet_os_detection.nasl",

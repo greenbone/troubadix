@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_add_preference_type import (
     CheckScriptAddPreferenceType,
     ValidType,
 )
+
+from . import PluginTestCase
 
 
 class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):

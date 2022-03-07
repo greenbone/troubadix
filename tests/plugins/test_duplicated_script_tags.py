@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.duplicated_script_tags import CheckDuplicatedScriptTags
+
+from . import PluginTestCase
 
 
 class CheckDuplicatedScriptTagsTestCase(PluginTestCase):

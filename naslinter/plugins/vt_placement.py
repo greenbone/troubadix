@@ -16,18 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
 from naslinter.helper import (
+    ScriptTag,
+    SpecialScriptTag,
     get_root,
     get_special_tag_pattern,
-    SpecialScriptTag,
     get_tag_pattern,
-    ScriptTag,
 )
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckVTPlacement(FileContentPlugin):

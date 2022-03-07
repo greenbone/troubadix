@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
-import unittest
 import sys
+import unittest
+from pathlib import Path
 from unittest.mock import Mock
 
 from pontos.terminal import _set_terminal

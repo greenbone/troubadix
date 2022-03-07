@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.cvss_format import CheckCVSSFormat
+
+from . import PluginTestCase
 
 
 class CheckCVSSFormatTestCase(PluginTestCase):

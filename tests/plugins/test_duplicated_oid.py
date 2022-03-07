@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError, LinterMessage
 from naslinter.plugins.duplicate_oid import CheckDuplicateOID
+
+from . import PluginTestCase
 
 
 class CheckDuplicateOIDTestCase(PluginTestCase):

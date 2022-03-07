@@ -16,15 +16,10 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterable, Iterator, AnyStr, OrderedDict
+from typing import AnyStr, Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LineContentPlugin,
-    LinterError,
-    LinterResult,
-)
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 
 class GrammerPattern:

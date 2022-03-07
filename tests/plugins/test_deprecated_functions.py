@@ -17,12 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
-from naslinter.plugins.deprecated_functions import (
-    CheckDeprecatedFunctions,
-)
+from naslinter.plugins.deprecated_functions import CheckDeprecatedFunctions
+
+from . import PluginTestCase
 
 
 class CheckDeprecatedDependencyTestCase(PluginTestCase):

@@ -22,6 +22,8 @@ from . import PluginTestCase
 from naslinter.plugin import LinterError
 from naslinter.plugins.valid_oid import CheckValidOID
 
+from . import PluginTestCase
+
 
 class CheckValidOIDTestCase(PluginTestCase):
     def test_ok(self):

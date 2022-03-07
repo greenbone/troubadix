@@ -17,18 +17,13 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, List, Union, OrderedDict
+from typing import Iterator, List, OrderedDict, Union
+
+from naslinter.helper.patterns import get_common_tag_patterns
+from naslinter.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 # import magic
 
-from naslinter.plugin import (
-    FileContentPlugin,
-    LinterResult,
-    LinterWarning,
-)
-from naslinter.helper.patterns import (
-    get_common_tag_patterns,
-)
 
 # ;                 can not be displayed in GSA, within
 #                   (summary|impact|affected|insight|vuldetect|solution)

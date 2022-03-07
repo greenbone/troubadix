@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError, LinterWarning
 from naslinter.plugins.using_display import CheckUsingDisplay
+
+from . import PluginTestCase
 
 
 class CheckUsingDisplayTestCase(PluginTestCase):

@@ -16,14 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
 from typing import Iterator, OrderedDict
 
 from naslinter.helper import is_ignore_file
-
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
-from naslinter.helper.patterns import get_tag_pattern, ScriptTag
+from naslinter.helper.patterns import ScriptTag, get_tag_pattern
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 # We don't want to touch the metadata of this older VTs...
 _IGNORE_FILES = [

@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
-import re
-from naslinter.plugin import LinterWarning, FileContentPlugin, LinterResult
+
+from naslinter.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 TAB_TO_SPACES = 2
 

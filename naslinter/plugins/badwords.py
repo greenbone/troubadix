@@ -21,8 +21,8 @@ import re
 from pathlib import Path
 from typing import Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, LineContentPlugin, LinterResult
 from naslinter.helper import is_ignore_file
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 # hexstr(OpenVAS) = '4f70656e564153'
 # hexstr(openvas) = '6f70656e766173'

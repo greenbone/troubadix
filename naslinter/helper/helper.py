@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from subprocess import Popen, PIPE
 from pathlib import Path
+from subprocess import PIPE, Popen
 from typing import List, Optional, Union
-
 
 # Root directory of nasl files
 _ROOT = "nasl"

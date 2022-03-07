@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.missing_tag_solution import CheckMissingTagSolution
+
+from . import PluginTestCase
 
 
 class CheckDoubleEndPointsTestCase(PluginTestCase):

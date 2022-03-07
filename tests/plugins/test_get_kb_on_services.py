@@ -17,10 +17,10 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.get_kb_on_services import CheckGetKBOnServices
+
+from . import PluginTestCase
 
 
 class CheckGetKBOnServicesTestCase(PluginTestCase):
