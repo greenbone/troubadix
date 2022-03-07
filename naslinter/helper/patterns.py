@@ -164,6 +164,10 @@ class SpecialScriptTagPatterns:
                         name=tag.value, value=r".+?", type="URL"
                     ),
                 )
+            elif tag.value == "version":
+                self.pattern[tag.value] = _get_special_tag_pattern(
+                    name=tag.value, value=r"[0-9\-\:\+T]{24}"
+                )
             else:
                 self.pattern[tag.value] = _get_special_tag_pattern(
                     name=tag.value, flags=re.MULTILINE

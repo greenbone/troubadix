@@ -17,8 +17,6 @@
 
 from pathlib import Path
 
-from . import PluginTestCase
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.valid_oid import CheckValidOID
 
@@ -30,14 +28,28 @@ class CheckValidOIDTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = 'script_oid("1.3.6.1.4.1.25623.1.0.100376");'
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_empty_tag(self):
         path = Path("some/file.nasl")
         content = "script_oid();"
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -50,7 +62,14 @@ class CheckValidOIDTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = 'script_oid("1.3.6.1.4.1.25623.2.0.100376");'
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -66,7 +85,14 @@ class CheckValidOIDTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = 'script_oid("1.3.6.1.4.1.25623.1.1.100376");'
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -123,7 +149,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SuSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_suse_family(self):
@@ -133,7 +166,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SuSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -153,7 +193,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Debian Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_debian(self):
@@ -163,7 +210,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Suse Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -182,7 +236,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Suse Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -201,7 +262,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SuSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_suse(self):
@@ -211,7 +279,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -230,7 +305,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Amazon Linux Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_amazon(self):
@@ -240,7 +322,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -259,7 +348,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Gentoo Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_gentoo(self):
@@ -269,7 +365,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -288,7 +391,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("FreeBSD Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_freebsd(self):
@@ -298,7 +408,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -317,7 +434,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Oracle Linux Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_oracle(self):
@@ -327,7 +451,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -346,7 +477,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Fedora Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_fedora(self):
@@ -356,7 +494,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Debian Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -375,7 +520,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Mageia Linux Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_mageia(self):
@@ -385,7 +537,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Debian Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -404,7 +563,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("RedHat Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_redhat(self):
@@ -414,7 +580,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -433,7 +606,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Ubuntu Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_ubuntu(self):
@@ -443,7 +623,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -462,7 +649,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("Slackware Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_slackware(self):
@@ -472,7 +666,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -491,7 +692,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_family("SUSE Local Security Checks");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -511,7 +719,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_name("AdaptBB Detection (HTTP)");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -529,7 +744,14 @@ class CheckValidOIDTestCase(PluginTestCase):
             'script_name("Mozilla Firefox Security Advisory");'
         )
 
-        results = list(CheckValidOID.run(path, content))
+        results = list(
+            CheckValidOID.run(
+                nasl_file=path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         print(results)
         self.assertEqual(len(results), 0)
 

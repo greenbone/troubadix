@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.helper import get_tag_pattern
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
@@ -27,7 +27,13 @@ class CheckSolutionText(FileContentPlugin):
     name = "check_solution_text"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """There are specific guidelines on the syntax for the solution tag on
         VTs with the solution_type "NoneAvailable" or "WillNotFix" available at:
 
@@ -41,7 +47,7 @@ class CheckSolutionText(FileContentPlugin):
             file_content: Content of the nasl_file to be checked
 
         """
-
+        del tag_pattern, special_tag_pattern
         # Two different strings, one for RegEx one for output
         correct_none_available_pattern = (
             r"script_tag\s*\("

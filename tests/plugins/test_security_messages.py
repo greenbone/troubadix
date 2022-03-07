@@ -14,15 +14,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from pathlib import Path
 
-import unittest
+from pathlib import Path
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.security_messages import CheckSecurityMessages
+from tests.plugins import PluginTestCase
 
 
-class CheckSecurityMessagesTestCase(unittest.TestCase):
+class CheckSecurityMessagesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -32,7 +32,14 @@ class CheckSecurityMessagesTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckSecurityMessages.run(nasl_file, content))
+        results = list(
+            CheckSecurityMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_ok2(self):
@@ -47,7 +54,14 @@ class CheckSecurityMessagesTestCase(unittest.TestCase):
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
 
-        results = list(CheckSecurityMessages.run(nasl_file, content))
+        results = list(
+            CheckSecurityMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -62,7 +76,14 @@ class CheckSecurityMessagesTestCase(unittest.TestCase):
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
 
-        results = list(CheckSecurityMessages.run(nasl_file, content))
+        results = list(
+            CheckSecurityMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -82,7 +103,14 @@ class CheckSecurityMessagesTestCase(unittest.TestCase):
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
 
-        results = list(CheckSecurityMessages.run(nasl_file, content))
+        results = list(
+            CheckSecurityMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

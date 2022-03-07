@@ -57,6 +57,8 @@ class CheckVTPlacement(FileContentPlugin):
         Returns:
             if no problem
         """
+        del tag_pattern, special_tag_pattern
+
         root = get_root(nasl_file)
 
         match = get_special_tag_pattern(

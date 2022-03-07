@@ -15,10 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.helper import get_tag_pattern, get_special_tag_pattern
+from naslinter.helper.patterns import ScriptTag, SpecialScriptTag
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -26,7 +27,13 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
     name = "check_script_version_and_last_modification_tags"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """The script checks if the passed VT has a correct syntax of the
         following two tags:
 
@@ -40,11 +47,10 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             nasl_file: The VT that shall be checked
             file_content: The content of the VT that shall be checked
         """
-
         # script_version("2019-03-21T12:19:01+0000");")
-        match_ver_modified = get_special_tag_pattern(
-            name="version", value=r"[0-9\-\:\+T]{24}"
-        ).search(file_content)
+        match_ver_modified = special_tag_pattern[
+            SpecialScriptTag.VERSION.value
+        ].search(file_content)
 
         if not match_ver_modified:
             yield LinterError(
@@ -55,10 +61,9 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
 
         # script_tag(name:"last_modification",
         # value:"2019-03-21 12:19:01 +0000 (Thu, 21 Mar 2019)");
-        match_last_modified = get_tag_pattern(
-            name="last_modification",
-            value=r'"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"',
-        ).search(file_content)
+        match_last_modified = tag_pattern[
+            ScriptTag.LAST_MODIFICATION.value
+        ].search(file_content)
 
         if not match_last_modified:
             yield LinterError(

@@ -24,6 +24,7 @@ from typing import Iterator, OrderedDict
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 from naslinter.helper import get_special_tag_pattern
 
+
 class CheckValidOID(FileContentPlugin):
     name = "check_valid_oid"
 

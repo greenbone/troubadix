@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -26,7 +26,13 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
     name = "check_set_get_kb_calls"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Checks a given file if it calls any of the following functions setting
         or getting KB entries in a wrong way like e.g. with too much or too
@@ -50,6 +56,7 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
+        del tag_pattern, special_tag_pattern
 
         param_re = re.compile(r"(name|value) ?:")
 

@@ -115,7 +115,14 @@ class CheckLogMessagesTestCase(PluginTestCase):
             "log_message(  );"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -138,7 +145,14 @@ class CheckLogMessagesTestCase(PluginTestCase):
             "log_message(\t);\n"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
