@@ -20,9 +20,9 @@
 import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
+from naslinter.helper.patterns import SpecialScriptTag
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
-from naslinter.helper import get_special_tag_pattern
 
 
 class CheckValidOID(FileContentPlugin):
@@ -56,7 +56,7 @@ class CheckValidOID(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
-        del tag_pattern, special_tag_pattern
+        del tag_pattern
 
         if nasl_file.suffix == ".inc":
             return
@@ -65,10 +65,9 @@ class CheckValidOID(FileContentPlugin):
         is_using_reserved = "is using an OID that is reserved for"
         invalid_oid = "is using an invalid OID"
 
-        oid_match = get_special_tag_pattern(
-            name="oid",
-            value=r'\s*["\'](?P<oid>([0-9.]+))["\']\s*',
-        ).search(file_content)
+        oid_match = special_tag_pattern[SpecialScriptTag.OID.value].search(
+            file_content
+        )
         if oid_match is None or oid_match.group("oid") is None:
             yield LinterError("No valid script_oid() call found")
             return
@@ -81,14 +80,13 @@ class CheckValidOID(FileContentPlugin):
 
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1." in oid:
-            family_match = get_special_tag_pattern(
-                name="family",
-                value=r'\s*["\'](?P<family>.*)["\']\s*',
-            ).search(file_content)
-            if family_match is None or family_match.group("family") is None:
+            family_match = special_tag_pattern[
+                SpecialScriptTag.FAMILY.value
+            ].search(file_content)
+            if family_match is None or family_match.group("value") is None:
                 yield LinterError("VT is missing a script family!")
                 return
-            family = family_match.group("family")
+            family = family_match.group("value")
 
             # Fixed OID-scheme for (Huawei) Euler OS OIDs
             if "1.3.6.1.4.1.25623.1.1.2." in oid:
@@ -281,14 +279,13 @@ class CheckValidOID(FileContentPlugin):
 
         # product-specific OIDs
         if "1.3.6.1.4.1.25623.1.2." in oid:
-            name_match = get_special_tag_pattern(
-                name="name",
-                value=r'\s*["\'](?P<name2>([\w ()-]+))["\']\s*',
-            ).search(file_content)
-            if not name_match or not name_match.group("name2"):
+            name_match = special_tag_pattern[
+                SpecialScriptTag.NAME.value
+            ].search(file_content)
+            if not name_match or not name_match.group("value"):
                 yield LinterError("VT is missing a script name!")
                 return
-            name = name_match.group("name2")
+            name = name_match.group("value")
 
             # Fixed OID-scheme for Mozilla Firefox OIDs
             if "1.3.6.1.4.1.25623.1.2.1." in oid:

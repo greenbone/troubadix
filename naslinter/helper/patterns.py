@@ -164,6 +164,10 @@ class SpecialScriptTagPatterns:
                         name=tag.value, value=r".+?", type="URL"
                     ),
                 )
+            elif tag.value == "oid":
+                self.pattern[tag.value] = _get_special_tag_pattern(
+                    name=tag.value, value=r'\s*["\'](?P<oid>([0-9.]+))["\']\s*'
+                )
             elif tag.value == "version":
                 self.pattern[tag.value] = _get_special_tag_pattern(
                     name=tag.value, value=r"[0-9\-\:\+T]{24}"

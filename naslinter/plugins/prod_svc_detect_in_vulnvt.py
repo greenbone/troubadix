@@ -22,6 +22,7 @@ from naslinter.helper import (
     ScriptTag,
     SpecialScriptTag,
 )
+from naslinter.helper import get_special_tag_pattern
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -64,7 +65,6 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             file_content: The content of the VT
         """
         del special_tag_pattern
-
         # Don't need to check VTs having a cvss of 0.0
         cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
             file_content
@@ -73,7 +73,7 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
         if cvss_detect is not None and cvss_detect.group("value") == "0.0":
             return
 
-        match_family = special_tag_pattern(
+        match_family = get_special_tag_pattern(
             name=SpecialScriptTag.FAMILY,
             value=r"(Product|Service) detection",
         ).search(file_content)

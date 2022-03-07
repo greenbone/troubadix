@@ -49,7 +49,7 @@ class CheckMissingTagSolution(FileContentPlugin):
         This excludes files from the (sub)dir "nmap_nse/" and deprecated
         vts.
         """
-        del tag_pattern, special_tag_pattern
+        del special_tag_pattern
 
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return

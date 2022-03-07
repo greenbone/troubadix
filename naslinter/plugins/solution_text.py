@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Iterator, OrderedDict
 
 from naslinter.helper import get_tag_pattern
+from naslinter.helper.patterns import ScriptTag
 from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -103,17 +104,21 @@ class CheckSolutionText(FileContentPlugin):
             'for the reason here, e.g. CVE was disputed>.");'
         )
 
-        if get_tag_pattern(name="solution_type", value="NoneAvailable").search(
-            file_content
-        ) and not re.search(correct_none_available_pattern, file_content):
+        if get_tag_pattern(
+            name=ScriptTag.SOLUTION_TYPE, value="NoneAvailable"
+        ).search(file_content) and not re.search(
+            correct_none_available_pattern, file_content
+        ):
             yield LinterError(
                 "The VT with solution type 'NoneAvailable' is using an "
                 "incorrect syntax in the solution text. Please use "
                 f"(EXACTLY):\n{correct_none_available_syntax}",
             )
-        elif get_tag_pattern(name="solution_type", value="WillNotFix").search(
-            file_content
-        ) and not re.search(correct_will_not_fix_pattern, file_content):
+        elif get_tag_pattern(
+            name=ScriptTag.SOLUTION_TYPE, value="WillNotFix"
+        ).search(file_content) and not re.search(
+            correct_will_not_fix_pattern, file_content
+        ):
             yield LinterError(
                 "The VT with solution type 'WillNotFix' is using an incorrect "
                 "syntax in the solution text. Please use one of these "

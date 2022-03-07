@@ -87,8 +87,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a security_message in a VT without"
-            " severity",
+            "VT is using a security_message in a VT without" " severity",
             results[0].message,
         )
 
@@ -114,7 +113,6 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a security_message in a VT without"
-            " severity",
+            "VT is using a security_message in a VT without" " severity",
             results[0].message,
         )

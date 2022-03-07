@@ -47,15 +47,9 @@ class CheckDependencies(FileContentPlugin):
         """
         del tag_pattern
 
-        # if not "script_dependencies(" in file_content:
-        #     return
-
         matches = special_tag_pattern[
             SpecialScriptTag.DEPENDENCIES.value
         ].finditer(file_content)
-        # matches = get_special_tag_pattern(
-        #     name="dependencies", flags=re.MULTILINE
-        # ).finditer(file_content)
 
         root = get_root(nasl_file)
 

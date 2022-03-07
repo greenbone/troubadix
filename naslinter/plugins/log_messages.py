@@ -43,6 +43,17 @@ class CheckLogMessages(FileContentPlugin):
 
         """
         del special_tag_pattern
+
+        log_match = re.search(
+            r"log_message\s*\([\s\n]*\)\s*(;|;\s*(\n|#))",
+            file_content,
+            re.MULTILINE,
+        )
+        if log_match:
+            yield LinterError(
+                "The VT is using an empty log_message() " "function"
+            )
+
         if nasl_file.suffix == ".inc":
             return
         # Policy VTs might use both, security_message and log_message

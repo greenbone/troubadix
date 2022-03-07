@@ -126,12 +126,11 @@ class CheckLogMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using an empty log_message() function",
+            "The VT is using an empty log_message() function",
             results[0].message,
         )
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a " "severity",
             results[1].message,
         )
 
@@ -156,11 +155,10 @@ class CheckLogMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using an empty log_message() function",
+            "The VT is using an empty log_message() function",
             results[0].message,
         )
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a " "severity",
             results[1].message,
         )
