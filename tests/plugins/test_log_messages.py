@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.log_messages import CheckLogMessages
 
 
-class CheckLogMessagesTestCase(unittest.TestCase):
+class CheckLogMessagesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -34,7 +34,14 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             'log_message("hello test");\n'
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -56,7 +63,14 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "report );\n\n"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -76,7 +90,14 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "min_key_size + ' bits (key-size:algorithm:serial:issuer)');"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

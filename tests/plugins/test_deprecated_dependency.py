@@ -17,7 +17,7 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.helper.helper import _ROOT
@@ -28,12 +28,14 @@ from naslinter.plugins.deprecated_dependency import (
 here = Path.cwd()
 
 
-class CheckDeprecatedDependencyTestCase(unittest.TestCase):
+class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def setUp(self) -> None:
         self.dir = here / _ROOT / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text("script_category(ACT_ATTACK);\n exit(66);")
+
+        return super().setUp()
 
     def tearDown(self) -> None:
         self.dep.unlink()
@@ -47,7 +49,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             "script_category(ACT_ATTACK);"
         )
 
-        results = list(CheckDeprecatedDependency.run(path, content))
+        results = list(
+            CheckDeprecatedDependency.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_dependency(self):
@@ -58,7 +67,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             "script_category(ACT_ATTACK);"
         )
 
-        results = list(CheckDeprecatedDependency.run(path, content))
+        results = list(
+            CheckDeprecatedDependency.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_deprecated(self):
@@ -70,7 +86,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             "exit(66);"
         )
 
-        results = list(CheckDeprecatedDependency.run(path, content))
+        results = list(
+            CheckDeprecatedDependency.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_deprecated2(self):
@@ -82,7 +105,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             'script_tag(name:"deprecated", value:TRUE);'
         )
 
-        results = list(CheckDeprecatedDependency.run(path, content))
+        results = list(
+            CheckDeprecatedDependency.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_dependency_missing(self):
@@ -95,7 +125,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        results = list(CheckDeprecatedDependency.run(path, content))
+        results = list(
+            CheckDeprecatedDependency.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
@@ -114,7 +151,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        results = list(CheckDeprecatedDependency.run(path, content))
+        results = list(
+            CheckDeprecatedDependency.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

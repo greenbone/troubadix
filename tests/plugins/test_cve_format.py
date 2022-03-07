@@ -18,13 +18,13 @@
 from datetime import datetime
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.cve_format import CheckCVEFormat
 
 
-class CheckCVEFormatTestCase(unittest.TestCase):
+class CheckCVEFormatTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -32,21 +32,42 @@ class CheckCVEFormatTestCase(unittest.TestCase):
             'script_cve_id("CVE-2022-23807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_detection_script(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"0.0");\n'
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_cve_reference(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"7.5");\n'
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -61,7 +82,14 @@ class CheckCVEFormatTestCase(unittest.TestCase):
             'script_cve_id("CVE-a123-23807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -76,7 +104,14 @@ class CheckCVEFormatTestCase(unittest.TestCase):
             'script_cve_id("CVE-2021-03807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -92,7 +127,14 @@ class CheckCVEFormatTestCase(unittest.TestCase):
             'script_cve_id("CVE-1971-3807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -106,7 +148,14 @@ class CheckCVEFormatTestCase(unittest.TestCase):
             f'script_cve_id("CVE-{current_year + 1}-3807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -121,7 +170,14 @@ class CheckCVEFormatTestCase(unittest.TestCase):
             'script_cve_id("CVE-2021-3807","CVE-2021-3807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

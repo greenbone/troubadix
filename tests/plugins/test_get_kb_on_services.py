@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.get_kb_on_services import CheckGetKBOnServices
 
 
-class CheckGetKBOnServicesTestCase(unittest.TestCase):
+class CheckGetKBOnServicesTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -31,7 +31,14 @@ class CheckGetKBOnServicesTestCase(unittest.TestCase):
             'script_tag(name:"cvss_base", value:"4.0");\n'
         )
 
-        results = list(CheckGetKBOnServices.run(path, content))
+        results = list(
+            CheckGetKBOnServices.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
@@ -42,6 +49,13 @@ class CheckGetKBOnServicesTestCase(unittest.TestCase):
             'get_kb_list("Services/udp/upnp");\n'
         )
 
-        results = list(CheckGetKBOnServices.run(path, content))
+        results = list(
+            CheckGetKBOnServices.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)

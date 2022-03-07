@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.overlong_script_tags import CheckOverlongScriptTags
 
 
-class CheckOverlongScriptTagsTestCase(unittest.TestCase):
+class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -34,13 +34,27 @@ class CheckOverlongScriptTagsTestCase(unittest.TestCase):
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
             'script_tag(name:"solution", value:"Shorter than 1000");\n'
         )
-        results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
+        results = list(
+            CheckOverlongScriptTags.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_nasl_file(self):
         path = Path("some/file.inc")
         content = 'script_tag(name:"summary", value:"Shorter than 1000");\n'
-        results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
+        results = list(
+            CheckOverlongScriptTags.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_ignore_file(self):
@@ -52,7 +66,14 @@ class CheckOverlongScriptTagsTestCase(unittest.TestCase):
             'script_tag(name:"insight", value:"Shorter than 1000");\n'
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
         )
-        results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
+        results = list(
+            CheckOverlongScriptTags.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_one_wrong_entry(self):
@@ -80,7 +101,14 @@ class CheckOverlongScriptTagsTestCase(unittest.TestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
+        results = list(
+            CheckOverlongScriptTags.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -129,7 +157,14 @@ class CheckOverlongScriptTagsTestCase(unittest.TestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
+        results = list(
+            CheckOverlongScriptTags.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -244,7 +279,14 @@ class CheckOverlongScriptTagsTestCase(unittest.TestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        results = list(CheckOverlongScriptTags.run(path, content.split("\n")))
+        results = list(
+            CheckOverlongScriptTags.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 6)
 
         self.assertIsInstance(results[0], LinterError)

@@ -20,6 +20,7 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable, Iterator, OrderedDict
+
 from naslinter.helper.patterns import ScriptTag
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
@@ -41,20 +42,14 @@ class CheckCreationDate(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
-        mod_pattern = tag_pattern[ScriptTag.CREATION_DATE.value]
+        if not "creation_date" in file_content:
+            yield LinterError(f"No creation date has been found.")
+            return
 
-        match = mod_pattern.search(string=file_content)
+        # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
+        match = tag_pattern[ScriptTag.CREATION_DATE.value].search(file_content)
+
         if match:
-            # Check length of the datetime value
-            if len(match.group("value")) != LENGTH:
-                yield LinterError(
-                    "Incorrectly formatted creation_date of VT "
-                    f"'{nasl_file}' (length != {LENGTH}). Please "
-                    'use EXACTLY the following format as in: "2017'
-                    '-11-29 13:56:41 +0000 (Wed, 29 Nov 2017)"'
-                )
-                return
             try:
                 date_left = datetime.strptime(
                     match.group("value")[:25], "%Y-%m-%d %H:%M:%S %z"
@@ -66,32 +61,22 @@ class CheckCreationDate(FileContentPlugin):
                 week_day_parsed = date_right.strftime("%a")
             except ValueError:
                 yield LinterError(
-                    f"False or incorrectly formatted creation_date "
-                    f"of VT '{nasl_file}'"
+                    f"False or incorrectly formatted creation_date."
                 )
                 return
             week_day_str = match.group("value")[27:30]
             # Wed, 29 Nov 2017
             if date_left.date() != date_right.date():
                 yield LinterError(
-                    f"The creation_date of VT '{nasl_file}' "
-                    "consists of two different dates."
+                    "The creation_date consists of two different dates."
                 )
             # Check correct weekday
             elif week_day_str != week_day_parsed:
                 formatted_date = week_day_parsed
                 yield LinterError(
-                    f"Wrong day of week in VT '{nasl_file}'. "
-                    f"Please change it from '{week_day_str}' to "
-                    f"'{formatted_date}'."
+                    f"Wrong day of week. Please change it from '{week_day_str}"
+                    f"' to '{formatted_date}'."
                 )
         else:
-            yield LinterError(
-                f"False or incorrectly formatted creation_date "
-                f"of VT '{nasl_file}'"
-            )
-        return
-
-        yield LinterError(
-            f"No creation date has been found in VT '{nasl_file}'."
-        )
+            yield LinterError(f"False or incorrectly formatted creation_date.")
+            return

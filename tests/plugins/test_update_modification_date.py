@@ -15,21 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest
+from . import PluginTestCase
 
 from pathlib import Path
 from naslinter.plugin import LinterError, LinterResult
 from naslinter.plugins.update_modification_date import UpdateModificationDate
 
 
-class TestUpdateModificationDate(unittest.TestCase):
+class TestUpdateModificationDate(PluginTestCase):
     def test_change_date(self):
         nasl_file = Path(__file__).parent / "test.nasl"
 
         content = nasl_file.read_text(encoding="latin1")
 
         output = UpdateModificationDate.run(
-            nasl_file=nasl_file, file_content=content
+            nasl_file=nasl_file,
+            file_content=content,
+            tag_pattern=self.tag_pattern,
+            special_tag_pattern=self.special_tag_pattern,
         )
 
         self.assertIsInstance(next(output), LinterResult)
@@ -46,7 +49,10 @@ class TestUpdateModificationDate(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         output = UpdateModificationDate.run(
-            nasl_file=nasl_file, file_content=content
+            nasl_file=nasl_file,
+            file_content=content,
+            tag_pattern=self.tag_pattern,
+            special_tag_pattern=self.special_tag_pattern,
         )
 
         expected_error = LinterError(
@@ -66,7 +72,10 @@ class TestUpdateModificationDate(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         output = UpdateModificationDate.run(
-            nasl_file=nasl_file, file_content=content
+            nasl_file=nasl_file,
+            file_content=content,
+            tag_pattern=self.tag_pattern,
+            special_tag_pattern=self.special_tag_pattern,
         )
 
         expected_error = LinterError(

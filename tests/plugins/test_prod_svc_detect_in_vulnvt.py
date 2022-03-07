@@ -16,7 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.prod_svc_detect_in_vulnvt import (
@@ -24,7 +24,7 @@ from naslinter.plugins.prod_svc_detect_in_vulnvt import (
 )
 
 
-class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
+class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -34,7 +34,14 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
+        results = list(
+            CheckProdSvcDetectInVulnvt.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -47,7 +54,14 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             'script_family("Product detection");\n'
         )
 
-        results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
+        results = list(
+            CheckProdSvcDetectInVulnvt.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -68,7 +82,14 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             "register_product(cpe:cpe);\n"
         )
 
-        results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
+        results = list(
+            CheckProdSvcDetectInVulnvt.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

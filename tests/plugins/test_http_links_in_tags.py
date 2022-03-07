@@ -18,13 +18,13 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.http_links_in_tags import CheckHttpLinksInTags
 
 
-class CheckHttpLinksInTagsTestCase(unittest.TestCase):
+class CheckHttpLinksInTagsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -35,7 +35,14 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
 
-        results = list(CheckHttpLinksInTags.run(path, content))
+        results = list(
+            CheckHttpLinksInTags.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_not_ok(self):
@@ -48,7 +55,14 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckHttpLinksInTags.run(path, content))
+        results = list(
+            CheckHttpLinksInTags.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -71,7 +85,14 @@ class CheckHttpLinksInTagsTestCase(unittest.TestCase):
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");\n'
         )
 
-        results = list(CheckHttpLinksInTags.run(path, content))
+        results = list(
+            CheckHttpLinksInTags.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

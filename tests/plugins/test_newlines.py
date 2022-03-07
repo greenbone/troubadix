@@ -17,27 +17,41 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterWarning
 from naslinter.plugins.newlines import CheckNewlines
 
 
-class CheckNewlinesTestCase(unittest.TestCase):
+class CheckNewlinesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        lines = nasl_file.read_text(encoding="latin1").split("\n")
+        content = nasl_file.read_text(encoding="latin1")
 
-        results = list(CheckNewlines.run(nasl_file, lines))
+        results = list(
+            CheckNewlines.run(
+                nasl_file,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_newline_in_name(self):
         nasl_file = (
             Path(__file__).parent / "test_files" / "fail_name_newline.nasl"
         )
-        lines = nasl_file.read_text(encoding="latin1").splitlines()
+        content = nasl_file.read_text(encoding="latin1")
 
-        results = list(CheckNewlines.run(nasl_file, lines))
+        results = list(
+            CheckNewlines.run(
+                nasl_file,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
@@ -46,11 +60,11 @@ class CheckNewlinesTestCase(unittest.TestCase):
             results[0].message,
         )
 
-        new_lines = nasl_file.read_text(encoding="latin1")
-        self.assertNotEqual(lines, new_lines)
+        new_content = nasl_file.read_text(encoding="latin1")
+        self.assertNotEqual(content, new_content)
 
         # revert changes for the next time
-        nasl_file.write_text("\n".join(lines), encoding="latin1")
+        nasl_file.write_text(content, encoding="latin1")
 
     def test_newline_in_name_and_copyright(self):
         nasl_file = (
@@ -58,9 +72,16 @@ class CheckNewlinesTestCase(unittest.TestCase):
             / "test_files"
             / "fail_name_and_copyright_newline.nasl"
         )
-        lines = nasl_file.read_text(encoding="latin1").splitlines()
+        content = nasl_file.read_text(encoding="latin1")
 
-        results = list(CheckNewlines.run(nasl_file, lines))
+        results = list(
+            CheckNewlines.run(
+                nasl_file,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterWarning)
@@ -74,8 +95,8 @@ class CheckNewlinesTestCase(unittest.TestCase):
             results[1].message,
         )
 
-        new_lines = nasl_file.read_text(encoding="latin1")
-        self.assertNotEqual(lines, new_lines)
+        new_content = nasl_file.read_text(encoding="latin1")
+        self.assertNotEqual(content, new_content)
 
         # revert changes for the next time
-        nasl_file.write_text("\n".join(lines), encoding="latin1")
+        nasl_file.write_text(content, encoding="latin1")

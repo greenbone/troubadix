@@ -18,13 +18,13 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
 
 
-class CheckForkingNaslFuncsTestCase(unittest.TestCase):
+class CheckForkingNaslFuncsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -35,7 +35,14 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
 
-        results = list(CheckForkingNaslFuncs.run(path, content))
+        results = list(
+            CheckForkingNaslFuncs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_not_ok(self):
@@ -51,7 +58,14 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             'service:"www" ) )\nexit( 0 );\n'
         )
 
-        results = list(CheckForkingNaslFuncs.run(path, content))
+        results = list(
+            CheckForkingNaslFuncs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -76,7 +90,14 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             ")\nexit(0);\n"
         )
 
-        results = list(CheckForkingNaslFuncs.run(path, content))
+        results = list(
+            CheckForkingNaslFuncs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

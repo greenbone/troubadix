@@ -68,7 +68,6 @@ def _get_tag_pattern(
 class ScriptTagPatterns:
     def __init__(self) -> None:
         self.pattern = OrderedDict()
-        print("weeee")
         for tag in ScriptTag:
             flags = 0
             if tag.value == "deprecated":

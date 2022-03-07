@@ -99,18 +99,12 @@ class CheckBadwords(LineContentPlugin):
     ) -> Iterator[LinterResult]:
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
-        line_number = 1
-        badword_found = False
-        output = f"Badword(s) found in {nasl_file}:\n"
-        for line in lines:
+
+        for i, line in enumerate(lines):
             if any(badword in line for badword in DEFAULT_BADWORDS):
                 if not any(
                     exception in line for exception in EXCEPTIONS
                 ) and not any(
                     line.startswith(start) for start in STARTS_WITH_EXCEPTIONS
                 ):
-                    output += f"line {line_number:5}: {line}\n"
-                    badword_found = True
-            line_number = line_number + 1
-        if badword_found:
-            yield LinterError(output)
+                    yield LinterError(f"Badword in line {i+1:5}: {line}")

@@ -20,6 +20,7 @@
 from enum import Enum
 
 from pathlib import Path
+import re
 from typing import Iterator, OrderedDict
 from naslinter.helper.patterns import SpecialScriptTag, get_special_tag_pattern
 

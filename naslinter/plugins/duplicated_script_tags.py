@@ -48,8 +48,8 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
                 match = list(match)
                 if len(match) > 1:
                     yield LinterError(
-                        f"The VT is using the script tag "
-                        f"'{tag}' multiple number of times."
+                        f"The VT is using the script tag 'script_"
+                        f"{tag.value}' multiple number of times."
                     )
 
         for tag in ScriptTag:
@@ -59,6 +59,6 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
                 match = list(match)
                 if len(match) > 1:
                     yield LinterError(
-                        f"The VT is using the script tag '{tag}' "
+                        f"The VT is using the script tag '{tag.value}' "
                         "multiple number of times."
                     )

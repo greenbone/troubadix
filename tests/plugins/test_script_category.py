@@ -17,25 +17,39 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_category import CheckScriptCategory
 
 
-class CheckScriptCategoryTestCase(unittest.TestCase):
+class CheckScriptCategoryTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = "script_category(ACT_GATHER_INFO);"
 
-        results = list(CheckScriptCategory.run(path, content))
+        results = list(
+            CheckScriptCategory.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_missing_category(self):
         path = Path("some/file.nasl")
         content = ""
 
-        results = list(CheckScriptCategory.run(path, content))
+        results = list(
+            CheckScriptCategory.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -47,7 +61,14 @@ class CheckScriptCategoryTestCase(unittest.TestCase):
         path = Path("some/file.nasl")
         content = "script_category(ACT_FOO);"
 
-        results = list(CheckScriptCategory.run(path, content))
+        results = list(
+            CheckScriptCategory.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

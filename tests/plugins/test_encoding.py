@@ -17,7 +17,7 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.encoding import (
@@ -25,7 +25,7 @@ from naslinter.plugins.encoding import (
 )
 
 
-class CheckCopyrightTextTestCase(unittest.TestCase):
+class CheckEncodingTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("tests/file.nasl")
 
@@ -35,9 +35,16 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             "abcdefghijklmnopqrstuvwxyz{|}~",
             encoding="utf-8",
         )
-        lines = path.read_text(encoding="latin1").splitlines()
+        content = path.read_text(encoding="latin1")
 
-        results = list(CheckEncoding.run(path, lines))
+        results = list(
+            CheckEncoding.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 0)
 
@@ -52,9 +59,16 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             "ÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ",
             encoding="utf-8",
         )
-        lines = path.read_text(encoding="latin1").splitlines()
+        content = path.read_text(encoding="latin1")
 
-        results = list(CheckEncoding.run(path, lines))
+        results = list(
+            CheckEncoding.run(
+                path,
+                content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 3)
 
         self.assertIsInstance(results[0], LinterError)

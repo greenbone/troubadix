@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
+from . import PluginTestCase
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.missing_tag_solution import CheckMissingTagSolution
 
 
-class CheckDoubleEndPointsTestCase(unittest.TestCase):
+class CheckDoubleEndPointsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -33,7 +33,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckMissingTagSolution.run(path, content))
+        results = list(
+            CheckMissingTagSolution.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_solution_type(self):
@@ -43,7 +50,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_tag(name:"summary", value:"Foo Bar...");'
         )
 
-        results = list(CheckMissingTagSolution.run(path, content))
+        results = list(
+            CheckMissingTagSolution.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_missing_solution(self):
@@ -54,7 +68,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
         )
 
-        results = list(CheckMissingTagSolution.run(path, content))
+        results = list(
+            CheckMissingTagSolution.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

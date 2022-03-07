@@ -16,23 +16,34 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import unittest
 from naslinter.plugin import LinterError
 from naslinter.plugins.badwords import CheckBadwords
 
+from . import PluginTestCase
 
-class TestBadwords(unittest.TestCase):
+
+class TestBadwords(PluginTestCase):
     def test_files(self):
         nasl_file = Path(__file__).parent / "test_files" / "fail_badwords.nasl"
 
-        lines = nasl_file.read_text(encoding="latin1").splitlines()
+        content = nasl_file.read_text(encoding="latin1")
 
-        expected_warning = LinterError(
-            f"Badword(s) found in {nasl_file.absolute()}:\n"
-            "line     1: openvas is a bad word\n"
-            "line    10: OpenVAS is a scanner\n"
+        results = list(
+            CheckBadwords.run(
+                nasl_file=nasl_file,
+                lines=content.splitlines(),
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
         )
 
-        output = CheckBadwords.run(nasl_file=nasl_file, lines=lines)
-
-        self.assertEqual(next(output), expected_warning)
+        self.assertEqual(len(results), 2)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "Badword in line     1: openvas is a bad word",
+            results[0].message,
+        )
+        self.assertEqual(
+            "Badword in line    10: OpenVAS is a scanner",
+            results[1].message,
+        )
