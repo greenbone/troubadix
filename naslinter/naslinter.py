@@ -68,7 +68,7 @@ def generate_patterns(
     Arguments:
     include_patterns    List of glob patterns to filter files with
     exclude_patterns    List of glob patterns of files that will excluded
-    non_recursive       Wether to include all subdirs to the patterns or not
+    non_recursive       Whether to include all subdirs to the patterns or not
 
     Returns
     Corrected tuple of lists of include and exclude patterns"""

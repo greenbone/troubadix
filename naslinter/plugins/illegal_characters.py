@@ -27,7 +27,7 @@ from naslinter.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 # ;                 can not be displayed in GSA, within
 #                   (summary|impact|affected|insight|vuldetect|solution)
-# | =               are delimiter in the interal VT cache
+# | =               are delimiter in the internal VT cache
 #                   (e.g. Tag1=Foo|Tag2=Bar|Tag3=Baz)
 #                   in all script_tag(name:"", value:"")
 FORBIDDEN_CHARS = ["|", "=", ";"]

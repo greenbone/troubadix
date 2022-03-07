@@ -50,7 +50,7 @@ def _get_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
-    The returned pattern catchs all `script_tags(name="", value="");`
+    The returned pattern catches all `script_tags(name="", value="");`
 
     Arguments:
         name        a SpecialScriptTag Enum type
@@ -93,7 +93,7 @@ def get_tag_pattern(
     flags: re.RegexFlag = 0,
 ) -> re.Pattern:
     """
-    The returned pattern catchs all `script_<name>(<value>);`
+    The returned pattern catches all `script_<name>(<value>);`
 
     Arguments:
         name        script tag name

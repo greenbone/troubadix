@@ -61,7 +61,7 @@ def parse_args(
     """Parsing args for nasl-lint
 
     Arguments:
-    args        The programm arguments passed by exec"""
+    args        The program arguments passed by exec"""
 
     parser = ArgumentParser(
         description="Greenbone NASL File Linter.",
@@ -99,8 +99,8 @@ def parse_args(
         type=file_type,
         help=(
             "Pass a file that contains a List of files "
-            "containing pathes to files, that should be "
-            "checked. Files should be seperated by newline"
+            "containing paths to files, that should be "
+            "checked. Files should be separated by newline"
         ),
     )
 
@@ -197,7 +197,7 @@ def parse_args(
         default=cpu_count() // 2,
         type=check_cpu_count,
         help=(
-            "Define number of jobs, that should run simultaniously"
+            "Define number of jobs, that should run simultaneously"
             "Default: %(default)s"
         ),
     )
