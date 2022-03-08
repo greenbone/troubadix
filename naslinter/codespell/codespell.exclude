@@ -1,0 +1,1128 @@
+# 00000001 This file is used together with the -x flag of codespell to exclude specific known typos
+# 00000002 and lines which should be kept. It needs to have the very same syntax (e.g spaces, tabs)
+# 00000003 in front or after the line so that codespell is ignoring the line correctly.
+# 00000004 nb: Once the whole directory is codespell "free" we might want to generate this file automatically
+# 00000005 nb2: The strings before are used like this so we can call "sort | uniq" on the file more easily.
+# 000300Dedected burute force atack from your ip adress   <--- alternative response
+    '000300Dedected burute force atack from your ip adress' >< r ||
+# 00: 33 20 2d 2d 36 20 42 61 64 20 52 65 71 75 65 73    3 --6 Bad Reques
+# 0x00:  00 11 49 6E 76 61 6C 69 64 20 63 6F 6D 6D 61 6E    ..Invalid comman
+# 0x00:  01 67 65 74 6E 61 6D 65 69 6E 66 6F 3A 20 54 65    .getnameinfo: Te
+# 0x0010:  73 65 72 20 20 20 20 20 20 48 6F 73 74 28 73 29    ser      Host(s)
+# 0x00E0:  74 65 20 69 6E 64 65 78 20 69 68 61 76 65 20 64    te index ihave d
+# 0x00F0:  75 70 6C 69 63 61 74 65 20 6D 69 6D 65 20 66 6F    uplicate mime fo
+                   0x02,			# ByteOrder (little endian)
+# 0x10:  70 65 63 69 66 69 65 64 20 75 73 65 72 2E 0D 0A    pecified user...
+# 0x20:  64 79 0D 0A 45 52 52 4F 52 20 43 6F 6D 6D 61 6E    dy..ERROR Comman
+# 0x20:  6D 65 73 73 61 67 65 2E 48 61 6E 64 73 68 61 6B    message.Handshak
+# 0x50:  72 6F 2E 70 72 6F 64 75 63 74 2E 64 65 76 69 63    ro.product.devic
+# 0x50:  A1 37 43 6F 6E 6E 65 63 74 69 6F 6E 20 66 72 6F    .7Connection fro
+#0x60:  AC 13 28 D3 B3 A5 BA F0 FD D6 FA 22 BF 4D F2 4D    ..(........".M.M
+                     1047, "WIT",
+                     1153, "Alga Automacao e controle LTDA",
+                     1212, "HSA Systems",
+2007-11-08  Tim Brown <timb@openvas.org>
+2008-02-20  Tim Brown <timb@openvas.org>
+2008-09-10  Tim Brown <timb@openvas.org>
+2008-09-14  Tim Brown <timb@openvas.org>
+2008-09-15  Tim Brown <timb@openvas.org>
+2008-09-18  Tim Brown <timb@openvas.org>
+2008-10-12  Tim Brown <timb@openvas.org>
+2008-11-05  Tim Brown <timb@openvas.org>
+2008-12-16  Tim Brown <timb@openvas.org>
+2009-07-10  Tim Brown <timb@openvas.org>
+2009-07-11  Tim Brown <timb@openvas.org>
+2009-07-13  Tim Brown <timb@openvas.org>
+2009-07-14  Tim Brown <timb@openvas.org>
+2009-07-20  Tim Brown <timb@openvas.org>
+2009-09-01  Tim Brown <timb@openvas.org>
+2009-09-02  Tim Brown <timb@openvas.org>
+2010-09-10  Tim Brown <timb@openvas.org>
+2011-07-01  Tim Brown <timb@openvas.org>
+# 20: 74 68 65 6e 74 69 63 61 74 69 6f 6e 20 53 65 72 thentication Ser
+                     249, "Varian Vacuum Products",
+                     303, "Binar Elektronik AB",
+                          38, "CompoNet Repeater",
+                     419, "GERBI & FASE S.p.A.(Fase Saldatura)",
+  # 50: 4d 4c 20 5b 0a 20 20 20 3c 21 45 4c 45 4d 45 4e    ML [.   <!ELEMEN
+# 50: 4d 4c 20 5b 0a 20 20 20 3c 21 45 4c 45 4d 45 4e    ML [.   <!ELEMEN
+  # 50: 65 63 74 20 65 6e 76 65 6c 6f 70 65 20 76 61 63 ect envelope vac
+# 50: 65 63 74 20 65 6e 76 65 6c 6f 70 65 20 76 61 63 ect envelope vac
+                          52, "HART Device",
+ 6-4c-4/01 00000411 Atom X series Readded what missing in last
+                          "84:BA:3B","Canon",
+                     879, "PULS GmbH",
+8930 was added, Dell Inspiron Mini 9 HDA sound support was added, CIFS
+                     961, "Varian Vacuum Technologies",
+'-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access',
+'-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access');
+'-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access',
+  accessible from a public WAN (Internet) / public LAN.
+  accessible from a public WAN (Internet) / public LAN.");
+  - ACI - DO not encode query_string
+  (ACI) mode could allow an unauthenticated, remote attacker to unexpectedly restart the device,
+  - ACI modules - Fix non-signature authentication
+Add back sibling paca poiter to paca (bsc#1055117).
+#  -- add dealign method
+  added ALSA fixes for Intel HDA, added workaround for a bug on iwlagn,
+	Added reference to Tim Brown's contribution.
+ * added: regression testing to Travis CI for OSS-Fuzz crashers
+Additionally, the popd build-in now ensures that the normalized stack offset is within bounds before trying to free that stack entry. This fixes a segmentation fault.");
+Add more important informations
+ * Add suppor... [Please see the references for more information on the vulnerabilities]");
+  a denial of service. (CVE-2016-4429) Tim Ruehsen discovered that the
+"admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp:all,ftp",
+  Admin endpoints to a public WAN (Internet) / public LAN without authentication.
+"Administrator:admin:cisco,conexant,corecess,gvc:all",
+"Adminstrator|",
+"adminstrator|changeme",
+"ADMN|admn",
+# ADSL Router, VxWorks SNMPv1/v2c Agent, Conexant System, Inc.
+A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)");
+Aftandilian, and Jordi Chancel as the original reporters.");
+Aftandilian, Paul Theriault, Julian Hector, Petr Cerny, Jordi Chancel, and
+  - Agobot.FO
+All FreeS/WAN 2.x users should upgrade to the latest stable version:
+ allowed for informations leaks and potentially privilege escalation
+All Super-FreeS/WAN users should migrate to the latest stable version of
+                        "/alog.nsf", "/archive/a_domlog.nsf", "/archive/l_domlog.nsf",
+alsa: hda/realtek: Add suppor... [Please see the references for more information on the vulnerabilities]");
+ALSA: usb-audio: Add Schiit Hel device to mixer map quirk table
+Also a bug was fixed where qemu-img convert could occasionaly corrupt images. (bsc#908380)");
+ALS... [Please see the references for more information on the vulnerabilities]");
+  An attacker could use this to cause a denial of service. (CVE-2016-4429) Tim
+and all recent Fedora versions (which is almost all current versions of sysstat verified). o Added a number of additional metrics into the importer for people starting to use it to analyse sar data from real customer incidents. o Rework use of C99 'restrict' keyword in pmdalogger (Debian bug: 689552) o Alot of work on the PCP QA suite, special thanks to Tomas Dohnalek for all his efforts there. o Win32 build updates o Add 'raw' disk active metrics so that existing tools like iostat can be emulated o Allow sar2pcp to accept XML input directly (.xml suffix), allowing it to not have to run on the same platform as the sadc/sadf that originally generated it. o Add PMI error codes into the PCP::LogImport perl module. o Fix a typo in pmiUnits man page synopsis section o Resolve pmdalinux ordering issue in NUMA/CPU indom setup (Redhat bug: 858384) o Remove unused pmcollectl imports (Redhat bug: 863210) o Allow event traces to be used in libpcp interpolate mode
+  and CVE-2013-1667. Upstream acknowledges Tim Brown as the original
+  - An error in the epan/dissectors/packet-dof.c script within the DOF dissector
+An input validation issue was addressed with improved memory handling. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to read restricted memory.(CVE-2020-10001)");
+Application Centric Infrastructure (ACI) could allow an unauthenticated, adjacent attacker to cause a denial of
+  Application Centric Infrastructure (ACI) mode could allow an authenticated, local attacker to
+  Application Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to
+  - arm64: ptrace: Avoid setting compat FPR to garbage if get_user fails
+ ascii art thats show the arcs between that start and end points of
+  as demonstrated using the Connection: TE, , Keep-Alive header.");
+- A seperate sblim-sfcb-openssl1 package was added to the SECURITY Module.
+  as the original reporter of CVE-2010-1168, and Tim Bunce and Rafal
+  Autoloader '%{pear_phpdir}/CAS/Autoload.php'<semicolon>");
+"bakup\n",
+                          base:"cpe:/a:cas:commserver_ua:", expr:"^([0-9.]+)", insloc:location, regService:"smb-login", regPort:0);
+#  Based on the work of Tim Brown <timb@nth-dimension.org.uk> as published
+batman-adv: bla: use netif_rx_ni whe... [Please see the references for more information on the vulnerabilities]");
+because of an initialization bug in the framework. This issue has been addressed in Mozilla products by explicitly turning off the framework's logging of input events. On vulnerable systems, this issue can result in private data such as usernames, passwords, and other inputed data being saved to a log file on the local system.
+bit32_lines = make_list('-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access',
+bit64_lines = make_list('-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access',
+  BMX NOE 0100 (H) prior to version 3.3, BMX NOE 0110 (H) prior to version 6.5 and BMX NOC 0401 prior to
+ branch speculation could be enabled even though it was diabled before
+ branch speculation could be enabled even though it was diabled be... [Please see the references for more information on the vulnerabilities]");
+# @brief test if address is on a WAN (Internet) or Public LAN
+- bsc#934506: Fix vte monitor consol looks empy
+- bso#11740: Real memeory leak(buildup) issue in loadparm.");
+btrfs: add hel... [Please see the references for more information on the vulnerabilities]");
+- Btrfs: Avoid trucating page or punching hole in a already existed hole
+- Btrfs: delete chunk allocation attemp when setting block group ro.
+- Btrfs: explictly delete unused block groups in close_ctree and
+buil... [Please see the references for more information on the vulnerabilities]");
+  Business RV042 Dual WAN VPN Routers and Cisco Small Business RV042G Dual Gigabit WAN VPN Routers could allow
+  Business RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers could allow an unauthenticated, remote
+can: gs_usb: fix endianess problem with candleLight fi... [Please see the references for more information on the vulnerabilities]");
+can: gs_usb: fix endianess problem with candleLight firmware (git-fixes).
+#  CARD8    byteOrder (66 'B'=MSB, 108 'l'=LSB)
+  carefully crafted GIF or IFF ILBM file, the application could crash
+CAS authentication protocol, did not encode tickets before adding them
+"cas\n",
+CAs. The two existing TurkTrust root CAs remain active.");
+            '=categorie&cp=CONCAT(1,SQL-INJECTION-TEST)&lang=en&rpp=15';
+ causes a memor... [Please see the references for more information on the vulnerabilities]");
+  certain components in the underlying Application Centric Infrastructure (ACI). An attacker could exploit this
+certificates (including ones from CAs) using keys with an exponent e = 3, which
+"chage --inactive <DAYS> <USER> for existing users.';
+# Charles Thier <cthier@thethiers.net>
+        check_matches = re.finditer('[^\r\n]*[#]+[ ]*([Tt]hunderbird|[Ss]ea[Mm]onkey|[Hh]ot[Ff]ix|[Ff]irefox|[Pp]ower[Pp]oint( Viewer)?)[ ]*[Cc]heck[^\r\n]*\n', text)
+China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt (server auth)
+China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt server auth
+Christian Loos discovered an information disclosure flaw which may
+Christian Loos discovered a remote denial of service vulnerability,
+  Cisco ACI Multi-Site Orchestrator (MSO) to send a specific API request to a managed Cisco APIC or
+# Cisco TelePresence TC and TE Software Multiple Security Vulnerabilities
+Claus Wahlers reported that random images from GPU memory
+  Clemens Huebner and Kevin Stange discovered that Pidgin incorrectly handled
+"cliente",
+cmd = 'for usr in $(cut -d: -f1 /etc/shadow); do [[ $(chage --list $usr | grep \'^Last password change\' | cut -d: -f2) > $(date) ]] && echo "$usr :$(chage --list $usr | grep \'^Last password change\' | cut -d: -f2)"; done';
+cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip saddr,ip6 saddr]\'';
+cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip sddr,ip6 sddr]\'';
+  CNA, but CVE is not intended to cover defense-in-depth issues that are
+  command execution by remote attackers who have access to the ANS page.");
+ Commit frame and insufficent validation of elliptic curve points
+  common_files_dir_id = 'oval:org.mitre.oval:obj:281';
+# Comparison Engine Power 'product.comparision.php' SQL Injection Vulnerability
+complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:ind-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:oval-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:win-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows windows-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd">');
+  Conexant cx231xx USB video capture driver in the Linux kernel did not properly
+"config.sys", "io.sys", "msdos.sys", "pagefile.sys",
+"Connection: TE, close\r\n",
+                  "Connection: TE,,Keep-Alive\r\n\r\n" );
+  control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
+converter, performed insufficient namespace validation of Rouge syntax
+# Copyright (C) 2005 Charles Thier
+# Copyright (c) 2008 Tim Brown
+# Copyright (C) 2008 Tim Brown
+# Copyright (c) 2008 Tim Brown and Portcullis Computer Security Ltd
+# Copyright (c) 2009 Tim Brown
+# Copyright (C) 2009 Tim Brown
+# Copyright (c) 2009 Tim Brown and Portcullis Computer Security Ltd
+Corrected a badly constracted file which could have allowed treating of
+    correct_none_available_pattern = 'script_tag\s*\(\s*name\s*:\s*"solution"\s*,\s*value\s*:\s*"No known solution is available\s+as\s+of\s+[0-9]{2}(st|nd|rd|th)\s+(January|February|March|April|May|June|July|August|September|October|November|December),\s+20[0-9]{2}\.\s+Information\s+regarding\s+this\s+issue\s+will\s+be\s+updated\s+once\s+solution\s+details\s+are\s+available\.'
+    correct_none_available_syntax = 'No known solution is available as of dd(st|nd|rd|th) mmmmmmmm, yyyy. Information regarding this issue will be updated once solution details are available.'
+ could have allowed attackers to perfrom CRLF attacks (bsc#1137825).");
+ could lead to shared memory segments of other users beeing freed
+    cpe = build_cpe(value:ver, exp:"^([0-9.]+)", base:"cpe:/a:mitre:ovaldi:");
+CPE = "cpe:/a:mapp:webtrekk:";
+      cpe = "cpe:/a:mitre:ovaldi";
+CPE = "cpe:/a:netsparker:wass";
+ CPU' could have occured because a retry loop continually finds the same
+crafted IFF ILBM file. NOTE: some of these details are obtained from
+Create all system-defined macros defore processing command-line given
+  csd_version_id = 'oval:org.mitre.oval:obj:717';
+    csrsrv_file_id = 'oval:org.mitre.oval:obj:2045';
+    csrsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
+  CVE-2008-4210: When creating a file, open()/creat() allowed the setgid
+ CVE-2011-2928: The befs_follow_linkl function in fs/befs/linuxvfs.c in the Linux kernel did not validate the lenght attribute of long symlinsk, which allowed local users to cause a denial of service (incorrect pointer dereference and Ooops) by accessing a long symlink on a malformed Be filesystem.
+ CVE-2014-0077: drivers/vhost/net.c in the Linux kernel before 3.13.10, when mergeable buffers are disabled, does not properly validate packet lengths, whic... [Please see the references for more information on the vulnerabilities]");
+CVE-2015-0206: A memory leak could have occured in dtls1_buffer_record.
+ * CVE-2015-0255: Check string lenghts in XkbSetGeometry request
+- CVE-2015-0255: Check string lenghts in XkbSetGeometry request
+CVE-2015-2922: The ndisc_router_discovery function in net/ipv6/ndisc.c in the Neighbor Discovery (ND) protocol implementation in the IPv6 stack in the Linux kernel before 3.19.6 allows remote attackers to reconfigure a hop-limit setting via a small hop_limit value in a Router Advertisement (RA) message. (bnc#922583)
+- CVE-2015-4680: Fixed Insufficent CRL application for intermediate
+- CVE-2015-7509: Mounting ext4 filesystems in no-journal mode could hav
+- CVE-2016-0448: Vulnerability in the JMX comonent related to attribute
+CVE-2016-1978 and Tim Taubert as the original reporter of CVE-2016-1979.
+CVE-2016-1978 and Tim Taubert as the original reporter of CVE-2016-1979.");
+- CVE-2016-2112: LDAP conenctions were vulnerable to downgrade and MITM
+CVE-2016-5416 389-ds-base: ACI readable by anonymous user
+ * CVE-2016-8707 Possible code execution in Tiff conver utility
+- CVE-2017-1000376: Don't request excutable stack from libffi.
+- CVE-2017-10971: Fix endianess handling of GenericEvent to prevent a
+- CVE-2017-11145: Lack of bounds checks in timelib_meridian coud lead to
+ * CVE-2017-12587: User controlable large loop in the ReadPWPImage in
+  - CVE-2017-15594: x86: Incorrect handling of IST settings during CPU hotplug
+ * CVE-2017-15930: Null Pointer dereference while transfering JPEG
+- CVE-2017-6209: stack buffer oveflow in parse_identifier (bsc#1026723)
+- CVE-2017-7184: The XFRM processsing in the Linux kernel 16.10 allowed
+- CVE-2017-7228: Broken check in memory_exchange() permited PV guest
+- CVE-2017-7890: Buffer over-read from unitialized data in
+CVE-2017-9107: Fixed an issue when quering domain names which could have
+- CVE-2018-10017: Preven out-of-bounds memory read with IT/ITP/MO3 files
+- CVE-2018-11359: Fix multiple dissectors crashs (bsc#1094301).
+CVE-2018-11359: Fix multiple dissectors crashs (bsc#1094301).
+- CVE-2018-12599: The ReadBMPImage and WriteBMPImage fucntions allowed
+CVE-2018-13094: Prevent OOPS that may have occured for a corrupted xfs
+CVE-2018-15473: OpenSSH was prone to a user existance oracle
+CVE-2018-18883: Fixed an issue related to inproper restriction of nested
+CVE-2018-19491: Fixed a buffer overlow in the PS_options function
+CVE-2018-19873: Fixed a segmantation fault via a malformed BMP file
+CVE-2018-5390: Fixed the possiblilty that the kernel can be forced to
+- CVE-2018-7322: DICOM: inifinite loop (dissect_dcm_tag)
+CVE-2019-10098: Fixed mod_rewrite configuration vulnerablility to open
+  - CVE-2019-10896: DOF dissector crash.
+CVE-2019-11324: Fixed invalid CA certificat verification (bsc#1132900).
+CVE-2019-11707: Fixed a type confusion vulnerability in Arrary.pop
+CVE-2019-17012: Fixed multiple memmory issues (bmo#1449736, bmo#1533957,
+CVE-2019-19063: Fixe... [Please see the references for more information on the vulnerabilities]");
+CVE-2019-19319: A slab-out-of-bounds write access could have occured
+CVE-2019-19927: A slab-out-of-bounds read access occured when mounting a
+CVE-2019-3816: Fixed a vulnerability in openwsmand deamon which could
+CVE-2019-3838: Fixed various bugs which allows to reenable and misuse
+CVE-2019-3863: Fixed an Integer overflow in user authenicate keyboard
+CVE-2020-10757: Fixed an issue where remaping hugepage DAX to anon mmap
+CVE-2020-14381: Fixed requeue paths such that filp was valid when
+CVE-2020-15254: Undefined behavior in bounded channel of crossbeam rust crate
+CVE-2020-1945: Fixed an inseure temorary file vulnerability which could
+CVE-2020-26117: Server certificates were stored as certiticate
+CVE-2020-29481: Fixed an issue which could have allowd to new domains to
+CVE-2020-36158: Fixed an issue wich might have allowed a remote
+CVE-2020-5208: Fixed multiple remote code executtion vulnerabilities
+CVE-2020-8492: Fixed a regular expression in urrlib that was prone to
+CVE-2021-30004: Fixed an issue where forging attacks might have occured
+  David Bloom and Jordi Chancel discovered that Firefox did not always
+  David Bloom and Jordi Chancel discovered that Thunderbird did not always
+David Watson reported an issue in the open()/creat() system calls
+default, although transcripting can still be enabled through the Start-Transcript cmdlet.
+default_cgis = make_list( "/v2/api/product/manger/getInfo", "/v2/api/product/manager/getInfo" );
+delete  = script_get_preference( "Delete hash test Programm after the test", id:3 );
+ demuxer that could result in excessive amount of ressource allocation
+ * Dependency needed for the MozillaThunderbird udpate");
+  desc = "Diese Vorgabe muss manuell ueberprueft werden.";
+  desc = "Host ist kein Microsoft Windows 10 System.";
+        detection_english_match = re.search('"(Run\s+Windows\s+Update\s+and\s+(update|install)\s+the\s+listed\s+hotfixes\s+or\s+download\s+and\s+(update|install\s+the)\s+(mentioned\s+)?hotfixes\s+(in|from)(\s+the)?(\s+referenced)?\s+(advisory|avdisory)\.?(\s*(For\s+(details|updates)\s+refer\s+to(\s+the)?\s+reference\s+links?|Please\s+see\s+the\s+references\s+for\s+more\s+information)\.?)?)"', text, re.IGNORECASE)
+"developement\n",
+# |/dev/hda|ST3160021A|UNK|*||/dev/hdc|???|ERR|*||/dev/hdg|Maxtor 6B200P0|UNK|*||/dev/hdh|Maxtor 6Y160P0|38|C|
+  die aktuellste Ergaenzungslieferung bezieht. Titel und Inhalt koennen sich bei einer
+Die Standard-Anforderung 'A7: Lokale Sicherheitsrichtlinien' beschreibt, dass und welche
+                          dir + "/ans/ans.pl?p=../../../../../usr/bin/id|&blah" ) ) {
+ * Disable all weak EXPORT ciphers by default. These can be reenabled if
+disable, or enable CAs causing various denial of service problems with
+  discovered that the Conexant USB driver in the Linux kernel improperly handled
+distrust all of DigiNotar's CAs. In this update, this is done in the
+ (divide-by-zero error and QEMU process crash) via a larg... [Please see the references for more information on the vulnerabilities]");
+  # <div style="float: right; margin-top: 5px; margin-right: 5px;">Rev. 1.04.06&nbsp;&nbsp;&nbsp;&nbsp;Bulid. 20150226142928 </div>
+  # <div style="float: right; margin-top: 5px; margin-right: 5px;">Rev. 1.04.07&nbsp;&nbsp;&nbsp;&nbsp;Bulid. 20150925151332 </div>
+ Docker compatability (#3340)
+drbd: Avoid Clang warning about pointless switch statment (bsc#1051510).
+- drm/i915: Add Reenable Timer to turn Hotplug Detection back on (v4)
+ eliptic curve parameters were not sufficiently validated during
+  else if (AUDITLOGDAEMON_START =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITLOGDAEMON_START =~ ".*No such file or directory.*")  AUDITLOGDAEMON_START = "no audit.log";
+  else if (AUDITLOG_DATETIME =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITLOG_DATETIME =~ ".*No such file or directory.*")  AUDITLOGDATETIME_LAST = "no audit.log";
+  } else if("diese Vorgabe muss manuell ueberprueft werden" >< tolower(status)) {
+  else if( svc == "agobot.fo" )
+Enable log information of starting/stoping services. (bsc#1144923,
+Engineering (TE) tunnel's physical source interface is not propagated to hardware after the adjacency is lost.
+  eSpace IAD, eSpace U1981 and eSpace USM.");
+  exact-width integer types int{N}_t and uint{N}_t.
+examined with fuzzing by Tim Blazytko, Cornelius Aschermann, Sergej
+ executuon (bsc#966437).
+EXP=CustomIE.dll
+EXP=expext.dll
+ * extended EAP-SIM/AKA fast re-authentication to allow use with FILS
+ external emulators, which may have cuased Xen to crash, resulting in a
+'facsimiletelephonenumber' to the Access Control Instruction (ACI) for user
+  family_id = 'oval:org.mitre.oval:obj:99';
+  family_xml = '\t\t<family_item xmlns="http://oval.mitre.org/XMLSchema/oval-sys' +
+(FATE#312793, bnc#782369). The userland utilities were published seperately to support this feature.
+(FATE#313309) The ipset userland utility will be published seperately to support this feature.
+(FATE#314441). A seperate hyper-v package will be published to support this feature.
+  feature is available to ensure that nobody can gain remote access to the modem (via the WAN/DSL interface).
+# Fedora Update for tre FEDORA-2016-0a952a3bc0
+# Fedora Update for tre FEDORA-2016-0ff6c3d84b
+# Fedora Update for tre FEDORA-2016-cd09eab674
+  files to potentially execute code and it is tracked by the Mitre CVE
+  file_xml = '\t\t<file_item' + status + ' xmlns="http://oval.mitre.org/XMLSchema/' +
+Fixed a bug where Podman could not run containers usin... [Please see the references for more information on the vulnerabilities]");
+Fixed an issue with version missmatch (bsc#1162224).
+Fixed a regression in regards to the 'edge' comand line flag
+  * fixed FILS to and RSNE into (Re)Association Response frames
+Fixed utf8 handling in perldoc by useing 'term' instead of 'man'
+ * Fixed: Various stability, functionality, and security fixe (MFSA
+fixes/enhancements for HP Educ.ar machine HDA sound support, minor
+Fix java detection on machines with too many cpus CVE-2018-10583: An information disclosure vulnerability occured when
+Fix %posttrans script execution (fixes #265) The scripts are execuable.
+- Fix removeing links before update-alternatives run. bnc#931702
+fix SOLVER_FLAG_FOCUS_BEST updateing packages without reason
+Fix source-download commnds help (bsc#1180663)
+fixtext = 'Add rules to audit the system calls "creat", "open/openat" and "truncate/ftruncate" in
+	Fix typo in preference name: "password" misspelled as "pasword".
+  #<FONT SIZE="+3">S</FONT>EARCH
+ - For backwards compatability, setting --log-driver=json-file in podman
+foreach dir( make_list_unique( "/ag", "/ang", "/guestbook", "/anguestbook", http_cgi_dirs( port:port ) ) ) {
+foreach dir( make_list_unique( "/", "/cas", "/cas-server-webapp", http_cgi_dirs( port:port ) ) ) {
+  foreach url( make_list( dir + "/ans.pl?p=../../../../../usr/bin/id|&blah",
+- For the full release notse, see:
+"foto",
+ found/known outside kde4 enviroment/session
+    fpr = tmpfpr[0];
+  from a public WAN (Internet) / public LAN.");
+  from both LAN and WAN.");
+  from WAN (if port-forwarding is enabled to allow remote configuration, then it is a good idea to disable port-forwarding
+ function may have writen data beyond the target buffer, leading to a
+Furthemore, the following bugs were fixed:
+Furthermore, a severe flaw had been discovered by Tim Duesterhus in
+  Furthermore Microsoft Exchange CAS and OWA as well as other webservers or load balancers might be also affected.");
+ G14(GA401) ser... [Please see the references for more information on the vulnerabilities]");
+Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an unauthenticated, remote attacker
+  * gnutls doesn't like root CAs without Basic
+ * go#39920 net/http: panic on misformed If-None-Match Header with
+ * go#41463 compress/flate: deflatefast produces corrupted output
+  * groupd no longer allows the default fence d ...
+  Grundschutz. Die detaillierte Beschreibung zu dieser Massnahme findet sich unter
+    guess += '\n- Huawei TE Device';
+"hanlder\n",
+ have resul... [Please see the references for more information on the vulnerabilities]");
+ * Heap-based buffer overflow when scanning crypted PE files
+"H", "HSI",
+  - HP Helion Eucalyptus does not correctly check IAM user's permissions for accessing versioned objects and ACLs.
+    hp_printer['login_success'] = '<?hp te.includeSubPage';
+# <HTML>Acess not granted.</HTML>
+# <HTML>Acess to resource EDITION not granted.</HTML>
+# http://nto.github.io/AirPlay.html#video-httprequests
+        - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-
+# Huawei TE Device Detection
+# Huawei TE Devices Multiple Vulnerabilities
+ hypervisor crash leading to a Denial of Servce. (XSA-203, bsc#1014300,
+i40e: Fix kernel oops whe... [Please see the references for more information on the vulnerabilities]");
+  ie_reg_version_id = 'oval:org.mitre.oval:obj:247';
+    iexplore_file_id = 'oval:org.mitre.oval:obj:16';
+    if(!appName || appName !~ "CAS.CommServerUA") continue;
+    if(!appName || appName !~ "ICS Generic HART") continue;
+  if (AUDITCONF =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITCONF =~ ".*No such file or directory.*") AUDITCONF = "no auditd.conf";
+  if (AUDITRULES =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITRULES =~ ".*No such file or directory.*") AUDITRULES = "no audit.rules";
+  if (AUDITSTATUS =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITSTATUS =~ ".*No such file or directory.*") AUDITSTATUS = "no auditctl";
+if( banner =~ " (A\. A\. Milne|Albert Einstein|Anonimo|Antico proverbio cinese|Autor desconocido|Charles Dickens|Francisco de Quevedo y Villegas|George Bernard Shaw|Jaime Balmes|Johann Wolfgang von Goethe|Jil Sander|Juana de Asbaje|Konfucius|Lord Philip Chesterfield|Montaigne|Petrarca|Ralph Waldo Emerson|Seneca|Syrus|Werner von Siemens)" ||
+if (banner =~ "Huawei TE[0-9]0") {
+  if( ( buf =~ "<title>GLPI - Authentification" || buf =~ "<title>GLPI - Authentication" ) && ( buf =~ "Powered By Indepnet" ||
+if( "CONEXANT SYSTEMS, INC." >< r &&
+if( "CONEXANT SYSTEMS, INC" >< r && "ACCESS RUNNER ADSL CONSOLE PORT" >< r && "LOGON PASSWORD" >< r ) {
+if( cpe =~ "^cpe:/o:huawei:te(3|4|5|6)0_firmware" ) {
+  if( ">CrawlTrack informations<" >< rcvRes ) {
+    if (cryptdisks =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  cryptdisks =~ ".*No such file or directory.*") cryptdisks = "none";
+    if (crypttab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  crypttab =~ ".*No such file or directory.*") crypttab = "none";
+  if (devaudio =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  devaudio =~ ".*No such file or directory.*") devaudio = "no audio";
+if( ect = egrep( pattern:"^Expect-CT\s*:", string:banner, icase:TRUE ) )
+  if( ect_on_http )  report += '\nECT-Header:\n\n' + ect;
+if( egrep( pattern:"RTSP/1\.0 505( Protocol | RTSP | )Version [nN]ot [sS]upported", string:r ) ) {
+if( found = egrep( string:dir_recv, pattern:"^(c:\\te?mp|/var/spool/cron|/etc/crontabs|/etc|/proc|/tmp)", icase:TRUE ) ) {
+    if( fpr[0] == "[" ) {
+    if (fstab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  fstab =~ ".*No such file or directory.*") cryptdisks = "none";
+if (fstab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  fstab =~ ".*No such file or directory.*") fstab = "none";
+  if("^HTTP/1\.[01] 200" >< rcvRes && eregmatch(pattern:"IST [0-9]+", string:rcvRes)){
+if(http_vuln_check(port:port, url:'/hag/pages/toolbox.htm',pattern:"<title>Advanced Setup", extra_check:make_list("WAN Configuration","ADSL Status"))) {
+if(http_vuln_check(port:port, url:url, pattern:"Current Configuration", extra_check:make_list("System Description","System Software Version","network parms"))) {
+  if(http_vuln_check(port:port, url:url, pattern:"Password found\. Loging in\.\.\.<script>")) {
+if (http_vuln_check(port: port, url: url, pattern: "<title>WAN Setup", check_header: TRUE)) {
+  if( "Huawei TE" >< banner ) {
+  if( ! iif || ! ip || ! ip6 ) {
+  if(!isnull(res = isrpmvuln(pkg:"libell", rpm:"libell~0.26~1.fc31", rls:"FC31"))) {
+if( "Login successed" >< recv ) {
+  if (lssendmailcnf =~ ".*Datei oder Verzeichnis nicht gefunden.*" || lssendmailcnf =~ ".*No such file or directory.*"){
+      if (lsstatusfile =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  lsstatusfile =~ ".*No such file or directory.*") lsstatusfile = "nofile";
+  If-Match, If-None-Match, If-Range, If-Unmodified-Since, Max-Forwards, TE, Host)");
+if( ( model =~ '^RP200' || model =~ '^TE[3456]0' ) && revcomp( a: version, b: "v600r006c00spc500" ) < 0) {
+if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 ) {
+  if (mountd =~ 'program 100005 version . ready and waiting' || mountd =~ 'Program 100005 Version . ist bereit und wartet') mountd = "true";
+  if (nfsd =~ 'program 100003 version . ready and waiting' || nfsd =~ 'Program 100003 Version . ist bereit und wartet') nfsd = "true";
+                    if "nvd.nist.gov/vuln/detail/CVE-" in match.group(2) or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-" in match.group(2):
+  if ("presse" >< res1) {
+if (prod == "BMX NOC 0401" || prod == "BMX NOE 0100" || prod = "BMX NOE 0110" || prod == "BMX NOE 0110H" ||
+if (prod == "BMX NOC 0401" || prod == "BMX NOE 0100" || prod == "BMX NOE 0110" || prod == "BMX NOE 0110H" ||
+if (prod == "BMX NOE 0100") {
+if (prod == "BMX NOE 0100" || prod == "BMX NOE 0100H") {
+if (prod == "BMX NOE 0110") {
+if (prod == "BMX NOE 0110" || prod == "BMX NOE 0110H") {
+if( r =~ " (A\. A\. Milne|Albert Einstein|Anonimo|Antico proverbio cinese|Autor desconocido|Charles Dickens|Francisco de Quevedo y Villegas|George Bernard Shaw|Jaime Balmes|Johann Wolfgang von Goethe|Jil Sander|Juana de Asbaje|Konfucius|Lord Philip Chesterfield|Montaigne|Petrarca|Ralph Waldo Emerson|Seneca|Syrus|Werner von Siemens)" ||
+  if(rcvRes && '>iAm[i]nE<' >< rcvRes)
+    if( res =~ "^HTTP/1\.[01] 200" && "Powered by" >< res && "ANG" >< res ) {
+if((res = isdpkgvuln(pkg:"nd", ver:"0.5.0-1woody1", rls:"DEB3.0")) != NULL) {
+if ((res = ispkgvuln(pkg:"app-admin/lsat", unaffected: make_list(), vulnerable: make_list("le 0.9.2"))) != NULL) {
+  if ((res = isrpmvuln(pkg:"tre", rpm:"tre~0.8.0~18.20140228gitc2f5d13.fc23", rls:"FC23")) != NULL)
+  if ((res = isrpmvuln(pkg:"tre", rpm:"tre~0.8.0~18.20140228gitc2f5d13.fc24", rls:"FC24")) != NULL)
+  if ((res = isrpmvuln(pkg:"tre", rpm:"tre~0.8.0~18.20140228gitc2f5d13.fc25", rls:"FC25")) != NULL)
+if(res =~ "<span>[Ss]arix&[Tt]rade;</span>" && res =~ "<span>Copyright\s*&copy;\s*[0-9]+-[0-9]+,\s*[Pp][Ee][Ll][Cc][Oo]\s*&middot;"
+if( res && "WAN SETTINGS" >< res && "value='3G Interface" >< res && "menu.html" >< res &&
+if (secretstdb =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  secretstdb =~ ".*No such file or directory.*") secretstdb = "none";
+if (smbconf =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  smbconf =~ ".*No such file or directory.*") smbconf = "none";
+if (smbpasswd =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  smbpasswd =~ ".*No such file or directory.*") smbpasswd = "none";
+  if(strlen(res) && "nonexistant" >< res && "XJ004CSS" >< res) {
+if ("<title>Cisco NFVIS</title>" >< res && 'content="Xenon Boostrap Admin Panel"' >< res) {
+if ("<title>COMfortel</title>" >< res && "/statics/script/pageChallenge.js" >< res) {
+if (usbbus =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  usbbus =~ ".*No such file or directory.*" ) usbbus = "none";
+if (usbmodules =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  usbmodules =~ ".*No such file or directory.*" ) usbmodules = "none";
+if (usbstorage =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  usbstorage =~ ".*No such file or directory.*" || usbstorage =~ "cat: .* /sys/kernel/debug/usb/devices:.*") usbstorage = "none";
+If you disable this policy setting, transcripting of PowerShell-based applications is disabled by
+If you enable this policy setting, Windows PowerShell will enable transcripting for Windows
+	Ignore root CAs.
+  iif = ssh_cmd( socket:sock, cmd:'nft list ruleset | awk \'/hook input/,/}/\' | grep \'iif "lo" accept\'', nosh:TRUE, return_errors:FALSE );
+ image. This occured because of a lack of proper validation that cached
+  Imaging and Communications in Medicine (DICOM) service accessible from a public WAN (Internet) /
+  Imaging and Communications in Medicine (DICOM) web viewer accessible from a public WAN (Internet)
+ improved over the 2.40 series. The API/ABI there remain unchaged, so
+ Inbuilt protection in ps maped a guard page at the end of the overflowed
+include("CAs.inc");
+inheritence not possible in abstract classes) [bnc#783239]
+install = script_get_preference( "Install hash test Programm on the Target", id:2 );
+  interface for Cisco Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an unauthenticated,
+  interface of Cisco Small Business RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers
+intermediate CAs used by the Dutch PKIoverheid program.
+In the crossbeam crate, one or more tasks in the worker queue could have been be popped twice instead of other tasks that are forgotten and never popped. If tasks are allocated on the heap, this could have caused a double free and a memory leak.
+In the crossbeam rust crate, the bounded channel incorrectly assumed that Vec::from_iter had allocated capacity that was the same as the number of iterator elements. Vec::from_iter does not actually guarantee that and may allocate extra memory. The destructor of the bounded channel reconstructs Vec from the raw pointer based on the incorrect assumptions - this is unsound and caused a deallocation with the incorrect capacity when Vec::from_iter had allocated different sizes than the number of iterator elements. The impact on Firefox is undetermined, but in another use case, the behavior was causing corruption of jemalloc structures.
+In the Linux kernel before 5.7.8, fs/nfsd/vfs.c (in the NFS ser ..
+In the Linux kernel before 5.7.8, fs/nfsd/vfs.c (in the NFS ser ...
+ in the modular exponentation code were added that make sure that it is
+  - invalid GOST parameters DoS attack (CVE-2012-0027)");
+  invalid parameters for the GOST block cipher, which allows remote
+invalid parameters for the GOST block cipher, which allows remote
+  inventory fields and via the 'All softwares' search form for the 'Software name' field.");
+ * iscsiadm: Optimize the the verification of mode paramters
+  issue. Upstream acknowledges Tim Zingelman as the original reporter.
+ It could have occured with FUSE requests. (bnc#1133190)
+item = "EnableTranscripting";
+  it was added support for Cirrus Logic CS420x HDA codec, Wacom driver
+It was discovered that a buffer overflow in IFF ILBM image parsing
+It was discovered that the HSA Linux kernel driver for AMD GPU devices did
+  It was discovered that the SBNI WAN driver did not correctly check for the
+It was found that 389 Directory Server was vulnerable to a flaw in which the default ACI (Access Control Instructions) could be read by an anonymous user. This could lead to leakage of sensitive information.
+It was found that if a Non-Maskable Interrupt (NMI) occurred immediately after a SYSCALL call or before a SYSRET call with the user RSP pointing to the NMI IST stack, the kernel could skip that NMI.(CVE-2015-3291)
+  James web admin endpoints to a public WAN (Internet) / public LAN without authentication.");
+ javax/security/auth/Subject/doAs/NestedActions.java fails if extra
+"jave",
+Jesse Hertz and Tim Newsham discovered that the Linux netfilter
+  Jordi Chancel discovered a buffer overflow in the JPEG decoding engine. An
+Jordi Chancel discovered an address spoofing issue.
+  Jordi Chancel discovered a vulnerability on multipart/x-mixed-replace
+Jordi Chancel discovered a way to use a persistent menu within a select
+  Jordi Chancel discovered that Firefox did not properly display invalid URLs
+Jordi Chancel discovered that Firefox did not properly display invalid URLs
+  Jordi Chancel discovered that Firefox did not properly handle when a server
+Jordi Chancel discovered that HTML select elements could display arbitrary
+Jordi Chancel discovered that the downloads dialog did not implement a
+Jordi Chancel discovered that the location could be spoofed to
+  Jordi Chancel, Eddy Bordi, and Chris McGowen discovered that Firefox
+Jordi Chanel discovered a spoofing vulnerability of the URL location bar
+Jouni Knuutinen from Synopsys discovered flaws in the Samba DCE-RPC
+    key = "HostDetails/Cert/" + fpr + "/";
+keyserv		100029	keyserver
+"keyserver",
+  Konovalov discovered that the Conexant cx231xx USB video capture driver in the
+# Kubernetes Dashboard Public WAN (Internet) Accessible
+L3: conring size for XEN HV's with huge memory to small. Inital Xen logs
+ leaks because of a missing check when transfering pages via
+library: Increment to 7:0:1 No changes, no removals New fuctions:
+[link moved to references] has more informations.
+list to be autodetected, STAC92HD71Bx and STAC92HD75Bx based HDA
+      log_message(data: build_detection_report(app: "OpenMairie Open Presse", version: version,
+    log_message( port:0, data:"'Log nmap output' was set to 'yes' but 'Report about unrechable Hosts' and 'Mark unrechable Hosts as dead (not scanning)' to no. Plugin will exit without logging." );
+  log_message( port:port, data:"A Conexant configuration interface is running on this port" );
+  log_message( port:port, data:"An Agobot.fo backdoor is running on this port" );
+  log_message( port:port, data:"Interface of a Conexant ADSL router is running on this port" );
+M*)6UG-,[V6-;N*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'6['*(;8>~A:>
+Mac OS X SMB2 implmenetation sees Input/output error or Resource
+Maks Polunin and Alberto Garcia discovered independently that
+ + Malicous SMB1 server can crash libsmbclient, (bso#14366)
+mark_dead = script_get_preference( "Mark unrechable Hosts as dead (not scanning)", id:5 );
+  masked. All LSAT users are advised to unmerge it.
+  "Max-Forwards", "TE" ) ) {
+     "Memorise" >< poshRes)
+ memory disclosure whne processing of a specially crafted mp4 file with
+# Mesosphere Marathon Web UI Public WAN (Internet) Accessible
+    "Metastasio (Ipermestra)" >< banner || '"\r\nAnonimo' >< banner || banner =~ '^"[^"]+" *Autor desconocido[ \t\r\n]*$' || "/usr/games/fortune: not found" >< banner ||
+    "Metastasio (Ipermestra)" >< r || '"\r\nAnonimo' >< r || r =~ '^"[^"]+" *Autor desconocido[ \t\r\n]*$' ) {
+ MFSA 2012-27 / CVE-2012-0474: Security researchers Jordi Chancel and Eddy Bordi reported that they could short-circuit page loads to show the address of a different site than what is ... [Please see the references for more information on the vulnerabilities]");
+ MFSA 2012-75 / CVE-2012-3984: Security researcher David Bloom of Cue discovered that 'select' elements are always-on-top chromeless windows and that navigation away from a page with an active 'select' menu does not remove this window.When another menu is opened programmatically on a new page, the original 'select' menu can be retained and arbitrary HTML content within it rendered, allowing an attacker to cover arbitrary portions of the new page through absolute positioning/scrolling, leading to spoofing attacks. Security researcher Jordi Chancel found a variation that would allow for click-jacking attacks was well.
+ MFSA 2013-23 / CVE-2013-0765: Mozilla developer Boris Zbarsky reported that in some circumstances a wrapped WebIDL object can be wrapped multiple times, overwriting the existing wrapp... [Please see the references for more information on the vulnerabilities]");
+ MFSA 2013-54 / CVE-2013-1692: Security researcher Johnathan Kuskos reported that Firefox is sending data in the body of XMLHttpRequest (XHR) HEAD requests, which goes agains the XHR specification. This can potentially be used for Cross-Site Request Forgery (CSRF) attacks against sites which do not distinguish between HEAD and POST requests.
+  * missing capability checks were found in the SBNI WAN driver which could
+ML^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'
+MM]7>[YM~GC^@?_WK0@W/F>UDL^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/
+MN*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'6['*(;8>~A:>&GO>&&M7/36X
+  model = "TE Unknown Model";
+  mod = eregmatch(pattern: "Huawei (TE[0-9]0)", string: banner);
+    mod = eregmatch( pattern:"var Model(Nmae|Name) = '(EDR-[^']+)';", string:buf );
+# Modified by Tim Brown <timb@openvas.org>
+	Move CVE-2016-2313 into the new plugins. The NVD/Mitre entry is wrong in
+    mshtml_file_id = 'oval:org.mitre.oval:obj:222';
+    mshtml_file_variable_id = 'oval:org.mitre.oval:var:200';
+  msi_build_min_obj_id = 'oval:org.mitre.oval:obj:23987';
+  msi_build_mjr_obj_id = 'oval:org.mitre.oval:obj:23905';
+  msi_prd_min_obj_id = 'oval:org.mitre.oval:obj:23564';
+  msi_prd_mjr_obj_id = 'oval:org.mitre.oval:obj:23591';
+MS-MMS, RTPS, RTPS2, Mount, ACN, CIMD and DTLS protocols, which could
+ multiple connections, and reenabled for use!
+M?_WK0@W/F>UDL^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/.DM''*U8D?Q:
+  nachfolgendem Verweis. Es ist zu beachten, dass der dortige Text sich immer auf
+    name = "Agobot.fo backdoor";
+NAME=Expext/MetaDirect hijacker
+      # nb: Data Element with Explicit VR of OB, OD, OF, OL, OV, OW, SQ, SV, UC, UR, UT, UN or UV have a different
+    # nb: Data Element with Explicit VR of OB, OD, OF, OL, OV, OW, SQ, SV, UC, UR, UT, UN or UV have a different
+  # nb: "Programm" is a typo here (and below) but can't be changed as it would break existing scan configs.
+# nb: Programm is a typo, see above...
+ND advertisements.");
+(ND) packets. An attacker could exploit this vulnerability by sending a number of IPv6 ND packets to be processed
+Ned Williamson and Niklas Baumstark discovered a remote code execution
+Ned Williamson and Niklas Baumstark discovered a way to escape the sandbox.
+Ned Williamson discovered an out-of-bounds read issue.
+Ned Williamson discovered an out-of-bounds write issue.
+Ned Williamson discovered a stack overflow issue.
+Ned Williamson discovered a use-after-free issue.
+Ned Williamson discovered a use-after-free issue in IndexedDB.
+Ned Williamson discovered a use-after-free issue in the WebRTC
+Ned Williamson discovered a way to escape the sandbox.
+  Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch Software could allow an adjacent,
+# nft add rule inet filter input iif lo accept
+# Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability (Windows)
+nname[count]    = "Agobot.FO";
+        ## NO CPE Name found, using cpe:/a:netsparker:wass: CPE Name
+No descriptio ...
+                         "NOTIC: iSCSI:", "INFOR: iSCSI:", "ERROR: iSCSI:", # DELL TL2000/TL4000 iSCSI-SAS Bridge on 1234/tcp
+not properly check the user's permissions while modifying CAs in Dogtag. An
+  number of fixes for Intel HDA were added, another number of fixes for
+nvme: Namepace identification descriptor list is optional (bsc#1174748).
+ occured in the EXTRACT_16BITS function, called from the stp_print
+ occurrance of 'keys' and 'controlkey' in ntp.conf.");
+ occurrance of 'keys' and 'controlkey' in ntp.conf (bsc#957226).");
+  OceanStor Backup Software, SMC2.0, eSpace VCN3000, iManager NetEco, iManager NetEco 6000.");
+  OceanStor UDS, SMC2.0 and eSpace VCN3000.");
+  of CAS CommServer UA for Windows.");
+  of Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers could allow an
+  of Cisco Small Business RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers could allow
+  of ICS Generic HART DTM for Windows.");
+ofproto/bond: fix interal flow leak of tcp-balance bond
+  of the Cisco Small Business RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers could
+ of the CPU microcode packages, delivered in seperate updates.
+  of user-supplied input processed by Steam In-Home Streaming (IHS) Discovery
+  of Wiesemann & Theis GmbH W&T OPC Server for Windows.");
+Ohter bug fixes:
+Openswan. Note that Portage will force a move for Super-FreeS/WAN users to
+or CAS service provider is enable and the administrator has chosen to store
+or potentially have unspecified futher impact.
+               'oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux linux-system-characteristics-schema.xsd">\n\n' );
+                       '//oval.mitre.org/XMLSchema/oval-system-characteristi' +
+               'oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 ',
+ overflow might have occured that allowed a malicious or buggy PV guest
+ package. They're not used anymore becuse of systemd (bsc#1178396).
+           "pass=&Servers-0-verbose_check=on&Servers-0-bookmarktable=&Ser",
+ * Pasword lockout not enforced for SAMR password changes.
+                    pattern:'<title>DNP LAN/WAN Status</title>','Electro Industries/GaugeTech',
+Paulo Bonzini discovered that the KVM implemen ...
+p_data_tf_types["00720073"] = "Selector OD Value";
+  pointers can be exploited to bypass CAS (Code Access Security) restrictions and disclose information.
+Poll for artifact blob, addresses goal state procesing issue
+postfix_list = make_list(".pub", ".crl", ".prv", ".ser", "#6101CA.cer", ".p12");
+potentially, escalate their privilages to that of libvirtd process. (CVE-2013-0170)
+Prevent sporious 'salt-api' stuck processes when managing SSH minions
+Prevent sporious 'salt-api' stuck processes when managing SSH minions.
+    print("----- Using an link to Mitre/NVD within the script_xref -----\r\n")
+  * Prior to this update, the Directory Server (DS) always checked the ACI
+  processor_arch_id = 'oval:org.mitre.oval:obj:1576';
+  product_os_name_id = 'oval:org.mitre.oval:obj:5590';
+ prompted to give a password when acessing root owned files. (bsc#1125084)");
+Provide the 32bit samba winbind PAM module and its dependend 32bit
+  p = script_get_preference( "No ARP or ND Ping", id:25 );
+  public WAN (Internet) / public LAN.
+  public WAN (Internet) / public LAN.");
+  public WAN (Internet) / public LAN. If the target system is on the local LAN the VT is reporting
+  published information on a series of critical memory allocation vulnerabilities in IoT and OT
+- Races in the grant table unmap code allowed for informations leaks and
+ rbd devices, which coul... [Please see the references for more information on the vulnerabilities]");
+Readded Broadwell CPU ucode that was missing in last update:
+Readded missing in last update:
+Readded what missing in last update: BDX-ML B0/M0/R0 6-4f-1/ef 0b00002e->00000036 Xeon E5/E7 v4, Core i7-69xx/68xx");
+- Readd index.vnc. (bsc#1026833)
+- Real memeory leak(buildup) issue in loadparm, (bso#11740).
+  received on a specific port from outside the ACI fabric and destined to an endpoint located on a border leaf
+  Red Hat would like to thank Ang Way Chuang for reporting CVE-2010-1086.
+  Red Hat would like to thank Tim Baum for reporting this issue.");
+  Red Hat would like to thank Tim Bunce for responsibly reporting the
+  Red Hat would like to thank Timo Warns of PRESENSE Technologies GmbH for
+reenable php7-dba support of Berkeley DB (bsc#1108554)");
+             "Referer: http://",host,":",port,"/UE/welcome_login.html\r\n",
+# Ref : http://www.hsc.fr/ressources/articles/win_net_srv/index.html.en by Jean-Baptiste Marchand
+        register_and_report_cpe( app:"Netsparker - Web Application Security Scanner", ver:netVer, base:"cpe:/a:netsparker:wass:", expr:"^([0-9.]+)", insloc:netPath );
+    register_and_report_cpe(app:"Wiesemann & Theis GmbH " + appName, ver:version, concluded:concluded,
+    reg_xml = '\t\t<registry_item' + status + ' xmlns="http://oval.mitre.org/' +
+** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.(CVE-2020-16598)
+Reject invalid eliptic curve point coordinates (bsc#1131291)");
+  - Remote Command Execution via WAN and LAN
+  - Remote Unauthenticated Information Disclosure via WAN and LAN
+	Remove all mitre.org links from the script descriptions as
+	Removed script_xref references to cve.mitre.org. This
+	Remove reference to cve.mitre.org from insight tag.
+report_dead = script_get_preference( "Report about unrechable Hosts", id:6 );
+  reporter of CVE-2010-0542 Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
+  reporter of CVE-2010-0542, Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
+    report = "Keiner der unter Punkt 2.2.1.2 geforderten Ciphers wurde auf dem System unter Port " + port + " gefunden.";
+  report = "Mindestens einer der unter Punkt 2.1.2 geforderten Ciphers wurde auf Port " + port + " gefunden:\n" + result;
+  report += '\nIn order to secure your system, please also confirm that the following registry keys are set to 0 (zero) or are not present:\n';
+        report += '\nIn total ' + final_len + ' of DICOM data is offered for download.';
+req = string("GET /default.nd HTTP/-1111111\r\n\r\n");
+    req = string("HEAD /",buf,ret,nops,jmp_back2,nseh,seh," HTTP/1.1\r\n",
+req = string("POST /UE/ProcessForm HTTP/1.1\r\n",
+  req += string("TE: deflate,gzip;q=0.3\r\nConnection: TE, close\r\n");
+  request = http_get(item:amVer[2] + "/cource.php?action=pregled&cont_id=[SQL]", port:amPort);
+  requests without a To header, when SER has been enabled to use the SL module,
+    res = http_get_cache( item:dir + "/ang/index.php", port:port );
+- Restrict envrionment variable expansion to `ENV`, `ADD`, `COPY`,
+  result = "Diese Vorgabe muss manuell ueberprueft werden.";
+                return -1, "The following script_xref of VT '" + str(file) + "' is pointing to Mitre/NVD which is already covered by the script_cve_id. This is a redundant info and the script_xref needs to be removed:" + nvd_mitre_link_tags
+  return("Diese Vorgabe muss manuell ueberprueft werden.");
+        return make_list( "error", text_response + 'Ueberpruefung fehlgeschlagen. Die Verwendung der benoetigten win_cmd_exec Funktion wurde in "Options for Local Security Checks (OID: 1.3.6.1.4.1.25623.1.0.100509)" manuell deaktiviert.\n' );
+                  returnport, ">\r\nTo: <sip:", myaddr, ":", returnport,
+# @return TRUE if the tested address is on a WAN (Internet) or Public LAN,
+Revert 'ipc,sem: remove uneeded sem_undo_list lock usage in exit_sem()'
+  * revoke mis-issued intermediate CAs from TURKTRUST.");
+Rick Macklem, Christopher Key and Tim Zingelman reported that the
+root CAs when using an https connection.
+  Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers version 1.0.02.16 and earlier");
+ (R) processor graphics whichs may have allowed an authenticated user to
+  RSE6500, S12700, S1700, S2700, S5700, S6700, S7700, S9700, SoftCo, VP9660 and eSpace U1981.");
+RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remote attacker with administrative
+  RV320 Dual Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an
+  RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers could allow an authenticated,
+- s390: fix test_fp_ctl inline assembly contraints (bnc#979915,
+ - S7192202: Make sure keytool prints both unknown and unparseable
+ + S8048147: Privilege tests with JAAS Subject.doAs
+ - S8168724, CVE-2016-5549: ECDSA signing improvments
+ - S8168728, CVE-2016-5548: DSA signing improvments
+same vulnerability as CVE-2012-3455, but it was SPLIT by the CNA even
+same vulnerability as CVE-2012-3456, but it was SPLIT by the CNA even
+SAML/CAS tokens in the session database, an attacker can open an anonymous
+  script_add_preference(name:"Delete hash test Programm after the test", type:"checkbox", value:"yes", id:3);
+  script_add_preference(name:"Install hash test Programm on the Target", type:"checkbox", value:"no", id:2);
+  script_add_preference(name:"Mark unrechable Hosts as dead (not scanning)", type:"checkbox", value:"yes", id:5); # nb: Don't change this name and id, these are hardcoded / used in GVMd
+  script_add_preference(name:"Network type", type:"radio", value:"Mixed (use RFC 1918);Private LAN;Public WAN (Internet);Public LAN", id:8);
+  script_add_preference(name:"No ARP or ND Ping", type:"checkbox", value:"no", id:25);
+  script_add_preference(name:"Report about unrechable Hosts", type:"checkbox", value:"no", id:6);
+  script_add_preference(name:"Value", type:"entry", value:"O:BAG:BAD:(A;;RC;;;BA)");
+  script_copyright("Copyright (C) 2005 Charles Thier");
+  script_copyright("Copyright (C) 2008 E-Soft Inc. http://www.securityspace.com & Tim Brown");
+  script_copyright("Copyright (C) 2008 Tim Brown and Vlatko Kosturjak");
+  script_copyright("Copyright (C) 2009 Tim Brown");
+  script_copyright("(c) Tim Brown and Portcullis Computer Security Ltd, 2008");
+  script_mandatory_keys("Jasig CAS server/Installed");
+  script_mandatory_keys("telnet/huawei/te/detected");
+  script_name("AIDA64 <= 6.25.5400 SEH Buffer Overflow Vulnerability");
+  script_name("Apache James Server Web Admin Public WAN (Internet) / Public LAN Accessible without Authentication");
+  script_name("Apache JServ Protocol (AJP) Public WAN (Internet) / Public LAN Accessible");
+  script_name("CAS CommServer UA Version Detection (Windows)");
+  script_name("Cisco Nexus 9000 Series ACI Mode Switch Software Link Layer Discovery Protocol Buffer Overflow Vulnerability");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Arbitrary File Read Vulnerability (cisco-sa-naci-afr-UtjfO2D7)");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Border Leaf Endpoint Learning Vulnerability");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Multi-Pod and Multi-Site TCP DoS Vulnerability (cisco-sa-n9kaci-tcp-dos-YXukt6gM)");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Privilege Escalation Vulnerability (cisco-sa-naci-mdvul-vrKVgNU)");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Queue Wedge DoS Vulnerability (cisco-sa-n9kaci-queue-wedge-cLDDEfKF)");
+  script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Authenticated Remote Code Execution Vulnerabilities (cisco-sa-sb-rv34x-rce-8bfG2h6b)");
+  script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Local Privilege Escalation Vulnerability (cisco-sa-rv-34x-privesc-GLN8ZAQE)");
+  script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers SSL Denial of Service Vulnerability");
+  script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers SSL Remote Code Execution and Denial of Service Vulnerability");
+  script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Web Management Vulnerabilities (cisco-sa-rv340-cmdinj-rcedos-pY8J3qfy)");
+  script_name("Cisco TelePresence TC and TE Software Multiple Security Vulnerabilities");
+  script_name("Comparison Engine Power 'product.comparision.php' SQL Injection Vulnerability");
+  script_name("Debian Security Advisory DSA 412-1 (nd)");
+  script_name("DICOM Multiple Web Viewer/Server Public WAN (Internet) / Public LAN Accessible");
+  script_name("DICOM Service Public WAN (Internet) / Public LAN Accessible");
+  script_name("Elasticsearch Public WAN (Internet) / Public LAN Accessible");
+  script_name("Fedora Update for libell FEDORA-2019-17419b24a3");
+  script_name("Fedora Update for tre FEDORA-2016-0a952a3bc0");
+  script_name("Fedora Update for tre FEDORA-2016-0ff6c3d84b");
+  script_name("Fedora Update for tre FEDORA-2016-cd09eab674");
+  script_name("Gentoo Security Advisory GLSA 200703-20 (lsat)");
+  script_name("Huawei TE Device Detection (Telnet)");
+  script_name("Huawei TE Devices Multiple Vulnerabilities (huawei-sa-20180630-01-sccp, huawei-sa-20180630-01-cops)");
+  script_name("ICS Generic HART DTM Version Detection (Windows)");
+  script_name("Kaseya VAS ConntectWise ManagedITSync RCE Vulnerability");
+  script_name("Kaseya VAS PowerShell Execution Vulnerability");
+  script_name("Kubernetes Dashboard Public WAN (Internet) / Public LAN Accessible");
+  script_name("Mesosphere Marathon Web UI Public WAN (Internet) / Public LAN Accessible");
+  script_name("Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability - Windows");
+  script_name("Palo Alto PAN-OS SD WAN Vulnerability (CVE-2020-2009)");
+  script_name("Sphinx Search Server Public WAN (Internet) / Public LAN Accessible");
+  script_name("Swarmpit Web UI Public WAN (Internet) / Public LAN Accessible");
+  script_name("WAN Emulator Remote Command Execution Vulnerabilities");
+  script_name("Wiesemann & Theis GmbH W&T OPC Server Version Detection (Windows)");
+  script_name("Wireshark Steam IHS Discovery/CoAP Dissector DoS Vulnerabilities (Mac OS X)");
+  script_name("Wireshark Steam IHS Discovery/CoAP Dissector DoS Vulnerabilities (Windows)");
+	* scripts/CAs.inc:
+  script_tag(name:"affected", value:"Apple Mac OS X Big Sur versions 11.x before
+  script_tag(name:"affected", value:"BA SYSTEMS BAS Web on BAS920 devices with
+  script_tag(name:"affected", value:"Cisco Nexus 9000 Series ACI Mode Switches when running software versions prior to 11.0(3h) and 11.1(1j)");
+  script_tag(name:"affected", value:"RV320 Dual Gigabit WAN VPN Router and RV325 Dual Gigabit WAN
+  script_tag(name:"affected", value:"RV320 Dual Gigabit WAN VPN Router and RV325 Dual Gigabit WAN VPN Router.");
+  script_tag(name:"affected", value:"tre on Fedora 23");
+  script_tag(name:"affected", value:"tre on Fedora 24");
+  script_tag(name:"affected", value:"tre on Fedora 25");
+  script_tag(name:"affected", value:"Visicom Medias AceFTP Freeware/Pro Version 3.80.3 and prior on Windows.");
+  script_tag(name:"affected", value:"WAN Emulator 2.3 is vulnerable. Other versions may also be affected.");
+  script_tag(name:"impact", value:"A successful exploit could allow the attacker to cause the wireless WAN (WWAN)
+  script_tag(name:"impact", value:"Successful exploit could allow an unauthenticated, remote attacker to cause an affected device to start dropping legitimate IPv6 neighbors as legitimate ND times out, leading to DOS.");
+  script_tag(name:"insight", value:"Adam Langley and Wan-Teh Chang discovered that OpenSSL
+  script_tag(name:"insight", value:"Adrian Pastor and Tim Starling discovered that the CUPS web interface
+  script_tag(name:"insight", value:"A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)
+  script_tag(name:"insight", value:"A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)");
+  script_tag(name:"insight", value:"An external control of filename vulnerability in the SD WAN component of Palo
+  script_tag(name:"insight", value:"An input validation issue was addressed with improved memory handling. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to read restricted memory.(CVE-2020-10001)");
+  script_tag(name:"insight", value:"A security feature bypass exists in Azure SSH Keypairs, due to a change in the provisioning logic for some Linux images that use cloud-init, aka 'Azure SSH Keypairs Security Feature Bypass Vulnerability'.(CVE-2019-0816)");
+  script_tag(name:"insight", value:"A vulnerability in processing IPv6 ND packets originating from subscribers
+  script_tag(name:"insight", value:"A vulnerability in the implementation of the Short Message Service (SMS) handling functionality of Cisco IOS Software and Cisco IOS XE Software could allow an unauthenticated, remote attacker to trigger a denial of service (DoS) condition on an affected device. The vulnerability is due to improper processing of SMS protocol data units (PDUs) that are encoded with a special character set. An attacker could exploit this vulnerability by sending a malicious SMS message to an affected device. A successful exploit could allow the attacker to cause the wireless WAN (WWAN) cellular interface module on an affected device to crash, resulting in a DoS condition that would require manual intervention to restore normal operating conditions. (CVE-2019-1747)
+  script_tag(name:"insight", value:"A vulnerability in the implementation of the Short Message Service (SMS) handling functionality of Cisco IOS Software and Cisco IOS XE Software could allow an unauthenticated, remote attacker to trigger a denial of service (DoS) condition on an affected device. The vulnerability is due to improper processing of SMS protocol data units (PDUs) that are encoded with a special character set. An attacker could exploit this vulnerability by sending a malicious SMS message to an affected device. A successful exploit could allow the attacker to cause the wireless WAN (WWAN) cellular interface module on an affected device to crash, resulting in a DoS condition that would require manual intervention to restore normal operating conditions. (CVE-2019-1747)");
+  script_tag(name:"insight", value:"A vulnerability in the implementation of the Short Message Service (SMS) handling functionality of Cisco IOS Software and Cisco IOS XE Software could allow an unauthenticated, remote attacker to trigger a denial of service (DoS) condition on an affected device. The vulnerability is due to improper processing of SMS protocol data units (PDUs) that are encoded with a special character set. An attacker could exploit this vulnerability by sending a malicious SMS message to an affected device. A successful exploit could allow the attacker to cause the wireless WAN (WWAN) cellular interface module on an affected device to crash, resulting in a DoS condition that would require manual intervention to restore normal operating conditions.(CVE-2019-1747)
+  script_tag(name:"insight", value:"A vulnerability was found in Linux kernel. There is an information leak in file 'sound/core/timer.c' of the latest mainline Linux kernel, the stack object tread has a total size of 32 bytes. It contains a 8-bytes padding, which is not initialized but sent to user via copy_to_user(), resulting a kernel leak.(CVE-2016-4569)
+  script_tag(name:"insight", value:"Calle Dybedahl discovered a bug in lyskom-server which could result in
+  script_tag(name:"insight", value:"Cisco TelePresence TC and TE Software are prone to
+  script_tag(name:"insight", value:"_core_/plugins/medias in SPIP allows remote authenticated authors to inject
+  script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
+  script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
+  script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered
+  script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered that
+  script_tag(name:"insight", value:"Juraj Somorovsky, Robert Merget, and Nimrod Aviram discovered that certain
+  script_tag(name:"insight", value:"libsoup without ca path added, accepted all SSL certificats as trusted. This has been fixed. CVE-2012-2132 has been assigned to this issue.
+  script_tag(name:"insight", value:"LSAT insecurely creates temporary files which can lead to symlink attacks
+  script_tag(name:"insight", value:"Meh Chang discovered that Exim incorrectly
+  script_tag(name:"insight", value:"Multiple flaws are due to errors in MS-MMS, RTPS, RTPS2, Mount, AMPQ, ACN,
+  script_tag(name:"insight", value:"Multiple flaws are due to errors in RELOAD, MPLS Echo, CSN.1, HART/IP and TCP
+  script_tag(name:"insight", value:"Multiple flaws are present due to errors in Liquify save mesh, Sharpen,
+  script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in nd, a command-line WebDAV
+  script_tag(name:"insight", value:"Ning Zhang & Amin Tora discovered that the mod_dav module
+  script_tag(name:"insight", value:"** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Notes: none.(CVE-2021-20095)");
+  script_tag(name:"insight", value:"Robert Merget, Marcus Brinkmann, Nimrod Aviram, and Juraj Somorovsky
+  script_tag(name:"insight", value:"Several vulnerabilities have been discovered in phpCAS, a CAS client
+  script_tag(name:"insight", value:"Simo Sorce discovered that a NULL pointer dereference existed in
+  script_tag(name:"insight", value:"The http_request_split_value function in request.c in lighttpd before 1.4.32 allows remote attackers to cause a denial of service (infinite loop) via a request with a header containing an empty token, as demonstrated using the 'Connection: TE,,Keep-Alive' header.");
+  script_tag(name:"insight", value:"The ndisc_router_discovery function in net/ipv6/ndisc.c in the Neighbor Discovery (ND) protocol implementation in the IPv6 stack
+  script_tag(name:"insight", value:"The Neighbor Discovery (ND) protocol implementation in the IPv6 stack in Cisco IOS before 15.0(1)XA5 allows remote attackers to cause a denial of service (CPU consumption and device hang) by sending many Router Advertisement (RA) messages with different source addresses, as demonstrated by the flood_router6 program in the thc-ipv6 package, aka Bug ID CSCti33534.");
+  script_tag(name:"insight", value:"There is a vulnerability in the IP Version 6 (IPv6) Neighbor Discovery packet process of multiple products, successful exploit could allow an unauthenticated, remote attacker to cause an affected device to start dropping legitimate IPv6 neighbors as legitimate ND times out, leading to a denial of service (DoS). (Vulnerability ID: HWPSIRT-2016-06012)This vulnerability has been assigned a Common Vulnerabilities and Exposures (CVE) ID: CVE-2016-1409.Huawei has released software updates to fix this vulnerability. This advisory is available in the linked references.");
+  script_tag(name:"insight", value:"This update provides PostgreSQL 8.3.20. As part of this update, the packaging scheme has been changed to accomodate an optional parallel installation of newer PostgreSQL versions.
+  script_tag(name:"insight", value:"Tim Brown discovered a shared memory permissions vulnerability in the
+  script_tag(name:"insight", value:"Tim Brown discovered that Ark did not properly perform input validation
+  script_tag(name:"insight", value:"Tim Brown discovered that KSSL in KDE-Libs did not properly perform input
+  script_tag(name:"insight", value:"Tim Bunce discovered that PostgreSQL, a database server software, does
+  script_tag(name:"insight", value:"Tim Dijkstra discovered a problem during the upgrade of geneweb, a
+  script_tag(name:"insight", value:"Tim Duesterhus discovered that haproxy, a TCP/HTTP reverse proxy, did
+  script_tag(name:"insight", value:"Tim Ruehsen discovered that curl
+  script_tag(name:"insight", value:"Tim Starling discovered that LibThai did not correctly handle long strings.
+  script_tag(name:"insight", value:"Tim Waugh found several insecure uses of temporary files in the xsane
+  script_tag(name:"insight", value:"Tim Zingelmann discovered that due an incorrect configure script the
+  script_tag(name:"insight", value:"Toom Lhmus discovered that the Lua API and preprocessor in the Battle
+  script_tag(name:"insight", value:"WeeChat (Wee Enhanced Environment for Chat) is a portable, fast, light and
+  script_tag(name:"insight", value:"Wen Xu discovered a use-after-free flaw
+  script_tag(name:"insight", value:"Wen Xu discovered that a use-after-free
+  script_tag(name:"insight", value:"Wen Xu discovered that a use-after-free vulnerability existed in the ext4
+  script_tag(name:"insight", value:"Wen Xu discovered that the ext4 file system
+  script_tag(name:"insight", value:"Wen Xu discovered that the ext4 filesystem
+  script_tag(name:"insight", value:"Wen Xu discovered that the ext4 file system implementation in the Linux
+  script_tag(name:"insight", value:"Wen Xu discovered that the ext4 filesystem implementation in the Linux
+  script_tag(name:"insight", value:"When UPnP services and WAN http administrative access are enabled,
+  script_tag(name:"solution", value:"All FreeS/WAN 1.9x users should upgrade to the latest stable version:
+  script_tag(name:"solution", value:"Ask the vendor for an update. Ensure remote WAN management is disabled on the affected devices.
+  script_tag(name:"solution", value:"Please take the time to visit cve.mitre.org and check the
+  script_tag(name:"solution", value:"Since LSAT is not actively maintained anymore, this package has been
+  script_tag(name:"solution", value:"Upgrade to Apple Mac OS X Big Sur version
+  script_tag(name:"summary", value:"A security vulnerability in Avenger's News System (ANS) allows
+  script_tag(name:"summary", value:"A vulnerability in the IPv6 neighbor discovery (ND) handling of Cisco IOS XE Software on
+  script_tag(name:"summary", value:"Cisco TelePresence TC and TE Software are prone to multiple
+  script_tag(name:"summary", value:"Juraj Somorovsky, Robert Merget and Nimrod Aviram discovered a padding
+  script_tag(name:"summary", value:"Listet alle erfuellten Tests der 'AKIF Orientierungshilfe Windows 10 Ueberpruefung' auf.");
+  script_tag(name:"summary", value:"Listet alle Fehler der 'AKIF Orientierungshilfe Windows 10 Uberpruefung' auf.");
+  script_tag(name:"summary", value:"Listet alle nicht erfuellten Tests der 'AKIF Orientierungshilfe Windows 10 Ueberpruefung' auf.");
+  script_tag(name:"summary", value:"Meh Chang discovered a buffer overflow flaw in a utility function used
+  script_tag(name:"summary", value:"Nidesoft MP3 Converter is prone to an SEH local buffer overflow
+  script_tag(name:"summary", value:"Palo Alto PAN-OS is prone to a vulnerability in Panorama SD WAN.");
+  script_tag(name:"summary", value:"Telnet based detection of Huawei TE (Telepresence and
+  script_tag(name:"summary", value:"The remote host is a SIP Express Router (SER).
+  script_tag(name:"summary", value:"The remote host is missing an update for the 'Recommended udpate for SUSE Manager Client Tools' package(s) announced via the SUSE-SU-2016:1366-1 advisory.");
+  script_tag(name:"summary", value:"The remote host is missing an update for the 'tre'
+  script_tag(name:"summary", value:"The remote host is missing an update to nd
+  script_tag(name:"summary", value:"Tim McLean discovered that pyjwt, a Python implementation of JSON Web
+  script_tag(name:"summary", value:"WAN Emulator is prone to a remote command-execution vulnerability because
+  script_tag(name:"summary", value:"Wen Bin discovered that bchunk, an application that converts a CD
+  script_tag(name:"summary", value:"Ziel des Bausteins SYS.2.2.3 ist der Schutz von Informationen,
+  script_tag(name:"vuldetect", value:"Checks if the Swarmpit UI is accessible from a public WAN
+  script_xref(name:"URL", value:"http://cpe.mitre.org/");
+  script_xref(name:"URL", value:"https://cwe.mitre.org/data/definitions/319.html");
+  script_xref(name:"URL", value:"https://oval.cisecurity.org/repository/search/definition/oval%3Aorg.mitre.oval%3Adef%3A10184");
+  script_xref(name:"URL", value:"https://oval.cisecurity.org/repository/search/definition/oval%3Aorg.mitre.oval%3Adef%3A447");
+  script_xref(name:"URL", value:"https://oval.cisecurity.org/repository/search/definition/oval%3Aorg.mitre.oval%3Adef%3A9894");
+  script_xref(name:"URL", value:"https://packetstormsecurity.com/files/130797/raritanpoweriq-staticsecret.txt");
+  script_xref(name:"URL", value:"https://ths.sh/posts/zoomzoo/");
+  script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/GLPI_9.4.0_stored_XSS.pdf");
+  script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/GLPI_9.4.0_unsafe_reset.pdf");
+  script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/Sitecore_CSRF_deserialize_RCE.pdf");
+  script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/WordPress_Duplicator-1.2.40-RCE.pdf");
+  script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cve-2018-18907/");
+  script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cyrc-advisory-nagios-xi/");
+  script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/path-traversal-defects-oracles-jsf2-implementation/");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/cups2.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/cups.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/greed.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/linpopup.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/mpg123.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/mplayer.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/o3read.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/tnftp.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/unrtf.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/vilistextum.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/xine-lib.txt");
+  script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/yamt.txt");
+  script_xref(name:"URL", value:"http://wiki.peiqi.tech/PeiQi_Wiki/OA%E4%BA%A7%E5%93%81%E6%BC%8F%E6%B4%9E/%E5%B8%86%E8%BD%AFOA/%E5%B8%86%E8%BD%AF%E6%8A%A5%E8%A1%A8%202012%20%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E.html");
+  script_xref(name:"URL", value:"http://www.iptel.org/ser/security/");
+  script_xref(name:"URL", value:"http://www.iptel.org/ser/security/secalert-002-0_8_10.patch");
+  script_xref(name:"URL", value:"http://www.nd.edu/~jsmith30/xul/test/spoof.html");
+  script_xref(name:"URL", value:"http://www.synacktiv.ninja/ressources/advisories_cisco_switch_sg220_default_snmp.pdf");
+  script_xref(name:"URL", value:"http://www.synacktiv.ninja/ressources/CVE-2017-3143_BIND9_TSIG_dynamic_updates_vulnerability_Synacktiv.pdf");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA04-111A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA04-147A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA04-261A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA05-180A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA06-109A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA06-200A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA06-291A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA07-017A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA07-108A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA07-200A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA07-290A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA08-017A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA08-134A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA08-162B.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA09-020A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA10-103B.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA10-103C.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA10-159B.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA11-102A.html");
+  script_xref(name:"URL", value:"http://www.us-cert.gov/cas/techalerts/TA11-201A.html");
+sd-bus: if we receive an invalid dbus message, ignore and proceeed
+- sd-netlink: don't take possesion of netlink fd from caller on failure
+  Secospace AntiDDoS8030, Secospace USG6600, UPS2000, USG9500 and eSpace VCN3000.");
+  Security researcher Jordi Chancel reported a crash on
+  Security researchers Jordi Chancel and Eddy Bordi reported that they
+ Security researchers Jordi Chancel and Eddy Bordi reported that they could short-circuit page loads to show the address of a different site than what is loaded in the ... [Please see the references for more information on the vulnerabilities]");
+Security vulnerability addresed:
+ Segment.cpp that may cause a denial of serivce (bsc#1084850).");
+    seh  = raw_string(0x67,0x1a,0x48);
+send(socket: soc, data: triggerD);
+"|SER",
+  Series Switches running in Application Centric Infrastructure (ACI) mode could allow an unauthenticated, remote
+  Series VPN Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers
+       '    </ser>\r\n' +
+       '    <ser>\r\n' +
+  server accessible from a public WAN (Internet) / public LAN.");
+  # Server: WebLogic Server 10.3.6.0.171017 PSU Patch for BUG26519424 TUE SEP 12 18:34:42 IST 2017
+  service accessible from a public WAN (Internet) / public LAN.
+  service accessible from a public WAN (Internet) / public LAN.");
+  service_register( port:port, proto:"agobot.fo" );
+    service_report( port:port, svc:"agobot.fo", banner:banner );
+ SessionTicket extention and ECDHE-ECDSA (bsc#1015499).
+    set_kb_item(name:"cas/commserver_ua/win/detected", value:TRUE);
+    set_kb_item( name:"Jasig CAS server/Installed", value:TRUE );
+    set_kb_item( name:"telnet/huawei/te/detected", value:TRUE );
+set_kb_item(name:"WMI/Antivir/UptoDate", value:AntiVir_UpDate);
+    set_kb_item( name:"www/" + port + "/cas", value:version );
+  several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic
+Several other fixes for pg_dump, which includ... [Please see the references for more information on the vulnerabilities]");
+ + Short curcuit the conditional for identifying the sysconfig renderer.
+Simo Sorce discovered that Samba clients always requested
+  Simo Sorce discovered that the MIT krb5 Key Distribution Center (KDC)
+Simo Sorce of Red Hat discovered that the Samba client code always
+  Small Business RV042 Dual WAN VPN Routers and Cisco Small Business RV042G Dual Gigabit WAN VPN
+  Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an unauthenticated, remote
+- smbd: Fix file name buflen and padding in notify repsonse, (bso#10634).
+- Smbd: fix file name buflen and padding in notify repsonse, (bso#10634).
+sndReq = http_get(item:"/olt/Login.do", port:oatPort);
+  sndReq = http_get(item:string(dir , "/doc/catalogue.html"), port:openPort);
+  sndReq = http_get(item:string(dir, "/LiveTime/WebObjects/LiveTime.woa"), port:novPort);
+  # SNPP, HylaFAX FTP, HylaFAX SPP, agobot.fo, IRC bots, WinSock server,
+ * some OSCP improvments
+Soyeon Park and Wen Xu discovered a type error in the v8 javascript
+Soyeon Park and Wen Xu discovered memory corruption issues that
+Soyeon Park and Wen Xu discovered the use of a wrong type in the v8
+specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series Ethernet Switches to cause a slow
+ Specially crafted MIME headers could cause openssl's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
+ * Specially crafted MIME headers could cause OpenSSL's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
+ spurrious errors due to Go returning -EINTR from I/O syscalls much more
+ stack oveflow allowing local root escalation (bsc#1130116).");
+  Stange, Olli Pettay, Ehsan Akhgari, Gary Kwong, Tooru Fujisawa, and Randell
+"statics",
+"statics/html",
+"statics/script",
+string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
+  supporting the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.");
+ support was already present, but it was not enforcable).");
+support was enhanced and fixed, support for HDA sound on Acer Aspire
+# Swarmpit Web UI Public WAN (Internet) Accessible
+Switches in Application-Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to cause
+syntax. As a consequence, removing an ACI failed with a syntax error.
+  system_root_id = 'oval:org.mitre.oval:obj:219';
+systems with HDA sound needing MSI support were added to the quirks
+	tags. Also removed references to cve.mitre.org. This
+take priviliges into account for the connecting user,
+      "TANQ PRODUTO" >< res || "TANK PRODUKT" >< res || "REC 90" >< res ||
+# Tarik El-Yassem <te@itsec.nl>
+## TC and CE affected but pattern coming like(TE)
+TCP 1005 Theef
+TCP 1040 Medias, Sedepex
+TCP 13298 Theef.C
+TCP 31337 ADM worm, Back Fire, Back Orifice 1.20 patches, Back Orifice (Lm), Back Orifice russian, Baron Night, Beeone, bindshell, BO client, BO Facil, BO spy, BO2, cron / crontab, Freak88, Freak2k, Gummo, icmp_pipe.c,Linux Rootkit IV (4), Sm4ck, Sockdmini, Emcommander, W32.HLLW.Gool
+TCP 5637 PC Crasher
+TCP 5638 PC Crasher
+TCP 80 711 trojan (Seven Eleven), AckCmd, Back End, Back Orifice 2000 Plug-Ins, Cafeini, CGI Backdoor, Executor, God Message, God Message 4 Creator, Hooker, IISworm, MTX, NCX, Noob, Ramen, Reverse WWW Tunnel Backdoor, RingZero, RTB 666, Seeker, WAN Remote, Web Server CT, WebDownloader, Mydoom, Xeory, Zombam, W32.Yaha, Ketch, Mydoom, W32.Welchia,W32.HLLW.Doomjuice, W32.HLLW.Heycheck, W32.Gaobot, W32.HLLW.Polybot, W32.Beagle, W32.Spybot, Mindos, Hexem, Eaghouse, Tabela, W32.Ifbo, W32.Pinkton, W32.Tdiserv, W32.Bobax, W32.Theals, Banito, W32.Lile, Darkmoon, Bifrose, Lodear, Civcat, Muquest, W32.Feebs, Bebshell, Hesive
+TCP 9871 Theef.B
+  TE30, TE40, TE50, TE60, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030 and eSpace U1981.");
+## TE and CE affected but pattern coming like this only
+##TE and CE affected but pattern coming like this only
+"TE: deflate,gzip;q=0.3\r\n",
+ * The ACN dissector could attempt to divide by zero.
+  the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.
+The Binary File Descriptor (BFD) library (aka libbfd), as distributed in GNU Binutils 2.28, is vulnerable to a global buffer over-read error because of an assumption made by code that runs for objcopy and strip, that SHT_REL/SHR_RELA sections are always named starting with a .rel/.rela prefix. This vulnerability causes programs that conduct an analysis of binary programs using the libbfd library, such as objcopy and strip, to crash.(CVE-2017-8393)
+-the bundled version of the cssparser crate now builds correctly on Rust
+The compiler now rejects //go: compiler directives tha... [Please see the references for more information on the vulnerabilities]");
+  The CVE-2013-0200 issues were discovered by Tim Waugh of Red Hat.
+The CVE-2013-0200 issues were discovered by Tim Waugh of Red Hat.
+The CVE-2014-7817 issue was discovered by Tim Waugh of the Red Hat
+The CVE-2015-8631 issue was discovered by Simo Sorce of Red Hat.
+The CVE-2015-8631 issue was discovered by Simo Sorce of Red Hat.");
+ the deamon (bsc#1128937).
+the default ACI (Access Control Instructions) could be read by an anonymous
+  The exec module in Kamailio, Opensips and probably every other SER fork passes the received SIP
+- The ext2 filesystem got reenabled and supported to allow support for
+The fst_get_iface function in drivers/net/wan/farsync.c in the Linux kernel before 3.11.7 does not properly initialize a certain data structure, which allows local users to obtain sensitive information from kernel memory by leveraging the CAP_NET_ADMIN capability for an SIOCWANDEV ioctl call.(CVE-2014-1444)
+  The GOST ENGINE in OpenSSL before 1.0.0f does not properly handle
+The GOST ENGINE in OpenSSL before 1.0.0f does not properly handle
+ the guest to leak information. It occured while processing transmit(tx)
+ * The HART/IP dissectory could go into an infinite loop. wnpa-sec-2013-11 CVE-2013-2476
+  the only recommendations are to deny any access to ports 10000 and 10001 from WAN (if port-forwarding is enabled to allow remote
+The previous update of tcpdump already fixed variuous Buffer overflow/overread vulnerabilities [bsc#1153098, bsc#1153332]
+the router to stop forwarding data traffic across Traffic Engineering (TE) tunnels, resulting in a denial of
+  The sbni_ioctl function in drivers/net/wan/sbni.c in the wan
+  The SER product has been found to contain a vulnerability where ACKs
+Theses non-security issues were fixed:
+Theses security issues were fixed:
+These updates contain the XEN Hypervisor adjustments, that additionaly also use CPU Microcode updates.
+These vulnerabilities could be triggered by processing specially crafted image files, which could lead to a process crash or resource consumtion,
+  the System.Net.Sockets namespace and can be exploited to bypass CAS (Code
+ the system to the new default if it exists. The trigger is only excuted
+ the unfortunate expense to prior SLE11 SP4 kvm release compatability
+"The virus 'W32.Bable.AG@mm' is present on the remote host\n\n",
+The wanxl_ioctl function in drivers/net/wan/wanxl.c in the Linux kernel before 3.11.7 does not properly initialize a certain data structure, which allows local users to obtain sensitive information from kernel memory via an ioctl call.(CVE-2014-1445)
+# the work from Tom Ptacek and Tim Newsham.
+ This is done with help of Linux Kernel fixes on the Intel/AMD x86_64 and IBM zSeries architectures. On x86_64, this requires also updates of the CPU microcode packages, delivered in seperate updates.
+  This issue is tracked by the Mitre CVE ID CVE-2006-5870.
+  This issue is tracked by the Mitre CVE ID CVE-2006-6104 and only
+  This issue is tracked by the Mitre CVE ID CVE-2006-6799.");
+  This issue is tracked by the Mitre CVE ID CVE-2007-2799.");
+This is the result of mImageBufferSize in the encoder being initialized with a value different than the size of the source image. There is the possibility of sensitive data from uninitialized memory being appended to a PNG image when converted fron an ICO format image. This sensitive data may then be disclosed in the resulting image. ((MFSA 2012-06)
+ This package can be installed additionaly, and the SysV Init script will pick the openssl1 variant on the next start, offering TLS 1.2 support
+  This problem is tracked by the Mitre CVE ID CVE-2006-6772.");
+This security issues was fixe:
+ this to inject arbitrary network packe... [Please see the references for more information on the vulnerabilities]");
+This update for mozilla-nspr to version 4.19 fixes the follwing issues Added TCP Fast Open functionality
+This update for mozilla-nss to version 3.36.4 fixes the follwing issues Connecting to a server that was recently upgraded to TLS 1.3 would
+This version fixes a number of vulnerabilities that affect pcre and applications using the libary when accepting untrusted input as regular expressions or as part thereof. Remote attackers could have caused the application to crash, disclose information or potentially execute arbitrary code. These security issues were fixed:
+  "thn.htm", '^<html>.+<iframe src="["^]+\\.zip"',
+Thses security issues were fixed:
+  Tim Abraldes discovered that when encoding certain image types the
+  Tim Boddy discovered that Expat did not properly handle memory reallocation
+  Tim Boddy discovered that the Expat module in Python 2.5 did not properly
+Tim Brown and Dirk Mueller discovered several format string
+  Tim Brown and Mark Lowe discovered that Qt incorrectly used weak
+Tim Brown discovered that Firefox discloses the hostname during NTLM
+  Tim Brown discovered that KDE KHTML did not properly escape URLs from
+# Tim Brown <timb@openvas.org>
+# Tim Brown <timb@openvas.org> (Complete rewrite)
+Tim Bunce discovered that the implementation of the procedural
+Tim McCormack discovered that the permissions notification can show the
+Tim Panton and Birgit Arkestein discovered that a programming error
+Tim Philipp Schaefers and Sebastian Neef discovered that onbeforeunload
+  Tim Philipp Schaefers and Sebastian Neef, the team of
+Tim Prouty discovered that the smbd daemon in Samba incorrectly handled
+Tim Ruehsen discovered that curl incorrectly allowed cookies to be set
+Tim Starling discovered that action=ajax requests were dispatched to the
+  Tim Starling discovered that libthai, a set of Thai language support
+Tim Starling discovered that missing input sanitising in the EXIF
+Tim Taubert discovered a use-after-free vulnerability in ASN.1 DER
+Tim Waugh discovered that HPLIP incorrectly handled temporary files when
+Tim Waugh of Red Hat discovered that the WRDE_NOCMD option of the
+Tim Wickberg and Ralf Hemmenstaedt reported an outstanding issue with
+title = "Lokale Sicherheitsrichtlinien";
+ to a buffer overlow in phar_fix_filepath (bsc#938719)
+ to a buffer overlow in phar_fix_filepath (bsc#938719)");
+          + "/toAdmin.php?uE=1&uC=');alert(document.cookie);%3C/script%3E";
+ * Tolerating bad MIME headers in ANS.1 parser.
+  to or through a WAN interface of an affected device.");
+  to the router from the WAN IP address.");
+ to use of unitialized use of memory (bsc#1133037).
+  TP3106, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030, eCNS210_TD and eSpace U1981.");
+ transfered in cleartext (bsc#1158440).");
+- Transport of TE related metrics over OSPF, IS-IS.
+triggerD = raw_string(0x06,0x00,0x07,0x00,0x20,0x00,0x00,0x00,0x0e,0x00,0x32,
+Tuomas Haanpaa and Matti Kamunen from Synopsys Ltd discovered that
+two intermediate CAs which could be used to generate rogue end-entity
+udev: Downgrade message when settting inotify watch up fails.
+ unconstrained interal data buffering (bsc#1145575).
+ unconstrained interal data buffering (bsc#1146097).
+  - Undefined behavior in bounded channel of crossbeam rust crate.
+  unspecified errors in GSS-API, DCERPC SPOOLSS, LDSS, DOF, SRVLOC
+ updates the cc crate, which was buggy in the version that was originally
+	Update the regex to allow a prepending st, nd, rd, th
+upon the close() system call. As a consequence, the iput() final was
+Upstream acknowledges sushi Anton Larsson, firehack, Jordi Chancel,
+  Upstream acknowledges Tim Brown and Mark Lowe of Portcullis Computer
+  url = dir + "/ang/shared/flags.php?g_lang=../../../../../../../" + file;
+url = dir + "/cds.php?interpret=%22><script>alert(document.cookie)</script>&titel=title&jahr=1" ;
+    url = dir +'/includes/wysiwyg/spaw/editor/plugins/imgpopup/img_popup.php?'+
+url = dir + "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt";
+url = dir + "/profiles/index.php?gud=<script>alert(document.cookie)</script>";
+url = dir + "/te<script>alert(document.cookie);</script>st";
+URL=http://www.us-cert.gov/cas/techalerts/TA04-041A.html
+  url = '/medias/?context=' + payload_encoded;
+  url = "/olt/pages/" + uploadfile;
+url = "/statics/html/index.htm";
+url = "/statics/pageChallenge.html";
+  url = string(dir, "/config.xml.sav");
+  url = string(dir, "/product.comparision.php?cat=null%20union%20all%20select%201,concat_ws(0x3a,0x4f,0x70,0x65,0x6e,0x56,0x41,0x53),3,4,5%20from%20daype_users_tb%20--&name=GSM");
+  url = string(openVer[2], "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt");
+url = '/UE/advanced.html';
+url = "/UE/welcome_login.html";
+ * usb/net: rndis: remove ambigous status codes. only net/hyperv part
+ used to cause a redirect to any URI of an attackers choise (bsc#1110850).");
+    user32_file_id = 'oval:org.mitre.oval:obj:390';
+    user32_file_variable_id = 'oval:org.mitre.oval:var:200';
+  users into executing downloads as reported by Jordi Chancel.
+  USG9520, USG9560, USG9580, ViewPoint 9030 and eSpace U1981.");
+ using a PCI passthrough device, was not preemptable, which allowed local
+using the 'Connection: TE, , Keep-Alive' header.");
+"v2/api/product/manger",
+               value:"Die Orientierungshilfe Windows 10 Policy Datei ist leer. Es koennen keine Ueberpruefungen durchgefuehrt werden." );
+  value = 'Loopback interface for iif "lo" accept:\n' + iif + '\n';
+ value of divider greater than ba... [Please see the references for more information on the vulnerabilities]");
+            variable_get_set = re.search('[^#](\n[ ]*#+ ?([Vv]ulnerable [Uu][Rr][Ll]|[GgSs]et|[Ss]end[s]?( (the |a )?[Rr]equest)? [Aa]nd [Rr]eceive|[Ff]etch|[Oo]pen ([Tt]he )?(UDP|udp|TCP|tcp)? ?[Ss]ocket|[Cc]los(e|ing) ([Tt]he )?(FTP|Telnet|SSH)? ?[Ss]ocket|[Cc]heck|[Ii]terate|[Tt]ry|[Cc]onfirm|[Cc]onstruct|[Bb]uild|[Gg]rep|[Rr]egister|[Cc]onstant|[Ww]indows|[Ll]inux]|[Tt]raversal_files\(\) [Ff]unction [Rr]eturns [Dd]ictionary|[Ww]ait|[Ss]leep)[s]?(ing)?(ed)?(ation)?[^\r\n]*)', text)
+        variable_get_set = re.search('[^#](\n[ ]*#+ ?([Vv]ulnerable [Uu][Rr][Ll]|[GgSs]et|[Ss]end[s]?( (the |a )?[Rr]equest)? [Aa]nd [Rr]eceive|[Ff]etch|[Oo]pen ([Tt]he )?(UDP|udp|TCP|tcp)? ?[Ss]ocket|[Cc]los(e|ing) ([Tt]he )?(FTP|Telnet|SSH)? ?[Ss]ocket|[Cc]heck|[Ii]terate|[Tt]ry|[Cc]onfirm|[Cc]onstruct|[Bb]uild|[Gg]rep|[Rr]egister|[Cc]onstant|[Ww]indows|[Ll]inux]|[Tt]raversal_files\(\) [Ff]unction [Rr]eturns [Dd]ictionary|[Ww]ait|[Ss]leep)[s]?(ing)?(ed)?(ation)?[^\r\n]*)', text)
+  vers = eregmatch( pattern:"mandr(iva|ake).*inux ?(enterprise server)? release ([0-9.]+)", string:rls, icase:TRUE );
+      version = eregmatch( pattern:"Powered by.*ANG(</a>)? ([0-9.]+)", string:res );
+version of nd.
+ + vfs_recycle: Prevent flooding the log if we're called on non-existant
+    vgx_file_id = 'oval:org.mitre.oval:obj:308';
+    vgx_file_variable_id = 'oval:org.mitre.oval:var:209';
+  vulnerability by flooding an adjacent IOS XE device with specific ND messages.");
+vuln_url = "/olt/Login.do/../../olt/UploadFileUpload.do";
+# WAN Emulator Remote Command Execution Vulnerabilities
+       && '">WAN IP<' >< res && '">LAN IP<' >< res ) {
+    # WAN Miniport (IPv6)|5|(null)|(null)
+Wan-Teh Chang as the original reporters of CVE-2013-5607.
+  web-based interface for Cisco Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could
+Wen Guanxing discovered that PCRE incorrectly handled certain regular
+Wen Xu and Po-Ning Tseng discovered that btrfs file system implementation
+Wen Xu and Po-Ning Tseng discovered that the btrfs filesystem
+Wen Xu and wushi of KeenTeam discovered that users allowed to create
+Wen Xu discovered an integer overflow issue in the Angle library.
+Wen Xu discovered an out-of-bounds read issue in the v8 library.
+Wen Xu discovered a use-after-free flaw in the Linux kernel's ipv4 ping
+Wen Xu discovered a use-after-free flaw in the Linux kernel's ipv4 ping support.
+Wen Xu discovered that a buffer overflow existed in the ext4 filesystem
+Wen Xu discovered that an out-of-bounds write vulnerability existed in the
+Wen Xu discovered that a use-after-free vulnerability existed in the ext4
+Wen Xu discovered that maliciously crafted web content may lead to
+Wen Xu discovered that the ext4 file system implementation in the Linux
+Wen Xu discovered that the ext4 filesystem implementation in the Linux
+Wen Xu discovered that the f2fs file system implementation in the Linux
+Wen Xu discovered that the f2fs filesystem implementation in the Linux
+Wen Xu discovered that the HFS+ filesystem implementation in the Linux
+Wen Xu discovered that the XFS filesystem implementation in the Linux
+Wen Xu from SSLab at Gatech reported several NULL pointer
+Wen Xu reported that a crafted ext4 filesystem image could trigger
+We recommend that you update your nd package.");
+  when a certain WinForm object is created and can be exploited to bypass CAS
+  which ultimately allows for overwriting Structured Exception Handler (SEH) addresses and the
+  Wide Area Network (WAN) Settings and 'addURLFilter', 'addHostFilter'
+will execute user defined network requests to both WAN and LAN clients. A remote unauthenticated attacker can use
+    win32k_file_id = 'oval:org.mitre.oval:obj:570';
+    win32k_file_variable_id = 'oval:org.mitre.oval:var:200';
+    winsrv_file_id = 'oval:org.mitre.oval:obj:1382';
+    winsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
+With this update, the ACI check is stopped when the ACI is going to be
+"/wls-wsat/CoordinatorPortType11", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.CoordinatorPort",
+"/wls-wsat/CoordinatorPortType", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.CoordinatorPort",
+"/wls-wsat/ParticipantPortType11", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.ParticipantPort",
+"/wls-wsat/ParticipantPortType", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.ParticipantPort",
+"/wls-wsat/RegistrationPortTypeRPC11", "weblogic\.wsee\.wstx\.wsc\.v1[01]\.endpoint\.RegistrationPort");
+"/wls-wsat/RegistrationPortTypeRPC", "weblogic\.wsee\.wstx\.wsc\.v1[01]\.endpoint\.RegistrationPort",
+"/wls-wsat/RegistrationRequesterPortType", "weblogic\.wsee\.wstx\.wsc\.v1[01]\.endpoint\.RegistrationRequesterPort",
+Work around CVE-2019-11059 by disabling 64Bit descritptor size
+  would be able to change the WAN device configuration, leading to a denial
+- x86/entry/64: Do not use IST entry for #BP stack (bsc#1087088).");
+- xen/x86/entry/64: Do not use IST entry for #BP stack (bsc#1087088).
+- Xephyr: Fix broken image when endianess of client machine and
+               'xmlns:linux-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux" ',
+               'xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" ',
+               'xmlns:oval-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" ',
+xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" ',
+      xml += string( '\t\t<dpkginfo_item id=\"', i, '\" xmlns=\"http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux\">\n' );
+      xml += string( '\t\t<rpminfo_item id=\"', i, '\" xmlns=\"http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux\">\n' );
+ XSA-55: CVE-2013-2195: The Elf parser (libelf) in Xen 4.2.x and earlier allow local guest administrators with certain permissions to hav... [Please see the references for more information on the vulnerabilities]");
+               'xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 ',
+  - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
+  Zhongling Wen discovered that the h323 conntrack handler did not correctly
+  Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remote
+  script_tag(name:"insight", value:"Toom Lohmus discovered that the Lua API and preprocessor in the Battle for

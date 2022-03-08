@@ -50,6 +50,7 @@ from .security_messages import CheckSecurityMessages
 from .set_get_kb_calls import CheckWrongSetGetKBCalls
 from .solution_text import CheckSolutionText
 from .solution_type import CheckSolutionType
+from .spelling import CheckSpelling
 from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
 from .update_modification_date import UpdateModificationDate
@@ -86,6 +87,7 @@ _NASL_ONLY_PLUGINS = [
     CheckSecurityMessages,
     CheckSolutionText,
     CheckSolutionType,
+    CheckSpelling,
     CheckTodoTbd,
     CheckUsingDisplay,
     CheckVTPlacement,

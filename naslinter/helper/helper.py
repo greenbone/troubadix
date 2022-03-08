@@ -14,11 +14,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import os
 import re
 from pathlib import Path
 from subprocess import PIPE, Popen
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Tuple, AnyStr
 
 # Root directory of nasl files
 _ROOT = "nasl"
@@ -33,10 +33,41 @@ def is_ignore_file(
     return False
 
 
-def subprocess_cmd(command: str) -> str:
-    process = Popen(command, stdout=PIPE, shell=True)
-    proc_stdout = process.communicate()[0].strip()
-    return proc_stdout.decode("utf-8")
+# https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+def which(program):
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, _fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
+
+def subprocess_cmd(command: str, encoding="UTF-8") -> Tuple[AnyStr, AnyStr]:
+    def any2str(str_input: AnyStr) -> str:
+        if isinstance(str_input, bytes):
+            return str_input.decode(encoding).strip()
+        elif isinstance(str_input, str):
+            return str_input.strip()
+        return ""
+
+    process = Popen(
+        command,
+        stdout=PIPE,
+        shell=True,
+        encoding=encoding,
+    )
+    proc_stdout, proc_stderr = process.communicate()
+
+    return any2str(proc_stdout), any2str(proc_stderr)
 
 
 class Root:

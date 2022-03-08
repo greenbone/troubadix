@@ -42,7 +42,6 @@ class CheckSolutionTextTestCase(PluginTestCase):
                 special_tag_pattern=self.special_tag_pattern,
             )
         )
-        print(results)
         self.assertEqual(len(results), 0)
 
     def test_ok2(self):

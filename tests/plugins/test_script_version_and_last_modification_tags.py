@@ -45,7 +45,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
                 special_tag_pattern=self.special_tag_pattern,
             )
         )
-        print(results)
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -65,7 +64,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
                 special_tag_pattern=self.special_tag_pattern,
             )
         )
-        print(results)
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
