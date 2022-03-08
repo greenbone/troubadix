@@ -51,6 +51,7 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'script_description("TestTest");\n'
         ).splitlines()
+
         results = list(
             CheckDescription.run(
                 nasl_file,
@@ -76,6 +77,7 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
         ).splitlines()
+
         results = list(
             CheckDescription.run(
                 nasl_file,
