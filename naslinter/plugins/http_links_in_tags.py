@@ -80,7 +80,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 continue
 
                             yield LinterError(
-                                "One script_tag in the VT is using an HTTP "
+                                "One script_tag in the VT is using a HTTP "
                                 "link/URL which should be moved to a separate "
                                 '\'script_xref(name:"URL", value:"");\''
                                 f" tag instead: '{tag_match.group(0)}'"
