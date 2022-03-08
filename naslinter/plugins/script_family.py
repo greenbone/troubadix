@@ -108,6 +108,7 @@ class CheckScriptFamily(FileContentPlugin):
 
         if not match:
             yield LinterError("No script family exist")
+            return
 
         if match.group("script_family") not in VALID_FAMILIES:
             yield LinterError(
