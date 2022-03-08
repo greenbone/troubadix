@@ -17,16 +17,22 @@
 
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterResult, FileContentPlugin, LinterError
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckForkingNaslFuncs(FileContentPlugin):
     name = "check_forking_nasl_funcs"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if any of the following functions are used more
         than once or in conjunction with other mentioned functions within the
         same VT:
@@ -71,6 +77,7 @@ class CheckForkingNaslFuncs(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the file that is going to be checked
         """
+        del tag_pattern, special_tag_pattern
 
         # Those two are only calling http_get_port() if get_app_port() was
         # "empty".
@@ -101,7 +108,7 @@ class CheckForkingNaslFuncs(FileContentPlugin):
             for tag in match:
                 if tag[0]:
                     yield LinterError(
-                        f"The VT '{str(nasl_file)}' is using the {tag[0]} "
+                        f"The VT is using the {tag[0]} "
                         "multiple times or in conjunction with other "
                         "forking functions. Please either use get_app_port_from"
                         "_list() from host_details.inc or split your VT into "
@@ -122,20 +129,18 @@ class CheckForkingNaslFuncs(FileContentPlugin):
                     # some special cases, these are calling get_app_location
                     # with nofork:TRUE which returns a list instead of doing
                     # a fork.
-                    if (
-                        "2018/phpunit/gb_phpunit_rce.nasl" in str(nasl_file)
-                        or "2018/gb_unprotected_web_app_installers.nasl"
-                        in str(nasl_file)
-                        or "2018/gb_sensitive_file_disclosures_http.nasl"
-                        in str(nasl_file)
-                    ):
+                    exceptions = [
+                        "2018/phpunit/gb_phpunit_rce.nasl",
+                        "2018/gb_unprotected_web_app_installers.nasl",
+                        "2018/gb_sensitive_file_disclosures_http.nasl",
+                    ]
+                    if any(e in str(nasl_file) for e in exceptions):
                         if "nofork:TRUE" in tag[0]:
                             continue
                     yield LinterError(
-                        f"The VT '{nasl_file}' is using the {tag[0]} "
-                        "multiple times or in conjunction with other forking "
-                        "functions. Please use e.g. "
-                        "get_app_version_and_location(), "
+                        f"The VT is using the {tag[0]} multiple times or in "
+                        "conjunction with other forking functions. Please use "
+                        "e.g. get_app_version_and_location(), "
                         "get_app_version_and_location_from_list() or similar "
-                        f"functions from host_details.inc."
+                        "functions from host_details.inc."
                     )

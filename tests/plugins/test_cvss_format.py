@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.cvss_format import CheckCVSSFormat
 
+from . import PluginTestCase
 
-class CheckCVSSFormatTestCase(unittest.TestCase):
+
+class CheckCVSSFormatTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -32,7 +32,14 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckCVSSFormat.run(path, content))
+        results = list(
+            CheckCVSSFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_invalid_base(self):
@@ -40,14 +47,21 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
         content = (
             'script_tag(name:"cvss_base", value:"a12");\n'
             'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
+            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
 
-        results = list(CheckCVSSFormat.run(path, content))
+        results = list(
+            CheckCVSSFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
 
@@ -58,11 +72,18 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckCVSSFormat.run(path, content))
+        results = list(
+            CheckCVSSFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
 
@@ -74,12 +95,18 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:");'
         )
 
-        results = list(CheckCVSSFormat.run(path, content))
+        results = list(
+            CheckCVSSFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base_vector "
-            "value.",
+            "VT has a missing or invalid cvss_base_vector value.",
             results[0].message,
         )
 
@@ -87,11 +114,17 @@ class CheckCVSSFormatTestCase(unittest.TestCase):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"4.0");\n'
 
-        results = list(CheckCVSSFormat.run(path, content))
+        results = list(
+            CheckCVSSFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' has a missing or invalid cvss_base_vector "
-            "value.",
+            "VT has a missing or invalid cvss_base_vector value.",
             results[0].message,
         )

@@ -15,18 +15,23 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckMisplacedCompareInIf(FileContentPlugin):
     name = "check_misplaced_compare_in_if"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks the passed VT/Include if it is using a misplaced
             compare within an if() call like e.g.:
 
@@ -44,6 +49,7 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
             nasl_file: The VT/Include that is going to be checked
             file_content: The content of the VT
         """
+        del tag_pattern, special_tag_pattern
 
         # pylint: disable=W0511
         # TODO: Find a better way to parse if calls as this would miss
@@ -69,12 +75,6 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
         if not if_matches:
             return
 
-        misplaced_compare_report = (
-            f"VT/Include '{str(nasl_file)}' is using a"
-            " misplaced compare within an if() call in"
-            " the following line: "
-        )
-
         for if_match in if_matches:
             if if_match:
                 misplaced_compare_match = re.search(
@@ -86,5 +86,6 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
                 )
                 if misplaced_compare_match:
                     yield LinterError(
-                        misplaced_compare_report + if_match.group(0)
+                        f"VT/Include is using a misplaced compare "
+                        f"within an if() call in {if_match.group(0)}"
                     )

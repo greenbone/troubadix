@@ -16,85 +16,48 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
-
-SIMPLE_CALLS_TO_CHECK = [
-    "mandatory_keys",
-    "name",
-    "require_keys",
-    "exclude_keys",
-    "oid",
-    "require_ports",
-    "require_udp_ports",
-    "copyright",
-    "family",
-    "category",
-    "cve_id",
-    "version",
-    "bugtraq_id",
-    "dependencies",
-]
-SCRIPT_TAGS_TO_CHECK = [
-    "solution",
-    "solution_type",
-    "qod_type",
-    "cvss_base",
-    "cvss_base_vector",
-    "summary",
-    "last_modification",
-    "insight",
-    "affected",
-    "creation_date",
-    "vuldetect",
-    "impact",
-    "deprecated",
-    "qod",
-    "severity_vector",
-    "severity_origin",
-    "severity_date",
-]
+from naslinter.helper.patterns import ScriptTag, SpecialScriptTag
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckDuplicatedScriptTags(FileContentPlugin):
     name = "check_duplicated_script_tags"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
-        for check in SIMPLE_CALLS_TO_CHECK:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        for tag in SpecialScriptTag:
             # TBD: script_name might also look like this:
             # script_name("MyVT (Windows)");
-            match = re.findall(
-                r"^ *script_" + check + r" *\([^)]+\) *;",
-                file_content,
-                re.MULTILINE,
-            )
-            if match and len(match) > 1:
+            match = special_tag_pattern[tag.value].finditer(file_content)
+
+            if match:
                 # This is allowed, see e.g.
                 # gb_netapp_data_ontap_consolidation.nasl
-                if check == "dependencies" and "FEED_NAME" in file_content:
+                if tag == "dependencies" and "FEED_NAME" in file_content:
                     continue
+                match = list(match)
+                if len(match) > 1:
+                    yield LinterError(
+                        f"The VT is using the script tag 'script_"
+                        f"{tag.value}' multiple number of times."
+                    )
 
-                function = match[0].partition("(")[0]
-                yield LinterError(
-                    f"The VT '{nasl_file}' is using the script function "
-                    f"'{function}' multiple number of times."
-                )
+        for tag in ScriptTag:
+            match = tag_pattern[tag.value].finditer(file_content)
 
-        for check in SCRIPT_TAGS_TO_CHECK:
-            match = re.findall(
-                r"^ *script_tag *\( *name *: *[\"']"
-                + check
-                + r"[\"'] *, *value *: *.*?(?=\) *;)+\) *;",
-                file_content,
-                re.MULTILINE | re.DOTALL,
-            )
-            if match and len(match) > 1:
-                tag = match[0].partition(",")[0]
-                yield LinterError(
-                    f"The VT '{nasl_file}' is using the script tag '{tag}' "
-                    "multiple number of times."
-                )
+            if match:
+                match = list(match)
+                if len(match) > 1:
+                    yield LinterError(
+                        f"The VT is using the script tag '{tag.value}' "
+                        "multiple number of times."
+                    )

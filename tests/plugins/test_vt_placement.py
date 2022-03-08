@@ -17,19 +17,21 @@
 
 from pathlib import Path
 
-import unittest
-
-from naslinter.plugin import LinterError
 from naslinter.helper.helper import _ROOT
+from naslinter.plugin import LinterError
 from naslinter.plugins.vt_placement import CheckVTPlacement
+
+from . import PluginTestCase
 
 here = Path.cwd()
 
 
-class CheckVTPlacementTestCase(unittest.TestCase):
+class CheckVTPlacementTestCase(PluginTestCase):
     def setUp(self) -> None:
         self.dir = here / _ROOT / "foo"
         self.dir.mkdir(parents=True)
+
+        return super().setUp()
 
     def tearDown(self) -> None:
         self.dir.rmdir()
@@ -43,7 +45,14 @@ class CheckVTPlacementTestCase(unittest.TestCase):
                 f'script_family("{_type} detection");\n'
             )
 
-            results = list(CheckVTPlacement.run(path, content))
+            results = list(
+                CheckVTPlacement.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
             self.assertEqual(len(results), 0)
 
     def test_ok_dirs(self):
@@ -56,7 +65,14 @@ class CheckVTPlacementTestCase(unittest.TestCase):
                     f'script_family("{_type} detection");\n'
                 )
 
-                results = list(CheckVTPlacement.run(path, content))
+                results = list(
+                    CheckVTPlacement.run(
+                        path,
+                        content,
+                        tag_pattern=self.tag_pattern,
+                        special_tag_pattern=self.special_tag_pattern,
+                    )
+                )
                 self.assertEqual(len(results), 0)
 
     def test_ok_deprecated(self):
@@ -69,7 +85,14 @@ class CheckVTPlacementTestCase(unittest.TestCase):
                 'script_tag(name:"deprecated", value=TRUE);\n'
             )
 
-            results = list(CheckVTPlacement.run(path, content))
+            results = list(
+                CheckVTPlacement.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
             self.assertEqual(len(results), 0)
 
     def test_no_detection(self):
@@ -80,7 +103,14 @@ class CheckVTPlacementTestCase(unittest.TestCase):
             'script_dependencies("example.inc");\n'
         )
 
-        results = list(CheckVTPlacement.run(path, content))
+        results = list(
+            CheckVTPlacement.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_wrong_placement(self):
@@ -92,11 +122,17 @@ class CheckVTPlacementTestCase(unittest.TestCase):
                 f'script_family("{_type} detection");\n'
             )
 
-            results = list(CheckVTPlacement.run(path, content))
+            results = list(
+                CheckVTPlacement.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                f"VT '{str(path)}' should be "
-                f"placed in the root directory ({self.dir}).",
+                "VT should be " f"placed in the root directory ({self.dir}).",
                 results[0].message,
             )

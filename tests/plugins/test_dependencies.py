@@ -17,21 +17,23 @@
 
 from pathlib import Path
 
-import unittest
-
-from naslinter.plugin import LinterError
 from naslinter.helper.helper import _ROOT
+from naslinter.plugin import LinterError
 from naslinter.plugins.dependencies import CheckDependencies
+
+from . import PluginTestCase
 
 here = Path.cwd()
 
 
-class CheckDoubleEndPointsTestCase(unittest.TestCase):
+class CheckDoubleEndPointsTestCase(PluginTestCase):
     def setUp(self) -> None:
         self.dir = here / _ROOT / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.touch()
+
+        return super().setUp()
 
     def tearDown(self) -> None:
         self.dep.unlink()
@@ -44,7 +46,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_tag(name:"summary", value:"Foo Bar.");'
         )
 
-        results = list(CheckDependencies.run(path, content))
+        results = list(
+            CheckDependencies.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_dep_existing(self):
@@ -55,7 +64,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_dependencies("example.inc");\n'
         )
 
-        results = list(CheckDependencies.run(path, content))
+        results = list(
+            CheckDependencies.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_dep_missing(self):
@@ -67,7 +83,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             f'script_dependencies("{dependency}");\n'
         )
 
-        results = list(CheckDependencies.run(path, content))
+        results = list(
+            CheckDependencies.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

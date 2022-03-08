@@ -15,16 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from contextlib import redirect_stdout
 import io
 import unittest
-
+from contextlib import redirect_stdout
 from pathlib import Path
 
-from pontos.terminal.terminal import Terminal
 from pontos.terminal import _set_terminal
-from naslinter.plugin import LinterError, LinterResult
+from pontos.terminal.terminal import Terminal
 
+from naslinter.plugin import LinterError, LinterResult
 from naslinter.plugins import _NASL_ONLY_PLUGINS
 from naslinter.runner import Runner
 

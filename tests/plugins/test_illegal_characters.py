@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterWarning
 from naslinter.plugins.illegal_characters import CheckIllegalCharacters
 
+from . import PluginTestCase
 
-class CheckIllegalCharactersTestCase(unittest.TestCase):
+
+class CheckIllegalCharactersTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -33,7 +33,14 @@ class CheckIllegalCharactersTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckIllegalCharacters.run(path, content))
+        results = list(
+            CheckIllegalCharacters.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_illegal_chars_in_various_tags(self):
@@ -61,7 +68,14 @@ class CheckIllegalCharactersTestCase(unittest.TestCase):
                 'script_tag(name:"solution", value:"meh");\n'
             )
 
-            results = list(CheckIllegalCharacters.run(path, content))
+            results = list(
+                CheckIllegalCharacters.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterWarning)
             self.assertEqual(

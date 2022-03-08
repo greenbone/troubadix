@@ -18,35 +18,38 @@
 # pylint: disable=fixme
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
+from naslinter.helper import SpecialScriptTag, get_root
 from naslinter.plugin import (
-    LinterError,
     FileContentPlugin,
+    LinterError,
     LinterResult,
     LinterWarning,
 )
-from naslinter.helper import get_root, get_special_tag_pattern
 
 
 class CheckDependencies(FileContentPlugin):
     name = "check_dependencies"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks whether the files used in script_dependencies()
         exist on the local filesystem.
         An error will be thrown if a dependency could not be found.
         """
+        del tag_pattern
 
-        if not "script_dependencies(" in file_content:
-            return
-
-        matches = get_special_tag_pattern(
-            name="dependencies", flags=re.MULTILINE
-        ).finditer(file_content)
+        matches = special_tag_pattern[
+            SpecialScriptTag.DEPENDENCIES.value
+        ].finditer(file_content)
 
         root = get_root(nasl_file)
 

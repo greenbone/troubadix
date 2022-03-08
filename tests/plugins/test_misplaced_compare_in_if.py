@@ -16,13 +16,13 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.misplaced_compare_in_if import CheckMisplacedCompareInIf
 
+from . import PluginTestCase
 
-class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
+
+class CheckMisplacedCompareInIfTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -32,7 +32,14 @@ class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckMisplacedCompareInIf.run(nasl_file, content))
+        results = list(
+            CheckMisplacedCompareInIf.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -45,12 +52,19 @@ class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
             'if( variable >< "text" ) {}\n'
         )
 
-        results = list(CheckMisplacedCompareInIf.run(nasl_file, content))
+        results = list(
+            CheckMisplacedCompareInIf.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT/Include '{str(nasl_file)}' is using a misplaced compare "
-            "within an if() call in the following line: "
+            "VT/Include is using a misplaced compare "
+            "within an if() call in "
             'if( variable >< "text" ) {',
             results[0].message,
         )
@@ -65,12 +79,19 @@ class CheckMisplacedCompareInIfTestCase(unittest.TestCase):
             'if( variable >< "text" )\nexit(1);\n'
         )
 
-        results = list(CheckMisplacedCompareInIf.run(nasl_file, content))
+        results = list(
+            CheckMisplacedCompareInIf.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT/Include '{str(nasl_file)}' is using a misplaced compare "
-            "within an if() call in the following line: "
+            "VT/Include is using a misplaced compare "
+            "within an if() call in "
             'if( variable >< "text" )\nexit(1);',
             results[0].message,
         )

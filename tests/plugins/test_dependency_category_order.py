@@ -17,23 +17,25 @@
 
 from pathlib import Path
 
-import unittest
-
-from naslinter.plugin import LinterError
 from naslinter.helper.helper import _ROOT
+from naslinter.plugin import LinterError
 from naslinter.plugins.dependency_category_order import (
     CheckDependencyCategoryOrder,
 )
 
+from . import PluginTestCase
+
 here = Path.cwd()
 
 
-class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
+class CheckDependencyCategoryOrderTestCase(PluginTestCase):
     def setUp(self) -> None:
         self.dir = here / _ROOT / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text("script_category(ACT_ATTACK);")
+
+        return super().setUp()
 
     def tearDown(self) -> None:
         self.dep.unlink()
@@ -47,7 +49,14 @@ class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
             "script_category(ACT_ATTACK);"
         )
 
-        results = list(CheckDependencyCategoryOrder.run(path, content))
+        results = list(
+            CheckDependencyCategoryOrder.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_dependency(self):
@@ -58,7 +67,14 @@ class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
             "script_category(ACT_ATTACK);"
         )
 
-        results = list(CheckDependencyCategoryOrder.run(path, content))
+        results = list(
+            CheckDependencyCategoryOrder.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_dependency_missing(self):
@@ -71,7 +87,14 @@ class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        results = list(CheckDependencyCategoryOrder.run(path, content))
+        results = list(
+            CheckDependencyCategoryOrder.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
@@ -90,7 +113,14 @@ class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        results = list(CheckDependencyCategoryOrder.run(path, content))
+        results = list(
+            CheckDependencyCategoryOrder.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
@@ -109,7 +139,14 @@ class CheckDependencyCategoryOrderTestCase(unittest.TestCase):
             f'script_dependencies("{dependency}");\n'
         )
 
-        results = list(CheckDependencyCategoryOrder.run(path, content))
+        results = list(
+            CheckDependencyCategoryOrder.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

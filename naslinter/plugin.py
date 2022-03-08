@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, OrderedDict
 
 
 @dataclass
@@ -50,7 +51,13 @@ class FileContentPlugin(Plugin):
 
     @staticmethod
     @abstractmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         pass
 
 
@@ -59,5 +66,11 @@ class LineContentPlugin(Plugin):
 
     @staticmethod
     @abstractmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         pass

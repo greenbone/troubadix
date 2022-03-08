@@ -18,13 +18,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
 
+from . import PluginTestCase
 
-class CheckForkingNaslFuncsTestCase(unittest.TestCase):
+
+class CheckForkingNaslFuncsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -35,7 +35,14 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
 
-        results = list(CheckForkingNaslFuncs.run(path, content))
+        results = list(
+            CheckForkingNaslFuncs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_not_ok(self):
@@ -51,11 +58,18 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             'service:"www" ) )\nexit( 0 );\n'
         )
 
-        results = list(CheckForkingNaslFuncs.run(path, content))
+        results = list(
+            CheckForkingNaslFuncs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The VT '{str(path)}' is using the "
+            "The VT is using the "
             'get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, service:"www" ) ) '
             "multiple times or in conjunction with other forking functions. "
             "Please either use get_app_port_from_list() from host_details.inc "
@@ -76,11 +90,18 @@ class CheckForkingNaslFuncsTestCase(unittest.TestCase):
             ")\nexit(0);\n"
         )
 
-        results = list(CheckForkingNaslFuncs.run(path, content))
+        results = list(
+            CheckForkingNaslFuncs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The VT '{str(path)}' is using the "
+            "The VT is using the "
             "get_app_full(cpe:CPE, port:port, exit_no_version:TRUE)) "
             "multiple times or in conjunction with other forking functions. "
             "Please use e.g. get_app_version_and_location(), "

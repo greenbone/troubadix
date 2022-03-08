@@ -16,14 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.helper import is_ignore_file
-
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
-from naslinter.helper.patterns import get_tag_pattern
+from naslinter.helper.patterns import ScriptTag
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 # We don't want to touch the metadata of this older VTs...
 _IGNORE_FILES = [
@@ -35,7 +33,13 @@ class CheckMissingTagSolution(FileContentPlugin):
     name = "check_missing_tag_solution"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if the VT has a solution_type script tag:
         script_tag(name:"solution_type", value:"");
 
@@ -45,31 +49,33 @@ class CheckMissingTagSolution(FileContentPlugin):
         This excludes files from the (sub)dir "nmap_nse/" and deprecated
         vts.
         """
+        del special_tag_pattern
+
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
         # Not all VTs have/require a solution_type text
         if "solution_type" not in file_content:
             return
         # Avoid unnecessary message against deprecated VTs.
-        deprecated_match = get_tag_pattern(
-            name="deprecated", value="TRUE"
-        ).search(string=file_content)
+        deprecated_match = tag_pattern[ScriptTag.DEPRECATED.value].search(
+            string=file_content
+        )
 
         if deprecated_match and deprecated_match.group("value"):
             return
 
-        solution_type_match = get_tag_pattern(name="solution_type").search(
+        solution_type_match = tag_pattern[ScriptTag.SOLUTION_TYPE.value].search(
             string=file_content
         )
-        if not solution_type_match and solution_type_match.group(0):
+        if not solution_type_match:
             return
 
-        solution_match = get_tag_pattern(
-            name="solution", flags=re.MULTILINE | re.DOTALL
-        ).search(string=file_content)
+        solution_match = tag_pattern[ScriptTag.SOLUTION.value].search(
+            string=file_content
+        )
 
         if not solution_match or solution_match.group(0) is None:
             yield LinterError(
                 "'solution_type' script_tag but no 'solution' script_tag "
-                f"found in the description block of VT '{str(nasl_file)}'"
+                "found in the description block."
             )

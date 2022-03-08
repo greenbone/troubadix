@@ -17,16 +17,16 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_add_preference_type import (
     CheckScriptAddPreferenceType,
     ValidType,
 )
 
+from . import PluginTestCase
 
-class CheckScriptAddPreferenceTypeTestCase(unittest.TestCase):
+
+class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
     def test_ok(self):
         for pref_type in ValidType:
             path = Path("some/file.nasl")
@@ -37,7 +37,14 @@ class CheckScriptAddPreferenceTypeTestCase(unittest.TestCase):
                 f'script_add_preference(type: "{pref_type.value}");\n'
             )
 
-            results = list(CheckScriptAddPreferenceType.run(path, content))
+            results = list(
+                CheckScriptAddPreferenceType.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
             self.assertEqual(len(results), 0)
 
     def test_no_add_preference(self):
@@ -48,7 +55,14 @@ class CheckScriptAddPreferenceTypeTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckScriptAddPreferenceType.run(path, content))
+        results = list(
+            CheckScriptAddPreferenceType.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_invalid(self):
@@ -61,7 +75,14 @@ class CheckScriptAddPreferenceTypeTestCase(unittest.TestCase):
             f"{add_pref}\n"
         )
 
-        results = list(CheckScriptAddPreferenceType.run(path, content))
+        results = list(
+            CheckScriptAddPreferenceType.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

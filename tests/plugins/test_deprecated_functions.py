@@ -17,15 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
-from naslinter.plugins.deprecated_functions import (
-    CheckDeprecatedFunctions,
-)
+from naslinter.plugins.deprecated_functions import CheckDeprecatedFunctions
+
+from . import PluginTestCase
 
 
-class CheckDeprecatedDependencyTestCase(unittest.TestCase):
+class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -34,7 +32,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
             "script_category(ACT_ATTACK);"
         )
 
-        results = list(CheckDeprecatedFunctions.run(path, content))
+        results = list(
+            CheckDeprecatedFunctions.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_deprecated_functions(self):
@@ -59,7 +64,14 @@ class CheckDeprecatedDependencyTestCase(unittest.TestCase):
                 f"script_category(ACT_ATTACK);\n{cont}"
             )
 
-            results = list(CheckDeprecatedFunctions.run(path, content))
+            results = list(
+                CheckDeprecatedFunctions.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
 
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)

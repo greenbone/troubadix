@@ -16,9 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -42,7 +41,14 @@ class CheckSolutionType(FileContentPlugin):
     name = "check_solution_type"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         has_severity = True
         cvss_detect = re.search(
             r"script_tag\s*\(name\s*:\s*\"cvss_base\","

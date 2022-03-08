@@ -17,11 +17,12 @@
 
 """ checking badwords in NASL scripts with the NASLinter """
 
+import re
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, LineContentPlugin
 from naslinter.helper import is_ignore_file
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 # hexstr(OpenVAS) = '4f70656e564153'
 # hexstr(openvas) = '6f70656e766173'
@@ -92,21 +93,19 @@ class CheckBadwords(LineContentPlugin):
     def run(
         nasl_file: Path,
         lines: Iterable[str],
-    ):
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
-        line_number = 1
-        badword_found = False
-        output = f"Badword(s) found in {nasl_file}:\n"
-        for line in lines:
+
+        for i, line in enumerate(lines):
             if any(badword in line for badword in DEFAULT_BADWORDS):
                 if not any(
                     exception in line for exception in EXCEPTIONS
                 ) and not any(
                     line.startswith(start) for start in STARTS_WITH_EXCEPTIONS
                 ):
-                    output += f"line {line_number:5}: {line}\n"
-                    badword_found = True
-            line_number = line_number + 1
-        if badword_found:
-            yield LinterError(output)
+                    yield LinterError(f"Badword in line {i+1:5}: {line}")

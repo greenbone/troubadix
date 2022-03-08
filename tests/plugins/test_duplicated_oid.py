@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError, LinterMessage
 from naslinter.plugins.duplicate_oid import CheckDuplicateOID
 
+from . import PluginTestCase
 
-class CheckDuplicateOIDTestCase(unittest.TestCase):
+
+class CheckDuplicateOIDTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -33,7 +33,14 @@ class CheckDuplicateOIDTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckDuplicateOID.run(path, content))
+        results = list(
+            CheckDuplicateOID.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
@@ -44,7 +51,14 @@ class CheckDuplicateOIDTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckDuplicateOID.run(path, content))
+        results = list(
+            CheckDuplicateOID.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
@@ -61,7 +75,14 @@ class CheckDuplicateOIDTestCase(unittest.TestCase):
             'script_name("Foo Bar");\n'
         )
 
-        results = list(CheckDuplicateOID.run(path, content))
+        results = list(
+            CheckDuplicateOID.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

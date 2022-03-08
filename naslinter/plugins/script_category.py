@@ -16,11 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 SCRIPT_CATEGORIES = {
     "ACT_INIT": 0,
@@ -41,7 +40,17 @@ class CheckScriptCategory(FileContentPlugin):
     name = "check_script_category"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
+        if nasl_file.suffix == ".inc":
+            return
+
         own_category_match = re.search(
             r"^\s*script_category\s*\(([^)]{3,})\)\s*;",
             file_content,
@@ -49,7 +58,7 @@ class CheckScriptCategory(FileContentPlugin):
         )
 
         if own_category_match is None or own_category_match.group(1) is None:
-            yield LinterError(f"VT '{nasl_file}' is missing a script_category.")
+            yield LinterError("VT is missing a script_category.")
             return
 
         # pylint: disable=line-too-long
@@ -58,7 +67,6 @@ class CheckScriptCategory(FileContentPlugin):
         own_category = own_category_match.group(1)
         if own_category not in SCRIPT_CATEGORIES:
             yield LinterError(
-                f"VT '{nasl_file}' is using an unsupported category "
-                f"'{own_category}'."
+                f"VT is using an unsupported category '{own_category}'."
             )
             return

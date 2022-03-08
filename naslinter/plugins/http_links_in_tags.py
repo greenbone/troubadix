@@ -16,34 +16,38 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
-from pathlib import Path
-from typing import Iterator, AnyStr
-
 from itertools import chain
+from pathlib import Path
+from typing import AnyStr, Iterator, OrderedDict
 
-from naslinter.helper import get_tag_pattern, get_special_tag_pattern
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.helper import (
+    SpecialScriptTag,
+    get_common_tag_patterns,
+)
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckHttpLinksInTags(FileContentPlugin):
     name = "check_http_links_in_tags"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern
         return chain(
             CheckHttpLinksInTags.contains_nvd_mitre_link_in_xref(
-                nasl_file, file_content
+                file_content, special_tag_pattern
             ),
-            CheckHttpLinksInTags.contains_http_link_in_tag(
-                nasl_file, file_content
-            ),
+            CheckHttpLinksInTags.contains_http_link_in_tag(file_content),
         )
 
     @staticmethod
-    def contains_http_link_in_tag(
-        nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    def contains_http_link_in_tag(file_content: str) -> Iterator[LinterResult]:
         """Checks a given file if any of the
         script_tag(name:"(summary|impact|affected|insight|vuldetect|
         solution)", value:"")
@@ -58,9 +62,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                             checked
         """
 
-        pattern = get_tag_pattern(
-            name=r"summary|impact|affected|insight|vuldetect|solution",
-        )
+        pattern = get_common_tag_patterns()
         tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
         for tag_match in tag_matches:
@@ -69,7 +71,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                     r".*((http|ftp)s?://|(www|\s+ftp)\.).*",
                     tag_match.group("value"),
                 )
-                if http_link_matches is not None:
+                if http_link_matches:
                     for http_link_match in http_link_matches:
                         if http_link_match:
                             if CheckHttpLinksInTags.check_to_continue(
@@ -78,16 +80,16 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 continue
 
                             yield LinterError(
-                                f"One script_tag in VT '{nasl_file}' is using "
-                                "an HTTP Link/URL which should be moved to a "
-                                "separate "
-                                '\'script_xref(name:"URL", value:"");\' '
-                                f"tag instead: '{tag_match.group(0)}'"
+                                "One script_tag in the VT is using a HTTP "
+                                "link/URL which should be moved to a separate "
+                                '\'script_xref(name:"URL", value:"");\''
+                                f" tag instead: '{tag_match.group(0)}'"
                             )
 
     @staticmethod
     def contains_nvd_mitre_link_in_xref(
-        nasl_file: Path, file_content: str
+        file_content: str,
+        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Checks a given file if the script_xref(name:"URL", value:""); contains
@@ -106,9 +108,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 checked
         """
 
-        pattern = get_special_tag_pattern(
-            name=r"xref", value=r'name\s*:\s*"URL"\s*,\s*value\s*:\s*"([^"]+)"'
-        )
+        pattern = special_tag_pattern[SpecialScriptTag.XREF.value]
         tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
         for match in tag_matches:
@@ -121,11 +121,10 @@ class CheckHttpLinksInTags(FileContentPlugin):
                     # fmt: on
                 ):
                     yield LinterError(
-                        "The following script_xref of VT "
-                        f"'{nasl_file}' is pointing to Mitre/NVD "
-                        "which is already covered by the script_cve_id. "
-                        "This is a redundant info and the script_xref "
-                        f"needs to be removed: {match.group(0)}"
+                        "The following script_xref is pointing "
+                        "to Mitre/NVD which is already covered by the "
+                        "script_cve_id. This is a redundant info and the "
+                        f"script_xref needs to be removed: {match.group(0)}"
                     )
 
     @staticmethod

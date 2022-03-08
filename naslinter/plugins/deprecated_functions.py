@@ -18,22 +18,23 @@
 # pylint: disable=fixme
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LinterError,
-    FileContentPlugin,
-    LinterResult,
-)
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckDeprecatedFunctions(FileContentPlugin):
     name = "check_deprecated_functions"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Following functions / description items are outdated:
         script_summary()
@@ -49,6 +50,7 @@ class CheckDeprecatedFunctions(FileContentPlugin):
         Args:
             nasl_file: Name of the VT to be checked
         """
+        del tag_pattern, special_tag_pattern
         deprecated_functions = {
             "script_summary(), use script_tag"
             '(name:"summary", value:"") instead': r"script_summary\s*\([^)]*\)",

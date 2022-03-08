@@ -18,7 +18,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.helper import subprocess_cmd
 from naslinter.plugin import (
@@ -33,7 +33,13 @@ class CheckDuplicateOID(FileContentPlugin):
     name = "check_duplicate_oid"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script reads the OID from the file and runs grep to find out if
         the OID is used in more than one file.
 
@@ -42,6 +48,9 @@ class CheckDuplicateOID(FileContentPlugin):
             file_content: The content of the file
 
         """
+        del tag_pattern, special_tag_pattern
+        if nasl_file.suffix == ".inc":
+            return
 
         oid = re.search(r'script_oid\("([0-9.]+)"\);', file_content)
 
@@ -63,4 +72,3 @@ class CheckDuplicateOID(FileContentPlugin):
             return
         else:
             yield LinterMessage(f"No OID found in VT '{nasl_file}'")
-            return

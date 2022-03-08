@@ -15,10 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
 import re
+from pathlib import Path
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckVariableAssignedInIf(FileContentPlugin):
@@ -36,7 +37,13 @@ class CheckVariableAssignedInIf(FileContentPlugin):
     name = "check_variable_assigned_in_if"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> str:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Args:
             file: The VT/Include that is going to be checked
@@ -53,6 +60,8 @@ class CheckVariableAssignedInIf(FileContentPlugin):
         #
         # if((foo =~ "bar || bar =~ "foo") || foobar = "foo")
         #   bar = "foo"; (no ending {)
+        del tag_pattern, special_tag_pattern
+
         matches = re.finditer(
             r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE
         )

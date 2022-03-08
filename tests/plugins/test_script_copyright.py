@@ -17,29 +17,43 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_copyright import CheckScriptCopyright
 
+from . import PluginTestCase
 
-class CheckScriptCopyrightTestCase(unittest.TestCase):
+
+class CheckScriptCopyrightTestCase(PluginTestCase):
     def test_copyright_ok(self):
         path = Path("some/file.nasl")
         content = 'script_copyright("Copyright (C) 2020 Foo Bar")'
 
-        results = list(CheckScriptCopyright.run(path, content))
+        results = list(
+            CheckScriptCopyright.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_copyright_error(self):
         path = Path("some/file.nasl")
         content = 'script_copyright("Copyright 2020 Foo Bar")'
 
-        results = list(CheckScriptCopyright.run(path, content))
+        results = list(
+            CheckScriptCopyright.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertIn(
-            "The VT 'some/file.nasl' is using an incorrect syntax for its "
+            "The VT is using an incorrect syntax for its "
             "copyright statement.",
             results[0].message,
         )

@@ -18,36 +18,38 @@
 # pylint: disable=fixme
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LinterError,
-    FileContentPlugin,
-    LinterResult,
-)
-from naslinter.helper import get_root, get_special_tag_pattern
+from naslinter.helper import SpecialScriptTag, get_root
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckDeprecatedDependency(FileContentPlugin):
     name = "check_deprecated_dependency"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """No VT should depend on other VTs that are marked as deprecated via:
 
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
         """
+        del tag_pattern
         if not "script_dependencies(" in file_content:
             return
 
         root = get_root(nasl_file)
 
-        matches = get_special_tag_pattern(
-            name="dependencies", flags=re.MULTILINE
-        ).finditer(file_content)
+        matches = special_tag_pattern[
+            SpecialScriptTag.DEPENDENCIES.value
+        ].finditer(file_content)
         if not matches:
             return
 

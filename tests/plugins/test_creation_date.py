@@ -17,21 +17,28 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.creation_date import CheckCreationDate
 
+from . import PluginTestCase
 
-class CheckCreationDateTestCase(unittest.TestCase):
+
+class CheckCreationDateTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
-        content = [
+        content = (
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");'
-        ]
+        )
 
-        results = list(CheckCreationDate.run(path, content))
+        results = list(
+            CheckCreationDate.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_missing(self):
@@ -42,12 +49,19 @@ class CheckCreationDateTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:N/C:P/I:P/A:P");'
         )
 
-        results = list(CheckCreationDate.run(path, content.splitlines()))
+        results = list(
+            CheckCreationDate.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "No creation date has been found in VT 'some/file.nasl'.",
+            "No creation date has been found.",
             results[0].message,
         )
 
@@ -58,13 +72,19 @@ class CheckCreationDateTestCase(unittest.TestCase):
             '(Mon, 14 May 2013)");'
         )
 
-        results = list(CheckCreationDate.run(path, content.splitlines()))
+        results = list(
+            CheckCreationDate.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Wrong day of week in VT 'some/file.nasl'. Please change it from "
-            "'Mon' to 'Tue'.",
+            "Wrong day of week. Please change it from 'Mon' to 'Tue'.",
             results[0].message,
         )
 
@@ -75,13 +95,19 @@ class CheckCreationDateTestCase(unittest.TestCase):
             '(Tue, 14 May 2013)");'
         )
 
-        results = list(CheckCreationDate.run(path, content.splitlines()))
+        results = list(
+            CheckCreationDate.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "False or incorrectly formatted creation_date of VT "
-            "'some/file.nasl'",
+            "False or incorrectly formatted creation_date.",
             results[0].message,
         )
 
@@ -92,13 +118,19 @@ class CheckCreationDateTestCase(unittest.TestCase):
             '(Tue, 15 May 2013)");'
         )
 
-        results = list(CheckCreationDate.run(path, content.splitlines()))
+        results = list(
+            CheckCreationDate.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The creation_date of VT 'some/file.nasl' consists of two "
-            "different dates.",
+            "The creation_date consists of two different dates.",
             results[0].message,
         )
 
@@ -109,13 +141,18 @@ class CheckCreationDateTestCase(unittest.TestCase):
             '(Tue, 14 May 2013 )");'
         )
 
-        results = list(CheckCreationDate.run(path, content.splitlines()))
+        results = list(
+            CheckCreationDate.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Incorrectly formatted creation_date of VT 'some/file.nasl' "
-            "(length != 44). Please use EXACTLY the following format as in: "
-            '"2017-11-29 13:56:41 +0000 (Wed, 29 Nov 2017)"',
+            "False or incorrectly formatted creation_date.",
             results[0].message,
         )

@@ -17,14 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.copyright_text import (
-    CheckCopyrightText,
     CORRECT_COPYRIGHT_PHRASE,
+    CheckCopyrightText,
 )
 
+from . import PluginTestCase
 
 WRONG_TEXTS = [
     "# Text descriptions are largely excerpted from the referenced\n"
@@ -38,7 +37,7 @@ WRONG_TEXTS = [
 ]
 
 
-class CheckCopyrightTextTestCase(unittest.TestCase):
+class CheckCopyrightTextTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("tests/file.nasl")
         content = (
@@ -49,7 +48,14 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             'script_copyright("Copyright (C) 1234");'
         )
 
-        results = list(CheckCopyrightText.run(path, content))
+        results = list(
+            CheckCopyrightText.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 0)
 
@@ -67,7 +73,14 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
             '  script_copyright("Copyright (C) 134");'
         )
 
-        results = list(CheckCopyrightText.run(path, content))
+        results = list(
+            CheckCopyrightText.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -104,7 +117,14 @@ class CheckCopyrightTextTestCase(unittest.TestCase):
                 '  script_copyright("Copyright (C) 1234");'
             )
 
-            results = list(CheckCopyrightText.run(path, content))
+            results = list(
+                CheckCopyrightText.run(
+                    path,
+                    content,
+                    tag_pattern=self.tag_pattern,
+                    special_tag_pattern=self.special_tag_pattern,
+                )
+            )
             self.assertEqual(len(results), 1)
 
             self.assertIsInstance(results[0], LinterError)

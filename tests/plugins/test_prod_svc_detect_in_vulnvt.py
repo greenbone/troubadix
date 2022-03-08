@@ -14,17 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from pathlib import Path
 
-import unittest
+from pathlib import Path
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.prod_svc_detect_in_vulnvt import (
     CheckProdSvcDetectInVulnvt,
 )
 
+from . import PluginTestCase
 
-class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
+
+class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -34,7 +35,14 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
+        results = list(
+            CheckProdSvcDetectInVulnvt.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -47,16 +55,20 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             'script_family("Product detection");\n'
         )
 
-        results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
+        results = list(
+            CheckProdSvcDetectInVulnvt.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' has a severity but is "
-            "placed in the following family which is "
-            "disallowed for such a "
-            'VT:\n\nscript_family("Product detection");\n\n'
-            "Please split this VT into a separate Product / "
-            "Service detection and Vulnerability-VT.\n",
+            "VT has a severity but is placed in the family 'Product detection' "
+            "which is not allowed for this VT. Please split this VT into a "
+            "separate Product/Service detection and Vulnerability-VT.",
             results[0].message,
         )
 
@@ -68,27 +80,28 @@ class CheckProdSVCDetectInVulnvtTestCase(unittest.TestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
             'script_family("Product detection");\n'
-            "register_product();\n"
+            "register_product(cpe:cpe);\n"
         )
 
-        results = list(CheckProdSvcDetectInVulnvt.run(nasl_file, content))
+        results = list(
+            CheckProdSvcDetectInVulnvt.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' has a severity but is "
-            "placed in the following family which is "
-            "disallowed for such a "
-            'VT:\n\nscript_family("Product detection");\n\n'
-            "Please split this VT into a separate Product / "
-            "Service detection and Vulnerability-VT.\n",
+            "VT has a severity but is placed in the family 'Product detection' "
+            "which is not allowed for this VT. Please split this VT into a "
+            "separate Product/Service detection and Vulnerability-VT.",
             results[0].message,
         )
         self.assertEqual(
-            f"VT '{str(nasl_file)}' has a severity but is "
-            "using the following functions which is "
-            "disallowed for such a VT:\n\n"
-            "register_product();\n\nPlease split this "
-            "VT into a separate Product / Service detection and "
-            "Vulnerability-VT.\n",
+            "VT has a severity but is using the function 'register_product' "
+            "which is not allowed for this VT. Please split this VT into a "
+            "separate Product/Service detection and Vulnerability-VT.",
             results[1].message,
         )

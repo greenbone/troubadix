@@ -17,18 +17,14 @@
 
 # pylint: disable=fixme
 
-from enum import IntEnum
 import re
-
+from enum import IntEnum
 from pathlib import Path
-from typing import Iterator, Union
+from typing import Iterator, OrderedDict, Union
 
-from naslinter.plugin import (
-    LinterError,
-    FileContentPlugin,
-    LinterResult,
-)
-from naslinter.helper import get_root, get_special_tag_pattern
+from naslinter.helper import SpecialScriptTag, get_root
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
+
 
 # See https://shorturl.at/jBGJT for a list of the category numbers.
 class VTCategory(IntEnum):
@@ -46,7 +42,7 @@ class VTCategory(IntEnum):
 
 
 def check_category(
-    content: str, script: str = ""
+    content: str, pattern: re.Pattern, script: str = ""
 ) -> Union[LinterError, VTCategory]:
     """Check if the content contains a script category
     Arguments:
@@ -56,9 +52,7 @@ def check_category(
         LinterError     if no category found or category invalid
         VTCategory      else
     """
-    match = get_special_tag_pattern(name="category", flags=re.MULTILINE).search(
-        content
-    )
+    match = pattern.search(content)
 
     if not match:
         return LinterError(f"{script}: Script category is missing.")
@@ -76,7 +70,13 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
     name = "check_dependency_category_order"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """No VT N should depend on scripts that are in a category that
         normally would be executed after the category of VT M.
         e.g. a VT N within the ACT_GATHER_INFO category (3) is
@@ -86,19 +86,24 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         In addition it is not allowed for VTs to have a direct dependency
         to VTs from within the ACT_SCANNER category.
         """
+        del tag_pattern
         if not "script_dependencies(" in file_content:
             return
 
         root = get_root(nasl_file)
 
-        category = check_category(content=file_content, script=nasl_file.name)
+        category = check_category(
+            content=file_content,
+            pattern=special_tag_pattern[SpecialScriptTag.CATEGORY.value],
+            script=nasl_file.name,
+        )
         if isinstance(category, LinterError):
             yield category
             return
 
-        matches = get_special_tag_pattern(
-            name="dependencies", flags=re.MULTILINE
-        ).finditer(file_content)
+        matches = special_tag_pattern[
+            SpecialScriptTag.DEPENDENCIES.value
+        ].finditer(file_content)
 
         if not matches:
             return
@@ -131,6 +136,9 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
 
                         dependency_category = check_category(
                             content=dependency_content,
+                            pattern=special_tag_pattern[
+                                SpecialScriptTag.CATEGORY.value
+                            ],
                             script=dependency_path.name,
                         )
                         if isinstance(dependency_category, LinterError):

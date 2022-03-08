@@ -17,18 +17,25 @@
 
 """ checking badwords in NASL scripts with the NASLinter """
 
-from pathlib import Path
 import re
+from pathlib import Path
+from typing import Iterator, OrderedDict
+from naslinter.helper.patterns import SpecialScriptTag
 
-from naslinter.helper import get_special_tag_pattern
-from naslinter.plugin import LinterError, FileContentPlugin
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckValidOID(FileContentPlugin):
     name = "check_valid_oid"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str):
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """Checks if a NASL script is using a valid script_oid() tag.
 
         Valid:
@@ -49,15 +56,18 @@ class CheckValidOID(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
+        del tag_pattern
+
+        if nasl_file.suffix == ".inc":
+            return
         security_template = "Security Advisory"
         family_template = "Local Security Checks"
         is_using_reserved = "is using an OID that is reserved for"
         invalid_oid = "is using an invalid OID"
 
-        oid_match = get_special_tag_pattern(
-            name="oid",
-            value=r'\s*["\'](?P<oid>([0-9.]+))["\']\s*',
-        ).search(file_content)
+        oid_match = special_tag_pattern[SpecialScriptTag.OID.value].search(
+            file_content
+        )
         if oid_match is None or oid_match.group("oid") is None:
             yield LinterError("No valid script_oid() call found")
             return
@@ -70,14 +80,13 @@ class CheckValidOID(FileContentPlugin):
 
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1." in oid:
-            family_match = get_special_tag_pattern(
-                name="family",
-                value=r'\s*["\'](?P<family>.*)["\']\s*',
-            ).search(file_content)
-            if family_match is None or family_match.group("family") is None:
+            family_match = special_tag_pattern[
+                SpecialScriptTag.FAMILY.value
+            ].search(file_content)
+            if family_match is None or family_match.group("value") is None:
                 yield LinterError("VT is missing a script family!")
                 return
-            family = family_match.group("family")
+            family = family_match.group("value")
 
             # Fixed OID-scheme for (Huawei) Euler OS OIDs
             if "1.3.6.1.4.1.25623.1.1.2." in oid:
@@ -270,14 +279,13 @@ class CheckValidOID(FileContentPlugin):
 
         # product-specific OIDs
         if "1.3.6.1.4.1.25623.1.2." in oid:
-            name_match = get_special_tag_pattern(
-                name="name",
-                value=r'\s*["\'](?P<name2>([\w ()-]+))["\']\s*',
-            ).search(file_content)
-            if not name_match or not name_match.group("name2"):
+            name_match = special_tag_pattern[
+                SpecialScriptTag.NAME.value
+            ].search(file_content)
+            if not name_match or not name_match.group("value"):
                 yield LinterError("VT is missing a script name!")
                 return
-            name = name_match.group("name2")
+            name = name_match.group("value")
 
             # Fixed OID-scheme for Mozilla Firefox OIDs
             if "1.3.6.1.4.1.25623.1.2.1." in oid:
@@ -294,9 +302,9 @@ class CheckValidOID(FileContentPlugin):
                 )
                 if not firefox_sa_match:
                     yield LinterError(
-                        f"script_oid() {invalid_oid} '{str(oid)}' (Firefox "
-                        "pattern: 1.3.6.1.4.1.25623.1.2.1.[ADVISORY_YEAR]"
-                        ".[ADVISORY_ID])"
+                        f"script_oid() {invalid_oid} '{str(oid)}' "
+                        "(Firefox pattern: 1.3.6.1.4.1.25623.1.2.1."
+                        "[ADVISORY_YEAR].[ADVISORY_ID])",
                     )
                     return
                 return
@@ -306,31 +314,30 @@ class CheckValidOID(FileContentPlugin):
         )
         if oid_digit_match is None or oid_digit_match.group(1) is None:
             yield LinterError(
-                f"script_oid() {invalid_oid} '{str(oid)}' (last digits)"
+                f"script_oid() {invalid_oid} '{str(oid)}' (last digits)",
             )
             return
 
-        # nb: Those are using invalid OID ranges but are already in the feed
-        # since longer time and can't be fixed / changed.
-        if (
-            "ossim_server_detect.nasl" in str(nasl_file)
-            or "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_stack_memory_usage"
-            "_vuln_macosx.nasl" in str(nasl_file)
-            or "2008/asterisk_sdp_header_overflow.nasl" in str(nasl_file)
-            or "2008/cisco_ios_ftp_server_auth_bypass.nasl" in str(nasl_file)
-            or "2008/qk_smtp_server_dos.nasl" in str(nasl_file)
-            or "2008/asterisk_pbx_guest_access_enabled.nasl" in str(nasl_file)
-            or "2008/asterisk_null_pointer_dereference.nasl" in str(nasl_file)
-            or "2008/goaheadwebserver_source_disclosure.nasl" in str(nasl_file)
-            or "2011/secpod_ibm_lotus_domino_rpc_auth_dos_vuln.nasl"
-            in str(nasl_file)
-            or "2011/secpod_cubecart_mult_xss_and_sql_inj_vuln.nasl"
-            in str(nasl_file)
-            or "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl" in str(nasl_file)
-            or "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl" in str(nasl_file)
-            or "2017/gb_openssh_mult_vuln_jan17_lin.nasl" in str(nasl_file)
-            or "2017/gb_xenserver_ctx219378.nasl" in str(nasl_file)
-        ):
+        exceptions = [
+            "ossim_server_detect.nasl",
+            "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_"
+            "stack_memory_usage_vuln_macosx.nasl",
+            "2008/asterisk_sdp_header_overflow.nasl",
+            "2008/cisco_ios_ftp_server_auth_bypass.nasl",
+            "2008/qk_smtp_server_dos.nasl",
+            "2008/asterisk_pbx_guest_access_enabled.nasl",
+            "2008/asterisk_null_pointer_dereference.nasl",
+            "2008/goaheadwebserver_source_disclosure.nasl",
+            "2011/secpod_ibm_lotus_domino_rpc_auth_dos_vuln.nasl",
+            "2011/secpod_cubecart_mult_xss_and_sql_inj_vuln.nasl",
+            "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl",
+            "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl",
+            "2017/gb_openssh_mult_vuln_jan17_lin.nasl",
+            "2017/gb_xenserver_ctx219378.nasl",
+        ]
+        # nb: Those are using invalid OID ranges but are already in
+        # the feed since longer time and can't be fixed / changed.
+        if any(e in str(nasl_file) for e in exceptions):
             return
 
         oid_digit = int(oid_digit_match.group(1))
@@ -352,9 +359,8 @@ class CheckValidOID(FileContentPlugin):
 
         if 300000 <= oid_digit <= 309999:
             yield LinterError(
-                f"script_oid() {invalid_oid} '{str(oid)}' "
-                "(reserved OID range not part of the official "
-                "Feed)"
+                f"script_oid() {invalid_oid} '{str(oid)}' (reserved OID "
+                "range not part of the official Feed)",
             )
             return
 

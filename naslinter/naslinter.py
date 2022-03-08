@@ -17,11 +17,12 @@
 
 """ Main module for naslinter """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 from typing import List, Tuple
+
+from pontos.terminal import _set_terminal, error, info, warning
 from pontos.terminal.terminal import Terminal
-from pontos.terminal import error, info, warning, _set_terminal
 
 from naslinter.argparser import parse_args
 from naslinter.helper import get_root

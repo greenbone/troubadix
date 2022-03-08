@@ -16,34 +16,46 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.helper import ScriptTag
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckCVEFormat(FileContentPlugin):
     name = "check_cve_format"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del special_tag_pattern
+        if nasl_file.suffix == ".inc":
+            return
+
         # don't need to check detection scripts since they don't refer to CVEs.
         # all detection scripts have a cvss of 0.0
-
-        cvss_detect = re.search(
-            r'script_tag\s*\(name\s*:\s*"cvss_base",'
-            r'\s*value:\s*"(\d{1,2}\.\d)"',
-            file_content,
+        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
+            file_content
         )
-        if cvss_detect is not None and cvss_detect.group(1) == "0.0":
+        # cvss_detect = re.search(
+        #     r'script_tag\s*\(name\s*:\s*"cvss_base",'
+        #     r'\s*value:\s*"(\d{1,2}\.\d)"',
+        #     file_content,
+        # )
+        if cvss_detect and cvss_detect.group("value") == "0.0":
             return
 
         # ("CVE-2017-2750");
         match_result = re.search("(?<=script_cve_id)[^;]+", file_content)
         if match_result is None or match_result.group(0) is None:
-            yield LinterError(f"VT '{nasl_file}' does not refer to any CVEs.")
+            yield LinterError("VT does not refer to any CVEs.")
             return
 
         found_cves = []
@@ -52,28 +64,22 @@ class CheckCVEFormat(FileContentPlugin):
         for match in matches:
             result = re.search(r'"CVE-\d{4}-\d{4,7}"', match)
             if result is None or result.group(0) is None:
-                yield LinterError(
-                    f"VT '{nasl_file}' uses an invalid CVE format."
-                )
+                yield LinterError("VT uses an invalid CVE format.")
                 return
 
             cve = result.group(0)
 
             if len(cve) > 15 and cve[10] == "0":
                 yield LinterError(
-                    f"The last group of CVE digits of VT '{nasl_file}'"
-                    " must not start with a 0 if there are more than 4 digits."
+                    "The last group of CVE digits of the VT "
+                    "must not start with a 0 if there are more than 4 digits."
                 )
 
             year = cve.split("-")
             if not 1999 <= int(year[1]) <= current_year:
-                yield LinterError(
-                    f"VT '{nasl_file}' uses an invalid year in CVE format."
-                )
+                yield LinterError("VT uses an invalid year in CVE format.")
 
             if cve in found_cves:
-                yield LinterError(
-                    f"VT '{nasl_file}' is using CVE {cve} multiple times."
-                )
+                yield LinterError(f"VT is using CVE {cve} multiple times.")
 
             found_cves.append(cve)

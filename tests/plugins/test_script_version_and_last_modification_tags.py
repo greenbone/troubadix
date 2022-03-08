@@ -14,17 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from pathlib import Path
 
-import unittest
+from pathlib import Path
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptVersionAndLastModificationTagsTestCase(unittest.TestCase):
+class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -38,7 +38,12 @@ class CheckScriptVersionAndLastModificationTagsTestCase(unittest.TestCase):
         )
 
         results = list(
-            CheckScriptVersionAndLastModificationTags.run(nasl_file, content)
+            CheckScriptVersionAndLastModificationTags.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
         )
         print(results)
         self.assertEqual(len(results), 0)
@@ -53,7 +58,12 @@ class CheckScriptVersionAndLastModificationTagsTestCase(unittest.TestCase):
         )
 
         results = list(
-            CheckScriptVersionAndLastModificationTags.run(nasl_file, content)
+            CheckScriptVersionAndLastModificationTags.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
         )
         print(results)
         self.assertEqual(len(results), 2)

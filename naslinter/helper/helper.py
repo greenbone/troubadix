@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from subprocess import Popen, PIPE
 from pathlib import Path
+from subprocess import PIPE, Popen
 from typing import List, Optional, Union
-
 
 # Root directory of nasl files
 _ROOT = "nasl"
@@ -52,9 +51,9 @@ class Root:
             self.root = Path(match.group("path"))
             if not self.root.exists():
                 self.root = None
-            self.instance = self
         else:
             self.root = None
+        self.instance = self
 
 
 def get_root(path: Path) -> Optional[Path]:

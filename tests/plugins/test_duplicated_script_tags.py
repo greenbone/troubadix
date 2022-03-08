@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.duplicated_script_tags import CheckDuplicatedScriptTags
 
+from . import PluginTestCase
 
-class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
+
+class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -32,7 +32,14 @@ class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckDuplicatedScriptTags.run(path, content))
+        results = list(
+            CheckDuplicatedScriptTags.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_duplicated_function(self):
@@ -43,11 +50,18 @@ class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
             'script_name("Foo Bar");\n'
         )
 
-        results = list(CheckDuplicatedScriptTags.run(path, content))
+        results = list(
+            CheckDuplicatedScriptTags.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT 'some/file.nasl' is using the script function "
+            "The VT is using the script tag "
             "'script_name' multiple number of times.",
             results[0].message,
         )
@@ -59,11 +73,18 @@ class CheckDuplicatedScriptTagsTestCase(unittest.TestCase):
             'script_tag(name:"cvss_base", value:"5.0");\n'
         )
 
-        results = list(CheckDuplicatedScriptTags.run(path, content))
+        results = list(
+            CheckDuplicatedScriptTags.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT 'some/file.nasl' is using the script tag "
-            "'script_tag(name:\"cvss_base\"' multiple number of times.",
+            "The VT is using the script tag "
+            "'cvss_base' multiple number of times.",
             results[0].message,
         )

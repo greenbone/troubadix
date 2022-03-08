@@ -18,69 +18,104 @@
 from datetime import datetime
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.cve_format import CheckCVEFormat
 
+from . import PluginTestCase
 
-class CheckCVEFormatTestCase(unittest.TestCase):
+
+class CheckCVEFormatTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"7.5")\n'
+            'script_tag(name:"cvss_base", value:"7.5");\n'
             'script_cve_id("CVE-2022-23807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_detection_script(self):
         path = Path("some/file.nasl")
-        content = 'script_tag(name:"cvss_base", value:"0.0")\n'
+        content = 'script_tag(name:"cvss_base", value:"0.0");\n'
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_cve_reference(self):
         path = Path("some/file.nasl")
-        content = 'script_tag(name:"cvss_base", value:"7.5")\n'
+        content = 'script_tag(name:"cvss_base", value:"7.5");\n'
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' does not refer to any CVEs.",
+            "VT does not refer to any CVEs.",
             results[0].message,
         )
 
     def test_invalid_cve_format(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"7.5")\n'
+            'script_tag(name:"cvss_base", value:"10.0");\n'
             'script_cve_id("CVE-a123-23807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' uses an invalid CVE format.",
+            "VT uses an invalid CVE format.",
             results[0].message,
         )
 
     def test_more_then_four_digits(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"7.5")\n'
+            'script_tag(name:"cvss_base", value:"7.5");\n'
             'script_cve_id("CVE-2021-03807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The last group of CVE digits of VT 'some/file.nasl' must not "
+            "The last group of CVE digits of the VT must not "
             "start with a 0 if there are more than 4 digits.",
             results[0].message,
         )
@@ -88,44 +123,64 @@ class CheckCVEFormatTestCase(unittest.TestCase):
     def test_invalid_year(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"7.5")\n'
+            'script_tag(name:"cvss_base", value:"7.5");\n'
             'script_cve_id("CVE-1971-3807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' uses an invalid year in CVE format.",
+            "VT uses an invalid year in CVE format.",
             results[0].message,
         )
 
         current_year = datetime.now().year
         content = (
-            'script_tag(name:"cvss_base", value:"7.5")\n'
+            'script_tag(name:"cvss_base", value:"7.5");\n'
             f'script_cve_id("CVE-{current_year + 1}-3807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' uses an invalid year in CVE format.",
+            "VT uses an invalid year in CVE format.",
             results[0].message,
         )
 
     def test_duplicate_cves(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"7.5")\n'
+            'script_tag(name:"cvss_base", value:"7.5");\n'
             'script_cve_id("CVE-2021-3807","CVE-2021-3807");'
         )
 
-        results = list(CheckCVEFormat.run(path, content))
+        results = list(
+            CheckCVEFormat.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT 'some/file.nasl' is using CVE \"CVE-2021-3807\" multiple "
-            "times.",
+            'VT is using CVE "CVE-2021-3807" multiple ' "times.",
             results[0].message,
         )

@@ -17,16 +17,13 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, List, Union
+from typing import Iterator, List, OrderedDict, Union
+
+from naslinter.helper.patterns import get_common_tag_patterns
+from naslinter.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 # import magic
 
-from naslinter.plugin import (
-    FileContentPlugin,
-    LinterResult,
-    LinterWarning,
-)
-from naslinter.helper.patterns import get_tag_pattern
 
 # ;                 can not be displayed in GSA, within
 #                   (summary|impact|affected|insight|vuldetect|solution)
@@ -60,16 +57,21 @@ class CheckIllegalCharacters(FileContentPlugin):
     name = "check_illegal_characters"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Currently the following chars are not allowed in
         every script_tag(name:"", value:"") :
         """
+        del tag_pattern, special_tag_pattern
 
         changes: bool = False
-        pattern = get_tag_pattern(
-            name=r"summary|impact|affected|insight|vuldetect|solution",
-        )
+        pattern = get_common_tag_patterns()
 
         tag_matches: List[re.Match] = pattern.finditer(file_content)
         if tag_matches:

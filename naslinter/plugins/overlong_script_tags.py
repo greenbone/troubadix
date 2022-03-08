@@ -16,12 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterator, Iterable
+from typing import Iterable, Iterator, OrderedDict
 
 from naslinter.helper import is_ignore_file
-from ..plugin import LinterError, LineContentPlugin, LinterResult
+
+from ..plugin import LineContentPlugin, LinterError, LinterResult
 
 # Arbitrary limit adopted from original step
 VALUE_LIMIT = 1000
@@ -47,7 +47,15 @@ class CheckOverlongScriptTags(LineContentPlugin):
     name = "check_overlong_script_tags"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
+
         if is_ignore_file(nasl_file, IGNORE_FILES):
             return
 

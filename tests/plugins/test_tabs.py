@@ -17,18 +17,25 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterWarning
-from naslinter.plugins.tabs import CheckTabs, TAB_TO_SPACES
+from naslinter.plugins.tabs import TAB_TO_SPACES, CheckTabs
+
+from . import PluginTestCase
 
 
-class CheckTabsTestCase(unittest.TestCase):
+class CheckTabsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("tests/file.nasl")
         content = "What ever."
 
-        results = list(CheckTabs.run(path, content))
+        results = list(
+            CheckTabs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
 
         self.assertEqual(len(results), 0)
 
@@ -43,7 +50,14 @@ class CheckTabsTestCase(unittest.TestCase):
 
         expected_content = "            \n1234456789"
 
-        results = list(CheckTabs.run(path, content))
+        results = list(
+            CheckTabs.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterWarning)

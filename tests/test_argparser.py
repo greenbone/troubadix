@@ -17,13 +17,13 @@
 
 import sys
 import unittest
-
 from argparse import Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
 from unittest.mock import Mock
 
 from pontos.terminal import _set_terminal
+
 from naslinter.argparser import parse_args
 
 

@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.double_end_points import CheckDoubleEndPoints
 
+from . import PluginTestCase
 
-class CheckDoubleEndPointsTestCase(unittest.TestCase):
+
+class CheckDoubleEndPointsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -31,7 +31,14 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_tag(name:"summary", value:"Foo Bar.");'
         )
 
-        results = list(CheckDoubleEndPoints.run(path, content))
+        results = list(
+            CheckDoubleEndPoints.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_invalid(self):
@@ -41,12 +48,19 @@ class CheckDoubleEndPointsTestCase(unittest.TestCase):
             'script_tag(name:"summary", value:"Foo Bar...");'
         )
 
-        results = list(CheckDoubleEndPoints.run(path, content))
+        results = list(
+            CheckDoubleEndPoints.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The script tag 'script_tag(name:\"summary\"' of VT "
-            "'some/file.nasl' is ending with two or more end points: "
-            "'Foo Bar...\");'.",
+            "The script tag 'summary' "
+            "is ending with two or more points: "
+            "'Foo Bar...'.",
             results[0].message,
         )

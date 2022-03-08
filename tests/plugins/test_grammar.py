@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.grammar import CheckGrammar
 
+from . import PluginTestCase
 
-class CheckNewlinesTestCase(unittest.TestCase):
+
+class CheckNewlinesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -33,7 +33,14 @@ class CheckNewlinesTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         ).splitlines()
 
-        results = list(CheckGrammar.run(nasl_file, content))
+        results = list(
+            CheckGrammar.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_grammar(self):
@@ -46,7 +53,14 @@ class CheckNewlinesTestCase(unittest.TestCase):
             "# is prone to a security bypass vulnerabilities\n"
         ).splitlines()
 
-        results = list(CheckGrammar.run(nasl_file, content))
+        results = list(
+            CheckGrammar.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -66,7 +80,14 @@ class CheckNewlinesTestCase(unittest.TestCase):
             "# refer the Reference\n"
         ).splitlines()
 
-        results = list(CheckGrammar.run(nasl_file, content))
+        results = list(
+            CheckGrammar.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

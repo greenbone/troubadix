@@ -16,12 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
-from typing import Iterable
 from pathlib import Path
+from typing import Iterable, Iterator, OrderedDict
 
-from ..plugin import LineContentPlugin, LinterError
 from ..helper import is_ignore_file
+from ..plugin import LineContentPlugin, LinterError, LinterResult
 
 _IGNORE_FILES = [
     "gb_openvas",
@@ -39,7 +38,15 @@ class CheckTodoTbd(LineContentPlugin):
     name = "check_todo_tbd"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]):
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
+
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
         for index, line in enumerate(lines, start=1):

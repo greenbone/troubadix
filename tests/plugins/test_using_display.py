@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError, LinterWarning
 from naslinter.plugins.using_display import CheckUsingDisplay
 
+from . import PluginTestCase
 
-class CheckUsingDisplayTestCase(unittest.TestCase):
+
+class CheckUsingDisplayTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -32,7 +32,14 @@ class CheckUsingDisplayTestCase(unittest.TestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
 
-        results = list(CheckUsingDisplay.run(path, content))
+        results = list(
+            CheckUsingDisplay.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_using_display(self):
@@ -44,7 +51,14 @@ class CheckUsingDisplayTestCase(unittest.TestCase):
             'display("FOO");'
         )
 
-        results = list(CheckUsingDisplay.run(path, content))
+        results = list(
+            CheckUsingDisplay.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -62,7 +76,14 @@ class CheckUsingDisplayTestCase(unittest.TestCase):
             'if (0) display("FOO");'
         )
 
-        results = list(CheckUsingDisplay.run(path, content))
+        results = list(
+            CheckUsingDisplay.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
@@ -81,7 +102,14 @@ class CheckUsingDisplayTestCase(unittest.TestCase):
             '# display("FOO");'
         )
 
-        results = list(CheckUsingDisplay.run(path, content))
+        results = list(
+            CheckUsingDisplay.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(

@@ -16,28 +16,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LineContentPlugin,
-    LinterResult,
-    LinterWarning,
-)
+from naslinter.plugin import LineContentPlugin, LinterResult, LinterWarning
 
 
 class CheckNewlines(LineContentPlugin):
     name = "check_wrong_newlines"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script FIXES newline errors:
         - Checking the passed VT for the existence of newlines in
           the script_name() and script_copyright() tags.
         - Removes wrong newline indicators (\r or \r\n).
         - Removes whitespaces in script_name( "myname") or script_copyright
         """
+        del tag_pattern, special_tag_pattern
 
         # This "hack" guarantees, that we only have "\n" as newlines
         # since we

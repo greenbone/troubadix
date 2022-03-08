@@ -14,15 +14,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from pathlib import Path
 
-import unittest
+from pathlib import Path
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.set_get_kb_calls import CheckWrongSetGetKBCalls
+from tests.plugins import PluginTestCase
 
 
-class CheckWrongSetGetKBCallTestCase(unittest.TestCase):
+class CheckWrongSetGetKBCallTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -32,7 +32,14 @@ class CheckWrongSetGetKBCallTestCase(unittest.TestCase):
             'get_kb_list("kb/key");\n'
         )
 
-        results = list(CheckWrongSetGetKBCalls.run(nasl_file, content))
+        results = list(
+            CheckWrongSetGetKBCalls.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -45,7 +52,14 @@ class CheckWrongSetGetKBCallTestCase(unittest.TestCase):
             'get_kb_item(name:"kbkey");\n'
         )
 
-        results = list(CheckWrongSetGetKBCalls.run(nasl_file, content))
+        results = list(
+            CheckWrongSetGetKBCalls.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

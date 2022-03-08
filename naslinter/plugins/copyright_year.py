@@ -16,12 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, OrderedDict
 
-from naslinter.plugin import LinterError, LineContentPlugin
+from black import Iterator
+
 from naslinter.helper import is_ignore_file
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 _IGNORE_FILES = (
     "sw_telnet_os_detection.nasl",
@@ -39,7 +40,14 @@ class CheckCopyrightYear(LineContentPlugin):
     name = "check_copyright_year"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]):
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        del tag_pattern, special_tag_pattern
         report = ""
         copyright_date = ""
         copyright_year = ""

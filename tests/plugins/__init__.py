@@ -14,3 +14,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import unittest
+
+from naslinter.helper.patterns import (
+    ScriptTagPatterns,
+    SpecialScriptTagPatterns,
+)
+
+
+class PluginTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        self.tag_pattern = ScriptTagPatterns().pattern
+        self.special_tag_pattern = SpecialScriptTagPatterns().pattern
+
+        return super().setUp()

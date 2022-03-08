@@ -16,18 +16,23 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckMissingDescExit(FileContentPlugin):
     name = "check_missing_desc_exit"
 
     @staticmethod
-    def run(nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """This script checks if a VT is missing an 'exit(0);' within the
         description block like this:
 
@@ -47,9 +52,13 @@ class CheckMissingDescExit(FileContentPlugin):
             file_content: The content of the file that is going to be checked
 
         """
+        del tag_pattern, special_tag_pattern
+
+        if nasl_file.suffix == ".inc":
+            return
 
         match = re.search(
-            r"^if\s*\(\s*description *\)\s*\{(.*?)(?=^})",
+            r"^if\s*\(\s*description\s*\)\s*\{(.+?)^\}",
             file_content,
             re.MULTILINE | re.DOTALL,
         )
@@ -59,12 +68,9 @@ class CheckMissingDescExit(FileContentPlugin):
             )
             if not submatch:
                 yield LinterError(
-                    "No mandatory exit(0); found in the "
-                    f"description block of VT '{str(nasl_file)}'"
+                    "No mandatory exit(0); found in the description block."
                 )
 
             return
 
-        yield LinterError(
-            "No description block extracted/found in VT " f"'{str(nasl_file)}'"
-        )
+        yield LinterError("No description block extracted/found.")

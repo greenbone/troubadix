@@ -17,13 +17,13 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.log_messages import CheckLogMessages
 
+from . import PluginTestCase
 
-class CheckLogMessagesTestCase(unittest.TestCase):
+
+class CheckLogMessagesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -34,7 +34,14 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             'log_message("hello test");\n'
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -56,12 +63,18 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "report );\n\n"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[0].message,
         )
 
@@ -77,12 +90,18 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "min_key_size + ' bits (key-size:algorithm:serial:issuer)');"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[0].message,
         )
 
@@ -96,16 +115,22 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "log_message(  );"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using an empty log_message() function",
+            "The VT is using an empty log_message() function",
             results[0].message,
         )
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[1].message,
         )
 
@@ -119,15 +144,21 @@ class CheckLogMessagesTestCase(unittest.TestCase):
             "log_message(\t);\n"
         )
 
-        results = list(CheckLogMessages.run(nasl_file, content))
+        results = list(
+            CheckLogMessages.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using an empty log_message() function",
+            "The VT is using an empty log_message() function",
             results[0].message,
         )
         self.assertEqual(
-            f"VT '{str(nasl_file)}' is using a log_message in a VT with a "
-            "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[1].message,
         )

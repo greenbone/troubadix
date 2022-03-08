@@ -16,18 +16,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import unittest
 
 from naslinter.plugin import LinterError
 from naslinter.plugins.solution_type import CheckSolutionType
 
+from . import PluginTestCase
 
-class CheckSolutionTypeTestCase(unittest.TestCase):
+
+class CheckSolutionTypeTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"0.0");'
 
-        results = list(CheckSolutionType.run(path, content))
+        results = list(
+            CheckSolutionType.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_severity_present_ok(self):
@@ -37,14 +45,28 @@ class CheckSolutionTypeTestCase(unittest.TestCase):
             'script_tag(name:"solution_type", value:"Workaround");'
         )
 
-        results = list(CheckSolutionType.run(path, content))
+        results = list(
+            CheckSolutionType.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_no_solution_type(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"1.0");'
 
-        results = list(CheckSolutionType.run(path, content))
+        results = list(
+            CheckSolutionType.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -60,7 +82,14 @@ class CheckSolutionTypeTestCase(unittest.TestCase):
             'script_tag(name:"solution_type", value:"Wrong solution");'
         )
 
-        results = list(CheckSolutionType.run(path, content))
+        results = list(
+            CheckSolutionType.run(
+                path,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
