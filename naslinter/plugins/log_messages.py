@@ -51,7 +51,7 @@ class CheckLogMessages(FileContentPlugin):
         )
         if log_match:
             yield LinterError(
-                "The VT is using an empty log_message() " "function"
+                "The VT is using an empty log_message() function"
             )
 
         if nasl_file.suffix == ".inc":

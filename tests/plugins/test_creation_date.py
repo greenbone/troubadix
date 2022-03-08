@@ -84,7 +84,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Wrong day of week. Please change it from " "'Mon' to 'Tue'.",
+            "Wrong day of week. Please change it from 'Mon' to 'Tue'.",
             results[0].message,
         )
 
@@ -130,7 +130,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The creation_date consists of two " "different dates.",
+            "The creation_date consists of two different dates.",
             results[0].message,
         )
 

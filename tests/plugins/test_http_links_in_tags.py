@@ -66,7 +66,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "One script_tag in the VT is using an "
+            "One script_tag in the VT is using a "
             "HTTP link/URL which should be moved to a separate "
             '\'script_xref(name:"URL", value:"");\' tag instead: '
             '\'script_tag(name:"summary", value:"Foo Bar. '

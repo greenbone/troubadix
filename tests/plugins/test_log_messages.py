@@ -130,7 +130,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "The VT is using a log_message in a VT with a " "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[1].message,
         )
 
@@ -159,6 +159,6 @@ class CheckLogMessagesTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "The VT is using a log_message in a VT with a " "severity",
+            "The VT is using a log_message in a VT with a severity",
             results[1].message,
         )
