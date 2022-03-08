@@ -16,25 +16,39 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterWarning
 from naslinter.plugins.spelling import CheckSpelling
 
+from . import PluginTestCase
 
-class CheckSpellingTestCase(unittest.TestCase):
+
+class CheckSpellingTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = "# this is not uses, it use the nasl_file instead\n"
 
-        results = list(CheckSpelling.run(nasl_file, content))
+        results = list(
+            CheckSpelling.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
         content = "# this is not uses, it use the nasl_file instead\n"
 
-        results = list(CheckSpelling.run(nasl_file, content))
+        results = list(
+            CheckSpelling.run(
+                nasl_file=nasl_file,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(

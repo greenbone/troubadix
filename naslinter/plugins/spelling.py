@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 
 from naslinter.helper.helper import which, subprocess_cmd
 from naslinter.plugin import (
@@ -36,7 +36,13 @@ class CheckSpelling(FileContentPlugin):
 
     @staticmethod
     # (file, cwdir, vtdir, full, include_regex, exclude_regex)
-    def run(nasl_file: Path, _file_content: str) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """'codespell' is required to execute this step!
         This script opens a shell in a subprocess and executes 'codespell' to
         check the VT for spelling mistakes. An error will be thrown if
@@ -48,7 +54,7 @@ class CheckSpelling(FileContentPlugin):
             _file_content: The content of the VT
 
         """
-
+        del tag_pattern, special_tag_pattern
         codespell = ""
         program = which("codespell")
         if program is None:
@@ -67,7 +73,6 @@ class CheckSpelling(FileContentPlugin):
             f"--disable-colors {str(nasl_file)}",
         )
         codespell = (out + "\n" + err).strip("\n")
-        print(codespell)
 
         if (
             codespell is not None
@@ -190,7 +195,6 @@ class CheckSpelling(FileContentPlugin):
 
                 codespell += line + "\n"
 
-        print(codespell)
         if codespell and "==>" in codespell:
             yield LinterWarning(codespell)
         elif codespell and "Traceback (most recent call last):" in codespell:
