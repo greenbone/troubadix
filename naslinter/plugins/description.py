@@ -40,7 +40,7 @@ class CheckDescription(LineContentPlugin):
                           checked
         """
 
-        pattern = re.compile(".*script_description.*", re.IGNORECASE)
+        pattern = re.compile(r"script_description\(.+\);", re.IGNORECASE)
 
         for line in lines:
             match = pattern.search(line)
