@@ -18,37 +18,28 @@ from pathlib import Path
 
 import unittest
 
-from naslinter.plugin import LinterError
+from naslinter.plugin import LinterWarning
 from naslinter.plugins.spelling import CheckSpelling
 
 
 class CheckSpellingTestCase(unittest.TestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-        )
+        content = "# this is not uses, it use the nasl_file instead\n"
 
         results = list(CheckSpelling.run(nasl_file, content))
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
-        nasl_file = Path(__file__).parent / "test.nasl"
-        content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-        )
+        nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
+        content = "# this is not uses, it use the nasl_file instead\n"
 
         results = list(CheckSpelling.run(nasl_file, content))
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            "'solution_type' script_tag but no 'solution' script_tag "
-            f"found in the description block of VT '{str(nasl_file)}'",
+            f"{nasl_file}:1: soltuion ==> solution\n"
+            f"{nasl_file}:1: aviaalable ==> available\n"
+            f"{nasl_file}:2: upated ==> updated\n",
             results[0].message,
         )

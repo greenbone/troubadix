@@ -52,12 +52,19 @@ def which(program):
 
 
 def subprocess_cmd(command: str, encoding="UTF-8") -> Tuple[AnyStr, AnyStr]:
-    def any2str(string: AnyStr) -> str:
-        if string:
-            return string.strip()
+    def any2str(str_input: AnyStr) -> str:
+        if isinstance(str_input, bytes):
+            return str_input.decode(encoding).strip()
+        elif isinstance(str_input, str):
+            return str_input.strip()
         return ""
 
-    process = Popen(command, stdout=PIPE, shell=True, encoding=encoding)
+    process = Popen(
+        command,
+        stdout=PIPE,
+        shell=True,
+        encoding=encoding,
+    )
     proc_stdout, proc_stderr = process.communicate()
 
     return any2str(proc_stdout), any2str(proc_stderr)

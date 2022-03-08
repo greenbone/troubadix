@@ -64,15 +64,10 @@ class CheckSpelling(FileContentPlugin):
             f"--dictionary={CodespellConfigPath}/codespell.additions "
             f"--exclude-file={CodespellConfigPath}/codespell.exclude "
             f"--ignore-words={CodespellConfigPath}/codespell.ignore "
-            f"--skip=bad_ssh_host_keys.inc --disable-colors "
-            f"{str(nasl_file)}",
-            "latin-1",
+            f"--disable-colors {str(nasl_file)}",
         )
-
-        if err and "RuntimeWarning: " not in err:
-            codespell = err
-        if out:
-            codespell = out
+        codespell = (out + "\n" + err).strip("\n")
+        print(codespell)
 
         if (
             codespell is not None
@@ -195,10 +190,8 @@ class CheckSpelling(FileContentPlugin):
 
                 codespell += line + "\n"
 
-        if codespell is not None and "==>" in codespell:
-            LinterWarning(codespell)
-        elif (
-            codespell is not None
-            and "Traceback (most recent call last):" in codespell
-        ):
-            LinterError(codespell)
+        print(codespell)
+        if codespell and "==>" in codespell:
+            yield LinterWarning(codespell)
+        elif codespell and "Traceback (most recent call last):" in codespell:
+            yield LinterError(codespell)
