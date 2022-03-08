@@ -25,7 +25,7 @@ from . import PluginTestCase
 class CheckSpellingTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        content = "# this is not uses, it use the nasl_file instead\n"
+        content = "# this is not used, it use the nasl_file instead\n"
 
         results = list(
             CheckSpelling.run(
@@ -39,7 +39,7 @@ class CheckSpellingTestCase(PluginTestCase):
 
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
-        content = "# this is not uses, it use the nasl_file instead\n"
+        content = "# this is not used, it use the nasl_file instead\n"
 
         results = list(
             CheckSpelling.run(
