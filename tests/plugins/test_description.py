@@ -17,13 +17,12 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.description import CheckDescription
+from . import PluginTestCase
 
 
-class CheckDescriptionTestCase(unittest.TestCase):
+class CheckDescriptionTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -33,7 +32,14 @@ class CheckDescriptionTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
         ).splitlines()
 
-        results = list(CheckDescription.run(nasl_file, content))
+        results = list(
+            CheckDescription.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_description(self):
@@ -45,8 +51,14 @@ class CheckDescriptionTestCase(unittest.TestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'script_description("TestTest");\n'
         ).splitlines()
-
-        results = list(CheckDescription.run(nasl_file, content))
+        results = list(
+            CheckDescription.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -64,8 +76,14 @@ class CheckDescriptionTestCase(unittest.TestCase):
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
         ).splitlines()
-
-        results = list(CheckDescription.run(nasl_file, content))
+        results = list(
+            CheckDescription.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

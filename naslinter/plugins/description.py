@@ -16,22 +16,24 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, OrderedDict
 
-from naslinter.plugin import (
-    LineContentPlugin,
-    LinterError,
-    LinterResult,
-)
+from naslinter.plugin import LineContentPlugin, LinterError, LinterResult
 
 
 class CheckDescription(LineContentPlugin):
     name = "check_description"
 
     @staticmethod
-    def run(nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
+    def run(
+        nasl_file: Path,
+        lines: Iterable[str],
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+
         """This script checks if some NVTs are still using script_description
 
         Args:
@@ -39,6 +41,7 @@ class CheckDescription(LineContentPlugin):
             file_content: The content of the file that is going to be
                           checked
         """
+        del tag_pattern, special_tag_pattern
 
         pattern = re.compile(r"script_description\(.+\);", re.IGNORECASE)
 
