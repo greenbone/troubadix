@@ -84,6 +84,25 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            'No script family exist', results[0].message
+        self.assertEqual("No script family exist", results[0].message)
+
+    def test_script_family3(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_family("???\\");\n'
+            "script_bugtraq_id(00000);\n"
         )
+
+        results = list(
+            CheckScriptFamily.run(
+                nasl_file,
+                content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual("No script family exist", results[0].message)
