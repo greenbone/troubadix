@@ -32,6 +32,8 @@ jobs:
   test:
     name: Run all tests
     runs-on: 'ubuntu-latest'
+    container:
+      image: greenbone/ospd-openvas:stable
     strategy:
         matrix:
           python-version:
