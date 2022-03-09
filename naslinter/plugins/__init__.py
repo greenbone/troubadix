@@ -53,6 +53,7 @@ from .solution_type import CheckSolutionType
 from .spelling import CheckSpelling
 from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
+from .trailing_spaces_tabs import CheckTrailingSpacesTabs
 from .update_modification_date import UpdateModificationDate
 from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
@@ -90,6 +91,7 @@ _NASL_ONLY_PLUGINS = [
     CheckSolutionType,
     CheckSpelling,
     CheckTodoTbd,
+    CheckTrailingSpacesTabs,
     CheckUsingDisplay,
     CheckVTPlacement,
     CheckValidOID,
