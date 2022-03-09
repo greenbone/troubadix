@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "NASLinter"
-version = "22.3.0"
+version = "22.3.1.dev1"
 description = "A linter for NASL files"
 authors = ["Greenbone <info@greenbone.net>"]
 license = "GPL-3.0-or-later"
