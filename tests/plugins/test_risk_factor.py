@@ -65,6 +65,6 @@ class RiskFactorTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Risk factor tag found: TestTest",
+            'Deprecated function "risk factor" found: TestTest',
             results[0].message,
         )
