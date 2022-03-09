@@ -63,7 +63,7 @@ class CheckDescriptionTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include is still using script_description: "
+            "VT/Include is using deprecated 'script_description': "
             'script_description("TestTest");',
             results[0].message,
         )
@@ -89,7 +89,7 @@ class CheckDescriptionTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include is still using script_description: "
+            "VT/Include is using deprecated 'script_description': "
             'TTTTTTTscrIpt_descriPtion("TestTest");',
             results[0].message,
         )

@@ -49,5 +49,6 @@ class CheckDescription(LineContentPlugin):
             match = pattern.search(line)
             if match:
                 yield LinterError(
-                    "VT/Include is still using script_description: " f"{line}"
+                    "VT/Include is using deprecated 'script_description':"
+                    f" {line}"
                 )
