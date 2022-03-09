@@ -75,7 +75,7 @@ class Root:
 
     def __init__(self, path: Path, root: str = _ROOT) -> None:
         match = re.search(
-            rf"(?P<path>/([a-zA-Z0-9\-\_\.]+/)+{root}/[a-zA-Z0-9\-\_]+/)",
+            rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
             str(path),
         )
         if match:

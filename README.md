@@ -63,6 +63,14 @@ Validate the activated git hooks by running
 
     poetry run autohooks check
 
+## Environment Options
+
+| ENV Variable         | Default | Description                                                                                                                                                                                                                                             |
+|----------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| NASLINTER_DOCKER_RUN | `'false'`   | If we use `'true'` we use the Docker with the `greenbone/ospd-openvas:stable` image from DockerHub to run the tests via `openvas-nasl-lint for the `check_openvas_lint` plugin. If default `'false'` is used we expect that openvas is installed local. |
+
+
+
 ## Maintainer
 
 This project is maintained by [Greenbone Networks GmbH][Greenbone Networks]
