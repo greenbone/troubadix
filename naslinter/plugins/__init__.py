@@ -60,6 +60,7 @@ from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 from .risk_factor import CheckRiskFactor
+from .script_family import CheckScriptFamily
 
 _NASL_ONLY_PLUGINS = [
     CheckBadwords,
@@ -99,6 +100,7 @@ _NASL_ONLY_PLUGINS = [
     CheckWrongSetGetKBCalls,
     UpdateModificationDate,
     CheckRiskFactor,
+    CheckScriptFamily,
 ]
 
 _PLUGINS = [
