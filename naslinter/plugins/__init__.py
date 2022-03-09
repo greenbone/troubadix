@@ -61,6 +61,7 @@ from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 from .risk_factor import CheckRiskFactor
 from .script_family import CheckScriptFamily
+from .description import CheckDescription
 
 _NASL_ONLY_PLUGINS = [
     CheckBadwords,
@@ -101,6 +102,7 @@ _NASL_ONLY_PLUGINS = [
     UpdateModificationDate,
     CheckRiskFactor,
     CheckScriptFamily,
+    CheckDescription,
 ]
 
 _PLUGINS = [
