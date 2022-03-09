@@ -33,8 +33,7 @@ class CheckRiskFactor(FileContentPlugin):
         tag_pattern: OrderedDict[str, re.Pattern],
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
-        """This script checks if a VT is using one or
-        more tabs instead of spaces."""
+        """This script checks if a VT with risk_factor tag exist."""
         del tag_pattern, special_tag_pattern
 
         match = re.search(
@@ -45,4 +44,6 @@ class CheckRiskFactor(FileContentPlugin):
         if not match:
             return
 
-        yield LinterError(f'Risk factor tag found: {match.group("risk")}')
+        yield LinterError(
+            f'Deprecated function "risk factor" found: {match.group("risk")}'
+        )
