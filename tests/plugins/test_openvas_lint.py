@@ -68,6 +68,6 @@ class CheckOpenvasLintTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Error while processing " f"{str(nasl_file)}.\n1 errors found",
+            f"Error while processing {str(nasl_file)}.\n1 errors found",
             results[0].message,
         )

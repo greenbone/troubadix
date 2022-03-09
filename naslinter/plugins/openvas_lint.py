@@ -63,11 +63,13 @@ class CheckOpenvasLint(FileContentPlugin):
             #     the docker container to run the linting.
             # Default: -v "$(pwd)/scripts:/var/lib/openvas/plugins"
             cmd = (
-                'docker run --rm -v "{root}:{root}" '
-                "greenbone/ospd-openvas:stable openvas-nasl-lint -i"
-            ).format(root=str(root))
+                "docker run --rm -i --log-driver=none -a stdin -a stdout "
+                '-a stderr -v "{root}:{root}" '
+                "greenbone/ospd-openvas:stable openvas-nasl-lint "
+                "-i {root} {nasl_file}"
+            )
         else:
-            cmd = "openvas-nasl-lint -i"
+            cmd = "openvas-nasl-lint -i {root} {nasl_file}"
             program = which("openvas-nasl-lint")
             if program is None:
                 yield LinterError(
@@ -77,16 +79,15 @@ class CheckOpenvasLint(FileContentPlugin):
                 )
                 return
 
-        exec_cmd = f"{cmd} {str(root)} {str(nasl_file)}"
-        print(exec_cmd)
+        exec_cmd = cmd.format(root=str(root), nasl_file=str(nasl_file))
 
         lint_out, lint_err = subprocess_cmd(exec_cmd)
         report = ""
-        if lint_out:
-            report += lint_out
         if lint_err:
             report += lint_err
-        print(report)
+        if lint_out:
+            report += lint_out
+
         if " errors found" not in report:
             yield LinterWarning(str(report))
         # nb: "Cannot compile regex" was added here because
