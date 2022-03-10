@@ -42,6 +42,7 @@ class TestNASLinter(unittest.TestCase):
                 "**/test.nasl",
                 "**/templates/*/*.nasl",
                 "**/test_files/*",
+                "**/test_files/**/*.nasl",
             ],
             include_patterns=["**/*.nasl", "**/*.inc"],
         )

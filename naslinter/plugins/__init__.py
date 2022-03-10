@@ -39,6 +39,7 @@ from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
+from .openvas_lint import CheckOpenvasLint
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .script_version_and_last_modification_tags import (
@@ -83,6 +84,7 @@ _NASL_ONLY_PLUGINS = [
     CheckMissingDescExit,
     CheckMissingTagSolution,
     CheckNewlines,
+    CheckOpenvasLint,
     CheckOverlongScriptTags,
     CheckProdSvcDetectInVulnvt,
     CheckScriptCategory,
