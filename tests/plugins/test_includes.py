@@ -97,33 +97,3 @@ class CheckIncludesTestCase(PluginTestCase):
             "not be found within the VTs.",
             results[0].message,
         )
-
-    def test_include_list_missing(self):
-        path = Path(f"{self.dir}/file.nasl")
-        content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'include("example2.inc, example3.inc");\n'
-        )
-
-        results = list(
-            CheckIncludes.run(
-                path,
-                content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
-            )
-        )
-        self.assertEqual(len(results), 2)
-        self.assertIsInstance(results[0], LinterError)
-        self.assertIsInstance(results[1], LinterError)
-        self.assertEqual(
-            "The included file example2.inc could "
-            "not be found within the VTs.",
-            results[0].message,
-        )
-        self.assertEqual(
-            "The included file example3.inc could "
-            "not be found within the VTs.",
-            results[1].message,
-        )

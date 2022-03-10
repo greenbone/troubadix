@@ -53,48 +53,45 @@ class CheckIncludes(FileContentPlugin):
         )
 
         root = get_root(nasl_file)
+        base_dir = nasl_file.parent
 
         for match in matches:
-            # Remove single and/or double quotes, spaces
-            # and create a list by using the comma as a separator
-            dependencies = re.sub(r'[\'"\s]', "", match.group("value")).split(
-                ","
-            )
+            inc = match.group("value")
+            # Check for include in root directory and
+            # in the current nasl directory as in the original script.
+            if not (root / inc).exists() and not (base_dir / inc).exists():
+                yield LinterError(
+                    f"The included file {inc} could not "
+                    "be found within the VTs."
+                )
+            else:
+                # TODO: gsf/PCIDSS/PCI-DSS.nasl,
+                # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
+                # and GSHB/EL15/GSHB.nasl
+                # are using a variable which we currently
+                # can't handle.
+                if "+d+.nasl" in inc:
+                    continue
 
-            for dep in dependencies:
-                if not (root / dep).exists():
-                    yield LinterError(
-                        f"The included file {dep} could not "
-                        "be found within the VTs."
+                # Debug as those might be correctly placed
+                if inc[:4] == "gsf/" and not (
+                    inc[:11] == "gsf/PCIDSS/" or inc[:11] == "gsf/Policy/"
+                ):
+                    yield LinterWarning(
+                        f"The included file {inc} is in a "
+                        "subdirectory, which might be misplaced."
                     )
-                else:
-                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                    # and GSHB/EL15/GSHB.nasl
-                    # are using a variable which we currently
-                    # can't handle.
-                    if "+d+.nasl" in dep:
-                        continue
-
-                    # Debug as those might be correctly placed
-                    if dep[:4] == "gsf/" and not (
-                        dep[:11] == "gsf/PCIDSS/" or dep[:11] == "gsf/Policy/"
-                    ):
-                        yield LinterWarning(
-                            f"The included file {dep} is in a "
-                            "subdirectory, which might be misplaced."
-                        )
-                    # Subdirectories only allowed for directories
-                    # on a whitelist
-                    elif "/" in dep and not (
-                        dep[:5] != "GSHB/"
-                        or dep[:7] == "Policy/"
-                        or dep[:11] == "gsf/PCIDSS/"
-                        or dep[:11] == "gsf/Policy/"
-                        or dep[:4] == "gcf/"
-                        or dep[:9] == "nmap_nse/"
-                    ):
-                        yield LinterWarning(
-                            f"The included file {dep} is within "
-                            "a subdirectory, which is not allowed."
-                        )
+                # Subdirectories only allowed for directories
+                # on a whitelist
+                elif "/" in inc and not (
+                    inc[:5] != "GSHB/"
+                    or inc[:7] == "Policy/"
+                    or inc[:11] == "gsf/PCIDSS/"
+                    or inc[:11] == "gsf/Policy/"
+                    or inc[:4] == "gcf/"
+                    or inc[:9] == "nmap_nse/"
+                ):
+                    yield LinterWarning(
+                        f"The included file {inc} is within "
+                        "a subdirectory, which is not allowed."
+                    )
