@@ -138,7 +138,7 @@ def main(args=None):
 
     if parsed_args.files:
         # Get the root of the nasl files
-        if not get_root(parsed_args.files[0].absolute()):
+        if not get_root(parsed_args.files[0].resolve()):
             error(
                 "Root directory of VTs not found. Looked for "
                 f"{parsed_args.files[0].resolve()}"
