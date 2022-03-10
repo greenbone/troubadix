@@ -25,7 +25,6 @@ from naslinter.helper import get_root
 from naslinter.plugin import (
     FileContentPlugin,
     LinterError,
-    LinterWarning,
     LinterResult,
 )
 
@@ -64,34 +63,3 @@ class CheckIncludes(FileContentPlugin):
                     f"The included file {inc} could not "
                     "be found within the VTs."
                 )
-            else:
-                # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                # and GSHB/EL15/GSHB.nasl
-                # are using a variable which we currently
-                # can't handle.
-                if "+d+.nasl" in inc:
-                    continue
-
-                # Debug as those might be correctly placed
-                if inc[:4] == "gsf/" and not (
-                    inc[:11] == "gsf/PCIDSS/" or inc[:11] == "gsf/Policy/"
-                ):
-                    yield LinterWarning(
-                        f"The included file {inc} is in a "
-                        "subdirectory, which might be misplaced."
-                    )
-                # Subdirectories only allowed for directories
-                # on a whitelist
-                elif "/" in inc and not (
-                    inc[:5] != "GSHB/"
-                    or inc[:7] == "Policy/"
-                    or inc[:11] == "gsf/PCIDSS/"
-                    or inc[:11] == "gsf/Policy/"
-                    or inc[:4] == "gcf/"
-                    or inc[:9] == "nmap_nse/"
-                ):
-                    yield LinterWarning(
-                        f"The included file {inc} is within "
-                        "a subdirectory, which is not allowed."
-                    )
