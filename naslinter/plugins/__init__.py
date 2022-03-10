@@ -26,6 +26,7 @@ from .creation_date import CheckCreationDate
 from .cve_format import CheckCVEFormat
 from .cvss_format import CheckCVSSFormat
 from .dependencies import CheckDependencies
+from .description import CheckDescription
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
@@ -34,18 +35,22 @@ from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
+from .includes import CheckIncludes
 from .log_messages import CheckLogMessages
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
+from .openvas_lint import CheckOpenvasLint
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
+from .risk_factor import CheckRiskFactor
+from .script_category import CheckScriptCategory
+from .script_copyright import CheckScriptCopyright
+from .script_family import CheckScriptFamily
 from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
-from .script_category import CheckScriptCategory
-from .script_copyright import CheckScriptCopyright
 from .security_messages import CheckSecurityMessages
 from .set_get_kb_calls import CheckWrongSetGetKBCalls
 from .solution_text import CheckSolutionText
@@ -55,14 +60,11 @@ from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
 from .trailing_spaces_tabs import CheckTrailingSpacesTabs
 from .update_modification_date import UpdateModificationDate
+from .updated_date_version import CheckUpdatedDateVersion
 from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
-from .risk_factor import CheckRiskFactor
-from .script_family import CheckScriptFamily
-from .description import CheckDescription
-from .includes import CheckIncludes
 
 _NASL_ONLY_PLUGINS = [
     CheckBadwords,
@@ -72,6 +74,7 @@ _NASL_ONLY_PLUGINS = [
     CheckCopyrightYear,
     CheckCreationDate,
     CheckDependencies,
+    CheckDescription,
     CheckDoubleEndPoints,
     CheckDuplicateOID,
     CheckDuplicatedScriptTags,
@@ -79,15 +82,19 @@ _NASL_ONLY_PLUGINS = [
     CheckGetKBOnServices,
     CheckGrammar,
     CheckHttpLinksInTags,
+    CheckIncludes,
     CheckLogMessages,
     CheckMisplacedCompareInIf,
     CheckMissingDescExit,
     CheckMissingTagSolution,
     CheckNewlines,
+    CheckOpenvasLint,
     CheckOverlongScriptTags,
     CheckProdSvcDetectInVulnvt,
+    CheckRiskFactor,
     CheckScriptCategory,
     CheckScriptCopyright,
+    CheckScriptFamily,
     CheckScriptVersionAndLastModificationTags,
     CheckSecurityMessages,
     CheckSolutionText,
@@ -95,16 +102,13 @@ _NASL_ONLY_PLUGINS = [
     CheckSpelling,
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
+    CheckUpdatedDateVersion,
     CheckUsingDisplay,
     CheckVTPlacement,
     CheckValidOID,
     CheckValidScriptTagNames,
     CheckWrongSetGetKBCalls,
     UpdateModificationDate,
-    CheckRiskFactor,
-    CheckScriptFamily,
-    CheckDescription,
-    CheckIncludes,
 ]
 
 _PLUGINS = [
