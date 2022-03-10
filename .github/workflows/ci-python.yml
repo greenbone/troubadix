@@ -47,7 +47,11 @@ jobs:
       - name: Install poetry and dependencies
         uses: greenbone/actions/poetry@v1
       - name: Run unit tests
-        run: poetry run python -m unittest -v
+        run: |
+          docker pull greenbone/ospd-openvas:stable # download image before running tests
+          poetry run python -m unittest -v
+        env:
+          NASLINTER_DOCKER_RUN: "true"
 
   codecov:
     name: Upload coverage to codecov.io
