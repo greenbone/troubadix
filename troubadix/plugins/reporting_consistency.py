@@ -50,6 +50,9 @@ class CheckReportingConsistency(FileContentPlugin):
         # Check check_cve_format looks close!
         # Removed script_id(...) and SCRIPT_OID=... deprecated!
 
+        if nasl_file.suffix == ".inc":
+            return
+
         report_function = re.compile(r"log_message|security_message").search(
             file_content
         )
