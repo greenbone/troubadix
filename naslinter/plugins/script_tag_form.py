@@ -36,7 +36,7 @@ class CheckScriptTagForm(FileContentPlugin):
         special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
-        Checks for correct parameters for script_tag calls
+        Checks for correct form for script_tag calls
         """
         del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":

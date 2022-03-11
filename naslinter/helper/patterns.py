@@ -91,6 +91,7 @@ _XREF_TAG_PATTERN = (
     r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
 )
 
+
 def get_xref_pattern(
     name: str, *, value: str = r".+", flags: re.RegexFlag = 0
 ) -> re.Pattern:
@@ -107,7 +108,9 @@ def get_xref_pattern(
     Returns
         `re.Pattern` object
     """
-    return re.compile(_XREF_PATTERN.format(name=name, value=value), flags=flags)
+    return re.compile(
+        _XREF_TAG_PATTERN.format(name=name, value=value), flags=flags
+    )
 
 
 def get_tag_pattern(
