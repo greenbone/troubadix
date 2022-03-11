@@ -17,26 +17,39 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_xref_url import CheckScriptXrefUrl
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptXrefUrlTestCase(unittest.TestCase):
+class CheckScriptXrefUrlTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
 
         content = 'script_xref(name:"URL", value:"http://www.example.com");'
 
-        results = list(CheckScriptXrefUrl.run(self.path, content))
+        results = list(
+            CheckScriptXrefUrl.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_invalid_url(self):
         content = 'script_xref(name:"URL", value:"www.example.com");'
 
-        results = list(CheckScriptXrefUrl.run(self.path, content))
+        results = list(
+            CheckScriptXrefUrl.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

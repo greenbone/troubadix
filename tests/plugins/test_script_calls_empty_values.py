@@ -17,15 +17,14 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_calls_empty_values import (
     CheckScriptCallsEmptyValues,
 )
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptCallsEmptyValuesTestCase(unittest.TestCase):
+class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
@@ -37,7 +36,14 @@ class CheckScriptCallsEmptyValuesTestCase(unittest.TestCase):
             'script_add_preferences("");'
         )
 
-        results = list(CheckScriptCallsEmptyValues.run(self.path, content))
+        results = list(
+            CheckScriptCallsEmptyValues.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_missing_values(self):
@@ -47,6 +53,13 @@ class CheckScriptCallsEmptyValuesTestCase(unittest.TestCase):
             'script_tag(name:"", value:"");'
         )
 
-        results = list(CheckScriptCallsEmptyValues.run(self.path, content))
+        results = list(
+            CheckScriptCallsEmptyValues.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 3)
         self.assertIsInstance(results[0], LinterError)

@@ -17,15 +17,14 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterWarning
 from naslinter.plugins.script_calls_recommended import (
     CheckScriptCallsRecommended,
 )
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptCallsRecommendedTestCase(unittest.TestCase):
+class CheckScriptCallsRecommendedTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
@@ -38,12 +37,26 @@ class CheckScriptCallsRecommendedTestCase(unittest.TestCase):
             "script_mandatory_keys();"
         )
 
-        results = list(CheckScriptCallsRecommended.run(self.path, content))
+        results = list(
+            CheckScriptCallsRecommended.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_missing_calls(self):
         content = 'script_xref(name: "URL", value:"");'
 
-        results = list(CheckScriptCallsRecommended.run(self.path, content))
+        results = list(
+            CheckScriptCallsRecommended.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterWarning)

@@ -17,13 +17,12 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_tag_form import CheckScriptTagForm
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptTagFormTestCase(unittest.TestCase):
+class CheckScriptTagFormTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
@@ -33,13 +32,27 @@ class CheckScriptTagFormTestCase(unittest.TestCase):
             'script_tag(name: "foo", value:42);'
         )
 
-        results = list(CheckScriptTagForm.run(self.path, content))
+        results = list(
+            CheckScriptTagForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_wrong_name(self):
         content = 'script_tag(nammmme: "foo", value:"bar");'
 
-        results = list(CheckScriptTagForm.run(self.path, content))
+        results = list(
+            CheckScriptTagForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -51,13 +64,27 @@ class CheckScriptTagFormTestCase(unittest.TestCase):
     def test_wrong_value(self):
         content = 'script_tag(name: "foo", valueeeee:"bar");'
 
-        results = list(CheckScriptTagForm.run(self.path, content))
+        results = list(
+            CheckScriptTagForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
 
     def test_wrong_missing_parameters(self):
         content = 'script_tag("foo", "bar");'
 
-        results = list(CheckScriptTagForm.run(self.path, content))
+        results = list(
+            CheckScriptTagForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

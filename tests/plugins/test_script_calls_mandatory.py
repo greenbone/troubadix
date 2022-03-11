@@ -17,13 +17,12 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_calls_mandatory import CheckScriptCallsMandatory
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptCallsMandatoryTestCase(unittest.TestCase):
+class CheckScriptCallsMandatoryTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
@@ -36,12 +35,26 @@ class CheckScriptCallsMandatoryTestCase(unittest.TestCase):
             "script_copyright();\n"
         )
 
-        results = list(CheckScriptCallsMandatory.run(self.path, content))
+        results = list(
+            CheckScriptCallsMandatory.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_missing_calls(self):
         content = 'script_xref(name: "URL", value:"");'
 
-        results = list(CheckScriptCallsMandatory.run(self.path, content))
+        results = list(
+            CheckScriptCallsMandatory.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterError)

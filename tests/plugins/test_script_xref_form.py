@@ -17,26 +17,39 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_xref_form import CheckScriptXrefForm
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptXrefFormTestCase(unittest.TestCase):
+class CheckScriptXrefFormTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
 
         content = 'script_xref(name: "foo", value:"bar");'
 
-        results = list(CheckScriptXrefForm.run(self.path, content))
+        results = list(
+            CheckScriptXrefForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_wrong_name(self):
         content = 'script_xref(nammmme: "foo", value:"bar");'
 
-        results = list(CheckScriptXrefForm.run(self.path, content))
+        results = list(
+            CheckScriptXrefForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -48,13 +61,27 @@ class CheckScriptXrefFormTestCase(unittest.TestCase):
     def test_wrong_value(self):
         content = 'script_xref(name: "foo", valueeeee:"bar");'
 
-        results = list(CheckScriptXrefForm.run(self.path, content))
+        results = list(
+            CheckScriptXrefForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
 
     def test_wrong_missing_parameters(self):
         content = 'script_xref("foo", "bar");'
 
-        results = list(CheckScriptXrefForm.run(self.path, content))
+        results = list(
+            CheckScriptXrefForm.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

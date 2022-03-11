@@ -17,26 +17,39 @@
 
 from pathlib import Path
 
-import unittest
-
 from naslinter.plugin import LinterError
 from naslinter.plugins.script_tag_whitespaces import CheckScriptTagWhitespaces
+from tests.plugins import PluginTestCase
 
 
-class CheckScriptTagWhitespacesTestCase(unittest.TestCase):
+class CheckScriptTagWhitespacesTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
 
         content = 'script_tag(name: "foo", value:"bar");'
 
-        results = list(CheckScriptTagWhitespaces.run(self.path, content))
+        results = list(
+            CheckScriptTagWhitespaces.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 0)
 
     def test_leading_whitespace(self):
         content = 'script_tag(name: "foo", value:" bar");'
 
-        results = list(CheckScriptTagWhitespaces.run(self.path, content))
+        results = list(
+            CheckScriptTagWhitespaces.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -48,6 +61,13 @@ class CheckScriptTagWhitespacesTestCase(unittest.TestCase):
     def test_trailing_whitespace(self):
         content = 'script_tag(name: "foo", value:"bar\n");'
 
-        results = list(CheckScriptTagWhitespaces.run(self.path, content))
+        results = list(
+            CheckScriptTagWhitespaces.run(
+                nasl_file=self.path,
+                file_content=content,
+                tag_pattern=self.tag_pattern,
+                special_tag_pattern=self.special_tag_pattern,
+            )
+        )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
