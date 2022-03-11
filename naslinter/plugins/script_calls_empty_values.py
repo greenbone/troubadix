@@ -15,27 +15,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 from naslinter.helper.patterns import (
     get_special_tag_pattern,
     get_tag_pattern,
     get_xref_pattern,
 )
 
-from naslinter.plugin import FileContentPlugin, LinterError
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckScriptCallsEmptyValues(FileContentPlugin):
     name = "check_script_calls_empty_values"
 
     @staticmethod
-    def run(_: Path, file_content: str) -> Iterator[LinterError]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Checks for empty 'value:""' in script calls. Excepted from this is
         script_add_preferences().
         """
+        del tag_pattern, special_tag_pattern
+        if nasl_file.suffix == ".inc":
+            return
+
         matches = get_tag_pattern(name=r".*", value=r"").finditer(file_content)
         for match in matches:
             yield LinterError(f"{match.group(0)} does not contain a value")

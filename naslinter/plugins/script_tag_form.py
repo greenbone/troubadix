@@ -18,20 +18,30 @@
 import re
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, OrderedDict
 from naslinter.helper.patterns import get_tag_pattern
 
-from naslinter.plugin import FileContentPlugin, LinterError
+from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckScriptTagForm(FileContentPlugin):
     name = "check_script_tag_form"
 
     @staticmethod
-    def run(_: Path, file_content: str) -> Iterator[LinterError]:
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
         """
         Checks for correct parameters for script_tag calls
         """
+        del tag_pattern, special_tag_pattern
+        if nasl_file.suffix == ".inc":
+            return
+
         matches = re.finditer(r"script_tag\(.*\);", file_content)
         for match in matches:
             if match:
