@@ -17,6 +17,7 @@
 
 """ Main module for naslinter """
 
+import foo
 import sys
 from pathlib import Path
 from typing import List, Tuple
