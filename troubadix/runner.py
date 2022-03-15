@@ -52,8 +52,6 @@ def initializer():
     """Ignore CTRL+C in the worker process."""
     signal.signal(signal.SIGINT, signal.SIG_IGN)
 
-mt_manager = Manager()
-
 
 class FileResults:
     def __init__(self, file_path: Path):
@@ -117,8 +115,10 @@ class Runner:
         )
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
+
+        self.mt_manager = Manager()
         self.pre_run_plugins = _PRE_RUN_PLUGINS
-        self.pre_run_data = mt_manager.dict()
+        self.pre_run_data = self.mt_manager.dict()
 
         self._term = term
         self._n_jobs = n_jobs
