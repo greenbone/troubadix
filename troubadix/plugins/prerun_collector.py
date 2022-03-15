@@ -68,11 +68,6 @@ class OIDMapBuilder:
     def scan_file(self, fullname):
         # the filename in the mapping file must be relative to nvt basedir
         root = get_root(fullname)
-        if str(fullname).startswith(str(root)) is False:
-            print(str(fullname).startswith(str(root)))
-            print(root)
-            print(fullname)
-
         assert str(fullname).startswith(str(root))
         filename = str(fullname)[len(str(root)) :].lstrip("/")
 
