@@ -141,10 +141,10 @@ class Runner:
 
     def __getstate__(self):
         """called when pickling - this hack allows subprocesses to
-           be spawned without the AuthenticationString raising an error"""
+        be spawned without the AuthenticationString raising an error"""
         state = self.__dict__.copy()
-        if 'mt_manager' in state:
-            del state['mt_manager']
+        if "mt_manager" in state:
+            del state["mt_manager"]
         return state
 
     def __setstate__(self, state):
@@ -233,14 +233,19 @@ class Runner:
         )
         self._term.info(f"{'sum':50} {counts:11}")
 
-    def pre_run(self) -> None:
+    def pre_run(self, nasl_files: List[Path]) -> None:
         """ Running Plugins that do not require a run per file,
         but a single execution """
         self._report_info("Starting pre-run")
         self._report_info("Loading plugins")
 
         for _i, e in sorted(list(enumerate(self.pre_run_plugins))):
-            e.run(self.pre_run_data)
+            e.run(
+                self.pre_run_data,
+                nasl_files,
+                special_tag_pattern=self.special_tag_pattern.pattern,
+                tag_pattern=self.tag_pattern.pattern,
+            )
 
         self._report_info("Data")
         pprint(self.pre_run_data.copy())
@@ -301,6 +306,12 @@ class Runner:
 
         # maybe we need to re-read file content, if a Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
+
+        kwargs = {
+            "filetree": self.pre_run_data.copy(),
+            "tag_pattern": self.tag_pattern.pattern,
+            "special_tag_pattern": self.special_tag_pattern.pattern,
+        }
 
         for plugin in self.plugins:
             if issubclass(plugin, LineContentPlugin):

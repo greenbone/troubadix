@@ -50,7 +50,11 @@ class PreRunPlugin(Plugin):
 
     @staticmethod
     @abstractmethod
-    def run(pre_run_data: dict) -> None:
+    def run(
+        pre_run_data: dict,
+        nasl_files: Iterable[Path],
+        **kwargs,
+    ) -> None:
         pass
 
 
