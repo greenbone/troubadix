@@ -30,4 +30,4 @@ class CheckPreRunCollector(PreRunPlugin):
         pre_run_data: dict,
     ) -> None:
         """"""
-        pre_run_data["pre_run_collector"] = 1
+        pre_run_data[CheckPreRunCollector.name] = 1

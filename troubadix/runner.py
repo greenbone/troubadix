@@ -17,10 +17,12 @@
 
 import datetime
 import signal
+import json
 
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool, Manager
 from pathlib import Path
+from pprint import pprint
 from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
@@ -137,6 +139,18 @@ class Runner:
             with self._log_file.open(mode="a", encoding="utf-8") as f:
                 f.write(f"{message}\n")
 
+    def __getstate__(self):
+        """called when pickling - this hack allows subprocesses to
+           be spawned without the AuthenticationString raising an error"""
+        state = self.__dict__.copy()
+        if 'mt_manager' in state:
+            del state['mt_manager']
+        return state
+
+    def __setstate__(self, state):
+        """for unpickling"""
+        self.__dict__.update(state)
+
     def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
             if isinstance(result, LinterResult):
@@ -228,11 +242,16 @@ class Runner:
         for _i, e in sorted(list(enumerate(self.pre_run_plugins))):
             e.run(self.pre_run_data)
 
+        self._report_info("Data")
+        pprint(self.pre_run_data.copy())
+        print(json.dumps(self.pre_run_data.copy(), sort_keys=False, indent=2))
         self._report_info("Pre-run finished")
 
     def run(self, files: List[Path]) -> None:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
+
+        # statistic variables
         files_count = len(files)
         i = 0
         start = datetime.datetime.now()
@@ -280,7 +299,7 @@ class Runner:
         file_name = file_path.resolve()
         results = FileResults(file_path)
 
-        # maybe we need to re-read filecontent, if an Plugin changes it
+        # maybe we need to re-read file content, if a Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
         for plugin in self.plugins:
