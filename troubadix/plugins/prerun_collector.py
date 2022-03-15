@@ -68,6 +68,11 @@ class OIDMapBuilder:
     def scan_file(self, fullname):
         # the filename in the mapping file must be relative to nvt basedir
         root = get_root(fullname)
+        if str(fullname).startswith(str(root)) is False:
+            print(str(fullname).startswith(str(root)))
+            print(root)
+            print(fullname)
+
         assert str(fullname).startswith(str(root))
         filename = str(fullname)[len(str(root)) :].lstrip("/")
 
@@ -91,7 +96,13 @@ class OIDMapBuilder:
                 if oid not in self.mapping:
                     self.mapping[oid] = filename
                 else:
-                    self.duplicates.append((oid, filename, self.mapping[oid]))
+                    self.duplicates.append(
+                        {
+                            "oid": oid,
+                            "duplicate": filename,
+                            "first_usage": self.mapping[oid],
+                        }
+                    )
                     if self.verbose:
                         print(
                             f"OID {oid} used by both '{filename}' and "
@@ -116,7 +127,7 @@ class OIDMapBuilder:
             return OPENVAS_OID_PREFIX + match.group("id")
         match = get_special_tag_pattern(
             name=SpecialScriptTag.OID,
-            value=r'\s*["\'](?P<oid>([0-9.]+))["\']\s*',
+            value=r'\s*(?P<quote>[\'"])(?P<oid>([0-9.]+))(?P=quote)\s*',
             flags=re.IGNORECASE,
         ).search(line)
         if match:

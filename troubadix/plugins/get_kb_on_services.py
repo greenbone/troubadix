@@ -54,8 +54,8 @@ class CheckGetKBOnServices(FileContentPlugin):
             return
 
         kb_matches = re.finditer(
-            r'(get_kb_(?P<type>item|list)\s*\(\s*["\'](?P<value>Services/['
-            r"^)]+)\))",
+            r'(get_kb_(?P<type>item|list)\s*\(\s*(?P<quote>[\'"])(?P<value>'
+            r"Services/[^)]+)\))",
             file_content,
         )
         if kb_matches:

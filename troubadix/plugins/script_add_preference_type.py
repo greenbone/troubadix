@@ -60,7 +60,8 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
 
         preferences_matches = get_special_tag_pattern(
             name=SpecialScriptTag.ADD_PREFERENCE,
-            value=r'type\s*:\s*[\'"](?P<type>[^\'"]+)[\'"]\s*[^)]*',
+            value=r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)'
+            r"(?P=quote)\s*[^)]*",
         ).finditer(file_content)
 
         for preferences_match in preferences_matches:

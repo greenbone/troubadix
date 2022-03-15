@@ -242,16 +242,11 @@ class Runner:
             "tag_pattern": self.tag_pattern.pattern,
             "special_tag_pattern": self.special_tag_pattern.pattern,
         }
-        for _i, e in sorted(list(enumerate(self.pre_run_plugins))):
+        for e in sorted(list(self.pre_run_plugins)):
             e.run(
                 self.pre_run_data,
                 nasl_files,
-                **kwargs,
             )
-
-        self._report_info("Data")
-        print(json.dumps(self.pre_run_data.copy(), sort_keys=False, indent=2))
-        self._report_info("Pre-run finished")
 
     def run(self, files: List[Path]) -> None:
         if not len(self.plugins):

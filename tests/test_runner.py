@@ -162,7 +162,15 @@ class TestRunner(unittest.TestCase):
         )
 
     def test_runner_run_fail_with_verbose_level_2(self):
-        nasl_file = _here / "plugins" / "fail.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "fail.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -179,7 +187,10 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(f"Checking {nasl_file}", output)
+        self.assertIn(
+            "Checking " f"{str(nasl_file).split('nasl/', maxsplit=1)[-1]}",
+            output,
+        )
         self.assertIn("Results for plugin update_modification_date", output)
         # CI terminal formats for 80 chars per line
         self.assertIn(
@@ -192,7 +203,15 @@ class TestRunner(unittest.TestCase):
         )
 
     def test_runner_run_changed_with_verbose_level_1(self):
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -209,7 +228,10 @@ class TestRunner(unittest.TestCase):
             self.assertNotEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(f"Checking {nasl_file}", output)
+        self.assertIn(
+            "Checking " f"{str(nasl_file).split('nasl/', maxsplit=1)[-1]}",
+            output,
+        )
         self.assertIn("Results for plugin update_modification_date", output)
         self.assertIn(
             "Replaced modification_date 2021-03-24 10:08:26 +0000"
@@ -248,7 +270,15 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -272,7 +302,15 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(

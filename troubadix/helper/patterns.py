@@ -23,8 +23,8 @@ from typing import Dict
 
 # regex patterns for script tags
 _TAG_PATTERN = (
-    r'script_tag\s*\(\s*name\s*:\s*["\'](?P<name>{name})["\']\s*,'
-    r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
+    r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>{name})(?P=quote)\s*,'
+    r'\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{value})(?P=quote2)?\s*\)\s*;'
 )
 
 
@@ -145,7 +145,14 @@ def get_xref_pattern(
 
 
 _SPECIAL_TAG_PATTERN = (
-    r'script_(?P<name>{name})\s*\(["\']?(?P<value>{value})["\']?\s*\)\s*;'
+    r'script_(?P<name>{name})\s*\((?P<quote99>[\'"])?(?P<value>{value})'
+    r"(?P=quote99)?\s*\)\s*;"
+)
+
+_XREF_TAG_PATTERN = (
+    r'script_xref\(\s*name\s*:\s*(?P<quote>[\'"])(?P<type>{type})'
+    r'(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{'
+    r"value})(?P=quote2)?\s*\)\s*;"
 )
 
 
@@ -224,39 +231,6 @@ def get_special_script_tag_pattern(
 ) -> re.Pattern:
     special_script_tag_patterns = get_special_script_tag_patterns()
     return special_script_tag_patterns[special_script_tag]
-
-
-def get_special_tag_pattern(
-    name: SpecialScriptTag,
-    *,
-    value: str = None,
-    flags: re.RegexFlag = 0,
-    url_type: str = "URL",
-) -> re.Pattern:
-    """
-    The returned pattern catchs all `script_<name>(<value>);`
-
-    Arguments:
-        name        script tag name
-        value       script tag value (default: at least on char)
-        flags       regex flags for compile (default: 0)
-
-    The returned `Match`s by this pattern will have group strings
-    .group('name') and .group('value')
-    Returns
-        `re.Pattern` object
-    """
-    # if not value:
-    #     return SpecialScriptTagPatterns().pattern[name.value]
-    if name.value == "x_ref":
-        return re.compile(
-            _XREF_TAG_PATTERN.format(
-                name=name.value, value=value, type=url_type
-            ),
-            flags=flags,
-        )
-    return _get_special_tag_pattern(name=name.value, value=value, flags=flags)
-
 
 class CommonScriptTagsPattern:
     instance = False
