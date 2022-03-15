@@ -64,6 +64,7 @@ from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
+from .prerun_collector import CheckPreRunCollector
 
 _PLUGINS = [
     CheckBadwords,
@@ -109,6 +110,8 @@ _PLUGINS = [
     CheckEncoding,
     CheckTabs,
 ]
+
+_PRE_RUN_PLUGINS = [CheckPreRunCollector]
 
 
 class Plugins:

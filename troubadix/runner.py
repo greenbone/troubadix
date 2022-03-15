@@ -19,7 +19,7 @@ import datetime
 import signal
 
 from collections import OrderedDict, defaultdict
-from multiprocessing import Pool
+from multiprocessing import Pool, Manager
 from pathlib import Path
 from typing import Dict, Iterator, List
 
@@ -37,7 +37,7 @@ from troubadix.plugin import (
     LinterResult,
     LinterWarning,
 )
-from troubadix.plugins import Plugins
+from troubadix.plugins import _PRE_RUN_PLUGINS, Plugins
 
 CHUNKSIZE = 1  # default 1
 # js: can we get this to utf-8 in future @scanner @feed?
@@ -51,6 +51,8 @@ class TroubadixException(Exception):
 def initializer():
     """Ignore CTRL+C in the worker process."""
     signal.signal(signal.SIGINT, signal.SIG_IGN)
+
+mt_manager = Manager()
 
 
 class FileResults:
@@ -109,11 +111,15 @@ class Runner:
         statistic: bool = True,
         log_file: Path = None,
     ) -> bool:
+        #plugins initialization
         self.plugins = Plugins(
             excluded_plugins, included_plugins, update_date=update_date
         )
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
+        self.pre_run_plugins = _PRE_RUN_PLUGINS
+        self.pre_run_data = mt_manager.dict()
+
         self._term = term
         self._n_jobs = n_jobs
         self.verbose = verbose
@@ -213,18 +219,30 @@ class Runner:
         )
         self._term.info(f"{'sum':50} {counts:11}")
 
-    def run(
-        self,
-        files: List[Path],
-    ) -> None:
-        files_count = len(files)
-        i = 0
+    def pre_run(self) -> None:
+        """ Running Plugins that do not require a run per file,
+        but a single execution """
+        self._report_info("Starting pre-run")
+        self._report_info("Loading plugins")
 
+        for _i, e in sorted(list(enumerate(self.pre_run_plugins))):
+            e.run(self.pre_run_data)
+
+        self._report_info("Pre-run finished")
+
+    def run(self, files: List[Path]) -> None:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
+        files_count = len(files)
+        i = 0
+        start = datetime.datetime.now()
 
+        # print plugins that will be executed
         if self.verbose > 2:
             self._report_plugins()
+
+        # run single time execution plugins
+        self.pre_run()
 
         start = datetime.datetime.now()
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:

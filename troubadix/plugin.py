@@ -45,6 +45,15 @@ class Plugin(ABC):
     description: str = None
 
 
+class PreRunPlugin(Plugin):
+    """A plugin that only runs PreRun collectors"""
+
+    @staticmethod
+    @abstractmethod
+    def run(pre_run_data: dict) -> None:
+        pass
+
+
 class FileContentPlugin(Plugin):
     """A plugin that does checks on the whole file content"""
 
