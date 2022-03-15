@@ -23,7 +23,7 @@ from collections import OrderedDict, defaultdict
 from multiprocessing import Pool, Manager
 from pathlib import Path
 from pprint import pprint
-from typing import Dict, Iterator, List
+from typing import Iterator, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -238,17 +238,18 @@ class Runner:
         but a single execution """
         self._report_info("Starting pre-run")
         self._report_info("Loading plugins")
-
+        kwargs = {
+            "tag_pattern": self.tag_pattern.pattern,
+            "special_tag_pattern": self.special_tag_pattern.pattern,
+        }
         for _i, e in sorted(list(enumerate(self.pre_run_plugins))):
             e.run(
                 self.pre_run_data,
                 nasl_files,
-                special_tag_pattern=self.special_tag_pattern.pattern,
-                tag_pattern=self.tag_pattern.pattern,
+                **kwargs,
             )
 
         self._report_info("Data")
-        pprint(self.pre_run_data.copy())
         print(json.dumps(self.pre_run_data.copy(), sort_keys=False, indent=2))
         self._report_info("Pre-run finished")
 

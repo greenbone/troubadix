@@ -43,13 +43,12 @@ class CheckPreRunCollector(PreRunPlugin):
     ) -> None:
         """Run PRE_RUN_COLLECTOR."""
 
-        oidmappingfile = Path(os.environ["QATMPDIR"]) / "oidmapping.txt"
-
         builder = OIDMapBuilder(True, **kwargs)
         builder.scan(nasl_files)
-        builder.write_mapping(oidmappingfile)
-
-        pre_run_data[CheckPreRunCollector.name] = 1
+        # oidmappingfile = Path(os.environ.get("QATMPDIR", "")) /
+        # "oidmapping.txt"
+        # builder.write_mapping(oidmappingfile)
+        pre_run_data["oid_mappings"] = builder.dict_mapping()
 
 
 class OIDMapBuilder:
@@ -69,20 +68,12 @@ class OIDMapBuilder:
     def scan_file(self, fullname):
         # the filename in the mapping file must be relative to nvt basedir
         root = get_root(fullname)
-        assert fullname.__str__().startswith(root)
-        filename = fullname.__str__()[len(root) :].lstrip("/")
+        assert str(fullname).startswith(str(root))
+        filename = str(fullname)[len(str(root)) :].lstrip("/")
 
-        with fullname.open() as f:
-            for line in f:
-                oid = self.find_oid(line)
-                if oid:
-                    if oid in self.mapping:
-                        self.duplicates.append(oid)
-                    else:
-                        self.mapping[oid] = filename
-                else:
-                    self.invalids.append(filename)
-        for line in fullname.open():
+        with fullname.open(encoding="latin-1") as f:
+            lines = f.readlines()
+        for line in lines:
             line = line.strip()
             if line.startswith("#"):
                 # skip comments
@@ -131,6 +122,16 @@ class OIDMapBuilder:
         if match:
             return match.group("oid")
         return None
+
+    def dict_mapping(self) -> dict:
+        return dict(
+            {
+                "mapping": self.mapping,
+                "duplicates": self.duplicates,
+                "absents": self.absents,
+                "invalids": self.invalids,
+            }
+        )
 
     def write_mapping(self, filename: Path):
         """Writes the mapping to the file named by filename"""
