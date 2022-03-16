@@ -19,7 +19,7 @@ import re
 
 from pathlib import Path
 from typing import Iterator, OrderedDict
-from naslinter.helper.patterns import get_tag_pattern
+from naslinter.helper.patterns import _get_tag_pattern
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -42,7 +42,9 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        matches = get_tag_pattern(name=r".*", flags=re.S).finditer(file_content)
+        matches = _get_tag_pattern(name=r".*", flags=re.S).finditer(
+            file_content
+        )
 
         for match in matches:
             if re.match(r"\s+.*", match.group("value")) or re.match(

@@ -19,7 +19,7 @@ import re
 
 from pathlib import Path
 from typing import Iterator, OrderedDict
-from naslinter.helper.patterns import get_special_tag_pattern, get_tag_pattern
+from naslinter.helper.patterns import _get_special_tag_pattern, _get_tag_pattern
 
 from naslinter.plugin import FileContentPlugin, LinterResult, LinterWarning
 
@@ -54,9 +54,9 @@ class CheckScriptCallsRecommended(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        if get_special_tag_pattern(
+        if _get_special_tag_pattern(
             name=r"category", value=r"ACT_(SETTINGS|SCANNER|INIT)"
-        ).search(file_content) or get_tag_pattern(
+        ).search(file_content) or _get_tag_pattern(
             name=r"deprecated", value=r"TRUE"
         ).search(
             file_content
@@ -71,7 +71,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
             r"mandatory_keys",
         ]
 
-        if not get_special_tag_pattern(
+        if not _get_special_tag_pattern(
             name=rf"({'|'.join(recommended_many_call)})", value=".*"
         ).search(file_content):
             yield LinterWarning(
@@ -79,7 +79,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
                 f"{', '.join(recommended_many_call)}"
             )
         for call in recommended_single_call:
-            if not get_special_tag_pattern(name=call, value=".*").search(
+            if not _get_special_tag_pattern(name=call, value=".*").search(
                 file_content
             ):
                 yield LinterWarning(

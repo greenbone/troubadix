@@ -43,7 +43,7 @@ class CheckScriptXrefUrl(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        matches = get_xref_pattern(name="URL", value=".+").finditer(
+        matches = get_xref_pattern(name="URL", value=r".+?").finditer(
             file_content
         )
         for match in matches:

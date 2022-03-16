@@ -19,7 +19,7 @@ import re
 
 from pathlib import Path
 from typing import Iterator, OrderedDict
-from naslinter.helper.patterns import get_tag_pattern
+from naslinter.helper.patterns import _get_tag_pattern
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -45,7 +45,7 @@ class CheckScriptTagForm(FileContentPlugin):
         matches = re.finditer(r"script_tag\(.*\);", file_content)
         for match in matches:
             if match:
-                if not get_tag_pattern(name=r".*", value=r".*").match(
+                if not _get_tag_pattern(name=r".*", value=r".*").match(
                     match.group(0)
                 ):
                     yield LinterError(

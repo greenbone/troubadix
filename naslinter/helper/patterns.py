@@ -93,7 +93,10 @@ _XREF_TAG_PATTERN = (
 
 
 def get_xref_pattern(
-    name: str, *, value: str = r".+", flags: re.RegexFlag = 0
+    name: str,
+    *,
+    value: str = r".+",
+    flags: re.RegexFlag = 0,
 ) -> re.Pattern:
     """
     The returned pattern catchs all `script_tags(name="", value="");`
@@ -109,7 +112,8 @@ def get_xref_pattern(
         `re.Pattern` object
     """
     return re.compile(
-        _XREF_TAG_PATTERN.format(name=name, value=value), flags=flags
+        _XREF_TAG_PATTERN.format(type=name, value=value),
+        flags=flags,
     )
 
 

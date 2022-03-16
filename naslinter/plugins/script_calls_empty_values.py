@@ -20,8 +20,8 @@ import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
 from naslinter.helper.patterns import (
-    get_special_tag_pattern,
-    get_tag_pattern,
+    _get_special_tag_pattern,
+    _get_tag_pattern,
     get_xref_pattern,
 )
 
@@ -47,7 +47,7 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        matches = get_tag_pattern(name=r".*", value=r"").finditer(file_content)
+        matches = _get_tag_pattern(name=r".*", value=r"").finditer(file_content)
         for match in matches:
             yield LinterError(f"{match.group(0)} does not contain a value")
 
@@ -55,7 +55,7 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
         for match in matches:
             yield LinterError(f"{match.group(0)} does not contain a value")
 
-        matches = get_special_tag_pattern(
+        matches = _get_special_tag_pattern(
             name=r"(?!add_preferences).*", value=""
         ).finditer(file_content)
         for match in matches:

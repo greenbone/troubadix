@@ -46,7 +46,7 @@ class CheckScriptXrefForm(FileContentPlugin):
         if matches:
             for match in matches:
                 if match:
-                    if not get_xref_pattern(name=".*", value=".*").match(
+                    if not get_xref_pattern(name=r".*", value=r".*").match(
                         match.group(0)
                     ):
                         yield LinterError(

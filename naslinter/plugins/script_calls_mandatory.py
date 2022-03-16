@@ -19,7 +19,10 @@ import re
 
 from pathlib import Path
 from typing import Iterator, OrderedDict
-from naslinter.helper.patterns import get_special_tag_pattern
+from naslinter.helper.patterns import (
+    SpecialScriptTag,
+    get_special_tag_pattern,
+)
 
 from naslinter.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -49,11 +52,11 @@ class CheckScriptCallsMandatory(FileContentPlugin):
             return
 
         mandatory_calls = [
-            r"name",
-            r"version",
-            r"category",
-            r"family",
-            r"copyright",
+            SpecialScriptTag.NAME,
+            SpecialScriptTag.VERSION,
+            SpecialScriptTag.CATEGORY,
+            SpecialScriptTag.FAMILY,
+            SpecialScriptTag.COPYRIGHT,
         ]
 
         for call in mandatory_calls:
