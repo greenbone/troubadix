@@ -101,17 +101,23 @@ class CheckScriptFamily(FileContentPlugin):
         of its script family"""
         del tag_pattern, special_tag_pattern
 
-        match = re.search(
-            r'script_family\("(?P<script_family>[0-9A-Za-z\s\-:\.]+)"\);',
+        if nasl_file.suffix == ".inc":
+            return
+
+        match = re.findall(
+            r'script_family\s*\(["\']?(?P<script_family>.+?)["\']?\s*\)\s*;',
             file_content,
         )
 
-        if not match:
+        if not len(match):
             yield LinterError("No script family exist")
             return
 
-        if match.group("script_family") not in VALID_FAMILIES:
+        if len(match) > 1:
+            yield LinterError("More then one script family exist")
+            return
+
+        if match[0] not in VALID_FAMILIES:
             yield LinterError(
-                "Invalid or misspelled script family "
-                f'"{match.group("script_family")}"'
+                "Invalid or misspelled script family " f'"{match[0]}"'
             )
