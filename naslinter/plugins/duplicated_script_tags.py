@@ -42,7 +42,9 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
             if match:
                 # This is allowed, see e.g.
                 # gb_netapp_data_ontap_consolidation.nasl
-                if tag == "dependencies" and "FEED_NAME" in file_content:
+                if tag.value == "dependencies" and "FEED_NAME" in file_content:
+                    continue
+                if tag.value == "xref":
                     continue
                 match = list(match)
                 if len(match) > 1:
