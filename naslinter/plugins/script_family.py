@@ -18,6 +18,7 @@
 import re
 from pathlib import Path
 from typing import Iterator, OrderedDict
+from naslinter.helper.patterns import SpecialScriptTag
 
 from naslinter.plugin import FileContentPlugin, LinterResult, LinterError
 
@@ -99,19 +100,25 @@ class CheckScriptFamily(FileContentPlugin):
     ) -> Iterator[LinterResult]:
         """This script checks VT for the existence / validity
         of its script family"""
-        del tag_pattern, special_tag_pattern
+        del tag_pattern
 
-        match = re.search(
-            r'script_family\("(?P<script_family>[0-9A-Za-z\s\-:\.]+)"\);',
-            file_content,
-        )
-
-        if not match:
-            yield LinterError("No script family exist")
+        if nasl_file.suffix == ".inc":
             return
 
-        if match.group("script_family") not in VALID_FAMILIES:
+        matches = list(
+            special_tag_pattern[SpecialScriptTag.FAMILY.value].finditer(
+                file_content
+            )
+        )
+        if not matches:
+            yield LinterError("No script family exist")
+            return
+        if len(matches) > 1:
+            yield LinterError("More then one script family exist")
+            return
+
+        if matches[0].group("value") not in VALID_FAMILIES:
             yield LinterError(
                 "Invalid or misspelled script family "
-                f'"{match.group("script_family")}"'
+                f"'{matches[0].group('value')}'"
             )

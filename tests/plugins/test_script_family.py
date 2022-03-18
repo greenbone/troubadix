@@ -63,7 +63,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'Invalid or misspelled script family "TestTest"', results[0].message
+            "Invalid or misspelled script family 'TestTest'", results[0].message
         )
 
     def test_script_family2(self):
@@ -92,6 +92,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             'script_family("???\\");\n'
+            'script_family("???\\");\n'
             "script_bugtraq_id(00000);\n"
         )
 
@@ -105,4 +106,6 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
-        self.assertEqual("No script family exist", results[0].message)
+        self.assertEqual(
+            "More then one script family exist", results[0].message
+        )
