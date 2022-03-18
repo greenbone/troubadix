@@ -63,7 +63,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'Invalid or misspelled script family "TestTest"', results[0].message
+            "Invalid or misspelled script family 'TestTest'", results[0].message
         )
 
     def test_script_family2(self):
