@@ -48,7 +48,7 @@ class CheckIncludes(FileContentPlugin):
 
         # TODO: add to special_tag_pattern
         matches = re.compile(
-            r'include\s*\([\'"]?(?P<value>.+?)[\'"]?s*\)s*;'
+            r'include\s*\([\'"]?(?P<value>.+?)[\'"]?\s*\)\s*;'
         ).finditer(file_content)
 
         root = get_root(nasl_file)
