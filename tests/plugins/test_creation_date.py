@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.creation_date import CheckCreationDate
+from troubadix.plugin import LinterError
+from troubadix.plugins.creation_date import CheckCreationDate
 
 from . import PluginTestCase
 

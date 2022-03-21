@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.solution_type import CheckSolutionType
+from troubadix.plugin import LinterError
+from troubadix.plugins.solution_type import CheckSolutionType
 
 from . import PluginTestCase
 

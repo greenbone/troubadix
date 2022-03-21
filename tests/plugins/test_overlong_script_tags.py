@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.overlong_script_tags import CheckOverlongScriptTags
+from troubadix.plugin import LinterError
+from troubadix.plugins.overlong_script_tags import CheckOverlongScriptTags
 
 from . import PluginTestCase
 

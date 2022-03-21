@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.set_get_kb_calls import CheckWrongSetGetKBCalls
+from troubadix.plugin import LinterError
+from troubadix.plugins.set_get_kb_calls import CheckWrongSetGetKBCalls
 from tests.plugins import PluginTestCase
 
 

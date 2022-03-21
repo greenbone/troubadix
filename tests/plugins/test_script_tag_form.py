@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_tag_form import CheckScriptTagForm
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_tag_form import CheckScriptTagForm
 from tests.plugins import PluginTestCase
 
 

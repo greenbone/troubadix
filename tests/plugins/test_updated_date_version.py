@@ -16,8 +16,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.updated_date_version import CheckUpdatedDateVersion
+from troubadix.plugin import LinterError
+from troubadix.plugins.updated_date_version import CheckUpdatedDateVersion
 
 from . import PluginTestCase
 

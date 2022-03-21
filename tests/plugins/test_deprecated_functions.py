@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.deprecated_functions import CheckDeprecatedFunctions
+from troubadix.plugin import LinterError
+from troubadix.plugins.deprecated_functions import CheckDeprecatedFunctions
 
 from . import PluginTestCase
 

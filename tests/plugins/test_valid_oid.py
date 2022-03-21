@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.valid_oid import CheckValidOID
+from troubadix.plugin import LinterError
+from troubadix.plugins.valid_oid import CheckValidOID
 
 from . import PluginTestCase
 

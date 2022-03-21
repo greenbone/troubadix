@@ -16,8 +16,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-from naslinter.plugin import LinterWarning
-from naslinter.plugins.spelling import CheckSpelling
+from troubadix.plugin import LinterWarning
+from troubadix.plugins.spelling import CheckSpelling
 
 from . import PluginTestCase
 

@@ -18,8 +18,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
+from troubadix.plugin import LinterError
+from troubadix.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
 
 from . import PluginTestCase
 

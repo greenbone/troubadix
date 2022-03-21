@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.prod_svc_detect_in_vulnvt import (
+from troubadix.plugin import LinterError
+from troubadix.plugins.prod_svc_detect_in_vulnvt import (
     CheckProdSvcDetectInVulnvt,
 )
 

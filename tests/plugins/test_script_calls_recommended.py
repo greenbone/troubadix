@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterWarning
-from naslinter.plugins.script_calls_recommended import (
+from troubadix.plugin import LinterWarning
+from troubadix.plugins.script_calls_recommended import (
     CheckScriptCallsRecommended,
 )
 from tests.plugins import PluginTestCase

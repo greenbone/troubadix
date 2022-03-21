@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError, LinterMessage
-from naslinter.plugins.duplicate_oid import CheckDuplicateOID
+from troubadix.plugin import LinterError, LinterMessage
+from troubadix.plugins.duplicate_oid import CheckDuplicateOID
 
 from . import PluginTestCase
 

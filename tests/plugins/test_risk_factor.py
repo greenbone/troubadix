@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.risk_factor import CheckRiskFactor
+from troubadix.plugin import LinterError
+from troubadix.plugins.risk_factor import CheckRiskFactor
 
 from . import PluginTestCase
 

@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.badwords import CheckBadwords
+from troubadix.plugin import LinterError
+from troubadix.plugins.badwords import CheckBadwords
 
 from . import PluginTestCase
 

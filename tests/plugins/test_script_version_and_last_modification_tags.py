@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_version_and_last_modification_tags import (
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
 from tests.plugins import PluginTestCase

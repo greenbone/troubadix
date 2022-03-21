@@ -18,8 +18,8 @@
 from datetime import datetime
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.cve_format import CheckCVEFormat
+from troubadix.plugin import LinterError
+from troubadix.plugins.cve_format import CheckCVEFormat
 
 from . import PluginTestCase
 

@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins import CheckTodoTbd
+from troubadix.plugin import LinterError
+from troubadix.plugins import CheckTodoTbd
 
 from . import PluginTestCase
 

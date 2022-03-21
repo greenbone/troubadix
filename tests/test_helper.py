@@ -18,7 +18,7 @@
 import unittest
 from pathlib import Path
 
-from naslinter.helper import is_ignore_file
+from troubadix.helper import is_ignore_file
 
 
 class IgnoreFile(unittest.TestCase):

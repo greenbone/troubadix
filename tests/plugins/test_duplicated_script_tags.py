@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.duplicated_script_tags import CheckDuplicatedScriptTags
+from troubadix.plugin import LinterError
+from troubadix.plugins.duplicated_script_tags import CheckDuplicatedScriptTags
 
 from . import PluginTestCase
 

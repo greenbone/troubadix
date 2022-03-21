@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.double_end_points import CheckDoubleEndPoints
+from troubadix.plugin import LinterError
+from troubadix.plugins.double_end_points import CheckDoubleEndPoints
 
 from . import PluginTestCase
 

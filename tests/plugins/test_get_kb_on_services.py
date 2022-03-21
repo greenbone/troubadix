@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.get_kb_on_services import CheckGetKBOnServices
+from troubadix.plugin import LinterError
+from troubadix.plugins.get_kb_on_services import CheckGetKBOnServices
 
 from . import PluginTestCase
 

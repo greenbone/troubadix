@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_family import CheckScriptFamily
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_family import CheckScriptFamily
 
 from . import PluginTestCase
 

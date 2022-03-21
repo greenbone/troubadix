@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.encoding import CheckEncoding
+from troubadix.plugin import LinterError
+from troubadix.plugins.encoding import CheckEncoding
 
 from . import PluginTestCase
 

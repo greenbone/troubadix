@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError, LinterResult
-from naslinter.plugins.update_modification_date import UpdateModificationDate
+from troubadix.plugin import LinterError, LinterResult
+from troubadix.plugins.update_modification_date import UpdateModificationDate
 
 from . import PluginTestCase
 

@@ -23,9 +23,9 @@ from pathlib import Path
 from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
 
-from naslinter.plugin import LinterError, LinterResult
-from naslinter.plugins import _NASL_ONLY_PLUGINS
-from naslinter.runner import Runner
+from troubadix.plugin import LinterError, LinterResult
+from troubadix.plugins import _NASL_ONLY_PLUGINS
+from troubadix.runner import Runner
 
 
 class TestRunner(unittest.TestCase):

@@ -18,8 +18,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.http_links_in_tags import CheckHttpLinksInTags
+from troubadix.plugin import LinterError
+from troubadix.plugins.http_links_in_tags import CheckHttpLinksInTags
 
 from . import PluginTestCase
 
