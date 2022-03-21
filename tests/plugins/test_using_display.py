@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError, LinterWarning
-from naslinter.plugins.using_display import CheckUsingDisplay
+from troubadix.plugin import LinterError, LinterWarning
+from troubadix.plugins.using_display import CheckUsingDisplay
 
 from . import PluginTestCase
 

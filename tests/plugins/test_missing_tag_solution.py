@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.missing_tag_solution import CheckMissingTagSolution
+from troubadix.plugin import LinterError
+from troubadix.plugins.missing_tag_solution import CheckMissingTagSolution
 
 from . import PluginTestCase
 

@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_add_preference_type import (
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_add_preference_type import (
     CheckScriptAddPreferenceType,
     ValidType,
 )

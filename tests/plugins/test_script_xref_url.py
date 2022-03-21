@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_xref_url import CheckScriptXrefUrl
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_xref_url import CheckScriptXrefUrl
 from tests.plugins import PluginTestCase
 
 

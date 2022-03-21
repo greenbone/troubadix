@@ -22,7 +22,7 @@ from unittest.mock import Mock
 
 from pontos.terminal import _set_terminal
 
-from naslinter.naslinter import generate_file_list, generate_patterns
+from troubadix.troubadix import generate_file_list, generate_patterns
 
 
 class TestNASLinter(unittest.TestCase):

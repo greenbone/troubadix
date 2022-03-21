@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_calls_empty_values import (
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_calls_empty_values import (
     CheckScriptCallsEmptyValues,
 )
 from tests.plugins import PluginTestCase

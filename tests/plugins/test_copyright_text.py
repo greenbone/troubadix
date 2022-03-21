@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.copyright_text import (
+from troubadix.plugin import LinterError
+from troubadix.plugins.copyright_text import (
     CORRECT_COPYRIGHT_PHRASE,
     CheckCopyrightText,
 )

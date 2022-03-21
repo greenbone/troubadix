@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
-from naslinter.helper.helper import _ROOT
-from naslinter.plugin import LinterError
-from naslinter.plugins.dependencies import CheckDependencies
+from troubadix.helper.helper import _ROOT
+from troubadix.plugin import LinterError
+from troubadix.plugins.dependencies import CheckDependencies
 
 from . import PluginTestCase
 

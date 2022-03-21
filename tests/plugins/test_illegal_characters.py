@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterWarning
-from naslinter.plugins.illegal_characters import CheckIllegalCharacters
+from troubadix.plugin import LinterWarning
+from troubadix.plugins.illegal_characters import CheckIllegalCharacters
 
 from . import PluginTestCase
 

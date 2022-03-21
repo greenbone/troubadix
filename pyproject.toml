@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "NASLinter"
 version = "22.3.1.dev1"
-description = "A linter for NASL files"
+description = "A linting and QA check tool for NASL files"
 authors = ["Greenbone <info@greenbone.net>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
-repository = "https://github.com/greenbone/naslinter"
-homepage = "https://github.com/greenbone/naslinter"
+repository = "https://github.com/greenbone/troubadix"
+homepage = "https://github.com/greenbone/troubadix"
 
 classifiers=[
   # Full list: https://pypi.org/pypi?%3Aaction=list_classifiers
@@ -22,7 +22,7 @@ classifiers=[
 ]
 
 packages = [
-  { include = "naslinter"},
+  { include = "troubadix"},
   { include = "tests", format = "sdist" },
 ]
 
@@ -64,10 +64,10 @@ mode = "poetry"
 pre-commit = ['autohooks.plugins.black', 'autohooks.plugins.pylint']
 
 [tool.pontos.version]
-version-module-file = "naslinter/__version__.py"
+version-module-file = "troubadix/__version__.py"
 
 [tool.poetry.scripts]
-naslinter = 'naslinter.naslinter:main'
+troubadix = 'troubadix.troubadix:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

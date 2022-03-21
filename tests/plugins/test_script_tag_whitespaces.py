@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.script_tag_whitespaces import CheckScriptTagWhitespaces
+from troubadix.plugin import LinterError
+from troubadix.plugins.script_tag_whitespaces import CheckScriptTagWhitespaces
 from tests.plugins import PluginTestCase
 
 

@@ -16,8 +16,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.misplaced_compare_in_if import CheckMisplacedCompareInIf
+from troubadix.plugin import LinterError
+from troubadix.plugins.misplaced_compare_in_if import CheckMisplacedCompareInIf
 
 from . import PluginTestCase
 

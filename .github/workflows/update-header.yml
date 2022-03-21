@@ -16,5 +16,5 @@ jobs:
         github-user: ${{ secrets.GREENBONE_BOT }}
         github-user-mail: ${{ secrets.GREENBONE_BOT_MAIL }}
         github-user-token: ${{ secrets.GREENBONE_BOT_TOKEN }}
-        directories: naslinter tests
+        directories: troubadix tests
         target: main

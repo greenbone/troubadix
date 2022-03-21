@@ -1,0 +1,76 @@
+#  Copyright (c) 2022 Greenbone Networks GmbH
+#
+#  SPDX-License-Identifier: GPL-3.0-or-later
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import re
+from pathlib import Path
+from typing import Iterator, OrderedDict
+
+from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+
+
+class CheckMissingDescExit(FileContentPlugin):
+    name = "check_missing_desc_exit"
+
+    @staticmethod
+    def run(
+        nasl_file: Path,
+        file_content: str,
+        *,
+        tag_pattern: OrderedDict[str, re.Pattern],
+        special_tag_pattern: OrderedDict[str, re.Pattern],
+    ) -> Iterator[LinterResult]:
+        """This script checks if a VT is missing an 'exit(0);' within the
+        description block like this:
+
+        if(description) {
+          *tags*
+        }
+
+        which should be the following instead:
+
+        if(description) {
+          *tags*
+          exit(0);
+        }
+
+        Args:
+            nasl_file: The VT that is going to be checked
+            file_content: The content of the file that is going to be checked
+
+        """
+        del tag_pattern, special_tag_pattern
+
+        if nasl_file.suffix == ".inc":
+            return
+
+        match = re.search(
+            r"^if\s*\(\s*description\s*\)\s*\{(.+?)^\}",
+            file_content,
+            re.MULTILINE | re.DOTALL,
+        )
+        if match and match.group(1):
+            submatch = re.search(
+                r"^\s*exit\s*\(\s*0\s*\)\s*;", match.group(1), re.MULTILINE
+            )
+            if not submatch:
+                yield LinterError(
+                    "No mandatory exit(0); found in the description block."
+                )
+
+            return
+
+        yield LinterError("No description block extracted/found.")

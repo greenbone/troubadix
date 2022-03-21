@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.log_messages import CheckLogMessages
+from troubadix.plugin import LinterError
+from troubadix.plugins.log_messages import CheckLogMessages
 
 from . import PluginTestCase
 

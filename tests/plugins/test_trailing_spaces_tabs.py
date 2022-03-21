@@ -16,8 +16,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.trailing_spaces_tabs import CheckTrailingSpacesTabs
+from troubadix.plugin import LinterError
+from troubadix.plugins.trailing_spaces_tabs import CheckTrailingSpacesTabs
 
 from . import PluginTestCase
 

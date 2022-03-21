@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.grammar import CheckGrammar
+from troubadix.plugin import LinterError
+from troubadix.plugins.grammar import CheckGrammar
 
 from . import PluginTestCase
 

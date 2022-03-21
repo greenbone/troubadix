@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterWarning
-from naslinter.plugins.newlines import CheckNewlines
+from troubadix.plugin import LinterWarning
+from troubadix.plugins.newlines import CheckNewlines
 
 from . import PluginTestCase
 

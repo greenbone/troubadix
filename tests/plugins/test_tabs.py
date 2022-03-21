@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterWarning
-from naslinter.plugins.tabs import TAB_TO_SPACES, CheckTabs
+from troubadix.plugin import LinterWarning
+from troubadix.plugins.tabs import TAB_TO_SPACES, CheckTabs
 
 from . import PluginTestCase
 

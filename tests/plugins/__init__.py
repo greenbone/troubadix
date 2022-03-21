@@ -17,7 +17,7 @@
 
 import unittest
 
-from naslinter.helper.patterns import (
+from troubadix.helper.patterns import (
     ScriptTagPatterns,
     SpecialScriptTagPatterns,
 )

@@ -24,7 +24,7 @@ from unittest.mock import Mock
 
 from pontos.terminal import _set_terminal
 
-from naslinter.argparser import parse_args
+from troubadix.argparser import parse_args
 
 
 class TestArgparsing(unittest.TestCase):
@@ -38,7 +38,7 @@ class TestArgparsing(unittest.TestCase):
         sys.argv = self.old_args
 
     def test_parse_full_debug_staged(self):
-        sys.argv = ["naslinter", "-f", "--debug", "--staged-only"]
+        sys.argv = ["troubadix", "-f", "--debug", "--staged-only"]
         expcected_dirs = [Path.cwd()]
 
         parsed_args = parse_args()
@@ -64,7 +64,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_files(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "--files",
             "tests/plugins/test.nasl",
             "tests/plugins/fail2.nasl",
@@ -96,10 +96,10 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_dir_skip_duplicate(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "--dirs",
             "tests",
-            "naslinter",
+            "troubadix",
             "--skip-duplicated-oids",
             "--non-recursive",
         ]
@@ -108,7 +108,7 @@ class TestArgparsing(unittest.TestCase):
 
         expected_args = Namespace(
             full=False,
-            dirs=[Path("tests"), Path("naslinter")],
+            dirs=[Path("tests"), Path("troubadix")],
             files=None,
             from_file=None,
             commit_range=None,
@@ -126,7 +126,7 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_commit_range(self):
-        sys.argv = ["naslinter", "--commit-range", "0123456", "7abcdef"]
+        sys.argv = ["troubadix", "--commit-range", "0123456", "7abcdef"]
 
         parsed_args = parse_args()
 
@@ -151,7 +151,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_include_tests(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "--include-tests",
             "CheckBadwords",
             "UpdateModificationDate",
@@ -180,7 +180,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_exclude_tests(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "--exclude-tests",
             "CheckBadwords",
             "UpdateModificationDate",
@@ -208,7 +208,7 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_include_patterns(self):
-        sys.argv = ["naslinter", "-f", "--include-patterns", "naslinter/*"]
+        sys.argv = ["troubadix", "-f", "--include-patterns", "troubadix/*"]
         expcected_dirs = [Path.cwd()]
 
         parsed_args = parse_args()
@@ -222,7 +222,7 @@ class TestArgparsing(unittest.TestCase):
             staged_only=False,
             debug=False,
             non_recursive=False,
-            include_patterns=["naslinter/*"],
+            include_patterns=["troubadix/*"],
             exclude_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
@@ -233,14 +233,14 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_include_patterns_fail(self):
-        sys.argv = ["naslinter", "--include-patterns", "naslinter/*"]
+        sys.argv = ["troubadix", "--include-patterns", "troubadix/*"]
 
         with self.assertRaises(SystemExit):
             parse_args()
 
     def test_parse_files_non_recursive_fail(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "--files",
             "tests/plugins/test.nasl",
             "tests/plugins/fail2.nasl",
@@ -251,7 +251,7 @@ class TestArgparsing(unittest.TestCase):
             parse_args()
 
     def test_parse_exclude_patterns(self):
-        sys.argv = ["naslinter", "-f", "--exclude-patterns", "naslinter/*"]
+        sys.argv = ["troubadix", "-f", "--exclude-patterns", "troubadix/*"]
         expcected_dirs = [Path.cwd()]
 
         parsed_args = parse_args()
@@ -265,7 +265,7 @@ class TestArgparsing(unittest.TestCase):
             staged_only=False,
             debug=False,
             non_recursive=False,
-            exclude_patterns=["naslinter/*"],
+            exclude_patterns=["troubadix/*"],
             include_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
@@ -277,10 +277,10 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_max_cpu(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "-f",
             "--exclude-patterns",
-            "naslinter/*",
+            "troubadix/*",
             "-j",
             "1337",
         ]
@@ -297,7 +297,7 @@ class TestArgparsing(unittest.TestCase):
             staged_only=False,
             debug=False,
             non_recursive=False,
-            exclude_patterns=["naslinter/*"],
+            exclude_patterns=["troubadix/*"],
             include_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
@@ -309,10 +309,10 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_min_cpu(self):
         sys.argv = [
-            "naslinter",
+            "troubadix",
             "-f",
             "--exclude-patterns",
-            "naslinter/*",
+            "troubadix/*",
             "-j",
             "-1337",
         ]
@@ -329,7 +329,7 @@ class TestArgparsing(unittest.TestCase):
             staged_only=False,
             debug=False,
             non_recursive=False,
-            exclude_patterns=["naslinter/*"],
+            exclude_patterns=["troubadix/*"],
             include_patterns=None,
             excluded_plugins=None,
             included_plugins=None,

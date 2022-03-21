@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.cvss_format import CheckCVSSFormat
+from troubadix.plugin import LinterError
+from troubadix.plugins.cvss_format import CheckCVSSFormat
 
 from . import PluginTestCase
 
