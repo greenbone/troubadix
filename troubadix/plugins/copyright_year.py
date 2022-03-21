@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Iterable, OrderedDict
 
-from black import Iterator
+from typing import Iterator
 
 from troubadix.helper import is_ignore_file
 from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
