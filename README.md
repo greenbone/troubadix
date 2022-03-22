@@ -1,6 +1,6 @@
 ![Greenbone Logo](https://www.greenbone.net/wp-content/uploads/gb_new-logo_horizontal_rgb_small.png)
 
-# NASLinter
+# Troubadix
 A linting and QA check tool for NASL files
 
 [![GitHub releases](https://img.shields.io/github/release/greenbone/troubadix.svg)](https://github.com/greenbone/troubadix/releases)
