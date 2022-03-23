@@ -17,7 +17,6 @@
 
 from pathlib import Path
 from typing import Iterator
-
 from troubadix.helper.patterns import (
     _get_special_tag_pattern,
     _get_tag_pattern,

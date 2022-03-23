@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import List
 
 from troubadix.helper import get_root, SpecialScriptTag, get_special_tag_pattern
-from troubadix.plugin import LinterError, PreRunPlugin, LinterResult
+from troubadix.plugin import PreRunPlugin
 
 OPENVAS_OID_PREFIX = r"1.3.6.1.4.1.25623.1.[0-9]+."
 OID_RE = re.compile(r"^" + OPENVAS_OID_PREFIX.replace(".", r"\.") + r"[\d.]+$")

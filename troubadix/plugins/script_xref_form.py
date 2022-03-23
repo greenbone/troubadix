@@ -19,7 +19,6 @@ import re
 
 from pathlib import Path
 from typing import Iterator
-
 from troubadix.helper.patterns import get_xref_pattern
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult

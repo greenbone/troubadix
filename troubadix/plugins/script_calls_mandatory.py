@@ -17,7 +17,6 @@
 
 from pathlib import Path
 from typing import Iterator
-
 from troubadix.helper.patterns import (
     SpecialScriptTag,
     get_special_tag_pattern,
@@ -55,7 +54,7 @@ class CheckScriptCallsMandatory(FileContentPlugin):
 
         for call in mandatory_calls:
             # if not re.search(r"script_" + call, file_content):
-            if not get_special_tag_pattern(name=call, value=".*").search(
+            if not get_special_tag_pattern(name=call).search(
                 file_content
             ):
                 yield LinterError(
