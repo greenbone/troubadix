@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from naslinter.plugins.qod import (
+from troubadix.plugins.qod import (
     VALID_QOD_NUM_VALUES,
     VALID_QOD_TYPES,
     CheckQod,

@@ -19,9 +19,9 @@ from pathlib import Path
 import re
 from typing import Iterator, OrderedDict
 
-from naslinter.helper import get_tag_pattern
-from naslinter.helper.patterns import ScriptTag
-from naslinter.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.helper import get_tag_pattern
+from troubadix.helper.patterns import ScriptTag
+from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
 VALID_QOD_NUM_VALUES = [
     1,
@@ -68,7 +68,7 @@ class CheckQod(FileContentPlugin):
         """
         The script checks the passed VT for the existence / validity of its QoD
         """
-        del nasl_file, tag_pattern, special_tag_pattern
+        del tag_pattern, special_tag_pattern
 
         match_qod = list(
             get_tag_pattern(name=ScriptTag.QOD, value=r".*").finditer(
