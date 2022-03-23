@@ -44,6 +44,7 @@ from .newlines import CheckNewlines
 from .openvas_lint import CheckOpenvasLint
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
+from .reporting_consistency import CheckReportingConsistency
 from .risk_factor import CheckRiskFactor
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
@@ -91,6 +92,7 @@ _NASL_ONLY_PLUGINS = [
     CheckOpenvasLint,
     CheckOverlongScriptTags,
     CheckProdSvcDetectInVulnvt,
+    CheckReportingConsistency,
     CheckRiskFactor,
     CheckScriptCategory,
     CheckScriptCopyright,
