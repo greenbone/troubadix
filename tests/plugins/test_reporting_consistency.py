@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from naslinter.plugin import LinterError
-from naslinter.plugins.reporting_consistency import CheckReportingConsistency
+from troubadix.plugin import LinterError
+from troubadix.plugins.reporting_consistency import CheckReportingConsistency
 from tests.plugins import PluginTestCase
 
 
