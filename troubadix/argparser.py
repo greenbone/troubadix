@@ -128,6 +128,13 @@ def parse_args(
     )
 
     parser.add_argument(
+        "--log-file",
+        dest="log_file",
+        type=file_type,
+        help=("Log file path"),
+    )
+
+    parser.add_argument(
         "--non-recursive",
         action="store_true",
         help=(
