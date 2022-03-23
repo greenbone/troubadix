@@ -115,6 +115,7 @@ def main(args=None):
         update_date=parsed_args.update_date,
         debug=parsed_args.debug,
         statistic=True if not parsed_args.no_statistic else False,
+        log_file=parsed_args.log_file,
     )
 
     if parsed_args.dirs:
