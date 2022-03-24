@@ -21,5 +21,6 @@ from .patterns import (
     SpecialScriptTag,
     get_common_tag_patterns,
     get_special_tag_pattern,
-    get_tag_pattern,
+    get_script_tag_pattern,
+    get_special_script_tag_pattern,
 )
