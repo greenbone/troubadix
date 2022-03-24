@@ -90,7 +90,7 @@ class Runner:
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
         update_date: bool = False,
-        debug: bool = False,
+        verbose: int = 0,
         statistic: bool = True,
         log_file: Path = None,
     ) -> None:
@@ -101,7 +101,7 @@ class Runner:
         self._included_plugins = included_plugins
         self._term = term
         self._n_jobs = n_jobs
-        self.debug = debug
+        self.verbose = verbose
 
         # this dict will store the result counts for the statistic
         self.result_counts = ResultCounts()
@@ -155,7 +155,7 @@ class Runner:
         ) in results.items():
             if plugin_results:
                 self._report_info(f"Results for plugin {plugin_name}")
-            elif self.debug:
+            elif self.verbose > 1:
                 self._report_ok(f"No results for plugin {plugin_name}")
 
             # add the results to the statistic
@@ -220,7 +220,6 @@ class Runner:
 
                     with self._term.indent():
                         self._report_results(results.generic_results)
-
                         self._process_plugin_results(results.plugin_results)
             except KeyboardInterrupt:
                 pool.terminate()

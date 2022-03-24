@@ -122,11 +122,12 @@ def parse_args(
     )
 
     parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Enables the DEBUG output",
+        "--verbose",
+        "-v",
+        action="count",
+        default=0,
+        help=("-v verbose, -vv debug"),
     )
-
     parser.add_argument(
         "--log-file",
         dest="log_file",
