@@ -97,10 +97,11 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(len(results.generic_results), 0)
         self.assertEqual(len(results.plugin_results), 1)
         self.assertEqual(
-            len(results.plugin_results["update_modification_date"]), 1
+            len(results.plugin_results["update_modification_date"][0]), 1
         )
         self.assertIsInstance(
-            results.plugin_results["update_modification_date"][0], LinterResult
+            results.plugin_results["update_modification_date"][0][0],
+            LinterResult,
         )
 
         # revert changes for the next time
@@ -127,10 +128,10 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(len(results.generic_results), 0)
         self.assertEqual(len(results.plugin_results), 1)
         self.assertEqual(
-            len(results.plugin_results["update_modification_date"]), 1
+            len(results.plugin_results["update_modification_date"][0]), 1
         )
 
-        error = results.plugin_results["update_modification_date"][0]
+        error = results.plugin_results["update_modification_date"][0][0]
         self.assertIsInstance(error, LinterError)
         self.assertIn(
             "fail.nasl does not contain a modification day script tag.",

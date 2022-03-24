@@ -16,10 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Iterator, List
+from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -38,7 +38,8 @@ from troubadix.plugin import (
 from troubadix.plugins import Plugins
 
 CHUNKSIZE = 1  # default 1
-CURRENT_ENCODING = "latin1"
+# js: can we get this to utf-8 in future @scanner @feed?
+CURRENT_ENCODING = "latin1"  # currently default
 
 
 class FileResults:
@@ -58,6 +59,17 @@ class FileResults:
         return self
 
 
+class ResultCounts:
+    def __init__(self):
+        self.result_counts = defaultdict(int)
+
+    def add_result_counts(self, plugin: str, count: int):
+        """Add the number of results (count) to the dict for the
+        plugin name (plugin)"""
+        if count > 1:
+            self.result_counts[plugin] += count
+
+
 class Runner:
     def __init__(
         self,
@@ -67,6 +79,7 @@ class Runner:
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
         debug: bool = False,
+        statistic: bool = True,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = term
@@ -74,8 +87,11 @@ class Runner:
         self.debug = debug
         self.special_tag_pattern = SpecialScriptTagPatterns()
         self.tag_pattern = ScriptTagPatterns()
+        # this dict will store the result counts for the statistic
+        self.result_counts = ResultCounts()
+        self.statistic = statistic
 
-    def _report_results(self, results: List[LinterMessage]):
+    def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
             if isinstance(result, LinterResult):
                 self._report_ok(result.message)
@@ -84,20 +100,49 @@ class Runner:
             elif isinstance(result, LinterWarning):
                 self._report_warning(result.message)
 
-    def _report_warning(self, message: str):
+    def _report_warning(self, message: str) -> None:
         self._term.warning(message)
 
-    def _report_error(self, message: str):
+    def _report_error(self, message: str) -> None:
         self._term.error(message)
 
-    def _report_info(self, message: str):
+    def _report_info(self, message: str) -> None:
         self._term.info(message)
 
-    def _report_bold_info(self, message: str):
+    def _report_bold_info(self, message: str) -> None:
         self._term.bold_info(message)
 
-    def _report_ok(self, message: str):
+    def _report_ok(self, message: str) -> None:
         self._term.ok(message)
+
+    def _process_plugin_results(
+        self, results: Dict[str, List[LinterMessage]]
+    ) -> None:
+        # print the files plugin results
+        for (
+            plugin_name,
+            plugin_results,
+        ) in results.items():
+            if plugin_results or self.debug:
+                self._report_info(f"Running plugin {plugin_name}")
+
+            # add the results to the statistic
+            self.result_counts.add_result_counts(
+                plugin_name, len(plugin_results)
+            )
+
+            with self._term.indent():
+                self._report_results(plugin_results)
+
+    def _report_statistic(self) -> None:
+        overall = 0
+        self._term.print(f"{'Plugin':40} {'Error Count':11}")
+        self._term.print("-" * 52)
+        for (plugin, count) in self.result_counts.result_counts.items():
+            overall += count
+            self._term.error(f"{plugin:40} {count:11}")
+        self._term.print("-" * 52)
+        self._term.error(f"{'sum':40} {overall:11}")
 
     def run(
         self,
@@ -124,17 +169,11 @@ class Runner:
                 with self._term.indent():
                     self._report_results(results.generic_results)
 
-                    for (
-                        plugin_name,
-                        plugin_results,
-                    ) in results.plugin_results.items():
-                        if plugin_results or self.debug:
-                            self._report_info(f"Running plugin {plugin_name}")
-
-                        with self._term.indent():
-                            self._report_results(plugin_results)
+                    self._process_plugin_results(results.plugin_results)
 
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
+        if self.statistic:
+            self._report_statistic()
 
     def check_file(self, file_path: Path) -> FileResults:
         file_name = file_path.resolve()

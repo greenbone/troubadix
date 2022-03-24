@@ -202,6 +202,12 @@ def parse_args(
         ),
     )
 
+    parser.add_argument(
+        "--no-statistic",
+        action="store_true",
+        help="Don't print the statistic",
+    )
+
     if len(sys.argv) == 1:
         parser.print_help(sys.stdout)
         sys.exit(1)
