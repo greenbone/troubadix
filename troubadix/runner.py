@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from multiprocessing import Pool
 from pathlib import Path
 from typing import Dict, Iterator, List
@@ -61,14 +61,12 @@ class FileResults:
 
 class ResultCounts:
     def __init__(self):
-        self.result_counts = {}
+        self.result_counts = defaultdict(int)
 
     def add_result_counts(self, plugin: str, count: int):
         """Add the number of results (count) to the dict for the
         plugin name (plugin)"""
         if count > 1:
-            if plugin not in self.result_counts:
-                self.result_counts[plugin] = 0
             self.result_counts[plugin] += count
 
 
