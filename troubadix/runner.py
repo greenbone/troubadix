@@ -19,7 +19,7 @@ import datetime
 from collections import OrderedDict
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Iterator, List
+from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -96,7 +96,7 @@ class Runner:
         self.result_counts = ResultCounts()
         self.statistic = statistic
 
-    def _report_results(self, results: List[LinterMessage]):
+    def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
             if isinstance(result, LinterResult):
                 self._report_ok(result.message)
@@ -105,23 +105,24 @@ class Runner:
             elif isinstance(result, LinterWarning):
                 self._report_warning(result.message)
 
-    def _report_warning(self, message: str):
+    def _report_warning(self, message: str) -> None:
         self._term.warning(message)
 
-    def _report_error(self, message: str):
+    def _report_error(self, message: str) -> None:
         self._term.error(message)
 
-    def _report_info(self, message: str):
+    def _report_info(self, message: str) -> None:
         self._term.info(message)
 
-    def _report_bold_info(self, message: str):
+    def _report_bold_info(self, message: str) -> None:
         self._term.bold_info(message)
 
-    def _report_ok(self, message: str):
+    def _report_ok(self, message: str) -> None:
         self._term.ok(message)
 
-    def _process_plugin_results(self, results: OrderedDict):
-
+    def _process_plugin_results(
+        self, results: Dict[str, List[LinterMessage]]
+    ) -> None:
         # print the files plugin results
         for (
             plugin_name,
@@ -136,7 +137,7 @@ class Runner:
             with self._term.indent():
                 self._report_results(plugin_results[0])
 
-    def _report_statistic(self):
+    def _report_statistic(self) -> None:
         overall = 0
         self._term.print(f"{'Plugin':40} {'Error Count':11}")
         self._term.print("-" * 52)
