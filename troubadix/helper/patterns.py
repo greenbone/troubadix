@@ -20,36 +20,6 @@ import re
 from enum import Enum
 from typing import Dict
 
-_XREF_TAG_PATTERN = (
-    r'script_xref\(\s*name\s*:\s*["\'](?P<type>{type})["\']\s*,'
-    r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
-)
-
-
-def get_xref_pattern(
-    name: str,
-    *,
-    value: str = r".+",
-    flags: re.RegexFlag = 0,
-) -> re.Pattern:
-    """
-    The returned pattern catchs all `script_tags(name="", value="");`
-
-    Arguments:
-        name        script tag name
-        value       script tag value (default: at least on char)
-        flags       regex flags for compile (default: 0)
-
-    The returned `Match`s by this pattern will have group strings
-    .group('name') and .group('value')
-    Returns
-        `re.Pattern` object
-    """
-    return re.compile(
-        _XREF_TAG_PATTERN.format(type=name, value=value),
-        flags=flags,
-    )
-
 
 # regex patterns for script tags
 _TAG_PATTERN = (
@@ -143,6 +113,37 @@ def get_script_tag_pattern(script_tag: ScriptTag) -> re.Pattern:
     return script_tag_patterns[script_tag]
 
 
+_XREF_TAG_PATTERN = (
+    r'script_xref\(\s*name\s*:\s*["\'](?P<type>{type})["\']\s*,'
+    r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
+)
+
+
+def get_xref_pattern(
+    name: str,
+    *,
+    value: str = r".+",
+    flags: re.RegexFlag = 0,
+) -> re.Pattern:
+    """
+    The returned pattern catchs all `script_tags(name="", value="");`
+
+    Arguments:
+        name        script tag name
+        value       script tag value (default: at least on char)
+        flags       regex flags for compile (default: 0)
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
+    return re.compile(
+        _XREF_TAG_PATTERN.format(type=name, value=value),
+        flags=flags,
+    )
+
+
 _SPECIAL_TAG_PATTERN = (
     r'script_(?P<name>{name})\s*\(["\']?(?P<value>{value})["\']?\s*\)\s*;'
 )
@@ -152,18 +153,20 @@ class SpecialScriptTag(Enum):
     ADD_PREFERENCE = "add_preference"
     BUGTRAQ_ID = "bugtraq_id"
     CATEGORY = "category"
+    # script_copyright("Copyright (C) 2021 Greenbone Networks GmbH");
     COPYRIGHT = "copyright"
     CVE_ID = "cve_id"
     DEPENDENCIES = "dependencies"
     EXCLUDE_KEYS = "exclude_keys"
-    FAMILY = "family"
+
+    FAMILY = "family"  # script_family("FIXME");
     MANDATORY_KEYS = "mandatory_keys"
     NAME = "name"
-    OID = "oid"
+    OID = "oid"  # script_oid("1.3.6.1.4.1.25623.1.0.XXXXXX");
     REQUIRE_KEYS = "require_keys"
     REQUIRE_PORTS = "require_ports"
     REQUIRE_UDP_PORTS = "require_udp_ports"
-    VERSION = "version"
+    VERSION = "version"  # script_version("YYYY-MM-DDTHH:mm:ss+0000");
     XREF = "xref"
 
 
@@ -175,8 +178,19 @@ def _get_special_tag_pattern(
     )
 
 
+__PORT_VALUE = r"\"(?P<service>[\w\s])+\", (?P<port>\d{1,5})"
+
 # pylint: disable=invalid-name
 __special_script_tag_patterns = None
+
+__special_script_tag_values = {
+    SpecialScriptTag.OID: r"(?P<oid>([0-9.]+))",
+    SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}",
+    SpecialScriptTag.REQUIRE_PORTS: __PORT_VALUE,
+    SpecialScriptTag.REQUIRE_UDP_PORTS: __PORT_VALUE,
+    SpecialScriptTag.XREF: r"name:\"(?P<ref_type>[\w\s]+)\","
+    r" value:\"(?P<ref>[\w/:= %._\-\?]+)\"",
+}
 
 
 def init_special_script_tag_patterns() -> None:
@@ -185,24 +199,16 @@ def init_special_script_tag_patterns() -> None:
 
     __special_script_tag_patterns = dict()
     for tag in SpecialScriptTag:
-        if tag.value == "xref":
-            __special_script_tag_patterns[tag] = re.compile(
-                _XREF_TAG_PATTERN.format(
-                    name=tag.value, value=r".+?", type="URL"
-                ),
-            )
-        elif tag.value == "oid":
-            __special_script_tag_patterns[tag] = _get_special_tag_pattern(
-                name=tag.value, value=r'\s*["\'](?P<oid>([0-9.]+))["\']\s*'
-            )
-        elif tag.value == "version":
-            __special_script_tag_patterns[tag] = _get_special_tag_pattern(
-                name=tag.value, value=r"[0-9\-\:\+T]{24}"
-            )
-        else:
-            __special_script_tag_patterns[tag] = _get_special_tag_pattern(
-                name=tag.value, flags=re.MULTILINE
-            )
+        flags = 0
+        value = __special_script_tag_values.get(tag)
+
+        if value is None:
+            value = r".+?"
+            flags = re.MULTILINE
+
+        __special_script_tag_patterns[tag] = _get_special_tag_pattern(
+            name=tag.value, value=value, flags=flags
+        )
 
 
 def get_special_script_tag_patterns() -> Dict[SpecialScriptTag, re.Pattern]:

@@ -110,9 +110,9 @@ class CheckHttpLinksInTags(FileContentPlugin):
             if match:
                 if (
                     # fmt: off
-                    "nvd.nist.gov/vuln/detail/CVE-" in match.group('value')
+                    "nvd.nist.gov/vuln/detail/CVE-" in match.group('ref')
                     or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-"
-                    in match.group('value')
+                    in match.group('ref')
                     # fmt: on
                 ):
                     yield LinterError(
