@@ -138,13 +138,13 @@ class Runner:
 
     def _report_statistic(self) -> None:
         overall = 0
-        self._term.print(f"{'Plugin':40} {'Error Count':11}")
-        self._term.print("-" * 52)
+        self._term.print(f"{'Plugin':50} {'Error Count':11}")
+        self._term.print("-" * 62)
         for (plugin, count) in self.result_counts.result_counts.items():
             overall += count
-            self._term.error(f"{plugin:40} {count:11}")
-        self._term.print("-" * 52)
-        self._term.error(f"{'sum':40} {overall:11}")
+            self._term.error(f"{plugin:50} {count:11}")
+        self._term.print("-" * 62)
+        self._term.error(f"{'sum':50} {overall:11}")
 
     def run(
         self,
