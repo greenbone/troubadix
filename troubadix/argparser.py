@@ -118,13 +118,13 @@ def parse_args(
     what_group.add_argument(
         "--staged-only",
         action="store_true",
-        help=('Only run against files which are "staged/added" in git'),
+        help='Only run against files which are "staged/added" in git',
     )
 
     parser.add_argument(
         "--debug",
         action="store_true",
-        help=("Enables the DEBUG output"),
+        help="Enables the DEBUG output",
     )
 
     parser.add_argument(
@@ -182,6 +182,16 @@ def parse_args(
             "Allows to exclude tests from this lint. "
             "All tests excluding the given will run. "
             "Valid as CamelCase and snake_case."
+        ),
+    )
+
+    tests_group.add_argument(
+        "--update-date",
+        action="store_true",
+        help=(
+            "Run troubadix in update modification_date and "
+            "script_version mode. Attention: This will modify all "
+            "passed files."
         ),
     )
 
