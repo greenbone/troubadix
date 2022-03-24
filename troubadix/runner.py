@@ -153,7 +153,7 @@ class Runner:
             plugin_name,
             plugin_results,
         ) in results.items():
-            if plugin_results:
+            if plugin_results and self.verbose > 0:
                 self._report_info(f"Results for plugin {plugin_name}")
             elif self.verbose > 1:
                 self._report_ok(f"No results for plugin {plugin_name}")
@@ -163,8 +163,9 @@ class Runner:
                 plugin_name, len(plugin_results)
             )
 
-            with self._term.indent():
-                self._report_results(plugin_results)
+            if self.verbose > 0:
+                with self._term.indent():
+                    self._report_results(plugin_results)
 
     def _report_plugins(self) -> None:
         if self._excluded_plugins:
@@ -213,13 +214,15 @@ class Runner:
                     short_file_name = str(results.file_path).split(
                         "nasl/", maxsplit=1
                     )[-1]
-                    self._report_bold_info(
-                        f"Checking {short_file_name} ({i}/{files_count})"
-                    )
+                    if self.verbose > 0:
+                        self._report_bold_info(
+                            f"Checking {short_file_name} ({i}/{files_count})"
+                        )
                     i = i + 1
 
                     with self._term.indent():
-                        self._report_results(results.generic_results)
+                        if self.verbose > 0:
+                            self._report_results(results.generic_results)
                         self._process_plugin_results(results.plugin_results)
             except KeyboardInterrupt:
                 pool.terminate()
