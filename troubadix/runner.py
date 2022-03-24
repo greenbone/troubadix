@@ -24,8 +24,8 @@ from typing import Dict, Iterator, List
 from pontos.terminal.terminal import Terminal
 
 from troubadix.helper.patterns import (
-    ScriptTagPatterns,
-    SpecialScriptTagPatterns,
+    init_script_tag_patterns,
+    init_special_script_tag_patterns,
 )
 from troubadix.plugin import (
     FileContentPlugin,
@@ -85,11 +85,13 @@ class Runner:
         self._term = term
         self._n_jobs = n_jobs
         self.debug = debug
-        self.special_tag_pattern = SpecialScriptTagPatterns()
-        self.tag_pattern = ScriptTagPatterns()
+
         # this dict will store the result counts for the statistic
         self.result_counts = ResultCounts()
         self.statistic = statistic
+
+        init_script_tag_patterns()
+        init_special_script_tag_patterns()
 
     def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
@@ -190,8 +192,6 @@ class Runner:
                     plugin.run(
                         file_name,
                         lines,
-                        special_tag_pattern=self.special_tag_pattern.pattern,
-                        tag_pattern=self.tag_pattern.pattern,
                     ),
                 )
             elif issubclass(plugin, FileContentPlugin):
@@ -200,8 +200,6 @@ class Runner:
                     plugin.run(
                         file_name,
                         file_content,
-                        special_tag_pattern=self.special_tag_pattern.pattern,
-                        tag_pattern=self.tag_pattern.pattern,
                     ),
                 )
             else:
