@@ -112,6 +112,7 @@ def main(args=None):
         term=term,
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
+        update_date=parsed_args.update_date,
         debug=parsed_args.debug,
         statistic=True if not parsed_args.no_statistic else False,
     )

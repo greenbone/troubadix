@@ -82,10 +82,13 @@ class Runner:
         *,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
+        update_date: bool = False,
         debug: bool = False,
         statistic: bool = True,
     ) -> None:
-        self.plugins = Plugins(excluded_plugins, included_plugins)
+        self.plugins = Plugins(
+            excluded_plugins, included_plugins, update_date=update_date
+        )
         self._term = term
         self._n_jobs = n_jobs
         self.debug = debug
