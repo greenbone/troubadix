@@ -82,7 +82,6 @@ class TestRunner(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
-            verbose=1,
             n_jobs=1,
             term=self._term,
             update_date=True,
@@ -134,7 +133,7 @@ class TestRunner(unittest.TestCase):
             error.message,
         )
 
-    def test_runner_run_fail_with_verbose(self):
+    def test_runner_run_fail_with_verbose_level_2(self):
         nasl_file = _here / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
@@ -164,7 +163,7 @@ class TestRunner(unittest.TestCase):
             output,
         )
 
-    def test_runner_run_changed_without_verbose(self):
+    def test_runner_run_changed_with_verbose_level_1(self):
         nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
@@ -193,7 +192,7 @@ class TestRunner(unittest.TestCase):
         # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
 
-    def test_runner_run_ok_with_verbose(self):
+    def test_runner_run_ok_with_verbose_level_2(self):
         included_plugins = [
             "CheckMissingDescExit",
         ]
@@ -217,7 +216,7 @@ class TestRunner(unittest.TestCase):
         self.assertIn(f"Checking {nasl_file}", output)
         self.assertIn("No results for plugin", output)
 
-    def test_runner_run_ok_without_verbose(self):
+    def test_runner_run_ok_with_verbose_level_1(self):
         included_plugins = [
             "CheckMissingDescExit",
         ]
