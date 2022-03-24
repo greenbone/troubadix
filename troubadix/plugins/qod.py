@@ -16,11 +16,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-import re
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper import get_tag_pattern
-from troubadix.helper.patterns import ScriptTag
+from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
 VALID_QOD_NUM_VALUES = [
@@ -61,25 +59,15 @@ class CheckQod(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         The script checks the passed VT for the existence / validity of its QoD
         """
-        del tag_pattern, special_tag_pattern
+        qod_pattern = get_script_tag_pattern(ScriptTag.QOD)
+        qod_type_pattern = get_script_tag_pattern(ScriptTag.QOD_TYPE)
 
-        match_qod = list(
-            get_tag_pattern(name=ScriptTag.QOD, value=r".*").finditer(
-                file_content
-            )
-        )
-        match_qod_type = list(
-            get_tag_pattern(name=ScriptTag.QOD_TYPE, value=r".*").finditer(
-                file_content
-            )
-        )
+        match_qod = list(qod_pattern.finditer(file_content))
+        match_qod_type = list(qod_type_pattern.finditer(file_content))
 
         num_matches = len(match_qod) + len(match_qod_type)
         if num_matches < 1:

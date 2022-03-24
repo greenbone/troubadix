@@ -18,9 +18,9 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper.patterns import ScriptTag
+from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -31,16 +31,11 @@ class CheckReportingConsistency(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks the consistency between log_message,
         security_message reporting function and
         the cvss base value.
         """
-        del special_tag_pattern
-
         if nasl_file.suffix == ".inc":
             return
 
@@ -51,7 +46,8 @@ class CheckReportingConsistency(FileContentPlugin):
             # We can't do anything about this one, skipping
             return
 
-        cvss_base = tag_pattern[ScriptTag.CVSS_BASE.value].search(file_content)
+        cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+        cvss_base = cvss_base_pattern.search(file_content)
 
         if not cvss_base:
             yield LinterError("VT/Include has no cvss_base tag")

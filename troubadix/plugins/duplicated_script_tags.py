@@ -15,11 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper.patterns import ScriptTag, SpecialScriptTag
+from troubadix.helper.patterns import (
+    get_script_tag_patterns,
+    get_special_script_tag_patterns,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -30,14 +32,12 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
-        for tag in SpecialScriptTag:
+        special_script_tag_patterns = get_special_script_tag_patterns()
+        for tag, pattern in special_script_tag_patterns.items():
             # TBD: script_name might also look like this:
             # script_name("MyVT (Windows)");
-            match = special_tag_pattern[tag.value].finditer(file_content)
+            match = pattern.finditer(file_content)
 
             if match:
                 # This is allowed, see e.g.
@@ -53,8 +53,9 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
                         f"{tag.value}' multiple number of times."
                     )
 
-        for tag in ScriptTag:
-            match = tag_pattern[tag.value].finditer(file_content)
+        script_tag_patterns = get_script_tag_patterns()
+        for tag, pattern in script_tag_patterns.items():
+            match = pattern.finditer(file_content)
 
             if match:
                 match = list(match)

@@ -16,13 +16,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import (
     ScriptTag,
     SpecialScriptTag,
 )
 from troubadix.helper import get_special_tag_pattern
+from troubadix.helper.patterns import get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -33,9 +34,6 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if the passed VT if it is doing a vulnerability
         reporting and a product / service detection together in a single VT.
@@ -64,11 +62,9 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the VT
         """
-        del special_tag_pattern
         # Don't need to check VTs having a cvss of 0.0
-        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
-            file_content
-        )
+        cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+        cvss_detect = cvss_base_pattern.search(file_content)
 
         if cvss_detect is not None and cvss_detect.group("value") == "0.0":
             return

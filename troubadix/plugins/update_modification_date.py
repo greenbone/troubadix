@@ -20,7 +20,7 @@
 import datetime
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -32,13 +32,8 @@ class UpdateModificationDate(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         # update modification date
-        del tag_pattern, special_tag_pattern
-
         tag_template = 'script_tag(name:"last_modification", value:"{date}");'
         mod_pattern = (
             r"script_tag\(name:\"last_modification\", value:\"(.*)\"\);"

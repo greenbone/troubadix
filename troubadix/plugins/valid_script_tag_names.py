@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -78,16 +78,11 @@ class CheckValidScriptTagNames(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Args:
             nasl_file: The VT that is going to be checked
         """
-        del tag_pattern, special_tag_pattern
-
         if nasl_file.suffix == ".inc":
             return
 

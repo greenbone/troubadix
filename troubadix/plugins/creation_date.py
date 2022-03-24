@@ -15,12 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper.patterns import ScriptTag
+from troubadix.helper.patterns import (
+    ScriptTag,
+    get_script_tag_pattern,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 LENGTH = 44
@@ -33,11 +35,7 @@ class CheckCreationDate(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
-        del special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 
@@ -45,8 +43,10 @@ class CheckCreationDate(FileContentPlugin):
             yield LinterError("No creation date has been found.")
             return
 
+        tag_pattern = get_script_tag_pattern(ScriptTag.CREATION_DATE)
+
         # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
-        match = tag_pattern[ScriptTag.CREATION_DATE.value].search(file_content)
+        match = tag_pattern.search(file_content)
 
         if match:
             try:
@@ -63,6 +63,7 @@ class CheckCreationDate(FileContentPlugin):
                     "False or incorrectly formatted creation_date."
                 )
                 return
+
             week_day_str = match.group("value")[27:30]
             # Wed, 29 Nov 2017
             if date_left.date() != date_right.date():

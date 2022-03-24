@@ -32,8 +32,6 @@ class TestUpdateModificationDate(PluginTestCase):
         output = UpdateModificationDate.run(
             nasl_file=nasl_file,
             file_content=content,
-            tag_pattern=self.tag_pattern,
-            special_tag_pattern=self.special_tag_pattern,
         )
 
         self.assertIsInstance(next(output), LinterResult)
@@ -52,8 +50,6 @@ class TestUpdateModificationDate(PluginTestCase):
         output = UpdateModificationDate.run(
             nasl_file=nasl_file,
             file_content=content,
-            tag_pattern=self.tag_pattern,
-            special_tag_pattern=self.special_tag_pattern,
         )
 
         expected_error = LinterError(
@@ -75,8 +71,6 @@ class TestUpdateModificationDate(PluginTestCase):
         output = UpdateModificationDate.run(
             nasl_file=nasl_file,
             file_content=content,
-            tag_pattern=self.tag_pattern,
-            special_tag_pattern=self.special_tag_pattern,
         )
 
         expected_error = LinterError(

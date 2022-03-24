@@ -50,8 +50,6 @@ class CheckIncludesTestCase(PluginTestCase):
             CheckIncludes.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -68,8 +66,6 @@ class CheckIncludesTestCase(PluginTestCase):
             CheckIncludes.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -86,8 +82,6 @@ class CheckIncludesTestCase(PluginTestCase):
             CheckIncludes.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)

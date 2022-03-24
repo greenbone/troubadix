@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 from validators import url
 
 from troubadix.helper.patterns import get_xref_pattern
@@ -32,14 +30,10 @@ class CheckScriptXrefUrl(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Checks if a URL type script_xref call contains a valid URL
         """
-        del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

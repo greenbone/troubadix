@@ -33,8 +33,6 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -46,8 +44,6 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -59,8 +55,6 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -76,8 +70,6 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -90,13 +82,11 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
         self.assertEqual(
-            'script_tag(name:"qod", value:"foo");: \'foo"\' is an invalid QoD'
+            'script_tag(name:"qod", value:"foo");: \'foo\' is an invalid QoD'
             " number value. Allowed are"
             f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}",
             results[0].message,
@@ -109,8 +99,6 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -128,13 +116,11 @@ class CheckQodTestCase(PluginTestCase):
             CheckQod.run(
                 self.nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
         self.assertEqual(
-            'script_tag(name:"qod_type", value:"foo");: \'foo"\' is an invalid'
+            'script_tag(name:"qod_type", value:"foo");: \'foo\' is an invalid'
             f" QoD type. Allowed are {', '.join(VALID_QOD_TYPES)}",
             results[0].message,
         )

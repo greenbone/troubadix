@@ -19,7 +19,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import get_root
 from troubadix.plugin import (
@@ -36,16 +36,11 @@ class CheckIncludes(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if the files used in include()
         exist on the local filesystem.
         An error will be thrown if a dependency could not be found.
         """
-        del tag_pattern, special_tag_pattern
-
         # TODO: add to special_tag_pattern
         matches = re.compile(
             r'include\s*\([\'"]?(?P<value>.+?)[\'"]?\s*\)\s*;'

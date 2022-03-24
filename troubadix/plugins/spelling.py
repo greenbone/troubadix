@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper.helper import which, subprocess_cmd
 from troubadix.plugin import (
@@ -35,13 +35,9 @@ class CheckSpelling(FileContentPlugin):
     name = "check_spelling"
 
     @staticmethod
-    # (file, cwdir, vtdir, full, include_regex, exclude_regex)
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """'codespell' is required to execute this step!
         This script opens a shell in a subprocess and executes 'codespell' to
@@ -54,7 +50,6 @@ class CheckSpelling(FileContentPlugin):
             _file_content: The content of the VT
 
         """
-        del tag_pattern, special_tag_pattern
         codespell = ""
         program = which("codespell")
         if program is None:

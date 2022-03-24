@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 
@@ -31,14 +30,9 @@ class CheckTabs(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or
         more tabs instead of spaces."""
-        del tag_pattern, special_tag_pattern
-
         if "\t" in file_content:
             file_content = file_content.replace("\t", " " * TAB_TO_SPACES)
             nasl_file.write_text(data=file_content, encoding="latin1")

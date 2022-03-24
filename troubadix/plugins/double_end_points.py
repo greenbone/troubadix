@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper.patterns import get_common_tag_patterns
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
@@ -30,9 +30,6 @@ class CheckDoubleEndPoints(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or more doubled end point
         in a script_tag like e.g.:
@@ -44,8 +41,6 @@ class CheckDoubleEndPoints(FileContentPlugin):
             script_tag(name:"insight", value:"My insight.
             .");
         """
-        del tag_pattern, special_tag_pattern
-
         tag_matches = get_common_tag_patterns().finditer(file_content)
 
         if tag_matches is not None:

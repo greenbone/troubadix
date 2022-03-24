@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -29,9 +29,6 @@ class CheckMissingDescExit(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is missing an 'exit(0);' within the
         description block like this:
@@ -52,8 +49,6 @@ class CheckMissingDescExit(FileContentPlugin):
             file_content: The content of the file that is going to be checked
 
         """
-        del tag_pattern, special_tag_pattern
-
         if nasl_file.suffix == ".inc":
             return
 

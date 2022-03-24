@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -29,9 +29,6 @@ class CheckGetKBOnServices(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Checks a given file if it is accessing one or more "Services/" KB keys
@@ -53,7 +50,6 @@ class CheckGetKBOnServices(FileContentPlugin):
                               checked
 
         """
-        del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

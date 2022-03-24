@@ -15,11 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper.patterns import ScriptTag, SpecialScriptTag
+from troubadix.helper.patterns import (
+    ScriptTag,
+    SpecialScriptTag,
+    get_script_tag_pattern,
+    get_special_script_tag_pattern,
+)
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -30,9 +34,6 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """The script checks if the passed VT has a correct syntax of the
         following two tags:
@@ -48,9 +49,10 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             file_content: The content of the VT that shall be checked
         """
         # script_version("2019-03-21T12:19:01+0000");")
-        match_ver_modified = special_tag_pattern[
-            SpecialScriptTag.VERSION.value
-        ].search(file_content)
+        version_pattern = get_special_script_tag_pattern(
+            SpecialScriptTag.VERSION
+        )
+        match_ver_modified = version_pattern.search(file_content)
 
         if not match_ver_modified:
             yield LinterError(
@@ -61,9 +63,10 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
 
         # script_tag(name:"last_modification",
         # value:"2019-03-21 12:19:01 +0000 (Thu, 21 Mar 2019)");
-        match_last_modified = tag_pattern[
-            ScriptTag.LAST_MODIFICATION.value
-        ].search(file_content)
+        last_modification_pattern = get_script_tag_pattern(
+            ScriptTag.LAST_MODIFICATION
+        )
+        match_last_modified = last_modification_pattern.search(file_content)
 
         if not match_last_modified:
             yield LinterError(

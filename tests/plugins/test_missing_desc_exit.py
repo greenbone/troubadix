@@ -39,8 +39,6 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             CheckMissingDescExit.run(
                 nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -60,8 +58,6 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             CheckMissingDescExit.run(
                 nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -84,8 +80,6 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             CheckMissingDescExit.run(
                 nasl_file,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)

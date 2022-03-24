@@ -39,8 +39,6 @@ class CheckEncodingTestCase(PluginTestCase):
             CheckEncoding.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
 
@@ -63,8 +61,6 @@ class CheckEncodingTestCase(PluginTestCase):
             CheckEncoding.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 3)

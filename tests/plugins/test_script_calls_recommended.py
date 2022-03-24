@@ -41,8 +41,6 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
             CheckScriptCallsRecommended.run(
                 nasl_file=self.path,
                 file_content=content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -54,8 +52,6 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
             CheckScriptCallsRecommended.run(
                 nasl_file=self.path,
                 file_content=content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 2)

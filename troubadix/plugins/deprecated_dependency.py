@@ -18,10 +18,12 @@
 # pylint: disable=fixme
 
 import re
+
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag, get_root
+from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -32,24 +34,21 @@ class CheckDeprecatedDependency(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """No VT should depend on other VTs that are marked as deprecated via:
 
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
         """
-        del tag_pattern
         if not "script_dependencies(" in file_content:
             return
 
         root = get_root(nasl_file)
 
-        matches = special_tag_pattern[
-            SpecialScriptTag.DEPENDENCIES.value
-        ].finditer(file_content)
+        dependencies_pattern = get_special_script_tag_pattern(
+            SpecialScriptTag.DEPENDENCIES
+        )
+        matches = dependencies_pattern.finditer(file_content)
         if not matches:
             return
 

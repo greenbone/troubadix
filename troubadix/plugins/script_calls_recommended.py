@@ -15,12 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from pathlib import Path
-from typing import Iterator, OrderedDict
-from troubadix.helper.patterns import _get_special_tag_pattern, _get_tag_pattern
+from typing import Iterator
 
+from troubadix.helper.patterns import _get_special_tag_pattern, _get_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 
@@ -31,9 +29,6 @@ class CheckScriptCallsRecommended(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         This script checks for the existence of recommended script calls. These
@@ -50,7 +45,6 @@ class CheckScriptCallsRecommended(FileContentPlugin):
         - script_require_keys
         - script_mandatory_keys
         """
-        del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

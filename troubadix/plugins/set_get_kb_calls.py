@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -29,9 +29,6 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Checks a given file if it calls any of the following functions setting
@@ -56,8 +53,6 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
-        del tag_pattern, special_tag_pattern
-
         param_re = re.compile(r"(name|value) ?:")
 
         set_matches = re.finditer(

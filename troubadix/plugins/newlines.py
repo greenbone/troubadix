@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterable, Iterator, OrderedDict
+from typing import Iterable, Iterator
 
 from troubadix.plugin import LineContentPlugin, LinterResult, LinterWarning
 
@@ -29,9 +29,6 @@ class CheckNewlines(LineContentPlugin):
     def run(
         nasl_file: Path,
         lines: Iterable[str],
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script FIXES newline errors:
         - Checking the passed VT for the existence of newlines in
@@ -39,8 +36,6 @@ class CheckNewlines(LineContentPlugin):
         - Removes wrong newline indicators (\r or \r\n).
         - Removes whitespaces in script_name( "myname") or script_copyright
         """
-        del tag_pattern, special_tag_pattern
-
         # This "hack" guarantees, that we only have "\n" as newlines
         # since we
         content = "\n".join(lines)

@@ -36,8 +36,6 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             CheckUsingDisplay.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -55,8 +53,6 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             CheckUsingDisplay.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -80,8 +76,6 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             CheckUsingDisplay.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -106,8 +100,6 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             CheckUsingDisplay.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)

@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, List, OrderedDict, Union
+from typing import Iterator, List, Union
 
 from troubadix.helper.patterns import get_common_tag_patterns
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
@@ -60,16 +60,11 @@ class CheckIllegalCharacters(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Currently the following chars are not allowed in
         every script_tag(name:"", value:"") :
         """
-        del tag_pattern, special_tag_pattern
-
         changes: bool = False
         pattern = get_common_tag_patterns()
 

@@ -18,10 +18,14 @@
 """ checking badwords in NASL scripts with the NASLinter """
 
 import re
-from pathlib import Path
-from typing import Iterator, OrderedDict
-from troubadix.helper.patterns import SpecialScriptTag
 
+from pathlib import Path
+from typing import Iterator
+
+from troubadix.helper.patterns import (
+    SpecialScriptTag,
+    get_special_script_tag_pattern,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -32,9 +36,6 @@ class CheckValidOID(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """Checks if a NASL script is using a valid script_oid() tag.
 
@@ -56,18 +57,16 @@ class CheckValidOID(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
-        del tag_pattern
-
         if nasl_file.suffix == ".inc":
             return
+
         security_template = "Security Advisory"
         family_template = "Local Security Checks"
         is_using_reserved = "is using an OID that is reserved for"
         invalid_oid = "is using an invalid OID"
 
-        oid_match = special_tag_pattern[SpecialScriptTag.OID.value].search(
-            file_content
-        )
+        oid_pattern = get_special_script_tag_pattern(SpecialScriptTag.OID)
+        oid_match = oid_pattern.search(file_content)
         if oid_match is None or oid_match.group("oid") is None:
             yield LinterError("No valid script_oid() call found")
             return
@@ -80,12 +79,14 @@ class CheckValidOID(FileContentPlugin):
 
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1." in oid:
-            family_match = special_tag_pattern[
-                SpecialScriptTag.FAMILY.value
-            ].search(file_content)
+            family_pattern = get_special_script_tag_pattern(
+                SpecialScriptTag.FAMILY
+            )
+            family_match = family_pattern.search(file_content)
             if family_match is None or family_match.group("value") is None:
                 yield LinterError("VT is missing a script family!")
                 return
+
             family = family_match.group("value")
 
             # Fixed OID-scheme for (Huawei) Euler OS OIDs
@@ -96,6 +97,7 @@ class CheckValidOID(FileContentPlugin):
                         f"'{str(oid)}'"
                     )
                     return
+
                 euler_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.2\.20[0-4][0-9]\.[0-9]{"
                     r"4}$",
@@ -108,6 +110,7 @@ class CheckValidOID(FileContentPlugin):
                         ".[ADVISORY_ID])"
                     )
                 return
+
             # Fixed OID-scheme for SUSE SLES OS OIDs
             elif "1.3.6.1.4.1.25623.1.1.4." in oid:
                 if family != f"SuSE {family_template}":
@@ -116,6 +119,7 @@ class CheckValidOID(FileContentPlugin):
                         f"'{str(oid)}'"
                     )
                     return
+
                 sles_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.20[0-4][0-9]\.[0-9]{"
                     r"4,5}\.[0-9]$",
@@ -128,6 +132,7 @@ class CheckValidOID(FileContentPlugin):
                         f".[ADVISORY_ID].[ADVISORY_REVISION])"
                     )
                 return
+
             elif "1.3.6.1.4.1.25623.1.1.5." in oid:
                 if family != f"Amazon Linux {family_template}":
                     yield LinterError(
@@ -135,6 +140,7 @@ class CheckValidOID(FileContentPlugin):
                         f"'{str(oid)}'"
                     )
                     return
+
                 amazon_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.5\.20[0-4][0-9]\.[0-9]+$",
                     oid,
@@ -146,6 +152,7 @@ class CheckValidOID(FileContentPlugin):
                         ".[ADVISORY_ID])"
                     )
                 return
+
             elif "1.3.6.1.4.1.25623.1.1.10." in oid:
                 if family != f"Mageia Linux {family_template}":
                     yield LinterError(
@@ -153,6 +160,7 @@ class CheckValidOID(FileContentPlugin):
                         f"'{str(oid)}'"
                     )
                     return
+
                 mageia_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.10\.20[0-4][0-9]\.["
                     r"0-9]{4}$",
@@ -279,12 +287,12 @@ class CheckValidOID(FileContentPlugin):
 
         # product-specific OIDs
         if "1.3.6.1.4.1.25623.1.2." in oid:
-            name_match = special_tag_pattern[
-                SpecialScriptTag.NAME.value
-            ].search(file_content)
+            name_patter = get_special_script_tag_pattern(SpecialScriptTag.NAME)
+            name_match = name_patter.search(file_content)
             if not name_match or not name_match.group("value"):
                 yield LinterError("VT is missing a script name!")
                 return
+
             name = name_match.group("value")
 
             # Fixed OID-scheme for Mozilla Firefox OIDs
@@ -295,6 +303,7 @@ class CheckValidOID(FileContentPlugin):
                         f"{str(oid)})"
                     )
                     return
+
                 firefox_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.2\.1\.20[1-4][0-9]\.[0-9]{"
                     r"2,3}$",
@@ -307,6 +316,7 @@ class CheckValidOID(FileContentPlugin):
                         "[ADVISORY_YEAR].[ADVISORY_ID])",
                     )
                     return
+
                 return
 
         oid_digit_match = re.search(
