@@ -84,6 +84,7 @@ class Runner:
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
         debug: bool = False,
+        statistic: bool = True,
     ) -> None:
         self.plugins = Plugins(excluded_plugins, included_plugins)
         self._term = term
@@ -93,6 +94,7 @@ class Runner:
         self.tag_pattern = ScriptTagPatterns()
         # this dict will store the result counts for the statistic
         self.result_counts = ResultCounts()
+        self.statistic = statistic
 
     def _report_results(self, results: List[LinterMessage]):
         for result in results:
@@ -134,7 +136,7 @@ class Runner:
             with self._term.indent():
                 self._report_results(plugin_results[0])
 
-    def _report_statistics(self):
+    def _report_statistic(self):
         overall = 0
         self._term.print(f"{'Plugin':40} {'Error Count':11}")
         self._term.print("-" * 52)
@@ -172,7 +174,8 @@ class Runner:
                     self._process_plugin_results(results.plugin_results)
 
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
-        self._report_statistics()
+        if self.statistic:
+            self._report_statistic()
 
     def check_file(self, file_path: Path) -> FileResults:
         file_name = file_path.resolve()
