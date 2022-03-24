@@ -55,10 +55,7 @@ class FileResults:
     def add_plugin_results(
         self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
-        """the key 'results' in self.plugin_results will contain
-        a tuple: (list of the results, number of results)"""
-        results_list = list(results)
-        self.plugin_results[plugin_name] = (results_list, len(results_list))
+        self.plugin_results[plugin_name] = list(results)
         return self
 
 
@@ -128,14 +125,16 @@ class Runner:
             plugin_name,
             plugin_results,
         ) in results.items():
-            if plugin_results[0] or self.debug:
+            if plugin_results or self.debug:
                 self._report_info(f"Running plugin {plugin_name}")
 
             # add the results to the statistic
-            self.result_counts.add_result_counts(plugin_name, plugin_results[1])
+            self.result_counts.add_result_counts(
+                plugin_name, len(plugin_results)
+            )
 
             with self._term.indent():
-                self._report_results(plugin_results[0])
+                self._report_results(plugin_results)
 
     def _report_statistic(self) -> None:
         overall = 0
