@@ -112,10 +112,9 @@ class Runner:
         self._log_file = log_file
 
     def _log_append(self, message: str):
-        if not self._log_file:
-            return
-        with self._log_file.open(mode="a", encoding="utf-8") as f:
-            f.write(f"{message}\n")
+        if self._log_file:
+            with self._log_file.open(mode="a", encoding="utf-8") as f:
+                f.write(f"{message}\n")
 
     def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
@@ -128,13 +127,11 @@ class Runner:
 
     def _report_warning(self, message: str) -> None:
         self._term.warning(message)
-        message = message.replace("\n", "\n\t\t")
-        self._log_append(f"\t\t{message}")
+        self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _report_error(self, message: str) -> None:
         self._term.error(message)
-        message = message.replace("\n", "\n\t\t")
-        self._log_append(f"\t\t{message}")
+        self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _report_info(self, message: str) -> None:
         self._term.info(message)
@@ -146,8 +143,7 @@ class Runner:
 
     def _report_ok(self, message: str) -> None:
         self._term.ok(message)
-        message = message.replace("\n", "\n\t\t")
-        self._log_append(f"\t\t{message}")
+        self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _process_plugin_results(
         self, results: Dict[str, List[LinterMessage]]
