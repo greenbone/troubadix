@@ -82,6 +82,7 @@ class TestRunner(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
+            verbose=1,
             n_jobs=1,
             term=self._term,
             update_date=True,
@@ -168,6 +169,7 @@ class TestRunner(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
+            verbose=1,
             n_jobs=1,
             term=self._term,
             update_date=True,
@@ -223,6 +225,7 @@ class TestRunner(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
+            verbose=1,
             n_jobs=1,
             term=self._term,
             included_plugins=included_plugins,
