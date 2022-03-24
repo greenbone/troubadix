@@ -121,16 +121,16 @@ class Runner:
         self._term.ok(message)
 
     def _process_plugin_results(self, results: OrderedDict):
-        # add the results to the statistic
 
         # print the files plugin results
         for (
             plugin_name,
             plugin_results,
         ) in results.items():
-            if plugin_results or self.debug:
+            if plugin_results[0] or self.debug:
                 self._report_info(f"Running plugin {plugin_name}")
 
+            # add the results to the statistic
             self.result_counts.add_result_counts(plugin_name, plugin_results[1])
 
             with self._term.indent():
