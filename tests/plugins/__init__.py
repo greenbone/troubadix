@@ -17,15 +17,6 @@
 
 import unittest
 
-from troubadix.helper.patterns import (
-    ScriptTagPatterns,
-    SpecialScriptTagPatterns,
-)
-
 
 class PluginTestCase(unittest.TestCase):
-    def setUp(self) -> None:
-        self.tag_pattern = ScriptTagPatterns().pattern
-        self.special_tag_pattern = SpecialScriptTagPatterns().pattern
-
-        return super().setUp()
+    pass
