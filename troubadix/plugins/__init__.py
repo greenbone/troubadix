@@ -67,7 +67,7 @@ from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
 
-_NASL_ONLY_PLUGINS = [
+_PLUGINS = [
     CheckBadwords,
     CheckCVEFormat,
     CheckCVSSFormat,
@@ -110,10 +110,6 @@ _NASL_ONLY_PLUGINS = [
     CheckValidOID,
     CheckValidScriptTagNames,
     CheckWrongSetGetKBCalls,
-    UpdateModificationDate,
-]
-
-_PLUGINS = [
     CheckEncoding,
     CheckTabs,
 ]
@@ -124,19 +120,23 @@ class Plugins:
         self,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
+        update_date: bool = False,
     ) -> None:
-        self.plugins = _NASL_ONLY_PLUGINS
+        if update_date:
+            self.plugins = [UpdateModificationDate]
+            return
+        self.plugins = _PLUGINS
         if excluded_plugins:
             self.plugins = [
                 plugin
-                for plugin in _NASL_ONLY_PLUGINS
+                for plugin in _PLUGINS
                 if plugin.__name__ not in excluded_plugins
                 and plugin.name not in excluded_plugins
             ]
         if included_plugins:
             self.plugins = [
                 plugin
-                for plugin in _NASL_ONLY_PLUGINS
+                for plugin in _PLUGINS
                 if plugin.__name__ in included_plugins
                 or plugin.name in included_plugins
             ]

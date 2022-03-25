@@ -24,7 +24,7 @@ from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
 
 from troubadix.plugin import LinterError, LinterResult
-from troubadix.plugins import _NASL_ONLY_PLUGINS
+from troubadix.plugins import _PLUGINS
 from troubadix.runner import Runner, TroubadixException
 
 _here = Path(__file__).parent
@@ -39,7 +39,7 @@ class TestRunner(unittest.TestCase):
     def test_runner_with_all_plugins(self):
         runner = Runner(n_jobs=1, term=self._term)
 
-        plugins = _NASL_ONLY_PLUGINS
+        plugins = _PLUGINS
 
         for plugin in runner.plugins.plugins:
             self.assertIn(plugin, plugins)
@@ -48,11 +48,10 @@ class TestRunner(unittest.TestCase):
         excluded_plugins = [
             "CheckBadwords",
             "CheckCopyRightYearPlugin",
-            "UpdateModificationDate",
         ]
         included_plugins = [
             plugin.__name__
-            for plugin in _NASL_ONLY_PLUGINS
+            for plugin in _PLUGINS
             if plugin.__name__ not in excluded_plugins
         ]
         runner = Runner(
@@ -79,16 +78,13 @@ class TestRunner(unittest.TestCase):
             self.assertIn(plugin.__name__, included_plugins)
 
     def test_runner_run_ok(self):
-        included_plugins = [
-            "UpdateModificationDate",
-        ]
         nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
             n_jobs=1,
             term=self._term,
-            included_plugins=included_plugins,
+            update_date=True,
         )
 
         results = runner.check_file(nasl_file)
@@ -110,16 +106,13 @@ class TestRunner(unittest.TestCase):
         nasl_file.write_text(content, encoding="latin1")
 
     def test_runner_run_error(self):
-        included_plugins = [
-            "UpdateModificationDate",
-        ]
         nasl_file = _here / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
             n_jobs=1,
             term=self._term,
-            included_plugins=included_plugins,
+            update_date=True,
         )
 
         results = runner.check_file(nasl_file)
@@ -141,16 +134,13 @@ class TestRunner(unittest.TestCase):
         )
 
     def test_runner_run_fail_with_debug(self):
-        included_plugins = [
-            "UpdateModificationDate",
-        ]
         nasl_file = _here / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
             n_jobs=1,
             term=self._term,
-            included_plugins=included_plugins,
+            update_date=True,
             debug=True,
         )
 
@@ -174,16 +164,13 @@ class TestRunner(unittest.TestCase):
         )
 
     def test_runner_run_changed_without_debug(self):
-        included_plugins = [
-            "UpdateModificationDate",
-        ]
         nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
             n_jobs=1,
             term=self._term,
-            included_plugins=included_plugins,
+            update_date=True,
         )
 
         with redirect_stdout(io.StringIO()) as f:

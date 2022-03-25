@@ -59,6 +59,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -92,6 +93,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -124,6 +126,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=True,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -149,6 +152,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -158,7 +162,6 @@ class TestArgparsing(unittest.TestCase):
             "troubadix",
             "--include-tests",
             "CheckBadwords",
-            "UpdateModificationDate",
         ]
 
         parsed_args = parse_args()
@@ -176,9 +179,10 @@ class TestArgparsing(unittest.TestCase):
             include_patterns=None,
             exclude_patterns=None,
             excluded_plugins=None,
-            included_plugins=["CheckBadwords", "UpdateModificationDate"],
+            included_plugins=["CheckBadwords"],
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -188,7 +192,6 @@ class TestArgparsing(unittest.TestCase):
             "troubadix",
             "--exclude-tests",
             "CheckBadwords",
-            "UpdateModificationDate",
         ]
 
         parsed_args = parse_args()
@@ -205,10 +208,11 @@ class TestArgparsing(unittest.TestCase):
             non_recursive=False,
             include_patterns=None,
             exclude_patterns=None,
-            excluded_plugins=["CheckBadwords", "UpdateModificationDate"],
+            excluded_plugins=["CheckBadwords"],
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -235,6 +239,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -279,6 +284,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
@@ -312,11 +318,12 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count(),
+            update_date=False,
         )
 
         self.assertEqual(parsed_args, expected_args)
 
-    def test_parse_min_cpu(self):
+    def test_parse_min_cpu_update_date(self):
         sys.argv = [
             "troubadix",
             "-f",
@@ -324,6 +331,7 @@ class TestArgparsing(unittest.TestCase):
             "troubadix/*",
             "-j",
             "-1337",
+            "--update-date",
         ]
         expcected_dirs = [Path.cwd()]
 
@@ -345,6 +353,7 @@ class TestArgparsing(unittest.TestCase):
             included_plugins=None,
             skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
+            update_date=True,
         )
 
         self.assertEqual(parsed_args, expected_args)
