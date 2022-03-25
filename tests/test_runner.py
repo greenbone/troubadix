@@ -25,7 +25,9 @@ from pontos.terminal.terminal import Terminal
 
 from troubadix.plugin import LinterError, LinterResult
 from troubadix.plugins import _NASL_ONLY_PLUGINS
-from troubadix.runner import Runner
+from troubadix.runner import Runner, TroubadixException
+
+_here = Path(__file__).parent
 
 
 class TestRunner(unittest.TestCase):
@@ -80,7 +82,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "UpdateModificationDate",
         ]
-        nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
+        nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -111,7 +113,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "UpdateModificationDate",
         ]
-        nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
+        nasl_file = _here / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -142,7 +144,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "UpdateModificationDate",
         ]
-        nasl_file = Path(__file__).parent / "plugins" / "fail.nasl"
+        nasl_file = _here / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -175,7 +177,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "UpdateModificationDate",
         ]
-        nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
+        nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -206,7 +208,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
+        nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -230,7 +232,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = Path(__file__).parent / "plugins" / "test.nasl"
+        nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -251,3 +253,15 @@ class TestRunner(unittest.TestCase):
 
         # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
+
+    def test_no_plugins(self):
+        runner = Runner(
+            n_jobs=1,
+            term=self._term,
+            included_plugins=["foo"],
+        )
+
+        nasl_file = _here / "plugins" / "test.nasl"
+
+        with self.assertRaises(TroubadixException):
+            runner.run([nasl_file])

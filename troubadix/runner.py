@@ -42,6 +42,10 @@ CHUNKSIZE = 1  # default 1
 CURRENT_ENCODING = "latin1"  # currently default
 
 
+class TroubadixException(Exception):
+    """Generic Exception for Troubadix"""
+
+
 class FileResults:
     def __init__(self, file_path: Path):
         self.file_path = file_path
@@ -152,6 +156,9 @@ class Runner:
     ) -> None:
         files_count = len(files)
         i = 0
+
+        if not len(self.plugins):
+            raise TroubadixException("No Plugin found.")
 
         start = datetime.datetime.now()
         with Pool(processes=self._n_jobs) as pool:
