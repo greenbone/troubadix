@@ -36,6 +36,7 @@ from troubadix.plugin import (
     LinterMessage,
     LinterResult,
     LinterWarning,
+    PreRunPlugin,
 )
 from troubadix.plugins import _PRE_RUN_PLUGINS, Plugins
 
@@ -237,16 +238,20 @@ class Runner:
         self._report_info("Starting pre-run")
         self._report_info("Loading plugins")
 
-        kwargs = {
-            "filetree": self.pre_run_data.copy(),
-        }
+        # kwargs = {
+        #     "filetree": self.pre_run_data.copy(),
+        # }
 
-        for e in sorted(list(self.pre_run_plugins)):
-            e.run(
-                self.pre_run_data,
-                nasl_files,
-                **kwargs,
-            )
+        for plugin in self.pre_run_plugins:
+            if issubclass(plugin, PreRunPlugin):
+                results = plugin.run(
+                    self.pre_run_data,
+                    nasl_files,
+                )
+                for result in results:
+                    self._report_error(message=result.message)
+            else:
+                self._report_error("Plugin {plugin.__name__} can not be read.")
 
     def run(self, files: List[Path]) -> None:
         if not len(self.plugins):

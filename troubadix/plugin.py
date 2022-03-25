@@ -53,8 +53,7 @@ class PreRunPlugin(Plugin):
     def run(
         pre_run_data: dict,
         nasl_files: Iterable[Path],
-        **kwargs,
-    ) -> None:
+    ) -> Iterator[LinterResult]:
         pass
 
 

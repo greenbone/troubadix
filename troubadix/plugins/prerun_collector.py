@@ -14,23 +14,24 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import errno
-import os
+
 import re
-import sys
-import tempfile
 from pathlib import Path
-from typing import List
+from typing import Iterator, List
 
 from troubadix.helper import (
-    get_root,
     SpecialScriptTag,
     get_special_script_tag_pattern,
 )
-from troubadix.plugin import PreRunPlugin
+from troubadix.plugin import (
+    LinterError,
+    # LinterMessage,
+    LinterResult,
+    PreRunPlugin,
+)
 
 OPENVAS_OID_PREFIX = r"1.3.6.1.4.1.25623.1.[0-9]+."
-OID_RE = re.compile(r"^" + OPENVAS_OID_PREFIX.replace(".", r"\.") + r"[\d.]+$")
+OID_RE = re.compile(r"^1\.3\.6\.1\.4\.1\.25623\.1\.[0-9]+\.[\d.]+$")
 
 KNOWN_DUPS = {"1.3.6.1.4.1.25623.1.0.850001", "1.3.6.1.4.1.25623.1.0.95888"}
 KNOWN_ABSENTS = {"template.nasl"}
@@ -43,91 +44,105 @@ class CheckPreRunCollector(PreRunPlugin):
     def run(
         pre_run_data: dict,
         nasl_files: List[Path],
-        **kwargs,
-    ) -> None:
+    ) -> Iterator[LinterResult]:
         """Run PRE_RUN_COLLECTOR."""
 
-        builder = OIDMapBuilder(True, **kwargs)
-        builder.scan(nasl_files)
-        # oidmappingfile = Path(os.environ.get("QATMPDIR", "")) /
-        # "oidmapping.txt"
-        # builder.write_mapping(oidmappingfile)
-        pre_run_data["oid_mappings"] = builder.dict_mapping()
+        mapping = dict()
+        duplicates = []
+        absents = []
+        invalids = []
+
+        for nasl_file in nasl_files:
+            if nasl_file.suffix == ".nasl":
+                file_name = str(nasl_file).split("nasl/", maxsplit=1)[-1]
+                content = nasl_file.read_text(encoding="latin-1")
+                # search for deprecated script_id
+                match = get_special_script_tag_pattern(
+                    SpecialScriptTag.OID
+                ).search(content)
+                if match:
+                    oid = match.group("oid")
+                else:
+                    match = get_special_script_tag_pattern(
+                        SpecialScriptTag.ID
+                    ).search(content)
+                    if match:
+                        oid = OPENVAS_OID_PREFIX + match.group("oid")
+                if not oid:
+                    absents.append(file_name)
+                    yield LinterError(f"{file_name}: Could not find a OID.")
+                elif not OID_RE.match(oid):
+                    invalids.append(file_name)
+                    yield LinterError(f"{file_name}: Invalid OID {oid} found.")
+                elif oid not in mapping:
+                    mapping[oid] = file_name
+                else:
+                    duplicates.append(
+                        {
+                            "oid": oid,
+                            "duplicate": file_name,
+                            "first_usage": mapping[oid],
+                        }
+                    )
+                    yield LinterError(
+                        f"{file_name}: OID {oid} already "
+                        f"used by '{mapping[oid]}'"
+                    )
+                # yield LinterMessage(f"{file_name}: OK!")
+
+                # builder = OIDDictBuilder()
+                # builder.scan(nasl_files)
+
+        # pre_run_data["oid_mappings"] = builder.dict_mapping()
 
 
-class OIDMapBuilder:
-    def __init__(self, verbose, **kwargs):
+class OIDDictBuilder:
+    def __init__(self):
         self.mapping = dict()
-        self.verbose = verbose
         self.duplicates = []
         self.absents = []
         self.invalids = []
-        self.args = kwargs
 
-    def scan(self, files: List[Path]):
-        for file in files:
-            if file.suffix == ".nasl":
-                self.scan_file(file)
+    def scan(self, files: List[Path]) -> None:
+        for nasl_file in files:
+            if nasl_file.suffix == ".nasl":
+                self._find_oid(nasl_file=nasl_file)
 
-    def scan_file(self, nasl_file: Path):
-        # the filename in the mapping file must be relative to nvt basedir
-        root = get_root(nasl_file)
-        assert str(nasl_file).startswith(str(root))
-        filename = str(nasl_file)[len(str(root)) :].lstrip("/")
-
-        with nasl_file.open(encoding="latin-1") as f:
-            for line in f.readlines():
-                line = line.strip()
-                if line.startswith("#"):
-                    # skip comments
-                    continue
-                oid = self.find_oid(line)
-                if oid is not None:
-                    if OID_RE.match(oid) is None:
-                        self.invalids.append(filename)
-                        if self.verbose:
-                            print(
-                                f"Invalid OID {oid} used for {filename}",
-                                file=sys.stderr,
-                            )
-                        break
-                    if oid not in self.mapping:
-                        self.mapping[oid] = filename
-                    else:
-                        self.duplicates.append(
-                            {
-                                "oid": oid,
-                                "duplicate": filename,
-                                "first_usage": self.mapping[oid],
-                            }
-                        )
-                        if self.verbose:
-                            print(
-                                f"OID {oid} used by both '{filename}' and "
-                                f"'{self.mapping[oid]}'",
-                                file=sys.stderr,
-                            )
-                    break
-            else:
-                self.absents.append(filename)
-                if self.verbose:
-                    print(
-                        f"Could not find script_id in {filename}",
-                        file=sys.stderr,
-                    )
-
-    def find_oid(self, line):
-        # search for deprecated script_id in line
-
-        match = get_special_script_tag_pattern(SpecialScriptTag.ID).search(line)
+    def _find_oid(self, nasl_file: Path) -> None:
+        file_name = str(nasl_file).split("nasl/", maxsplit=1)[-1]
+        content = nasl_file.read_text(encoding="latin-1")
+        # search for deprecated script_id
+        match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
+            content
+        )
         if match:
-            return OPENVAS_OID_PREFIX + match.group("id")
-        match = get_special_script_tag_pattern(
-            SpecialScriptTag.OID,
-        ).search(line)
-        if match:
-            return match.group("oid")
-        return None
+            oid = OPENVAS_OID_PREFIX + match.group("oid")
+        else:
+            match = get_special_script_tag_pattern(SpecialScriptTag.ID).search(
+                content
+            )
+            if match:
+                oid = match.group("oid")
+        if not oid:
+            self.absents.append(file_name)
+            yield LinterError(f"{file_name}: Could not find a OID.")
+        elif not OID_RE.match(oid):
+            self.invalids.append(file_name)
+            yield LinterError(f"{file_name}: Invalid OID {oid} found.")
+        elif oid not in self.mapping:
+            self.mapping[oid] = file_name
+        else:
+            self.duplicates.append(
+                {
+                    "oid": oid,
+                    "duplicate": file_name,
+                    "first_usage": self.mapping[oid],
+                }
+            )
+            yield LinterError(
+                f"{file_name}: OID {oid} already used by '{self.mapping[oid]}'"
+            )
+        yield LinterError("TEST")
 
     def dict_mapping(self) -> dict:
         return dict(
@@ -138,26 +153,3 @@ class OIDMapBuilder:
                 "invalids": self.invalids,
             }
         )
-
-    def write_mapping(self, filename: Path):
-        """Writes the mapping to the file named by filename"""
-        directory = filename.parent.resolve()
-        fileno, tempname = tempfile.mkstemp(".txt", "oidmapping", directory)
-        try:
-            outfile = os.fdopen(fileno, "w")
-            for key, value in self.mapping.items():
-                outfile.write(f"{key} {value}\n")
-            outfile.flush()
-            os.rename(tempname, filename)
-            outfile.close()
-        finally:
-            try:
-                os.remove(tempname)
-            except OSError as exc:
-                if exc.errno == errno.ENOENT:
-                    # should only happen if tempname has already been
-                    # renamed and therefore doesn't exist any more under that
-                    # name
-                    pass
-                else:
-                    raise exc
