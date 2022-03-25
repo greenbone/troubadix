@@ -191,7 +191,7 @@ class TestRunner(unittest.TestCase):
         # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
 
-    def test_runner_run_ok_with_debug(self):
+    def test_runner_run_no_results_with_debug(self):
         included_plugins = [
             "CheckMissingDescExit",
         ]
@@ -213,7 +213,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"Checking {nasl_file}", output)
-        self.assertIn("Results for plugin check_missing_desc_exit", output)
+        self.assertIn("No results for plugin", output)
 
     def test_runner_run_ok_without_debug(self):
         included_plugins = [
