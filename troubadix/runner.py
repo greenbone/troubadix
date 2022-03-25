@@ -142,7 +142,7 @@ class Runner:
             plugin_results,
         ) in results.items():
             if plugin_results or self.debug:
-                self._report_info(f"Running plugin {plugin_name}")
+                self._report_info(f"Results for plugin {plugin_name}")
 
             # add the results to the statistic
             self.result_counts.add_result_counts(

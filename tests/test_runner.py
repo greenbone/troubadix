@@ -152,7 +152,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"Checking {nasl_file}", output)
-        self.assertIn("Running plugin update_modification_date", output)
+        self.assertIn("Results for plugin update_modification_date", output)
         # CI terminal formats for 80 chars per line
         self.assertIn(
             "fail.nasl does not",
@@ -181,7 +181,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"Checking {nasl_file}", output)
-        self.assertIn("Running plugin update_modification_date", output)
+        self.assertIn("Results for plugin update_modification_date", output)
         self.assertIn(
             "Replaced modification_date 2021-03-24 10:08:26 +0000"
             " (Wed, 24 Mar 2021",
@@ -213,7 +213,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"Checking {nasl_file}", output)
-        self.assertIn("Running plugin check_missing_desc_exit", output)
+        self.assertIn("Results for plugin check_missing_desc_exit", output)
 
     def test_runner_run_ok_without_debug(self):
         included_plugins = [
@@ -236,7 +236,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"Checking {nasl_file}", output)
-        self.assertNotIn("Running plugin check_missing_desc_exit", output)
+        self.assertNotIn("Results for plugin check_missing_desc_exit", output)
 
         # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
