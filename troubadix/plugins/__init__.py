@@ -141,5 +141,8 @@ class Plugins:
                 or plugin.name in included_plugins
             ]
 
+    def __len__(self) -> int:
+        return len(self.plugins)
+
     def __iter__(self) -> Iterable[Plugin]:
         return iter(self.plugins)
