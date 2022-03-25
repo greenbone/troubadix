@@ -17,10 +17,9 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper import get_tag_pattern
-from troubadix.helper.patterns import ScriptTag
+from troubadix.helper.patterns import ScriptTag, _get_tag_pattern
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -31,9 +30,6 @@ class CheckSolutionText(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """There are specific guidelines on the syntax for the solution tag on
         VTs with the solution_type "NoneAvailable" or "WillNotFix" available at:
@@ -48,7 +44,6 @@ class CheckSolutionText(FileContentPlugin):
             file_content: Content of the nasl_file to be checked
 
         """
-        del tag_pattern, special_tag_pattern
         # Two different strings, one for RegEx one for output
         correct_none_available_pattern = (
             r"script_tag\s*\("
@@ -104,8 +99,8 @@ class CheckSolutionText(FileContentPlugin):
             'for the reason here, e.g. CVE was disputed>.");'
         )
 
-        if get_tag_pattern(
-            name=ScriptTag.SOLUTION_TYPE, value="NoneAvailable"
+        if _get_tag_pattern(
+            name=ScriptTag.SOLUTION_TYPE.value, value="NoneAvailable"
         ).search(file_content) and not re.search(
             correct_none_available_pattern, file_content
         ):
@@ -114,8 +109,8 @@ class CheckSolutionText(FileContentPlugin):
                 "incorrect syntax in the solution text. Please use "
                 f"(EXACTLY):\n{correct_none_available_syntax}",
             )
-        elif get_tag_pattern(
-            name=ScriptTag.SOLUTION_TYPE, value="WillNotFix"
+        elif _get_tag_pattern(
+            name=ScriptTag.SOLUTION_TYPE.value, value="WillNotFix"
         ).search(file_content) and not re.search(
             correct_will_not_fix_pattern, file_content
         ):

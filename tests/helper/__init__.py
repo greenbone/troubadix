@@ -14,13 +14,3 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-from .helper import Root, get_root, is_ignore_file, subprocess_cmd
-from .patterns import (
-    ScriptTag,
-    SpecialScriptTag,
-    get_common_tag_patterns,
-    get_special_tag_pattern,
-    get_script_tag_pattern,
-    get_special_script_tag_pattern,
-)

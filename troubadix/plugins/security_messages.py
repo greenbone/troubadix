@@ -17,9 +17,9 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper.patterns import ScriptTag
+from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
 
@@ -30,9 +30,6 @@ class CheckSecurityMessages(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks the passed VT if it is using a security_message
         and having no severity (CVSS score) assigned which is an error /
@@ -43,7 +40,6 @@ class CheckSecurityMessages(FileContentPlugin):
             file_content: The content of the VT
 
         """
-        del special_tag_pattern
         # Policy VTs might use both, security_message and log_message
         if (
             "Policy/" in str(nasl_file)
@@ -55,9 +51,8 @@ class CheckSecurityMessages(FileContentPlugin):
         # don't need to check VTs having a severity (which are for sure
         # using a security_message) or no cvss_base (which shouldn't happen and
         # is checked in a separate step) included at all.
-        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
-            file_content
-        )
+        cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+        cvss_detect = cvss_base_pattern.search(file_content)
 
         if cvss_detect and cvss_detect.group("value") != "0.0":
             return

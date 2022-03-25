@@ -16,8 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import (
     FileContentPlugin,
@@ -34,12 +35,7 @@ class CheckUsingDisplay(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
-        del tag_pattern, special_tag_pattern
-
         display_matches = re.finditer(
             r".*(display\s*\([^)]+\)\s*;)", file_content
         )

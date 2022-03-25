@@ -16,9 +16,10 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import ScriptTag
+from troubadix.helper.patterns import get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -29,9 +30,6 @@ class CheckLogMessages(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks the passed VT if it is using a log_message and
             having a severity (CVSS score) assigned which is an error /
@@ -42,8 +40,6 @@ class CheckLogMessages(FileContentPlugin):
             file_content: The content of the VT
 
         """
-        del special_tag_pattern
-
         log_match = re.search(
             r"log_message\s*\([\s\n]*\)\s*(;|;\s*(\n|#))",
             file_content,
@@ -60,9 +56,8 @@ class CheckLogMessages(FileContentPlugin):
 
         # don't need to check detection scripts since they are for sure using
         # a log_message. all detection scripts have a cvss of 0.0
-        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
-            file_content
-        )
+        cvss_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+        cvss_detect = cvss_pattern.search(file_content)
 
         if cvss_detect and cvss_detect.group("value") == "0.0":
             return

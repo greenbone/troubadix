@@ -33,8 +33,6 @@ class TestBadwords(PluginTestCase):
             CheckBadwords.run(
                 nasl_file=nasl_file,
                 lines=content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
 

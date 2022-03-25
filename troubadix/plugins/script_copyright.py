@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -29,17 +29,12 @@ class CheckScriptCopyright(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Args:
             nasl_file: The VT that shall be checked
             file_content: str representing the file content
         """
-        del tag_pattern, special_tag_pattern
-
         if not re.search(
             r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content
         ):

@@ -16,15 +16,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import (
     ScriptTag,
     SpecialScriptTag,
     get_root,
+    get_script_tag_pattern,
     get_special_tag_pattern,
-    get_tag_pattern,
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -45,9 +46,6 @@ class CheckVTPlacement(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Args:
@@ -57,8 +55,6 @@ class CheckVTPlacement(FileContentPlugin):
         Returns:
             if no problem
         """
-        del tag_pattern, special_tag_pattern
-
         root = get_root(nasl_file)
 
         match = get_special_tag_pattern(
@@ -69,7 +65,9 @@ class CheckVTPlacement(FileContentPlugin):
         if match is None:
             return
 
-        match = get_tag_pattern(name=ScriptTag.DEPRECATED).search(file_content)
+        tag_pattern = get_script_tag_pattern(ScriptTag.DEPRECATED)
+
+        match = tag_pattern.search(file_content)
         if match is not None:
             return
 

@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -29,9 +29,6 @@ class CheckForkingNaslFuncs(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if any of the following functions are used more
         than once or in conjunction with other mentioned functions within the
@@ -77,8 +74,6 @@ class CheckForkingNaslFuncs(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the file that is going to be checked
         """
-        del tag_pattern, special_tag_pattern
-
         # Those two are only calling http_get_port() if get_app_port() was
         # "empty".
         if "sw_magento_magmi_detect.nasl" in str(

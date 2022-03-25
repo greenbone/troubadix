@@ -17,7 +17,7 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import subprocess_cmd
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
@@ -30,9 +30,6 @@ class CheckUpdatedDateVersion(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """The script checks (via git diff) if the passed VT has changed both
         of the following two tags via the replace_svn_props.py script:
@@ -49,8 +46,6 @@ class CheckUpdatedDateVersion(FileContentPlugin):
             special_tag_pattern: The pattern for the special tag
 
         """
-        del file_content, tag_pattern, special_tag_pattern
-
         text, _ = subprocess_cmd(
             "git -c color.status=false --no-pager diff --cached "
             f"{str(nasl_file)}"

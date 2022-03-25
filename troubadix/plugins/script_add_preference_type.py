@@ -17,10 +17,9 @@
 
 # pylint: disable=fixme
 
-import re
 from enum import Enum
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper.patterns import SpecialScriptTag, get_special_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
@@ -41,9 +40,6 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks the passed VT if it is using a
         script_add_preference not matching one of the following
@@ -58,7 +54,6 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
         Args:
             file: The VT that is going to be checked
         """
-        del tag_pattern, special_tag_pattern
         # don't need to check VTs not having a script_add_preference() call
         if "script_add_preference" not in file_content:
             return

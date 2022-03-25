@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
 
@@ -29,13 +29,8 @@ class CheckRiskFactor(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if a VT with risk_factor tag exist."""
-        del tag_pattern, special_tag_pattern
-
         match = re.search(
             r'script_tag\(name:"risk_factor", value:"(?P<risk>.+)"\);',
             file_content,

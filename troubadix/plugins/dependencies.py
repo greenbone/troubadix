@@ -19,9 +19,10 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag, get_root
+from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import (
     FileContentPlugin,
     LinterError,
@@ -37,19 +38,15 @@ class CheckDependencies(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks whether the files used in script_dependencies()
         exist on the local filesystem.
         An error will be thrown if a dependency could not be found.
         """
-        del tag_pattern
-
-        matches = special_tag_pattern[
-            SpecialScriptTag.DEPENDENCIES.value
-        ].finditer(file_content)
+        dependencies_pattern = get_special_script_tag_pattern(
+            SpecialScriptTag.DEPENDENCIES
+        )
+        matches = dependencies_pattern.finditer(file_content)
 
         root = get_root(nasl_file)
 

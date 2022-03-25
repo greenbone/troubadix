@@ -18,9 +18,9 @@
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
-from troubadix.helper import ScriptTag
+from troubadix.helper import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -31,19 +31,15 @@ class CheckCVEFormat(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
-        del special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 
+        tag_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+
         # don't need to check detection scripts since they don't refer to CVEs.
         # all detection scripts have a cvss of 0.0
-        cvss_detect = tag_pattern[ScriptTag.CVSS_BASE.value].search(
-            file_content
-        )
+        cvss_detect = tag_pattern.search(file_content)
         # cvss_detect = re.search(
         #     r'script_tag\s*\(name\s*:\s*"cvss_base",'
         #     r'\s*value:\s*"(\d{1,2}\.\d)"',

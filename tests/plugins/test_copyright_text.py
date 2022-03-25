@@ -52,8 +52,6 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             CheckCopyrightText.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
 
@@ -77,8 +75,6 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             CheckCopyrightText.run(
                 path,
                 content,
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 2)
@@ -121,8 +117,6 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 CheckCopyrightText.run(
                     path,
                     content,
-                    tag_pattern=self.tag_pattern,
-                    special_tag_pattern=self.special_tag_pattern,
                 )
             )
             self.assertEqual(len(results), 1)

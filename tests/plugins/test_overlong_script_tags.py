@@ -38,8 +38,6 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             CheckOverlongScriptTags.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -51,8 +49,6 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             CheckOverlongScriptTags.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -70,8 +66,6 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             CheckOverlongScriptTags.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 0)
@@ -105,8 +99,6 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             CheckOverlongScriptTags.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 1)
@@ -161,8 +153,6 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             CheckOverlongScriptTags.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 2)
@@ -283,8 +273,6 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             CheckOverlongScriptTags.run(
                 path,
                 content.splitlines(),
-                tag_pattern=self.tag_pattern,
-                special_tag_pattern=self.special_tag_pattern,
             )
         )
         self.assertEqual(len(results), 6)

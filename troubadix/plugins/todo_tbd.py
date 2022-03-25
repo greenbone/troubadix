@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterable, Iterator, OrderedDict
+from typing import Iterable, Iterator
 
 from ..helper import is_ignore_file
 from ..plugin import LineContentPlugin, LinterError, LinterResult
@@ -41,14 +41,10 @@ class CheckTodoTbd(LineContentPlugin):
     def run(
         nasl_file: Path,
         lines: Iterable[str],
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
-        del tag_pattern, special_tag_pattern
-
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
+
         for index, line in enumerate(lines, start=1):
             match = re.search("##? *(TODO|TBD|@todo):?", line)
             if match is not None:

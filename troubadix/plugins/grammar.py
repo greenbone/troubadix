@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import AnyStr, Iterable, Iterator, OrderedDict
+from typing import AnyStr, Iterable, Iterator
 
 from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
@@ -75,9 +75,6 @@ class CheckGrammar(LineContentPlugin):
     def run(
         nasl_file: Path,
         lines: Iterable[str],
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks the passed VT / Include for common grammar
         problems
@@ -87,8 +84,6 @@ class CheckGrammar(LineContentPlugin):
             file_content: The content of the file that is going to be
                           checked
         """
-        del tag_pattern, special_tag_pattern
-
         pattern = get_grammer_pattern()
 
         for line in lines:
@@ -130,8 +125,8 @@ class CheckGrammar(LineContentPlugin):
 
         if (
             "2012/gb_VMSA-2010-0007.nasl" in nasl_file
-            and "e. VMware VMnc Codec heap overflow vulner"
-            "abilities\n\n  Vulnerabilities in the" in match
+            and "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
+            "  Vulnerabilities in the" in match
         ):
             return True
 

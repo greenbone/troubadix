@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -34,9 +34,6 @@ class CheckCopyrightText(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This step checks a VT for the correct use of the copyright text.
 
@@ -71,8 +68,6 @@ class CheckCopyrightText(FileContentPlugin):
         # Some text descriptions might be excerpted from (a) referenced
         # source(s), and are Copyright (C) by the respective right holder(s).
         """
-        del tag_pattern, special_tag_pattern
-
         if not re.search(
             r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content
         ):

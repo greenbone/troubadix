@@ -18,7 +18,8 @@
 import re
 
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
+
 from troubadix.helper.patterns import _get_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -30,15 +31,11 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """
         Checks a given file content if a script tag value contains a leading or
         trailing whitespace character
         """
-        del tag_pattern, special_tag_pattern
         if nasl_file.suffix == ".inc":
             return
 

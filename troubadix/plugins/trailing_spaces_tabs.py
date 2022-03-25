@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import Iterator, OrderedDict
+from typing import Iterator
 
 from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 
@@ -29,9 +29,6 @@ class CheckTrailingSpacesTabs(FileContentPlugin):
     def run(
         nasl_file: Path,
         file_content: str,
-        *,
-        tag_pattern: OrderedDict[str, re.Pattern],
-        special_tag_pattern: OrderedDict[str, re.Pattern],
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or more trailing whitespaces
          or tabs.
@@ -45,7 +42,6 @@ class CheckTrailingSpacesTabs(FileContentPlugin):
                     to find special tags
 
         """
-        del tag_pattern, special_tag_pattern
         spaces_tabs_matches = re.finditer("[\t ]+$", file_content)
 
         if spaces_tabs_matches:

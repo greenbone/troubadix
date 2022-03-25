@@ -16,14 +16,35 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
 from enum import Enum
-from typing import OrderedDict
+from typing import Dict
+
 
 # regex patterns for script tags
 _TAG_PATTERN = (
     r'script_tag\s*\(\s*name\s*:\s*["\'](?P<name>{name})["\']\s*,'
     r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
 )
+
+
+def _get_tag_pattern(
+    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
+) -> re.Pattern:
+    """
+    The returned pattern catches all `script_tags(name="", value="");`
+
+    Arguments:
+        name        a SpecialScriptTag Enum type
+        value       script tag value (default: at least on char)
+        flags       regex flags for compile (default: 0)
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
+    return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
 
 
 class ScriptTag(Enum):
@@ -46,44 +67,50 @@ class ScriptTag(Enum):
     VULDETECT = "vuldetect"
 
 
-def _get_tag_pattern(
-    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
-) -> re.Pattern:
-    """
-    The returned pattern catches all `script_tags(name="", value="");`
+# pylint: disable=invalid-name
+__script_tag_pattern = None
 
-    Arguments:
-        name        a SpecialScriptTag Enum type
-        value       script tag value (default: at least on char)
-        flags       regex flags for compile (default: 0)
+__DATE_VALUE = r"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"
 
-    The returned `Match`s by this pattern will have group strings
-    .group('name') and .group('value')
-    Returns
-        `re.Pattern` object
-    """
-    return re.compile(_TAG_PATTERN.format(name=name, value=value), flags=flags)
+__script_tag_values = {
+    ScriptTag.DEPRECATED: r"TRUE",
+    ScriptTag.CVSS_BASE_VECTOR: r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:"
+    r"[NPC]/A:[NPC]",
+    ScriptTag.CVSS_BASE: r"(10\.0|[0-9]\.[0-9])",
+    ScriptTag.CREATION_DATE: __DATE_VALUE,
+    ScriptTag.LAST_MODIFICATION: __DATE_VALUE,
+}
 
 
-class ScriptTagPatterns:
-    def __init__(self) -> None:
-        self.pattern = OrderedDict()
-        for tag in ScriptTag:
-            flags = 0
-            if tag.value == "deprecated":
-                value = r"TRUE"
-            elif tag.value == "cvss_base_vector":
-                value = r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:[NPC]/A:[NPC]"
-            elif tag.value == "cvss_base":
-                value = r"(10\.0|[0-9]\.[0-9])"
-            elif tag.value in ["creation_date", "modification_date"]:
-                value = r"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"
-            else:
-                value = r".+?"
-                flags = re.MULTILINE | re.DOTALL
-            self.pattern[tag.value] = _get_tag_pattern(
-                name=tag.value, value=value, flags=flags
-            )
+def init_script_tag_patterns() -> None:
+    # pylint: disable=global-statement
+    global __script_tag_pattern
+
+    __script_tag_pattern = dict()
+
+    for tag in ScriptTag:
+        flags = 0
+        value = __script_tag_values.get(tag)
+
+        if value is None:
+            value = r".+?"
+            flags = re.MULTILINE | re.DOTALL
+
+        __script_tag_pattern[tag] = _get_tag_pattern(
+            name=tag.value, value=value, flags=flags
+        )
+
+
+def get_script_tag_patterns() -> Dict[ScriptTag, re.Pattern]:
+    if not __script_tag_pattern:
+        init_script_tag_patterns()
+
+    return __script_tag_pattern
+
+
+def get_script_tag_pattern(script_tag: ScriptTag) -> re.Pattern:
+    script_tag_patterns = get_script_tag_patterns()
+    return script_tag_patterns[script_tag]
 
 
 _XREF_TAG_PATTERN = (
@@ -117,37 +144,6 @@ def get_xref_pattern(
     )
 
 
-def get_tag_pattern(
-    name: ScriptTag,
-    *,
-    value: str = r".+",
-    flags: re.RegexFlag = 0,
-) -> re.Pattern:
-    """
-    The returned pattern catches all `script_<name>(<value>);`
-
-    Arguments:
-        name        script tag name
-        value       script tag value (default: at least on char)
-        flags       regex flags for compile (default: 0)
-
-    The returned `Match`s by this pattern will have group strings
-    .group('name') and .group('value')
-    Returns
-        `re.Pattern` object
-    """
-    # if not value:
-    #     return ScriptTagPatterns().pattern[name.value]
-    if not value:
-        if name.value == "deprecated":
-            value = r"TRUE"
-        elif name.value == "cvss_base_vector":
-            value = r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:[NPC]/A:[NPC]"
-        elif name.value == "cvss_base":
-            value = r"(10\.0|[0-9]\.[0-9])"
-    return _get_tag_pattern(name=name.value, value=value, flags=flags)
-
-
 _SPECIAL_TAG_PATTERN = (
     r'script_(?P<name>{name})\s*\(["\']?(?P<value>{value})["\']?\s*\)\s*;'
 )
@@ -157,18 +153,20 @@ class SpecialScriptTag(Enum):
     ADD_PREFERENCE = "add_preference"
     BUGTRAQ_ID = "bugtraq_id"
     CATEGORY = "category"
+    # script_copyright("Copyright (C) 2021 Greenbone Networks GmbH");
     COPYRIGHT = "copyright"
     CVE_ID = "cve_id"
     DEPENDENCIES = "dependencies"
     EXCLUDE_KEYS = "exclude_keys"
-    FAMILY = "family"
+
+    FAMILY = "family"  # script_family("FIXME");
     MANDATORY_KEYS = "mandatory_keys"
     NAME = "name"
-    OID = "oid"
+    OID = "oid"  # script_oid("1.3.6.1.4.1.25623.1.0.XXXXXX");
     REQUIRE_KEYS = "require_keys"
     REQUIRE_PORTS = "require_ports"
     REQUIRE_UDP_PORTS = "require_udp_ports"
-    VERSION = "version"
+    VERSION = "version"  # script_version("YYYY-MM-DDTHH:mm:ss+0000");
     XREF = "xref"
 
 
@@ -180,28 +178,51 @@ def _get_special_tag_pattern(
     )
 
 
-class SpecialScriptTagPatterns:
-    def __init__(self) -> None:
-        self.pattern = OrderedDict()
-        for tag in SpecialScriptTag:
-            if tag.value == "xref":
-                self.pattern[tag.value] = re.compile(
-                    _XREF_TAG_PATTERN.format(
-                        name=tag.value, value=r".+?", type="URL"
-                    ),
-                )
-            elif tag.value == "oid":
-                self.pattern[tag.value] = _get_special_tag_pattern(
-                    name=tag.value, value=r'\s*["\'](?P<oid>([0-9.]+))["\']\s*'
-                )
-            elif tag.value == "version":
-                self.pattern[tag.value] = _get_special_tag_pattern(
-                    name=tag.value, value=r"[0-9\-\:\+T]{24}"
-                )
-            else:
-                self.pattern[tag.value] = _get_special_tag_pattern(
-                    name=tag.value, flags=re.MULTILINE
-                )
+__PORT_VALUE = r"\"(?P<service>[\w\s])+\", (?P<port>\d{1,5})"
+
+# pylint: disable=invalid-name
+__special_script_tag_patterns = None
+
+__special_script_tag_values = {
+    SpecialScriptTag.OID: r"(?P<oid>([0-9.]+))",
+    SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}",
+    SpecialScriptTag.REQUIRE_PORTS: __PORT_VALUE,
+    SpecialScriptTag.REQUIRE_UDP_PORTS: __PORT_VALUE,
+    SpecialScriptTag.XREF: r"name:\"(?P<ref_type>[\w\s]+)\","
+    r" value:\"(?P<ref>[\w/:= %._\-\?]+)\"",
+}
+
+
+def init_special_script_tag_patterns() -> None:
+    # pylint: disable=global-statement
+    global __special_script_tag_patterns
+
+    __special_script_tag_patterns = dict()
+    for tag in SpecialScriptTag:
+        flags = 0
+        value = __special_script_tag_values.get(tag)
+
+        if value is None:
+            value = r".+?"
+            flags = re.MULTILINE
+
+        __special_script_tag_patterns[tag] = _get_special_tag_pattern(
+            name=tag.value, value=value, flags=flags
+        )
+
+
+def get_special_script_tag_patterns() -> Dict[SpecialScriptTag, re.Pattern]:
+    if not __special_script_tag_patterns:
+        init_special_script_tag_patterns()
+
+    return __special_script_tag_patterns
+
+
+def get_special_script_tag_pattern(
+    special_script_tag: SpecialScriptTag,
+) -> re.Pattern:
+    special_script_tag_patterns = get_special_script_tag_patterns()
+    return special_script_tag_patterns[special_script_tag]
 
 
 def get_special_tag_pattern(
