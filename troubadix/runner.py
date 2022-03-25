@@ -199,7 +199,7 @@ class Runner:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
-        if self.debug:
+        if self.verbose > 1:
             self._report_plugins()
 
         start = datetime.datetime.now()
