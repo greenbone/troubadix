@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import signal
+
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool
 from pathlib import Path
@@ -44,6 +46,11 @@ CURRENT_ENCODING = "latin1"  # currently default
 
 class TroubadixException(Exception):
     """Generic Exception for Troubadix"""
+
+
+def initializer():
+    """Ignore CTRL+C in the worker process."""
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
 
 
 class FileResults:
@@ -164,24 +171,29 @@ class Runner:
             raise TroubadixException("No Plugin found.")
 
         start = datetime.datetime.now()
-        with Pool(processes=self._n_jobs) as pool:
-            for results in pool.imap_unordered(
-                self.check_file, files, chunksize=CHUNKSIZE
-            ):
-                # only print the part "common/some_nasl.nasl" by
-                # splitting at the nasl/ dir in
-                # /root/vts-repo/nasl/common/some_nasl.nasl
-                self._report_bold_info(
-                    "Checking "
-                    f"{str(results.file_path).split('nasl/', maxsplit=1)[-1]}"
-                    f" ({i}/{files_count})"
-                )
-                i = i + 1
+        with Pool(processes=self._n_jobs, initializer=initializer) as pool:
+            try:
+                for results in pool.imap_unordered(
+                    self.check_file, files, chunksize=CHUNKSIZE
+                ):
+                    # only print the part "common/some_nasl.nasl" by
+                    # splitting at the nasl/ dir in
+                    # /root/vts-repo/nasl/common/some_nasl.nasl
+                    short_file_name = str(results.file_path).split(
+                        "nasl/", maxsplit=1
+                    )[-1]
+                    self._report_bold_info(
+                        f"Checking {short_file_name} ({i}/{files_count})"
+                    )
+                    i = i + 1
 
-                with self._term.indent():
-                    self._report_results(results.generic_results)
+                    with self._term.indent():
+                        self._report_results(results.generic_results)
 
-                    self._process_plugin_results(results.plugin_results)
+                        self._process_plugin_results(results.plugin_results)
+            except KeyboardInterrupt:
+                pool.terminate()
+                pool.join()
 
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         if self.statistic:
