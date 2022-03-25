@@ -113,8 +113,9 @@ def main(args=None):
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
         update_date=parsed_args.update_date,
-        debug=parsed_args.debug,
+        verbose=parsed_args.verbose,
         statistic=True if not parsed_args.no_statistic else False,
+        log_file=parsed_args.log_file,
     )
 
     if parsed_args.dirs:

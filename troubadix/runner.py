@@ -90,8 +90,9 @@ class Runner:
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
         update_date: bool = False,
-        debug: bool = False,
+        verbose: int = 0,
         statistic: bool = True,
+        log_file: Path = None,
     ) -> None:
         self.plugins = Plugins(
             excluded_plugins, included_plugins, update_date=update_date
@@ -100,7 +101,7 @@ class Runner:
         self._included_plugins = included_plugins
         self._term = term
         self._n_jobs = n_jobs
-        self.debug = debug
+        self.verbose = verbose
 
         # this dict will store the result counts for the statistic
         self.result_counts = ResultCounts()
@@ -108,6 +109,12 @@ class Runner:
 
         init_script_tag_patterns()
         init_special_script_tag_patterns()
+        self._log_file = log_file
+
+    def _log_append(self, message: str):
+        if self._log_file:
+            with self._log_file.open(mode="a", encoding="utf-8") as f:
+                f.write(f"{message}\n")
 
     def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
@@ -120,18 +127,23 @@ class Runner:
 
     def _report_warning(self, message: str) -> None:
         self._term.warning(message)
+        self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _report_error(self, message: str) -> None:
         self._term.error(message)
+        self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _report_info(self, message: str) -> None:
         self._term.info(message)
+        self._log_append(f"\t{message}")
 
     def _report_bold_info(self, message: str) -> None:
         self._term.bold_info(message)
+        self._log_append(f"\n\n{message}")
 
     def _report_ok(self, message: str) -> None:
         self._term.ok(message)
+        self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _process_plugin_results(
         self, results: Dict[str, List[LinterMessage]]
@@ -141,9 +153,9 @@ class Runner:
             plugin_name,
             plugin_results,
         ) in results.items():
-            if plugin_results:
+            if plugin_results and self.verbose > 0:
                 self._report_info(f"Results for plugin {plugin_name}")
-            elif self.debug:
+            elif self.verbose > 1:
                 self._report_ok(f"No results for plugin {plugin_name}")
 
             # add the results to the statistic
@@ -151,8 +163,9 @@ class Runner:
                 plugin_name, len(plugin_results)
             )
 
-            with self._term.indent():
-                self._report_results(plugin_results)
+            if self.verbose > 0:
+                with self._term.indent():
+                    self._report_results(plugin_results)
 
     def _report_plugins(self) -> None:
         if self._excluded_plugins:
@@ -186,7 +199,7 @@ class Runner:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
-        if self.debug:
+        if self.verbose > 1:
             self._report_plugins()
 
         start = datetime.datetime.now()
@@ -201,14 +214,15 @@ class Runner:
                     short_file_name = str(results.file_path).split(
                         "nasl/", maxsplit=1
                     )[-1]
-                    self._report_bold_info(
-                        f"Checking {short_file_name} ({i}/{files_count})"
-                    )
+                    if self.verbose > 0:
+                        self._report_bold_info(
+                            f"Checking {short_file_name} ({i}/{files_count})"
+                        )
                     i = i + 1
 
                     with self._term.indent():
-                        self._report_results(results.generic_results)
-
+                        if self.verbose > 0:
+                            self._report_results(results.generic_results)
                         self._process_plugin_results(results.plugin_results)
             except KeyboardInterrupt:
                 pool.terminate()
