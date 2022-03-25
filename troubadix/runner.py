@@ -96,6 +96,8 @@ class Runner:
         self.plugins = Plugins(
             excluded_plugins, included_plugins, update_date=update_date
         )
+        self._excluded_plugins = excluded_plugins
+        self._included_plugins = included_plugins
         self._term = term
         self._n_jobs = n_jobs
         self.debug = debug
@@ -150,6 +152,18 @@ class Runner:
             with self._term.indent():
                 self._report_results(plugin_results)
 
+    def _report_plugins(self) -> None:
+        if self._excluded_plugins:
+            exclude = ", ".join(self._excluded_plugins)
+            self._report_info(f"Excluded Plugins: {exclude}")
+
+        if self._included_plugins:
+            include = ", ".join(self._included_plugins)
+            self._report_info(f"Included Plugins: {include}")
+
+        plugins = ", ".join([plugin.name for plugin in self.plugins.plugins])
+        self._report_info(f"Running plugins: {plugins}")
+
     def _report_statistic(self) -> None:
         overall = 0
         self._term.print(f"{'Plugin':50} {'Error Count':11}")
@@ -169,6 +183,9 @@ class Runner:
 
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
+
+        if self.debug:
+            self._report_plugins()
 
         start = datetime.datetime.now()
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
