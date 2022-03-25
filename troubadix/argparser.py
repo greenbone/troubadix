@@ -169,7 +169,7 @@ def parse_args(
         dest="included_plugins",
         help=(
             "Allows to choose which tests should be run in this lint. "
-            "Only the given tests will run."
+            "Only the given tests will run. Valid as CamelCase and snake_case."
         ),
     )
 
@@ -180,7 +180,8 @@ def parse_args(
         dest="excluded_plugins",
         help=(
             "Allows to exclude tests from this lint. "
-            "All tests excluding the given will run."
+            "All tests excluding the given will run. "
+            "Valid as CamelCase and snake_case."
         ),
     )
 

@@ -131,12 +131,14 @@ class Plugins:
                 plugin
                 for plugin in _NASL_ONLY_PLUGINS
                 if plugin.__name__ not in excluded_plugins
+                and plugin.name not in excluded_plugins
             ]
         if included_plugins:
             self.plugins = [
                 plugin
                 for plugin in _NASL_ONLY_PLUGINS
                 if plugin.__name__ in included_plugins
+                or plugin.name in included_plugins
             ]
 
     def __iter__(self) -> Iterable[Plugin]:
