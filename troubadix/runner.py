@@ -155,11 +155,11 @@ class Runner:
     def _report_plugins(self) -> None:
         if self._excluded_plugins:
             exclude = ", ".join(self._excluded_plugins)
-            self._report_info(f"Exclude Plugins: {exclude}")
+            self._report_info(f"Excluded Plugins: {exclude}")
 
         if self._included_plugins:
             include = ", ".join(self._included_plugins)
-            self._report_info(f"Include Plugins: {include}")
+            self._report_info(f"Included Plugins: {include}")
 
         plugins = ", ".join([plugin.name for plugin in self.plugins.plugins])
         self._report_info(f"Running plugins: {plugins}")
