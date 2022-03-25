@@ -141,8 +141,10 @@ class Runner:
             plugin_name,
             plugin_results,
         ) in results.items():
-            if plugin_results or self.debug:
+            if plugin_results:
                 self._report_info(f"Results for plugin {plugin_name}")
+            elif self.debug:
+                self._report_ok(f"No results for plugin {plugin_name}")
 
             # add the results to the statistic
             self.result_counts.add_result_counts(
