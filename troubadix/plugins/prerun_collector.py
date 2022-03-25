@@ -22,7 +22,11 @@ import tempfile
 from pathlib import Path
 from typing import List
 
-from troubadix.helper import get_root, SpecialScriptTag, get_special_tag_pattern
+from troubadix.helper import (
+    get_root,
+    SpecialScriptTag,
+    get_special_script_tag_pattern,
+)
 from troubadix.plugin import PreRunPlugin
 
 OPENVAS_OID_PREFIX = r"1.3.6.1.4.1.25623.1.[0-9]+."
@@ -65,65 +69,61 @@ class OIDMapBuilder:
             if file.suffix == ".nasl":
                 self.scan_file(file)
 
-    def scan_file(self, fullname):
+    def scan_file(self, nasl_file: Path):
         # the filename in the mapping file must be relative to nvt basedir
-        root = get_root(fullname)
-        assert str(fullname).startswith(str(root))
-        filename = str(fullname)[len(str(root)) :].lstrip("/")
+        root = get_root(nasl_file)
+        assert str(nasl_file).startswith(str(root))
+        filename = str(nasl_file)[len(str(root)) :].lstrip("/")
 
-        with fullname.open(encoding="latin-1") as f:
-            lines = f.readlines()
-        for line in lines:
-            line = line.strip()
-            if line.startswith("#"):
-                # skip comments
-                continue
-            oid = self.find_oid(line)
-            if oid is not None:
-                if OID_RE.match(oid) is None:
-                    self.invalids.append(filename)
-                    if self.verbose:
-                        print(
-                            f"Invalid OID {oid} used for {filename}",
-                            file=sys.stderr,
+        with nasl_file.open(encoding="latin-1") as f:
+            for line in f.readlines():
+                line = line.strip()
+                if line.startswith("#"):
+                    # skip comments
+                    continue
+                oid = self.find_oid(line)
+                if oid is not None:
+                    if OID_RE.match(oid) is None:
+                        self.invalids.append(filename)
+                        if self.verbose:
+                            print(
+                                f"Invalid OID {oid} used for {filename}",
+                                file=sys.stderr,
+                            )
+                        break
+                    if oid not in self.mapping:
+                        self.mapping[oid] = filename
+                    else:
+                        self.duplicates.append(
+                            {
+                                "oid": oid,
+                                "duplicate": filename,
+                                "first_usage": self.mapping[oid],
+                            }
                         )
+                        if self.verbose:
+                            print(
+                                f"OID {oid} used by both '{filename}' and "
+                                f"'{self.mapping[oid]}'",
+                                file=sys.stderr,
+                            )
                     break
-                if oid not in self.mapping:
-                    self.mapping[oid] = filename
-                else:
-                    self.duplicates.append(
-                        {
-                            "oid": oid,
-                            "duplicate": filename,
-                            "first_usage": self.mapping[oid],
-                        }
+            else:
+                self.absents.append(filename)
+                if self.verbose:
+                    print(
+                        f"Could not find script_id in {filename}",
+                        file=sys.stderr,
                     )
-                    if self.verbose:
-                        print(
-                            f"OID {oid} used by both '{filename}' and "
-                            f"'{self.mapping[oid]}'",
-                            file=sys.stderr,
-                        )
-                break
-        else:
-            self.absents.append(filename)
-            if self.verbose:
-                print(
-                    f"Could not find script_id in {filename}", file=sys.stderr
-                )
 
     def find_oid(self, line):
         # search for deprecated script_id in line
 
-        match = self.args["special_tag_pattern"][
-            SpecialScriptTag.ID.value
-        ].search(line)
+        match = get_special_script_tag_pattern(SpecialScriptTag.ID).search(line)
         if match:
             return OPENVAS_OID_PREFIX + match.group("id")
-        match = get_special_tag_pattern(
-            name=SpecialScriptTag.OID,
-            value=r'\s*(?P<quote>[\'"])(?P<oid>([0-9.]+))(?P=quote)\s*',
-            flags=re.IGNORECASE,
+        match = get_special_script_tag_pattern(
+            SpecialScriptTag.OID,
         ).search(line)
         if match:
             return match.group("oid")

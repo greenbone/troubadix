@@ -295,8 +295,11 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(f"Checking {nasl_file}", output)
-        self.assertNotIn("No results for plugin", output)
+        self.assertIn(
+            "Checking " f"{str(nasl_file).split('nasl/', maxsplit=1)[-1]}",
+            output,
+        )
+        self.assertIn("No results for plugin check_missing_desc_exit", output)
 
     def test_runner_run_ok_with_verbose_level_1(self):
         included_plugins = [
@@ -327,7 +330,9 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertNotIn(f"Checking {nasl_file}", output)
+        self.assertNotIn(
+            "No results for plugin check_missing_desc_exit", output
+        )
         self.assertNotIn("Results for plugin check_missing_desc_exit", output)
 
         # revert changes for the next time

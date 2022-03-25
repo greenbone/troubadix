@@ -20,20 +20,7 @@ from pathlib import Path
 from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
-
-SCRIPT_CATEGORIES = {
-    "ACT_INIT": 0,
-    "ACT_SCANNER": 1,
-    "ACT_SETTINGS": 2,
-    "ACT_GATHER_INFO": 3,
-    "ACT_ATTACK": 4,
-    "ACT_MIXED_ATTACK": 5,
-    "ACT_DESTRUCTIVE_ATTACK": 6,
-    "ACT_DENIAL": 7,
-    "ACT_KILL_HOST": 8,
-    "ACT_FLOOD": 9,
-    "ACT_END": 10,
-}
+from troubadix.helper.helper import SCRIPT_CATEGORIES
 
 
 class CheckScriptCategory(FileContentPlugin):

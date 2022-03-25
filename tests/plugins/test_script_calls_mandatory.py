@@ -26,13 +26,13 @@ class CheckScriptCallsMandatoryTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-
+        # js: check if these are used correctly, not if they are "there" -_-
         content = (
-            "script_name();\n"
-            "script_version();\n"
-            "script_category();\n"
-            "script_family();\n"
-            "script_copyright();\n"
+            "script_name('foo');\n"
+            "script_version(1234-56-78T90:98:76+5432);\n"
+            "script_category(ACT_INIT);\n"
+            "script_family(FAMILY);\n"
+            'script_copyright("COPYRIGHT");\n'
         )
 
         results = list(

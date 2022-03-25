@@ -22,8 +22,10 @@ from troubadix.helper import (
     ScriptTag,
     SpecialScriptTag,
 )
-from troubadix.helper import get_special_tag_pattern
-from troubadix.helper.patterns import get_script_tag_pattern
+from troubadix.helper.patterns import (
+    _get_special_script_tag_pattern,
+    get_script_tag_pattern,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -69,8 +71,8 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
         if cvss_detect is not None and cvss_detect.group("value") == "0.0":
             return
 
-        match_family = get_special_tag_pattern(
-            name=SpecialScriptTag.FAMILY,
+        match_family = _get_special_script_tag_pattern(
+            name=SpecialScriptTag.FAMILY.value,
             value=r"(Product|Service) detection",
         ).search(file_content)
         if match_family and match_family.group("value"):

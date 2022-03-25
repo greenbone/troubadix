@@ -21,7 +21,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.patterns import SpecialScriptTag, get_special_tag_pattern
+from troubadix.helper.patterns import (
+    SpecialScriptTag,
+    _get_special_script_tag_pattern,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -58,8 +61,8 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
         if "script_add_preference" not in file_content:
             return
 
-        preferences_matches = get_special_tag_pattern(
-            name=SpecialScriptTag.ADD_PREFERENCE,
+        preferences_matches = _get_special_script_tag_pattern(
+            name=SpecialScriptTag.ADD_PREFERENCE.value,
             value=r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)'
             r"(?P=quote)\s*[^)]*",
         ).finditer(file_content)

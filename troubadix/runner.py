@@ -17,13 +17,11 @@
 
 import datetime
 import signal
-import json
 
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool, Manager
 from pathlib import Path
-from pprint import pprint
-from typing import Iterator, List
+from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
 
@@ -234,18 +232,20 @@ class Runner:
         self._term.info(f"{'sum':50} {counts:11}")
 
     def pre_run(self, nasl_files: List[Path]) -> None:
-        """ Running Plugins that do not require a run per file,
-        but a single execution """
+        """Running Plugins that do not require a run per file,
+        but a single execution"""
         self._report_info("Starting pre-run")
         self._report_info("Loading plugins")
+
         kwargs = {
-            "tag_pattern": self.tag_pattern.pattern,
-            "special_tag_pattern": self.special_tag_pattern.pattern,
+            "filetree": self.pre_run_data.copy(),
         }
+
         for e in sorted(list(self.pre_run_plugins)):
             e.run(
                 self.pre_run_data,
                 nasl_files,
+                **kwargs,
             )
 
     def run(self, files: List[Path]) -> None:
@@ -262,7 +262,7 @@ class Runner:
             self._report_plugins()
 
         # run single time execution plugins
-        self.pre_run()
+        self.pre_run(files)
 
         start = datetime.datetime.now()
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
@@ -302,12 +302,6 @@ class Runner:
 
         # maybe we need to re-read file content, if a Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
-
-        kwargs = {
-            "filetree": self.pre_run_data.copy(),
-            "tag_pattern": self.tag_pattern.pattern,
-            "special_tag_pattern": self.special_tag_pattern.pattern,
-        }
 
         for plugin in self.plugins:
             if issubclass(plugin, LineContentPlugin):

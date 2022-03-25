@@ -19,6 +19,7 @@ import re
 
 from enum import Enum
 from typing import Dict
+from troubadix.helper.helper import SCRIPT_CATEGORIES
 
 
 # regex patterns for script tags
@@ -165,7 +166,6 @@ class SpecialScriptTag(Enum):
     CVE_ID = "cve_id"
     DEPENDENCIES = "dependencies"
     EXCLUDE_KEYS = "exclude_keys"
-
     FAMILY = "family"  # script_family("FIXME");
     MANDATORY_KEYS = "mandatory_keys"
     NAME = "name"
@@ -178,7 +178,7 @@ class SpecialScriptTag(Enum):
     XREF = "xref"
 
 
-def _get_special_tag_pattern(
+def _get_special_script_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     return re.compile(
@@ -193,6 +193,9 @@ __special_script_tag_patterns = None
 
 __special_script_tag_values = {
     SpecialScriptTag.OID: r"(?P<oid>([0-9.]+))",
+    SpecialScriptTag.ID: r"(?P<oid>([0-9.]+))",
+    SpecialScriptTag.CATEGORY: r"(?P<category>("
+    rf"{'|'.join([k for k, _ in SCRIPT_CATEGORIES.items()])}))",
     SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}",
     SpecialScriptTag.REQUIRE_PORTS: __PORT_VALUE,
     SpecialScriptTag.REQUIRE_UDP_PORTS: __PORT_VALUE,
@@ -214,7 +217,7 @@ def init_special_script_tag_patterns() -> None:
             value = r".+?"
             flags = re.MULTILINE
 
-        __special_script_tag_patterns[tag] = _get_special_tag_pattern(
+        __special_script_tag_patterns[tag] = _get_special_script_tag_pattern(
             name=tag.value, value=value, flags=flags
         )
 
@@ -231,6 +234,7 @@ def get_special_script_tag_pattern(
 ) -> re.Pattern:
     special_script_tag_patterns = get_special_script_tag_patterns()
     return special_script_tag_patterns[special_script_tag]
+
 
 class CommonScriptTagsPattern:
     instance = False
