@@ -14,7 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+import re
 from pathlib import Path
 from typing import Iterator
 
@@ -38,9 +38,13 @@ class CheckCVSSFormat(FileContentPlugin):
             ScriptTag.CVSS_BASE_VECTOR
         )
 
-        cvss_detect = cvss_base_pattern.search(file_content)
-        if not cvss_detect:
-            yield LinterError("VT has a missing or invalid cvss_base value.")
+        missing_cvss_base = re.search('"cvss_base", value:""', file_content)
+        if missing_cvss_base:
+            yield LinterError("VT has a missing cvss_base value.")
+        else:
+            cvss_detect = cvss_base_pattern.search(file_content)
+            if not cvss_detect:
+                yield LinterError("VT has an invalid cvss_base value.")
 
         vector_match = cvss_base_vector_pattern.search(file_content)
 
