@@ -1,7 +1,0 @@
-	Included Plugins: CheckMissingDescExit
-	Running plugins: check_missing_desc_exit
-
-
-Checking /home/work/work/troubadix/tests/plugins/test.nasl (0/1)
-
-	Time elapsed: 0:00:00.013967

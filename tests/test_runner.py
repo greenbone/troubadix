@@ -260,7 +260,6 @@ class TestRunner(unittest.TestCase):
             "CheckMissingDescExit",
         ]
         nasl_file = _here / "plugins" / "test.nasl"
-        compare_log_file = _here / "test_log.txt"
         gen_log_file = _here / "gen_log.txt"
 
         runner = Runner(
@@ -273,7 +272,12 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as _:
             runner.run([nasl_file])
 
-        compare_content = compare_log_file.read_text(encoding="utf-8")
+        compare_content = (
+            f"\tIncluded Plugins: CheckMissingDescExit\n\t"
+            "Running plugins: check_missing_desc_exit\n\n\nChecking"
+            f" {nasl_file} (0/1)\n\t\tNo results for plugin"
+            " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
+        )
         gen_content = gen_log_file.read_text(encoding="utf-8")
         gen_log_file.unlink()
         # Remove Time elapsed line
@@ -287,7 +291,6 @@ class TestRunner(unittest.TestCase):
             "CheckMissingDescExit",
         ]
         nasl_file = _here / "plugins" / "test.nasl"
-        compare_log_file = _here / "test_log_fail.txt"
         gen_log_file = _here / "gen_log.txt"
 
         runner = Runner(
@@ -300,7 +303,12 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as _:
             runner.run([nasl_file])
 
-        compare_content = compare_log_file.read_text(encoding="utf-8")
+        compare_content = (
+            f"\tIncluded Plugins: CheckMissingDescExit\n\t"
+            "Running plugins: check_missing_desc_exit\n\n\nChecking"
+            f" {nasl_file} (0/1)\n\tNo results for plugin"
+            " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
+        )
         gen_content = gen_log_file.read_text(encoding="utf-8")
         gen_log_file.unlink()
         # Remove Time elapsed line
