@@ -273,7 +273,7 @@ class TestRunner(unittest.TestCase):
             runner.run([nasl_file])
 
         compare_content = (
-            f"\tIncluded Plugins: CheckMissingDescExit\n\t"
+            "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\nChecking"
             f" {nasl_file} (0/1)\n\t\tNo results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
@@ -304,7 +304,7 @@ class TestRunner(unittest.TestCase):
             runner.run([nasl_file])
 
         compare_content = (
-            f"\tIncluded Plugins: CheckMissingDescExit\n\t"
+            "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\nChecking"
             f" {nasl_file} (0/1)\n\tNo results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
