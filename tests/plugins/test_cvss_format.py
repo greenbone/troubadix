@@ -57,7 +57,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT has a missing or invalid cvss_base value.",
+            "VT has an invalid cvss_base value.",
             results[0].message,
         )
 
@@ -77,7 +77,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT has a missing or invalid cvss_base value.",
+            "VT has an invalid cvss_base value.",
             results[0].message,
         )
 
@@ -116,5 +116,26 @@ class CheckCVSSFormatTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "VT has a missing or invalid cvss_base_vector value.",
+            results[0].message,
+        )
+
+    def test_missing_cvss_base(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_tag(name:"cvss_base", value:"");\n'
+            'script_tag(name:"cvss_base_vector", '
+            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
+        )
+
+        results = list(
+            CheckCVSSFormat.run(
+                path,
+                content,
+            )
+        )
+        self.assertEqual(len(results), 1)
+
+        self.assertEqual(
+            "VT has a missing cvss_base value.",
             results[0].message,
         )
