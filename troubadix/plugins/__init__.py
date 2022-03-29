@@ -60,7 +60,6 @@ from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
 from .trailing_spaces_tabs import CheckTrailingSpacesTabs
 from .update_modification_date import UpdateModificationDate
-from .updated_date_version import CheckUpdatedDateVersion
 from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
@@ -102,7 +101,6 @@ _PLUGINS = [
     CheckSpelling,
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
-    CheckUpdatedDateVersion,
     CheckUsingDisplay,
     CheckVTPlacement,
     CheckValidOID,
