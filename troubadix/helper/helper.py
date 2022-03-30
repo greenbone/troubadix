@@ -48,6 +48,10 @@ def is_ignore_file(
     return False
 
 
+def get_path_from_root(file_name: Path, root: str = "nasl/"):
+    return str(file_name).split(root, maxsplit=1)[-1]
+
+
 # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
 def which(program):
     def is_exe(fpath):

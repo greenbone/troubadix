@@ -22,6 +22,7 @@ from typing import Iterator, List
 from troubadix.helper import (
     SpecialScriptTag,
     get_special_script_tag_pattern,
+    get_path_from_root,
 )
 from troubadix.plugin import (
     LinterError,
@@ -54,7 +55,8 @@ class CheckPreRunCollector(PreRunPlugin):
 
         for nasl_file in nasl_files:
             if nasl_file.suffix == ".nasl":
-                file_name = str(nasl_file).split("nasl/", maxsplit=1)[-1]
+                oid = None
+                file_name = get_path_from_root(nasl_file)
                 content = nasl_file.read_text(encoding="latin-1")
                 # search for deprecated script_id
                 match = get_special_script_tag_pattern(

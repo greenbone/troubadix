@@ -15,7 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .helper import Root, get_root, is_ignore_file, subprocess_cmd
+from .helper import (
+    Root,
+    get_root,
+    get_path_from_root,
+    is_ignore_file,
+    subprocess_cmd,
+)
 from .patterns import (
     ScriptTag,
     SpecialScriptTag,

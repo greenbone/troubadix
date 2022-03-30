@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
+from troubadix.helper.helper import get_path_from_root
 
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
@@ -278,12 +279,10 @@ class Runner:
                     # only print the part "common/some_nasl.nasl" by
                     # splitting at the nasl/ dir in
                     # /root/vts-repo/nasl/common/some_nasl.nasl
-                    short_file_name = str(results.file_path).split(
-                        "nasl/", maxsplit=1
-                    )[-1]
-                    if results and self.verbose > 0 or self.verbose > 1:
+                    if self.verbose > 0:
                         self._report_bold_info(
-                            f"Checking {short_file_name} ({i}/{files_count})"
+                            f"Checking {get_path_from_root(results.file_path)}"
+                            f" ({i}/{files_count})"
                         )
                     i = i + 1
 
