@@ -254,3 +254,65 @@ class TestRunner(unittest.TestCase):
 
         with self.assertRaises(TroubadixException):
             runner.run([nasl_file])
+
+    def test_runner_log_file(self):
+        included_plugins = [
+            "CheckMissingDescExit",
+        ]
+        nasl_file = _here / "plugins" / "test.nasl"
+        gen_log_file = _here / "gen_log.txt"
+
+        runner = Runner(
+            verbose=2,
+            n_jobs=1,
+            term=self._term,
+            included_plugins=included_plugins,
+            log_file=gen_log_file,
+        )
+        with redirect_stdout(io.StringIO()) as _:
+            runner.run([nasl_file])
+
+        compare_content = (
+            "\tIncluded Plugins: CheckMissingDescExit\n\t"
+            "Running plugins: check_missing_desc_exit\n\n\nChecking"
+            f" {nasl_file} (0/1)\n\t\tNo results for plugin"
+            " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
+        )
+        gen_content = gen_log_file.read_text(encoding="utf-8")
+        gen_log_file.unlink()
+        # Remove Time elapsed line
+        self.assertEqual(
+            compare_content.splitlines()[:-1],
+            gen_content.splitlines()[:-1],
+        )
+
+    def test_runner_log_file_fail(self):
+        included_plugins = [
+            "CheckMissingDescExit",
+        ]
+        nasl_file = _here / "plugins" / "test.nasl"
+        gen_log_file = _here / "gen_log.txt"
+
+        runner = Runner(
+            verbose=2,
+            n_jobs=1,
+            term=self._term,
+            included_plugins=included_plugins,
+            log_file=gen_log_file,
+        )
+        with redirect_stdout(io.StringIO()) as _:
+            runner.run([nasl_file])
+
+        compare_content = (
+            "\tIncluded Plugins: CheckMissingDescExit\n\t"
+            "Running plugins: check_missing_desc_exit\n\n\nChecking"
+            f" {nasl_file} (0/1)\n\tNo results for plugin"
+            " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
+        )
+        gen_content = gen_log_file.read_text(encoding="utf-8")
+        gen_log_file.unlink()
+        # Remove Time elapsed line
+        self.assertNotEqual(
+            compare_content.splitlines()[:-1],
+            gen_content.splitlines()[:-1],
+        )
