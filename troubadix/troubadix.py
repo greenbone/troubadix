@@ -148,7 +148,9 @@ def main(args=None):
             )
             sys.exit(1)
         info(f"Start linting {len(parsed_args.files)} files ... ")
-        runner.run(parsed_args.files)
+        # Return exit with 1 if error exist
+        if runner.run(parsed_args.files):
+            sys.exit(1)
     else:
         warning("No files given/found.")
 

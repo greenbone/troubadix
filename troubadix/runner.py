@@ -93,7 +93,7 @@ class Runner:
         verbose: int = 0,
         statistic: bool = True,
         log_file: Path = None,
-    ) -> None:
+    ) -> bool:
         self.plugins = Plugins(
             excluded_plugins, included_plugins, update_date=update_date
         )
@@ -231,6 +231,9 @@ class Runner:
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         if self.statistic:
             self._report_statistic()
+        # Return true if error exist
+        if len(self.result_counts.result_counts):
+            return True
 
     def check_file(self, file_path: Path) -> FileResults:
         file_name = file_path.resolve()
