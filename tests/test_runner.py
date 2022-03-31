@@ -124,8 +124,12 @@ class TestRunner(unittest.TestCase):
         content = nasl_file.read_text(encoding="latin1")
 
         # Check sys exit 1
+        included_plugins = [
+            "CheckCVSSFormat",
+        ]
         runner = Runner(
             n_jobs=1,
+            included_plugins=included_plugins,
             term=self._term,
         )
         with redirect_stdout(io.StringIO()) as _:
