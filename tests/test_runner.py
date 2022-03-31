@@ -81,6 +81,20 @@ class TestRunner(unittest.TestCase):
         nasl_file = _here / "plugins" / "test.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
+        # Check sys exit 1
+        included_plugins = [
+            "CheckMissingDescExit",
+        ]
+        runner = Runner(
+            n_jobs=1,
+            included_plugins=included_plugins,
+            term=self._term,
+        )
+        with redirect_stdout(io.StringIO()) as _:
+            sys_exit = runner.run([nasl_file])
+        self.assertFalse(sys_exit)
+
+        # Test update_date
         runner = Runner(
             n_jobs=1,
             term=self._term,
@@ -109,6 +123,20 @@ class TestRunner(unittest.TestCase):
         nasl_file = _here / "plugins" / "fail.nasl"
         content = nasl_file.read_text(encoding="latin1")
 
+        # Check sys exit 1
+        included_plugins = [
+            "CheckCVSSFormat",
+        ]
+        runner = Runner(
+            n_jobs=1,
+            included_plugins=included_plugins,
+            term=self._term,
+        )
+        with redirect_stdout(io.StringIO()) as _:
+            sys_exit = runner.run([nasl_file])
+        self.assertTrue(sys_exit)
+
+        # Test update_date
         runner = Runner(
             n_jobs=1,
             term=self._term,
