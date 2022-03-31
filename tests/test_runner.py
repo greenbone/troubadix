@@ -297,7 +297,7 @@ class TestRunner(unittest.TestCase):
             included_plugins=included_plugins,
             log_file=gen_log_file,
         )
-        with redirect_stdout(io.StringIO()) as _:
+        with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
 
         compare_content = (
@@ -328,7 +328,7 @@ class TestRunner(unittest.TestCase):
             included_plugins=included_plugins,
             log_file=gen_log_file,
         )
-        with redirect_stdout(io.StringIO()) as _:
+        with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
 
         compare_content = (
