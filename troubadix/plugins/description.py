@@ -38,7 +38,7 @@ class CheckDescription(LineContentPlugin):
             file_content: The content of the file that is going to be
                           checked
         """
-        pattern = re.compile(r"script_description\(.+\);", re.IGNORECASE)
+        pattern = re.compile(r"script_description", re.IGNORECASE)
 
         for line in lines:
             match = pattern.search(line)
