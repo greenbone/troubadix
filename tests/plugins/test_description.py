@@ -30,7 +30,7 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
-        ).splitlines()
+        )
 
         results = list(
             CheckDescription.run(
@@ -48,7 +48,7 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
             'script_description("TestTest");\n'
-        ).splitlines()
+        )
 
         results = list(
             CheckDescription.run(
@@ -59,8 +59,7 @@ class CheckDescriptionTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include is using deprecated 'script_description': "
-            'script_description("TestTest");',
+            "VT/Include is using deprecated 'script_description'",
             results[0].message,
         )
 
@@ -72,7 +71,7 @@ class CheckDescriptionTestCase(PluginTestCase):
             'TTTTTTTscrIpt_descriPtion("TestTest");\n'
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
-        ).splitlines()
+        )
 
         results = list(
             CheckDescription.run(
@@ -83,7 +82,6 @@ class CheckDescriptionTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include is using deprecated 'script_description': "
-            'TTTTTTTscrIpt_descriPtion("TestTest");',
+            "VT/Include is using deprecated 'script_description'",
             results[0].message,
         )
