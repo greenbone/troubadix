@@ -64,7 +64,6 @@ from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .vt_placement import CheckVTPlacement
-from .prerun_collector import CheckPreRunCollector
 
 _PLUGINS = [
     CheckBadwords,
@@ -76,7 +75,6 @@ _PLUGINS = [
     CheckDependencies,
     CheckDescription,
     CheckDoubleEndPoints,
-    CheckDuplicateOID,
     CheckDuplicatedScriptTags,
     CheckForkingNaslFuncs,
     CheckGetKBOnServices,
@@ -111,7 +109,7 @@ _PLUGINS = [
     CheckTabs,
 ]
 
-_PRE_RUN_PLUGINS = [CheckPreRunCollector]
+_PRE_RUN_PLUGINS = [CheckDuplicateOID]
 
 
 class Plugins:
