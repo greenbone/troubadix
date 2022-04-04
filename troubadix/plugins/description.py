@@ -17,18 +17,18 @@
 
 import re
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterator
 
-from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
+from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
-class CheckDescription(LineContentPlugin):
+class CheckDescription(FileContentPlugin):
     name = "check_description"
 
     @staticmethod
     def run(
         nasl_file: Path,
-        lines: Iterable[str],
+        file_content: str,
     ) -> Iterator[LinterResult]:
 
         """This script checks if some NVTs are still using script_description
@@ -38,12 +38,10 @@ class CheckDescription(LineContentPlugin):
             file_content: The content of the file that is going to be
                           checked
         """
-        pattern = re.compile(r"script_description\(.+\);", re.IGNORECASE)
-
-        for line in lines:
-            match = pattern.search(line)
-            if match:
-                yield LinterError(
-                    "VT/Include is using deprecated 'script_description':"
-                    f" {line}"
-                )
+        script_description = re.compile(
+            r"script_description", re.IGNORECASE
+        ).search(file_content)
+        if script_description:
+            yield LinterError(
+                "VT/Include is using deprecated 'script_description'"
+            )
