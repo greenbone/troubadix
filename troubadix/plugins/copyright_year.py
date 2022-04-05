@@ -44,6 +44,9 @@ class CheckCopyrightYear(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
+        if nasl_file.suffix == ".inc":
+            return
+
         report = ""
         copyright_date = ""
         copyright_year = ""
