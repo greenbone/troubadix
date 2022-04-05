@@ -58,6 +58,7 @@ class FileResults:
         self.file_path = file_path
         self.plugin_results = OrderedDict()
         self.generic_results = []
+        self.has_results = False
 
     def add_generic_result(self, result: LinterResult) -> "FileResults":
         self.generic_results.append(result)
@@ -66,8 +67,14 @@ class FileResults:
     def add_plugin_results(
         self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
-        self.plugin_results[plugin_name] = list(results)
+        results = list(results)
+        if results:
+            self.has_results = True
+        self.plugin_results[plugin_name] = results
         return self
+
+    def __bool__(self):
+        return self.has_results
 
 
 class ResultCounts:
@@ -155,7 +162,7 @@ class Runner:
         ) in results.items():
             if plugin_results and self.verbose > 0:
                 self._report_info(f"Results for plugin {plugin_name}")
-            elif self.verbose > 1:
+            elif self.verbose > 2:
                 self._report_ok(f"No results for plugin {plugin_name}")
 
             # add the results to the statistic
@@ -199,7 +206,7 @@ class Runner:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
-        if self.verbose > 1:
+        if self.verbose > 2:
             self._report_plugins()
 
         start = datetime.datetime.now()
@@ -214,7 +221,7 @@ class Runner:
                     short_file_name = str(results.file_path).split(
                         "nasl/", maxsplit=1
                     )[-1]
-                    if self.verbose > 0:
+                    if results and self.verbose > 0 or self.verbose > 1:
                         self._report_bold_info(
                             f"Checking {short_file_name} ({i}/{files_count})"
                         )

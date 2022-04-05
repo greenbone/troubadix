@@ -126,7 +126,7 @@ def parse_args(
         "-v",
         action="count",
         default=0,
-        help=("-v verbose, -vv debug"),
+        help=("-v verbose, -vv more verbose, -vvv debug"),
     )
     parser.add_argument(
         "--log-file",
