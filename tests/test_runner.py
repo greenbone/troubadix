@@ -220,6 +220,30 @@ class TestRunner(unittest.TestCase):
         # revert changes for the next time
         nasl_file.write_text(content, encoding="latin1")
 
+    def test_runner_run_ok_with_verbose_level_3(self):
+        included_plugins = [
+            "CheckMissingDescExit",
+        ]
+        nasl_file = _here / "plugins" / "test.nasl"
+        content = nasl_file.read_text(encoding="latin1")
+
+        runner = Runner(
+            n_jobs=1,
+            term=self._term,
+            included_plugins=included_plugins,
+            verbose=3,
+        )
+
+        with redirect_stdout(io.StringIO()) as f:
+            runner.run([nasl_file])
+
+            new_content = nasl_file.read_text(encoding="latin1")
+            self.assertEqual(content, new_content)
+
+        output = f.getvalue()
+        self.assertIn(f"Checking {nasl_file}", output)
+        self.assertIn("No results for plugin", output)
+
     def test_runner_run_ok_with_verbose_level_2(self):
         included_plugins = [
             "CheckMissingDescExit",
@@ -242,7 +266,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"Checking {nasl_file}", output)
-        self.assertIn("No results for plugin", output)
+        self.assertNotIn("No results for plugin", output)
 
     def test_runner_run_ok_with_verbose_level_1(self):
         included_plugins = [
@@ -265,7 +289,7 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(f"Checking {nasl_file}", output)
+        self.assertNotIn(f"Checking {nasl_file}", output)
         self.assertNotIn("Results for plugin check_missing_desc_exit", output)
 
         # revert changes for the next time
@@ -291,7 +315,7 @@ class TestRunner(unittest.TestCase):
         gen_log_file = _here / "gen_log.txt"
 
         runner = Runner(
-            verbose=2,
+            verbose=3,
             n_jobs=1,
             term=self._term,
             included_plugins=included_plugins,
