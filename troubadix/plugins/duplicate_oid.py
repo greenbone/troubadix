@@ -31,6 +31,8 @@ from troubadix.plugin import (
     PreRunPlugin,
 )
 
+# import json
+
 OPENVAS_OID_PREFIX = r"1.3.6.1.4.1.25623.1.[0-9]+."
 OID_RE = re.compile(r"^1\.3\.6\.1\.4\.1\.25623\.1\.[0-9]+\.[\d.]+$")
 
@@ -77,7 +79,7 @@ class CheckDuplicateOID(PreRunPlugin):
                     invalids.append(file_name)
                     yield LinterError(f"{file_name}: Invalid OID {oid} found.")
                 elif oid not in mapping:
-                    mapping[oid] = file_name
+                    mapping[oid] = str(file_name)
                 else:
                     duplicates.append(
                         {
@@ -94,7 +96,8 @@ class CheckDuplicateOID(PreRunPlugin):
 
                 # builder = OIDDictBuilder()
                 # builder.scan(nasl_files)
-
+        # with open("mapping.json", "w") as f:
+        #     f.write(json.dumps(mapping))
         # pre_run_data["oid_mappings"] = builder.dict_mapping()
 
 
