@@ -49,9 +49,9 @@ def is_ignore_file(
 
 
 def get_path_from_root(file_name: Path, root: Path = None):
+    file_name = file_name.resolve()
     if not root:
         root = get_root(file_name)
-        print(f"Root: {root}")
     return file_name.relative_to(root)
 
 
@@ -96,7 +96,7 @@ class Root:
     def __init__(self, path: Path, root: str = _ROOT) -> None:
         match = re.search(
             rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
-            str(path),
+            str(path.resolve()),
         )
         if match:
             self.root = Path(match.group("path"))
