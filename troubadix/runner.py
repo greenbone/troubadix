@@ -236,23 +236,29 @@ class Runner:
     def pre_run(self, nasl_files: List[Path]) -> None:
         """Running Plugins that do not require a run per file,
         but a single execution"""
-        self._report_info("Starting pre-run")
-        self._report_info("Loading plugins")
+        # self._report_info("Starting pre-run")
+        # self._report_info("Loading plugins")
 
         # kwargs = {
         #     "filetree": self.pre_run_data.copy(),
         # }
 
         for plugin in self.pre_run_plugins:
+            self._report_bold_info(f"Run plugin {plugin.name}")
             if issubclass(plugin, PreRunPlugin):
-                results = plugin.run(
-                    self.pre_run_data,
-                    nasl_files,
+                results = list(
+                    plugin.run(
+                        self.pre_run_data,
+                        nasl_files,
+                    )
                 )
-                for result in results:
-                    self._report_error(message=result.message)
+                if results:
+                    for result in results:
+                        self._report_error(message=result.message)
+                else:
+                    self._report_ok("No duplicated OIDs found.")
             else:
-                self._report_error("Plugin {plugin.__name__} can not be read.")
+                self._report_error(f"Plugin {plugin.__name__} can not be read.")
 
     def run(self, files: List[Path]) -> None:
         if not len(self.plugins):
