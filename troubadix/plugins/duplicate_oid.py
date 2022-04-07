@@ -26,7 +26,6 @@ from troubadix.helper import (
 )
 from troubadix.plugin import (
     LinterError,
-    # LinterMessage,
     LinterResult,
     PreRunPlugin,
 )
@@ -45,7 +44,6 @@ class CheckDuplicateOID(PreRunPlugin):
 
     @staticmethod
     def run(
-        pre_run_data: dict,
         nasl_files: List[Path],
     ) -> Iterator[LinterResult]:
         """Run PRE_RUN_COLLECTOR."""
@@ -74,7 +72,7 @@ class CheckDuplicateOID(PreRunPlugin):
                         oid = OPENVAS_OID_PREFIX + match.group("oid")
                 if not oid:
                     absents.append(file_name)
-                    yield LinterError(f"{file_name}: Could not find a OID.")
+                    yield LinterError(f"{file_name}: Could not find an OID.")
                 elif not OID_RE.match(oid):
                     invalids.append(file_name)
                     yield LinterError(f"{file_name}: Invalid OID {oid} found.")
@@ -92,69 +90,7 @@ class CheckDuplicateOID(PreRunPlugin):
                         f"{file_name}: OID {oid} already "
                         f"used by '{mapping[oid]}'"
                     )
-                # yield LinterMessage(f"{file_name}: OK!")
 
-                # builder = OIDDictBuilder()
-                # builder.scan(nasl_files)
-        # with open("mapping.json", "w") as f:
-        #     f.write(json.dumps(mapping))
-        # pre_run_data["oid_mappings"] = builder.dict_mapping()
-
-
-class OIDDictBuilder:
-    def __init__(self):
-        self.mapping = dict()
-        self.duplicates = []
-        self.absents = []
-        self.invalids = []
-
-    def scan(self, files: List[Path]) -> None:
-        for nasl_file in files:
-            if nasl_file.suffix == ".nasl":
-                self._find_oid(nasl_file=nasl_file)
-
-    def _find_oid(self, nasl_file: Path) -> None:
-        file_name = str(nasl_file).split("nasl/", maxsplit=1)[-1]
-        content = nasl_file.read_text(encoding="latin-1")
-        # search for deprecated script_id
-        match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
-            content
-        )
-        if match:
-            oid = OPENVAS_OID_PREFIX + match.group("oid")
-        else:
-            match = get_special_script_tag_pattern(SpecialScriptTag.ID).search(
-                content
-            )
-            if match:
-                oid = match.group("oid")
-        if not oid:
-            self.absents.append(file_name)
-            yield LinterError(f"{file_name}: Could not find a OID.")
-        elif not OID_RE.match(oid):
-            self.invalids.append(file_name)
-            yield LinterError(f"{file_name}: Invalid OID {oid} found.")
-        elif oid not in self.mapping:
-            self.mapping[oid] = file_name
-        else:
-            self.duplicates.append(
-                {
-                    "oid": oid,
-                    "duplicate": file_name,
-                    "first_usage": self.mapping[oid],
-                }
-            )
-            yield LinterError(
-                f"{file_name}: OID {oid} already used by '{self.mapping[oid]}'"
-            )
-        yield LinterError("TEST")
-
-    def dict_mapping(self) -> dict:
-        return dict(
-            {
-                "mapping": self.mapping,
-                "duplicates": self.duplicates,
-                "absents": self.absents,
-                "invalids": self.invalids,
-            }
-        )
+    @staticmethod
+    def ok():
+        return "No duplicated OIDs found."

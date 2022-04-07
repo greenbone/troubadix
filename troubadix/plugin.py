@@ -51,9 +51,13 @@ class PreRunPlugin(Plugin):
     @staticmethod
     @abstractmethod
     def run(
-        pre_run_data: dict,
         nasl_files: Iterable[Path],
     ) -> Iterator[LinterResult]:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def ok():
         pass
 
 
