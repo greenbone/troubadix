@@ -111,7 +111,7 @@ class Runner:
         statistic: bool = True,
         log_file: Path = None,
     ) -> bool:
-        #plugins initialization
+        # plugins initialization
         self.plugins = Plugins(
             excluded_plugins, included_plugins, update_date=update_date
         )
@@ -282,7 +282,7 @@ class Runner:
                     # only print the part "common/some_nasl.nasl" by
                     # splitting at the nasl/ dir in
                     # /root/vts-repo/nasl/common/some_nasl.nasl
-                    if self.verbose > 0:
+                    if results and self.verbose > 0 or self.verbose > 1:
                         self._report_bold_info(
                             f"Checking {get_path_from_root(results.file_path)}"
                             f" ({i}/{files_count})"

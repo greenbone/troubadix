@@ -22,72 +22,52 @@ from troubadix.plugins.duplicate_oid import CheckDuplicateOID
 
 from . import PluginTestCase
 
+here = Path(__file__).parent
+
 
 class CheckDuplicateOIDTestCase(PluginTestCase):
     def test_ok(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_oid("1.2.3.4.5.6.78909.8.7.000000");\n'
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
-        )
-
-        results = list(
-            CheckDuplicateOID.run(
-                path,
-                content,
-            )
-        )
+        file1 = here / "test_files/nasl/21.04/fail.nasl"
+        file2 = here / "test_files/nasl/21.04/fail_name_newline.nasl"
+        results = list(CheckDuplicateOID.run([file1, file2]))
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
-        )
+        file1 = here / "test_files/nasl/21.04/fail_name_newline.nasl"
+        file2 = here / "test_files/nasl/21.04/fail_badwords.nasl"
 
-        results = list(
-            CheckDuplicateOID.run(
-                path,
-                content,
-            )
-        )
+        results = list(CheckDuplicateOID.run([file1, file2]))
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
-            f"No OID found in VT '{str(path)}'",
+            f"{file2.name}: Could not find an OID.",
             results[0].message,
         )
 
     def test_duplicated_oid_function(self):
-        path = Path("some/file.nasl")
-        content = (
-            'script_oid("1.2.3.4.5.6.78909.8.7.654321");\n'
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_name("Foo Bar");\n'
-            'script_name("Foo Bar");\n'
-        )
+        file1 = here / "test_files/nasl/21.04/fail.nasl"
+        file2 = here / "test_files/nasl/21.04/test.nasl"
+        results = list(CheckDuplicateOID.run([file1, file2]))
+        print(results)
 
-        results = list(
-            CheckDuplicateOID.run(
-                path,
-                content,
-            )
-        )
-        self.assertEqual(len(results), 4)
+        self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The OID '1.2.3.4.5.6.78909.8.7.654321' is also used in "
-            "./tests/plugins/fail2.nasl:  "
-            'script_oid("1.2.3.4.5.6.78909.8.7.654321");',
+            f"{file2.name}: OID 1.3.6.1.4.1.25623.1.0.100312 "
+            f"already used by '{file1.name}'",
             results[0].message,
         )
+
+    def test_invalid_oid(self):
+        file2 = (
+            here / "test_files/nasl/21.04/fail_name_and_copyright_newline.nasl"
+        )
+        results = list(CheckDuplicateOID.run([file2]))
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The OID '1.2.3.4.5.6.78909.8.7.654321' is also used in "
-            "./tests/plugins/test_files/fail_name_newline.nasl:  "
-            'script_oid("1.2.3.4.5.6.78909.8.7.654321");',
-            results[3].message,
+            f"{file2.name}: Invalid OID 1.2.3.4.5.6.78909.8.7.654321 found.",
+            results[0].message,
         )

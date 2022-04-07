@@ -58,9 +58,11 @@ def get_path_from_root(file_name: Path, root: Path = None):
 # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
 def which(program: Union[Path, str]) -> Optional[Path]:
     def is_exe(fpath: Path):
+        if isinstance(fpath, str):
+            fpath = Path(fpath)
         return fpath.is_file() and os.access(fpath, os.X_OK)
 
-    if isinstance(str, program) and is_exe(program):
+    if isinstance(program, (Path, str)) and is_exe(program):
         return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):

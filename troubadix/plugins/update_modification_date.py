@@ -45,7 +45,7 @@ class UpdateModificationDate(FileContentPlugin):
         )
         if not match:
             yield LinterError(
-                f"{nasl_file} does not contain a modification day script tag."
+                "VT does not contain a modification day script tag."
             )
             return
 
@@ -72,7 +72,7 @@ class UpdateModificationDate(FileContentPlugin):
             string=file_content,
         )
         if not match:
-            yield LinterError(f"{nasl_file} does not contain a script version.")
+            yield LinterError("VT does not contain a script version.")
             return
 
         old_version = match.groups()[0]

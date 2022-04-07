@@ -26,12 +26,14 @@
 
 if(description)
 {
-  script_oid("1.3.6.1.4.1.25623.1.0.100312");
+  script_oid("1.3.6.1.4.1.25623.1.0.100313");
   script_tag(name:"cvss_base", value:"0.0");
-  script_tag(name:"cvss_base_vector", value:"AV:N/AC:Lo/Au:N/C:N/I:N/A:N");
+  script_tag(name:"cvss_base_vector", value:"AV:N/AC:L/Au:N/C:N/I:N/A:N");
+  script_tag(name:"last_modification", value:"2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)");
   script_cve_id("CVE-2011-12345", "CVE-2011-54321");
   script_bugtraq_id(00000);
-  script_name("foo detection");
+  script_name("foo 
+  detection");
   script_category(ACT_GATHER_INFO);
   script_copyright("Copyright (c) Greenbone Networks GmbH");
   script_family("FreeBSD Local Security Checks");
@@ -40,7 +42,6 @@ if(description)
   script_tag(name:"solution", value:"Update your system with the appropriate patches or software upgrades.");
 
   script_xref(name:"URL", value:"http://www.foo.org/");
-  script_xref(name: "URL", valie: "[https://www.wordfence.com/blog/2017/10/zero-day-vulnerability-ultimate-form-builder-lite/"|https://www.wordfence.com/blog/2017/10/zero-day-vulnerability-ultimate-form-builder-lite/%22] [[^|https://www.wordfence.com/blog/2017/10/zero-day-vulnerability-ultimate-form-builder-lite/%22]]);
   script_tag(name:"summary", value:"The remote foo foos the bar");
 
   script_tag(name:"qod_type", value:"package");

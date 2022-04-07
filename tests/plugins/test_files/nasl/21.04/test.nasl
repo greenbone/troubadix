@@ -26,7 +26,7 @@
 
 if(description)
 {
-  script_oid("1.2.3.4.5.6.78909.8.7.974321");
+  script_oid("1.3.6.1.4.1.25623.1.0.100312");
   script_tag(name:"cvss_base", value:"0.0");
   script_tag(name:"cvss_base_vector", value:"AV:N/AC:L/Au:N/C:N/I:N/A:N");
   script_version("2021-03-24T10:08:26+0000");

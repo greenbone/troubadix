@@ -22,6 +22,7 @@ from pathlib import Path
 
 from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
+from troubadix.helper.helper import get_path_from_root
 
 from troubadix.plugin import LinterError, LinterResult
 from troubadix.plugins import _PLUGINS
@@ -78,7 +79,15 @@ class TestRunner(unittest.TestCase):
             self.assertIn(plugin.__name__, included_plugins)
 
     def test_runner_run_ok(self):
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         # Check sys exit 1
@@ -120,7 +129,15 @@ class TestRunner(unittest.TestCase):
         nasl_file.write_text(content, encoding="latin1")
 
     def test_runner_run_error(self):
-        nasl_file = _here / "plugins" / "fail.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "fail.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         # Check sys exit 1
@@ -157,7 +174,7 @@ class TestRunner(unittest.TestCase):
         error = results.plugin_results["update_modification_date"][0]
         self.assertIsInstance(error, LinterError)
         self.assertIn(
-            "fail.nasl does not contain a modification day script tag.",
+            "VT does not contain a modification day script tag.",
             error.message,
         )
 
@@ -188,7 +205,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{str(nasl_file).split('nasl/', maxsplit=1)[-1]}",
+            "Checking " f"{get_path_from_root(nasl_file)}",
             output,
         )
         self.assertIn("Results for plugin update_modification_date", output)
@@ -229,7 +246,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{str(nasl_file).split('nasl/', maxsplit=1)[-1]}",
+            "Checking " f"{get_path_from_root(nasl_file)}",
             output,
         )
         self.assertIn("Results for plugin update_modification_date", output)
@@ -246,7 +263,15 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         content = nasl_file.read_text(encoding="latin1")
 
         runner = Runner(
@@ -263,8 +288,8 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(f"Checking {nasl_file}", output)
-        self.assertIn("No results for plugin", output)
+        self.assertIn(f"Checking {get_path_from_root(nasl_file)}", output)
+        self.assertIn("No results for plugin check_missing_desc_exit", output)
 
     def test_runner_run_ok_with_verbose_level_2(self):
         included_plugins = [
@@ -296,10 +321,12 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{str(nasl_file).split('nasl/', maxsplit=1)[-1]}",
+            "Checking " f"{get_path_from_root(nasl_file)}",
             output,
         )
-        self.assertIn("No results for plugin check_missing_desc_exit", output)
+        self.assertNotIn(
+            "No results for plugin check_missing_desc_exit", output
+        )
 
     def test_runner_run_ok_with_verbose_level_1(self):
         included_plugins = [
@@ -354,7 +381,15 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         gen_log_file = _here / "gen_log.txt"
 
         runner = Runner(
@@ -370,7 +405,7 @@ class TestRunner(unittest.TestCase):
         compare_content = (
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\nChecking"
-            f" {nasl_file} (0/1)\n\t\tNo results for plugin"
+            f" {get_path_from_root(nasl_file)} (0/1)\n\t\tNo results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
         )
         gen_content = gen_log_file.read_text(encoding="utf-8")
@@ -401,7 +436,7 @@ class TestRunner(unittest.TestCase):
         compare_content = (
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\nChecking"
-            f" {nasl_file} (0/1)\n\tNo results for plugin"
+            f" {get_path_from_root(nasl_file)} (0/1)\n\tNo results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
         )
         gen_content = gen_log_file.read_text(encoding="utf-8")
