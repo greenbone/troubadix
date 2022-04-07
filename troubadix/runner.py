@@ -193,12 +193,11 @@ class Runner:
         self._term.print(f"{'Plugin':50} {'Error Count':11}")
         self._term.print("-" * 62)
         for (plugin, count) in self.result_counts.result_counts.items():
-            overall += count
             self._term.error(f"{plugin:50} {count:11}")
         self._term.print("-" * 62)
         self._term.error(f"{'warn':50} {self._warning_count:11}")
         self._term.error(f"{'err':50} {self._error_count:11}")
-        self._term.error(f"{'sum':50} {overall:11}")
+        self._term.info(f"{'sum':50} {self._error_count + self._warning_count:11}")
 
     def _count_errors(self, results: Dict[str, List[LinterMessage]]) -> None:
         for _, plugin_results in results.items():
