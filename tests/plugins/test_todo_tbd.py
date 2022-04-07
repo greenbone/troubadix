@@ -17,7 +17,7 @@
 
 from pathlib import Path
 
-from troubadix.plugin import LinterError
+from troubadix.plugin import LinterWarning
 from troubadix.plugins import CheckTodoTbd
 
 from . import PluginTestCase
@@ -71,13 +71,13 @@ class CheckTodoTbdTestCase(PluginTestCase):
         )
         self.assertEqual(len(results), 2)
 
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 1",
             results[0].message,
         )
 
-        self.assertIsInstance(results[1], LinterError)
+        self.assertIsInstance(results[1], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 2",
             results[1].message,
@@ -99,13 +99,13 @@ class CheckTodoTbdTestCase(PluginTestCase):
         )
         self.assertEqual(len(results), 2)
 
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 1",
             results[0].message,
         )
 
-        self.assertIsInstance(results[1], LinterError)
+        self.assertIsInstance(results[1], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 2",
             results[1].message,
@@ -127,13 +127,13 @@ class CheckTodoTbdTestCase(PluginTestCase):
         )
         self.assertEqual(len(results), 2)
 
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 1",
             results[0].message,
         )
 
-        self.assertIsInstance(results[1], LinterError)
+        self.assertIsInstance(results[1], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 2",
             results[1].message,
@@ -155,19 +155,19 @@ class CheckTodoTbdTestCase(PluginTestCase):
         )
         self.assertEqual(len(results), 3)
 
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 1",
             results[0].message,
         )
 
-        self.assertIsInstance(results[1], LinterError)
+        self.assertIsInstance(results[1], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 2",
             results[1].message,
         )
 
-        self.assertIsInstance(results[2], LinterError)
+        self.assertIsInstance(results[2], LinterWarning)
         self.assertEqual(
             "VT some/file.nasl contains #TODO/TBD/@todo keywords at line 4",
             results[2].message,

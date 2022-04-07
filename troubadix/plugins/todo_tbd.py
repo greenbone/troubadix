@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Iterable, Iterator
 
 from ..helper import is_ignore_file
-from ..plugin import LineContentPlugin, LinterError, LinterResult
+from ..plugin import LineContentPlugin, LinterWarning, LinterResult
 
 _IGNORE_FILES = [
     "gb_openvas",
@@ -48,7 +48,7 @@ class CheckTodoTbd(LineContentPlugin):
         for index, line in enumerate(lines, start=1):
             match = re.search("##? *(TODO|TBD|@todo):?", line)
             if match is not None:
-                yield LinterError(
+                yield LinterWarning(
                     f"VT {nasl_file} contains #TODO/TBD/@todo"
                     f" keywords at line {index}"
                 )
