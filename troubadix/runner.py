@@ -118,6 +118,7 @@ class Runner:
         init_special_script_tag_patterns()
         self._log_file = log_file
         self._error_count = 0
+        self._warning_count = 0
 
     def _log_append(self, message: str):
         if self._log_file:
@@ -195,6 +196,7 @@ class Runner:
             overall += count
             self._term.error(f"{plugin:50} {count:11}")
         self._term.print("-" * 62)
+        self._term.error(f"{'warn':50} {self._warning_count:11}")
         self._term.error(f"{'err':50} {self._error_count:11}")
         self._term.error(f"{'sum':50} {overall:11}")
 
@@ -203,6 +205,8 @@ class Runner:
             for plugin_result in plugin_results:
                 if isinstance(plugin_result, LinterError):
                     self._error_count += 1
+                elif isinstance(plugin_result, LinterWarning):
+                    self._warning_count += 1
 
     def run(
         self,
