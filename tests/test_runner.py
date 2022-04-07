@@ -211,11 +211,7 @@ class TestRunner(unittest.TestCase):
         self.assertIn("Results for plugin update_modification_date", output)
         # CI terminal formats for 80 chars per line
         self.assertIn(
-            "fail.nasl does not",
-            output,
-        )
-        self.assertIn(
-            "contain a modification day script tag.",
+            "VT does not contain a modification day script tag.",
             output,
         )
 
@@ -404,8 +400,12 @@ class TestRunner(unittest.TestCase):
 
         compare_content = (
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
-            "Running plugins: check_missing_desc_exit\n\n\nChecking"
-            f" {get_path_from_root(nasl_file)} (0/1)\n\t\tNo results for plugin"
+            "Running plugins: check_missing_desc_exit\n\n\n"
+            "Run plugin check_duplicate_oid\n"
+            f"\t\t{get_path_from_root(nasl_file)}: Invalid OID "
+            "1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
+            f"Checking {get_path_from_root(nasl_file)} (0/1)\n\t\t"
+            "No results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
         )
         gen_content = gen_log_file.read_text(encoding="utf-8")
@@ -420,7 +420,15 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = _here / "plugins" / "test.nasl"
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
         gen_log_file = _here / "gen_log.txt"
 
         runner = Runner(
@@ -436,6 +444,9 @@ class TestRunner(unittest.TestCase):
         compare_content = (
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\nChecking"
+            "Run plugin check_duplicate_oid"
+            f"\t\t{get_path_from_root(nasl_file)}: "
+            "Invalid OID 1.2.3.4.5.6.78909.1.7.654321 found."
             f" {get_path_from_root(nasl_file)} (0/1)\n\tNo results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
         )
