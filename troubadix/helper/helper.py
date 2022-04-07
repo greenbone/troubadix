@@ -20,6 +20,21 @@ from pathlib import Path
 from subprocess import PIPE, Popen
 from typing import List, Optional, Union, Tuple, AnyStr
 
+# Script categories
+SCRIPT_CATEGORIES = {
+    "ACT_INIT": 0,
+    "ACT_SCANNER": 1,
+    "ACT_SETTINGS": 2,
+    "ACT_GATHER_INFO": 3,
+    "ACT_ATTACK": 4,
+    "ACT_MIXED_ATTACK": 5,
+    "ACT_DESTRUCTIVE_ATTACK": 6,
+    "ACT_DENIAL": 7,
+    "ACT_KILL_HOST": 8,
+    "ACT_FLOOD": 9,
+    "ACT_END": 10,
+}
+
 # Root directory of nasl files
 _ROOT = "nasl"
 
@@ -33,18 +48,25 @@ def is_ignore_file(
     return False
 
 
-# https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
-def which(program):
-    def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+def get_path_from_root(file_name: Path, root: Path = None):
+    file_name = file_name.resolve()
+    if not root:
+        root = get_root(file_name)
+    return file_name.relative_to(root)
 
-    fpath, _fname = os.path.split(program)
-    if fpath:
-        if is_exe(program):
-            return program
+
+# https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+def which(program: Union[Path, str]) -> Optional[Path]:
+    def is_exe(fpath: Path):
+        if isinstance(fpath, str):
+            fpath = Path(fpath)
+        return fpath.is_file() and os.access(fpath, os.X_OK)
+
+    if isinstance(program, (Path, str)) and is_exe(program):
+        return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path) / program
             if is_exe(exe_file):
                 return exe_file
 
@@ -76,7 +98,7 @@ class Root:
     def __init__(self, path: Path, root: str = _ROOT) -> None:
         match = re.search(
             rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
-            str(path),
+            str(path.resolve()),
         )
         if match:
             self.root = Path(match.group("path"))

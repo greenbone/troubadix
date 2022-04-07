@@ -53,8 +53,9 @@ class CheckDeprecatedDependency(FileContentPlugin):
             return
 
         deprecated_pattern = re.compile(
-            r"^\s*exit\s*\(\s*66\s*\)\s*;|script_tag\s*\(\s*name\s*:\s*[\"']"
-            r"deprecated[\"']\s*,\s*value\s*:\s*TRUE\s*\)\s*;",
+            r"^\s*exit\s*\(\s*66\s*\)\s*;|script_tag\s*\(\s*name\s*:\s*"
+            r"(?P<quote>[\"'])deprecated(?P=quote)\s*,\s*value\s*:\s*TRUE"
+            r"\s*\)\s*;",
             re.MULTILINE,
         )
         deprecated = deprecated_pattern.search(file_content)

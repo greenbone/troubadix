@@ -23,7 +23,7 @@ from troubadix.plugins.script_family import CheckScriptFamily
 from . import PluginTestCase
 
 
-class CheckNewlinesTestCase(PluginTestCase):
+class CheckScriptFamilyTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (

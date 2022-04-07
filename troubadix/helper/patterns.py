@@ -19,12 +19,13 @@ import re
 
 from enum import Enum
 from typing import Dict
+from troubadix.helper.helper import SCRIPT_CATEGORIES
 
 
 # regex patterns for script tags
 _TAG_PATTERN = (
-    r'script_tag\s*\(\s*name\s*:\s*["\'](?P<name>{name})["\']\s*,'
-    r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
+    r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>{name})(?P=quote)\s*,'
+    r'\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{value})(?P=quote2)?\s*\)\s*;'
 )
 
 
@@ -145,7 +146,14 @@ def get_xref_pattern(
 
 
 _SPECIAL_TAG_PATTERN = (
-    r'script_(?P<name>{name})\s*\(["\']?(?P<value>{value})["\']?\s*\)\s*;'
+    r'script_(?P<name>{name})\s*\((?P<quote99>[\'"])?(?P<value>{value})'
+    r"(?P=quote99)?\s*\)\s*;"
+)
+
+_XREF_TAG_PATTERN = (
+    r'script_xref\(\s*name\s*:\s*(?P<quote>[\'"])(?P<type>{type})'
+    r'(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{'
+    r"value})(?P=quote2)?\s*\)\s*;"
 )
 
 
@@ -158,11 +166,11 @@ class SpecialScriptTag(Enum):
     CVE_ID = "cve_id"
     DEPENDENCIES = "dependencies"
     EXCLUDE_KEYS = "exclude_keys"
-
     FAMILY = "family"  # script_family("FIXME");
     MANDATORY_KEYS = "mandatory_keys"
     NAME = "name"
     OID = "oid"  # script_oid("1.3.6.1.4.1.25623.1.0.XXXXXX");
+    ID = "id"  # deprecated for OID but kept for backward compatibility
     REQUIRE_KEYS = "require_keys"
     REQUIRE_PORTS = "require_ports"
     REQUIRE_UDP_PORTS = "require_udp_ports"
@@ -170,7 +178,7 @@ class SpecialScriptTag(Enum):
     XREF = "xref"
 
 
-def _get_special_tag_pattern(
+def _get_special_script_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     return re.compile(
@@ -185,6 +193,9 @@ __special_script_tag_patterns = None
 
 __special_script_tag_values = {
     SpecialScriptTag.OID: r"(?P<oid>([0-9.]+))",
+    SpecialScriptTag.ID: r"(?P<oid>([0-9.]+))",
+    SpecialScriptTag.CATEGORY: r"(?P<category>("
+    rf"{'|'.join([k for k, _ in SCRIPT_CATEGORIES.items()])}))",
     SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}",
     SpecialScriptTag.REQUIRE_PORTS: __PORT_VALUE,
     SpecialScriptTag.REQUIRE_UDP_PORTS: __PORT_VALUE,
@@ -206,7 +217,7 @@ def init_special_script_tag_patterns() -> None:
             value = r".+?"
             flags = re.MULTILINE
 
-        __special_script_tag_patterns[tag] = _get_special_tag_pattern(
+        __special_script_tag_patterns[tag] = _get_special_script_tag_pattern(
             name=tag.value, value=value, flags=flags
         )
 
@@ -223,38 +234,6 @@ def get_special_script_tag_pattern(
 ) -> re.Pattern:
     special_script_tag_patterns = get_special_script_tag_patterns()
     return special_script_tag_patterns[special_script_tag]
-
-
-def get_special_tag_pattern(
-    name: SpecialScriptTag,
-    *,
-    value: str = None,
-    flags: re.RegexFlag = 0,
-    url_type: str = "URL",
-) -> re.Pattern:
-    """
-    The returned pattern catchs all `script_<name>(<value>);`
-
-    Arguments:
-        name        script tag name
-        value       script tag value (default: at least on char)
-        flags       regex flags for compile (default: 0)
-
-    The returned `Match`s by this pattern will have group strings
-    .group('name') and .group('value')
-    Returns
-        `re.Pattern` object
-    """
-    # if not value:
-    #     return SpecialScriptTagPatterns().pattern[name.value]
-    if name.value == "x_ref":
-        return re.compile(
-            _XREF_TAG_PATTERN.format(
-                name=name.value, value=value, type=url_type
-            ),
-            flags=flags,
-        )
-    return _get_special_tag_pattern(name=name.value, value=value, flags=flags)
 
 
 class CommonScriptTagsPattern:

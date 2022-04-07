@@ -25,8 +25,8 @@ from troubadix.helper import (
     SpecialScriptTag,
     get_root,
     get_script_tag_pattern,
-    get_special_tag_pattern,
 )
+from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -57,8 +57,8 @@ class CheckVTPlacement(FileContentPlugin):
         """
         root = get_root(nasl_file)
 
-        match = get_special_tag_pattern(
-            name=SpecialScriptTag.FAMILY,
+        match = _get_special_script_tag_pattern(
+            name=SpecialScriptTag.FAMILY.value,
             value=r"(Product|Service) detection",
             flags=re.MULTILINE,
         ).search(file_content)

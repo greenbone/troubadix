@@ -17,8 +17,11 @@
 
 from pathlib import Path
 from typing import Iterator
+from troubadix.helper.patterns import (
+    _get_special_script_tag_pattern,
+    _get_tag_pattern,
+)
 
-from troubadix.helper.patterns import _get_special_tag_pattern, _get_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 
@@ -48,7 +51,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        if _get_special_tag_pattern(
+        if _get_special_script_tag_pattern(
             name=r"category", value=r"ACT_(SETTINGS|SCANNER|INIT)"
         ).search(file_content) or _get_tag_pattern(
             name=r"deprecated", value=r"TRUE"
@@ -65,7 +68,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
             r"mandatory_keys",
         ]
 
-        if not _get_special_tag_pattern(
+        if not _get_special_script_tag_pattern(
             name=rf"({'|'.join(recommended_many_call)})", value=".*"
         ).search(file_content):
             yield LinterWarning(
@@ -73,9 +76,9 @@ class CheckScriptCallsRecommended(FileContentPlugin):
                 f"{', '.join(recommended_many_call)}"
             )
         for call in recommended_single_call:
-            if not _get_special_tag_pattern(name=call, value=".*").search(
-                file_content
-            ):
+            if not _get_special_script_tag_pattern(
+                name=call, value=".*"
+            ).search(file_content):
                 yield LinterWarning(
                     "VT does not contain the following recommended call: "
                     f"'script_{call}'"

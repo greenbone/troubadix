@@ -45,6 +45,22 @@ class Plugin(ABC):
     description: str = None
 
 
+class PreRunPlugin(Plugin):
+    """A plugin that only runs PreRun collectors"""
+
+    @staticmethod
+    @abstractmethod
+    def run(
+        nasl_files: Iterable[Path],
+    ) -> Iterator[LinterResult]:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def ok():
+        pass
+
+
 class FileContentPlugin(Plugin):
     """A plugin that does checks on the whole file content"""
 

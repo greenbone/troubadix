@@ -75,7 +75,6 @@ _PLUGINS = [
     CheckDependencies,
     CheckDescription,
     CheckDoubleEndPoints,
-    CheckDuplicateOID,
     CheckDuplicatedScriptTags,
     CheckForkingNaslFuncs,
     CheckGetKBOnServices,
@@ -109,6 +108,8 @@ _PLUGINS = [
     CheckEncoding,
     CheckTabs,
 ]
+
+_PRE_RUN_PLUGINS = [CheckDuplicateOID]
 
 
 class Plugins:

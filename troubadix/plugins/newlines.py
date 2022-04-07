@@ -45,7 +45,9 @@ class CheckNewlines(LineContentPlugin):
         # NEW: Remove whitespaces and newlines in script_name, script_copyright
         for tag in ["name", "copyright"]:
             remove_whitespaces_match = re.search(
-                rf'script_{tag}\s*\(\s*[\'"](.*)[\'"]\)\s*\)\s*;', content
+                rf'script_{tag}\s*\(\s*(?P<quote>[\'"])(.*)(?P=quote)\)'
+                r"\s*\)\s*;",
+                content,
             )
             if remove_whitespaces_match:
                 content.replace(
@@ -58,7 +60,8 @@ class CheckNewlines(LineContentPlugin):
                 )
 
             newline_match = re.search(
-                rf'(script_{tag}\([\'"][^\'"\n;]*)[\n]+\s*([^\'"\n;]*[\'"]\);)',
+                rf'(script_{tag}\((?P<quote>[\'"])[^\'"\n;]*)[\n]+\s*'
+                r'([^\'"\n;]*(?P=quote)\);)',
                 content,
             )
             if newline_match:

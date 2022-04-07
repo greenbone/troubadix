@@ -29,8 +29,8 @@ class AllScriptTagsPattern:
 
         self.pattern = re.compile(
             pattern=(
-                r'script_tag\(\s*name\s*:\s*["\']'
-                r'(?P<name>[a-zA-Z0-9\s\+\-\_]+)["\']\s*.+\s*\)\s*;'
+                r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])'
+                r"(?P<name>[a-zA-Z0-9\s\+\-\_]+)(?P=quote)\s*.+\s*\)\s*;"
             ),
             # flags=re.MULTILINE, # It seems that there is no multiline
             # script_tag here

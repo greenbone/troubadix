@@ -47,7 +47,7 @@ class CheckDoubleEndPoints(FileContentPlugin):
             for tag_match in tag_matches:
                 if tag_match:
                     doubled_end_points_match = re.search(
-                        r'\.\s*\.["\']\s*\)\s*;',
+                        r'\.\s*\.(?P<quote>[\'"])\s*\)\s*;',
                         tag_match.group(0),
                         re.MULTILINE,
                     )

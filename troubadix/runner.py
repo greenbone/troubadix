@@ -19,11 +19,12 @@ import datetime
 import signal
 
 from collections import OrderedDict, defaultdict
-from multiprocessing import Pool
+from multiprocessing import Pool, Manager
 from pathlib import Path
 from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
+from troubadix.helper.helper import get_path_from_root
 
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
@@ -36,8 +37,9 @@ from troubadix.plugin import (
     LinterMessage,
     LinterResult,
     LinterWarning,
+    PreRunPlugin,
 )
-from troubadix.plugins import Plugins
+from troubadix.plugins import _PRE_RUN_PLUGINS, Plugins
 
 CHUNKSIZE = 1  # default 1
 # js: can we get this to utf-8 in future @scanner @feed?
@@ -109,11 +111,17 @@ class Runner:
         statistic: bool = True,
         log_file: Path = None,
     ) -> bool:
+        # plugins initialization
         self.plugins = Plugins(
             excluded_plugins, included_plugins, update_date=update_date
         )
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
+
+        self.mt_manager = Manager()
+        self.pre_run_plugins = _PRE_RUN_PLUGINS
+        self.pre_run_data = self.mt_manager.dict()
+
         self._term = term
         self._n_jobs = n_jobs
         self.verbose = verbose
@@ -130,6 +138,18 @@ class Runner:
         if self._log_file:
             with self._log_file.open(mode="a", encoding="utf-8") as f:
                 f.write(f"{message}\n")
+
+    def __getstate__(self):
+        """called when pickling - this hack allows subprocesses to
+        be spawned without the AuthenticationString raising an error"""
+        state = self.__dict__.copy()
+        if "mt_manager" in state:
+            del state["mt_manager"]
+        return state
+
+    def __setstate__(self, state):
+        """for unpickling"""
+        self.__dict__.update(state)
 
     def _report_results(self, results: List[LinterMessage]) -> None:
         for result in results:
@@ -213,18 +233,45 @@ class Runner:
         )
         self._term.info(f"{'sum':50} {counts:11}")
 
-    def run(
-        self,
-        files: List[Path],
-    ) -> None:
-        files_count = len(files)
-        i = 0
+    def pre_run(self, nasl_files: List[Path]) -> None:
+        """Running Plugins that do not require a run per file,
+        but a single execution"""
+        # self._report_info("Starting pre-run")
+        # self._report_info("Loading plugins")
 
+        for plugin in self.pre_run_plugins:
+            if issubclass(plugin, PreRunPlugin):
+                results = list(
+                    plugin.run(
+                        nasl_files,
+                    )
+                )
+                with self._term.indent():
+                    if results and self.verbose > 0:
+                        self._report_bold_info(f"Run plugin {plugin.name}")
+                        for result in results:
+                            self._report_error(message=result.message)
+                    else:
+                        if self.verbose > 2:
+                            self._report_ok(plugin.ok())
+            else:
+                self._report_error(f"Plugin {plugin.__name__} can not be read.")
+
+    def run(self, files: List[Path]) -> None:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
+        # statistic variables
+        files_count = len(files)
+        i = 0
+        start = datetime.datetime.now()
+
+        # print plugins that will be executed
         if self.verbose > 2:
             self._report_plugins()
+
+        # run single time execution plugins
+        self.pre_run(files)
 
         start = datetime.datetime.now()
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
@@ -235,12 +282,10 @@ class Runner:
                     # only print the part "common/some_nasl.nasl" by
                     # splitting at the nasl/ dir in
                     # /root/vts-repo/nasl/common/some_nasl.nasl
-                    short_file_name = str(results.file_path).split(
-                        "nasl/", maxsplit=1
-                    )[-1]
                     if results and self.verbose > 0 or self.verbose > 1:
                         self._report_bold_info(
-                            f"Checking {short_file_name} ({i}/{files_count})"
+                            f"Checking {get_path_from_root(results.file_path)}"
+                            f" ({i}/{files_count})"
                         )
                     i = i + 1
 
@@ -262,7 +307,7 @@ class Runner:
         file_name = file_path.resolve()
         results = FileResults(file_path)
 
-        # maybe we need to re-read filecontent, if an Plugin changes it
+        # maybe we need to re-read file content, if a Plugin changes it
         file_content = file_path.read_text(encoding=CURRENT_ENCODING)
 
         for plugin in self.plugins:
