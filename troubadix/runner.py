@@ -239,24 +239,21 @@ class Runner:
         # self._report_info("Starting pre-run")
         # self._report_info("Loading plugins")
 
-        # kwargs = {
-        #     "filetree": self.pre_run_data.copy(),
-        # }
-
         for plugin in self.pre_run_plugins:
-            self._report_bold_info(f"Run plugin {plugin.name}")
             if issubclass(plugin, PreRunPlugin):
                 results = list(
                     plugin.run(
-                        self.pre_run_data,
                         nasl_files,
                     )
                 )
-                if results:
-                    for result in results:
-                        self._report_error(message=result.message)
-                else:
-                    self._report_ok("No duplicated OIDs found.")
+                with self._term.indent():
+                    if results and self.verbose > 0:
+                        self._report_bold_info(f"Run plugin {plugin.name}")
+                        for result in results:
+                            self._report_error(message=result.message)
+                    else:
+                        if self.verbose > 2:
+                            self._report_ok(plugin.ok())
             else:
                 self._report_error(f"Plugin {plugin.__name__} can not be read.")
 
