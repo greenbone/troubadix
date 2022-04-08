@@ -135,6 +135,7 @@ CAs. The two existing TurkTrust root CAs remain active.");
  causes a memor... [Please see the references for more information on the vulnerabilities]");
   certain components in the underlying Application Centric Infrastructure (ACI). An attacker could exploit this
 certificates (including ones from CAs) using keys with an exponent e = 3, which
+ - chage gives correct information (#216635)
 "chage --inactive <DAYS> <USER> for existing users.';
 # Charles Thier <cthier@thethiers.net>
         check_matches = re.finditer('[^\r\n]*[#]+[ ]*([Tt]hunderbird|[Ss]ea[Mm]onkey|[Hh]ot[Ff]ix|[Ff]irefox|[Pp]ower[Pp]oint( Viewer)?)[ ]*[Cc]heck[^\r\n]*\n', text)
@@ -325,6 +326,8 @@ foreach dir( make_list_unique( "/", "/cas", "/cas-server-webapp", http_cgi_dirs(
 Furthemore, the following bugs were fixed:
 Furthermore, a severe flaw had been discovered by Tim Duesterhus in
   Furthermore Microsoft Exchange CAS and OWA as well as other webservers or load balancers might be also affected.");
+- futex: Fix errors in nested key ref-counting (Darren Hart) [Orabug: 19590443] {CVE-2014-0205}");
+- futex: Forbid uaddr == uaddr2 in futex_wait_requeue_pi() (Darren Hart) [Orabug: 19315318] {CVE-2012-6647}
  G14(GA401) ser... [Please see the references for more information on the vulnerabilities]");
 Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an unauthenticated, remote attacker
   * gnutls doesn't like root CAs without Basic
@@ -532,6 +535,7 @@ Ned Williamson discovered a use-after-free issue.
 Ned Williamson discovered a use-after-free issue in IndexedDB.
 Ned Williamson discovered a use-after-free issue in the WebRTC
 Ned Williamson discovered a way to escape the sandbox.
+- [net] be2net: Remove code that stops further access to BE NIC based on UE bits (Alexander Gordeev) ... [Please see the references for more information on the vulnerabilities]");
   Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch Software could allow an adjacent,
 # nft add rule inet filter input iif lo accept
 # Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability (Windows)
@@ -767,6 +771,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Tim Waugh found several insecure uses of temporary files in the xsane
   script_tag(name:"insight", value:"Tim Zingelmann discovered that due an incorrect configure script the
   script_tag(name:"insight", value:"Toom Lhmus discovered that the Lua API and preprocessor in the Battle
+  script_tag(name:"insight", value:"Toom Lohmus discovered that the Lua API and preprocessor in the Battle for
   script_tag(name:"insight", value:"WeeChat (Wee Enhanced Environment for Chat) is a portable, fast, light and
   script_tag(name:"insight", value:"Wen Xu discovered a use-after-free flaw
   script_tag(name:"insight", value:"Wen Xu discovered that a use-after-free
@@ -887,6 +892,7 @@ Simo Sorce discovered that Samba clients always requested
   Simo Sorce discovered that the MIT krb5 Key Distribution Center (KDC)
 Simo Sorce of Red Hat discovered that the Samba client code always
   Small Business RV042 Dual WAN VPN Routers and Cisco Small Business RV042G Dual Gigabit WAN VPN
+  Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remote
   Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an unauthenticated, remote
 - smbd: Fix file name buflen and padding in notify repsonse, (bso#10634).
 - Smbd: fix file name buflen and padding in notify repsonse, (bso#10634).
@@ -1124,5 +1130,3 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
                'xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 ',
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
-  Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remote
-  script_tag(name:"insight", value:"Toom Lohmus discovered that the Lua API and preprocessor in the Battle for
