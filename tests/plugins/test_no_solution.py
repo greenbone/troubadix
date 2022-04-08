@@ -47,13 +47,15 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
         new_date = (datetime.now() - timedelta(days=200)).strftime("%Y/%m/%d")
 
-        text = file1.read_text()
-        file1.write_text(text.replace("02nd February, 2021", new_date))
+        text = file1.read_text(encoding="latin-1")
+        file1.write_text(
+            text.replace("02nd February, 2021", new_date), encoding="latin-1"
+        )
 
         results = list(CheckNoSolution.run([file1]))
 
         # reverse change to file
-        file1.write_text(text)
+        file1.write_text(text, encoding="latin-1")
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterMessage)
@@ -66,13 +68,15 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
         new_date = (datetime.now() - timedelta(days=10)).strftime("%Y/%m/%d")
 
-        text = file1.read_text()
-        file1.write_text(text.replace("02nd February, 2021", new_date))
+        text = file1.read_text(encoding="latin-1")
+        file1.write_text(
+            text.replace("02nd February, 2021", new_date), encoding="latin-1"
+        )
 
         results = list(CheckNoSolution.run([file1]))
 
         # reverse change to file
-        file1.write_text(text)
+        file1.write_text(text, encoding="latin-1")
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterMessage)
@@ -90,11 +94,17 @@ class CheckNoSolutionTestCase(PluginTestCase):
         date2 = (datetime.now() - timedelta(days=400)).strftime("%Y/%m/%d")
         date3 = (datetime.now() - timedelta(days=10)).strftime("%Y/%m/%d")
 
-        text = file1.read_text()
+        text = file1.read_text(encoding="latin-1")
 
-        file1.write_text(text.replace("02nd February, 2021", date1))
-        file2.write_text(text.replace("02nd February, 2021", date2))
-        file3.write_text(text.replace("02nd February, 2021", date3))
+        file1.write_text(
+            text.replace("02nd February, 2021", date1), encoding="latin-1"
+        )
+        file2.write_text(
+            text.replace("02nd February, 2021", date2), encoding="latin-1"
+        )
+        file3.write_text(
+            text.replace("02nd February, 2021", date3), encoding="latin-1"
+        )
 
         results = list(CheckNoSolution.run([file1, file2, file3]))
 
