@@ -24,7 +24,7 @@ from troubadix.helper import is_ignore_file
 from ..plugin import LineContentPlugin, LinterError, LinterResult
 
 # Arbitrary limit adopted from original step
-VALUE_LIMIT = 1000
+VALUE_LIMIT = 3000
 
 IGNORE_FILES = [
     "gb_nmap6_",
