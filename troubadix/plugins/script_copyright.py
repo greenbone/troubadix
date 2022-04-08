@@ -35,6 +35,9 @@ class CheckScriptCopyright(FileContentPlugin):
             nasl_file: The VT that shall be checked
             file_content: str representing the file content
         """
+        if nasl_file.suffix == ".inc":
+            return
+
         if not re.search(
             r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content
         ):
