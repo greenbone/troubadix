@@ -18,7 +18,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from troubadix.plugin import LinterError
+from troubadix.plugin import LinterError, LinterWarning
 from troubadix.plugins.cve_format import CheckCVEFormat
 
 from . import PluginTestCase
@@ -63,7 +63,7 @@ class CheckCVEFormatTestCase(PluginTestCase):
             )
         )
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "VT does not refer to any CVEs.",
             results[0].message,
