@@ -89,8 +89,6 @@ class CheckDependencies(FileContentPlugin):
                             or dep[:7] == "Policy/"
                             or dep[:11] == "gsf/PCIDSS/"
                             or dep[:11] == "gsf/Policy/"
-                            or dep[:4] == "gcf/"
-                            or dep[:9] == "nmap_nse/"
                         ):
                             yield LinterWarning(
                                 f"The script dependency {dep} is within "
