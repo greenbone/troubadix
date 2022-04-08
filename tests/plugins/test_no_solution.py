@@ -99,7 +99,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         results = list(CheckNoSolution.run([file1, file2, file3]))
 
         # reverse change to file
-        file1.write_text(text)
+        file1.write_text(text, encoding="latin-1")
         file2.unlink()
         file3.unlink()
 
