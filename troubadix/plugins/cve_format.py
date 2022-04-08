@@ -21,7 +21,12 @@ from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper import ScriptTag, get_script_tag_pattern
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import (
+    FileContentPlugin,
+    LinterError,
+    LinterResult,
+    LinterWarning,
+)
 
 
 class CheckCVEFormat(FileContentPlugin):
@@ -51,7 +56,7 @@ class CheckCVEFormat(FileContentPlugin):
         # ("CVE-2017-2750");
         match_result = re.search("(?<=script_cve_id)[^;]+", file_content)
         if match_result is None or match_result.group(0) is None:
-            yield LinterError("VT does not refer to any CVEs.")
+            yield LinterWarning("VT does not refer to any CVEs.")
             return
 
         found_cves = []
