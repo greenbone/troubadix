@@ -20,7 +20,12 @@ from typing import Iterator
 
 from troubadix.helper import ScriptTag
 from troubadix.helper.patterns import get_script_tag_pattern
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import (
+    FileContentPlugin,
+    LinterError,
+    LinterWarning,
+    LinterResult,
+)
 
 
 class CheckLogMessages(FileContentPlugin):
@@ -72,6 +77,6 @@ class CheckLogMessages(FileContentPlugin):
             re.MULTILINE,
         )
         if log_match:
-            yield LinterError(
+            yield LinterWarning(
                 "The VT is using a log_message in a VT with a severity"
             )
