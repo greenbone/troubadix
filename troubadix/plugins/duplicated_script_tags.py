@@ -33,10 +33,15 @@ class CheckDuplicatedScriptTags(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
+
         special_script_tag_patterns = get_special_script_tag_patterns()
         for tag, pattern in special_script_tag_patterns.items():
             # TBD: script_name might also look like this:
             # script_name("MyVT (Windows)");
+
+            if tag.name == "ADD_PREFERENCE":
+                continue
+
             match = pattern.finditer(file_content)
 
             if match:

@@ -82,3 +82,18 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             "'cvss_base' multiple number of times.",
             results[0].message,
         )
+
+    def test_excluded_tag(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_add_preference(name:"Test", type:"checkbox");\n'
+            'script_add_preference(name:"Test2", type:"checkbox");\n'
+        )
+
+        results = list(
+            CheckDuplicatedScriptTags.run(
+                path,
+                content,
+            )
+        )
+        self.assertEqual(len(results), 0)
