@@ -17,7 +17,7 @@
 
 from pathlib import Path
 
-from troubadix.plugin import LinterError
+from troubadix.plugin import LinterError, LinterWarning
 from troubadix.plugins.log_messages import CheckLogMessages
 
 from . import PluginTestCase
@@ -68,7 +68,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             )
         )
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "The VT is using a log_message in a VT with a severity",
             results[0].message,
@@ -93,7 +93,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             )
         )
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "The VT is using a log_message in a VT with a severity",
             results[0].message,
