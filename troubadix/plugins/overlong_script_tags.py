@@ -15,16 +15,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterator
+
+from troubadix.helper.patterns import (
+    get_script_tag_patterns,
+)
 
 from troubadix.helper import is_ignore_file
 
-from ..plugin import LineContentPlugin, LinterError, LinterResult
+from ..plugin import FileContentPlugin, LinterError, LinterResult
 
 # Arbitrary limit adopted from original step
-VALUE_LIMIT = 1000
+VALUE_LIMIT = 3000
 
 IGNORE_FILES = [
     "gb_nmap6_",
@@ -34,7 +37,7 @@ IGNORE_FILES = [
 ]
 
 
-class CheckOverlongScriptTags(LineContentPlugin):
+class CheckOverlongScriptTags(FileContentPlugin):
     """This steps checks if the script_tag summary, impact,
     affected, insight, vuldetect or solution of a given VT
     contains an overlong line within the value string.
@@ -49,26 +52,17 @@ class CheckOverlongScriptTags(LineContentPlugin):
     @staticmethod
     def run(
         nasl_file: Path,
-        lines: Iterable[str],
+        file_content: str,
     ) -> Iterator[LinterResult]:
         if is_ignore_file(nasl_file, IGNORE_FILES):
             return
 
-        line_number = 1
-        for line in lines:
-            # Length of value to check is found in group 3
-            # Tag name is found in group 2
-            match = re.search(
-                r"(script_tag\(\s*name\s*:\s*\""
-                r"(summary|impact|affected|insight|vuldetect|solution)"
-                r"\"\s*,\s*value\s*:\s*)\"([^\"]+)\"\)",
-                line,
-            )
-            if match is not None:
-                if len(match.group(3)) > VALUE_LIMIT:
+        script_tag_patterns = get_script_tag_patterns()
+        for tag, pattern in script_tag_patterns.items():
+            for match in pattern.finditer(file_content):
+                if len(match.group("value")) > VALUE_LIMIT:
                     yield LinterError(
-                        f"line {line_number : 5}:"
-                        f" contains overlong {match.group(2)}"
-                        f" with {len(match.group(3))} characters"
+                        f"Tag {tag.value} is to long"
+                        f" with {len(match.group('value'))} characters. "
+                        f"Max {VALUE_LIMIT}"
                     )
-            line_number += 1

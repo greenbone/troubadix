@@ -37,7 +37,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
         results = list(
             CheckOverlongScriptTags.run(
                 path,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 0)
@@ -48,7 +48,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
         results = list(
             CheckOverlongScriptTags.run(
                 path,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 0)
@@ -65,7 +65,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
         results = list(
             CheckOverlongScriptTags.run(
                 path,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 0)
@@ -93,12 +93,43 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
         results = list(
             CheckOverlongScriptTags.run(
                 path,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 1)
@@ -106,13 +137,44 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             results[0].message,
-            "line     6: contains overlong solution with 1007 characters",
+            "Tag solution is to long with 3053 characters. Max 3000",
         )
 
     def test_multiple_wrong_entries(self):
         path = Path("some/file.nasl")
         content = (
             'script_tag(name:"summary", value:"Loooooooooooooooooooooooooooooo'
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -147,12 +209,43 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
         results = list(
             CheckOverlongScriptTags.run(
                 path,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 2)
@@ -160,19 +253,50 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             results[0].message,
-            "line     1: contains overlong summary with 1007 characters",
+            "Tag solution is to long with 3053 characters. Max 3000",
         )
 
         self.assertIsInstance(results[1], LinterError)
         self.assertEqual(
             results[1].message,
-            "line     6: contains overlong solution with 1007 characters",
+            "Tag summary is to long with 3053 characters. Max 3000",
         )
 
     def test_all_wrong_entries(self):
         path = Path("some/files.nasl")
         content = (
             'script_tag(name:"summary", value:"Loooooooooooooooooooooooooooooo'
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -203,8 +327,70 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
             'script_tag(name:"affected", value:"Loooooooooooooooooooooooooooooo'
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -235,8 +421,70 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
             'script_tag(name:"vuldetect", value:"Looooooooooooooooooooooooooooo'
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -267,12 +515,43 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
         results = list(
             CheckOverlongScriptTags.run(
                 path,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 6)
@@ -280,35 +559,35 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             results[0].message,
-            "line     1: contains overlong summary with 1007 characters",
+            "Tag affected is to long with 3053 characters. Max 3000",
         )
 
         self.assertIsInstance(results[1], LinterError)
         self.assertEqual(
             results[1].message,
-            "line     2: contains overlong impact with 1007 characters",
-        )
-
-        self.assertIsInstance(results[2], LinterError)
-        self.assertEqual(
-            results[2].message,
-            "line     3: contains overlong affected with 1007 characters",
-        )
-
-        self.assertIsInstance(results[3], LinterError)
-        self.assertEqual(
-            results[3].message,
-            "line     4: contains overlong insight with 1007 characters",
-        )
-
-        self.assertIsInstance(results[4], LinterError)
-        self.assertEqual(
-            results[4].message,
-            "line     5: contains overlong vuldetect with 1007 characters",
+            "Tag impact is to long with 3053 characters. Max 3000",
         )
 
         self.assertIsInstance(results[5], LinterError)
         self.assertEqual(
+            results[2].message,
+            "Tag insight is to long with 3053 characters. Max 3000",
+        )
+
+        self.assertIsInstance(results[2], LinterError)
+        self.assertEqual(
+            results[3].message,
+            "Tag solution is to long with 3053 characters. Max 3000",
+        )
+
+        self.assertIsInstance(results[3], LinterError)
+        self.assertEqual(
+            results[4].message,
+            "Tag summary is to long with 3053 characters. Max 3000",
+        )
+
+        self.assertIsInstance(results[4], LinterError)
+        self.assertEqual(
             results[5].message,
-            "line     6: contains overlong solution with 1007 characters",
+            "Tag vuldetect is to long with 3053 characters. Max 3000",
         )
