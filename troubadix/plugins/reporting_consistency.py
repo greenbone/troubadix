@@ -39,13 +39,12 @@ class CheckReportingConsistency(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        report_function = re.compile(r"log_message|security_message").search(
-            file_content
-        )
-        if not report_function:
-            # We can't do anything about this one, skipping
-            return
-
+        security_message = re.compile(
+            r'security_message\s*\([\'"]?.+?[\'"]?\)\s*;', re.DOTALL
+        ).search(file_content)
+        log_message = re.compile(
+            r'log_message\s*\([\'"]?.+?[\'"]?\)\s*;', re.DOTALL
+        ).search(file_content)
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
         cvss_base = cvss_base_pattern.search(file_content)
 
@@ -53,18 +52,12 @@ class CheckReportingConsistency(FileContentPlugin):
             yield LinterError("VT/Include has no cvss_base tag")
             return
 
-        if (
-            report_function.group() == "log_message"
-            and cvss_base.group("value") != "0.0"
-        ):
+        if log_message and cvss_base.group("value") != "0.0":
             yield LinterError(
                 "Tag cvss_base is not 0.0 use report function security_message"
             )
 
-        if (
-            report_function.group() == "security_message"
-            and cvss_base.group("value") == "0.0"
-        ):
+        if security_message and cvss_base.group("value") == "0.0":
             yield LinterError(
                 "Tag cvss_base is 0.0 use report function log_message"
             )
