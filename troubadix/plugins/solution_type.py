@@ -45,6 +45,10 @@ class CheckSolutionType(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
+
+        if nasl_file.suffix == ".inc":
+            return
+
         has_severity = True
         cvss_detect = re.search(
             r"script_tag\s*\(name\s*:\s*\"cvss_base\","
