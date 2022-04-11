@@ -74,6 +74,9 @@ class CheckForkingNaslFuncs(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the file that is going to be checked
         """
+        if nasl_file.suffix == ".inc":
+            return
+
         # Those two are only calling http_get_port() if get_app_port() was
         # "empty".
         if "sw_magento_magmi_detect.nasl" in str(
