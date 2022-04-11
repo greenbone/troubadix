@@ -17,8 +17,8 @@
 
 from pathlib import Path
 
-from troubadix.plugin import LinterWarning
-from troubadix.plugins.tabs import TAB_TO_SPACES, CheckTabs
+from troubadix.plugin import LinterError
+from troubadix.plugins.tabs import CheckTabs
 
 from . import PluginTestCase
 
@@ -40,31 +40,18 @@ class CheckTabsTestCase(PluginTestCase):
     def test_with_tabs(self):
         path = Path("tests/file.nasl")
 
-        path.write_text(
-            "\t\t\t\t\t\t\n1234456789",
-            encoding="utf-8",
-        )
-        content = path.read_text(encoding="latin1")
-
-        expected_content = "            \n1234456789"
+        content = "\t\t\t\t\t\t\n1234456789"
 
         results = list(
             CheckTabs.run(
                 path,
-                content,
+                content.splitlines(),
             )
         )
         self.assertEqual(len(results), 1)
 
-        self.assertIsInstance(results[0], LinterWarning)
+        self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"Replaced one or more tabs to {TAB_TO_SPACES} spaces!",
+            "Found tabs in line 1.",
             results[0].message,
         )
-        self.assertEqual(
-            path.read_text(encoding="latin1"),
-            expected_content,
-        )
-
-        if path.exists():
-            path.unlink()
