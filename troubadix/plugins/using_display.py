@@ -83,6 +83,7 @@ class CheckUsingDisplay(FileContentPlugin):
 
                 if (
                     "gsf/dicom.inc" in file_name
+                    or "enterprise/dicom.inc" in file_name
                     or "global_settings.inc" in file_name
                     or "rdp.inc" in file_name
                     or "bin.inc" in file_name
