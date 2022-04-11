@@ -297,7 +297,7 @@ class CheckValidOID(FileContentPlugin):
 
             # Fixed OID-scheme for Mozilla Firefox OIDs
             if "1.3.6.1.4.1.25623.1.2.1." in oid:
-                if name != f"Mozilla Firefox {security_template}":
+                if not name.startswith(f"Mozilla Firefox {security_template}"):
                     yield LinterError(
                         f"script_oid() {is_using_reserved} 'Firefox' ("
                         f"{str(oid)})"
@@ -357,12 +357,11 @@ class CheckValidOID(FileContentPlugin):
         if (
             (10000 <= oid_digit <= 29999)
             or (50000 <= oid_digit <= 118999)
-            or (120000 <= oid_digit <= 124999)
-            or (130000 <= oid_digit <= 179999)
+            or (120000 <= oid_digit <= 125999)
+            or (130000 <= oid_digit <= 169999)
+            or (170000 <= oid_digit <= 179999)
             or (200000 <= oid_digit <= 209999)
-            or (700000 <= oid_digit <= 709999)
-            or (800000 <= oid_digit <= 899999)
-            or (900000 <= oid_digit <= 909999)
+            or (700000 <= oid_digit <= 919999)
             or (1020000 <= oid_digit <= 1029999)
         ):
             return
