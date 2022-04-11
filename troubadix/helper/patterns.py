@@ -55,7 +55,7 @@ class ScriptTag(Enum):
     CVSS_BASE_VECTOR = "cvss_base_vector"
     DEPRECATED = "deprecated"
     IMPACT = "impact"
-    INSIGHT = ("insight",)
+    INSIGHT = "insight"
     LAST_MODIFICATION = "last_modification"
     QOD = "qod"
     QOD_TYPE = "qod_type"
