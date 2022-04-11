@@ -39,6 +39,9 @@ class CheckSecurityMessages(FileContentPlugin):
             file_content: The content of the VT
 
         """
+        if nasl_file.suffix == ".inc":
+            return
+
         # Policy VTs might use both, security_message and log_message
         if (
             "Policy/" in str(nasl_file)
