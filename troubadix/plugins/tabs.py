@@ -16,26 +16,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterator
+from typing import Iterable, Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
-
-TAB_TO_SPACES = 2
+from troubadix.plugin import LineContentPlugin, LinterResult, LinterError
 
 
-class CheckTabs(FileContentPlugin):
+class CheckTabs(LineContentPlugin):
     name = "check_tabs"
 
     @staticmethod
     def run(
         nasl_file: Path,
-        file_content: str,
+        lines: Iterable[str],
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or
         more tabs instead of spaces."""
-        if "\t" in file_content:
-            file_content = file_content.replace("\t", " " * TAB_TO_SPACES)
-            nasl_file.write_text(data=file_content, encoding="latin1")
-            yield LinterWarning(
-                f"Replaced one or more tabs to {TAB_TO_SPACES} spaces!"
-            )
+        count = 1
+        for line in lines:
+            if "\t" in line:
+                yield LinterError(f"Found tabs in line {count}.")
+            count += 1

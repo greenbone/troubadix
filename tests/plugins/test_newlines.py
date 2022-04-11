@@ -17,7 +17,7 @@
 
 from pathlib import Path
 
-from troubadix.plugin import LinterWarning
+from troubadix.plugin import LinterError
 from troubadix.plugins.newlines import CheckNewlines
 
 from . import PluginTestCase
@@ -31,7 +31,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         results = list(
             CheckNewlines.run(
                 nasl_file,
-                content.splitlines(),
+                content,
             )
         )
         self.assertEqual(len(results), 0)
@@ -45,22 +45,16 @@ class CheckNewlinesTestCase(PluginTestCase):
         results = list(
             CheckNewlines.run(
                 nasl_file,
-                content.splitlines(),
+                content,
             )
         )
 
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterWarning)
+        self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Removed a newline within the tag script_name.",
+            "Found a newline within the tag script_name.",
             results[0].message,
         )
-
-        new_content = nasl_file.read_text(encoding="latin1")
-        self.assertNotEqual(content, new_content)
-
-        # revert changes for the next time
-        nasl_file.write_text(content, encoding="latin1")
 
     def test_newline_in_name_and_copyright(self):
         nasl_file = (
@@ -73,24 +67,76 @@ class CheckNewlinesTestCase(PluginTestCase):
         results = list(
             CheckNewlines.run(
                 nasl_file,
-                content.splitlines(),
+                content,
             )
         )
 
         self.assertEqual(len(results), 2)
-        self.assertIsInstance(results[0], LinterWarning)
+        self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Removed a newline within the tag script_name.",
+            "Found a newline within the tag script_name.",
             results[0].message,
         )
-        self.assertIsInstance(results[1], LinterWarning)
+        self.assertIsInstance(results[1], LinterError)
         self.assertEqual(
-            "Removed a newline within the tag script_copyright.",
+            "Found a newline within the tag script_copyright.",
             results[1].message,
         )
 
-        new_content = nasl_file.read_text(encoding="latin1")
-        self.assertNotEqual(content, new_content)
+    def test_whitespaces_in_name_and_copyright(self):
+        nasl_file = (
+            Path(__file__).parent
+            / "test_files"
+            / "fail_name_and_copyright_newline.nasl"
+        )
+        content = (
+            'script_name("foo\tdetection");\n'
+            'script_copyright("Copyright\t(c) Greenbone Networks GmbH");\n'
+            'script_copyright("Copyrigh(c) Greenbone Networks GmbH");\n'
+        )
 
-        # revert changes for the next time
-        nasl_file.write_text(content, encoding="latin1")
+        results = list(
+            CheckNewlines.run(
+                nasl_file,
+                content,
+            )
+        )
+
+        self.assertEqual(len(results), 2)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "Found whitespaces in script_name.",
+            results[0].message,
+        )
+        self.assertIsInstance(results[1], LinterError)
+        self.assertEqual(
+            "Found whitespaces in script_copyright.",
+            results[1].message,
+        )
+
+    def test_new_line(self):
+        nasl_file = (
+            Path(__file__).parent
+            / "test_files"
+            / "fail_name_and_copyright_newline.nasl"
+        )
+        content = (
+            'script_name("foo detection");'
+            'script_copyright("Copyright(c) Greenbone Networks GmbH");\r\n'
+            'script_copyright("Copyrigh(c) Greenbone Networks GmbH");\n'
+        )
+
+        results = list(
+            CheckNewlines.run(
+                nasl_file,
+                content,
+            )
+        )
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "Found \r.",
+            results[0].message,
+        )
+        self.assertIsInstance(results[0], LinterError)

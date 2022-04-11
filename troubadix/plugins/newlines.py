@@ -17,60 +17,46 @@
 
 import re
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterator
 
-from troubadix.plugin import LineContentPlugin, LinterResult, LinterWarning
+from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
 
 
-class CheckNewlines(LineContentPlugin):
+class CheckNewlines(FileContentPlugin):
     name = "check_wrong_newlines"
 
     @staticmethod
     def run(
         nasl_file: Path,
-        lines: Iterable[str],
+        file_content: str,
     ) -> Iterator[LinterResult]:
         """This script FIXES newline errors:
         - Checking the passed VT for the existence of newlines in
           the script_name() and script_copyright() tags.
-        - Removes wrong newline indicators (\r or \r\n).
-        - Removes whitespaces in script_name( "myname") or script_copyright
+        - Search for (\r or \r\n).
+        - Search for whitespaces in script_name( "myname") or script_copyright
         """
-        # This "hack" guarantees, that we only have "\n" as newlines
-        # since we
-        content = "\n".join(lines)
+
+        if "\r" in file_content:
+            yield LinterError("Found \r.")
 
         # A few remaining have script_name( "myname") instead of
         # script_name("myname").
         # NEW: Remove whitespaces and newlines in script_name, script_copyright
         for tag in ["name", "copyright"]:
-            remove_whitespaces_match = re.search(
-                rf'script_{tag}\s*\(\s*(?P<quote>[\'"])(.*)(?P=quote)\)'
-                r"\s*\)\s*;",
-                content,
+            whitespaces_match = re.search(
+                rf'script_{tag}\s*\([\'"]?.+?[\t]+.+?[\'"]?\)\s*;',
+                file_content,
             )
-            if remove_whitespaces_match:
-                content.replace(
-                    remove_whitespaces_match.group(0),
-                    f'script_{tag}("{remove_whitespaces_match.group(1)}");',
-                )
-                yield LinterWarning(
-                    "Removed whitespaces in "
-                    f"{remove_whitespaces_match.group(0)}"
-                )
+            if whitespaces_match:
+                yield LinterError("Found whitespaces in " f"script_{tag}.")
 
             newline_match = re.search(
                 rf'(script_{tag}\((?P<quote>[\'"])[^\'"\n;]*)[\n]+\s*'
                 r'([^\'"\n;]*(?P=quote)\);)',
-                content,
+                file_content,
             )
             if newline_match:
-                content = content.replace(
-                    newline_match.group(0),
-                    f"{newline_match.group(1)}{newline_match.group(2)}",
+                yield LinterError(
+                    f"Found a newline within the tag script_{tag}."
                 )
-                yield LinterWarning(
-                    f"Removed a newline within the tag script_{tag}."
-                )
-
-        nasl_file.write_text(content, encoding="latin1")
