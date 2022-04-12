@@ -107,7 +107,6 @@ class CheckBadwords(LineContentPlugin):
                     and not any(
                         line.startswith(start)
                         for start in STARTS_WITH_EXCEPTIONS
-                        # file not in combined[0] and
                     )
                     and not any(
                         nasl_file.name == combination[0]
