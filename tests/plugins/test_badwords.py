@@ -46,3 +46,11 @@ class TestBadwords(PluginTestCase):
             "Badword in line    10: OpenVAS is a scanner",
             results[1].message,
         )
+
+    def test_combined(self):
+        path = Path("some/find_service3.nasl")
+        content = "OpenVAS-8 and probably prior\n" + "OpenVAS-9"
+
+        results = list(CheckBadwords.run(path, content.splitlines()))
+
+        self.assertEqual(len(results), 0)

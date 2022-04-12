@@ -38,6 +38,7 @@ _IGNORE_FILES = [
     "gb_gsa_",
     "http_func.inc",
     "misc_func.inc",
+    "OpenVAS_detect.nasl",
 ]
 
 EXCEPTIONS = [
@@ -50,6 +51,10 @@ EXCEPTIONS = [
     "openvas-manager",
     "openvassd",
     "lists.wald.intevation.org",
+    "lib64openvas-devel",
+    "lib64openvas6",
+    "libopenvas-devel",
+    "libopenvas6",
     "cpe:/a:openvas",
     "OPENVAS_VERSION",
     "openvas.org",
@@ -64,7 +69,7 @@ EXCEPTIONS = [
     "openvas_tcp_scanner",
     "gb_openvas_",
     "OpenVAS_detect.nasl",
-    "'OpenVAS Manager",
+    "OpenVAS Manager",
     "OpenVAS Administrator",
     "OpenVAS / Greenbone Vulnerability Manager",
 ]
@@ -81,9 +86,9 @@ COMBINED = [("find_service3.nasl", "OpenVAS-")]
 
 
 class CheckBadwords(LineContentPlugin):
-    """This steps checks if a VT contains a Copyright statement containing a
-    year not matching the year defined in the creation_date statement like
-    script_tag(name:"creation_date", value:"2017-
+    """This plugin checks the passed VT for the use of any of
+    the defined badwords. An error will be thrown if the VT contains
+    such a badword.
     """
 
     name = "check_badwords"
@@ -98,9 +103,17 @@ class CheckBadwords(LineContentPlugin):
 
         for i, line in enumerate(lines):
             if any(badword in line for badword in DEFAULT_BADWORDS):
-                if not any(
-                    exception in line for exception in EXCEPTIONS
-                ) and not any(
-                    line.startswith(start) for start in STARTS_WITH_EXCEPTIONS
+                if (
+                    not any(exception in line for exception in EXCEPTIONS)
+                    and not any(
+                        line.startswith(start)
+                        for start in STARTS_WITH_EXCEPTIONS
+                        # file not in combined[0] and
+                    )
+                    and not any(
+                        nasl_file.name == combination[0]
+                        and combination[1] in line
+                        for _, combination in enumerate(COMBINED)
+                    )
                 ):
                     yield LinterError(f"Badword in line {i+1:5}: {line}")
