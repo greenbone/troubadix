@@ -81,7 +81,6 @@ STARTS_WITH_EXCEPTIONS = [
     "# $Id: ",
 ]
 
-# (file, exception) #to do... integrate this into badword check
 COMBINED = [("find_service3.nasl", "OpenVAS-")]
 
 
