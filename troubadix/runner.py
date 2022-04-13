@@ -122,6 +122,7 @@ class Runner:
 
         self._term = term
         self._n_jobs = n_jobs
+        self._log_file = log_file
         self.verbose = verbose
 
         # this dict will store the result counts for the statistic
@@ -130,7 +131,6 @@ class Runner:
 
         init_script_tag_patterns()
         init_special_script_tag_patterns()
-        self._log_file = log_file
 
     def _log_append(self, message: str):
         if self._log_file:
@@ -298,6 +298,7 @@ class Runner:
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         if self.statistic:
             self._report_statistic()
+
         # Return true if error exist
         return self.result_counts.error_count > 0
 
