@@ -21,7 +21,7 @@ import signal
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool, Manager
 from pathlib import Path
-from typing import Dict, Iterable, Iterator, List
+from typing import Dict, Iterable, Iterator
 
 from pontos.terminal.terminal import Terminal
 from troubadix.helper import CURRENT_ENCODING
@@ -102,8 +102,8 @@ class Runner:
         n_jobs: int,
         term: Terminal,
         *,
-        excluded_plugins: List[str] = None,
-        included_plugins: List[str] = None,
+        excluded_plugins: Iterable[str] = None,
+        included_plugins: Iterable[str] = None,
         update_date: bool = False,
         verbose: int = 0,
         statistic: bool = True,
@@ -149,7 +149,7 @@ class Runner:
         """for unpickling"""
         self.__dict__.update(state)
 
-    def _report_results(self, results: List[LinterMessage]) -> None:
+    def _report_results(self, results: Iterable[LinterMessage]) -> None:
         for result in results:
             if isinstance(result, LinterResult):
                 self._report_ok(result.message)
@@ -179,7 +179,7 @@ class Runner:
         self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _process_plugin_results(
-        self, results: Dict[str, List[LinterMessage]]
+        self, results: Dict[str, Iterable[LinterMessage]]
     ) -> None:
         # print the files plugin results
         for (
