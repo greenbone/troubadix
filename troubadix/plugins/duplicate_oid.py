@@ -55,42 +55,49 @@ class CheckDuplicateOID(PreRunPlugin):
         invalids = []
 
         for nasl_file in nasl_files:
-            if nasl_file.suffix == ".nasl":
-                oid = None
-                file_name = get_path_from_root(nasl_file)
-                content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-                # search for deprecated script_id
+            if not nasl_file.suffix == ".nasl":
+                continue
+
+            oid = None
+            file_name = get_path_from_root(nasl_file)
+            content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+            # search for deprecated script_id
+            match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
+                content
+            )
+
+            if match:
+                oid = match.group("oid")
+            else:
                 match = get_special_script_tag_pattern(
-                    SpecialScriptTag.OID
+                    SpecialScriptTag.ID
                 ).search(content)
                 if match:
-                    oid = match.group("oid")
-                else:
-                    match = get_special_script_tag_pattern(
-                        SpecialScriptTag.ID
-                    ).search(content)
-                    if match:
-                        oid = OPENVAS_OID_PREFIX + match.group("oid")
-                if not oid:
-                    absents.append(file_name)
-                    yield LinterError(f"{file_name}: Could not find an OID.")
-                elif not OID_RE.match(oid):
-                    invalids.append(file_name)
-                    yield LinterError(f"{file_name}: Invalid OID {oid} found.")
-                elif oid not in mapping:
-                    mapping[oid] = str(file_name)
-                else:
-                    duplicates.append(
-                        {
-                            "oid": oid,
-                            "duplicate": file_name,
-                            "first_usage": mapping[oid],
-                        }
-                    )
-                    yield LinterError(
-                        f"{file_name}: OID {oid} already "
-                        f"used by '{mapping[oid]}'"
-                    )
+                    oid = OPENVAS_OID_PREFIX + match.group("oid")
+
+            if not oid:
+                absents.append(file_name)
+                yield LinterError(f"{file_name}: Could not find an OID.")
+
+            elif not OID_RE.match(oid):
+                invalids.append(file_name)
+                yield LinterError(f"{file_name}: Invalid OID {oid} found.")
+
+            elif oid not in mapping:
+                mapping[oid] = str(file_name)
+            else:
+                duplicates.append(
+                    {
+                        "oid": oid,
+                        "duplicate": file_name,
+                        "first_usage": mapping[oid],
+                    }
+                )
+
+                yield LinterError(
+                    f"{file_name}: OID {oid} already "
+                    f"used by '{mapping[oid]}'"
+                )
 
     @staticmethod
     def ok():
