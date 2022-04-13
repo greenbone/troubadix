@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Dict, Iterator, List
 
 from pontos.terminal.terminal import Terminal
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
 
 from troubadix.helper.patterns import (
@@ -42,8 +43,6 @@ from troubadix.plugin import (
 from troubadix.plugins import _PRE_RUN_PLUGINS, Plugins
 
 CHUNKSIZE = 1  # default 1
-# js: can we get this to utf-8 in future @scanner @feed?
-CURRENT_ENCODING = "latin1"  # currently default
 
 
 class TroubadixException(Exception):

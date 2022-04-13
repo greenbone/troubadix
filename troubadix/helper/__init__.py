@@ -29,3 +29,6 @@ from .patterns import (
     get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
+
+# js: can we get this to utf-8 in future @scanner @feed?
+CURRENT_ENCODING = "latin1"  # currently default
