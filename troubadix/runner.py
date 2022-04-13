@@ -40,7 +40,12 @@ from troubadix.plugin import (
     LinterWarning,
     PreRunPlugin,
 )
-from troubadix.plugins import _PRE_RUN_PLUGINS, Plugins
+from troubadix.plugins import (
+    _PRE_RUN_PLUGINS,
+    Plugins,
+    StandardPlugins,
+    UpdatePlugins,
+)
 
 CHUNKSIZE = 1  # default 1
 
@@ -110,8 +115,10 @@ class Runner:
         log_file: Path = None,
     ) -> bool:
         # plugins initialization
-        self.plugins = Plugins(
-            excluded_plugins, included_plugins, update_date=update_date
+        self.plugins: Plugins = (
+            UpdatePlugins()
+            if update_date
+            else StandardPlugins(excluded_plugins, included_plugins)
         )
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
@@ -179,7 +186,7 @@ class Runner:
             include = ", ".join(self._included_plugins)
             self._report_info(f"Included Plugins: {include}")
 
-        plugins = ", ".join([plugin.name for plugin in self.plugins.plugins])
+        plugins = ", ".join([plugin.name for plugin in self.plugins])
         self._report_info(f"Running plugins: {plugins}")
 
     def _report_statistic(self) -> None:

@@ -43,7 +43,7 @@ class TestRunner(unittest.TestCase):
 
         plugins = _PLUGINS
 
-        for plugin in runner.plugins.plugins:
+        for plugin in runner.plugins:
             self.assertIn(plugin, plugins)
 
     def test_runner_with_excluded_plugins(self):
@@ -62,7 +62,7 @@ class TestRunner(unittest.TestCase):
             excluded_plugins=excluded_plugins,
         )
 
-        for plugin in runner.plugins.plugins:
+        for plugin in runner.plugins:
             self.assertIn(plugin.__name__, included_plugins)
 
     def test_runner_with_included_plugins(self):
@@ -76,7 +76,7 @@ class TestRunner(unittest.TestCase):
             included_plugins=included_plugins,
         )
 
-        for plugin in runner.plugins.plugins:
+        for plugin in runner.plugins:
             self.assertIn(plugin.__name__, included_plugins)
 
     def test_runner_run_ok(self):
