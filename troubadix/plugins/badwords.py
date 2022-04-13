@@ -109,9 +109,9 @@ class CheckBadwords(LineContentPlugin):
                         for start in STARTS_WITH_EXCEPTIONS
                     )
                     and not any(
-                        nasl_file.name == combination[0]
-                        and combination[1] in line
-                        for _, combination in enumerate(COMBINED)
+                        nasl_file.name == filename
+                        and value in line
+                        for filename, value in COMBINED
                     )
                 ):
                     yield LinterError(f"Badword in line {i+1:5}: {line}")
