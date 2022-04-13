@@ -87,7 +87,7 @@ class TestRunner(unittest.TestCase):
             / "nasl"
             / "21.04"
             / "runner"
-            / "test.nasl"
+            / "test_valid_oid.nasl"
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
@@ -102,6 +102,7 @@ class TestRunner(unittest.TestCase):
         )
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
+
         self.assertFalse(sys_exit)
 
         # Test update_date
@@ -400,9 +401,11 @@ class TestRunner(unittest.TestCase):
             runner.run([nasl_file])
 
         compare_content = (
+            "\tPre-Run Plugins: check_duplicate_oid\n"
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\n"
             "Run plugin check_duplicate_oid\n"
+            "\tResults for plugin check_duplicate_oid\n"
             f"\t\t{get_path_from_root(nasl_file)}: Invalid OID "
             "1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
             f"Checking {get_path_from_root(nasl_file)} (0/1)\n\t\t"
