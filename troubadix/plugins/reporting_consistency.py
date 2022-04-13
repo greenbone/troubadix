@@ -40,11 +40,14 @@ class CheckReportingConsistency(FileContentPlugin):
             return
 
         security_message = re.compile(
-            r'security_message\s*\(\s*[\'"]?.+?[\'"]?\s*\)\s*;', re.DOTALL
+            r"^\s*[^#]?\s*security_message\s*\(.+?\)\s*;\s",
+            re.MULTILINE | re.DOTALL,
         ).search(file_content)
         log_message = re.compile(
-            r'log_message\s*\(\s*[\'"]?.+?[\'"]?\s*\)\s*;', re.DOTALL
+            r"^\s*[^#]?\s*log_message\s*\(.+?\)\s*;\s",
+            re.MULTILINE | re.DOTALL,
         ).search(file_content)
+
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
         cvss_base = cvss_base_pattern.search(file_content)
 
