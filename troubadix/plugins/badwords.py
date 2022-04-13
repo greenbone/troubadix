@@ -109,8 +109,7 @@ class CheckBadwords(LineContentPlugin):
                         for start in STARTS_WITH_EXCEPTIONS
                     )
                     and not any(
-                        nasl_file.name == filename
-                        and value in line
+                        nasl_file.name == filename and value in line
                         for filename, value in COMBINED
                     )
                 ):
