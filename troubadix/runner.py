@@ -21,7 +21,7 @@ import signal
 from collections import OrderedDict, defaultdict
 from multiprocessing import Pool, Manager
 from pathlib import Path
-from typing import Dict, Iterator, List
+from typing import Dict, Iterable, Iterator, List
 
 from pontos.terminal.terminal import Terminal
 from troubadix.helper import CURRENT_ENCODING
@@ -57,9 +57,9 @@ def initializer():
 class FileResults:
     def __init__(self, file_path: Path):
         self.file_path = file_path
-        self.plugin_results = OrderedDict()
-        self.generic_results = []
-        self.has_results = False
+        self.plugin_results: Dict[str, Iterable[LinterResult]] = OrderedDict()
+        self.generic_results: Iterable[LinterResult] = []
+        self.has_plugin_results = False
 
     def add_generic_result(self, result: LinterResult) -> "FileResults":
         self.generic_results.append(result)
@@ -69,13 +69,12 @@ class FileResults:
         self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
         results = list(results)
-        if results:
-            self.has_results = True
+        self.has_plugin_results = self.has_plugin_results or bool(results)
         self.plugin_results[plugin_name] = results
         return self
 
     def __bool__(self):
-        return self.has_results
+        return self.has_plugin_results
 
 
 class ResultCounts:
