@@ -49,7 +49,6 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         file1 = here / "test_files/nasl/21.04/fail.nasl"
         file2 = here / "test_files/nasl/21.04/test.nasl"
         results = list(CheckDuplicateOID.run([file1, file2]))
-        print(results)
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
