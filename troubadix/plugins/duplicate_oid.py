@@ -98,7 +98,3 @@ class CheckDuplicateOID(PreRunPlugin):
                     f"{file_name}: OID {oid} already "
                     f"used by '{mapping[oid]}'"
                 )
-
-    @staticmethod
-    def ok():
-        return "No duplicated OIDs found."
