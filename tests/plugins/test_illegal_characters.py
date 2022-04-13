@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.illegal_characters import CheckIllegalCharacters
 
@@ -80,7 +81,7 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
                 'value:"Foo|Bar;Baz=Bad.");',
             )
             self.assertEqual(
-                path.read_text(encoding="latin1"),
+                path.read_text(encoding=CURRENT_ENCODING),
                 expected_content,
             )
 

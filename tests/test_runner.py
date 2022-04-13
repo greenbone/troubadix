@@ -22,6 +22,7 @@ from pathlib import Path
 
 from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
 
 from troubadix.plugin import LinterError, LinterResult
@@ -88,7 +89,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "test.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         # Check sys exit 1
         included_plugins = [
@@ -112,7 +113,7 @@ class TestRunner(unittest.TestCase):
 
         results = runner.check_file(nasl_file)
 
-        new_content = nasl_file.read_text(encoding="latin1")
+        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertNotEqual(content, new_content)
 
         self.assertEqual(len(results.generic_results), 0)
@@ -126,7 +127,7 @@ class TestRunner(unittest.TestCase):
         )
 
         # revert changes for the next time
-        nasl_file.write_text(content, encoding="latin1")
+        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
     def test_runner_run_error(self):
         nasl_file = (
@@ -138,7 +139,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "fail.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         # Check sys exit 1
         included_plugins = [
@@ -162,7 +163,7 @@ class TestRunner(unittest.TestCase):
 
         results = runner.check_file(nasl_file)
 
-        new_content = nasl_file.read_text(encoding="latin1")
+        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)
 
         self.assertEqual(len(results.generic_results), 0)
@@ -188,7 +189,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "fail.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         runner = Runner(
             n_jobs=1,
@@ -200,7 +201,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as f:
             runner.run([nasl_file])
 
-            new_content = nasl_file.read_text(encoding="latin1")
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
@@ -225,7 +226,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "test.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         runner = Runner(
             verbose=1,
@@ -237,7 +238,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as f:
             runner.run([nasl_file])
 
-            new_content = nasl_file.read_text(encoding="latin1")
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             self.assertNotEqual(content, new_content)
 
         output = f.getvalue()
@@ -253,7 +254,7 @@ class TestRunner(unittest.TestCase):
         )
 
         # revert changes for the next time
-        nasl_file.write_text(content, encoding="latin1")
+        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
     def test_runner_run_ok_with_verbose_level_3(self):
         included_plugins = [
@@ -268,7 +269,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "test.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         runner = Runner(
             n_jobs=1,
@@ -280,7 +281,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as f:
             runner.run([nasl_file])
 
-            new_content = nasl_file.read_text(encoding="latin1")
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
@@ -300,7 +301,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "test.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         runner = Runner(
             n_jobs=1,
@@ -312,7 +313,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as f:
             runner.run([nasl_file])
 
-            new_content = nasl_file.read_text(encoding="latin1")
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
@@ -337,7 +338,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "test.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         runner = Runner(
             verbose=1,
@@ -349,7 +350,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as f:
             runner.run([nasl_file])
 
-            new_content = nasl_file.read_text(encoding="latin1")
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
@@ -359,7 +360,7 @@ class TestRunner(unittest.TestCase):
         self.assertNotIn("Results for plugin check_missing_desc_exit", output)
 
         # revert changes for the next time
-        nasl_file.write_text(content, encoding="latin1")
+        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
     def test_no_plugins(self):
         runner = Runner(

@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.badwords import CheckBadwords
 
@@ -27,7 +28,7 @@ class TestBadwords(PluginTestCase):
     def test_files(self):
         nasl_file = Path(__file__).parent / "test_files" / "fail_badwords.nasl"
 
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         results = list(
             CheckBadwords.run(

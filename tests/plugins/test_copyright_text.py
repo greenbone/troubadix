@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.copyright_text import (
     CORRECT_COPYRIGHT_PHRASE,
@@ -92,7 +93,9 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             f"with:\n{CORRECT_COPYRIGHT_PHRASE}",
             results[1].message,
         )
-        self.assertEqual(path.read_text(encoding="latin1"), expected_content)
+        self.assertEqual(
+            path.read_text(encoding=CURRENT_ENCODING), expected_content
+        )
 
         if path.exists():
             path.unlink()
@@ -128,7 +131,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 results[0].message,
             )
             self.assertEqual(
-                path.read_text(encoding="latin1"), expected_content
+                path.read_text(encoding=CURRENT_ENCODING), expected_content
             )
 
         if path.exists():

@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Iterator, List
 
 from troubadix.helper import (
+    CURRENT_ENCODING,
     SpecialScriptTag,
     get_special_script_tag_pattern,
     get_path_from_root,
@@ -57,7 +58,7 @@ class CheckDuplicateOID(PreRunPlugin):
             if nasl_file.suffix == ".nasl":
                 oid = None
                 file_name = get_path_from_root(nasl_file)
-                content = nasl_file.read_text(encoding="latin-1")
+                content = nasl_file.read_text(encoding=CURRENT_ENCODING)
                 # search for deprecated script_id
                 match = get_special_script_tag_pattern(
                     SpecialScriptTag.OID

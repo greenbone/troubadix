@@ -18,6 +18,7 @@
 import re
 from pathlib import Path
 from typing import Iterator, List, Union
+from troubadix.helper import CURRENT_ENCODING
 
 from troubadix.helper.patterns import get_common_tag_patterns
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
@@ -83,4 +84,4 @@ class CheckIllegalCharacters(FileContentPlugin):
                         )
 
         if changes:
-            nasl_file.write_text(file_content, encoding="latin1")
+            nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)

@@ -23,7 +23,7 @@ from enum import IntEnum
 from pathlib import Path
 from typing import Iterator, Union
 
-from troubadix.helper import SpecialScriptTag, get_root
+from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag, get_root
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -135,7 +135,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                             continue
 
                         dependency_content = dependency_path.read_text(
-                            encoding="latin1"
+                            encoding=CURRENT_ENCODING
                         )
 
                         dependency_category = check_category(

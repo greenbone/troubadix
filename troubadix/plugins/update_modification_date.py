@@ -21,6 +21,7 @@ import datetime
 import re
 from pathlib import Path
 from typing import Iterator
+from troubadix.helper import CURRENT_ENCODING
 
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -84,7 +85,7 @@ class UpdateModificationDate(FileContentPlugin):
             version_template.format(date=old_version),
             version_template.format(date=correctly_formated_version),
         )
-        nasl_file.write_text(file_content, encoding="latin1")
+        nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)
 
         yield LinterResult(
             f"Replaced modification_date {old_datetime} "
