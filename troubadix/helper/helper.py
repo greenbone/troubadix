@@ -96,12 +96,21 @@ class Root:
     instance = False
 
     def __init__(self, path: Path, root: str = _ROOT) -> None:
+        file_path = str(path.resolve())
         match = re.search(
-            rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
-            str(path.resolve()),
+            rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/)",
+            file_path,
         )
         if match:
-            self.root = Path(match.group("path"))
+            match_path = Path(match.group("path"))
+            if f'{root}/common' in file_path:
+                self.root = match_path / 'common'
+            elif f'{root}/21.04' in file_path:
+                self.root = match_path / '21.04'
+            elif f'{root}/22.04' in file_path:
+                self.root = match_path / '22.04'
+            else:
+                self.root = match_path
             if not self.root.exists():
                 self.root = None
         else:
