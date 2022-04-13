@@ -103,12 +103,12 @@ class Root:
         )
         if match:
             match_path = Path(match.group("path"))
-            if f'{root}/common' in file_path:
-                self.root = match_path / 'common'
-            elif f'{root}/21.04' in file_path:
-                self.root = match_path / '21.04'
-            elif f'{root}/22.04' in file_path:
-                self.root = match_path / '22.04'
+            if f"{root}/common" in file_path:
+                self.root = match_path / "common"
+            elif f"{root}/21.04" in file_path:
+                self.root = match_path / "21.04"
+            elif f"{root}/22.04" in file_path:
+                self.root = match_path / "22.04"
             else:
                 self.root = match_path
             if not self.root.exists():
