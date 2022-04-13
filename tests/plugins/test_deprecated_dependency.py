@@ -28,7 +28,7 @@ here = Path.cwd()
 
 class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def setUp(self) -> None:
-        self.dir = here / _ROOT / "foo"
+        self.dir = here / _ROOT / "22.04"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text("script_category(ACT_ATTACK);\n exit(66);")

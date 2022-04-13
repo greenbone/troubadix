@@ -28,7 +28,7 @@ here = Path.cwd()
 
 class CheckVTPlacementTestCase(PluginTestCase):
     def setUp(self) -> None:
-        self.dir = here / _ROOT / "foo"
+        self.dir = here / _ROOT / "22.04"
         self.dir.mkdir(parents=True)
 
         return super().setUp()
