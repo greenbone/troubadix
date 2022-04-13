@@ -19,7 +19,7 @@ import datetime
 import signal
 
 from collections import OrderedDict, defaultdict
-from multiprocessing import Pool, Manager
+from multiprocessing import Pool
 from pathlib import Path
 from typing import Dict, Iterable, Iterator
 
@@ -116,9 +116,7 @@ class Runner:
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
 
-        self.mt_manager = Manager()
         self.pre_run_plugins = _PRE_RUN_PLUGINS
-        self.pre_run_data = self.mt_manager.dict()
 
         self._term = term
         self._n_jobs = n_jobs
@@ -136,18 +134,6 @@ class Runner:
         if self._log_file:
             with self._log_file.open(mode="a", encoding="utf-8") as f:
                 f.write(f"{message}\n")
-
-    def __getstate__(self):
-        """called when pickling - this hack allows subprocesses to
-        be spawned without the AuthenticationString raising an error"""
-        state = self.__dict__.copy()
-        if "mt_manager" in state:
-            del state["mt_manager"]
-        return state
-
-    def __setstate__(self, state):
-        """for unpickling"""
-        self.__dict__.update(state)
 
     def _report_results(self, results: Iterable[LinterMessage]) -> None:
         for result in results:
