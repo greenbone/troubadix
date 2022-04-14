@@ -25,8 +25,8 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 class CheckForkingNaslFuncs(FileContentPlugin):
     name = "check_forking_nasl_funcs"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

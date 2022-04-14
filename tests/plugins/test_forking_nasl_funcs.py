@@ -17,6 +17,7 @@
 
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
@@ -34,13 +35,13 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckForkingNaslFuncs(fake_context)
 
-        results = list(
-            CheckForkingNaslFuncs.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_not_ok(self):
@@ -55,13 +56,13 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
             "if( ! infos = get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, "
             'service:"www" ) )\nexit( 0 );\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckForkingNaslFuncs(fake_context)
 
-        results = list(
-            CheckForkingNaslFuncs.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -86,12 +87,13 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
             ")\nexit(0);\n"
         )
 
-        results = list(
-            CheckForkingNaslFuncs.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckForkingNaslFuncs(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

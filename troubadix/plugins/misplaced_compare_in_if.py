@@ -15,20 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckMisplacedCompareInIf(FileContentPlugin):
+class CheckMisplacedCompareInIf(FilePlugin):
     name = "check_misplaced_compare_in_if"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """This script checks the passed VT/Include if it is using a misplaced
             compare within an if() call like e.g.:
 
@@ -63,7 +59,7 @@ class CheckMisplacedCompareInIf(FileContentPlugin):
         #   r"^\s*(if|}?\s*else if)\s*\(([^)]+)"
         if_matches = re.finditer(
             r"^\s*(if|}?\s*else if)\s*\((?P<condition>.*)\)\s*({|(.*|.*\n.*);)",
-            file_content,
+            self.context.file_content,
             re.MULTILINE,
         )
 

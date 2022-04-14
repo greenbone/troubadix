@@ -21,23 +21,19 @@ from typing import Iterator
 from troubadix.helper.helper import which, subprocess_cmd
 from troubadix.plugin import (
     LinterError,
-    FileContentPlugin,
     LinterResult,
     LinterWarning,
+    FilePlugin,
 )
 
 PluginPath = Path(__file__).parent.resolve()
 CodespellConfigPath = (PluginPath.parent / "codespell").resolve()
 
 
-class CheckSpelling(FileContentPlugin):
+class CheckSpelling(FilePlugin):
     name = "check_spelling"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """'codespell' is required to execute this step!
         This script opens a shell in a subprocess and executes 'codespell' to
         check the VT for spelling mistakes. An error will be thrown if
@@ -64,7 +60,7 @@ class CheckSpelling(FileContentPlugin):
             f"--dictionary={CodespellConfigPath}/codespell.additions "
             f"--exclude-file={CodespellConfigPath}/codespell.exclude "
             f"--ignore-words={CodespellConfigPath}/codespell.ignore "
-            f"--disable-colors {str(nasl_file)}",
+            f"--disable-colors {str(self.context.nasl_file)}",
         )
         codespell = (out + "\n" + err).strip("\n")
 

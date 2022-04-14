@@ -31,8 +31,8 @@ LENGTH = 44
 class CheckCreationDate(FileContentPlugin):
     name = "creation_date"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_tag_form import CheckScriptTagForm
@@ -26,29 +27,28 @@ class CheckScriptTagFormTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-
         content = (
             'script_tag(name: "foo", value:"bar");\n'
             'script_tag(name: "foo", value:42);'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagForm(fake_context)
 
-        results = list(
-            CheckScriptTagForm.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_wrong_name(self):
         content = 'script_tag(nammmme: "foo", value:"bar");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagForm(fake_context)
 
-        results = list(
-            CheckScriptTagForm.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -59,24 +59,24 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_value(self):
         content = 'script_tag(name: "foo", valueeeee:"bar");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagForm(fake_context)
 
-        results = list(
-            CheckScriptTagForm.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
 
     def test_wrong_missing_parameters(self):
         content = 'script_tag("foo", "bar");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagForm(fake_context)
 
-        results = list(
-            CheckScriptTagForm.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

@@ -92,8 +92,8 @@ class CheckBadwords(LineContentPlugin):
 
     name = "check_badwords"
 
-    @staticmethod
-    def run(
+    def check_lines(
+        self,
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:

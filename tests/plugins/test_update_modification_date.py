@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError, LinterResult
@@ -29,11 +30,12 @@ class TestUpdateModificationDate(PluginTestCase):
         nasl_file = Path(__file__).parent / "test.nasl"
 
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = UpdateModificationDate(fake_context)
 
-        output = UpdateModificationDate.run(
-            nasl_file=nasl_file,
-            file_content=content,
-        )
+        output = plugin.run()
 
         self.assertIsInstance(next(output), LinterResult)
 
@@ -47,11 +49,12 @@ class TestUpdateModificationDate(PluginTestCase):
         nasl_file = Path(__file__).parent / "fail.nasl"
 
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = UpdateModificationDate(fake_context)
 
-        output = UpdateModificationDate.run(
-            nasl_file=nasl_file,
-            file_content=content,
-        )
+        output = plugin.run()
 
         expected_error = LinterError(
             "VT does not contain a modification day script tag."
@@ -69,10 +72,12 @@ class TestUpdateModificationDate(PluginTestCase):
 
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
-        output = UpdateModificationDate.run(
-            nasl_file=nasl_file,
-            file_content=content,
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = UpdateModificationDate(fake_context)
+
+        output = plugin.run()
 
         expected_error = LinterError("VT does not contain a script version.")
 

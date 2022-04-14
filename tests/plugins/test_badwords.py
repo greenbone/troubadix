@@ -16,26 +16,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-
+from unittest.mock import MagicMock
 from troubadix.helper import CURRENT_ENCODING
+
 from troubadix.plugin import LinterError
 from troubadix.plugins.badwords import CheckBadwords
 
 from . import PluginTestCase
 
 
+root = Path(__file__).parent / "test_files"
+
+
 class TestBadwords(PluginTestCase):
     def test_files(self):
-        nasl_file = Path(__file__).parent / "test_files" / "fail_badwords.nasl"
+        nasl_file = root / "fail_badwords.nasl"
 
-        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+        context = MagicMock()
+        context.nasl_file = nasl_file
+        context.lines = nasl_file.read_text(
+            encoding=CURRENT_ENCODING
+        ).splitlines()
+        plugin = CheckBadwords(context)
 
-        results = list(
-            CheckBadwords.run(
-                nasl_file=nasl_file,
-                lines=content.splitlines(),
-            )
-        )
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
@@ -50,8 +54,13 @@ class TestBadwords(PluginTestCase):
 
     def test_combined(self):
         path = Path("some/find_service3.nasl")
-        content = "OpenVAS-8 and probably prior\n" + "OpenVAS-9"
+        content = "OpenVAS-8 and probably prior\nOpenVAS-9"
 
-        results = list(CheckBadwords.run(path, content.splitlines()))
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.lines = content.splitlines()
+
+        plugin = CheckBadwords(fake_context)
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 0)

@@ -92,8 +92,8 @@ VALID_FAMILIES = [
 class CheckScriptFamily(FileContentPlugin):
     name = "check_script_family"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

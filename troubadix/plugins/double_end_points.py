@@ -16,20 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
+
 from typing import Iterator
 
 from troubadix.helper.patterns import get_common_tag_patterns
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckDoubleEndPoints(FileContentPlugin):
+class CheckDoubleEndPoints(FilePlugin):
     name = "check_double_end_points"
 
-    @staticmethod
     def run(
-        nasl_file: Path,
-        file_content: str,
+        self,
     ) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or more doubled end point
         in a script_tag like e.g.:
@@ -41,7 +39,9 @@ class CheckDoubleEndPoints(FileContentPlugin):
             script_tag(name:"insight", value:"My insight.
             .");
         """
-        tag_matches = get_common_tag_patterns().finditer(file_content)
+        tag_matches = get_common_tag_patterns().finditer(
+            self.context.file_content
+        )
 
         if tag_matches is not None:
             for tag_match in tag_matches:

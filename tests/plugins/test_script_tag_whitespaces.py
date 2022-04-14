@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_tag_whitespaces import CheckScriptTagWhitespaces
@@ -26,26 +27,25 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-
         content = 'script_tag(name: "foo", value:"bar");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagWhitespaces(fake_context)
 
-        results = list(
-            CheckScriptTagWhitespaces.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_leading_whitespace(self):
         content = 'script_tag(name: "foo", value:" bar");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagWhitespaces(fake_context)
 
-        results = list(
-            CheckScriptTagWhitespaces.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -56,12 +56,12 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_trailing_whitespace(self):
         content = 'script_tag(name: "foo", value:"bar\n");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptTagWhitespaces(fake_context)
 
-        results = list(
-            CheckScriptTagWhitespaces.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

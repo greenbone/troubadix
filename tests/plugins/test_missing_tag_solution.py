@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.missing_tag_solution import CheckMissingTagSolution
@@ -32,13 +33,13 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckMissingTagSolution(fake_context)
 
-        results = list(
-            CheckMissingTagSolution.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_no_solution_type(self):
@@ -47,13 +48,13 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckMissingTagSolution(fake_context)
 
-        results = list(
-            CheckMissingTagSolution.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_missing_solution(self):
@@ -63,13 +64,13 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar...");'
             'script_tag(name:"solution_type", value:"VendorFix");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckMissingTagSolution(fake_context)
 
-        results = list(
-            CheckMissingTagSolution.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

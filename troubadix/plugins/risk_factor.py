@@ -16,24 +16,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
+from troubadix.plugin import LinterResult, LinterError, FilePlugin
 
 
-class CheckRiskFactor(FileContentPlugin):
+class CheckRiskFactor(FilePlugin):
     name = "risk_factor"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """This script checks if a VT with risk_factor tag exist."""
         match = re.search(
             r'script_tag\(name:"risk_factor", value:"(?P<risk>.+)"\);',
-            file_content,
+            self.context.file_content,
         )
 
         if not match:

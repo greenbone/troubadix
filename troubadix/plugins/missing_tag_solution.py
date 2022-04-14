@@ -31,8 +31,8 @@ _IGNORE_FILES = [
 class CheckMissingTagSolution(FileContentPlugin):
     name = "check_missing_tag_solution"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

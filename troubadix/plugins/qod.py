@@ -15,11 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
-from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 VALID_QOD_NUM_VALUES = [
     1,
@@ -52,17 +51,15 @@ VALID_QOD_TYPES = [
 ]
 
 
-class CheckQod(FileContentPlugin):
+class CheckQod(FilePlugin):
     name = "check_qod"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """
         The script checks the passed VT for the existence / validity of its QoD
         """
+        file_content = self.context.file_content
+
         qod_pattern = get_script_tag_pattern(ScriptTag.QOD)
         qod_type_pattern = get_script_tag_pattern(ScriptTag.QOD_TYPE)
 

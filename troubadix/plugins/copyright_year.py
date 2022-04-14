@@ -39,8 +39,8 @@ class CheckCopyrightYear(LineContentPlugin):
 
     name = "check_copyright_year"
 
-    @staticmethod
-    def run(
+    def check_lines(
+        self,
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:

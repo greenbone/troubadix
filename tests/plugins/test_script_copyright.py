@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_copyright import CheckScriptCopyright
@@ -27,25 +28,25 @@ class CheckScriptCopyrightTestCase(PluginTestCase):
     def test_copyright_ok(self):
         path = Path("some/file.nasl")
         content = 'script_copyright("Copyright (C) 2020 Foo Bar")'
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptCopyright(fake_context)
 
-        results = list(
-            CheckScriptCopyright.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_copyright_error(self):
         path = Path("some/file.nasl")
         content = 'script_copyright("Copyright 2020 Foo Bar")'
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptCopyright(fake_context)
 
-        results = list(
-            CheckScriptCopyright.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertIn(

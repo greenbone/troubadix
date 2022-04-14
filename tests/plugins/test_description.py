@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.description import CheckDescription
@@ -31,13 +32,13 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckDescription(fake_context)
 
-        results = list(
-            CheckDescription.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_description(self):
@@ -50,12 +51,13 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_description("TestTest");\n'
         )
 
-        results = list(
-            CheckDescription.run(
-                nasl_file,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckDescription(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -73,12 +75,13 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        results = list(
-            CheckDescription.run(
-                nasl_file,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckDescription(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

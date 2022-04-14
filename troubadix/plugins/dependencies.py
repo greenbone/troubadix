@@ -34,8 +34,8 @@ from troubadix.plugin import (
 class CheckDependencies(FileContentPlugin):
     name = "check_dependencies"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

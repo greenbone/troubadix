@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError, LinterMessage
 from troubadix.plugins.duplicate_oid import CheckDuplicateOID
@@ -29,14 +30,22 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
     def test_ok(self):
         file1 = here / "test_files/nasl/21.04/fail.nasl"
         file2 = here / "test_files/nasl/21.04/fail_name_newline.nasl"
-        results = list(CheckDuplicateOID.run([file1, file2]))
+        context = MagicMock()
+        context.nasl_files = [file1, file2]
+        plugin = CheckDuplicateOID(context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
         file1 = here / "test_files/nasl/21.04/fail_name_newline.nasl"
         file2 = here / "test_files/nasl/21.04/fail_badwords.nasl"
+        context = MagicMock()
+        context.nasl_files = [file1, file2]
+        plugin = CheckDuplicateOID(context)
 
-        results = list(CheckDuplicateOID.run([file1, file2]))
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterMessage)
@@ -48,7 +57,11 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
     def test_duplicated_oid_function(self):
         file1 = here / "test_files/nasl/21.04/fail.nasl"
         file2 = here / "test_files/nasl/21.04/test.nasl"
-        results = list(CheckDuplicateOID.run([file1, file2]))
+        context = MagicMock()
+        context.nasl_files = [file1, file2]
+        plugin = CheckDuplicateOID(context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
@@ -62,7 +75,11 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         file2 = (
             here / "test_files/nasl/21.04/fail_name_and_copyright_newline.nasl"
         )
-        results = list(CheckDuplicateOID.run([file2]))
+        context = MagicMock()
+        context.nasl_files = [file2]
+        plugin = CheckDuplicateOID(context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

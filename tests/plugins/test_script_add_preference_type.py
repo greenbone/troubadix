@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_add_preference_type import (
@@ -36,13 +37,13 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
                 'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
                 f'script_add_preference(type: "{pref_type.value}");\n'
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            plugin = CheckScriptAddPreferenceType(fake_context)
 
-            results = list(
-                CheckScriptAddPreferenceType.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 0)
 
     def test_no_add_preference(self):
@@ -52,13 +53,13 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             'script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptAddPreferenceType(fake_context)
 
-        results = list(
-            CheckScriptAddPreferenceType.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_invalid(self):
@@ -70,13 +71,13 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             'script_name("Foo Bar");\n'
             f"{add_pref}\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptAddPreferenceType(fake_context)
 
-        results = list(
-            CheckScriptAddPreferenceType.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

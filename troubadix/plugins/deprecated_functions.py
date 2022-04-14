@@ -15,23 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# pylint: disable=fixme
-
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckDeprecatedFunctions(FileContentPlugin):
+class CheckDeprecatedFunctions(FilePlugin):
     name = "check_deprecated_functions"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """
         Following functions / description items are outdated:
         script_summary()
@@ -61,7 +55,7 @@ class CheckDeprecatedFunctions(FileContentPlugin):
         }
 
         for description, pattern in deprecated_functions.items():
-            if re.search(pattern, file_content):
+            if re.search(pattern, self.context.file_content):
                 yield LinterError(
                     f"Found a deprecated function call: {description}"
                 )

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper.helper import _ROOT
 from troubadix.plugin import LinterError
@@ -44,13 +45,13 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar.");\n'
                 f'script_family("{_type} detection");\n'
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            plugin = CheckVTPlacement(fake_context)
 
-            results = list(
-                CheckVTPlacement.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 0)
 
     def test_ok_dirs(self):
@@ -62,13 +63,13 @@ class CheckVTPlacementTestCase(PluginTestCase):
                     'script_tag(name:"summary", value:"Foo Bar.");\n'
                     f'script_family("{_type} detection");\n'
                 )
+                fake_context = MagicMock()
+                fake_context.nasl_file = path
+                fake_context.file_content = content
+                plugin = CheckVTPlacement(fake_context)
 
-                results = list(
-                    CheckVTPlacement.run(
-                        path,
-                        content,
-                    )
-                )
+                results = list(plugin.run())
+
                 self.assertEqual(len(results), 0)
 
     def test_ok_deprecated(self):
@@ -81,12 +82,13 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 'script_tag(name:"deprecated", value=TRUE);\n'
             )
 
-            results = list(
-                CheckVTPlacement.run(
-                    path,
-                    content,
-                )
-            )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            plugin = CheckVTPlacement(fake_context)
+
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 0)
 
     def test_no_detection(self):
@@ -97,12 +99,13 @@ class CheckVTPlacementTestCase(PluginTestCase):
             'script_dependencies("example.inc");\n'
         )
 
-        results = list(
-            CheckVTPlacement.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckVTPlacement(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_wrong_placement(self):
@@ -113,13 +116,13 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar.");\n'
                 f'script_family("{_type} detection");\n'
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            plugin = CheckVTPlacement(fake_context)
 
-            results = list(
-                CheckVTPlacement.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_category import CheckScriptCategory
@@ -27,25 +28,25 @@ class CheckScriptCategoryTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = "script_category(ACT_GATHER_INFO);"
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptCategory(fake_context)
 
-        results = list(
-            CheckScriptCategory.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_missing_category(self):
         path = Path("some/file.nasl")
         content = ""
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptCategory(fake_context)
 
-        results = list(
-            CheckScriptCategory.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -56,13 +57,13 @@ class CheckScriptCategoryTestCase(PluginTestCase):
     def test_invalid_category(self):
         path = Path("some/file.nasl")
         content = "script_category(ACT_FOO);"
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckScriptCategory(fake_context)
 
-        results = list(
-            CheckScriptCategory.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.deprecated_functions import CheckDeprecatedFunctions
@@ -31,13 +32,13 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckDeprecatedFunctions(fake_context)
 
-        results = list(
-            CheckDeprecatedFunctions.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_deprecated_functions(self):
@@ -61,13 +62,12 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar.");\n'
                 f"script_category(ACT_ATTACK);\n{cont}"
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            plugin = CheckDeprecatedFunctions(fake_context)
 
-            results = list(
-                CheckDeprecatedFunctions.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
 
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)

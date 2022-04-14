@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.creation_date import CheckCreationDate
@@ -30,13 +31,12 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
 
-        results = list(
-            CheckCreationDate.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
         self.assertEqual(len(results), 0)
 
     def test_missing(self):
@@ -46,13 +46,13 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:N/C:P/I:P/A:P");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
 
-        results = list(
-            CheckCreationDate.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -67,13 +67,13 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
             '(Mon, 14 May 2013)");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
 
-        results = list(
-            CheckCreationDate.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -88,13 +88,13 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
             '(Tue, 14 May 2013)");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
 
-        results = list(
-            CheckCreationDate.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -109,13 +109,13 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
             '(Tue, 15 May 2013)");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
 
-        results = list(
-            CheckCreationDate.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -130,13 +130,13 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
             '(Tue, 14 May 2013 )");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
 
-        results = list(
-            CheckCreationDate.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)

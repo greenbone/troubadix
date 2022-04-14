@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
-from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.illegal_characters import CheckIllegalCharacters
 
@@ -33,13 +33,13 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckIllegalCharacters(fake_context)
 
-        results = list(
-            CheckIllegalCharacters.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_illegal_chars_in_various_tags(self):
@@ -60,29 +60,19 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
                 'script_tag(name:"solution", value:"meh");\n'
             )
 
-            expected_content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                f'script_tag(name:"{tag}", value:"Foo Bar Baz Bad.");\n'
-                'script_tag(name:"solution_type", value:"VendorFix");\n'
-                'script_tag(name:"solution", value:"meh");\n'
-            )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            plugin = CheckIllegalCharacters(fake_context)
 
-            results = list(
-                CheckIllegalCharacters.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterWarning)
             self.assertEqual(
                 results[0].message,
                 f'Found illegal character in script_tag(name:"{tag}", '
                 'value:"Foo|Bar;Baz=Bad.");',
-            )
-            self.assertEqual(
-                path.read_text(encoding=CURRENT_ENCODING),
-                expected_content,
             )
 
         if path.exists():
