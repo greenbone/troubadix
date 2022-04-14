@@ -104,23 +104,6 @@ def parse_args(
         ),
     )
 
-    what_group.add_argument(
-        "--commit-range",
-        nargs="+",
-        type=str,
-        help=(
-            "Allows to specify a git commit range "
-            '(e.g. "$commit-hash1 $commit-hash2" or '
-            '"HEAD~1") to run the QA test against.'
-        ),
-    )
-
-    what_group.add_argument(
-        "--staged-only",
-        action="store_true",
-        help='Only run against files which are "staged/added" in git',
-    )
-
     parser.add_argument(
         "--verbose",
         "-v",
@@ -201,12 +184,6 @@ def parse_args(
             "script_version mode. Attention: This will modify all "
             "passed files."
         ),
-    )
-
-    parser.add_argument(
-        "--skip-duplicated-oids",
-        action="store_true",
-        help=" Disables the check for duplicated OIDs in VTs",
     )
 
     parser.add_argument(
