@@ -18,7 +18,7 @@
 import re
 from pathlib import Path
 from typing import Iterator
-
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
 
 
@@ -36,20 +36,25 @@ class CheckNewlines(FileContentPlugin):
         - Search for (\r or \r\n).
         - Search for whitespaces in script_name( "myname") or script_copyright
         """
-
-        if "\r" in file_content:
-            yield LinterError("Found \r.")
+        # Need to be loaded as bytes or \r is converted to \n
+        data = nasl_file.read_bytes().decode(CURRENT_ENCODING)
+        if "\r" in data or "\r\n" in data:
+            yield LinterError("Found \\r or \\r\\n newline.")
 
         # A few remaining have script_name( "myname") instead of
         # script_name("myname").
         # NEW: Remove whitespaces and newlines in script_name, script_copyright
         for tag in ["name", "copyright"]:
             whitespaces_match = re.search(
-                rf'script_{tag}\s*\([\'"]?.+?[\t]+.+?[\'"]?\)\s*;',
+                rf'script_{tag}(?P<w1>\s*)\((?P<w2>\s*)(?P<quote>[\'"])'
+                r"?.+?(?P=quote)?(?P<w3>\s*)\)(?P<w4>\s*);",
                 file_content,
             )
             if whitespaces_match:
-                yield LinterError("Found whitespaces in " f"script_{tag}.")
+                for i in range(1, 5):
+                    if whitespaces_match.group(f"w{i}") != "":
+                        yield LinterError(f"Found whitespaces in script_{tag}.")
+                        break
 
             newline_match = re.search(
                 rf'(script_{tag}\((?P<quote>[\'"])[^\'"\n;]*)[\n]+\s*'
