@@ -260,7 +260,7 @@ class Runner:
 
                 self._process_plugin_results(plugin.name, results)
 
-    def run(self, files: Iterable[Path]) -> None:
+    def run(self, files: Iterable[Path]) -> bool:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
