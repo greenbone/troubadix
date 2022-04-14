@@ -122,15 +122,23 @@ def main(args=None):
         log_file=parsed_args.log_file,
     )
 
-    if parsed_args.dirs:
-        (include_patterns, exclude_patterns,) = generate_patterns(
+    # Full will run in the root directory of executing. (Like pwd)
+    if parsed_args.full:
+        cwd = Path.cwd()
+        dirs = [cwd]
+        info(f"Running full lint from {cwd}")
+    else:
+        dirs = parsed_args.dirs
+
+    if dirs:
+        include_patterns, exclude_patterns = generate_patterns(
             include_patterns=parsed_args.include_patterns,
             exclude_patterns=parsed_args.exclude_patterns,
             non_recursive=parsed_args.non_recursive,
         )
 
         files = generate_file_list(
-            dirs=parsed_args.dirs,
+            dirs=dirs,
             exclude_patterns=exclude_patterns,
             include_patterns=include_patterns,
         )

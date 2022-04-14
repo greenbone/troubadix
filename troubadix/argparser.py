@@ -18,12 +18,13 @@
 """ Argument parser for troubadix """
 
 import sys
+
 from argparse import ArgumentParser, Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
-from typing import List
+from typing import Iterable
 
-from pontos.terminal import info, warning
+from pontos.terminal import warning
 
 
 def directory_type(string: str) -> Path:
@@ -55,13 +56,13 @@ def check_cpu_count(number: str) -> int:
 
 
 def parse_args(
-    *,
-    args: List[str] = None,
+    args: Iterable[str] = None,
 ) -> Namespace:
-    """Parsing args for nasl-lint
+    """Parsing args for troubadix
 
     Arguments:
-    args        The program arguments passed by exec"""
+        args        The program arguments passed by exec
+    """
 
     parser = ArgumentParser(
         description="Greenbone NASL File Linter.",
@@ -210,14 +211,10 @@ def parse_args(
 
     parsed_args = parser.parse_args(args=args)
 
-    # Full will run in the root directory of executing. (Like pwd)
-    if parsed_args.full:
-        cwd = Path.cwd()
-        info(f"Running full lint from {cwd}")
-        parsed_args.dirs = [cwd]
-
-    if not parsed_args.dirs and (
-        parsed_args.include_patterns or parsed_args.exclude_patterns
+    if (
+        not parsed_args.full
+        and not parsed_args.dirs
+        and (parsed_args.include_patterns or parsed_args.exclude_patterns)
     ):
         warning(
             "The arguments '--include-patterns' and '--exclude-patterns' "
@@ -225,7 +222,11 @@ def parse_args(
         )
         sys.exit(1)
 
-    if not parsed_args.dirs and parsed_args.non_recursive:
+    if (
+        not parsed_args.full
+        and not parsed_args.dirs
+        and parsed_args.non_recursive
+    ):
         warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"
