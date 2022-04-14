@@ -152,4 +152,13 @@ class CheckGrammar(LineContentPlugin):
         # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
         if re.search(r'(\s+|")[Aa]\s+multiple\s+of', match):
             return True
+
+        # Like seen in 2022/debian/deb_dla_2981.nasl
+        if "a multiple concurrency" in match:
+            return True
+
+        # WITH can be used like e.g. the following which is valid:
+        # "with WITH stack unwinding"
+        if "with WITH" in match:
+            return True
         return False
