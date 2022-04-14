@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.newlines import CheckNewlines
@@ -91,9 +90,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             / "fail_name_and_copyright_newline.nasl"
         )
         content = (
-            'script_name("foo\tdetection");\n'
-            'script_copyright("Copyright\t(c) Greenbone Networks GmbH");\n'
-            'script_copyright("Copyrigh(c) Greenbone Networks GmbH");\n'
+            'script_name( "foodetection");\n'
+            'script_copyright ( "Copyright(c) Greenbone Networks GmbH" ) ; \n'
+            'script_copyright ("Copyright(c) Greenbone Networks GmbH");\n'
         )
 
         results = list(
@@ -117,16 +116,9 @@ class CheckNewlinesTestCase(PluginTestCase):
 
     def test_new_line(self):
         nasl_file = (
-            Path(__file__).parent
-            / "test_files"
-            / "fail_name_and_copyright_newline.nasl"
+            Path(__file__).parent / "test_files" / "fail_bad_new_line.nasl"
         )
-        content = (
-            'script_name("foo detection");'
-            'script_copyright("Copyright(c) Greenbone Networks GmbH");\r\n'
-            'script_copyright("Copyrigh(c) Greenbone Networks GmbH");\n'
-        )
-
+        content = ""
         results = list(
             CheckNewlines.run(
                 nasl_file,
@@ -137,7 +129,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Found \r.",
+            "Found \\r or \\r\\n newline.",
             results[0].message,
         )
         self.assertIsInstance(results[0], LinterError)
