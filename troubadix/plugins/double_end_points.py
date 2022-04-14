@@ -60,8 +60,6 @@ class CheckDoubleEndPoints(FileContentPlugin):
                         ):
                             continue
 
-                        # phpix.nasl has ..%2F..&2F.. in summary
-
                         yield LinterError(
                             f"The script tag '{tag_match.group('name')}' "
                             "is ending with two or more points: "
