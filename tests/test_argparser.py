@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import unittest
+
 from argparse import Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
@@ -29,51 +29,16 @@ from troubadix.argparser import parse_args
 
 class TestArgparsing(unittest.TestCase):
     def setUp(self):
-        # store old arguments
-        self.old_args = sys.argv
         _set_terminal(Mock())
 
-    def tearDown(self) -> None:
-        # reset old arguments
-        sys.argv = self.old_args
-
-    def test_parse_full_verbose_staged(self):
-        sys.argv = ["troubadix", "-f", "-vv", "--staged-only"]
-        expcected_dirs = [Path.cwd()]
-
-        parsed_args = parse_args()
-
-        expected_args = Namespace(
-            full=True,
-            dirs=expcected_dirs,
-            files=None,
-            from_file=None,
-            commit_range=None,
-            staged_only=True,
-            no_statistic=False,
-            verbose=2,
-            log_file=None,
-            non_recursive=False,
-            include_patterns=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            skip_duplicated_oids=False,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
-
     def test_parse_files(self):
-        sys.argv = [
-            "troubadix",
-            "--files",
-            "tests/plugins/test.nasl",
-            "tests/plugins/fail2.nasl",
-        ]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(
+            [
+                "--files",
+                "tests/plugins/test.nasl",
+                "tests/plugins/fail2.nasl",
+            ]
+        )
 
         expected_args = Namespace(
             full=False,
@@ -83,8 +48,6 @@ class TestArgparsing(unittest.TestCase):
                 Path("tests/plugins/fail2.nasl"),
             ],
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -93,68 +56,6 @@ class TestArgparsing(unittest.TestCase):
             exclude_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
-            skip_duplicated_oids=False,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
-
-    def test_parse_dir_skip_duplicate(self):
-        sys.argv = [
-            "troubadix",
-            "--dirs",
-            "tests",
-            "troubadix",
-            "--skip-duplicated-oids",
-            "--non-recursive",
-        ]
-
-        parsed_args = parse_args()
-
-        expected_args = Namespace(
-            full=False,
-            dirs=[Path("tests"), Path("troubadix")],
-            files=None,
-            from_file=None,
-            commit_range=None,
-            staged_only=False,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=True,
-            include_patterns=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            skip_duplicated_oids=True,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
-
-    def test_parse_commit_range(self):
-        sys.argv = ["troubadix", "--commit-range", "0123456", "7abcdef"]
-
-        parsed_args = parse_args()
-
-        expected_args = Namespace(
-            full=False,
-            dirs=None,
-            files=None,
-            from_file=None,
-            commit_range=["0123456", "7abcdef"],
-            staged_only=False,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            include_patterns=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
             update_date=False,
         )
@@ -162,21 +63,18 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_include_tests(self):
-        sys.argv = [
-            "troubadix",
-            "--include-tests",
-            "CheckBadwords",
-        ]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(
+            [
+                "--include-tests",
+                "CheckBadwords",
+            ]
+        )
 
         expected_args = Namespace(
             full=False,
             dirs=None,
             files=None,
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -185,7 +83,6 @@ class TestArgparsing(unittest.TestCase):
             exclude_patterns=None,
             excluded_plugins=None,
             included_plugins=["CheckBadwords"],
-            skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
             update_date=False,
         )
@@ -193,21 +90,18 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_exclude_tests(self):
-        sys.argv = [
-            "troubadix",
-            "--exclude-tests",
-            "CheckBadwords",
-        ]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(
+            [
+                "--exclude-tests",
+                "CheckBadwords",
+            ]
+        )
 
         expected_args = Namespace(
             full=False,
             dirs=None,
             files=None,
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -216,7 +110,6 @@ class TestArgparsing(unittest.TestCase):
             exclude_patterns=None,
             excluded_plugins=["CheckBadwords"],
             included_plugins=None,
-            skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
             update_date=False,
         )
@@ -224,18 +117,13 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_include_patterns(self):
-        sys.argv = ["troubadix", "-f", "--include-patterns", "troubadix/*"]
-        expcected_dirs = [Path.cwd()]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(["-f", "--include-patterns", "troubadix/*"])
 
         expected_args = Namespace(
             full=True,
-            dirs=expcected_dirs,
+            dirs=None,
             files=None,
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -244,7 +132,6 @@ class TestArgparsing(unittest.TestCase):
             exclude_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
-            skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
             update_date=False,
         )
@@ -252,36 +139,28 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_include_patterns_fail(self):
-        sys.argv = ["troubadix", "--include-patterns", "troubadix/*"]
-
         with self.assertRaises(SystemExit):
-            parse_args()
+            parse_args(["--include-patterns", "troubadix/*"])
 
     def test_parse_files_non_recursive_fail(self):
-        sys.argv = [
-            "troubadix",
-            "--files",
-            "tests/plugins/test.nasl",
-            "tests/plugins/fail2.nasl",
-            "--non-recursive",
-        ]
-
         with self.assertRaises(SystemExit):
-            parse_args()
+            parse_args(
+                [
+                    "--files",
+                    "tests/plugins/test.nasl",
+                    "tests/plugins/fail2.nasl",
+                    "--non-recursive",
+                ]
+            )
 
     def test_parse_exclude_patterns(self):
-        sys.argv = ["troubadix", "-f", "--exclude-patterns", "troubadix/*"]
-        expcected_dirs = [Path.cwd()]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(["-f", "--exclude-patterns", "troubadix/*"])
 
         expected_args = Namespace(
             full=True,
-            dirs=expcected_dirs,
+            dirs=None,
             files=None,
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -290,7 +169,6 @@ class TestArgparsing(unittest.TestCase):
             include_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
-            skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
             update_date=False,
         )
@@ -298,25 +176,21 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_max_cpu(self):
-        sys.argv = [
-            "troubadix",
-            "-f",
-            "--exclude-patterns",
-            "troubadix/*",
-            "-j",
-            "1337",
-        ]
-        expcected_dirs = [Path.cwd()]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(
+            [
+                "-f",
+                "--exclude-patterns",
+                "troubadix/*",
+                "-j",
+                "1337",
+            ]
+        )
 
         expected_args = Namespace(
             full=True,
-            dirs=expcected_dirs,
+            dirs=None,
             files=None,
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -325,7 +199,6 @@ class TestArgparsing(unittest.TestCase):
             include_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
-            skip_duplicated_oids=False,
             n_jobs=cpu_count(),
             update_date=False,
         )
@@ -333,26 +206,22 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args, expected_args)
 
     def test_parse_min_cpu_update_date(self):
-        sys.argv = [
-            "troubadix",
-            "-f",
-            "--exclude-patterns",
-            "troubadix/*",
-            "-j",
-            "-1337",
-            "--update-date",
-        ]
-        expcected_dirs = [Path.cwd()]
-
-        parsed_args = parse_args()
+        parsed_args = parse_args(
+            [
+                "-f",
+                "--exclude-patterns",
+                "troubadix/*",
+                "-j",
+                "-1337",
+                "--update-date",
+            ]
+        )
 
         expected_args = Namespace(
             full=True,
-            dirs=expcected_dirs,
+            dirs=None,
             files=None,
             from_file=None,
-            commit_range=None,
-            staged_only=False,
             no_statistic=False,
             verbose=0,
             log_file=None,
@@ -361,7 +230,6 @@ class TestArgparsing(unittest.TestCase):
             include_patterns=None,
             excluded_plugins=None,
             included_plugins=None,
-            skip_duplicated_oids=False,
             n_jobs=cpu_count() // 2,
             update_date=True,
         )

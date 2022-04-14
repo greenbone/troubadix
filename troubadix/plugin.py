@@ -55,11 +55,6 @@ class PreRunPlugin(Plugin):
     ) -> Iterator[LinterResult]:
         pass
 
-    @staticmethod
-    @abstractmethod
-    def ok():
-        pass
-
 
 class FileContentPlugin(Plugin):
     """A plugin that does checks on the whole file content"""

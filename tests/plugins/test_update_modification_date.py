@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError, LinterResult
 from troubadix.plugins.update_modification_date import UpdateModificationDate
 
@@ -27,7 +28,7 @@ class TestUpdateModificationDate(PluginTestCase):
     def test_change_date(self):
         nasl_file = Path(__file__).parent / "test.nasl"
 
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         output = UpdateModificationDate.run(
             nasl_file=nasl_file,
@@ -36,16 +37,16 @@ class TestUpdateModificationDate(PluginTestCase):
 
         self.assertIsInstance(next(output), LinterResult)
 
-        new_content = nasl_file.read_text(encoding="latin1")
+        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertNotEqual(content, new_content)
 
         # revert changes for the next time
-        nasl_file.write_text(content, encoding="latin1")
+        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
     def test_fail_modification_date(self):
         nasl_file = Path(__file__).parent / "fail.nasl"
 
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         output = UpdateModificationDate.run(
             nasl_file=nasl_file,
@@ -60,13 +61,13 @@ class TestUpdateModificationDate(PluginTestCase):
         self.assertIsInstance(error, LinterError)
         self.assertEqual(error, expected_error)
 
-        new_content = nasl_file.read_text(encoding="latin1")
+        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)
 
     def test_fail_script_version(self):
         nasl_file = Path(__file__).parent / "fail2.nasl"
 
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         output = UpdateModificationDate.run(
             nasl_file=nasl_file,
@@ -79,5 +80,5 @@ class TestUpdateModificationDate(PluginTestCase):
         self.assertIsInstance(error, LinterError)
         self.assertEqual(error, expected_error)
 
-        new_content = nasl_file.read_text(encoding="latin1")
+        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)

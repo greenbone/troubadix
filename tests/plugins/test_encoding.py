@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.encoding import CheckEncoding
 
@@ -33,7 +34,7 @@ class CheckEncodingTestCase(PluginTestCase):
             "abcdefghijklmnopqrstuvwxyz{|}~",
             encoding="utf-8",
         )
-        content = path.read_text(encoding="latin1")
+        content = path.read_text(encoding=CURRENT_ENCODING)
 
         results = list(
             CheckEncoding.run(
@@ -55,7 +56,7 @@ class CheckEncodingTestCase(PluginTestCase):
             "ÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ",
             encoding="utf-8",
         )
-        content = path.read_text(encoding="latin1")
+        content = path.read_text(encoding=CURRENT_ENCODING)
 
         results = list(
             CheckEncoding.run(

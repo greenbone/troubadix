@@ -19,7 +19,7 @@
 
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import Iterable, List, Tuple
 
 from pontos.terminal import _set_terminal, error, info, warning
 from pontos.terminal.terminal import Terminal
@@ -30,7 +30,9 @@ from troubadix.runner import Runner
 
 
 def generate_file_list(
-    dirs: List[Path], exclude_patterns: List[str], include_patterns: List[str]
+    dirs: Iterable[Path],
+    exclude_patterns: Iterable[str],
+    include_patterns: Iterable[str],
 ) -> List[Path]:
     """Generates a files list under respect of several given arguments
 
@@ -66,12 +68,14 @@ def generate_patterns(
     """Generates the include and exclude patterns
 
     Arguments:
-    include_patterns    List of glob patterns to filter files with
-    exclude_patterns    List of glob patterns of files that will excluded
-    non_recursive       Whether to include all subdirs to the patterns or not
+        include_patterns:    List of glob patterns to filter files with
+        exclude_patterns:    List of glob patterns of files that will excluded
+        non_recursive:       Whether to include all sub directories to the
+                            patterns or not
 
-    Returns
-    Corrected tuple of lists of include and exclude patterns"""
+    Returns:
+        Corrected tuple of lists of include and exclude patterns
+    """
     # Setting the globs for include all nasl and inc files, if no include
     # pattern given
     if not include_patterns:
@@ -88,7 +92,7 @@ def generate_patterns(
     return include_patterns, exclude_patterns
 
 
-def from_file(include_file: Path, term: Terminal):
+def from_file(include_file: Path, term: Terminal) -> Iterable[Path]:
     """Parse the given file containing a list of files into"""
     try:
         return [
@@ -118,41 +122,48 @@ def main(args=None):
         log_file=parsed_args.log_file,
     )
 
-    if parsed_args.dirs:
-        (
-            parsed_args.include_patterns,
-            parsed_args.exclude_patterns,
-        ) = generate_patterns(
+    # Full will run in the root directory of executing. (Like pwd)
+    if parsed_args.full:
+        cwd = Path.cwd()
+        dirs = [cwd]
+        info(f"Running full lint from {cwd}")
+    else:
+        dirs = parsed_args.dirs
+
+    if dirs:
+        include_patterns, exclude_patterns = generate_patterns(
             include_patterns=parsed_args.include_patterns,
             exclude_patterns=parsed_args.exclude_patterns,
             non_recursive=parsed_args.non_recursive,
         )
 
-        parsed_args.files = generate_file_list(
-            dirs=parsed_args.dirs,
-            exclude_patterns=parsed_args.exclude_patterns,
-            include_patterns=parsed_args.include_patterns,
+        files = generate_file_list(
+            dirs=dirs,
+            exclude_patterns=exclude_patterns,
+            include_patterns=include_patterns,
         )
 
-    if parsed_args.from_file:
-        parsed_args.files = from_file(
-            include_file=parsed_args.from_file, term=term
-        )
+    elif parsed_args.from_file:
+        files = from_file(include_file=parsed_args.from_file, term=term)
 
-    if parsed_args.files:
-        # Get the root of the nasl files
-        if not get_root(parsed_args.files[0].resolve()):
-            error(
-                "Root directory of VTs not found. Looked for "
-                f"{parsed_args.files[0].resolve()}"
-            )
-            sys.exit(1)
-        info(f"Start linting {len(parsed_args.files)} files ... ")
-        # Return exit with 1 if error exist
-        if runner.run(parsed_args.files):
-            sys.exit(1)
-    else:
+    elif parsed_args.files:
+        files = parsed_args.files
+
+    if not files:
         warning("No files given/found.")
+        sys.exit(1)
+
+    # Get the root of the nasl files
+    first_file = files[0].resolve()
+    if not get_root(first_file):
+        error(f"Root directory of VTs not found. Looked for {first_file}")
+        sys.exit(1)
+
+    info(f"Start linting {len(files)} files ... ")
+
+    # Return exit with 1 if error exist
+    if runner.run(files):
+        sys.exit(1)
 
 
 if __name__ == "__main__":

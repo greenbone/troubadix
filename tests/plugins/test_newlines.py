@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.newlines import CheckNewlines
 
@@ -26,7 +27,7 @@ from . import PluginTestCase
 class CheckNewlinesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         results = list(
             CheckNewlines.run(
@@ -40,7 +41,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         nasl_file = (
             Path(__file__).parent / "test_files" / "fail_name_newline.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         results = list(
             CheckNewlines.run(
@@ -62,7 +63,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             / "test_files"
             / "fail_name_and_copyright_newline.nasl"
         )
-        content = nasl_file.read_text(encoding="latin1")
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         results = list(
             CheckNewlines.run(

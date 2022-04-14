@@ -18,12 +18,13 @@
 """ Argument parser for troubadix """
 
 import sys
+
 from argparse import ArgumentParser, Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
-from typing import List
+from typing import Iterable
 
-from pontos.terminal import info, warning
+from pontos.terminal import warning
 
 
 def directory_type(string: str) -> Path:
@@ -55,13 +56,13 @@ def check_cpu_count(number: str) -> int:
 
 
 def parse_args(
-    *,
-    args: List[str] = None,
+    args: Iterable[str] = None,
 ) -> Namespace:
-    """Parsing args for nasl-lint
+    """Parsing args for troubadix
 
     Arguments:
-    args        The program arguments passed by exec"""
+        args        The program arguments passed by exec
+    """
 
     parser = ArgumentParser(
         description="Greenbone NASL File Linter.",
@@ -102,23 +103,6 @@ def parse_args(
             "containing paths to files, that should be "
             "checked. Files should be separated by newline"
         ),
-    )
-
-    what_group.add_argument(
-        "--commit-range",
-        nargs="+",
-        type=str,
-        help=(
-            "Allows to specify a git commit range "
-            '(e.g. "$commit-hash1 $commit-hash2" or '
-            '"HEAD~1") to run the QA test against.'
-        ),
-    )
-
-    what_group.add_argument(
-        "--staged-only",
-        action="store_true",
-        help='Only run against files which are "staged/added" in git',
     )
 
     parser.add_argument(
@@ -204,12 +188,6 @@ def parse_args(
     )
 
     parser.add_argument(
-        "--skip-duplicated-oids",
-        action="store_true",
-        help=" Disables the check for duplicated OIDs in VTs",
-    )
-
-    parser.add_argument(
         "-j",
         "--n-jobs",
         dest="n_jobs",
@@ -233,14 +211,10 @@ def parse_args(
 
     parsed_args = parser.parse_args(args=args)
 
-    # Full will run in the root directory of executing. (Like pwd)
-    if parsed_args.full:
-        cwd = Path.cwd()
-        info(f"Running full lint from {cwd}")
-        parsed_args.dirs = [cwd]
-
-    if not parsed_args.dirs and (
-        parsed_args.include_patterns or parsed_args.exclude_patterns
+    if (
+        not parsed_args.full
+        and not parsed_args.dirs
+        and (parsed_args.include_patterns or parsed_args.exclude_patterns)
     ):
         warning(
             "The arguments '--include-patterns' and '--exclude-patterns' "
@@ -248,7 +222,11 @@ def parse_args(
         )
         sys.exit(1)
 
-    if not parsed_args.dirs and parsed_args.non_recursive:
+    if (
+        not parsed_args.full
+        and not parsed_args.dirs
+        and parsed_args.non_recursive
+    ):
         warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"

@@ -111,33 +111,40 @@ _PRE_RUN_PLUGINS = [CheckDuplicateOID]
 
 
 class Plugins:
+    def __init__(self, plugins: List[Plugin]):
+        self._plugins = plugins
+
+    def __len__(self) -> int:
+        return len(self._plugins)
+
+    def __iter__(self) -> Iterable[Plugin]:
+        return iter(self._plugins)
+
+
+class UpdatePlugins(Plugins):
+    def __init__(self):
+        super().__init__([UpdateModificationDate])
+
+
+class StandardPlugins(Plugins):
     def __init__(
         self,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
-        update_date: bool = False,
     ) -> None:
-        if update_date:
-            self.plugins = [UpdateModificationDate]
-            return
-        self.plugins = _PLUGINS
+        super().__init__(_PLUGINS)
+
         if excluded_plugins:
-            self.plugins = [
+            self._plugins = [
                 plugin
-                for plugin in _PLUGINS
+                for plugin in self._plugins
                 if plugin.__name__ not in excluded_plugins
                 and plugin.name not in excluded_plugins
             ]
         if included_plugins:
-            self.plugins = [
+            self._plugins = [
                 plugin
                 for plugin in _PLUGINS
                 if plugin.__name__ in included_plugins
                 or plugin.name in included_plugins
             ]
-
-    def __len__(self) -> int:
-        return len(self.plugins)
-
-    def __iter__(self) -> Iterable[Plugin]:
-        return iter(self.plugins)
