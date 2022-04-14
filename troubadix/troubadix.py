@@ -19,7 +19,7 @@
 
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import Iterable, List, Tuple
 
 from pontos.terminal import _set_terminal, error, info, warning
 from pontos.terminal.terminal import Terminal
@@ -30,7 +30,9 @@ from troubadix.runner import Runner
 
 
 def generate_file_list(
-    dirs: List[Path], exclude_patterns: List[str], include_patterns: List[str]
+    dirs: Iterable[Path],
+    exclude_patterns: Iterable[str],
+    include_patterns: Iterable[str],
 ) -> List[Path]:
     """Generates a files list under respect of several given arguments
 
@@ -66,12 +68,14 @@ def generate_patterns(
     """Generates the include and exclude patterns
 
     Arguments:
-    include_patterns    List of glob patterns to filter files with
-    exclude_patterns    List of glob patterns of files that will excluded
-    non_recursive       Whether to include all subdirs to the patterns or not
+        include_patterns:    List of glob patterns to filter files with
+        exclude_patterns:    List of glob patterns of files that will excluded
+        non_recursive:       Whether to include all sub directories to the
+                            patterns or not
 
-    Returns
-    Corrected tuple of lists of include and exclude patterns"""
+    Returns:
+        Corrected tuple of lists of include and exclude patterns
+    """
     # Setting the globs for include all nasl and inc files, if no include
     # pattern given
     if not include_patterns:
@@ -88,7 +92,7 @@ def generate_patterns(
     return include_patterns, exclude_patterns
 
 
-def from_file(include_file: Path, term: Terminal):
+def from_file(include_file: Path, term: Terminal) -> Iterable[Path]:
     """Parse the given file containing a list of files into"""
     try:
         return [
