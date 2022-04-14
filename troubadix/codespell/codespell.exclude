@@ -1052,6 +1052,7 @@ url = "/statics/pageChallenge.html";
 url = '/UE/advanced.html';
 url = "/UE/welcome_login.html";
  * usb/net: rndis: remove ambigous status codes. only net/hyperv part
+ use-after-free due to the AB/BA lock with buffer_mutex and mmap_lock.
  used to cause a redirect to any URI of an attackers choise (bsc#1110850).");
     user32_file_id = 'oval:org.mitre.oval:obj:390';
     user32_file_variable_id = 'oval:org.mitre.oval:var:200';
