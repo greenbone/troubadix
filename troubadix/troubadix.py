@@ -123,40 +123,39 @@ def main(args=None):
     )
 
     if parsed_args.dirs:
-        (
-            parsed_args.include_patterns,
-            parsed_args.exclude_patterns,
-        ) = generate_patterns(
+        (include_patterns, exclude_patterns,) = generate_patterns(
             include_patterns=parsed_args.include_patterns,
             exclude_patterns=parsed_args.exclude_patterns,
             non_recursive=parsed_args.non_recursive,
         )
 
-        parsed_args.files = generate_file_list(
+        files = generate_file_list(
             dirs=parsed_args.dirs,
-            exclude_patterns=parsed_args.exclude_patterns,
-            include_patterns=parsed_args.include_patterns,
+            exclude_patterns=exclude_patterns,
+            include_patterns=include_patterns,
         )
 
-    if parsed_args.from_file:
-        parsed_args.files = from_file(
-            include_file=parsed_args.from_file, term=term
-        )
+    elif parsed_args.from_file:
+        files = from_file(include_file=parsed_args.from_file, term=term)
 
-    if parsed_args.files:
-        # Get the root of the nasl files
-        if not get_root(parsed_args.files[0].resolve()):
-            error(
-                "Root directory of VTs not found. Looked for "
-                f"{parsed_args.files[0].resolve()}"
-            )
-            sys.exit(1)
-        info(f"Start linting {len(parsed_args.files)} files ... ")
-        # Return exit with 1 if error exist
-        if runner.run(parsed_args.files):
-            sys.exit(1)
-    else:
+    elif parsed_args.files:
+        files = parsed_args.files
+
+    if not files:
         warning("No files given/found.")
+        sys.exit(1)
+
+    # Get the root of the nasl files
+    first_file = files[0].resolve()
+    if not get_root(first_file):
+        error(f"Root directory of VTs not found. Looked for {first_file}")
+        sys.exit(1)
+
+    info(f"Start linting {len(files)} files ... ")
+
+    # Return exit with 1 if error exist
+    if runner.run(files):
+        sys.exit(1)
 
 
 if __name__ == "__main__":
