@@ -18,7 +18,7 @@
 import re
 from pathlib import Path
 from typing import Iterator
-from troubadix.helper import CURRENT_ENCODING
+
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
 
 
@@ -37,8 +37,8 @@ class CheckNewlines(FileContentPlugin):
         - Search for whitespaces in script_name( "myname") or script_copyright
         """
         # Need to be loaded as bytes or \r is converted to \n
-        data = nasl_file.read_bytes().decode(CURRENT_ENCODING)
-        if "\r" in data or "\r\n" in data:
+        data = nasl_file.read_bytes()
+        if b"\r" in data or b"\r\n" in data:
             yield LinterError("Found \\r or \\r\\n newline.")
 
         # A few remaining have script_name( "myname") instead of
