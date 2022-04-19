@@ -48,10 +48,8 @@ def is_ignore_file(
     return False
 
 
-def get_path_from_root(file_name: Path, root: Path = None):
+def get_path_from_root(file_name: Path, root: Path):
     file_name = file_name.resolve()
-    if not root:
-        root = get_root(file_name)
     return file_name.relative_to(root)
 
 
