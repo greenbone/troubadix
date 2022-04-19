@@ -25,8 +25,8 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 class CheckScriptCopyright(FileContentPlugin):
     name = "check_script_copyright"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

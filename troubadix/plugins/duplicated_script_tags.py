@@ -15,26 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper.patterns import (
     get_script_tag_patterns,
     get_special_script_tag_patterns,
 )
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckDuplicatedScriptTags(FileContentPlugin):
+class CheckDuplicatedScriptTags(FilePlugin):
     name = "check_duplicated_script_tags"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
-
+    def run(self) -> Iterator[LinterResult]:
         special_script_tag_patterns = get_special_script_tag_patterns()
+        file_content = self.context.file_content
         for tag, pattern in special_script_tag_patterns.items():
             # TBD: script_name might also look like this:
             # script_name("MyVT (Windows)");

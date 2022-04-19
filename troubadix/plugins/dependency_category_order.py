@@ -71,8 +71,8 @@ def check_category(
 class CheckDependencyCategoryOrder(FileContentPlugin):
     name = "check_dependency_category_order"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

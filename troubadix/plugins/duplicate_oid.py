@@ -16,8 +16,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
-from typing import Iterator, List
+
+from typing import Iterator
 
 from troubadix.helper import (
     CURRENT_ENCODING,
@@ -26,9 +26,9 @@ from troubadix.helper import (
     get_path_from_root,
 )
 from troubadix.plugin import (
+    FilesPlugin,
     LinterError,
     LinterResult,
-    PreRunPlugin,
 )
 
 # import json
@@ -40,13 +40,10 @@ KNOWN_DUPS = {"1.3.6.1.4.1.25623.1.0.850001", "1.3.6.1.4.1.25623.1.0.95888"}
 KNOWN_ABSENTS = {"template.nasl"}
 
 
-class CheckDuplicateOID(PreRunPlugin):
+class CheckDuplicateOID(FilesPlugin):
     name = "check_duplicate_oid"
 
-    @staticmethod
-    def run(
-        nasl_files: List[Path],
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """Run PRE_RUN_COLLECTOR."""
 
         mapping = dict()
@@ -54,7 +51,7 @@ class CheckDuplicateOID(PreRunPlugin):
         absents = []
         invalids = []
 
-        for nasl_file in nasl_files:
+        for nasl_file in self.context.nasl_files:
             if not nasl_file.suffix == ".nasl":
                 continue
 

@@ -15,21 +15,17 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from pathlib import Path
+
 from typing import Iterator
 
 from troubadix.helper.patterns import ScriptTag, _get_tag_pattern
-from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckSolutionText(FileContentPlugin):
+class CheckSolutionText(FilePlugin):
     name = "check_solution_text"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """There are specific guidelines on the syntax for the solution tag on
         VTs with the solution_type "NoneAvailable" or "WillNotFix" available at:
 
@@ -97,6 +93,7 @@ class CheckSolutionText(FileContentPlugin):
             'value:"No solution is required.\n\n  Note: <add a specific note '
             'for the reason here, e.g. CVE was disputed>.");'
         )
+        file_content = self.context.file_content
 
         if _get_tag_pattern(
             name=ScriptTag.SOLUTION_TYPE.value, value="NoneAvailable"

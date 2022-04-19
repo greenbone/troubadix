@@ -205,7 +205,7 @@ def parse_args(
         help="Don't print the statistic",
     )
 
-    if len(sys.argv) == 1:
+    if not args:
         parser.print_help(sys.stdout)
         sys.exit(1)
 

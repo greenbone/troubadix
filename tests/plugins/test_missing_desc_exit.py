@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.missing_desc_exit import CheckMissingDescExit
@@ -34,13 +35,13 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             "exit(0);\n"
             "}\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckMissingDescExit(fake_context)
 
-        results = list(
-            CheckMissingDescExit.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -53,13 +54,13 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             "}\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckMissingDescExit(fake_context)
 
-        results = list(
-            CheckMissingDescExit.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -75,13 +76,13 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckMissingDescExit(fake_context)
 
-        results = list(
-            CheckMissingDescExit.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

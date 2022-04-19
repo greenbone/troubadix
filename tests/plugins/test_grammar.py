@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.grammar import CheckGrammar
@@ -32,13 +33,13 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         ).splitlines()
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.lines = content
+        plugin = CheckGrammar(fake_context)
 
-        results = list(
-            CheckGrammar.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_grammar(self):
@@ -51,12 +52,13 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# is prone to a security bypass vulnerabilities\n"
         ).splitlines()
 
-        results = list(
-            CheckGrammar.run(
-                nasl_file,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.lines = content
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -76,12 +78,13 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# refer the Reference\n"
         ).splitlines()
 
-        results = list(
-            CheckGrammar.run(
-                nasl_file,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.lines = content
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

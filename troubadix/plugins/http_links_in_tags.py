@@ -18,7 +18,6 @@
 import re
 
 from itertools import chain
-from pathlib import Path
 from typing import AnyStr, Iterator
 
 from troubadix.helper import (
@@ -26,24 +25,19 @@ from troubadix.helper import (
     get_common_tag_patterns,
 )
 from troubadix.helper.patterns import get_special_script_tag_pattern
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckHttpLinksInTags(FileContentPlugin):
+class CheckHttpLinksInTags(FilePlugin):
     name = "check_http_links_in_tags"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         return chain(
-            CheckHttpLinksInTags.contains_nvd_mitre_link_in_xref(file_content),
-            CheckHttpLinksInTags.contains_http_link_in_tag(file_content),
+            self.contains_http_link_in_tag(),
+            self.contains_nvd_mitre_link_in_xref(),
         )
 
-    @staticmethod
-    def contains_http_link_in_tag(file_content: str) -> Iterator[LinterResult]:
+    def contains_http_link_in_tag(self) -> Iterator[LinterResult]:
         """Checks a given file if any of the
         script_tag(name:"(summary|impact|affected|insight|vuldetect|
         solution)", value:"")
@@ -58,6 +52,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                             checked
         """
 
+        file_content = self.context.file_content
         pattern = get_common_tag_patterns()
         tag_matches: Iterator[re.Match] = pattern.finditer(file_content)
 
@@ -70,9 +65,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                 if http_link_matches:
                     for http_link_match in http_link_matches:
                         if http_link_match:
-                            if CheckHttpLinksInTags.check_to_continue(
-                                http_link_match.group(0)
-                            ):
+                            if self.check_to_continue(http_link_match.group(0)):
                                 continue
 
                             yield LinterError(
@@ -82,10 +75,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 f" tag instead: '{tag_match.group(0)}'"
                             )
 
-    @staticmethod
-    def contains_nvd_mitre_link_in_xref(
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def contains_nvd_mitre_link_in_xref(self) -> Iterator[LinterResult]:
         """
         Checks a given file if the script_xref(name:"URL", value:""); contains
         a link to an URL including any of this occurrence:
@@ -103,6 +93,7 @@ class CheckHttpLinksInTags(FileContentPlugin):
                                 checked
         """
 
+        file_content = self.context.file_content
         pattern = get_special_script_tag_pattern(SpecialScriptTag.XREF)
         tag_matches = pattern.finditer(file_content)
 

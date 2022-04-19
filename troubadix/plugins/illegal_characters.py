@@ -16,12 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
+
 from typing import Iterator, List, Union
-from troubadix.helper import CURRENT_ENCODING
 
 from troubadix.helper.patterns import get_common_tag_patterns
-from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
+from troubadix.plugin import LinterResult, LinterWarning, FilePlugin
 
 # import magic
 
@@ -54,20 +53,16 @@ def check_match(match: re.Match) -> Union[str, None]:
     return None
 
 
-class CheckIllegalCharacters(FileContentPlugin):
+class CheckIllegalCharacters(FilePlugin):
     name = "check_illegal_characters"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """
         Currently the following chars are not allowed in
         every script_tag(name:"", value:"") :
         """
-        changes: bool = False
         pattern = get_common_tag_patterns()
+        file_content = self.context.file_content
 
         tag_matches: List[re.Match] = pattern.finditer(file_content)
         if tag_matches:
@@ -75,7 +70,7 @@ class CheckIllegalCharacters(FileContentPlugin):
                 if match and match.group(0) is not None:
                     new_tag = check_match(match)
                     if new_tag:
-                        changes = True
+                        # changes = True
                         yield LinterWarning(
                             f"Found illegal character in {match.group(0)}"
                         )
@@ -83,5 +78,5 @@ class CheckIllegalCharacters(FileContentPlugin):
                             match.group(0), new_tag
                         )
 
-        if changes:
-            nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)
+        # if changes:
+        #     nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)

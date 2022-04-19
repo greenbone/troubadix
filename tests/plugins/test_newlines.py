@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
+
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.newlines import CheckNewlines
@@ -27,13 +29,13 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckNewlines(fake_context)
 
-        results = list(
-            CheckNewlines.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_newline_in_name(self):
@@ -41,13 +43,12 @@ class CheckNewlinesTestCase(PluginTestCase):
             Path(__file__).parent / "test_files" / "fail_name_newline.nasl"
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckNewlines(fake_context)
 
-        results = list(
-            CheckNewlines.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
@@ -63,13 +64,12 @@ class CheckNewlinesTestCase(PluginTestCase):
             / "fail_name_and_copyright_newline.nasl"
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckNewlines(fake_context)
 
-        results = list(
-            CheckNewlines.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
@@ -94,13 +94,12 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_copyright ( "Copyright(c) Greenbone Networks GmbH" ) ; \n'
             'script_copyright ("Copyright(c) Greenbone Networks GmbH");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckNewlines(fake_context)
 
-        results = list(
-            CheckNewlines.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
@@ -118,13 +117,17 @@ class CheckNewlinesTestCase(PluginTestCase):
         nasl_file = (
             Path(__file__).parent / "test_files" / "fail_bad_new_line.nasl"
         )
-        content = ""
-        results = list(
-            CheckNewlines.run(
-                nasl_file,
-                content,
-            )
+        content = (
+            'script_name("foo detection");'
+            'script_copyright("Copyright(c) Greenbone Networks GmbH");\r\n'
+            'script_copyright("Copyrigh(c) Greenbone Networks GmbH");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckNewlines(fake_context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

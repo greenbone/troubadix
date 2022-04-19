@@ -25,8 +25,8 @@ from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
 class CheckSecurityMessages(FileContentPlugin):
     name = "check_security_messages"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

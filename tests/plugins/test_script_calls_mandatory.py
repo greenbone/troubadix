@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_calls_mandatory import CheckScriptCallsMandatory
@@ -34,23 +35,23 @@ class CheckScriptCallsMandatoryTestCase(PluginTestCase):
             "script_family(FAMILY);\n"
             'script_copyright("COPYRIGHT");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptCallsMandatory(fake_context)
 
-        results = list(
-            CheckScriptCallsMandatory.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_missing_calls(self):
         content = 'script_xref(name: "URL", value:"");'
+        fake_context = MagicMock()
+        fake_context.nasl_file = self.path
+        fake_context.file_content = content
+        plugin = CheckScriptCallsMandatory(fake_context)
 
-        results = list(
-            CheckScriptCallsMandatory.run(
-                nasl_file=self.path,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterError)

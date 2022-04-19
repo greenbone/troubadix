@@ -16,20 +16,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
+from troubadix.plugin import LinterResult, LinterError, FilePlugin
 
 
-class CheckNewlines(FileContentPlugin):
+class CheckNewlines(FilePlugin):
     name = "check_wrong_newlines"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """This script FIXES newline errors:
         - Checking the passed VT for the existence of newlines in
           the script_name() and script_copyright() tags.
@@ -37,9 +33,11 @@ class CheckNewlines(FileContentPlugin):
         - Search for whitespaces in script_name( "myname") or script_copyright
         """
         # Need to be loaded as bytes or \r is converted to \n
-        data = nasl_file.read_bytes()
+        data = self.context.nasl_file.read_bytes()
         if b"\r" in data or b"\r\n" in data:
             yield LinterError("Found \\r or \\r\\n newline.")
+
+        file_content = self.context.file_content
 
         # A few remaining have script_name( "myname") instead of
         # script_name("myname").

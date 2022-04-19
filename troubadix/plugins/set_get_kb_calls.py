@@ -15,20 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckWrongSetGetKBCalls(FileContentPlugin):
+class CheckWrongSetGetKBCalls(FilePlugin):
     name = "check_set_get_kb_calls"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """
         Checks a given file if it calls any of the following functions setting
         or getting KB entries in a wrong way like e.g. with too much or too
@@ -52,6 +48,7 @@ class CheckWrongSetGetKBCalls(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
+        file_content = self.context.file_content
         param_re = re.compile(r"(name|value) ?:")
 
         set_matches = re.finditer(

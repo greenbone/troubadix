@@ -17,6 +17,7 @@
 
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.http_links_in_tags import CheckHttpLinksInTags
@@ -34,13 +35,13 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckHttpLinksInTags(fake_context)
 
-        results = list(
-            CheckHttpLinksInTags.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_not_ok(self):
@@ -52,13 +53,13 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckHttpLinksInTags(fake_context)
 
-        results = list(
-            CheckHttpLinksInTags.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -80,13 +81,13 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'script_xref(name:"URL", '
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckHttpLinksInTags(fake_context)
 
-        results = list(
-            CheckHttpLinksInTags.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

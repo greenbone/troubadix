@@ -37,8 +37,8 @@ def subprocess_cmd(command: str) -> bytes:
 class CheckEncoding(LineContentPlugin):
     name = "check_encoding"
 
-    @staticmethod
-    def run(
+    def check_lines(
+        self,
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:

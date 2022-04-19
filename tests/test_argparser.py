@@ -17,7 +17,6 @@
 
 import unittest
 
-from argparse import Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
 from unittest.mock import Mock
@@ -40,27 +39,11 @@ class TestArgparsing(unittest.TestCase):
             ]
         )
 
-        expected_args = Namespace(
-            full=False,
-            dirs=None,
-            files=[
-                Path("tests/plugins/test.nasl"),
-                Path("tests/plugins/fail2.nasl"),
-            ],
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            include_patterns=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
+        expected_files = [
+            Path("tests/plugins/test.nasl"),
+            Path("tests/plugins/fail2.nasl"),
+        ]
+        self.assertEqual(parsed_args.files, expected_files)
 
     def test_parse_include_tests(self):
         parsed_args = parse_args(
@@ -69,25 +52,9 @@ class TestArgparsing(unittest.TestCase):
                 "CheckBadwords",
             ]
         )
-
-        expected_args = Namespace(
-            full=False,
-            dirs=None,
-            files=None,
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            include_patterns=None,
-            exclude_patterns=None,
-            excluded_plugins=None,
-            included_plugins=["CheckBadwords"],
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
+        self.assertEqual(parsed_args.included_plugins, ["CheckBadwords"])
+        self.assertIsNone(parsed_args.excluded_plugins)
+        self.assertFalse(parsed_args.update_date)
 
     def test_parse_exclude_tests(self):
         parsed_args = parse_args(
@@ -96,47 +63,15 @@ class TestArgparsing(unittest.TestCase):
                 "CheckBadwords",
             ]
         )
-
-        expected_args = Namespace(
-            full=False,
-            dirs=None,
-            files=None,
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            include_patterns=None,
-            exclude_patterns=None,
-            excluded_plugins=["CheckBadwords"],
-            included_plugins=None,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
+        self.assertEqual(parsed_args.excluded_plugins, ["CheckBadwords"])
+        self.assertIsNone(parsed_args.included_plugins)
+        self.assertFalse(parsed_args.update_date)
 
     def test_parse_include_patterns(self):
         parsed_args = parse_args(["-f", "--include-patterns", "troubadix/*"])
 
-        expected_args = Namespace(
-            full=True,
-            dirs=None,
-            files=None,
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            include_patterns=["troubadix/*"],
-            exclude_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
+        self.assertTrue(parsed_args.full)
+        self.assertEqual(parsed_args.include_patterns, ["troubadix/*"])
 
     def test_parse_include_patterns_fail(self):
         with self.assertRaises(SystemExit):
@@ -156,24 +91,8 @@ class TestArgparsing(unittest.TestCase):
     def test_parse_exclude_patterns(self):
         parsed_args = parse_args(["-f", "--exclude-patterns", "troubadix/*"])
 
-        expected_args = Namespace(
-            full=True,
-            dirs=None,
-            files=None,
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            exclude_patterns=["troubadix/*"],
-            include_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            n_jobs=cpu_count() // 2,
-            update_date=False,
-        )
-
-        self.assertEqual(parsed_args, expected_args)
+        self.assertTrue(parsed_args.full)
+        self.assertEqual(parsed_args.exclude_patterns, ["troubadix/*"])
 
     def test_parse_max_cpu(self):
         parsed_args = parse_args(
@@ -186,24 +105,10 @@ class TestArgparsing(unittest.TestCase):
             ]
         )
 
-        expected_args = Namespace(
-            full=True,
-            dirs=None,
-            files=None,
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            exclude_patterns=["troubadix/*"],
-            include_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            n_jobs=cpu_count(),
-            update_date=False,
-        )
+        self.assertTrue(parsed_args.full)
+        self.assertEqual(parsed_args.exclude_patterns, ["troubadix/*"])
 
-        self.assertEqual(parsed_args, expected_args)
+        self.assertEqual(parsed_args.n_jobs, cpu_count())
 
     def test_parse_min_cpu_update_date(self):
         parsed_args = parse_args(
@@ -217,21 +122,9 @@ class TestArgparsing(unittest.TestCase):
             ]
         )
 
-        expected_args = Namespace(
-            full=True,
-            dirs=None,
-            files=None,
-            from_file=None,
-            no_statistic=False,
-            verbose=0,
-            log_file=None,
-            non_recursive=False,
-            exclude_patterns=["troubadix/*"],
-            include_patterns=None,
-            excluded_plugins=None,
-            included_plugins=None,
-            n_jobs=cpu_count() // 2,
-            update_date=True,
-        )
+        self.assertTrue(parsed_args.full)
+        self.assertEqual(parsed_args.exclude_patterns, ["troubadix/*"])
 
-        self.assertEqual(parsed_args, expected_args)
+        self.assertEqual(parsed_args.n_jobs, cpu_count() // 2)
+
+        self.assertTrue(parsed_args.update_date)

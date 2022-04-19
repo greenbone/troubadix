@@ -32,8 +32,8 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 class CheckValidOID(FileContentPlugin):
     name = "check_valid_oid"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

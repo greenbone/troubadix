@@ -39,8 +39,8 @@ class ValidType(Enum):
 class CheckScriptAddPreferenceType(FileContentPlugin):
     name = "check_script_add_preference_type"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
