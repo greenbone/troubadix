@@ -23,7 +23,7 @@ from enum import IntEnum
 from pathlib import Path
 from typing import Iterator, Union
 
-from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag, get_root
+from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -43,8 +43,12 @@ class VTCategory(IntEnum):
     ACT_END = 10
 
 
+class CategoryError(Exception):
+    pass
+
+
 def check_category(
-    content: str, pattern: re.Pattern, script: str = ""
+    content: str, pattern: re.Pattern, script: str
 ) -> Union[LinterError, VTCategory]:
     """Check if the content contains a script category
     Arguments:
@@ -57,15 +61,17 @@ def check_category(
     match = pattern.search(content)
 
     if not match:
-        return LinterError(f"{script}: Script category is missing.")
-
-    category_value = match.group("value")
-    if category_value not in dir(VTCategory):
-        return LinterError(
-            f"{script}: Script category {category_value} is unsupported."
+        raise CategoryError(
+            f"{script}: Script category is missing or unsupported."
         )
 
-    return VTCategory[category_value]
+    category_value = match.group("value")
+    try:
+        return VTCategory[category_value]
+    except ValueError:
+        raise CategoryError(
+            f"{script}: Script category {category_value} is unsupported."
+        ) from None
 
 
 class CheckDependencyCategoryOrder(FileContentPlugin):
@@ -88,19 +94,18 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         if not "script_dependencies(" in file_content:
             return
 
-        root = get_root(nasl_file)
-
         category_pattern = get_special_script_tag_pattern(
             SpecialScriptTag.CATEGORY
         )
 
-        category = check_category(
-            content=file_content,
-            pattern=category_pattern,
-            script=nasl_file.name,
-        )
-        if isinstance(category, LinterError):
-            yield category
+        try:
+            category = check_category(
+                content=file_content,
+                pattern=category_pattern,
+                script=nasl_file.name,
+            )
+        except CategoryError as e:
+            yield LinterError(str(e))
             return
 
         dependencies_pattern = get_special_script_tag_pattern(
@@ -110,6 +115,8 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
 
         if not matches:
             return
+
+        root = self.context.root
 
         for match in matches:
             if match:
@@ -138,13 +145,14 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                             encoding=CURRENT_ENCODING
                         )
 
-                        dependency_category = check_category(
-                            content=dependency_content,
-                            pattern=category_pattern,
-                            script=dependency_path.name,
-                        )
-                        if isinstance(dependency_category, LinterError):
-                            yield dependency_category
+                        try:
+                            dependency_category = check_category(
+                                content=dependency_content,
+                                pattern=category_pattern,
+                                script=dependency_path.name,
+                            )
+                        except CategoryError as e:
+                            yield LinterError(str(e))
 
                         if category.value < dependency_category.value:
                             yield LinterError(

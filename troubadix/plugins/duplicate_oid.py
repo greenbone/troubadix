@@ -56,7 +56,7 @@ class CheckDuplicateOID(FilesPlugin):
                 continue
 
             oid = None
-            file_name = get_path_from_root(nasl_file)
+            file_name = get_path_from_root(nasl_file, self.context.root)
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             # search for deprecated script_id
             match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(

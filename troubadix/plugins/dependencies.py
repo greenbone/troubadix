@@ -18,26 +18,24 @@
 # pylint: disable=fixme
 
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.helper import SpecialScriptTag, get_root
+from troubadix.helper import SpecialScriptTag
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import (
-    FileContentPlugin,
+    FilePlugin,
     LinterError,
     LinterResult,
     LinterWarning,
 )
 
 
-class CheckDependencies(FileContentPlugin):
+class CheckDependencies(FilePlugin):
     name = "check_dependencies"
 
-    def check_content(
+    def run(
         self,
-        nasl_file: Path,
-        file_content: str,
     ) -> Iterator[LinterResult]:
         """This script checks whether the files used in script_dependencies()
         exist on the local filesystem.
@@ -46,9 +44,11 @@ class CheckDependencies(FileContentPlugin):
         dependencies_pattern = get_special_script_tag_pattern(
             SpecialScriptTag.DEPENDENCIES
         )
-        matches = dependencies_pattern.finditer(file_content)
 
-        root = get_root(nasl_file)
+        root = self.context.root
+        file_content = self.context.file_content
+
+        matches = dependencies_pattern.finditer(file_content)
 
         for match in matches:
             if match:

@@ -22,28 +22,26 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag, get_root
+from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag
 from troubadix.helper.patterns import get_special_script_tag_pattern
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
-class CheckDeprecatedDependency(FileContentPlugin):
+class CheckDeprecatedDependency(FilePlugin):
     name = "check_deprecated_dependency"
 
-    def check_content(
-        self,
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """No VT should depend on other VTs that are marked as deprecated via:
 
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
         """
+        file_content = self.context.file_content
+
         if not "script_dependencies(" in file_content:
             return
 
-        root = get_root(nasl_file)
+        root = self.context.root
 
         dependencies_pattern = get_special_script_tag_pattern(
             SpecialScriptTag.DEPENDENCIES
@@ -94,6 +92,6 @@ class CheckDeprecatedDependency(FileContentPlugin):
                         )
                         if dependency_deprecated:
                             yield LinterError(
-                                f"VT depends on {dep}, which is marked"
+                                f"VT depends on {dep}, which is marked "
                                 "as deprecated."
                             )

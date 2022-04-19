@@ -43,7 +43,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.dir.rmdir()
 
     def test_ok(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
@@ -59,7 +59,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_no_dependency(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
@@ -76,7 +76,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
 
     def test_dependency_missing(self):
         dependency = "example2.inc"
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -86,6 +86,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDependencyCategoryOrder(fake_context)
 
         results = list(plugin.run())
@@ -99,7 +100,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         )
 
     def test_category_lower(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -109,6 +110,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDependencyCategoryOrder(fake_context)
 
         results = list(plugin.run())
@@ -123,7 +125,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
 
     def test_category_missing(self):
         dependency = "example.inc"
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -132,6 +134,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDependencyCategoryOrder(fake_context)
 
         results = list(plugin.run())
@@ -139,6 +142,29 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "file.nasl: Script category is missing.",
+            "file.nasl: Script category is missing or unsupported.",
+            results[0].message,
+        )
+
+    def test_category_unsupported(self):
+        path = self.dir / "file.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar...");\n'
+            'script_dependencies("example.inc");\n'
+            "script_category(ACT_FOO);"
+        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.root = self.dir
+        plugin = CheckDependencyCategoryOrder(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "file.nasl: Script category is missing or unsupported.",
             results[0].message,
         )
