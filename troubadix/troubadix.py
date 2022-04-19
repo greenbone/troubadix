@@ -111,17 +111,6 @@ def main(args=None):
 
     parsed_args = parse_args(args=args)
 
-    runner = Runner(
-        n_jobs=parsed_args.n_jobs,
-        term=term,
-        excluded_plugins=parsed_args.excluded_plugins,
-        included_plugins=parsed_args.included_plugins,
-        update_date=parsed_args.update_date,
-        verbose=parsed_args.verbose,
-        statistic=True if not parsed_args.no_statistic else False,
-        log_file=parsed_args.log_file,
-    )
-
     # Full will run in the root directory of executing. (Like pwd)
     if parsed_args.full:
         cwd = Path.cwd()
@@ -154,10 +143,26 @@ def main(args=None):
         sys.exit(1)
 
     # Get the root of the nasl files
-    first_file = files[0].resolve()
-    if not get_root(first_file):
-        error(f"Root directory of VTs not found. Looked for {first_file}")
-        sys.exit(1)
+    if parsed_args.root:
+        root = parsed_args.root
+    else:
+        first_file = files[0].resolve()
+        root = get_root(first_file)
+        if not root:
+            error(f"Root directory of VTs not found. Looked for {first_file}")
+            sys.exit(1)
+
+    runner = Runner(
+        n_jobs=parsed_args.n_jobs,
+        term=term,
+        excluded_plugins=parsed_args.excluded_plugins,
+        included_plugins=parsed_args.included_plugins,
+        update_date=parsed_args.update_date,
+        verbose=parsed_args.verbose,
+        statistic=True if not parsed_args.no_statistic else False,
+        log_file=parsed_args.log_file,
+        root=root,
+    )
 
     info(f"Start linting {len(files)} files ... ")
 
