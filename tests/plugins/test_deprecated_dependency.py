@@ -119,6 +119,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -143,6 +144,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -150,6 +152,6 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT depends on example.inc, which is marked" "as deprecated.",
+            "VT depends on example.inc, which is marked as deprecated.",
             results[0].message,
         )

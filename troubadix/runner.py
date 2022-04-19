@@ -106,6 +106,7 @@ class Runner:
         n_jobs: int,
         term: Terminal,
         *,
+        root: Path,
         excluded_plugins: Iterable[str] = None,
         included_plugins: Iterable[str] = None,
         update_date: bool = False,
@@ -127,6 +128,7 @@ class Runner:
         self._term = term
         self._n_jobs = n_jobs
         self._log_file = log_file
+        self._root = root
         self.verbose = verbose
 
         # this dict will store the result counts for the statistic
@@ -243,7 +245,7 @@ class Runner:
     def pre_run(self, nasl_files: Iterable[Path]) -> None:
         """Running Plugins that do not require a run per file,
         but a single execution"""
-        context = FilesPluginContext(nasl_files=nasl_files)
+        context = FilesPluginContext(root=self._root, nasl_files=nasl_files)
         for plugin_class in self.pre_run_plugins:
             if not issubclass(plugin_class, FilesPlugin):
                 self._report_error(
@@ -283,13 +285,13 @@ class Runner:
                         self.check_file, files, chunksize=CHUNKSIZE
                     )
                 ):
-                    # only print the part "common/some_nasl.nasl" by
-                    # splitting at the nasl/ dir in
-                    # /root/vts-repo/nasl/common/some_nasl.nasl
                     if results and self.verbose > 0 or self.verbose > 1:
+                        # only print the part "common/some_nasl.nasl"
+                        from_root_path = get_path_from_root(
+                            results.file_path, self._root
+                        )
                         self._report_bold_info(
-                            f"Checking {get_path_from_root(results.file_path)}"
-                            f" ({i}/{files_count})"
+                            f"Checking {from_root_path} ({i}/{files_count})"
                         )
 
                     with self._term.indent():
@@ -308,7 +310,9 @@ class Runner:
 
     def check_file(self, file_path: Path) -> FileResults:
         results = FileResults(file_path)
-        context = FilePluginContext(nasl_file=file_path.resolve())
+        context = FilePluginContext(
+            root=self._root, nasl_file=file_path.resolve()
+        )
 
         for plugin_class in self.plugins:
             plugin = plugin_class(context)

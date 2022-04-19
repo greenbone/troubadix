@@ -41,7 +41,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
         self.dir.rmdir()
 
     def test_ok(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");'
@@ -56,7 +56,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_dep_existing(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -65,6 +65,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDependencies(fake_context)
 
         results = list(plugin.run())
@@ -73,7 +74,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
 
     def test_dep_missing(self):
         dependency = "example2.inc"
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -82,6 +83,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDependencies(fake_context)
 
         results = list(plugin.run())

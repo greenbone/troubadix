@@ -44,8 +44,10 @@ class FilePluginContext:
     def __init__(
         self,
         *,
+        root: Path,
         nasl_file: Path = None,
     ) -> None:
+        self.root = root
         self.nasl_file = nasl_file
 
         self._file_content = None
@@ -67,7 +69,8 @@ class FilePluginContext:
 
 
 class FilesPluginContext:
-    def __init__(self, *, nasl_files: Iterable[Path]) -> None:
+    def __init__(self, *, root: Path, nasl_files: Iterable[Path]) -> None:
+        self.root = root
         self.nasl_files = nasl_files
 
 

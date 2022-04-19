@@ -17,6 +17,7 @@
 
 import io
 import unittest
+
 from contextlib import redirect_stdout
 from pathlib import Path
 
@@ -36,10 +37,15 @@ class TestRunner(unittest.TestCase):
     def setUp(self):
         # store old arguments
         self._term = Terminal()
+        self.root = _here / "plugins" / "test_files" / "nasl"
         _set_terminal(self._term)
 
     def test_runner_with_all_plugins(self):
-        runner = Runner(n_jobs=1, term=self._term)
+        runner = Runner(
+            n_jobs=1,
+            term=self._term,
+            root=self.root,
+        )
 
         plugins = _PLUGINS
 
@@ -60,6 +66,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             excluded_plugins=excluded_plugins,
+            root=self.root,
         )
 
         for plugin in runner.plugins:
@@ -74,6 +81,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             included_plugins=included_plugins,
+            root=self.root,
         )
 
         for plugin in runner.plugins:
@@ -99,6 +107,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             included_plugins=included_plugins,
             term=self._term,
+            root=self.root,
         )
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
@@ -110,6 +119,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             update_date=True,
+            root=self.root,
         )
 
         results = runner.check_file(nasl_file)
@@ -150,9 +160,12 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             included_plugins=included_plugins,
             term=self._term,
+            root=self.root,
         )
+
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
+
         self.assertTrue(sys_exit)
 
         # Test update_date
@@ -160,6 +173,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             update_date=True,
+            root=self.root,
         )
 
         results = runner.check_file(nasl_file)
@@ -197,6 +211,7 @@ class TestRunner(unittest.TestCase):
             term=self._term,
             update_date=True,
             verbose=2,
+            root=self.root,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -207,7 +222,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{get_path_from_root(nasl_file)}",
+            f"Checking {get_path_from_root(nasl_file, self.root)}",
             output,
         )
         self.assertIn("Results for plugin update_modification_date", output)
@@ -234,6 +249,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             update_date=True,
+            root=self.root,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -244,7 +260,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{get_path_from_root(nasl_file)}",
+            "Checking " f"{get_path_from_root(nasl_file, self.root)}",
             output,
         )
         self.assertIn("Results for plugin update_modification_date", output)
@@ -277,6 +293,7 @@ class TestRunner(unittest.TestCase):
             term=self._term,
             included_plugins=included_plugins,
             verbose=3,
+            root=self.root,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -286,7 +303,9 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(f"Checking {get_path_from_root(nasl_file)}", output)
+        self.assertIn(
+            f"Checking {get_path_from_root(nasl_file, self.root)}", output
+        )
         self.assertIn("No results for plugin check_missing_desc_exit", output)
 
     def test_runner_run_ok_with_verbose_level_2(self):
@@ -309,6 +328,7 @@ class TestRunner(unittest.TestCase):
             term=self._term,
             included_plugins=included_plugins,
             verbose=2,
+            root=self.root,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -319,7 +339,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{get_path_from_root(nasl_file)}",
+            "Checking " f"{get_path_from_root(nasl_file, self.root)}",
             output,
         )
         self.assertNotIn(
@@ -346,6 +366,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             included_plugins=included_plugins,
+            root=self.root,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -368,6 +389,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             term=self._term,
             included_plugins=["foo"],
+            root=self.root,
         )
 
         nasl_file = _here / "plugins" / "test.nasl"
@@ -396,6 +418,7 @@ class TestRunner(unittest.TestCase):
             term=self._term,
             included_plugins=included_plugins,
             log_file=gen_log_file,
+            root=self.root,
         )
         with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
@@ -406,9 +429,9 @@ class TestRunner(unittest.TestCase):
             "Running plugins: check_missing_desc_exit\n\n\n"
             "Run plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
-            f"\t\t{get_path_from_root(nasl_file)}: Invalid OID "
+            f"\t\t{get_path_from_root(nasl_file, self.root)}: Invalid OID "
             "1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
-            f"Checking {get_path_from_root(nasl_file)} (0/1)\n\t\t"
+            f"Checking {get_path_from_root(nasl_file, self.root)} (0/1)\n\t\t"
             "No results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
         )
@@ -441,6 +464,7 @@ class TestRunner(unittest.TestCase):
             term=self._term,
             included_plugins=included_plugins,
             log_file=gen_log_file,
+            root=self.root,
         )
         with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
@@ -449,9 +473,10 @@ class TestRunner(unittest.TestCase):
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\nChecking"
             "Run plugin check_duplicate_oid"
-            f"\t\t{get_path_from_root(nasl_file)}: "
+            f"\t\t{get_path_from_root(nasl_file, self.root)}: "
             "Invalid OID 1.2.3.4.5.6.78909.1.7.654321 found."
-            f" {get_path_from_root(nasl_file)} (0/1)\n\tNo results for plugin"
+            f" {get_path_from_root(nasl_file, self.root)} (0/1)\n"
+            "\tNo results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
         )
         gen_content = gen_log_file.read_text(encoding="utf-8")

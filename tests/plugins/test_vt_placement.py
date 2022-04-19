@@ -48,6 +48,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
             fake_context = MagicMock()
             fake_context.nasl_file = path
             fake_context.file_content = content
+            fake_context.root = path.parent
             plugin = CheckVTPlacement(fake_context)
 
             results = list(plugin.run())
@@ -56,7 +57,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
 
     def test_ok_dirs(self):
         for _dir in ["gsf", "attic"]:
-            path = Path(f"{self.dir}/{_dir}/file.nasl")
+            path = self.dir / _dir / "file.nasl"
             for _type in ["Product", "Service"]:
                 content = (
                     'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -66,6 +67,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 fake_context = MagicMock()
                 fake_context.nasl_file = path
                 fake_context.file_content = content
+                fake_context.root = self.dir
                 plugin = CheckVTPlacement(fake_context)
 
                 results = list(plugin.run())
@@ -73,7 +75,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 self.assertEqual(len(results), 0)
 
     def test_ok_deprecated(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         for _type in ["Prodcut", "Service"]:
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -85,6 +87,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
             fake_context = MagicMock()
             fake_context.nasl_file = path
             fake_context.file_content = content
+            fake_context.root = self.dir
             plugin = CheckVTPlacement(fake_context)
 
             results = list(plugin.run())
@@ -92,7 +95,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
             self.assertEqual(len(results), 0)
 
     def test_no_detection(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -102,6 +105,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckVTPlacement(fake_context)
 
         results = list(plugin.run())
@@ -109,7 +113,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_wrong_placement(self):
-        path = Path(f"{self.dir}/foo/bar/file.nasl")
+        path = self.dir / "foo" / "bar" / "file.nasl"
         for _type in ["Product", "Service"]:
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -119,6 +123,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
             fake_context = MagicMock()
             fake_context.nasl_file = path
             fake_context.file_content = content
+            fake_context.root = self.dir
             plugin = CheckVTPlacement(fake_context)
 
             results = list(plugin.run())
