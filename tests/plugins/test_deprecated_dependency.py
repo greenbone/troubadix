@@ -119,6 +119,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         fake_context = MagicMock()
         fake_context.nasl_file = path
         fake_context.file_content = content
+        fake_context.root = self.dir
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
