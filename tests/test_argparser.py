@@ -128,3 +128,8 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args.n_jobs, cpu_count() // 2)
 
         self.assertTrue(parsed_args.update_date)
+
+    def test_parse_root(self):
+        parsed_args = parse_args(["--root", "foo"])
+
+        self.assertEqual(parsed_args.root, Path("foo"))
