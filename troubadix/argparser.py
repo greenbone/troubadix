@@ -214,6 +214,7 @@ def parse_args(
     )
 
     if not args:
+        print("No arguments given.", file=sys.stderr)
         parser.print_help(sys.stdout)
         sys.exit(1)
 
