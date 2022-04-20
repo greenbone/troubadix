@@ -161,4 +161,12 @@ class CheckGrammar(LineContentPlugin):
         # "with WITH stack unwinding"
         if "with WITH" in match:
             return True
+
+        # From 2008/debian/deb_1017_1.nasl
+        if (
+            "Harald Welte discovered that if a process issues a "
+            "USB Request Block (URB)" in match
+        ):
+            return True
+
         return False
