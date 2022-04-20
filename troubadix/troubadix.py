@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Tuple
 
-from pontos.terminal import _set_terminal, error, info, warning
+from pontos.terminal import _set_terminal, info, warning
 from pontos.terminal.terminal import Terminal
 
 from troubadix.argparser import parse_args
@@ -152,9 +152,6 @@ def main(args=None):
     else:
         first_file = files[0].resolve()
         root = get_root(first_file)
-        if not root:
-            error(f"Root directory of VTs not found. Looked for {first_file}")
-            sys.exit(1)
 
     runner = Runner(
         n_jobs=parsed_args.n_jobs,
