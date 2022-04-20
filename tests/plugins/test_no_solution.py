@@ -46,7 +46,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         plugin = CheckNoSolution(context)
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
             "test_files/nasl/21.04/fail_solution_template.nasl:"
@@ -72,7 +72,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         # reverse change to file
         file1.write_text(text, encoding="latin-1")
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
             "test_files/nasl/21.04/fail_solution_template.nasl:"
@@ -98,7 +98,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         # reverse change to file
         file1.write_text(text, encoding="latin-1")
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
             "test_files/nasl/21.04/fail_solution_template.nasl:"
@@ -138,12 +138,20 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file2.unlink()
         file3.unlink()
 
-        self.assertEqual(len(results), 4)
+        self.assertEqual(len(results), 7)
         self.assertEqual(
-            """total missing solutions: 3
-missing solutions younger 1 month: 1
-missing solutions older than 6 months: 1
-missing solutions older than 1 year: 1
-""",
-            results[-1].message,
+            "total missing solutions: 3",
+            results[3].message,
+        )
+        self.assertEqual(
+            "missing solutions younger 1 month: 1",
+            results[4].message,
+        )
+        self.assertEqual(
+            "missing solutions older than 6 months: 1",
+            results[5].message,
+        )
+        self.assertEqual(
+            "missing solutions older than 1 year: 1",
+            results[6].message,
         )
