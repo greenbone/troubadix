@@ -109,6 +109,9 @@ def main(args=None):
     term = Terminal()
     _set_terminal(term)
 
+    if not args:
+        args = sys.argv[1:]
+
     parsed_args = parse_args(args=args)
 
     # Full will run in the root directory of executing. (Like pwd)
@@ -119,6 +122,7 @@ def main(args=None):
     else:
         dirs = parsed_args.dirs
 
+    files = None
     if dirs:
         include_patterns, exclude_patterns = generate_patterns(
             include_patterns=parsed_args.include_patterns,
