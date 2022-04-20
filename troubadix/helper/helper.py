@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
-import re
+
 from pathlib import Path
 from subprocess import PIPE, Popen
 from typing import List, Optional, Union, Tuple, AnyStr
@@ -90,15 +90,11 @@ def subprocess_cmd(command: str, encoding="UTF-8") -> Tuple[AnyStr, AnyStr]:
     return any2str(proc_stdout), any2str(proc_stderr)
 
 
-def get_root(path: Path) -> Optional[Path]:
+def get_root(path: Path) -> Path:
     """Get the root directory of the VTs"""
-    root = None
+    path = path.resolve().absolute()
+    for parent in path.parents:
+        if parent.name in ["", "nasl", "common", "21.04", "22.04"]:
+            return parent
 
-    match = re.search(
-        rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
-        str(path.resolve()),
-    )
-    if match:
-        root = Path(match.group("path"))
-
-    return root
+    return path

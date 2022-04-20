@@ -19,6 +19,7 @@ import unittest
 from pathlib import Path
 
 from troubadix.helper import is_ignore_file
+from troubadix.helper.helper import get_root
 
 
 class IgnoreFile(unittest.TestCase):
@@ -41,3 +42,15 @@ class IgnoreFile(unittest.TestCase):
     def test_compare_str_to_path(self):
         self.assertTrue(is_ignore_file("foo/bar", [Path("foo")]))
         self.assertFalse(is_ignore_file("foo/bar", [Path("ipsum")]))
+
+
+class GetRootTestCase(unittest.TestCase):
+    def test_get_root(self):
+        self.assertEqual(get_root(Path("/nasl/foo/bar")), Path("/nasl"))
+        self.assertEqual(
+            get_root(Path("/nasl/common/bar")), Path("/nasl/common")
+        )
+        self.assertEqual(get_root(Path("/nasl/21.04/bar")), Path("/nasl/21.04"))
+        self.assertEqual(get_root(Path("/nasl/22.04/bar")), Path("/nasl/22.04"))
+        self.assertEqual(get_root(Path("/foo/bar")), Path("/"))
+        self.assertEqual(get_root(Path("")), Path("/"))
