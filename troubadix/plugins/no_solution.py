@@ -53,6 +53,9 @@ class CheckNoSolution(FilesPlugin):
         missing_solutions_older_than_1_year = 0
 
         for nasl_file in self.context.nasl_files:
+            if nasl_file.suffix == ".inc":
+                continue
+
             file_name = get_path_from_root(nasl_file, self.context.root)
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             solution_match = get_script_tag_pattern(ScriptTag.SOLUTION).search(
@@ -74,6 +77,12 @@ class CheckNoSolution(FilesPlugin):
                 continue
 
             no_solution_since = parse_date(date_match.group("date"))
+            if not no_solution_since:
+                yield LinterError(
+                    f"{file_name}: Can not convert "
+                    f"'{date_match.group('date')}' to datetime"
+                )
+                continue
 
             # no solution and older than 1 year
             if no_solution_since <= NO_SOLUTION_DATE_TOO_OLDER_1_YEAR:
@@ -100,14 +109,19 @@ class CheckNoSolution(FilesPlugin):
 
         if total_missing_solutions > 0:
             yield LinterWarning(
-                "total missing solutions:"
-                f" {total_missing_solutions}\n"
+                "total missing solutions:" f" {total_missing_solutions}"
+            )
+            yield LinterWarning(
                 "missing solutions younger 1 month:"
-                f" {missing_solutions_younger_1_month}\n"
+                f" {missing_solutions_younger_1_month}"
+            )
+            yield LinterWarning(
                 "missing solutions older than 6 months:"
-                f" {missing_solutions_older_than_6_months}\n"
+                f" {missing_solutions_older_than_6_months}"
+            )
+            yield LinterWarning(
                 "missing solutions older than 1 year:"
-                f" {missing_solutions_older_than_1_year}\n"
+                f" {missing_solutions_older_than_1_year}"
             )
 
 
