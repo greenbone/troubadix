@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.overlong_script_tags import CheckOverlongScriptTags
@@ -34,23 +35,25 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
             'script_tag(name:"solution", value:"Shorter than 1000");\n'
         )
-        results = list(
-            CheckOverlongScriptTags.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckOverlongScriptTags(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_no_nasl_file(self):
         path = Path("some/file.inc")
         content = 'script_tag(name:"summary", value:"Shorter than 1000");\n'
-        results = list(
-            CheckOverlongScriptTags.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckOverlongScriptTags(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_ignore_file(self):
@@ -62,12 +65,13 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             'script_tag(name:"insight", value:"Shorter than 1000");\n'
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
         )
-        results = list(
-            CheckOverlongScriptTags.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckOverlongScriptTags(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_one_wrong_entry(self):
@@ -126,12 +130,13 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        results = list(
-            CheckOverlongScriptTags.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckOverlongScriptTags(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
@@ -242,12 +247,13 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        results = list(
-            CheckOverlongScriptTags.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckOverlongScriptTags(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -548,12 +554,13 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        results = list(
-            CheckOverlongScriptTags.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckOverlongScriptTags(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 6)
 
         self.assertIsInstance(results[0], LinterError)

@@ -71,8 +71,8 @@ def get_grammer_pattern() -> re.Pattern:
 class CheckGrammar(LineContentPlugin):
     name = "check_grammar"
 
-    @staticmethod
-    def run(
+    def check_lines(
+        self,
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
@@ -89,7 +89,7 @@ class CheckGrammar(LineContentPlugin):
         for line in lines:
             match = pattern.search(line)
             if match:
-                if CheckGrammar.check_for_false_positives(
+                if self.check_for_false_positives(
                     match.group(0), str(nasl_file)
                 ):
                     continue
@@ -161,4 +161,12 @@ class CheckGrammar(LineContentPlugin):
         # "with WITH stack unwinding"
         if "with WITH" in match:
             return True
+
+        # From 2008/debian/deb_1017_1.nasl
+        if (
+            "Harald Welte discovered that if a process issues a "
+            "USB Request Block (URB)" in match
+        ):
+            return True
+
         return False

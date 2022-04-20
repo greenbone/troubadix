@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper.helper import _ROOT
 from troubadix.plugin import LinterError
@@ -44,35 +45,37 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar.");\n'
                 f'script_family("{_type} detection");\n'
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            fake_context.root = path.parent
+            plugin = CheckVTPlacement(fake_context)
 
-            results = list(
-                CheckVTPlacement.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 0)
 
     def test_ok_dirs(self):
         for _dir in ["gsf", "attic"]:
-            path = Path(f"{self.dir}/{_dir}/file.nasl")
+            path = self.dir / _dir / "file.nasl"
             for _type in ["Product", "Service"]:
                 content = (
                     'script_tag(name:"cvss_base", value:"4.0");\n'
                     'script_tag(name:"summary", value:"Foo Bar.");\n'
                     f'script_family("{_type} detection");\n'
                 )
+                fake_context = MagicMock()
+                fake_context.nasl_file = path
+                fake_context.file_content = content
+                fake_context.root = self.dir
+                plugin = CheckVTPlacement(fake_context)
 
-                results = list(
-                    CheckVTPlacement.run(
-                        path,
-                        content,
-                    )
-                )
+                results = list(plugin.run())
+
                 self.assertEqual(len(results), 0)
 
     def test_ok_deprecated(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         for _type in ["Prodcut", "Service"]:
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -81,45 +84,50 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 'script_tag(name:"deprecated", value=TRUE);\n'
             )
 
-            results = list(
-                CheckVTPlacement.run(
-                    path,
-                    content,
-                )
-            )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            fake_context.root = self.dir
+            plugin = CheckVTPlacement(fake_context)
+
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 0)
 
     def test_no_detection(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
             'script_dependencies("example.inc");\n'
         )
 
-        results = list(
-            CheckVTPlacement.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.root = self.dir
+        plugin = CheckVTPlacement(fake_context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_wrong_placement(self):
-        path = Path(f"{self.dir}/foo/bar/file.nasl")
+        path = self.dir / "foo" / "bar" / "file.nasl"
         for _type in ["Product", "Service"]:
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
                 'script_tag(name:"summary", value:"Foo Bar.");\n'
                 f'script_family("{_type} detection");\n'
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+            fake_context.root = self.dir
+            plugin = CheckVTPlacement(fake_context)
 
-            results = list(
-                CheckVTPlacement.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
+
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(

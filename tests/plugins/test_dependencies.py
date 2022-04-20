@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper.helper import _ROOT
 from troubadix.plugin import LinterError
@@ -40,51 +41,53 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
         self.dir.rmdir()
 
     def test_ok(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckDependencies(fake_context)
 
-        results = list(
-            CheckDependencies.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_dep_existing(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
             'script_dependencies("example.inc");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.root = self.dir
+        plugin = CheckDependencies(fake_context)
 
-        results = list(
-            CheckDependencies.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_dep_missing(self):
         dependency = "example2.inc"
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
             f'script_dependencies("{dependency}");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.root = self.dir
+        plugin = CheckDependencies(fake_context)
 
-        results = list(
-            CheckDependencies.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

@@ -16,20 +16,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckTrailingSpacesTabs(FileContentPlugin):
+class CheckTrailingSpacesTabs(FilePlugin):
     name = "check_trailing_spaces_tabs"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or more trailing whitespaces
          or tabs.
 
@@ -42,7 +38,7 @@ class CheckTrailingSpacesTabs(FileContentPlugin):
                     to find special tags
 
         """
-        spaces_tabs_matches = re.finditer("[\t ]+$", file_content)
+        spaces_tabs_matches = re.finditer("[\t ]+$", self.context.file_content)
 
         if spaces_tabs_matches:
             for spaces_tabs_match in spaces_tabs_matches:

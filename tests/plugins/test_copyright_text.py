@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
@@ -48,13 +49,13 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "right holder(s).\n"
             'script_copyright("Copyright (C) 1234");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
 
-        results = list(
-            CheckCopyrightText.run(
-                path,
-                content,
-            )
-        )
+        plugin = CheckCopyrightText(fake_context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
 
@@ -66,18 +67,18 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "# advisory, and are Copyright (C) the respective author(s)\n"
             '  script_copyright("Copyright (C) 134");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
 
         expected_content = (
             f"{CORRECT_COPYRIGHT_PHRASE}\n"
             '  script_copyright("Copyright (C) 134");'
         )
 
-        results = list(
-            CheckCopyrightText.run(
-                path,
-                content,
-            )
-        )
+        plugin = CheckCopyrightText(fake_context)
+
+        results = list(plugin.run())
         self.assertEqual(len(results), 2)
 
         self.assertIsInstance(results[0], LinterError)
@@ -109,6 +110,11 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 f"{wrong_text}"
                 '  script_copyright("Copyright (C) 1234");'
             )
+            fake_context = MagicMock()
+            fake_context.nasl_file = path
+            fake_context.file_content = content
+
+            plugin = CheckCopyrightText(fake_context)
 
             expected_content = (
                 "# Copyright (C) 2017 Greenbone Networks GmbH\n"
@@ -116,12 +122,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 '  script_copyright("Copyright (C) 1234");'
             )
 
-            results = list(
-                CheckCopyrightText.run(
-                    path,
-                    content,
-                )
-            )
+            results = list(plugin.run())
             self.assertEqual(len(results), 1)
 
             self.assertIsInstance(results[0], LinterError)

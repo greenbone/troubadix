@@ -31,8 +31,8 @@ CORRECT_COPYRIGHT_PHRASE = (
 class CheckCopyrightText(FileContentPlugin):
     name = "check_copyright_text"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

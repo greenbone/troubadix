@@ -20,6 +20,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Iterator
 
+from troubadix.helper import CURRENT_ENCODING
+
 
 @dataclass
 class LinterMessage:
@@ -38,42 +40,89 @@ class LinterError(LinterMessage):
     pass
 
 
+class FilePluginContext:
+    def __init__(
+        self,
+        *,
+        root: Path,
+        nasl_file: Path = None,
+    ) -> None:
+        self.root = root
+        self.nasl_file = nasl_file
+
+        self._file_content = None
+        self._lines = None
+
+    @property
+    def file_content(self) -> str:
+        if not self._file_content:
+            self._file_content = self.nasl_file.read_text(
+                encoding=CURRENT_ENCODING
+            )
+        return self._file_content
+
+    @property
+    def lines(self) -> Iterable[str]:
+        if not self._lines:
+            self._lines = self.file_content.splitlines()
+        return self._lines
+
+
+class FilesPluginContext:
+    def __init__(self, *, root: Path, nasl_files: Iterable[Path]) -> None:
+        self.root = root
+        self.nasl_files = nasl_files
+
+
 class Plugin(ABC):
     """A linter plugin"""
 
     name: str = None
     description: str = None
 
-
-class PreRunPlugin(Plugin):
-    """A plugin that only runs PreRun collectors"""
-
-    @staticmethod
     @abstractmethod
-    def run(
-        nasl_files: Iterable[Path],
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         pass
 
 
-class FileContentPlugin(Plugin):
+class FilesPlugin(Plugin):
+    """A plugin that does checks over all files"""
+
+    def __init__(self, context: FilesPluginContext) -> None:
+        self.context = context
+
+
+class FilePlugin(Plugin):
+    """A plugin that does checks on single files"""
+
+    def __init__(self, context: FilePluginContext) -> None:
+        self.context = context
+
+
+class FileContentPlugin(FilePlugin):
     """A plugin that does checks on the whole file content"""
 
-    @staticmethod
+    def run(self) -> Iterator[LinterResult]:
+        return self.check_content(
+            self.context.nasl_file, self.context.file_content
+        )
+
     @abstractmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
+    def check_content(
+        self, nasl_file: Path, file_content: str
     ) -> Iterator[LinterResult]:
         pass
 
 
-class LineContentPlugin(Plugin):
+class LineContentPlugin(FilePlugin):
     """A plugin that checks file content line by line"""
 
-    @staticmethod
+    def run(self) -> Iterator[LinterResult]:
+        return self.check_lines(self.context.nasl_file, self.context.lines)
+
     @abstractmethod
-    def run(
+    def check_lines(
+        self,
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:

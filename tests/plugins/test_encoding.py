@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
@@ -35,13 +36,13 @@ class CheckEncodingTestCase(PluginTestCase):
             encoding="utf-8",
         )
         content = path.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.lines = content.splitlines()
+        plugin = CheckEncoding(fake_context)
 
-        results = list(
-            CheckEncoding.run(
-                path,
-                content.splitlines(),
-            )
-        )
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
 
@@ -57,13 +58,14 @@ class CheckEncodingTestCase(PluginTestCase):
             encoding="utf-8",
         )
         content = path.read_text(encoding=CURRENT_ENCODING)
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.lines = content.splitlines()
+        plugin = CheckEncoding(fake_context)
 
-        results = list(
-            CheckEncoding.run(
-                path,
-                content.splitlines(),
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 3)
 
         self.assertIsInstance(results[0], LinterError)

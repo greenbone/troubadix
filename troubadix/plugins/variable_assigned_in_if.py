@@ -37,8 +37,8 @@ class CheckVariableAssignedInIf(FileContentPlugin):
 
     name = "check_variable_assigned_in_if"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

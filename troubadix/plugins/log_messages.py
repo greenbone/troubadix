@@ -31,8 +31,8 @@ from troubadix.plugin import (
 class CheckLogMessages(FileContentPlugin):
     name = "check_log_messages"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

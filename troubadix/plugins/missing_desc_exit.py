@@ -25,8 +25,8 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 class CheckMissingDescExit(FileContentPlugin):
     name = "check_missing_desc_exit"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

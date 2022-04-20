@@ -31,8 +31,8 @@ from troubadix.plugin import (
 class CheckUsingDisplay(FileContentPlugin):
     name = "check_using_display"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

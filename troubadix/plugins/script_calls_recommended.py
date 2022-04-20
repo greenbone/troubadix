@@ -28,8 +28,8 @@ from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 class CheckScriptCallsRecommended(FileContentPlugin):
     name = "check_script_calls_recommended"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

@@ -27,8 +27,8 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 class CheckScriptCallsMandatory(FileContentPlugin):
     name = "check_script_calls_mandatory"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

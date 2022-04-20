@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError, LinterMessage
 from troubadix.plugins.duplicate_oid import CheckDuplicateOID
@@ -27,46 +28,75 @@ here = Path(__file__).parent
 
 class CheckDuplicateOIDTestCase(PluginTestCase):
     def test_ok(self):
-        file1 = here / "test_files/nasl/21.04/fail.nasl"
-        file2 = here / "test_files/nasl/21.04/fail_name_newline.nasl"
-        results = list(CheckDuplicateOID.run([file1, file2]))
+        file1 = here / "test_files" / "nasl" / "21.04" / "fail.nasl"
+        file2 = (
+            here / "test_files" / "nasl" / "21.04" / "fail_name_newline.nasl"
+        )
+        context = MagicMock()
+        context.nasl_files = [file1, file2]
+        context.root = here
+        plugin = CheckDuplicateOID(context)
+
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
-        file1 = here / "test_files/nasl/21.04/fail_name_newline.nasl"
-        file2 = here / "test_files/nasl/21.04/fail_badwords.nasl"
+        file1 = (
+            here / "test_files" / "nasl" / "21.04" / "fail_name_newline.nasl"
+        )
+        file2 = here / "test_files" / "nasl" / "21.04" / "fail_badwords.nasl"
+        context = MagicMock()
+        context.nasl_files = [file1, file2]
+        context.root = here
+        plugin = CheckDuplicateOID(context)
 
-        results = list(CheckDuplicateOID.run([file1, file2]))
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
-            f"{file2.name}: Could not find an OID.",
+            "test_files/nasl/21.04/fail_badwords.nasl: Could not find an OID.",
             results[0].message,
         )
 
     def test_duplicated_oid_function(self):
-        file1 = here / "test_files/nasl/21.04/fail.nasl"
-        file2 = here / "test_files/nasl/21.04/test.nasl"
-        results = list(CheckDuplicateOID.run([file1, file2]))
+        file1 = here / "test_files" / "nasl" / "21.04" / "fail.nasl"
+        file2 = here / "test_files" / "nasl" / "21.04" / "test.nasl"
+        context = MagicMock()
+        context.nasl_files = [file1, file2]
+        context.root = here
+        plugin = CheckDuplicateOID(context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"{file2.name}: OID 1.3.6.1.4.1.25623.1.0.100312 "
-            f"already used by '{file1.name}'",
+            "test_files/nasl/21.04/test.nasl: OID 1.3.6.1.4.1.25623.1.0.100312"
+            " already used by 'test_files/nasl/21.04/fail.nasl'",
             results[0].message,
         )
 
     def test_invalid_oid(self):
         file2 = (
-            here / "test_files/nasl/21.04/fail_name_and_copyright_newline.nasl"
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_name_and_copyright_newline.nasl"
         )
-        results = list(CheckDuplicateOID.run([file2]))
+        context = MagicMock()
+        context.nasl_files = [file2]
+        context.root = here
+        plugin = CheckDuplicateOID(context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"{file2.name}: Invalid OID 1.2.3.4.5.6.78909.8.7.654321 found.",
+            "test_files/nasl/21.04/fail_name_and_copyright_newline.nasl: "
+            "Invalid OID 1.2.3.4.5.6.78909.8.7.654321 found.",
             results[0].message,
         )

@@ -16,6 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.security_messages import CheckSecurityMessages
@@ -31,13 +32,13 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckSecurityMessages(fake_context)
 
-        results = list(
-            CheckSecurityMessages.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_ok2(self):
@@ -51,13 +52,13 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckSecurityMessages(fake_context)
 
-        results = list(
-            CheckSecurityMessages.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_nok(self):
@@ -71,13 +72,13 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckSecurityMessages(fake_context)
 
-        results = list(
-            CheckSecurityMessages.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -95,13 +96,13 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckSecurityMessages(fake_context)
 
-        results = list(
-            CheckSecurityMessages.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

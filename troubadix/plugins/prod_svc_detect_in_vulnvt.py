@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from pathlib import Path
+
 from typing import Iterator
 
 from troubadix.helper import (
@@ -26,17 +26,13 @@ from troubadix.helper.patterns import (
     _get_special_script_tag_pattern,
     get_script_tag_pattern,
 )
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckProdSvcDetectInVulnvt(FileContentPlugin):
+class CheckProdSvcDetectInVulnvt(FilePlugin):
     name = "check_prod_svc_detect_in_vulnvt"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """This script checks if the passed VT if it is doing a vulnerability
         reporting and a product / service detection together in a single VT.
         More specific this step is checking and reporting VTs having a severity
@@ -64,6 +60,7 @@ class CheckProdSvcDetectInVulnvt(FileContentPlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the VT
         """
+        file_content = self.context.file_content
         # Don't need to check VTs having a cvss of 0.0
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
         cvss_detect = cvss_base_pattern.search(file_content)

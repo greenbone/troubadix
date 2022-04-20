@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.helper.helper import _ROOT
 from troubadix.plugin import LinterError
@@ -40,74 +41,74 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.dir.rmdir()
 
     def test_ok(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckDeprecatedDependency(fake_context)
 
-        results = list(
-            CheckDeprecatedDependency.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_no_dependency(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckDeprecatedDependency(fake_context)
 
-        results = list(
-            CheckDeprecatedDependency.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_deprecated(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);\n"
             "exit(66);"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckDeprecatedDependency(fake_context)
 
-        results = list(
-            CheckDeprecatedDependency.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_deprecated2(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);\n"
             'script_tag(name:"deprecated", value:TRUE);'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckDeprecatedDependency(fake_context)
 
-        results = list(
-            CheckDeprecatedDependency.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_dependency_missing(self):
         dependency = "example2.inc"
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -115,12 +116,13 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        results = list(
-            CheckDeprecatedDependency.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.root = self.dir
+        plugin = CheckDeprecatedDependency(fake_context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
@@ -131,7 +133,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         )
 
     def test_deprecated_dependency(self):
-        path = Path(f"{self.dir}/file.nasl")
+        path = self.dir / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
@@ -139,16 +141,17 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        results = list(
-            CheckDeprecatedDependency.run(
-                path,
-                content,
-            )
-        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        fake_context.root = self.dir
+        plugin = CheckDeprecatedDependency(fake_context)
+
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT depends on example.inc, which is marked" "as deprecated.",
+            "VT depends on example.inc, which is marked as deprecated.",
             results[0].message,
         )

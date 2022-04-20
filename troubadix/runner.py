@@ -24,7 +24,6 @@ from pathlib import Path
 from typing import Dict, Iterable, Iterator
 
 from pontos.terminal.terminal import Terminal
-from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
 
 from troubadix.helper.patterns import (
@@ -32,13 +31,13 @@ from troubadix.helper.patterns import (
     init_special_script_tag_patterns,
 )
 from troubadix.plugin import (
-    FileContentPlugin,
-    LineContentPlugin,
+    FilesPluginContext,
     LinterError,
     LinterMessage,
     LinterResult,
     LinterWarning,
-    PreRunPlugin,
+    FilePluginContext,
+    FilesPlugin,
 )
 from troubadix.plugins import (
     _PRE_RUN_PLUGINS,
@@ -107,6 +106,7 @@ class Runner:
         n_jobs: int,
         term: Terminal,
         *,
+        root: Path,
         excluded_plugins: Iterable[str] = None,
         included_plugins: Iterable[str] = None,
         update_date: bool = False,
@@ -128,6 +128,7 @@ class Runner:
         self._term = term
         self._n_jobs = n_jobs
         self._log_file = log_file
+        self._root = root
         self.verbose = verbose
 
         # this dict will store the result counts for the statistic
@@ -244,16 +245,18 @@ class Runner:
     def pre_run(self, nasl_files: Iterable[Path]) -> None:
         """Running Plugins that do not require a run per file,
         but a single execution"""
-        for plugin in self.pre_run_plugins:
-            if not issubclass(plugin, PreRunPlugin):
-                self._report_error(f"Plugin {plugin.name} can not be read.")
+        context = FilesPluginContext(root=self._root, nasl_files=nasl_files)
+        for plugin_class in self.pre_run_plugins:
+            if not issubclass(plugin_class, FilesPlugin):
+                self._report_error(
+                    f"Plugin {plugin_class.name} can not be read."
+                )
                 continue
 
-            results = list(
-                plugin.run(
-                    nasl_files,
-                )
-            )
+            plugin = plugin_class(context)
+
+            results = list(plugin.run())
+
             with self._term.indent():
                 if results and self.verbose > 0 or self.verbose > 1:
                     self._report_bold_info(f"Run plugin {plugin.name}")
@@ -282,13 +285,13 @@ class Runner:
                         self.check_file, files, chunksize=CHUNKSIZE
                     )
                 ):
-                    # only print the part "common/some_nasl.nasl" by
-                    # splitting at the nasl/ dir in
-                    # /root/vts-repo/nasl/common/some_nasl.nasl
                     if results and self.verbose > 0 or self.verbose > 1:
+                        # only print the part "common/some_nasl.nasl"
+                        from_root_path = get_path_from_root(
+                            results.file_path, self._root
+                        )
                         self._report_bold_info(
-                            f"Checking {get_path_from_root(results.file_path)}"
-                            f" ({i}/{files_count})"
+                            f"Checking {from_root_path} ({i}/{files_count})"
                         )
 
                     with self._term.indent():
@@ -306,34 +309,16 @@ class Runner:
         return self.result_counts.error_count > 0
 
     def check_file(self, file_path: Path) -> FileResults:
-        file_name = file_path.resolve()
         results = FileResults(file_path)
+        context = FilePluginContext(
+            root=self._root, nasl_file=file_path.resolve()
+        )
 
-        # maybe we need to re-read file content, if a Plugin changes it
-        file_content = file_path.read_text(encoding=CURRENT_ENCODING)
-
-        for plugin in self.plugins:
-            if issubclass(plugin, LineContentPlugin):
-                lines = file_content.splitlines()
-                results.add_plugin_results(
-                    plugin.name,
-                    plugin.run(
-                        file_name,
-                        lines,
-                    ),
-                )
-            elif issubclass(plugin, FileContentPlugin):
-                results.add_plugin_results(
-                    plugin.name,
-                    plugin.run(
-                        file_name,
-                        file_content,
-                    ),
-                )
-            else:
-                results.add_plugin_results(
-                    plugin.__name__,
-                    [LinterError(f"Plugin {plugin.__name__} can not be read.")],
-                )
+        for plugin_class in self.plugins:
+            plugin = plugin_class(context)
+            results.add_plugin_results(
+                plugin.name,
+                plugin.run(),
+            )
 
         return results

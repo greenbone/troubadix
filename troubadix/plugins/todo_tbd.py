@@ -37,8 +37,8 @@ class CheckTodoTbd(LineContentPlugin):
 
     name = "check_todo_tbd"
 
-    @staticmethod
-    def run(
+    def check_lines(
+        self,
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:

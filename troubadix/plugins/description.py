@@ -16,20 +16,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
+
 from typing import Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class CheckDescription(FileContentPlugin):
+class CheckDescription(FilePlugin):
     name = "check_description"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
 
         """This script checks if some NVTs are still using script_description
 
@@ -40,7 +36,7 @@ class CheckDescription(FileContentPlugin):
         """
         script_description = re.compile(
             r"script_description", re.IGNORECASE
-        ).search(file_content)
+        ).search(self.context.file_content)
         if script_description:
             yield LinterError(
                 "VT/Include is using deprecated 'script_description'"

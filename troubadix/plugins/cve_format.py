@@ -32,8 +32,8 @@ from troubadix.plugin import (
 class CheckCVEFormat(FileContentPlugin):
     name = "check_cve_format"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

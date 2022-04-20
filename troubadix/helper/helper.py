@@ -48,10 +48,8 @@ def is_ignore_file(
     return False
 
 
-def get_path_from_root(file_name: Path, root: Path = None):
+def get_path_from_root(file_name: Path, root: Path):
     file_name = file_name.resolve()
-    if not root:
-        root = get_root(file_name)
     return file_name.relative_to(root)
 
 
@@ -92,25 +90,15 @@ def subprocess_cmd(command: str, encoding="UTF-8") -> Tuple[AnyStr, AnyStr]:
     return any2str(proc_stdout), any2str(proc_stderr)
 
 
-class Root:
-    instance = False
-
-    def __init__(self, path: Path, root: str = _ROOT) -> None:
-        match = re.search(
-            rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
-            str(path.resolve()),
-        )
-        if match:
-            self.root = Path(match.group("path"))
-            if not self.root.exists():
-                self.root = None
-        else:
-            self.root = None
-        self.instance = self
-
-
 def get_root(path: Path) -> Optional[Path]:
     """Get the root directory of the VTs"""
-    if Root.instance:
-        return Root.instance.root
-    return Root(path).root
+    root = None
+
+    match = re.search(
+        rf"(?P<path>/([\w\-\.\\ ]+/)+{root}/[\w\-\.]+/)",
+        str(path.resolve()),
+    )
+    if match:
+        root = Path(match.group("path"))
+
+    return root

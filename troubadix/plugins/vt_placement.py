@@ -23,7 +23,6 @@ from typing import Iterator
 from troubadix.helper import (
     ScriptTag,
     SpecialScriptTag,
-    get_root,
     get_script_tag_pattern,
 )
 from troubadix.helper.patterns import _get_special_script_tag_pattern
@@ -42,8 +41,8 @@ class CheckVTPlacement(FileContentPlugin):
 
     name = "check_vt_placement"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
@@ -55,7 +54,7 @@ class CheckVTPlacement(FileContentPlugin):
         Returns:
             if no problem
         """
-        root = get_root(nasl_file)
+        root = self.context.root
 
         match = _get_special_script_tag_pattern(
             name=SpecialScriptTag.FAMILY.value,

@@ -78,6 +78,14 @@ def parse_args(
         ),
     )
 
+    parser.add_argument(
+        "-r",
+        "--root",
+        type=directory_type,
+        help="Root directory for the nasl files. Will be derived from the "
+        "content if not set.",
+    )
+
     what_group = parser.add_mutually_exclusive_group(required=False)
 
     what_group.add_argument(
@@ -205,7 +213,7 @@ def parse_args(
         help="Don't print the statistic",
     )
 
-    if len(sys.argv) == 1:
+    if not args:
         parser.print_help(sys.stdout)
         sys.exit(1)
 

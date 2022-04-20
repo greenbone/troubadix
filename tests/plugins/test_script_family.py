@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_family import CheckScriptFamily
@@ -32,13 +33,13 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             "script_bugtraq_id(00000);\n"
             'script_family("FreeBSD Local Security Checks");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckScriptFamily(fake_context)
 
-        results = list(
-            CheckScriptFamily.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_script_family(self):
@@ -49,13 +50,13 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             "script_bugtraq_id(00000);\n"
             'script_family("TestTest");\n'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckScriptFamily(fake_context)
 
-        results = list(
-            CheckScriptFamily.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -69,13 +70,13 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_bugtraq_id(00000);\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckScriptFamily(fake_context)
 
-        results = list(
-            CheckScriptFamily.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual("No script family exist", results[0].message)
@@ -89,13 +90,13 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             'script_family("???\\");\n'
             "script_bugtraq_id(00000);\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckScriptFamily(fake_context)
 
-        results = list(
-            CheckScriptFamily.run(
-                nasl_file,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

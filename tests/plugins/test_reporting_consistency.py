@@ -16,6 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.reporting_consistency import CheckReportingConsistency
@@ -32,13 +33,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             "log_message('Test');\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckReportingConsistency(fake_context)
 
-        results = list(
-            CheckReportingConsistency.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_ok2(self):
@@ -52,13 +53,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckReportingConsistency(fake_context)
 
-        results = list(
-            CheckReportingConsistency.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_fail(self):
@@ -72,13 +73,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckReportingConsistency(fake_context)
 
-        results = list(
-            CheckReportingConsistency.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -96,13 +97,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckReportingConsistency(fake_context)
 
-        results = list(
-            CheckReportingConsistency.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -121,13 +122,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = content
+        plugin = CheckReportingConsistency(fake_context)
 
-        results = list(
-            CheckReportingConsistency.run(
-                nasl_file=nasl_file,
-                file_content=content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(

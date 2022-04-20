@@ -19,22 +19,20 @@
 
 import datetime
 import re
-from pathlib import Path
+
 from typing import Iterator
 from troubadix.helper import CURRENT_ENCODING
 
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterResult, FilePlugin
 
 
-class UpdateModificationDate(FileContentPlugin):
+class UpdateModificationDate(FilePlugin):
     name = "update_modification_date"
 
-    @staticmethod
-    def run(
-        nasl_file: Path,
-        file_content: str,
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         # update modification date
+        file_content = self.context.file_content
+
         tag_template = 'script_tag(name:"last_modification", value:"{date}");'
         mod_pattern = (
             r"script_tag\(name:\"last_modification\", value:\"(.*)\"\);"
@@ -85,7 +83,9 @@ class UpdateModificationDate(FileContentPlugin):
             version_template.format(date=old_version),
             version_template.format(date=correctly_formated_version),
         )
-        nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)
+        self.context.nasl_file.write_text(
+            file_content, encoding=CURRENT_ENCODING
+        )
 
         yield LinterResult(
             f"Replaced modification_date {old_datetime} "

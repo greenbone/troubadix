@@ -26,8 +26,8 @@ from troubadix.helper.helper import SCRIPT_CATEGORIES
 class CheckScriptCategory(FileContentPlugin):
     name = "check_script_category"
 
-    @staticmethod
-    def run(
+    def check_content(
+        self,
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:

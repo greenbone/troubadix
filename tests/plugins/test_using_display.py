@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError, LinterWarning
 from troubadix.plugins.using_display import CheckUsingDisplay
@@ -31,13 +32,13 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckUsingDisplay(fake_context)
 
-        results = list(
-            CheckUsingDisplay.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 0)
 
     def test_using_display(self):
@@ -48,13 +49,13 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
             'display("FOO");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckUsingDisplay(fake_context)
 
-        results = list(
-            CheckUsingDisplay.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
@@ -71,13 +72,13 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
             'if (0) display("FOO");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckUsingDisplay(fake_context)
 
-        results = list(
-            CheckUsingDisplay.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
@@ -95,13 +96,13 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
             '# display("FOO");'
         )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckUsingDisplay(fake_context)
 
-        results = list(
-            CheckUsingDisplay.run(
-                path,
-                content,
-            )
-        )
+        results = list(plugin.run())
+
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
