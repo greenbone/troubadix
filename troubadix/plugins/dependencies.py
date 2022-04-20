@@ -19,9 +19,12 @@
 
 import re
 
+from pathlib import Path
+
 from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag
+from troubadix.helper.helper import is_enterprise_folder
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import (
     FilePlugin,
@@ -64,33 +67,36 @@ class CheckDependencies(FilePlugin):
                             f"The script dependency {dep} could not "
                             "be found within the VTs."
                         )
-                    else:
-                        # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                        # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                        # and GSHB/EL15/GSHB.nasl
-                        # are using a variable which we currently
-                        # can't handle.
-                        if "+d+.nasl" in dep:
-                            continue
+                        continue
 
-                        # Debug as those might be correctly placed
-                        if dep[:4] == "gsf/" and not (
-                            dep[:11] == "gsf/PCIDSS/"
-                            or dep[:11] == "gsf/Policy/"
-                        ):
-                            yield LinterWarning(
-                                f"The script dependency {dep} is in a "
-                                "subdirectory, which might be misplaced."
-                            )
-                        # Subdirectories only allowed for directories
-                        # on a whitelist
-                        elif "/" in dep and not (
-                            dep[:5] != "GSHB/"
-                            or dep[:7] == "Policy/"
-                            or dep[:11] == "gsf/PCIDSS/"
-                            or dep[:11] == "gsf/Policy/"
-                        ):
-                            yield LinterWarning(
-                                f"The script dependency {dep} is within "
-                                "a subdirectory, which is not allowed."
-                            )
+                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
+                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
+                    # and GSHB/EL15/GSHB.nasl
+                    # are using a variable which we currently
+                    # can't handle.
+                    if "+d+.nasl" in dep:
+                        continue
+
+                    dependency = Path(dep)
+                    parts = dependency.parts
+
+                    if is_enterprise_folder(parts[0]):
+                        # strip parent enterprise folder
+                        parts = parts[1:]
+
+                    if len(parts) < 2:
+                        # only the filename is contained in parts means
+                        # no parent directory
+                        continue
+
+                    parent_folder = parts[0]
+                    if parent_folder in ["PCIDSS", "Policy", "GSHB"]:
+                        yield LinterWarning(
+                            f"The script dependency {dep} is in a "
+                            "subdirectory, which might be misplaced."
+                        )
+                    else:
+                        yield LinterError(
+                            f"The script dependency {dep} is within "
+                            "a subdirectory, which is not allowed."
+                        )
