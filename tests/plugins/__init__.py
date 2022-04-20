@@ -42,3 +42,16 @@ class TemporaryDirectory:
 class PluginTestCase(unittest.TestCase):
     def create_directory(self) -> TemporaryDirectory:
         return TemporaryDirectory()
+
+    def create_fake_file_plugin_context(
+        self,
+        *,
+        nasl_file: Path = None,
+        file_content: str = None,
+        root: Path = None,
+    ) -> FilePluginContext:
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = file_content
+        fake_context.root = root
+        return fake_context
