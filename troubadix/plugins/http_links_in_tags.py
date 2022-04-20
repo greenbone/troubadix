@@ -198,7 +198,7 @@ class CheckHttpLinksInTags(FilePlugin):
         if "https://www.phishingtarget.com@evil.com" in http_link_match_group:
             return True
         # e.g.:
-        # Since gedit supports opening files via 'http://' URLs (through GNOME vfs)
+        # Since gedit supports opening files via 'http://' URLs
         if (
             "'http://'" in http_link_match_group
             or "'https://'" in http_link_match_group
