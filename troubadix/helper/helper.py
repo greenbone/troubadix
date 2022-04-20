@@ -48,8 +48,14 @@ def is_ignore_file(
     return False
 
 
+ENTERPRISE_FOLDERS = (
+    "enterprise",
+    "gsf",
+)
+
+
 def is_enterprise_folder(folder: Union[Path, str]) -> bool:
-    return str(folder) in ["enterprise", "gsf"]
+    return str(folder) in ENTERPRISE_FOLDERS
 
 
 def get_path_from_root(file_name: Path, root: Path):
