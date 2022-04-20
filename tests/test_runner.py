@@ -424,13 +424,15 @@ class TestRunner(unittest.TestCase):
             runner.run([nasl_file])
 
         compare_content = (
-            "\tPre-Run Plugins: check_duplicate_oid\n"
+            "\tPre-Run Plugins: check_duplicate_oid, check_no_solution\n"
             "\tIncluded Plugins: CheckMissingDescExit\n\t"
             "Running plugins: check_missing_desc_exit\n\n\n"
             "Run plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
             f"\t\t{get_path_from_root(nasl_file, self.root)}: Invalid OID "
             "1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
+            "Run plugin check_no_solution\n"
+            "\t\tNo results for plugin check_no_solution\n\n\n"
             f"Checking {get_path_from_root(nasl_file, self.root)} (0/1)\n\t\t"
             "No results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"

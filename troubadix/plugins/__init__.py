@@ -40,6 +40,7 @@ from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
+from .no_solution import CheckNoSolution
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .reporting_consistency import CheckReportingConsistency
@@ -107,7 +108,10 @@ _PLUGINS = [
     CheckTabs,
 ]
 
-_PRE_RUN_PLUGINS = [CheckDuplicateOID]
+_PRE_RUN_PLUGINS = [
+    CheckDuplicateOID,
+    CheckNoSolution,
+]
 
 
 class Plugins:
