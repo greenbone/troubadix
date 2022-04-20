@@ -14,8 +14,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from datetime import datetime, timedelta
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterMessage
 from troubadix.plugins.no_solution import CheckNoSolution
@@ -28,18 +30,27 @@ here = Path(__file__).parent
 class CheckNoSolutionTestCase(PluginTestCase):
     def test_ok(self):
         file1 = here / "test_files/nasl/21.04/test.nasl"
-        results = list(CheckNoSolution.run([file1]))
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
 
     def test_too_old_1_year(self):
         file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
-        results = list(CheckNoSolution.run([file1]))
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
-            f"{file1.name}: Missing solution, older than 1 year.",
+            "test_files/nasl/21.04/fail_solution_template.nasl:"
+            " Missing solution, older than 1 year.",
             results[0].message,
         )
 
@@ -52,7 +63,11 @@ class CheckNoSolutionTestCase(PluginTestCase):
             text.replace("02nd February, 2021", new_date), encoding="latin-1"
         )
 
-        results = list(CheckNoSolution.run([file1]))
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
 
         # reverse change to file
         file1.write_text(text, encoding="latin-1")
@@ -60,7 +75,8 @@ class CheckNoSolutionTestCase(PluginTestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
-            f"{file1.name}: Missing solution, older than 6 months.",
+            "test_files/nasl/21.04/fail_solution_template.nasl:"
+            " Missing solution, older than 6 months.",
             results[0].message,
         )
 
@@ -73,7 +89,11 @@ class CheckNoSolutionTestCase(PluginTestCase):
             text.replace("02nd February, 2021", new_date), encoding="latin-1"
         )
 
-        results = list(CheckNoSolution.run([file1]))
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
 
         # reverse change to file
         file1.write_text(text, encoding="latin-1")
@@ -81,7 +101,8 @@ class CheckNoSolutionTestCase(PluginTestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterMessage)
         self.assertEqual(
-            f"{file1.name}: Missing solution, but younger than 31 days.",
+            "test_files/nasl/21.04/fail_solution_template.nasl:"
+            " Missing solution, but younger than 31 days.",
             results[0].message,
         )
 
@@ -106,7 +127,11 @@ class CheckNoSolutionTestCase(PluginTestCase):
             text.replace("02nd February, 2021", date3), encoding="latin-1"
         )
 
-        results = list(CheckNoSolution.run([file1, file2, file3]))
+        context = MagicMock()
+        context.nasl_files = [file1, file2, file3]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
 
         # reverse change to file
         file1.write_text(text, encoding="latin-1")

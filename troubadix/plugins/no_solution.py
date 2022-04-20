@@ -16,11 +16,11 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
-from typing import Iterator, List
+from typing import Iterator
 from datetime import timedelta, datetime
 
 from troubadix.helper import (
+    CURRENT_ENCODING,
     ScriptTag,
     get_script_tag_pattern,
     get_path_from_root,
@@ -29,7 +29,7 @@ from troubadix.plugin import (
     LinterError,
     LinterResult,
     LinterWarning,
-    PreRunPlugin,
+    FilesPlugin,
 )
 
 
@@ -37,14 +37,14 @@ NO_SOLUTION_DATE_TOO_YOUNG = datetime.now() - timedelta(days=31)
 NO_SOLUTION_DATE_TOO_OLDER_6_MONTH = datetime.now() - timedelta(days=186)
 NO_SOLUTION_DATE_TOO_OLDER_1_YEAR = datetime.now() - timedelta(days=365)
 
+# Add the solutions date's here
+STRPTIMES = ["%d %B, %Y", "%Y/%m/%d"]
 
-class CheckNoSolution(PreRunPlugin):
+
+class CheckNoSolution(FilesPlugin):
     name = "check_no_solution"
 
-    @staticmethod
-    def run(
-        nasl_files: List[Path],
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """Run PRE_RUN_COLLECTOR."""
 
         total_missing_solutions = 0
@@ -52,9 +52,9 @@ class CheckNoSolution(PreRunPlugin):
         missing_solutions_older_than_6_months = 0
         missing_solutions_older_than_1_year = 0
 
-        for nasl_file in nasl_files:
-            file_name = get_path_from_root(nasl_file)
-            content = nasl_file.read_text(encoding="latin-1")
+        for nasl_file in self.context.nasl_files:
+            file_name = get_path_from_root(nasl_file, self.context.root)
+            content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             solution_match = get_script_tag_pattern(ScriptTag.SOLUTION).search(
                 content
             )
@@ -109,13 +109,6 @@ class CheckNoSolution(PreRunPlugin):
                 "missing solutions older than 1 year:"
                 f" {missing_solutions_older_than_1_year}\n"
             )
-
-    @staticmethod
-    def ok():
-        return "No missing solutions found."
-
-
-STRPTIMES = ["%d %B, %Y", "%Y/%m/%d"]
 
 
 def parse_date(date_string: str) -> datetime:
