@@ -39,6 +39,12 @@ class TemporaryDirectory:
     def __exit__(self, exc, value, tb) -> None:
         self._tempdir.__exit__(exc, value, tb)
 
+    def __fspath__(self):
+        return self._tempdir.name
+
+    def cleanup(self):
+        self._tempdir.cleanup()
+
 
 class PluginTestCase(unittest.TestCase):
     def create_directory(self) -> TemporaryDirectory:
