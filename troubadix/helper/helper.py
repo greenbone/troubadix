@@ -35,9 +35,6 @@ SCRIPT_CATEGORIES = {
     "ACT_END": 10,
 }
 
-# Root directory of nasl files
-_ROOT = "nasl"
-
 
 def is_ignore_file(
     file_name: Union[Path, str], ignore_files: Union[List[Path], List[str]]
