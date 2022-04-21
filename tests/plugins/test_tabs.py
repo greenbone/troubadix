@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.tabs import CheckTabs
@@ -28,9 +27,9 @@ class CheckTabsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("tests/file.nasl")
         content = "What ever."
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTabs(fake_context)
 
         results = list(plugin.run())
@@ -42,9 +41,9 @@ class CheckTabsTestCase(PluginTestCase):
 
         content = "\t\t\t\t\t\t\n1234456789"
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTabs(fake_context)
 
         results = list(plugin.run())

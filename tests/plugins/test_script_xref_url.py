@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_xref_url import CheckScriptXrefUrl
@@ -28,9 +27,9 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
     def test_ok(self):
         content = 'script_xref(name:"URL", value:"http://www.example.com");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -39,9 +38,9 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
     def test_invalid_url(self):
         content = 'script_xref(name:"URL", value:"www.example.com");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())

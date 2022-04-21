@@ -32,7 +32,7 @@ class CheckDependenciesTestCase(PluginTestCase):
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");'
         )
-        fake_context = self.create_fake_file_plugin_context(
+        fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
         )
         plugin = CheckDependencies(fake_context)
@@ -51,7 +51,7 @@ class CheckDependenciesTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar...");\n'
                 'script_dependencies("example.inc");\n'
             )
-            fake_context = self.create_fake_file_plugin_context(
+            fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
             )
             plugin = CheckDependencies(fake_context)
@@ -68,7 +68,7 @@ class CheckDependenciesTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar...");\n'
             f'script_dependencies("{dependency}");\n'
         )
-        fake_context = self.create_fake_file_plugin_context(
+        fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
         )
         plugin = CheckDependencies(fake_context)
@@ -94,7 +94,7 @@ class CheckDependenciesTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar...");\n'
                 'script_dependencies("enterprise/example.inc");\n'
             )
-            fake_context = self.create_fake_file_plugin_context(
+            fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
             )
             plugin = CheckDependencies(fake_context)
@@ -114,7 +114,7 @@ class CheckDependenciesTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar...");\n'
                 'script_dependencies("Policy/example.inc");\n'
             )
-            fake_context = self.create_fake_file_plugin_context(
+            fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
             )
             plugin = CheckDependencies(fake_context)
@@ -141,7 +141,7 @@ class CheckDependenciesTestCase(PluginTestCase):
                 'script_tag(name:"summary", value:"Foo Bar...");\n'
                 'script_dependencies("foo/example.inc");\n'
             )
-            fake_context = self.create_fake_file_plugin_context(
+            fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
             )
             plugin = CheckDependencies(fake_context)

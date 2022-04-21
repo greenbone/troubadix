@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_tag_form import CheckScriptTagForm
@@ -31,9 +30,9 @@ class CheckScriptTagFormTestCase(PluginTestCase):
             'script_tag(name: "foo", value:"bar");\n'
             'script_tag(name: "foo", value:42);'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())
@@ -42,9 +41,9 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_name(self):
         content = 'script_tag(nammmme: "foo", value:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())
@@ -59,9 +58,9 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_value(self):
         content = 'script_tag(name: "foo", valueeeee:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())
@@ -71,9 +70,9 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_missing_parameters(self):
         content = 'script_tag("foo", "bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())

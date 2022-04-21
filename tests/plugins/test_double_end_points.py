@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.double_end_points import CheckDoubleEndPoints
@@ -31,9 +30,9 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckDoubleEndPoints(fake_context)
 
         results = list(plugin.run())
@@ -46,9 +45,9 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckDoubleEndPoints(fake_context)
 
         results = list(plugin.run())

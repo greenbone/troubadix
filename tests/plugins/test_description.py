@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.description import CheckDescription
@@ -32,9 +31,9 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_cve_id("CVE-2019-04879");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckDescription(fake_context)
 
         results = list(plugin.run())
@@ -51,9 +50,9 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_description("TestTest");\n'
         )
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckDescription(fake_context)
 
         results = list(plugin.run())
@@ -75,9 +74,9 @@ class CheckDescriptionTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
         )
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckDescription(fake_context)
 
         results = list(plugin.run())

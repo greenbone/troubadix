@@ -31,9 +31,9 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckCreationDate(fake_context)
 
         results = list(plugin.run())
@@ -46,9 +46,9 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:N/C:P/I:P/A:P");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckCreationDate(fake_context)
 
         results = list(plugin.run())
@@ -67,9 +67,9 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
             '(Mon, 14 May 2013)");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckCreationDate(fake_context)
 
         results = list(plugin.run())
@@ -88,9 +88,9 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
             '(Tue, 14 May 2013)");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckCreationDate(fake_context)
 
         results = list(plugin.run())
@@ -109,9 +109,9 @@ class CheckCreationDateTestCase(PluginTestCase):
             'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
             '(Tue, 15 May 2013)");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckCreationDate(fake_context)
 
         results = list(plugin.run())

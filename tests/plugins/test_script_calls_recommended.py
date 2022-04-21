@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.script_calls_recommended import (
@@ -36,9 +35,9 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
             "script_require_keys();\n"
             "script_mandatory_keys();"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptCallsRecommended(fake_context)
 
         results = list(plugin.run())
@@ -47,9 +46,9 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
 
     def test_missing_calls(self):
         content = 'script_xref(name: "URL", value:"");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptCallsRecommended(fake_context)
 
         results = list(plugin.run())

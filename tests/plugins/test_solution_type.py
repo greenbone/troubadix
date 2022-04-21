@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.solution_type import CheckSolutionType
@@ -28,9 +27,9 @@ class CheckSolutionTypeTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"0.0");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())
@@ -43,9 +42,9 @@ class CheckSolutionTypeTestCase(PluginTestCase):
             'script_tag(name:"cvss_base", value:"1.0");'
             'script_tag(name:"solution_type", value:"Workaround");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())
@@ -55,9 +54,9 @@ class CheckSolutionTypeTestCase(PluginTestCase):
     def test_no_solution_type(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"1.0");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())
@@ -76,9 +75,9 @@ class CheckSolutionTypeTestCase(PluginTestCase):
             'script_tag(name:"cvss_base", value:"1.0");'
             'script_tag(name:"solution_type", value:"Wrong solution");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())

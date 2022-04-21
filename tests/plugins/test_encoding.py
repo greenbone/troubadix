@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pathlib import Path
-from unittest.mock import MagicMock
-
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.encoding import CheckEncoding
@@ -27,60 +24,55 @@ from . import PluginTestCase
 
 class CheckEncodingTestCase(PluginTestCase):
     def test_ok(self):
-        path = Path("tests/file.nasl")
+        with self.create_directory() as tempdir:
+            path = tempdir / "file.nasl"
 
-        # It seems, that these are the only valid characters for this
-        path.write_text(
-            "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
-            "abcdefghijklmnopqrstuvwxyz{|}~",
-            encoding="utf-8",
-        )
-        content = path.read_text(encoding=CURRENT_ENCODING)
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        fake_context.lines = content.splitlines()
-        plugin = CheckEncoding(fake_context)
+            # It seems, that these are the only valid characters for this
+            path.write_text(
+                "!\"#$%&'()*+,-./0123456789:;<=>"
+                "?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
+                "abcdefghijklmnopqrstuvwxyz{|}~",
+                encoding="utf-8",
+            )
+            content = path.read_text(encoding=CURRENT_ENCODING)
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content, lines=content.splitlines()
+            )
+            plugin = CheckEncoding(fake_context)
 
-        results = list(plugin.run())
+            results = list(plugin.run())
 
-        self.assertEqual(len(results), 0)
-
-        if path.exists():
-            path.unlink()
+            self.assertEqual(len(results), 0)
 
     def test_some_invalid_characters(self):
-        path = Path("tests/file.nasl")
+        with self.create_directory() as tempdir:
+            path = tempdir / "file.nasl"
 
-        path.write_text(
-            "ȺȺȺȺʉʉʉʉϾϾϾϾ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄ"
-            "ÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ",
-            encoding="utf-8",
-        )
-        content = path.read_text(encoding=CURRENT_ENCODING)
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        fake_context.lines = content.splitlines()
-        plugin = CheckEncoding(fake_context)
+            path.write_text(
+                "ȺȺȺȺʉʉʉʉϾϾϾϾ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄ"
+                "ÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ",
+                encoding="utf-8",
+            )
+            content = path.read_text(encoding=CURRENT_ENCODING)
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content, lines=content.splitlines()
+            )
+            plugin = CheckEncoding(fake_context)
 
-        results = list(plugin.run())
+            results = list(plugin.run())
 
-        self.assertEqual(len(results), 3)
+            self.assertEqual(len(results), 3)
 
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            f"VT '{path}' has a wrong encoding.",
-            results[0].message,
-        )
-        self.assertEqual(
-            "Found invalid character in line 0",
-            results[1].message,
-        )
-        self.assertEqual(
-            "Found invalid character in line 1",
-            results[2].message,
-        )
-
-        if path.exists():
-            path.unlink()
+            self.assertIsInstance(results[0], LinterError)
+            self.assertEqual(
+                f"VT '{path}' has a wrong encoding.",
+                results[0].message,
+            )
+            self.assertEqual(
+                "Found invalid character in line 0",
+                results[1].message,
+            )
+            self.assertEqual(
+                "Found invalid character in line 1",
+                results[2].message,
+            )

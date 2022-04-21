@@ -17,7 +17,6 @@
 
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.http_links_in_tags import CheckHttpLinksInTags
@@ -35,9 +34,9 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckHttpLinksInTags(fake_context)
 
         results = list(plugin.run())
@@ -53,9 +52,9 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckHttpLinksInTags(fake_context)
 
         results = list(plugin.run())
@@ -81,9 +80,9 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'script_xref(name:"URL", '
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckHttpLinksInTags(fake_context)
 
         results = list(plugin.run())

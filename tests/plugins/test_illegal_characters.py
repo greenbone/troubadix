@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.illegal_characters import CheckIllegalCharacters
@@ -33,9 +32,9 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckIllegalCharacters(fake_context)
 
         results = list(plugin.run())
@@ -60,9 +59,9 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
                 'script_tag(name:"solution", value:"meh");\n'
             )
 
-            fake_context = MagicMock()
-            fake_context.nasl_file = path
-            fake_context.file_content = content
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content
+            )
             plugin = CheckIllegalCharacters(fake_context)
 
             results = list(plugin.run())
@@ -74,6 +73,3 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
                 f'Found illegal character in script_tag(name:"{tag}", '
                 'value:"Foo|Bar;Baz=Bad.");',
             )
-
-        if path.exists():
-            path.unlink()

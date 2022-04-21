@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
@@ -49,9 +48,9 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "right holder(s).\n"
             'script_copyright("Copyright (C) 1234");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
 
         plugin = CheckCopyrightText(fake_context)
 
@@ -67,9 +66,9 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "# advisory, and are Copyright (C) the respective author(s)\n"
             '  script_copyright("Copyright (C) 134");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
 
         expected_content = (
             f"{CORRECT_COPYRIGHT_PHRASE}\n"
@@ -102,38 +101,36 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             path.unlink()
 
     def test_wrong_copyright_text(self):
-        path = Path("tests/file.nasl")
+        with self.create_directory() as tempdir:
+            path = tempdir / "file.nasl"
 
-        for wrong_text in WRONG_TEXTS:
-            content = (
-                "# Copyright (C) 2017 Greenbone Networks GmbH\n"
-                f"{wrong_text}"
-                '  script_copyright("Copyright (C) 1234");'
-            )
-            fake_context = MagicMock()
-            fake_context.nasl_file = path
-            fake_context.file_content = content
+            for wrong_text in WRONG_TEXTS:
+                content = (
+                    "# Copyright (C) 2017 Greenbone Networks GmbH\n"
+                    f"{wrong_text}"
+                    '  script_copyright("Copyright (C) 1234");'
+                )
+                fake_context = self.create_file_plugin_context(
+                    nasl_file=path, file_content=content
+                )
 
-            plugin = CheckCopyrightText(fake_context)
+                plugin = CheckCopyrightText(fake_context)
 
-            expected_content = (
-                "# Copyright (C) 2017 Greenbone Networks GmbH\n"
-                f"{CORRECT_COPYRIGHT_PHRASE}\n"
-                '  script_copyright("Copyright (C) 1234");'
-            )
+                expected_content = (
+                    "# Copyright (C) 2017 Greenbone Networks GmbH\n"
+                    f"{CORRECT_COPYRIGHT_PHRASE}\n"
+                    '  script_copyright("Copyright (C) 1234");'
+                )
 
-            results = list(plugin.run())
-            self.assertEqual(len(results), 1)
+                results = list(plugin.run())
+                self.assertEqual(len(results), 1)
 
-            self.assertIsInstance(results[0], LinterError)
-            self.assertEqual(
-                "The VT was using an incorrect copyright statement. Replaced "
-                f"with:\n{CORRECT_COPYRIGHT_PHRASE}",
-                results[0].message,
-            )
-            self.assertEqual(
-                path.read_text(encoding=CURRENT_ENCODING), expected_content
-            )
-
-        if path.exists():
-            path.unlink()
+                self.assertIsInstance(results[0], LinterError)
+                self.assertEqual(
+                    "The VT was using an incorrect copyright statement. "
+                    f"Replaced with:\n{CORRECT_COPYRIGHT_PHRASE}",
+                    results[0].message,
+                )
+                self.assertEqual(
+                    path.read_text(encoding=CURRENT_ENCODING), expected_content
+                )

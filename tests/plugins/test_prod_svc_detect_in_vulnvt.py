@@ -16,7 +16,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.prod_svc_detect_in_vulnvt import (
@@ -35,9 +34,9 @@ class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckProdSvcDetectInVulnvt(fake_context)
 
         results = list(plugin.run())
@@ -53,9 +52,9 @@ class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'script_family("Product detection");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckProdSvcDetectInVulnvt(fake_context)
 
         results = list(plugin.run())
@@ -79,9 +78,9 @@ class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
             'script_family("Product detection");\n'
             "register_product(cpe:cpe);\n"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckProdSvcDetectInVulnvt(fake_context)
 
         results = list(plugin.run())
