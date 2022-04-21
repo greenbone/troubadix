@@ -17,6 +17,7 @@
 
 import re
 
+from itertools import chain
 from pathlib import Path
 from typing import Iterator
 
@@ -25,6 +26,7 @@ from troubadix.helper import (
     SpecialScriptTag,
     get_script_tag_pattern,
 )
+from troubadix.helper.helper import ENTERPRISE_FOLDERS
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -70,14 +72,12 @@ class CheckVTPlacement(FileContentPlugin):
         if match is not None:
             return
 
-        # nb: Path depends on the way the check
-        # is called (FULL/part run, CI run, ...)
-        if (
-            root / nasl_file.name == nasl_file
-            or root / "gsf" / nasl_file.name == nasl_file
-            or root / "attic" / nasl_file.name == nasl_file
-        ):
+        if root / nasl_file.name == nasl_file:
             return
+
+        for folder in chain(["attic"], ENTERPRISE_FOLDERS):
+            if root / folder / nasl_file.name == nasl_file:
+                return
 
         yield LinterError(
             f"VT should be placed in the root directory ({root}).",
