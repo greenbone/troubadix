@@ -48,6 +48,10 @@ def is_ignore_file(
     return False
 
 
+def is_enterprise_folder(folder: Union[Path, str]) -> bool:
+    return str(folder) in ["enterprise", "gsf"]
+
+
 def get_path_from_root(file_name: Path, root: Path):
     file_name = file_name.resolve()
     return file_name.relative_to(root)

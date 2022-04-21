@@ -19,7 +19,7 @@ import unittest
 from pathlib import Path
 
 from troubadix.helper import is_ignore_file
-from troubadix.helper.helper import get_root
+from troubadix.helper.helper import get_root, is_enterprise_folder
 
 
 class IgnoreFile(unittest.TestCase):
@@ -42,6 +42,19 @@ class IgnoreFile(unittest.TestCase):
     def test_compare_str_to_path(self):
         self.assertTrue(is_ignore_file("foo/bar", [Path("foo")]))
         self.assertFalse(is_ignore_file("foo/bar", [Path("ipsum")]))
+
+
+class IsEnterpriseFolderTestCase(unittest.TestCase):
+    def test_enterprise_folder(self):
+        self.assertTrue(is_enterprise_folder(Path("enterprise")))
+        self.assertTrue(is_enterprise_folder(Path("gsf")))
+        self.assertTrue(is_enterprise_folder("enterprise"))
+        self.assertTrue(is_enterprise_folder("gsf"))
+
+        self.assertFalse(is_enterprise_folder("gcf"))
+        self.assertFalse(is_enterprise_folder("foo"))
+        self.assertFalse(is_enterprise_folder(Path("gcf")))
+        self.assertFalse(is_enterprise_folder(Path("foo")))
 
 
 class GetRootTestCase(unittest.TestCase):

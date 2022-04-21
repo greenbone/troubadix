@@ -16,7 +16,42 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
+import tempfile
+
+from pathlib import Path
+from unittest.mock import MagicMock
+
+from troubadix.plugin import FilePluginContext
+
+
+class TemporaryDirectory:
+    """A wrapper around tempdir.TemporaryDirectory to return a Path
+    when using the with statement
+    """
+
+    def __init__(self) -> None:
+        self._tempdir = tempfile.TemporaryDirectory()
+
+    def __enter__(self) -> Path:
+        return Path(self._tempdir.__enter__())
+
+    def __exit__(self, exc, value, tb) -> None:
+        self._tempdir.__exit__(exc, value, tb)
 
 
 class PluginTestCase(unittest.TestCase):
-    pass
+    def create_directory(self) -> TemporaryDirectory:
+        return TemporaryDirectory()
+
+    def create_fake_file_plugin_context(
+        self,
+        *,
+        nasl_file: Path = None,
+        file_content: str = None,
+        root: Path = None,
+    ) -> FilePluginContext:
+        fake_context = MagicMock()
+        fake_context.nasl_file = nasl_file
+        fake_context.file_content = file_content
+        fake_context.root = root
+        return fake_context

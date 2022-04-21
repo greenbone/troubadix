@@ -16,74 +16,61 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
-from troubadix.helper.helper import _ROOT
-from troubadix.plugin import LinterError
+from troubadix.plugin import LinterError, LinterWarning
 from troubadix.plugins.dependencies import CheckDependencies
 
 from . import PluginTestCase
 
-here = Path.cwd()
+here = Path(__file__).parent
 
 
-class CheckDoubleEndPointsTestCase(PluginTestCase):
-    def setUp(self) -> None:
-        self.dir = here / _ROOT / "foo"
-        self.dir.mkdir(parents=True)
-        self.dep = self.dir / "example.inc"
-        self.dep.touch()
-
-        return super().setUp()
-
-    def tearDown(self) -> None:
-        self.dep.unlink()
-        self.dir.rmdir()
-
+class CheckDependenciesTestCase(PluginTestCase):
     def test_ok(self):
-        path = self.dir / "file.nasl"
+        path = here / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        plugin = CheckDependencies(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 0)
-
-    def test_dep_existing(self):
-        path = self.dir / "file.nasl"
-        content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'script_dependencies("example.inc");\n'
+        fake_context = self.create_fake_file_plugin_context(
+            nasl_file=path, file_content=content, root=here
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        fake_context.root = self.dir
         plugin = CheckDependencies(fake_context)
 
         results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
 
-    def test_dep_missing(self):
+    def test_dependency_existing(self):
+        with self.create_directory() as tmpdir:
+            path = tmpdir / "file.nasl"
+            example = tmpdir / "example.inc"
+            example.touch()
+            content = (
+                'script_tag(name:"cvss_base", value:"4.0");\n'
+                'script_tag(name:"summary", value:"Foo Bar...");\n'
+                'script_dependencies("example.inc");\n'
+            )
+            fake_context = self.create_fake_file_plugin_context(
+                nasl_file=path, file_content=content, root=tmpdir
+            )
+            plugin = CheckDependencies(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 0)
+
+    def test_dependency_missing(self):
         dependency = "example2.inc"
-        path = self.dir / "file.nasl"
+        path = here / "file.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar...");\n'
             f'script_dependencies("{dependency}");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        fake_context.root = self.dir
+        fake_context = self.create_fake_file_plugin_context(
+            nasl_file=path, file_content=content, root=here
+        )
         plugin = CheckDependencies(fake_context)
 
         results = list(plugin.run())
@@ -95,3 +82,77 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             "not be found within the VTs.",
             results[0].message,
         )
+
+    def test_enterprise_dependency(self):
+        with self.create_directory() as tmpdir:
+            path = tmpdir / "file.nasl"
+            example = tmpdir / "enterprise" / "example.inc"
+            example.parent.mkdir()
+            example.touch()
+            content = (
+                'script_tag(name:"cvss_base", value:"4.0");\n'
+                'script_tag(name:"summary", value:"Foo Bar...");\n'
+                'script_dependencies("enterprise/example.inc");\n'
+            )
+            fake_context = self.create_fake_file_plugin_context(
+                nasl_file=path, file_content=content, root=tmpdir
+            )
+            plugin = CheckDependencies(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 0)
+
+    def test_policy_warning(self):
+        with self.create_directory() as tmpdir:
+            path = tmpdir / "file.nasl"
+            example = tmpdir / "Policy" / "example.inc"
+            example.parent.mkdir()
+            example.touch()
+            content = (
+                'script_tag(name:"cvss_base", value:"4.0");\n'
+                'script_tag(name:"summary", value:"Foo Bar...");\n'
+                'script_dependencies("Policy/example.inc");\n'
+            )
+            fake_context = self.create_fake_file_plugin_context(
+                nasl_file=path, file_content=content, root=tmpdir
+            )
+            plugin = CheckDependencies(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 1)
+
+            self.assertIsInstance(results[0], LinterWarning)
+            self.assertEqual(
+                "The script dependency Policy/example.inc is in a "
+                "subdirectory, which might be misplaced.",
+                results[0].message,
+            )
+
+    def test_error(self):
+        with self.create_directory() as tmpdir:
+            path = tmpdir / "file.nasl"
+            example = tmpdir / "foo" / "example.inc"
+            example.parent.mkdir()
+            example.touch()
+            content = (
+                'script_tag(name:"cvss_base", value:"4.0");\n'
+                'script_tag(name:"summary", value:"Foo Bar...");\n'
+                'script_dependencies("foo/example.inc");\n'
+            )
+            fake_context = self.create_fake_file_plugin_context(
+                nasl_file=path, file_content=content, root=tmpdir
+            )
+            plugin = CheckDependencies(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 1)
+
+            self.assertIsInstance(results[0], LinterError)
+            self.assertEqual(
+                "The script dependency foo/example.inc is within a "
+                "subdirectory, which is not allowed.",
+                results[0].message,
+            )
