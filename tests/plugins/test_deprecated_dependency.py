@@ -17,6 +17,7 @@
 
 from pathlib import Path
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterError
 from troubadix.plugins.deprecated_dependency import CheckDeprecatedDependency
 
@@ -29,7 +30,10 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.dir = Path(self.tempdir) / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
-        self.dep.write_text("script_category(ACT_ATTACK);\n exit(66);")
+        self.dep.write_text(
+            "script_category(ACT_ATTACK);\n exit(66);",
+            encoding=CURRENT_ENCODING,
+        )
 
         return super().setUp()
 
