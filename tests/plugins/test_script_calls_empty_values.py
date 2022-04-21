@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_calls_empty_values import (
@@ -29,16 +28,15 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-
         content = (
             "script_category(ACT_INIT);\n"
             'script_xref(name: "URL", value:"http://example.com");\n'
             'script_tag(name:"foo", value:"bar");\n'
             'script_add_preferences("");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptCallsEmptyValues(fake_context)
 
         results = list(plugin.run())
@@ -51,9 +49,9 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
             'script_xref(name: "URL",value:"");\n'
             'script_tag(name:"", value:"");'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptCallsEmptyValues(fake_context)
 
         results = list(plugin.run())

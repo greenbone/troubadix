@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterWarning
 from troubadix.plugins import CheckTodoTbd
@@ -32,9 +31,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"TODO");\n'
             'script_tag(name:"impact", value:"@todo");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTodoTbd(fake_context)
 
         results = list(plugin.run())
@@ -49,9 +48,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTodoTbd(fake_context)
 
         results = list(plugin.run())
@@ -66,9 +65,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTodoTbd(fake_context)
 
         results = list(plugin.run())
@@ -95,9 +94,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTodoTbd(fake_context)
 
         results = list(plugin.run())
@@ -124,9 +123,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTodoTbd(fake_context)
 
         results = list(plugin.run())
@@ -153,9 +152,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"A value");\n'
             'script_tag(name:"impact", value:"A value");##@todo\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
         plugin = CheckTodoTbd(fake_context)
 
         results = list(plugin.run())

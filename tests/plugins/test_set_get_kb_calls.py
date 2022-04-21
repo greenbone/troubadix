@@ -16,7 +16,6 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.set_get_kb_calls import CheckWrongSetGetKBCalls
@@ -32,9 +31,9 @@ class CheckWrongSetGetKBCallTestCase(PluginTestCase):
             'get_kb_item("kb/key");\n'
             'get_kb_list("kb/key");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckWrongSetGetKBCalls(fake_context)
 
         results = list(plugin.run())
@@ -50,9 +49,9 @@ class CheckWrongSetGetKBCallTestCase(PluginTestCase):
             'replace_kb_item(name:"kbkey", name:"kbkey");\n'
             'get_kb_item(name:"kbkey");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckWrongSetGetKBCalls(fake_context)
 
         results = list(plugin.run())

@@ -16,20 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
-from troubadix.helper.helper import _ROOT
 from troubadix.plugin import LinterError
 from troubadix.plugins.deprecated_dependency import CheckDeprecatedDependency
 
-from . import PluginTestCase
-
-here = Path.cwd()
+from . import PluginTestCase, TemporaryDirectory
 
 
 class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def setUp(self) -> None:
-        self.dir = here / _ROOT / "foo"
+        self.tempdir = TemporaryDirectory()
+        self.dir = Path(self.tempdir) / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text("script_category(ACT_ATTACK);\n exit(66);")
@@ -37,8 +34,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         return super().setUp()
 
     def tearDown(self) -> None:
-        self.dep.unlink()
-        self.dir.rmdir()
+        self.tempdir.cleanup()
 
     def test_ok(self):
         path = self.dir / "file.nasl"
@@ -47,9 +43,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -63,9 +59,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_category(ACT_ATTACK);"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -80,9 +76,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_category(ACT_ATTACK);\n"
             "exit(66);"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -97,9 +93,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_category(ACT_ATTACK);\n"
             'script_tag(name:"deprecated", value:TRUE);'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -116,10 +112,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        fake_context.root = self.dir
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content, root=self.dir
+        )
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -141,10 +136,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_category(ACT_SCANNER);"
         )
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        fake_context.root = self.dir
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content, root=self.dir
+        )
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())

@@ -15,7 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.misplaced_compare_in_if import CheckMisplacedCompareInIf
@@ -32,9 +31,9 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -50,9 +49,9 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'if( variable >< "text" ) {}\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -75,9 +74,9 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'if( variable >< "text" )\nexit(1);\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())

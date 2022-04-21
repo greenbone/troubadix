@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.grammar import CheckGrammar
@@ -33,9 +32,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         ).splitlines()
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.lines = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, lines=content
+        )
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -52,9 +51,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# is prone to a security bypass vulnerabilities\n"
         ).splitlines()
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.lines = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, lines=content
+        )
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -78,9 +77,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# refer the Reference\n"
         ).splitlines()
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.lines = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, lines=content
+        )
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())

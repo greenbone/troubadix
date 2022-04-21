@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_family import CheckScriptFamily
@@ -33,9 +32,9 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             "script_bugtraq_id(00000);\n"
             'script_family("FreeBSD Local Security Checks");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckScriptFamily(fake_context)
 
         results = list(plugin.run())
@@ -50,9 +49,9 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             "script_bugtraq_id(00000);\n"
             'script_family("TestTest");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckScriptFamily(fake_context)
 
         results = list(plugin.run())
@@ -70,9 +69,9 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             "script_bugtraq_id(00000);\n"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckScriptFamily(fake_context)
 
         results = list(plugin.run())
@@ -90,9 +89,9 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             'script_family("???\\");\n'
             "script_bugtraq_id(00000);\n"
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
         plugin = CheckScriptFamily(fake_context)
 
         results = list(plugin.run())

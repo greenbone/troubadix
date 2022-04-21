@@ -15,7 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from unittest.mock import MagicMock
+from pathlib import Path
+
 from troubadix.plugins.qod import (
     VALID_QOD_NUM_VALUES,
     VALID_QOD_TYPES,
@@ -25,13 +26,13 @@ from . import PluginTestCase
 
 
 class CheckQodTestCase(PluginTestCase):
-    nasl_file = "some/file.nasl"
+    nasl_file = Path("some/file.nasl")
 
     def test_ok_qod_num(self):
         content = 'script_tag(name:"qod", value:97);'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())
@@ -41,9 +42,9 @@ class CheckQodTestCase(PluginTestCase):
     def test_ok_qod_type(self):
         content = 'script_tag(name:"qod_type", value:"exploit");'
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())
@@ -51,9 +52,9 @@ class CheckQodTestCase(PluginTestCase):
 
     def test_missing_qod(self):
         content = 'script_tag(name:"foo", value:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())
@@ -66,9 +67,9 @@ class CheckQodTestCase(PluginTestCase):
             'script_tag(name:"qod_type", value:"exploit");\n'
             'script_tag(name:"qod", value:97);'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())
@@ -78,9 +79,9 @@ class CheckQodTestCase(PluginTestCase):
 
     def test_wrong_qod_num_str(self):
         content = 'script_tag(name:"qod", value:"foo");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())
@@ -95,9 +96,9 @@ class CheckQodTestCase(PluginTestCase):
 
     def test_wrong_qod_num_int(self):
         content = 'script_tag(name:"qod", value:2);'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())
@@ -112,9 +113,9 @@ class CheckQodTestCase(PluginTestCase):
 
     def test_wrong_qod_type(self):
         content = 'script_tag(name:"qod_type", value:"foo");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.nasl_file
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.nasl_file, file_content=content
+        )
         plugin = CheckQod(fake_context)
 
         results = list(plugin.run())

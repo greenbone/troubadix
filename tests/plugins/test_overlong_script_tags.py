@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.overlong_script_tags import CheckOverlongScriptTags
@@ -35,9 +34,9 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
             'script_tag(name:"solution", value:"Shorter than 1000");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -47,9 +46,9 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_no_nasl_file(self):
         path = Path("some/file.inc")
         content = 'script_tag(name:"summary", value:"Shorter than 1000");\n'
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -65,9 +64,9 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             'script_tag(name:"insight", value:"Shorter than 1000");\n'
             'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -130,9 +129,9 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -247,9 +246,9 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -554,9 +553,9 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())

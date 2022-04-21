@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
+
 from troubadix.helper import CURRENT_ENCODING
 
 from troubadix.plugin import LinterError
@@ -31,12 +31,10 @@ root = Path(__file__).parent / "test_files"
 class TestBadwords(PluginTestCase):
     def test_files(self):
         nasl_file = root / "fail_badwords.nasl"
-
-        context = MagicMock()
-        context.nasl_file = nasl_file
-        context.lines = nasl_file.read_text(
-            encoding=CURRENT_ENCODING
-        ).splitlines()
+        context = self.create_file_plugin_context(
+            nasl_file=nasl_file,
+            lines=nasl_file.read_text(encoding=CURRENT_ENCODING).splitlines(),
+        )
         plugin = CheckBadwords(context)
 
         results = list(plugin.run())
@@ -56,9 +54,9 @@ class TestBadwords(PluginTestCase):
         path = Path("some/find_service3.nasl")
         content = "OpenVAS-8 and probably prior\nOpenVAS-9"
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.lines = content.splitlines()
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
 
         plugin = CheckBadwords(fake_context)
         results = list(plugin.run())

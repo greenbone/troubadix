@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_xref_form import CheckScriptXrefForm
@@ -28,9 +27,9 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_ok(self):
         content = 'script_xref(name: "foo", value:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -39,9 +38,9 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_name(self):
         content = 'script_xref(nammmme: "foo", value:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +55,9 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_value(self):
         content = 'script_xref(name: "foo", valueeeee:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -68,9 +67,9 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_missing_parameters(self):
         content = 'script_xref("foo", "bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())

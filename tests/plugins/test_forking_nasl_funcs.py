@@ -17,7 +17,6 @@
 
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
@@ -35,9 +34,9 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckForkingNaslFuncs(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +55,9 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
             "if( ! infos = get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, "
             'service:"www" ) )\nexit( 0 );\n'
         )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckForkingNaslFuncs(fake_context)
 
         results = list(plugin.run())
@@ -87,9 +86,9 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
             ")\nexit(0);\n"
         )
 
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
         plugin = CheckForkingNaslFuncs(fake_context)
 
         results = list(plugin.run())

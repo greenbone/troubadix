@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_tag_whitespaces import CheckScriptTagWhitespaces
@@ -28,9 +27,9 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_ok(self):
         content = 'script_tag(name: "foo", value:"bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -39,9 +38,9 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_leading_whitespace(self):
         content = 'script_tag(name: "foo", value:" bar");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +55,9 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_trailing_whitespace(self):
         content = 'script_tag(name: "foo", value:"bar\n");'
-        fake_context = MagicMock()
-        fake_context.nasl_file = self.path
-        fake_context.file_content = content
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
