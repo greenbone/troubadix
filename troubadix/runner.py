@@ -275,6 +275,9 @@ class Runner:
 
             results = list(plugin.run())
 
+            if self._fix:
+                results.extend(plugin.fix())
+
             with self._term.indent():
                 if results and self.verbose > 0 or self.verbose > 1:
                     self._report_bold_info(f"Run plugin {plugin.name}")
@@ -293,6 +296,9 @@ class Runner:
                 plugin.name,
                 plugin.run(),
             )
+
+            if self._fix:
+                results.add_plugin_results(plugin.name, plugin.fix())
 
         return results
 
