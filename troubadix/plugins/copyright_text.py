@@ -20,7 +20,12 @@ from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import (
+    FileContentPlugin,
+    LinterError,
+    LinterFix,
+    LinterResult,
+)
 
 CORRECT_COPYRIGHT_PHRASE = (
     "# Some text descriptions might be excerpted from (a) referenced\n"
@@ -69,6 +74,8 @@ class CheckCopyrightText(FileContentPlugin):
         # Some text descriptions might be excerpted from (a) referenced
         # source(s), and are Copyright (C) by the respective right holder(s).
         """
+        self.new_file_content = None
+
         if nasl_file.suffix == ".inc":
             return
 
@@ -92,13 +99,24 @@ class CheckCopyrightText(FileContentPlugin):
             re.MULTILINE,
         )
         if match:
-            file_content = file_content.replace(
+            self.new_file_content = file_content.replace(
                 match.group(0),
                 CORRECT_COPYRIGHT_PHRASE,
             )
 
-            nasl_file.write_text(data=file_content, encoding=CURRENT_ENCODING)
             yield LinterError(
-                "The VT was using an incorrect copyright statement. Replaced "
-                f"with:\n{CORRECT_COPYRIGHT_PHRASE}"
+                "The VT was using an incorrect copyright statement."
             )
+
+    def fix(self) -> Iterator[LinterResult]:
+        if not self.new_file_content:
+            return
+
+        nasl_file = self.context.nasl_file
+        nasl_file.write_text(
+            data=self.new_file_content, encoding=CURRENT_ENCODING
+        )
+
+        yield LinterFix(
+            f"The copyright has been updated to {CORRECT_COPYRIGHT_PHRASE}"
+        )

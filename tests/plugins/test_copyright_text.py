@@ -18,7 +18,7 @@
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import LinterError
+from troubadix.plugin import LinterError, LinterFix
 from troubadix.plugins.copyright_text import (
     CORRECT_COPYRIGHT_PHRASE,
     CheckCopyrightText,
@@ -70,11 +70,6 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             nasl_file=path, file_content=content
         )
 
-        expected_content = (
-            f"{CORRECT_COPYRIGHT_PHRASE}\n"
-            '  script_copyright("Copyright (C) 134");'
-        )
-
         plugin = CheckCopyrightText(fake_context)
 
         results = list(plugin.run())
@@ -89,48 +84,59 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "The VT was using an incorrect copyright statement. Replaced "
-            f"with:\n{CORRECT_COPYRIGHT_PHRASE}",
+            "The VT was using an incorrect copyright statement.",
             results[1].message,
         )
-        self.assertEqual(
-            path.read_text(encoding=CURRENT_ENCODING), expected_content
-        )
-
-        if path.exists():
-            path.unlink()
 
     def test_wrong_copyright_text(self):
-        with self.create_directory() as tempdir:
-            path = tempdir / "file.nasl"
+        path = Path("file.nasl")
 
-            for wrong_text in WRONG_TEXTS:
+        for wrong_text in WRONG_TEXTS:
+            content = (
+                "# Copyright (C) 2017 Greenbone Networks GmbH\n"
+                f"{wrong_text}"
+                '  script_copyright("Copyright (C) 1234");'
+            )
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content
+            )
+
+            plugin = CheckCopyrightText(fake_context)
+
+            results = list(plugin.run())
+            self.assertEqual(len(results), 1)
+
+            self.assertIsInstance(results[0], LinterError)
+            self.assertEqual(
+                "The VT was using an incorrect copyright statement.",
+                results[0].message,
+            )
+
+    def test_fix_wrong_copyright_text(self):
+        for wrong_text in WRONG_TEXTS:
+            with self.create_directory() as tempdir:
+                path = tempdir / "file.nasl"
                 content = (
                     "# Copyright (C) 2017 Greenbone Networks GmbH\n"
                     f"{wrong_text}"
                     '  script_copyright("Copyright (C) 1234");'
                 )
+                path.write_text(content, encoding=CURRENT_ENCODING)
+
                 fake_context = self.create_file_plugin_context(
                     nasl_file=path, file_content=content
                 )
 
                 plugin = CheckCopyrightText(fake_context)
 
-                expected_content = (
-                    "# Copyright (C) 2017 Greenbone Networks GmbH\n"
-                    f"{CORRECT_COPYRIGHT_PHRASE}\n"
-                    '  script_copyright("Copyright (C) 1234");'
-                )
+                list(plugin.run())
 
-                results = list(plugin.run())
+                results = list(plugin.fix())
                 self.assertEqual(len(results), 1)
 
-                self.assertIsInstance(results[0], LinterError)
+                self.assertIsInstance(results[0], LinterFix)
                 self.assertEqual(
-                    "The VT was using an incorrect copyright statement. "
-                    f"Replaced with:\n{CORRECT_COPYRIGHT_PHRASE}",
+                    "The copyright has been updated to "
+                    f"{CORRECT_COPYRIGHT_PHRASE}",
                     results[0].message,
-                )
-                self.assertEqual(
-                    path.read_text(encoding=CURRENT_ENCODING), expected_content
                 )

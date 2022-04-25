@@ -23,13 +23,21 @@ import re
 from typing import Iterator
 from troubadix.helper import CURRENT_ENCODING
 
-from troubadix.plugin import LinterError, LinterResult, FilePlugin
+from troubadix.plugin import (
+    LinterError,
+    LinterFix,
+    LinterResult,
+    FilePlugin,
+    LinterWarning,
+)
 
 
 class UpdateModificationDate(FilePlugin):
     name = "update_modification_date"
 
     def run(self) -> Iterator[LinterResult]:
+        self.new_file_content = None
+
         # update modification date
         file_content = self.context.file_content
 
@@ -79,16 +87,28 @@ class UpdateModificationDate(FilePlugin):
         # "2021-03-24T10:08:26+0000"
         correctly_formated_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
 
-        file_content = file_content.replace(
+        self.new_file_content = file_content.replace(
             version_template.format(date=old_version),
             version_template.format(date=correctly_formated_version),
         )
-        self.context.nasl_file.write_text(
-            file_content, encoding=CURRENT_ENCODING
+        self.old_version = old_version
+        self.new_version = correctly_formated_version
+        self.old_datetime = old_datetime
+        self.new_datetime = correctly_formated_datetime
+
+        yield LinterWarning(
+            f"Outdated last_modification date. Was {old_datetime} "
+            f"and should be {correctly_formated_datetime}"
         )
 
-        yield LinterResult(
-            f"Replaced modification_date {old_datetime} "
-            f"with {correctly_formated_datetime} and script_version "
-            f"{old_version} with {correctly_formated_version}."
-        )
+    def fix(self) -> Iterator[LinterResult]:
+        if self.new_file_content:
+            self.context.nasl_file.write_text(
+                self.new_file_content, encoding=CURRENT_ENCODING
+            )
+
+            yield LinterFix(
+                f"Replaced modification_date {self.old_datetime} "
+                f"with {self.new_datetime} and script_version "
+                f"{self.old_version} with {self.new_version}."
+            )

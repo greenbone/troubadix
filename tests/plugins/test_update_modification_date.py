@@ -18,14 +18,14 @@
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import LinterError, LinterResult
+from troubadix.plugin import LinterError, LinterFix, LinterWarning
 from troubadix.plugins.update_modification_date import UpdateModificationDate
 
 from . import PluginTestCase
 
 
 class TestUpdateModificationDate(PluginTestCase):
-    def test_change_date(self):
+    def test_fix_last_modifaction_date(self):
         nasl_file = Path(__file__).parent / "test.nasl"
 
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
@@ -34,9 +34,13 @@ class TestUpdateModificationDate(PluginTestCase):
         )
         plugin = UpdateModificationDate(fake_context)
 
-        output = plugin.run()
+        results = list(plugin.run())
 
-        self.assertIsInstance(next(output), LinterResult)
+        self.assertIsInstance(results[0], LinterWarning)
+
+        results = list(plugin.fix())
+
+        self.assertIsInstance(results[0], LinterFix)
 
         new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertNotEqual(content, new_content)
