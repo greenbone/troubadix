@@ -90,6 +90,7 @@ class ResultCounts:
         self.result_counts = defaultdict(resultsdict)
         self.error_count = 0
         self.warning_count = 0
+        self.fix_count = 0
 
     def add_error(self, plugin: str):
         self.error_count += 1
@@ -98,6 +99,9 @@ class ResultCounts:
     def add_warning(self, plugin: str):
         self.warning_count += 1
         self.result_counts[plugin]["warning"] += 1
+
+    def add_fix(self):
+        self.fix_count += 1
 
 
 class Runner:
