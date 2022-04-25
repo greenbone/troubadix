@@ -33,6 +33,7 @@ from troubadix.helper.patterns import (
 from troubadix.plugin import (
     FilesPluginContext,
     LinterError,
+    LinterFix,
     LinterMessage,
     LinterResult,
     LinterWarning,
@@ -100,8 +101,9 @@ class ResultCounts:
         self.warning_count += 1
         self.result_counts[plugin]["warning"] += 1
 
-    def add_fix(self):
+    def add_fix(self, plugin: str):
         self.fix_count += 1
+        self.result_counts[plugin]["fix"] += 1
 
 
 class Runner:
@@ -114,6 +116,7 @@ class Runner:
         excluded_plugins: Iterable[str] = None,
         included_plugins: Iterable[str] = None,
         update_date: bool = False,
+        fix: bool = False,
         verbose: int = 0,
         statistic: bool = True,
         log_file: Path = None,
@@ -133,6 +136,7 @@ class Runner:
         self._n_jobs = n_jobs
         self._log_file = log_file
         self._root = root
+        self._fix = fix
         self.verbose = verbose
 
         # this dict will store the result counts for the statistic
@@ -149,7 +153,7 @@ class Runner:
 
     def _report_results(self, results: Iterable[LinterMessage]) -> None:
         for result in results:
-            if isinstance(result, LinterResult):
+            if isinstance(result, (LinterResult, LinterFix)):
                 self._report_ok(result.message)
             elif isinstance(result, LinterError):
                 self._report_error(result.message)
@@ -202,11 +206,13 @@ class Runner:
         for (plugin, count) in self.result_counts.result_counts.items():
             if count["error"] > 0:
                 self._term.error(
-                    f"{plugin:50} {count['error']:8}  {count['warning']:8}"
+                    f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
+                    f"{count['fix']:8}"
                 )
             else:
                 self._term.warning(
-                    f"{plugin:50} {count['error']:8}  {count['warning']:8}"
+                    f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
+                    f"{count['fix']:8}"
                 )
 
         self._term.print("-" * 69)
@@ -214,6 +220,7 @@ class Runner:
         self._term.info(
             f"{'sum':50} {self.result_counts.warning_count:8}"
             f"  {self.result_counts.error_count:8}"
+            f"  {self.result_counts.fix_count:8}"
         )
 
     def _process_plugin_results(
@@ -230,6 +237,8 @@ class Runner:
                 self.result_counts.add_error(plugin_name)
             elif isinstance(plugin_result, LinterWarning):
                 self.result_counts.add_warning(plugin_name)
+            elif isinstance(plugin_result, LinterFix):
+                self.result_counts.add_fix(plugin_name)
 
         if self.verbose > 0:
             with self._term.indent():
