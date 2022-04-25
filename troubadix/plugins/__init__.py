@@ -34,6 +34,7 @@ from .encoding import CheckEncoding
 from .forking_nasl_funcs import CheckForkingNaslFuncs
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
+from .illegal_characters import CheckIllegalCharacters
 from .http_links_in_tags import CheckHttpLinksInTags
 from .log_messages import CheckLogMessages
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
@@ -80,6 +81,7 @@ _PLUGINS = [
     CheckGetKBOnServices,
     CheckGrammar,
     CheckHttpLinksInTags,
+    CheckIllegalCharacters,
     CheckLogMessages,
     CheckMisplacedCompareInIf,
     CheckMissingDescExit,
