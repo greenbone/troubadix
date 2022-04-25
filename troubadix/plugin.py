@@ -88,6 +88,9 @@ class Plugin(ABC):
     def run(self) -> Iterator[LinterResult]:
         pass
 
+    def fix(self) -> Iterator[LinterResult]:
+        return []
+
 
 class FilesPlugin(Plugin):
     """A plugin that does checks over all files"""
