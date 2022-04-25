@@ -40,6 +40,10 @@ class LinterError(LinterResult):
     """A error found during a check"""
 
 
+class LinterFix(LinterResult):
+    """A fix that has been applied"""
+
+
 class FilePluginContext:
     def __init__(
         self,
