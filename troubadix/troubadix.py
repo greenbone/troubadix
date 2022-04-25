@@ -168,7 +168,7 @@ def main(args=None):
     info(f"Start linting {len(files)} files ... ")
 
     # Return exit with 1 if error exist
-    if runner.run(files):
+    if not runner.run(files):
         sys.exit(1)
 
 

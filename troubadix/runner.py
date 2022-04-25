@@ -309,8 +309,8 @@ class Runner:
         if self.statistic:
             self._report_statistic()
 
-        # Return true if error exist
-        return self.result_counts.error_count > 0
+        # Return true if no error exists
+        return self.result_counts.error_count == 0
 
     def check_file(self, file_path: Path) -> FileResults:
         results = FileResults(file_path)
