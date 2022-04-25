@@ -81,23 +81,23 @@ class FileResults:
         return self.has_plugin_results
 
 
+def resultsdict():
+    return defaultdict(int)
+
+
 class ResultCounts:
     def __init__(self):
-        self.result_counts = defaultdict(int)
+        self.result_counts = defaultdict(resultsdict)
         self.error_count = 0
         self.warning_count = 0
 
-    def add_result_counts(self, plugin: str, count: int):
-        """Add the number of results (count) to the dict for the
-        plugin name (plugin)"""
-        if count > 0:
-            self.result_counts[plugin] += count
-
-    def add_error(self):
+    def add_error(self, plugin: str):
         self.error_count += 1
+        self.result_counts[plugin]["error"] += 1
 
-    def add_warning(self):
+    def add_warning(self, plugin: str):
         self.warning_count += 1
+        self.result_counts[plugin]["warning"] += 1
 
 
 class Runner:
@@ -191,21 +191,26 @@ class Runner:
         self._report_info(f"Running plugins: {plugins}")
 
     def _report_statistic(self) -> None:
-        self._term.print(f"{'Plugin':50} {'Error Count':11}")
-        self._term.print("-" * 62)
+        """Print a Error/Warning summary from the different plugins"""
+        self._term.print(f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}")
+        self._term.print("-" * 69)
 
         for (plugin, count) in self.result_counts.result_counts.items():
-            self._term.error(f"{plugin:50} {count:11}")
+            if count["error"] > 0:
+                self._term.error(
+                    f"{plugin:50} {count['error']:8}  {count['warning']:8}"
+                )
+            else:
+                self._term.warning(
+                    f"{plugin:50} {count['error']:8}  {count['warning']:8}"
+                )
 
-        self._term.print("-" * 62)
-        self._term.error(f"{'warn':50} {self.result_counts.warning_count:11}")
-        self._term.error(f"{'err':50} {self.result_counts.error_count:11}")
+        self._term.print("-" * 69)
 
-        counts = (
-            self.result_counts.error_count + self.result_counts.warning_count
+        self._term.info(
+            f"{'sum':50} {self.result_counts.warning_count:8}"
+            f"  {self.result_counts.error_count:8}"
         )
-
-        self._term.info(f"{'sum':50} {counts:11}")
 
     def _process_plugin_results(
         self, plugin_name: str, plugin_results: Iterable[LinterResult]
@@ -216,13 +221,11 @@ class Runner:
             self._report_ok(f"No results for plugin {plugin_name}")
 
         # add the results to the statistic
-        self.result_counts.add_result_counts(plugin_name, len(plugin_results))
-        # Count errors
         for plugin_result in plugin_results:
             if isinstance(plugin_result, LinterError):
-                self.result_counts.add_error()
+                self.result_counts.add_error(plugin_name)
             elif isinstance(plugin_result, LinterWarning):
-                self.result_counts.add_warning()
+                self.result_counts.add_warning(plugin_name)
 
         if self.verbose > 0:
             with self._term.indent():
