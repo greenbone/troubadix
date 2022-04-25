@@ -260,7 +260,7 @@ class Runner:
         ) in results.plugin_results.items():
             self._process_plugin_results(plugin_name, plugin_results)
 
-    def pre_run(self, nasl_files: Iterable[Path]) -> None:
+    def _check_files(self, nasl_files: Iterable[Path]) -> None:
         """Running Plugins that do not require a run per file,
         but a single execution"""
         context = FilesPluginContext(root=self._root, nasl_files=nasl_files)
@@ -281,26 +281,29 @@ class Runner:
 
                 self._process_plugin_results(plugin.name, results)
 
-    def run(self, files: Iterable[Path]) -> bool:
-        if not len(self.plugins):
-            raise TroubadixException("No Plugin found.")
+    def _check_file(self, file_path: Path) -> FileResults:
+        results = FileResults(file_path)
+        context = FilePluginContext(
+            root=self._root, nasl_file=file_path.resolve()
+        )
 
-        # print plugins that will be executed
-        if self.verbose > 2:
-            self._report_plugins()
+        for plugin_class in self.plugins:
+            plugin = plugin_class(context)
+            results.add_plugin_results(
+                plugin.name,
+                plugin.run(),
+            )
 
-        # statistic variables
+        return results
+
+    def _check_single_files(self, files: Iterable[Path]):
+        """Run all plugins that check single files"""
         files_count = len(files)
-        start = datetime.datetime.now()
-
-        # run single time execution plugins
-        self.pre_run(files)
-
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
             try:
                 for i, results in enumerate(
                     pool.imap_unordered(
-                        self.check_file, files, chunksize=CHUNKSIZE
+                        self._check_file, files, chunksize=CHUNKSIZE
                     ),
                     1,
                 ):
@@ -320,24 +323,23 @@ class Runner:
                 pool.terminate()
                 pool.join()
 
+    def run(self, files: Iterable[Path]) -> bool:
+        if not len(self.plugins):
+            raise TroubadixException("No Plugin found.")
+
+        # print plugins that will be executed
+        if self.verbose > 2:
+            self._report_plugins()
+
+        # statistic variables
+        start = datetime.datetime.now()
+
+        self._check_files(files)
+        self._check_single_files(files)
+
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         if self.statistic:
             self._report_statistic()
 
         # Return true if no error exists
         return self.result_counts.error_count == 0
-
-    def check_file(self, file_path: Path) -> FileResults:
-        results = FileResults(file_path)
-        context = FilePluginContext(
-            root=self._root, nasl_file=file_path.resolve()
-        )
-
-        for plugin_class in self.plugins:
-            plugin = plugin_class(context)
-            results.add_plugin_results(
-                plugin.name,
-                plugin.run(),
-            )
-
-        return results
