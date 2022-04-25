@@ -23,11 +23,15 @@ from pathlib import Path
 
 from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
+
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
 
-from troubadix.plugin import LinterError, LinterResult
 from troubadix.plugins import _PLUGINS
+from troubadix.plugins.badwords import CheckBadwords
+from troubadix.plugins.copyright_text import CheckCopyrightText
+from troubadix.plugins.cvss_format import CheckCVSSFormat
+from troubadix.plugins.missing_desc_exit import CheckMissingDescExit
 from troubadix.runner import Runner, TroubadixException
 
 _here = Path(__file__).parent
@@ -74,8 +78,8 @@ class TestRunner(unittest.TestCase):
 
     def test_runner_with_included_plugins(self):
         included_plugins = [
-            "CheckBadwords",
-            "CheckCopyRightYearPlugin",
+            CheckBadwords.name,
+            CheckCopyrightText.name,
         ]
         runner = Runner(
             n_jobs=1,
@@ -84,8 +88,10 @@ class TestRunner(unittest.TestCase):
             root=self.root,
         )
 
+        self.assertEqual(len(runner.plugins), 2)
+
         for plugin in runner.plugins:
-            self.assertIn(plugin.__name__, included_plugins)
+            self.assertIn(plugin.name, included_plugins)
 
     def test_runner_run_ok(self):
         nasl_file = (
@@ -97,11 +103,8 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "test_valid_oid.nasl"
         )
-        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-
-        # Check sys exit 1
         included_plugins = [
-            "CheckMissingDescExit",
+            CheckMissingDescExit.name,
         ]
         runner = Runner(
             n_jobs=1,
@@ -113,32 +116,12 @@ class TestRunner(unittest.TestCase):
             sys_exit = runner.run([nasl_file])
 
         self.assertTrue(sys_exit)
-
-        # Test update_date
-        runner = Runner(
-            n_jobs=1,
-            term=self._term,
-            update_date=True,
-            root=self.root,
-        )
-
-        results = runner.check_file(nasl_file)
-
-        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        self.assertNotEqual(content, new_content)
-
-        self.assertEqual(len(results.generic_results), 0)
-        self.assertEqual(len(results.plugin_results), 1)
+        self.assertEqual(runner.result_counts.error_count, 0)
+        self.assertEqual(runner.result_counts.warning_count, 0)
+        self.assertEqual(runner.result_counts.fix_count, 0)
         self.assertEqual(
-            len(results.plugin_results["update_modification_date"]), 1
+            runner.result_counts.result_counts[CheckMissingDescExit.name], 0
         )
-        self.assertIsInstance(
-            results.plugin_results["update_modification_date"][0],
-            LinterResult,
-        )
-
-        # revert changes for the next time
-        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
     def test_runner_run_error(self):
         nasl_file = (
@@ -150,12 +133,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "fail.nasl"
         )
-        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-
-        # Check sys exit 1
-        included_plugins = [
-            "CheckCVSSFormat",
-        ]
+        included_plugins = [CheckCVSSFormat.name]
         runner = Runner(
             n_jobs=1,
             included_plugins=included_plugins,
@@ -168,30 +146,11 @@ class TestRunner(unittest.TestCase):
 
         self.assertFalse(sys_exit)
 
-        # Test update_date
-        runner = Runner(
-            n_jobs=1,
-            term=self._term,
-            update_date=True,
-            root=self.root,
-        )
-
-        results = runner.check_file(nasl_file)
-
-        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        self.assertEqual(content, new_content)
-
-        self.assertEqual(len(results.generic_results), 0)
-        self.assertEqual(len(results.plugin_results), 1)
+        self.assertEqual(runner.result_counts.error_count, 4)
+        self.assertEqual(runner.result_counts.warning_count, 0)
+        self.assertEqual(runner.result_counts.fix_count, 0)
         self.assertEqual(
-            len(results.plugin_results["update_modification_date"]), 1
-        )
-
-        error = results.plugin_results["update_modification_date"][0]
-        self.assertIsInstance(error, LinterError)
-        self.assertIn(
-            "VT does not contain a modification day script tag.",
-            error.message,
+            runner.result_counts.result_counts[CheckCVSSFormat.name], 2
         )
 
     def test_runner_run_fail_with_verbose_level_2(self):
