@@ -286,7 +286,8 @@ class Runner:
                 for i, results in enumerate(
                     pool.imap_unordered(
                         self.check_file, files, chunksize=CHUNKSIZE
-                    )
+                    ),
+                    1,
                 ):
                     if results and self.verbose > 0 or self.verbose > 1:
                         # only print the part "common/some_nasl.nasl"
