@@ -112,7 +112,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
 
-        self.assertFalse(sys_exit)
+        self.assertTrue(sys_exit)
 
         # Test update_date
         runner = Runner(
@@ -166,7 +166,7 @@ class TestRunner(unittest.TestCase):
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
 
-        self.assertTrue(sys_exit)
+        self.assertFalse(sys_exit)
 
         # Test update_date
         runner = Runner(
