@@ -138,7 +138,7 @@ class Runner:
         self._n_jobs = n_jobs
         self._log_file = log_file
         self._root = root
-        self._fix = fix
+        self._fix = fix or update_date
         self.verbose = verbose
 
         # this dict will store the result counts for the statistic
