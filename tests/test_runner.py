@@ -120,7 +120,22 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(runner.result_counts.warning_count, 0)
         self.assertEqual(runner.result_counts.fix_count, 0)
         self.assertEqual(
-            runner.result_counts.result_counts[CheckMissingDescExit.name], 0
+            runner.result_counts.result_counts[CheckMissingDescExit.name][
+                "error"
+            ],
+            0,
+        )
+        self.assertEqual(
+            runner.result_counts.result_counts[CheckMissingDescExit.name][
+                "warning"
+            ],
+            0,
+        )
+        self.assertEqual(
+            runner.result_counts.result_counts[CheckMissingDescExit.name][
+                "fix"
+            ],
+            0,
         )
 
     def test_runner_run_error(self):
@@ -150,7 +165,14 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(runner.result_counts.warning_count, 0)
         self.assertEqual(runner.result_counts.fix_count, 0)
         self.assertEqual(
-            runner.result_counts.result_counts[CheckCVSSFormat.name], 2
+            runner.result_counts.result_counts[CheckCVSSFormat.name]["error"], 2
+        )
+        self.assertEqual(
+            runner.result_counts.result_counts[CheckCVSSFormat.name]["warning"],
+            0,
+        )
+        self.assertEqual(
+            runner.result_counts.result_counts[CheckCVSSFormat.name]["fix"], 0
         )
 
     def test_runner_run_fail_with_verbose_level_2(self):

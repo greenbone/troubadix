@@ -202,28 +202,43 @@ class Runner:
 
     def _report_statistic(self) -> None:
         """Print a Error/Warning summary from the different plugins"""
-        self._term.print(f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}")
-        self._term.print("-" * 69)
+        if self._fix:
+            self._term.print(
+                f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}  {'   Fixes':8}"
+            )
+        else:
+            self._term.print(f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}")
+
+        length = 79 if self._fix else 69
+        self._term.print("-" * length)
 
         for (plugin, count) in self.result_counts.result_counts.items():
-            if count["error"] > 0:
-                self._term.error(
+            if self._fix:
+                line = (
                     f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
                     f"{count['fix']:8}"
                 )
             else:
-                self._term.warning(
-                    f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
-                    f"{count['fix']:8}"
-                )
+                line = f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
 
-        self._term.print("-" * 69)
+            if count["error"] > 0:
+                self._term.error(line)
+            else:
+                self._term.warning(line)
 
-        self._term.info(
-            f"{'sum':50} {self.result_counts.warning_count:8}"
-            f"  {self.result_counts.error_count:8}"
-            f"  {self.result_counts.fix_count:8}"
-        )
+        self._term.print("-" * length)
+
+        if self._fix:
+            self._term.info(
+                f"{'sum':50} {self.result_counts.warning_count:8}"
+                f"  {self.result_counts.error_count:8}"
+                f"  {self.result_counts.fix_count:8}"
+            )
+        else:
+            self._term.info(
+                f"{'sum':50} {self.result_counts.warning_count:8}"
+                f"  {self.result_counts.error_count:8}"
+            )
 
     def _process_plugin_results(
         self, plugin_name: str, plugin_results: Iterable[LinterResult]
