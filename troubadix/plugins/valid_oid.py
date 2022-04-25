@@ -42,15 +42,11 @@ class CheckValidOID(FileContentPlugin):
         Valid:
         script_oid("1.3.6.1.4.1.25623.1.0.12345");
         script_oid('1.3.6.1.4.1.25623.1.0.12345');
-        Any of the OID ranges mentioned in
-        https://intra.greenbone.net/Production/GSF#All_ID_ranges
 
         Not valid:
         script_oid(""); (no OID included)
         script_oid(); (empty tag)
         script_oid("1.3.6.1.4.1.25623.1.12345"); (malformed)
-        A OID range not mentioned in
-        https://intra.greenbone.net/Production/GSF#All_ID_ranges
 
         Args:
             nasl_file: The VT that is going to be checked
@@ -186,7 +182,6 @@ class CheckValidOID(FileContentPlugin):
                     )
                     return
 
-                # https://gitlab.greenbone.net/tpassfeld/next-gen-lsc-poc/blob/4b576e4af40614ac29d1dc8f341026fb5f39d5db/generator/config.cfg#L9-21
                 vendor_number = vendor_number_match.group(1)
 
                 if vendor_number == "1":
@@ -353,8 +348,6 @@ class CheckValidOID(FileContentPlugin):
 
         oid_digit = int(oid_digit_match.group(1))
 
-        # See https://confluence.greenbone.net/display/GSFDEV/OID+Assignment
-        # for a list of valid/currently assigned OID ranges
         if (
             (10000 <= oid_digit <= 29999)
             or (50000 <= oid_digit <= 118999)

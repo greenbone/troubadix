@@ -67,7 +67,6 @@ class CheckLogMessages(FileContentPlugin):
         if cvss_detect and cvss_detect.group("value") == "0.0":
             return
 
-        # jf: Bugfix for https://jira.greenbone.net/browse/FE-1004 ?!
         # log_match = re.search(r'.*(log_message[\s]*\([^)]+\)[\s]*;)',
         #                       file_content, re.MULTILINE)
         log_match = re.search(
