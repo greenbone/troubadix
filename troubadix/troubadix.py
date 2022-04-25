@@ -159,6 +159,7 @@ def main(args=None):
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
         update_date=parsed_args.update_date,
+        fix=parsed_args.fix,
         verbose=parsed_args.verbose,
         statistic=True if not parsed_args.no_statistic else False,
         log_file=parsed_args.log_file,
