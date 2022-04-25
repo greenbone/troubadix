@@ -18,7 +18,7 @@
 import datetime
 import signal
 
-from collections import OrderedDict, defaultdict
+from collections import defaultdict
 from multiprocessing import Pool
 from pathlib import Path
 from typing import Dict, Iterable, Iterator
@@ -62,7 +62,9 @@ def initializer():
 class FileResults:
     def __init__(self, file_path: Path):
         self.file_path = file_path
-        self.plugin_results: Dict[str, Iterable[LinterResult]] = OrderedDict()
+        self.plugin_results: Dict[str, Iterable[LinterResult]] = defaultdict(
+            list
+        )
         self.generic_results: Iterable[LinterResult] = []
         self.has_plugin_results = False
 
@@ -75,7 +77,7 @@ class FileResults:
     ) -> "FileResults":
         results = list(results)
         self.has_plugin_results = self.has_plugin_results or bool(results)
-        self.plugin_results[plugin_name] = results
+        self.plugin_results[plugin_name] += results
         return self
 
     def __bool__(self):
