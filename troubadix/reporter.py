@@ -16,8 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterable
+from typing import List
 from pontos.terminal.terminal import Terminal
+from troubadix.helper.helper import get_path_from_root
 
 from troubadix.plugin import (
     LinterError,
@@ -26,6 +27,7 @@ from troubadix.plugin import (
     LinterResult,
     LinterWarning,
 )
+from troubadix.results import FileResults, ResultCounts
 
 
 class Reporter:
@@ -33,7 +35,9 @@ class Reporter:
         self,
         term: Terminal,
         *,
+        fix: bool = False,
         log_file: Path = None,
+        root: Path,
         statistic: bool = True,
         verbose: int = 0,
     ) -> None:
@@ -41,6 +45,17 @@ class Reporter:
         self._log_file = log_file
         self._statistic = statistic
         self._verbose = verbose
+        self._fix = fix
+        self._files_count = 0
+        self._root = root
+
+        self._result_counts = ResultCounts()
+
+    def set_files_count(self, count: int):
+        self._files_count = count
+
+    def get_result_count(self) -> int:
+        return self._result_counts.error_count
 
     def _report_warning(self, message: str) -> None:
         self._term.warning(message)
@@ -50,7 +65,8 @@ class Reporter:
         self._term.error(message)
         self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
-    def _report_info(self, message: str) -> None:
+    def report_info(self, message: str) -> None:
+        """Report an info message"""
         self._term.info(message)
         self._log_append(f"\t{message}")
 
@@ -62,35 +78,83 @@ class Reporter:
         self._term.ok(message)
         self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
-    def _report_results(self, results: Iterable[LinterMessage]) -> None:
-        for result in results:
-            if isinstance(result, (LinterResult, LinterFix)):
-                self._report_ok(result.message)
-            elif isinstance(result, LinterError):
-                self._report_error(result.message)
-            elif isinstance(result, LinterWarning):
-                self._report_warning(result.message)
+    def _process_plugin_results(
+        self, plugin_name: str, plugin_results: List[LinterResult]
+    ):
+        """Process the results of a plugin: Print/Log results if
+        verbosity/logging fits and count the results"""
+        if plugin_results and self._verbose > 0:
+            self.report_info(f"Results for plugin {plugin_name}")
+        elif self._verbose > 2:
+            self._report_ok(f"No results for plugin {plugin_name}")
 
-    def _report_plugins(self) -> None:
-        if self.pre_run_plugins:
-            pre_run = ", ".join(
-                [plugin.name for plugin in self.pre_run_plugins]
+        # add the results to the statistic and print/log them
+        with self._term.indent():
+            for plugin_result in plugin_results:
+                if isinstance(plugin_result, LinterError):
+                    self._result_counts.add_error(plugin_name)
+                    report = self._report_error
+                elif isinstance(plugin_result, LinterWarning):
+                    self._result_counts.add_warning(plugin_name)
+                    report = self._report_warning
+                elif isinstance(plugin_result, LinterFix):
+                    self._result_counts.add_fix(plugin_name)
+                    report = self._report_ok
+                elif isinstance(plugin_result, LinterMessage):
+                    report = self._report_ok
+
+                if self._verbose > 0:
+                    report(self._report_ok(plugin_result.message))
+
+    def report_single_run_plugin(self, plugin_name: str, plugin_results: List):
+        """Print the currently plugin"""
+        with self._term.indent():
+            if plugin_results and self._verbose > 0 or self._verbose > 1:
+                self._report_bold_info(f"Run plugin {plugin_name}")
+
+            self._process_plugin_results(
+                plugin_name=plugin_name, plugin_results=plugin_results
             )
-            self._report_info(f"Pre-Run Plugins: {pre_run}")
 
-        if self._excluded_plugins:
-            exclude = ", ".join(self._excluded_plugins)
-            self._report_info(f"Excluded Plugins: {exclude}")
+    def report_by_file_plugin(self, results: FileResults, pos: int):
+        if results and self._verbose > 0 or self._verbose > 1:
+            # only print the part "common/some_nasl.nasl"
+            from_root_path = get_path_from_root(results.file_path, self._root)
+            self._report_bold_info(
+                f"Checking {from_root_path} ({pos}/{self._files_count})"
+            )
 
-        if self._included_plugins:
-            include = ", ".join(self._included_plugins)
-            self._report_info(f"Included Plugins: {include}")
+            with self._term.indent():
 
-        plugins = ", ".join([plugin.name for plugin in self.plugins])
-        self._report_info(f"Running plugins: {plugins}")
+                # print the files plugin results
+                for (
+                    plugin_name,
+                    plugin_results,
+                ) in results.plugin_results.items():
+                    self._process_plugin_results(plugin_name, plugin_results)
 
-    def _report_statistic(self) -> None:
+    def report_plugins(self, excluded, included, pre_run) -> None:
+        if self._verbose > 2:
+            if pre_run:
+                self.report_info(
+                    "Pre-Run Plugins: "
+                    f"{', '.join([plugin.name for plugin in pre_run])}"
+                )
+
+            if excluded:
+                self.report_info(f"Excluded Plugins: {', '.join(excluded)}")
+
+            if included:
+                self.report_info(f"Included Plugins: {', '.join(included)}")
+
+            # plugins = ", ".join([plugin.name for plugin in self.plugins])
+            # self.report_info(f"Running plugins: {plugins}")
+
+    def report_statistic(self) -> None:
         """Print a Error/Warning summary from the different plugins"""
+        if not self._statistic:
+            return
+
         if self._fix:
             self._term.print(
                 f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}  {'   Fixes':8}"
@@ -101,7 +165,7 @@ class Reporter:
         length = 79 if self._fix else 69
         self._term.print("-" * length)
 
-        for (plugin, count) in self.result_counts.result_counts.items():
+        for (plugin, count) in self._result_counts.result_counts.items():
             if self._fix:
                 line = (
                     f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
@@ -119,17 +183,23 @@ class Reporter:
 
         if self._fix:
             self._term.info(
-                f"{'sum':50} {self.result_counts.warning_count:8}"
-                f"  {self.result_counts.error_count:8}"
-                f"  {self.result_counts.fix_count:8}"
+                f"{'sum':50} {self._result_counts.warning_count:8}"
+                f"  {self._result_counts.error_count:8}"
+                f"  {self._result_counts.fix_count:8}"
             )
         else:
             self._term.info(
-                f"{'sum':50} {self.result_counts.warning_count:8}"
-                f"  {self.result_counts.error_count:8}"
+                f"{'sum':50} {self._result_counts.warning_count:8}"
+                f"  {self._result_counts.error_count:8}"
             )
 
     def _log_append(self, message: str):
         if self._log_file:
             with self._log_file.open(mode="a", encoding="utf-8") as f:
                 f.write(f"{message}\n")
+
+    def plugin_not_found(self, plugin_name):
+        self._report_error(f"Plugin {plugin_name} is not existing.")
+
+    def plugin_unknown(self, plugin_name):
+        self._report_error(f"Plugin {plugin_name} can not be read.")
