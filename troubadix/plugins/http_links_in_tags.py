@@ -115,94 +115,41 @@ class CheckHttpLinksInTags(FilePlugin):
 
     @staticmethod
     def check_to_continue(http_link_match_group: AnyStr) -> bool:
-        if (
-            "The payloads try to open a connection to www.google.com"
-            in http_link_match_group
-        ):
-            return True
-        if (
-            "The script attempts to connect to www.google.com"
-            in http_link_match_group
-        ):
-            return True
-        if (
-            "to retrieve a web page from www.google.com"
-            in http_link_match_group
-        ):
-            return True
-        if "Subject: commonName=www.paypal.com" in http_link_match_group:
-            return True
-        if (
-            "Terms of use at https://www.verisign.com/rpa"
-            in http_link_match_group
-        ):
-            return True
-        if (
-            "example.com" in http_link_match_group
-            or "example.org" in http_link_match_group
-        ):
-            return True
-        if "www.exam" in http_link_match_group:
-            return True
-        if (
-            "sampling the resolution of a name (www.google.com)"
-            in http_link_match_group
-        ):
-            return True
-        if "once with 'www.' and once without" in http_link_match_group:
-            return True
-        if "wget http://www.javaop.com/~ron/tmp/nc" in http_link_match_group:
-            return True
-        if (
-            "Ncat: Version 5.30BETA1 (http://nmap.org/ncat)"
-            in http_link_match_group
-        ):
-            return True
-        if "as www.windowsupdate.com. (BZ#506016)" in http_link_match_group:
-            return True
-        if (
-            "located at http://sambarserver/session/pagecount."
-            in http_link_match_group
-        ):
-            return True
-        if "http://rest.modx.com" in http_link_match_group:
-            return True
-        if (
-            "ftp:// " in http_link_match_group
-            or "ftp://'" in http_link_match_group
-            or "ftp://)" in http_link_match_group
-            or "ftp.c" in http_link_match_group
-            or "ftp.exe" in http_link_match_group
-        ):
-            return True
-        if (
-            "using special ftp://" in http_link_match_group
-            or "running ftp." in http_link_match_group
-            or "ftp. The vulnerability" in http_link_match_group
-        ):
-            return True
-        if (
-            "'http://' protocol" in http_link_match_group
-            or "handle <a href='http://...'> properly" in http_link_match_group
-        ):
-            return True
-        if "Switch to git+https://" in http_link_match_group:
-            return True
-        if (
-            "wget https://compromised-domain.com/important-file"
-            in http_link_match_group
-        ):
-            return True
-        if "the https:// scheme" in http_link_match_group:
-            return True
-        if "https://www.phishingtarget.com@evil.com" in http_link_match_group:
-            return True
-        # e.g.:
-        # Since gedit supports opening files via 'http://' URLs
-        if (
-            "'http://'" in http_link_match_group
-            or "'https://'" in http_link_match_group
-        ):
-            return True
+        exclusions = [
+            "The payloads try to open a connection to www.google.com",
+            "The script attempts to connect to www.google.com",
+            "to retrieve a web page from www.google.com",
+            "Terms of use at https://www.verisign.com/rpa",
+            "Subject: commonName=www.paypal.com",
+            "example.com",
+            "example.org",
+            "www.exam",
+            "sampling the resolution of a name (www.google.com)",
+            "once with 'www.' and once without",
+            "wget http://www.javaop.com/~ron/tmp/nc",
+            "Ncat: Version 5.30BETA1 (http://nmap.org/ncat)",
+            "as www.windowsupdate.com. (BZ#506016)",
+            "located at http://sambarserver/session/pagecount.",
+            "http://rest.modx.com",
+            "ftp:// ",
+            "ftp://'",
+            "ftp://)",
+            "ftp.c",
+            "ftp.exe",
+            "using special ftp://",
+            "running ftp.",
+            "ftp. The vulnerability",
+            "'http://' protocol",
+            "handle <a href='http://...'> properly",
+            "Switch to git+https://",
+            "wget https://compromised-domain.com/important-file",
+            "the https:// scheme",
+            "https://www.phishingtarget.com@evil.com"
+            # e.g.:
+            # Since gedit supports opening files via 'http://' URLs
+            "'http://'" "'https://'",
+        ]
 
-        return False
+        return any(
+            exclusion in http_link_match_group for exclusion in exclusions
+        )
