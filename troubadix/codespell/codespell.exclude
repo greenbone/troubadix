@@ -160,7 +160,7 @@ cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip 
 complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:ind-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:oval-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:win-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows windows-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd">');
   Conexant cx231xx USB video capture driver in the Linux kernel did not properly
 "config.sys", "io.sys", "msdos.sys", "pagefile.sys",
-"Connection: TE, close\r\n",
+  "Connection: TE, close\r\n",
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
   control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
 converter, performed insufficient namespace validation of Rouge syntax
@@ -340,6 +340,7 @@ Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an 
   * groupd no longer allows the default fence d ...
   Grundschutz. Die detaillierte Beschreibung zu dieser Massnahme findet sich unter
     guess += '\n- Huawei TE Device';
+Guest can force Linux netback driver to hog large amounts of kernel memory [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Incoming data packets for a guest in the Linux kernel's netback driver are buffered until the guest is ready to process them. There are some measures taken for avoiding to pile up too much data, but those can be bypassed by the guest: There is a timeout how long the client side of an interface can stop consuming new packets before it is assumed to have stalled, but this timeout is rather long (60 seconds by default). Using a UDP connection on a fast interface can easily accumulate gigabytes of data in that time. (CVE-2021-28715) The timeout could even never trigger if the guest manages to have only one free slot in its RX queue ring page and the next package would require more than one free slot, which may be the case when using GSO, XDP, or software hashing.(CVE-2021-28715)
 "hanlder\n",
  have resul... [Please see the references for more information on the vulnerabilities]");
  * Heap-based buffer overflow when scanning crypted PE files
@@ -434,6 +435,7 @@ If you enable this policy setting, Windows PowerShell will enable transcripting 
 include("CAs.inc");
 inheritence not possible in abstract classes) [bnc#783239]
 install = script_get_preference( "Install hash test Programm on the Target", id:2 );
+  interface accessible from a public WAN (Internet) / public LAN and with auto-logon enabled.
   interface for Cisco Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an unauthenticated,
   interface of Cisco Small Business RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers
 intermediate CAs used by the Dutch PKIoverheid program.
@@ -470,6 +472,7 @@ Jordi Chancel discovered that Firefox did not properly display invalid URLs
 Jordi Chancel discovered that HTML select elements could display arbitrary
 Jordi Chancel discovered that the downloads dialog did not implement a
 Jordi Chancel discovered that the location could be spoofed to
+Jordi Chancel discovered that the location could be spoofed to appear like a secured page.
   Jordi Chancel, Eddy Bordi, and Chris McGowen discovered that Firefox
 Jordi Chanel discovered a spoofing vulnerability of the URL location bar
 Jouni Knuutinen from Synopsys discovered flaws in the Samba DCE-RPC
@@ -646,6 +649,9 @@ req = string("POST /UE/ProcessForm HTTP/1.1\r\n",
 Revert 'ipc,sem: remove uneeded sem_undo_list lock usage in exit_sem()'
   * revoke mis-issued intermediate CAs from TURKTRUST.");
 Rick Macklem, Christopher Key and Tim Zingelman reported that the
+Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
+Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28713)
+Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if ... [Please see the references for more information on the vulnerabilities]");
 root CAs when using an https connection.
   Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers version 1.0.02.16 and earlier");
  (R) processor graphics whichs may have allowed an authenticated user to
@@ -667,7 +673,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_add_preference(name:"Network type", type:"radio", value:"Mixed (use RFC 1918);Private LAN;Public WAN (Internet);Public LAN", id:8);
   script_add_preference(name:"No ARP or ND Ping", type:"checkbox", value:"no", id:25);
   script_add_preference(name:"Report about unrechable Hosts", type:"checkbox", value:"no", id:6);
-  script_add_preference(name:"Value", type:"entry", value:"O:BAG:BAD:(A;;RC;;;BA)");
+  script_add_preference(name:"Value", type:"entry", value:"O:BAG:BAD:(A;;RC;;;BA)", id:1);
   script_copyright("Copyright (C) 2005 Charles Thier");
   script_copyright("Copyright (C) 2008 E-Soft Inc. http://www.securityspace.com & Tim Brown");
   script_copyright("Copyright (C) 2008 Tim Brown and Vlatko Kosturjak");
@@ -710,6 +716,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Mesosphere Marathon Web UI Public WAN (Internet) / Public LAN Accessible");
   script_name("Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability - Windows");
   script_name("Palo Alto PAN-OS SD WAN Vulnerability (CVE-2020-2009)");
+  script_name("Siemens SICWEB Auto-Logon on Public WAN (Internet) / Public LAN (HTTP)");
   script_name("Sphinx Search Server Public WAN (Internet) / Public LAN Accessible");
   script_name("Swarmpit Web UI Public WAN (Internet) / Public LAN Accessible");
   script_name("WAN Emulator Remote Command Execution Vulnerabilities");
@@ -746,6 +753,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Cisco TelePresence TC and TE Software are prone to
   script_tag(name:"insight", value:"_core_/plugins/medias in SPIP allows remote authenticated authors to inject
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
+  script_tag(name:"insight", value:"Guest can force Linux netback driver to hog large amounts of kernel memory [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Incoming data packets for a guest in the Linux kernel's netback driver are buffered until the guest is ready to process them. There are some measures taken for avoiding to pile up too much data, but those can be bypassed by the guest: There is a timeout how long the client side of an interface can stop consuming new packets before it is assumed to have stalled, but this timeout is rather long (60 seconds by default). Using a UDP connection on a fast interface can easily accumulate gigabytes of data in that time. (CVE-2021-28715) The timeout could even never trigger if the guest manages to have only one free slot in its RX queue ring page and the next package would require more than one free slot, which may be the case when using GSO, XDP, or software hashing.(CVE-2021-28714)
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered that
@@ -896,6 +904,7 @@ set_kb_item(name:"WMI/Antivir/UptoDate", value:AntiVir_UpDate);
   several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic
 Several other fixes for pg_dump, which includ... [Please see the references for more information on the vulnerabilities]");
  + Short curcuit the conditional for identifying the sysconfig renderer.
+  SICWEB web interface accessible from a public WAN (Internet) / public LAN and with auto-logon
 Simo Sorce discovered that Samba clients always requested
   Simo Sorce discovered that the MIT krb5 Key Distribution Center (KDC)
 Simo Sorce of Red Hat discovered that the Samba client code always
@@ -946,7 +955,7 @@ TCP 9871 Theef.B
   TE30, TE40, TE50, TE60, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030 and eSpace U1981.");
 ## TE and CE affected but pattern coming like this only
 ##TE and CE affected but pattern coming like this only
-"TE: deflate,gzip;q=0.3\r\n",
+  "TE: deflate,gzip;q=0.3\r\n",
  * The ACN dissector could attempt to divide by zero.
   the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.
 The Binary File Descriptor (BFD) library (aka libbfd), as distributed in GNU Binutils 2.28, is vulnerable to a global buffer over-read error because of an assumption made by code that runs for objcopy and strip, that SHT_REL/SHR_RELA sections are always named starting with a .rel/.rela prefix. This vulnerability causes programs that conduct an analysis of binary programs using the libbfd library, such as objcopy and strip, to crash.(CVE-2017-8393)
@@ -1060,6 +1069,7 @@ url = "/statics/pageChallenge.html";
 url = '/UE/advanced.html';
 url = "/UE/welcome_login.html";
  * usb/net: rndis: remove ambigous status codes. only net/hyperv part
+ use-after-free due to the AB/BA lock with buffer_mutex and mmap_lock
  use-after-free due to the AB/BA lock with buffer_mutex and mmap_lock.
  used to cause a redirect to any URI of an attackers choise (bsc#1110850).");
     user32_file_id = 'oval:org.mitre.oval:obj:390';
@@ -1139,9 +1149,3 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
                'xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 ',
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
- use-after-free due to the AB/BA lock with buffer_mutex and mmap_lock
-  script_tag(name:"insight", value:"Guest can force Linux netback driver to hog large amounts of kernel memory [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Incoming data packets for a guest in the Linux kernel's netback driver are buffered until the guest is ready to process them. There are some measures taken for avoiding to pile up too much data, but those can be bypassed by the guest: There is a timeout how long the client side of an interface can stop consuming new packets before it is assumed to have stalled, but this timeout is rather long (60 seconds by default). Using a UDP connection on a fast interface can easily accumulate gigabytes of data in that time. (CVE-2021-28715) The timeout could even never trigger if the guest manages to have only one free slot in its RX queue ring page and the next package would require more than one free slot, which may be the case when using GSO, XDP, or software hashing.(CVE-2021-28714)
-Guest can force Linux netback driver to hog large amounts of kernel memory [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Incoming data packets for a guest in the Linux kernel's netback driver are buffered until the guest is ready to process them. There are some measures taken for avoiding to pile up too much data, but those can be bypassed by the guest: There is a timeout how long the client side of an interface can stop consuming new packets before it is assumed to have stalled, but this timeout is rather long (60 seconds by default). Using a UDP connection on a fast interface can easily accumulate gigabytes of data in that time. (CVE-2021-28715) The timeout could even never trigger if the guest manages to have only one free slot in its RX queue ring page and the next package would require more than one free slot, which may be the case when using GSO, XDP, or software hashing.(CVE-2021-28715)
-Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
-Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28713)
-Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if ... [Please see the references for more information on the vulnerabilities]");
