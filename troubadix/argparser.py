@@ -196,6 +196,12 @@ def parse_args(
     )
 
     parser.add_argument(
+        "--fix",
+        action="store_true",
+        help="Try to fix specific issues during the linting.",
+    )
+
+    parser.add_argument(
         "-j",
         "--n-jobs",
         dest="n_jobs",

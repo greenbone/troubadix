@@ -17,10 +17,11 @@
 
 import re
 
-from typing import Iterator, List, Union
+from typing import Iterator, Union
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import get_common_tag_patterns
-from troubadix.plugin import LinterResult, LinterWarning, FilePlugin
+from troubadix.plugin import LinterFix, LinterResult, LinterWarning, FilePlugin
 
 # import magic
 
@@ -64,19 +65,28 @@ class CheckIllegalCharacters(FilePlugin):
         pattern = get_common_tag_patterns()
         file_content = self.context.file_content
 
-        tag_matches: List[re.Match] = pattern.finditer(file_content)
+        self.new_file_content = None
+
+        tag_matches = pattern.finditer(file_content)
         if tag_matches:
             for match in tag_matches:
                 if match and match.group(0) is not None:
                     new_tag = check_match(match)
                     if new_tag:
-                        # changes = True
-                        yield LinterWarning(
-                            f"Found illegal character in {match.group(0)}"
-                        )
                         file_content = file_content.replace(
                             match.group(0), new_tag
                         )
+                        self.new_file_content = file_content
+                        yield LinterWarning(
+                            f"Found illegal character in {match.group(0)}"
+                        )
 
-        # if changes:
-        #     nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)
+    def fix(self) -> Iterator[LinterResult]:
+        if not self.new_file_content:
+            return
+
+        self.context.nasl_file.write_text(
+            self.new_file_content, encoding=CURRENT_ENCODING
+        )
+
+        yield LinterFix("Replaced Illegal Characters.")

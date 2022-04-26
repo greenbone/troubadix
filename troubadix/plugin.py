@@ -29,15 +29,19 @@ class LinterMessage:
 
 
 class LinterResult(LinterMessage):
-    pass
+    """A result found during running a check"""
 
 
-class LinterWarning(LinterMessage):
-    pass
+class LinterWarning(LinterResult):
+    """A result that is considered a warning"""
 
 
-class LinterError(LinterMessage):
-    pass
+class LinterError(LinterResult):
+    """A error found during a check"""
+
+
+class LinterFix(LinterResult):
+    """A fix that has been applied"""
 
 
 class FilePluginContext:
@@ -83,6 +87,9 @@ class Plugin(ABC):
     @abstractmethod
     def run(self) -> Iterator[LinterResult]:
         pass
+
+    def fix(self) -> Iterator[LinterResult]:
+        return []
 
 
 class FilesPlugin(Plugin):

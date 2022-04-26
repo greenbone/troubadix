@@ -133,3 +133,8 @@ class TestArgparsing(unittest.TestCase):
         parsed_args = parse_args(["--root", "foo"])
 
         self.assertEqual(parsed_args.root, Path("foo"))
+
+    def test_parse_fix(self):
+        parsed_args = parse_args(["--fix"])
+
+        self.assertTrue(parsed_args.fix)

@@ -47,19 +47,18 @@ class CheckCopyrightYear(LineContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        report = ""
-        copyright_date = ""
-        copyright_year = ""
-        copyright_dict = {}
+        creation_date = ""
+        creation_year = ""
+        copyrights = []
 
-        for line in lines:
+        for i, line in enumerate(lines, 1):
             if "creation_date" in line:
                 expre = re.search(r'value\s*:\s*"(.*)"', line)
                 if expre is not None and expre.group(1) is not None:
-                    copyright_date = expre.group(1)
-                    expre = re.search(r"^([0-9]+)-", copyright_date)
+                    creation_date = expre.group(1)
+                    expre = re.search(r"^([0-9]+)-", creation_date)
                     if expre is not None and expre.group(1) is not None:
-                        copyright_year = expre.group(1)
+                        creation_year = expre.group(1)
 
             copyright_match = re.search(
                 r"(# |script_copyright.*)[Cc]opyright \([Cc]\) ([0-9]+)",
@@ -70,20 +69,16 @@ class CheckCopyrightYear(LineContentPlugin):
                 and copyright_match.group(2) is not None
                 and not is_ignore_file(nasl_file, _IGNORE_FILES)
             ):
-                copyright_dict[line] = copyright_match.group(2)
+                copyrights.append((i, line, copyright_match.group(2)))
 
-        if not copyright_year:
+        if not creation_year:
             yield LinterError("Missing creation_date statement in VT")
 
         # key is the line where the copyright is found, value the year found
         # within that line
-        for key, value in copyright_dict.items():
-            if value != copyright_year:
-                report += f"\n{key.strip()}\n"
-
-        if len(report) > 0:
-            yield LinterError(
-                "VT contains a Copyright year not matching "
-                f"the year in {copyright_year} at the following lines:\n"
-                f"{report}",
-            )
+        for nr, line, copyright_year in copyrights:
+            if copyright_year != creation_year:
+                yield LinterError(
+                    "VT contains a Copyright year not matching "
+                    f"the year {creation_year} at line {nr}"
+                )

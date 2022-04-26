@@ -18,7 +18,7 @@
 import datetime
 import signal
 
-from collections import OrderedDict, defaultdict
+from collections import defaultdict
 from multiprocessing import Pool
 from pathlib import Path
 from typing import Dict, Iterable, Iterator
@@ -33,6 +33,7 @@ from troubadix.helper.patterns import (
 from troubadix.plugin import (
     FilesPluginContext,
     LinterError,
+    LinterFix,
     LinterMessage,
     LinterResult,
     LinterWarning,
@@ -61,7 +62,9 @@ def initializer():
 class FileResults:
     def __init__(self, file_path: Path):
         self.file_path = file_path
-        self.plugin_results: Dict[str, Iterable[LinterResult]] = OrderedDict()
+        self.plugin_results: Dict[str, Iterable[LinterResult]] = defaultdict(
+            list
+        )
         self.generic_results: Iterable[LinterResult] = []
         self.has_plugin_results = False
 
@@ -74,7 +77,7 @@ class FileResults:
     ) -> "FileResults":
         results = list(results)
         self.has_plugin_results = self.has_plugin_results or bool(results)
-        self.plugin_results[plugin_name] = results
+        self.plugin_results[plugin_name] += results
         return self
 
     def __bool__(self):
@@ -90,6 +93,7 @@ class ResultCounts:
         self.result_counts = defaultdict(resultsdict)
         self.error_count = 0
         self.warning_count = 0
+        self.fix_count = 0
 
     def add_error(self, plugin: str):
         self.error_count += 1
@@ -98,6 +102,10 @@ class ResultCounts:
     def add_warning(self, plugin: str):
         self.warning_count += 1
         self.result_counts[plugin]["warning"] += 1
+
+    def add_fix(self, plugin: str):
+        self.fix_count += 1
+        self.result_counts[plugin]["fix"] += 1
 
 
 class Runner:
@@ -110,6 +118,7 @@ class Runner:
         excluded_plugins: Iterable[str] = None,
         included_plugins: Iterable[str] = None,
         update_date: bool = False,
+        fix: bool = False,
         verbose: int = 0,
         statistic: bool = True,
         log_file: Path = None,
@@ -129,6 +138,7 @@ class Runner:
         self._n_jobs = n_jobs
         self._log_file = log_file
         self._root = root
+        self._fix = fix or update_date
         self.verbose = verbose
 
         # this dict will store the result counts for the statistic
@@ -145,7 +155,7 @@ class Runner:
 
     def _report_results(self, results: Iterable[LinterMessage]) -> None:
         for result in results:
-            if isinstance(result, LinterResult):
+            if isinstance(result, (LinterResult, LinterFix)):
                 self._report_ok(result.message)
             elif isinstance(result, LinterError):
                 self._report_error(result.message)
@@ -192,25 +202,43 @@ class Runner:
 
     def _report_statistic(self) -> None:
         """Print a Error/Warning summary from the different plugins"""
-        self._term.print(f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}")
-        self._term.print("-" * 69)
+        if self._fix:
+            self._term.print(
+                f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}  {'   Fixes':8}"
+            )
+        else:
+            self._term.print(f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}")
+
+        length = 79 if self._fix else 69
+        self._term.print("-" * length)
 
         for (plugin, count) in self.result_counts.result_counts.items():
-            if count["error"] > 0:
-                self._term.error(
-                    f"{plugin:50} {count['error']:8}  {count['warning']:8}"
+            if self._fix:
+                line = (
+                    f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
+                    f"{count['fix']:8}"
                 )
             else:
-                self._term.warning(
-                    f"{plugin:50} {count['error']:8}  {count['warning']:8}"
-                )
+                line = f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
 
-        self._term.print("-" * 69)
+            if count["error"] > 0:
+                self._term.error(line)
+            else:
+                self._term.warning(line)
 
-        self._term.info(
-            f"{'sum':50} {self.result_counts.warning_count:8}"
-            f"  {self.result_counts.error_count:8}"
-        )
+        self._term.print("-" * length)
+
+        if self._fix:
+            self._term.info(
+                f"{'sum':50} {self.result_counts.warning_count:8}"
+                f"  {self.result_counts.error_count:8}"
+                f"  {self.result_counts.fix_count:8}"
+            )
+        else:
+            self._term.info(
+                f"{'sum':50} {self.result_counts.warning_count:8}"
+                f"  {self.result_counts.error_count:8}"
+            )
 
     def _process_plugin_results(
         self, plugin_name: str, plugin_results: Iterable[LinterResult]
@@ -226,6 +254,8 @@ class Runner:
                 self.result_counts.add_error(plugin_name)
             elif isinstance(plugin_result, LinterWarning):
                 self.result_counts.add_warning(plugin_name)
+            elif isinstance(plugin_result, LinterFix):
+                self.result_counts.add_fix(plugin_name)
 
         if self.verbose > 0:
             with self._term.indent():
@@ -245,7 +275,7 @@ class Runner:
         ) in results.plugin_results.items():
             self._process_plugin_results(plugin_name, plugin_results)
 
-    def pre_run(self, nasl_files: Iterable[Path]) -> None:
+    def _check_files(self, nasl_files: Iterable[Path]) -> None:
         """Running Plugins that do not require a run per file,
         but a single execution"""
         context = FilesPluginContext(root=self._root, nasl_files=nasl_files)
@@ -260,32 +290,41 @@ class Runner:
 
             results = list(plugin.run())
 
+            if self._fix:
+                results.extend(plugin.fix())
+
             with self._term.indent():
                 if results and self.verbose > 0 or self.verbose > 1:
                     self._report_bold_info(f"Run plugin {plugin.name}")
 
                 self._process_plugin_results(plugin.name, results)
 
-    def run(self, files: Iterable[Path]) -> bool:
-        if not len(self.plugins):
-            raise TroubadixException("No Plugin found.")
+    def _check_file(self, file_path: Path) -> FileResults:
+        results = FileResults(file_path)
+        context = FilePluginContext(
+            root=self._root, nasl_file=file_path.resolve()
+        )
 
-        # print plugins that will be executed
-        if self.verbose > 2:
-            self._report_plugins()
+        for plugin_class in self.plugins:
+            plugin = plugin_class(context)
+            results.add_plugin_results(
+                plugin.name,
+                plugin.run(),
+            )
 
-        # statistic variables
+            if self._fix:
+                results.add_plugin_results(plugin.name, plugin.fix())
+
+        return results
+
+    def _check_single_files(self, files: Iterable[Path]):
+        """Run all plugins that check single files"""
         files_count = len(files)
-        start = datetime.datetime.now()
-
-        # run single time execution plugins
-        self.pre_run(files)
-
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
             try:
                 for i, results in enumerate(
                     pool.imap_unordered(
-                        self.check_file, files, chunksize=CHUNKSIZE
+                        self._check_file, files, chunksize=CHUNKSIZE
                     ),
                     1,
                 ):
@@ -305,24 +344,23 @@ class Runner:
                 pool.terminate()
                 pool.join()
 
+    def run(self, files: Iterable[Path]) -> bool:
+        if not len(self.plugins):
+            raise TroubadixException("No Plugin found.")
+
+        # print plugins that will be executed
+        if self.verbose > 2:
+            self._report_plugins()
+
+        # statistic variables
+        start = datetime.datetime.now()
+
+        self._check_files(files)
+        self._check_single_files(files)
+
         self._report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         if self.statistic:
             self._report_statistic()
 
         # Return true if no error exists
         return self.result_counts.error_count == 0
-
-    def check_file(self, file_path: Path) -> FileResults:
-        results = FileResults(file_path)
-        context = FilePluginContext(
-            root=self._root, nasl_file=file_path.resolve()
-        )
-
-        for plugin_class in self.plugins:
-            plugin = plugin_class(context)
-            results.add_plugin_results(
-                plugin.name,
-                plugin.run(),
-            )
-
-        return results
