@@ -47,7 +47,6 @@ class CheckCopyrightYear(LineContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        report = ""
         creation_date = ""
         creation_year = ""
         copyrights = []
@@ -79,11 +78,7 @@ class CheckCopyrightYear(LineContentPlugin):
         # within that line
         for nr, line, copyright_year in copyrights:
             if copyright_year != creation_year:
-                report += f"Line {nr}: {line.strip()}\n"
-
-        if len(report) > 0:
-            yield LinterError(
-                "VT contains a Copyright year not matching "
-                f"the year in {creation_year} at the following lines:\n"
-                f"{report}",
-            )
+                yield LinterError(
+                    "VT contains a Copyright year not matching "
+                    f"the year {creation_year} at line {nr}"
+                )
