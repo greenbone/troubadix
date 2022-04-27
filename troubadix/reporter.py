@@ -34,10 +34,10 @@ class Reporter:
     def __init__(
         self,
         term: Terminal,
+        root: Path,
         *,
         fix: bool = False,
         log_file: Path = None,
-        root: Path,
         statistic: bool = True,
         verbose: int = 0,
     ) -> None:
@@ -104,7 +104,7 @@ class Reporter:
                     report = self._report_ok
 
                 if self._verbose > 0:
-                    report(self._report_ok(plugin_result.message))
+                    report(plugin_result.message)
 
     def report_single_run_plugin(self, plugin_name: str, plugin_results: List):
         """Print the currently plugin"""
@@ -124,14 +124,14 @@ class Reporter:
                 f"Checking {from_root_path} ({pos}/{self._files_count})"
             )
 
-            with self._term.indent():
+        with self._term.indent():
 
-                # print the files plugin results
-                for (
-                    plugin_name,
-                    plugin_results,
-                ) in results.plugin_results.items():
-                    self._process_plugin_results(plugin_name, plugin_results)
+            # print the files plugin results
+            for (
+                plugin_name,
+                plugin_results,
+            ) in results.plugin_results.items():
+                self._process_plugin_results(plugin_name, plugin_results)
 
     def report_plugins(self, excluded, included, pre_run) -> None:
         if self._verbose > 2:

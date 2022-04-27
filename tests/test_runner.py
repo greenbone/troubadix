@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# pylint: disable=protected-access
 
 import io
 import unittest
@@ -32,6 +33,7 @@ from troubadix.plugins.badwords import CheckBadwords
 from troubadix.plugins.copyright_text import CheckCopyrightText
 from troubadix.plugins.cvss_format import CheckCVSSFormat
 from troubadix.plugins.missing_desc_exit import CheckMissingDescExit
+from troubadix.reporter import Reporter
 from troubadix.runner import Runner, TroubadixException
 
 _here = Path(__file__).parent
@@ -43,11 +45,12 @@ class TestRunner(unittest.TestCase):
         self._term = Terminal()
         self.root = _here / "plugins" / "test_files" / "nasl"
         _set_terminal(self._term)
+        self._reporter = Reporter(term=self._term, root=self.root)
 
     def test_runner_with_all_plugins(self):
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=self._reporter,
             root=self.root,
         )
 
@@ -68,7 +71,7 @@ class TestRunner(unittest.TestCase):
         ]
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=self._reporter,
             excluded_plugins=excluded_plugins,
             root=self.root,
         )
@@ -83,7 +86,7 @@ class TestRunner(unittest.TestCase):
         ]
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=self._reporter,
             included_plugins=included_plugins,
             root=self.root,
         )
@@ -108,33 +111,33 @@ class TestRunner(unittest.TestCase):
         ]
         runner = Runner(
             n_jobs=1,
+            reporter=self._reporter,
             included_plugins=included_plugins,
-            term=self._term,
             root=self.root,
         )
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
 
         self.assertTrue(sys_exit)
-        self.assertEqual(runner.result_counts.error_count, 0)
-        self.assertEqual(runner.result_counts.warning_count, 0)
-        self.assertEqual(runner.result_counts.fix_count, 0)
+        self.assertEqual(self._reporter._result_counts.error_count, 0)
+        self.assertEqual(self._reporter._result_counts.warning_count, 0)
+        self.assertEqual(self._reporter._result_counts.fix_count, 0)
         self.assertEqual(
-            runner.result_counts.result_counts[CheckMissingDescExit.name][
-                "error"
-            ],
+            self._reporter._result_counts.result_counts[
+                CheckMissingDescExit.name
+            ]["error"],
             0,
         )
         self.assertEqual(
-            runner.result_counts.result_counts[CheckMissingDescExit.name][
-                "warning"
-            ],
+            self._reporter._result_counts.result_counts[
+                CheckMissingDescExit.name
+            ]["warning"],
             0,
         )
         self.assertEqual(
-            runner.result_counts.result_counts[CheckMissingDescExit.name][
-                "fix"
-            ],
+            self._reporter._result_counts.result_counts[
+                CheckMissingDescExit.name
+            ]["fix"],
             0,
         )
 
@@ -151,8 +154,8 @@ class TestRunner(unittest.TestCase):
         included_plugins = [CheckCVSSFormat.name]
         runner = Runner(
             n_jobs=1,
+            reporter=self._reporter,
             included_plugins=included_plugins,
-            term=self._term,
             root=self.root,
         )
 
@@ -160,19 +163,28 @@ class TestRunner(unittest.TestCase):
             sys_exit = runner.run([nasl_file])
 
         self.assertFalse(sys_exit)
+        print(self._reporter._result_counts.result_counts)
 
-        self.assertEqual(runner.result_counts.error_count, 4)
-        self.assertEqual(runner.result_counts.warning_count, 0)
-        self.assertEqual(runner.result_counts.fix_count, 0)
+        self.assertEqual(self._reporter._result_counts.error_count, 4)
+        self.assertEqual(self._reporter._result_counts.warning_count, 0)
+        self.assertEqual(self._reporter._result_counts.fix_count, 0)
         self.assertEqual(
-            runner.result_counts.result_counts[CheckCVSSFormat.name]["error"], 2
+            self._reporter._result_counts.result_counts[CheckCVSSFormat.name][
+                "error"
+            ],
+            2,
         )
         self.assertEqual(
-            runner.result_counts.result_counts[CheckCVSSFormat.name]["warning"],
+            self._reporter._result_counts.result_counts[CheckCVSSFormat.name][
+                "warning"
+            ],
             0,
         )
         self.assertEqual(
-            runner.result_counts.result_counts[CheckCVSSFormat.name]["fix"], 0
+            self._reporter._result_counts.result_counts[CheckCVSSFormat.name][
+                "fix"
+            ],
+            0,
         )
 
     def test_runner_run_fail_with_verbose_level_2(self):
@@ -187,11 +199,12 @@ class TestRunner(unittest.TestCase):
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
+        reporter = Reporter(term=self._term, root=self.root, verbose=2)
+
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=reporter,
             update_date=True,
-            verbose=2,
             root=self.root,
         )
 
@@ -225,10 +238,11 @@ class TestRunner(unittest.TestCase):
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
+        reporter = Reporter(term=self._term, root=self.root, verbose=1)
+
         runner = Runner(
-            verbose=1,
             n_jobs=1,
-            term=self._term,
+            reporter=reporter,
             update_date=True,
             root=self.root,
         )
@@ -269,11 +283,12 @@ class TestRunner(unittest.TestCase):
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
+        reporter = Reporter(term=self._term, root=self.root, verbose=3)
+
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=reporter,
             included_plugins=included_plugins,
-            verbose=3,
             root=self.root,
         )
 
@@ -304,11 +319,12 @@ class TestRunner(unittest.TestCase):
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
+        reporter = Reporter(term=self._term, root=self.root, verbose=2)
+
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=reporter,
             included_plugins=included_plugins,
-            verbose=2,
             root=self.root,
         )
 
@@ -342,10 +358,11 @@ class TestRunner(unittest.TestCase):
         )
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
+        reporter = Reporter(term=self._term, root=self.root, verbose=1)
+
         runner = Runner(
-            verbose=1,
+            reporter=reporter,
             n_jobs=1,
-            term=self._term,
             included_plugins=included_plugins,
             root=self.root,
         )
@@ -368,7 +385,7 @@ class TestRunner(unittest.TestCase):
     def test_no_plugins(self):
         runner = Runner(
             n_jobs=1,
-            term=self._term,
+            reporter=self._reporter,
             included_plugins=["foo"],
             root=self.root,
         )
@@ -393,12 +410,14 @@ class TestRunner(unittest.TestCase):
         )
         gen_log_file = _here / "gen_log.txt"
 
+        reporter = Reporter(
+            term=self._term, root=self.root, verbose=3, log_file=gen_log_file
+        )
+
         runner = Runner(
-            verbose=3,
+            reporter=reporter,
             n_jobs=1,
-            term=self._term,
             included_plugins=included_plugins,
-            log_file=gen_log_file,
             root=self.root,
         )
         with redirect_stdout(io.StringIO()):
@@ -406,9 +425,9 @@ class TestRunner(unittest.TestCase):
 
         compare_content = (
             "\tPre-Run Plugins: check_duplicate_oid, check_no_solution\n"
-            "\tIncluded Plugins: CheckMissingDescExit\n\t"
-            "Running plugins: check_missing_desc_exit\n\n\n"
-            "Run plugin check_duplicate_oid\n"
+            "\tIncluded Plugins: CheckMissingDescExit\n"
+            # "\tRunning plugins: check_missing_desc_exit\n"
+            "\n\nRun plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
             f"\t\t{get_path_from_root(nasl_file, self.root)}: Invalid OID "
             "1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
@@ -441,12 +460,14 @@ class TestRunner(unittest.TestCase):
         )
         gen_log_file = _here / "gen_log.txt"
 
+        reporter = Reporter(
+            term=self._term, root=self.root, log_file=gen_log_file
+        )
+
         runner = Runner(
-            verbose=2,
             n_jobs=1,
-            term=self._term,
+            reporter=reporter,
             included_plugins=included_plugins,
-            log_file=gen_log_file,
             root=self.root,
         )
         with redirect_stdout(io.StringIO()):
