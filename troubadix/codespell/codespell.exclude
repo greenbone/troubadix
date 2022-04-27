@@ -3,6 +3,10 @@
 # 00000003 in front or after the line so that codespell is ignoring the line correctly.
 # 00000004 nb: Once the whole directory is codespell "free" we might want to generate this file automatically
 # 00000005 nb2: The strings before are used like this so we can call "sort | uniq" on the file more easily.
+# 00000006 nb3: After adding new entries to this file, it is advised to run:
+# 00000007 cat codespell.exclude | sort | uniq > codespellnew.exclude
+# 00000008 mv codespellnew.exclude codespell.exclude
+# 00000009 To ensure that entries are kept unique and ordered
 # 000300Dedected burute force atack from your ip adress   <--- alternative response
     '000300Dedected burute force atack from your ip adress' >< r ||
 # 00: 33 20 2d 2d 36 20 42 61 64 20 52 65 71 75 65 73    3 --6 Bad Reques
