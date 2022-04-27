@@ -144,10 +144,11 @@ class CheckHttpLinksInTags(FilePlugin):
             "Switch to git+https://",
             "wget https://compromised-domain.com/important-file",
             "the https:// scheme",
-            "https://www.phishingtarget.com@evil.com"
+            "https://www.phishingtarget.com@evil.com",
             # e.g.:
             # Since gedit supports opening files via 'http://' URLs
-            "'http://'" "'https://'",
+            "'http://'",
+            "'https://'",
         ]
 
         return any(
