@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock
 
-from troubadix.plugin import LinterMessage
+from troubadix.plugin import LinterWarning
 from troubadix.plugins.no_solution import CheckNoSolution
 
 from . import PluginTestCase
@@ -47,7 +47,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 5)
-        self.assertIsInstance(results[0], LinterMessage)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "test_files/nasl/21.04/fail_solution_template.nasl:"
             " Missing solution, older than 1 year.",
@@ -73,7 +73,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file1.write_text(text, encoding="latin-1")
 
         self.assertEqual(len(results), 5)
-        self.assertIsInstance(results[0], LinterMessage)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "test_files/nasl/21.04/fail_solution_template.nasl:"
             " Missing solution, older than 6 months.",
@@ -99,7 +99,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file1.write_text(text, encoding="latin-1")
 
         self.assertEqual(len(results), 5)
-        self.assertIsInstance(results[0], LinterMessage)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "test_files/nasl/21.04/fail_solution_template.nasl:"
             " Missing solution, but younger than 31 days.",

@@ -34,7 +34,6 @@ from troubadix.plugin import (
     FilesPluginContext,
     LinterError,
     LinterFix,
-    LinterMessage,
     LinterResult,
     LinterWarning,
     FilePluginContext,
@@ -153,7 +152,7 @@ class Runner:
             with self._log_file.open(mode="a", encoding="utf-8") as f:
                 f.write(f"{message}\n")
 
-    def _report_results(self, results: Iterable[LinterMessage]) -> None:
+    def _report_results(self, results: Iterable[LinterResult]) -> None:
         for result in results:
             if isinstance(result, (LinterResult, LinterFix)):
                 self._report_ok(result.message)
