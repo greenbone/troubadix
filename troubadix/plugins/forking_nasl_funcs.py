@@ -95,6 +95,10 @@ class CheckForkingNaslFuncs(FileContentPlugin):
         if "2013/gb_sap_netweaver_portal_rce_04_13.nasl" in str(nasl_file):
             return
 
+        # Another example using if/else calls
+        if "gsf/2022/siemens/gb_sicam_a8000_ssa-316850.nasl" in str(nasl_file):
+            return
+
         match = re.findall(
             r"\s*[=!]\s*((get_app_port|get_app_port_from_("
             r"cpe_prefix|list)|sip_get_port_proto|(tcp|udp)_get_all_port|("
