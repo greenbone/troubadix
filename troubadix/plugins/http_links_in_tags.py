@@ -115,6 +115,8 @@ class CheckHttpLinksInTags(FilePlugin):
 
     @staticmethod
     def check_to_continue(http_link_match_group: AnyStr) -> bool:
+        # When adding new entries to this list, please also add a testcase to
+        # tests/plugins/test_http_links_in_tags.py -> test_http_link_in_tags_ok
         exclusions = [
             "The payloads try to open a connection to www.google.com",
             "The script attempts to connect to www.google.com",
