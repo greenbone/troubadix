@@ -131,6 +131,11 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             "29. https://www.phishingtarget.com@evil.com",
             "30. 'http://'",
             "31. 'https://'",
+            "32. distributions on ftp.proftpd.org have all been",
+            "33. information from www.mutt.org:",
+            "34. According to www.tcpdump.org:",
+            "35. According to www.kde.org:",
+            "36. From the www.info-zip.org site:",
         ]
 
         for testcase in testcases:
