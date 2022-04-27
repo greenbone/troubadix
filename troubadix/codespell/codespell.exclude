@@ -3,6 +3,10 @@
 # 00000003 in front or after the line so that codespell is ignoring the line correctly.
 # 00000004 nb: Once the whole directory is codespell "free" we might want to generate this file automatically
 # 00000005 nb2: The strings before are used like this so we can call "sort | uniq" on the file more easily.
+# 00000006 nb3: After adding new entries to this file, it is advised to run:
+# 00000007 cat codespell.exclude | sort | uniq > codespellnew.exclude
+# 00000008 mv codespellnew.exclude codespell.exclude
+# 00000009 To ensure that entries are kept unique and ordered
 # 000300Dedected burute force atack from your ip adress   <--- alternative response
     '000300Dedected burute force atack from your ip adress' >< r ||
 # 00: 33 20 2d 2d 36 20 42 61 64 20 52 65 71 75 65 73    3 --6 Bad Reques
@@ -620,12 +624,14 @@ reenable php7-dba support of Berkeley DB (bsc#1108554)");
     reg_xml = '\t\t<registry_item' + status + ' xmlns="http://oval.mitre.org/' +
 ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.(CVE-2020-16598)
 Reject invalid eliptic curve point coordinates (bsc#1131291)");
+rejection for EXTRAVERSION = -xfs, but likely little else will be
   - Remote Command Execution via WAN and LAN
   - Remote Unauthenticated Information Disclosure via WAN and LAN
 	Remove all mitre.org links from the script descriptions as
 	Removed script_xref references to cve.mitre.org. This
 	Remove reference to cve.mitre.org from insight tag.
 report_dead = script_get_preference( "Report about unrechable Hosts", id:6 );
+Reported by Aurelien Delaitre (SATE 2009).
   reporter of CVE-2010-0542 Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
   reporter of CVE-2010-0542, Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
     report = "Keiner der unter Punkt 2.2.1.2 geforderten Ciphers wurde auf dem System unter Port " + port + " gefunden.";
@@ -1149,5 +1155,3 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
                'xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 ',
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
-rejection for EXTRAVERSION = -xfs, but likely little else will be
-Reported by Aurelien Delaitre (SATE 2009).
