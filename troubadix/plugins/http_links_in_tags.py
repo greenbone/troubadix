@@ -147,6 +147,11 @@ class CheckHttpLinksInTags(FilePlugin):
             "wget https://compromised-domain.com/important-file",
             "the https:// scheme",
             "https://www.phishingtarget.com@evil.com",
+            "distributions on ftp.proftpd.org have all been",
+            "information from www.mutt.org:",
+            "According to www.tcpdump.org:",
+            "According to www.kde.org:",
+            "From the www.info-zip.org site:",
             # e.g.:
             # Since gedit supports opening files via 'http://' URLs
             "'http://'",
