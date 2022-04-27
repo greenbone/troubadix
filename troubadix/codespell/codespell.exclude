@@ -1149,3 +1149,5 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
                'xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 ',
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
+rejection for EXTRAVERSION = -xfs, but likely little else will be
+Reported by Aurelien Delaitre (SATE 2009).
