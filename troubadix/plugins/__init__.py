@@ -31,7 +31,7 @@ from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
 from .encoding import CheckEncoding
-from .forking_nasl_funcs import CheckForkingNaslFuncs
+from .forking_nasl_functions import CheckForkingNaslFunctions
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
 from .illegal_characters import CheckIllegalCharacters
@@ -77,7 +77,7 @@ _PLUGINS = [
     CheckDescription,
     CheckDoubleEndPoints,
     CheckDuplicatedScriptTags,
-    CheckForkingNaslFuncs,
+    CheckForkingNaslFunctions,
     CheckGetKBOnServices,
     CheckGrammar,
     CheckHttpLinksInTags,
