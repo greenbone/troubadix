@@ -97,3 +97,54 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");',
             results[0].message,
         )
+
+    def test_http_link_in_tags_ok(self):
+        testcases = [
+            "01. The payloads try to open a connection to www.google.com",
+            "02. The script attempts to connect to www.google.com",
+            "03. to retrieve a web page from www.google.com",
+            "04. Subject: commonName=www.paypal.com",
+            "05. Terms of use at https://www.verisign.com/rpa",
+            "06. example.com",
+            "07. example.org",
+            "08. www.exam",
+            "09. sampling the resolution of a name (www.google.com)",
+            "10. once with 'www.' and once without",
+            "11. wget http://www.javaop.com/~ron/tmp/nc",
+            "12. Ncat: Version 5.30BETA1 (http://nmap.org/ncat)",
+            "13. as www.windowsupdate.com. (BZ#506016)",
+            "14. located at http://sambarserver/session/pagecount.",
+            "15. http://rest.modx.com",
+            "16. ftp:// ",
+            "17. ftp://'",
+            "18. ftp://)",
+            "19. ftp.c",
+            "20. ftp.exe",
+            "21. using special ftp://",
+            "22. running ftp.",
+            "23. ftp. The vulnerability",
+            "24. 'http://' protocol",
+            "25. handle <a href='http://...'> properly",
+            "26. Switch to git+https://",
+            "27. wget https://compromised-domain.com/important-file",
+            "28. the https:// scheme",
+            "29. https://www.phishingtarget.com@evil.com",
+            "30. 'http://'",
+            "31. 'https://'",
+        ]
+
+        for testcase in testcases:
+            self.assertTrue(CheckHttpLinksInTags.check_to_continue(testcase))
+
+    def test_http_link_in_tags_not_ok(self):
+        testcases = [
+            "The payloads try to open a connection to www.bing.com",
+            "examplephishing.org",
+            "located at http://sambdadancinglessions/session/pagecount.",
+            "fdp:// ",
+            "Switch to svn+https://",
+            "greenbone.net",
+        ]
+
+        for testcase in testcases:
+            self.assertFalse(CheckHttpLinksInTags.check_to_continue(testcase))
