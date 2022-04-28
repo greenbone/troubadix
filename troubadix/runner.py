@@ -132,24 +132,28 @@ class Runner:
                     ),
                     start=1,
                 ):
-                    self._reporter.report_by_file_plugin(results=results, pos=i)
+                    self._reporter.report_by_file_plugin(
+                        file_results=results, pos=i
+                    )
 
             except KeyboardInterrupt:
                 pool.terminate()
                 pool.join()
 
     def run(self, files: Iterable[Path]) -> bool:
+        """The function that should be executed to run
+        the Plugins over all files"""
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
         # print plugins that will be executed
-        self._reporter.report_plugins(
+        self._reporter.report_plugin_overview(
+            plugins=self.plugins,
             excluded=self._excluded_plugins,
             included=self._included_plugins,
             pre_run=self.pre_run_plugins,
         )
 
-        # statistic variables
         start = datetime.datetime.now()
 
         self._check_files(files)
@@ -161,4 +165,4 @@ class Runner:
         self._reporter.report_statistic()
 
         # Return true if no error exists
-        return self._reporter.get_result_count() == 0
+        return self._reporter.get_error_count() == 0

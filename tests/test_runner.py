@@ -41,7 +41,6 @@ _here = Path(__file__).parent
 
 class TestRunner(unittest.TestCase):
     def setUp(self):
-        # store old arguments
         self._term = Terminal()
         self.root = _here / "plugins" / "test_files" / "nasl"
         _set_terminal(self._term)
@@ -426,7 +425,7 @@ class TestRunner(unittest.TestCase):
         compare_content = (
             "\tPre-Run Plugins: check_duplicate_oid, check_no_solution\n"
             "\tIncluded Plugins: CheckMissingDescExit\n"
-            # "\tRunning plugins: check_missing_desc_exit\n"
+            "\tRunning plugins: check_missing_desc_exit\n"
             "\n\nRun plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
             f"\t\t{get_path_from_root(nasl_file, self.root)}: Invalid OID "

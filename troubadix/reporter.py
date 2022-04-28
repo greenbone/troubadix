@@ -16,17 +16,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import List
+from typing import Iterable, List
 from pontos.terminal.terminal import Terminal
 from troubadix.helper.helper import get_path_from_root
 
 from troubadix.plugin import (
+    FilesPlugin,
     LinterError,
     LinterFix,
     LinterMessage,
     LinterResult,
     LinterWarning,
 )
+from troubadix.plugins import Plugins
 from troubadix.results import FileResults, ResultCounts
 
 
@@ -54,7 +56,7 @@ class Reporter:
     def set_files_count(self, count: int):
         self._files_count = count
 
-    def get_result_count(self) -> int:
+    def get_error_count(self) -> int:
         return self._result_counts.error_count
 
     def _report_warning(self, message: str) -> None:
@@ -106,8 +108,15 @@ class Reporter:
                 if self._verbose > 0:
                     report(plugin_result.message)
 
-    def report_single_run_plugin(self, plugin_name: str, plugin_results: List):
-        """Print the currently plugin"""
+    def report_single_run_plugin(
+        self, plugin_name: str, plugin_results: List
+    ) -> None:
+        """Print/log the report of a single run plugin
+
+        Arguments:
+            plugin_name     name of the plugin
+            plugin_results  a List of results for the plugin
+        """
         with self._term.indent():
             if plugin_results and self._verbose > 0 or self._verbose > 1:
                 self._report_bold_info(f"Run plugin {plugin_name}")
@@ -116,10 +125,21 @@ class Reporter:
                 plugin_name=plugin_name, plugin_results=plugin_results
             )
 
-    def report_by_file_plugin(self, results: FileResults, pos: int):
-        if results and self._verbose > 0 or self._verbose > 1:
+    def report_by_file_plugin(
+        self, file_results: FileResults, pos: int
+    ) -> None:
+        """Print/log the results of all plugins for a specific file
+
+        Arguments:
+            file_results    a file results object
+            pos             the absolute file number in relation
+                            to the whole file count
+        """
+        if file_results and self._verbose > 0 or self._verbose > 1:
             # only print the part "common/some_nasl.nasl"
-            from_root_path = get_path_from_root(results.file_path, self._root)
+            from_root_path = get_path_from_root(
+                file_results.file_path, self._root
+            )
             self._report_bold_info(
                 f"Checking {from_root_path} ({pos}/{self._files_count})"
             )
@@ -130,15 +150,23 @@ class Reporter:
             for (
                 plugin_name,
                 plugin_results,
-            ) in results.plugin_results.items():
+            ) in file_results.plugin_results.items():
                 self._process_plugin_results(plugin_name, plugin_results)
 
-    def report_plugins(self, excluded, included, pre_run) -> None:
+    def report_plugin_overview(
+        self,
+        plugins: Plugins,
+        excluded: Iterable[str],
+        included: Iterable[str],
+        pre_run: Iterable[FilesPlugin],
+    ) -> None:
+        """Print/log an overview, which plugins are in-/excluded and which one
+        will be executed"""
         if self._verbose > 2:
             if pre_run:
                 self.report_info(
                     "Pre-Run Plugins: "
-                    f"{', '.join([plugin.name for plugin in pre_run])}"
+                    f"{', '.join([p.name for p in pre_run])}"
                 )
 
             if excluded:
@@ -147,8 +175,9 @@ class Reporter:
             if included:
                 self.report_info(f"Included Plugins: {', '.join(included)}")
 
-            # plugins = ", ".join([plugin.name for plugin in self.plugins])
-            # self.report_info(f"Running plugins: {plugins}")
+            self.report_info(
+                f"Running plugins: {', '.join([p.name for p in plugins])}"
+            )
 
     def report_statistic(self) -> None:
         """Print a Error/Warning summary from the different plugins"""
