@@ -18,7 +18,7 @@
 from pathlib import Path
 from unittest.mock import MagicMock
 
-from troubadix.plugin import LinterError, LinterMessage
+from troubadix.plugin import LinterError
 from troubadix.plugins.duplicate_oid import CheckDuplicateOID
 
 from . import PluginTestCase
@@ -54,7 +54,7 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterMessage)
+        self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "test_files/nasl/21.04/fail_badwords.nasl: Could not find an OID.",
             results[0].message,

@@ -24,12 +24,10 @@ from troubadix.helper import CURRENT_ENCODING
 
 
 @dataclass
-class LinterMessage:
-    message: str
-
-
-class LinterResult(LinterMessage):
+class LinterResult:
     """A result found during running a check"""
+
+    message: str
 
 
 class LinterWarning(LinterResult):
