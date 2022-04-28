@@ -24,7 +24,6 @@ from troubadix.plugin import (
     FilesPlugin,
     LinterError,
     LinterFix,
-    LinterMessage,
     LinterResult,
     LinterWarning,
 )
@@ -102,7 +101,7 @@ class Reporter:
                 elif isinstance(plugin_result, LinterFix):
                     self._result_counts.add_fix(plugin_name)
                     report = self._report_ok
-                elif isinstance(plugin_result, LinterMessage):
+                elif isinstance(plugin_result, LinterResult):
                     report = self._report_ok
 
                 if self._verbose > 0:

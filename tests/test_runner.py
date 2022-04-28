@@ -162,7 +162,6 @@ class TestRunner(unittest.TestCase):
             sys_exit = runner.run([nasl_file])
 
         self.assertFalse(sys_exit)
-        print(self._reporter._result_counts.result_counts)
 
         self.assertEqual(self._reporter._result_counts.error_count, 4)
         self.assertEqual(self._reporter._result_counts.warning_count, 0)
