@@ -22,8 +22,8 @@ from typing import Iterator
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
-class CheckForkingNaslFuncs(FileContentPlugin):
-    name = "check_forking_nasl_funcs"
+class CheckForkingNaslFunctions(FileContentPlugin):
+    name = "check_forking_nasl_functions"
 
     def check_content(
         self,

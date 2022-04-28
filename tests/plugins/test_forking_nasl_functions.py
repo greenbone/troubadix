@@ -19,12 +19,12 @@
 from pathlib import Path
 
 from troubadix.plugin import LinterError
-from troubadix.plugins.forking_nasl_funcs import CheckForkingNaslFuncs
+from troubadix.plugins.forking_nasl_functions import CheckForkingNaslFunctions
 
 from . import PluginTestCase
 
 
-class CheckForkingNaslFuncsTestCase(PluginTestCase):
+class CheckForkingNaslFunctionsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -37,7 +37,7 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
-        plugin = CheckForkingNaslFuncs(fake_context)
+        plugin = CheckForkingNaslFunctions(fake_context)
 
         results = list(plugin.run())
 
@@ -58,7 +58,7 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
-        plugin = CheckForkingNaslFuncs(fake_context)
+        plugin = CheckForkingNaslFunctions(fake_context)
 
         results = list(plugin.run())
 
@@ -89,7 +89,7 @@ class CheckForkingNaslFuncsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
-        plugin = CheckForkingNaslFuncs(fake_context)
+        plugin = CheckForkingNaslFunctions(fake_context)
 
         results = list(plugin.run())
 
