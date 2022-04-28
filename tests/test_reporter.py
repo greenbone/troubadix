@@ -53,9 +53,10 @@ class TestReporter(unittest.TestCase):
 
         output = f.getvalue()
 
-        self.assertIn("-" * 69, output)
+        self.assertIn("-" * 67, output)
 
-        self.assertIn(f"{'sum':50} {0:8}  {0:8}", output)
+        self.assertIn("Errors Warnings", output)
+        self.assertIn(f"{'sum':48} {0:8} {0:8}", output)
 
     def test_report_statistic_with_fix(self):
         reporter = Reporter(root=self.root, term=self._term, fix=True)
@@ -65,6 +66,17 @@ class TestReporter(unittest.TestCase):
 
         output = f.getvalue()
 
-        self.assertIn("-" * 79, output)
+        self.assertIn("-" * 75, output)
 
-        self.assertIn(f"{'sum':50} {0:8}  {0:8}  {0:8}", output)
+        self.assertIn("Errors Warnings    Fixes", output)
+        self.assertIn(f"{'sum':48} {0:8} {0:8} {0:8}", output)
+
+    def test_report_statistic_none(self):
+        reporter = Reporter(root=self.root, term=self._term, statistic=False)
+
+        with redirect_stdout(io.StringIO()) as f:
+            reporter.report_statistic()
+
+        output = f.getvalue()
+
+        self.assertFalse(output)

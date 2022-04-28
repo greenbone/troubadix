@@ -185,22 +185,22 @@ class Reporter:
 
         if self._fix:
             self._term.print(
-                f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}  {'   Fixes':8}"
+                f"{'Plugin':48} {'  Errors':8} {'Warnings':8} {'   Fixes':8}"
             )
         else:
-            self._term.print(f"{'Plugin':50} {'  Errors':8}  {'Warnings':8}")
+            self._term.print(f"{'Plugin':48} {'  Errors':8} {'Warnings':8}")
 
-        length = 79 if self._fix else 69
+        length = 75 if self._fix else 67
         self._term.print("-" * length)
 
         for (plugin, count) in self._result_counts.result_counts.items():
             if self._fix:
                 line = (
-                    f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
-                    f"{count['fix']:8}"
+                    f"{plugin:48} {count['error']:8} {count['warning']:8}"
+                    f" {count['fix']:8}"
                 )
             else:
-                line = f"{plugin:50} {count['error']:8}  {count['warning']:8}  "
+                line = f"{plugin:48} {count['error']:8} {count['warning']:8}"
 
             if count["error"] > 0:
                 self._term.error(line)
@@ -211,14 +211,14 @@ class Reporter:
 
         if self._fix:
             self._term.info(
-                f"{'sum':50} {self._result_counts.warning_count:8}"
-                f"  {self._result_counts.error_count:8}"
-                f"  {self._result_counts.fix_count:8}"
+                f"{'sum':48} {self._result_counts.warning_count:8}"
+                f" {self._result_counts.error_count:8}"
+                f" {self._result_counts.fix_count:8}"
             )
         else:
             self._term.info(
-                f"{'sum':50} {self._result_counts.warning_count:8}"
-                f"  {self._result_counts.error_count:8}"
+                f"{'sum':48} {self._result_counts.warning_count:8}"
+                f" {self._result_counts.error_count:8}"
             )
 
     def _log_append(self, message: str):

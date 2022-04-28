@@ -156,7 +156,7 @@ def main(args=None):
 
     reporter = Reporter(
         term=term,
-        fix=parsed_args.fix,
+        fix=parsed_args.fix or parsed_args.update_date,
         log_file=parsed_args.log_file,
         root=root,
         statistic=True if not parsed_args.no_statistic else False,
