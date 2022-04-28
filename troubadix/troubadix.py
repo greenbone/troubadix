@@ -26,6 +26,7 @@ from pontos.terminal.terminal import Terminal
 
 from troubadix.argparser import parse_args
 from troubadix.helper import get_root
+from troubadix.reporter import Reporter
 from troubadix.runner import Runner
 
 
@@ -153,16 +154,22 @@ def main(args=None):
         first_file = files[0].resolve()
         root = get_root(first_file)
 
-    runner = Runner(
-        n_jobs=parsed_args.n_jobs,
+    reporter = Reporter(
         term=term,
+        fix=parsed_args.fix or parsed_args.update_date,
+        log_file=parsed_args.log_file,
+        root=root,
+        statistic=True if not parsed_args.no_statistic else False,
+        verbose=parsed_args.verbose,
+    )
+
+    runner = Runner(
+        reporter=reporter,
+        n_jobs=parsed_args.n_jobs,
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
         update_date=parsed_args.update_date,
         fix=parsed_args.fix,
-        verbose=parsed_args.verbose,
-        statistic=True if not parsed_args.no_statistic else False,
-        log_file=parsed_args.log_file,
         root=root,
     )
 
