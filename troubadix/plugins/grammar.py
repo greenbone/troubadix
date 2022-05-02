@@ -86,7 +86,7 @@ class CheckGrammar(LineContentPlugin):
         """
         pattern = get_grammer_pattern()
 
-        for line in lines:
+        for nr, line in enumerate(lines, 1):
             match = pattern.search(line)
             if match:
                 if self.check_for_false_positives(
@@ -98,6 +98,7 @@ class CheckGrammar(LineContentPlugin):
                     f"VT/Include has the following grammar problem: {line}",
                     file=self.context.nasl_file,
                     plugin=self.name,
+                    line=nr,
                 )
 
     @staticmethod

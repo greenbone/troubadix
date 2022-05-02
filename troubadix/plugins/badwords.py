@@ -100,7 +100,7 @@ class CheckBadwords(LineContentPlugin):
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
 
-        for i, line in enumerate(lines):
+        for i, line in enumerate(lines, 1):
             if any(badword in line for badword in DEFAULT_BADWORDS):
                 if (
                     not any(exception in line for exception in EXCEPTIONS)
