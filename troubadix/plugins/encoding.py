@@ -16,9 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-import subprocess
+
 from pathlib import Path
 from typing import Iterable, Iterator
+
+import chardet
 
 from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
@@ -26,12 +28,6 @@ from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 # CHAR_SET = r"[^\x00-\xFF]"
 # Temporary only check for chars in between 7f-9f, like in the old Feed-QA...
 CHAR_SET = r"[\x7F-\x9F]"
-
-
-def subprocess_cmd(command: str) -> bytes:
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    proc_stdout = process.communicate()[0].strip()
-    return proc_stdout
 
 
 class CheckEncoding(LineContentPlugin):
@@ -42,15 +38,21 @@ class CheckEncoding(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
-        # Looking for VTs with wrong encoding... (maybe find a better way
-        # to do this in future ...)
-        encoding = subprocess_cmd(
-            f"LC_ALL=C file {nasl_file} | grep 'UTF-8'"
-        ).decode("latin-1")
-        if len(encoding) > 0:
-            yield LinterError(f"VT '{nasl_file}' has a wrong encoding.")
+        detection = chardet.detect(nasl_file.read_bytes())
+        encoding = detection.get("encoding")
+        if encoding and encoding not in ["ascii", "latin1", "ISO-8859-1"]:
+            yield LinterError(
+                f"VT uses a wrong encoding. Detected encoding is {encoding}.",
+                file=nasl_file,
+                plugin=self.name,
+            )
 
-        for index, line in enumerate(lines):
+        for index, line in enumerate(lines, 1):
             encoding = re.search(CHAR_SET, line)
             if encoding is not None:
-                yield LinterError(f"Found invalid character in line {index}")
+                yield LinterError(
+                    "Found invalid character",
+                    file=nasl_file,
+                    plugin=self.name,
+                    line=index,
+                )
