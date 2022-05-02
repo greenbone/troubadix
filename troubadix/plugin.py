@@ -18,7 +18,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, Optional
 
 from troubadix.helper import CURRENT_ENCODING
 
@@ -28,6 +28,9 @@ class LinterResult:
     """A result found during running a check"""
 
     message: str
+    file: Optional[Path] = None
+    plugin: Optional[str] = None
+    line: Optional[int] = None
 
 
 class LinterWarning(LinterResult):
