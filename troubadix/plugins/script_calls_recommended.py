@@ -73,7 +73,9 @@ class CheckScriptCallsRecommended(FileContentPlugin):
         ).search(file_content):
             yield LinterWarning(
                 "VT contains none of the following recommended calls: "
-                f"{', '.join(recommended_many_call)}"
+                f"{', '.join(recommended_many_call)}",
+                file=nasl_file,
+                plugin=self.name,
             )
         for call in recommended_single_call:
             if not _get_special_script_tag_pattern(
@@ -81,5 +83,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
             ).search(file_content):
                 yield LinterWarning(
                     "VT does not contain the following recommended call: "
-                    f"'script_{call}'"
+                    f"'script_{call}'",
+                    file=nasl_file,
+                    plugin=self.name,
                 )

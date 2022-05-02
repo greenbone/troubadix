@@ -59,13 +59,11 @@ class TestUpdateModificationDate(PluginTestCase):
 
         output = plugin.run()
 
-        expected_error = LinterError(
-            "VT does not contain a modification day script tag."
-        )
-
         error = next(output)
         self.assertIsInstance(error, LinterError)
-        self.assertEqual(error, expected_error)
+        self.assertEqual(
+            error.message, "VT does not contain a modification day script tag."
+        )
 
         new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)
@@ -81,12 +79,10 @@ class TestUpdateModificationDate(PluginTestCase):
         plugin = UpdateModificationDate(fake_context)
 
         output = plugin.run()
-
-        expected_error = LinterError("VT does not contain a script version.")
-
         error = next(output)
+
         self.assertIsInstance(error, LinterError)
-        self.assertEqual(error, expected_error)
+        self.assertEqual(error.message, "VT does not contain a script version.")
 
         new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)

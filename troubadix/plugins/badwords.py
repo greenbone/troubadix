@@ -113,4 +113,9 @@ class CheckBadwords(LineContentPlugin):
                         for filename, value in COMBINED
                     )
                 ):
-                    yield LinterError(f"Badword in line {i+1:5}: {line}")
+                    yield LinterError(
+                        f"Badword in line {i:5}: {line}",
+                        plugin=self.name,
+                        file=nasl_file,
+                        line=i,
+                    )

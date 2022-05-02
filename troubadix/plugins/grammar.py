@@ -95,7 +95,9 @@ class CheckGrammar(LineContentPlugin):
                     continue
 
                 yield LinterError(
-                    "VT/Include has the following grammar problem: " f"{line}"
+                    f"VT/Include has the following grammar problem: {line}",
+                    file=self.context.nasl_file,
+                    plugin=self.name,
                 )
 
     @staticmethod

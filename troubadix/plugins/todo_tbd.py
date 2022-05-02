@@ -49,6 +49,8 @@ class CheckTodoTbd(LineContentPlugin):
             match = re.search("##? *(TODO|TBD|@todo):?", line)
             if match is not None:
                 yield LinterWarning(
-                    f"VT {nasl_file} contains #TODO/TBD/@todo"
-                    f" keywords at line {index}"
+                    "VT contains #TODO/TBD/@todo keywords.",
+                    file=nasl_file,
+                    plugin=self.name,
+                    line=index,
                 )

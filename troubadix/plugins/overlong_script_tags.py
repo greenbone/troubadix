@@ -64,5 +64,7 @@ class CheckOverlongScriptTags(FileContentPlugin):
                     yield LinterError(
                         f"Tag {tag.value} is to long"
                         f" with {len(match.group('value'))} characters. "
-                        f"Max {VALUE_LIMIT}"
+                        f"Max {VALUE_LIMIT}",
+                        file=nasl_file,
+                        plugin=self.name,
                     )

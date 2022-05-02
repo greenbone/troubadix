@@ -65,7 +65,7 @@ class CheckSolutionTypeTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT some/file.nasl does not contain a solution_type",
+            "VT does not contain a solution_type",
             results[0].message,
         )
 
@@ -86,6 +86,6 @@ class CheckSolutionTypeTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT some/file.nasl does not contain a valid solution_type 'value'",
+            "VT does not contain a valid solution_type 'value'",
             results[0].message,
         )

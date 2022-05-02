@@ -67,9 +67,13 @@ class CheckSolutionType(FileContentPlugin):
         if has_severity:
             if match is None or match.group(1) is None:
                 yield LinterError(
-                    f"VT {nasl_file} does not contain a solution_type"
+                    "VT does not contain a solution_type",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
         if match is not None and match.group(2) not in VALUES:
             yield LinterError(
-                f"VT {nasl_file} does not contain a valid solution_type 'value'"
+                "VT does not contain a valid solution_type 'value'",
+                file=nasl_file,
+                plugin=self.name,
             )

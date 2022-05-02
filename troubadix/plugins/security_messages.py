@@ -68,5 +68,7 @@ class CheckSecurityMessages(FileContentPlugin):
 
         if sec_match:
             yield LinterError(
-                "VT is using a security_message in a VT without severity"
+                "VT is using a security_message in a VT without severity",
+                file=nasl_file,
+                plugin=self.name,
             )

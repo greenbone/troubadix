@@ -65,14 +65,14 @@ class CheckEncodingTestCase(PluginTestCase):
 
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                f"VT '{path}' has a wrong encoding.",
+                "VT uses a wrong encoding. Detected encoding is utf-8.",
                 results[0].message,
             )
             self.assertEqual(
-                "Found invalid character in line 0",
+                "Found invalid character",
                 results[1].message,
             )
             self.assertEqual(
-                "Found invalid character in line 1",
+                "Found invalid character",
                 results[2].message,
             )

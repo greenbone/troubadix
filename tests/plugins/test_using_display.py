@@ -58,8 +58,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include 'some/file.nasl' is using a display() "
-            'function at: display("FOO");',
+            'VT/Include is using a display() function at: display("FOO");',
             results[0].message,
         )
 
@@ -81,7 +80,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            "VT 'some/file.nasl' is using a display() function which is "
+            "VT is using a display() function which is "
             "protected by a comment or an if statement at: "
             'if (0) display("FOO");.',
             results[0].message,
@@ -105,7 +104,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            "VT 'some/file.nasl' is using a display() function which is "
+            "VT is using a display() function which is "
             "protected by a comment or an if statement at: "
             '# display("FOO");.',
             results[0].message,

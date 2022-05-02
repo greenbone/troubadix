@@ -65,7 +65,9 @@ class CheckDependencies(FilePlugin):
                     if not (root / dep).exists():
                         yield LinterError(
                             f"The script dependency {dep} could not "
-                            "be found within the VTs."
+                            "be found within the VTs.",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )
                         continue
 
@@ -93,10 +95,14 @@ class CheckDependencies(FilePlugin):
                     if parent_folder in ["PCIDSS", "Policy", "GSHB"]:
                         yield LinterWarning(
                             f"The script dependency {dep} is in a "
-                            "subdirectory, which might be misplaced."
+                            "subdirectory, which might be misplaced.",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )
                     else:
                         yield LinterError(
                             f"The script dependency {dep} is within "
-                            "a subdirectory, which is not allowed."
+                            "a subdirectory, which is not allowed.",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )

@@ -39,5 +39,7 @@ class CheckDescription(FilePlugin):
         ).search(self.context.file_content)
         if script_description:
             yield LinterError(
-                "VT/Include is using deprecated 'script_description'"
+                "VT/Include is using deprecated 'script_description'",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )

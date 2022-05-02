@@ -40,15 +40,25 @@ class CheckCVSSFormat(FileContentPlugin):
 
         missing_cvss_base = re.search('"cvss_base", value:""', file_content)
         if missing_cvss_base:
-            yield LinterError("VT has a missing cvss_base value.")
+            yield LinterError(
+                "VT has a missing cvss_base value.",
+                file=nasl_file,
+                plugin=self.name,
+            )
         else:
             cvss_detect = cvss_base_pattern.search(file_content)
             if not cvss_detect:
-                yield LinterError("VT has an invalid cvss_base value.")
+                yield LinterError(
+                    "VT has an invalid cvss_base value.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
         vector_match = cvss_base_vector_pattern.search(file_content)
 
         if not vector_match:
             yield LinterError(
-                "VT has a missing or invalid cvss_base_vector value."
+                "VT has a missing or invalid cvss_base_vector value.",
+                file=nasl_file,
+                plugin=self.name,
             )

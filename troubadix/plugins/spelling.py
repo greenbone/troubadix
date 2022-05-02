@@ -51,7 +51,9 @@ class CheckSpelling(FilePlugin):
             yield LinterError(
                 "codespell tool not found within your PATH. Please install it "
                 "via e.g. 'pip3 install codespell' or 'apt-get install "
-                "codespell' and make sure it is available within your PATH. "
+                "codespell' and make sure it is available within your PATH.",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )
             return
 
@@ -186,6 +188,14 @@ class CheckSpelling(FilePlugin):
                 codespell += line + "\n"
 
         if codespell and "==>" in codespell:
-            yield LinterWarning(codespell)
+            yield LinterWarning(
+                codespell,
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
         elif codespell and "Traceback (most recent call last):" in codespell:
-            yield LinterError(codespell)
+            yield LinterError(
+                codespell,
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )

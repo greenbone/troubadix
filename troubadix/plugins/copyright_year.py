@@ -72,7 +72,11 @@ class CheckCopyrightYear(LineContentPlugin):
                 copyrights.append((i, line, copyright_match.group(2)))
 
         if not creation_year:
-            yield LinterError("Missing creation_date statement in VT")
+            yield LinterError(
+                "Missing creation_date statement in VT",
+                file=nasl_file,
+                plugin=self.name,
+            )
 
         # key is the line where the copyright is found, value the year found
         # within that line
@@ -80,5 +84,8 @@ class CheckCopyrightYear(LineContentPlugin):
             if copyright_year != creation_year:
                 yield LinterError(
                     "VT contains a Copyright year not matching "
-                    f"the year {creation_year} at line {nr}"
+                    f"the year {creation_year} at line {nr}",
+                    file=nasl_file,
+                    plugin=self.name,
+                    line=nr,
                 )

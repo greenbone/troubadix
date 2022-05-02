@@ -56,7 +56,11 @@ class CheckCVEFormat(FileContentPlugin):
         # ("CVE-2017-2750");
         match_result = re.search("(?<=script_cve_id)[^;]+", file_content)
         if match_result is None or match_result.group(0) is None:
-            yield LinterWarning("VT does not refer to any CVEs.")
+            yield LinterWarning(
+                "VT does not refer to any CVEs.",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         found_cves = []
@@ -65,7 +69,11 @@ class CheckCVEFormat(FileContentPlugin):
         for match in matches:
             result = re.search(r'"CVE-\d{4}-\d{4,7}"', match)
             if result is None or result.group(0) is None:
-                yield LinterError("VT uses an invalid CVE format.")
+                yield LinterError(
+                    "VT uses an invalid CVE format.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
                 return
 
             cve = result.group(0)
@@ -73,14 +81,24 @@ class CheckCVEFormat(FileContentPlugin):
             if len(cve) > 15 and cve[10] == "0":
                 yield LinterError(
                     "The last group of CVE digits of the VT "
-                    "must not start with a 0 if there are more than 4 digits."
+                    "must not start with a 0 if there are more than 4 digits.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
 
             year = cve.split("-")
             if not 1999 <= int(year[1]) <= current_year:
-                yield LinterError("VT uses an invalid year in CVE format.")
+                yield LinterError(
+                    "VT uses an invalid year in CVE format.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
             if cve in found_cves:
-                yield LinterError(f"VT is using CVE {cve} multiple times.")
+                yield LinterError(
+                    f"VT is using CVE {cve} multiple times.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
             found_cves.append(cve)

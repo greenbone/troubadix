@@ -68,9 +68,17 @@ class CheckQod(FilePlugin):
 
         num_matches = len(match_qod) + len(match_qod_type)
         if num_matches < 1:
-            yield LinterError("VT is missing QoD or QoD type")
+            yield LinterError(
+                "VT is missing QoD or QoD type",
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
         if num_matches > 1:
-            yield LinterError("VT contains multiple QoD values")
+            yield LinterError(
+                "VT contains multiple QoD values",
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
 
         for match in match_qod:
             try:
@@ -79,13 +87,17 @@ class CheckQod(FilePlugin):
                     yield LinterError(
                         f"{match.group(0)}: '{qod}' is an invalid QoD number"
                         " value. Allowed are"
-                        f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}"
+                        f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )
             except ValueError:
                 yield LinterError(
                     f"{match.group(0)}: '{match.group('value')}' is an invalid"
                     " QoD number value. Allowed are"
-                    f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}"
+                    f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}",
+                    file=self.context.nasl_file,
+                    plugin=self.name,
                 )
 
         for match in match_qod_type:
@@ -93,5 +105,7 @@ class CheckQod(FilePlugin):
             if val not in VALID_QOD_TYPES:
                 yield LinterError(
                     f"{match.group(0)}: '{match.group('value')}' is an invalid"
-                    f" QoD type. Allowed are {', '.join(VALID_QOD_TYPES)}"
+                    f" QoD type. Allowed are {', '.join(VALID_QOD_TYPES)}",
+                    file=self.context.nasl_file,
+                    plugin=self.name,
                 )

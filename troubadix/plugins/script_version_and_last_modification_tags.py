@@ -56,9 +56,9 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
 
         if not match_ver_modified:
             yield LinterError(
-                f"VT '{str(nasl_file)}' is missing "
-                "script_version(); or "
-                "is using a wrong syntax.\n"
+                "VT is missing script_version(); or is using a wrong syntax.",
+                file=nasl_file,
+                plugin=self.name,
             )
 
         # script_tag(name:"last_modification",
@@ -70,7 +70,9 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
 
         if not match_last_modified:
             yield LinterError(
-                f"VT '{str(nasl_file)}' is missing script_tag("
+                "VT is missing script_tag("
                 'name:"last_modification" or is using a wrong '
-                "syntax.\n"
+                "syntax.",
+                file=nasl_file,
+                plugin=self.name,
             )

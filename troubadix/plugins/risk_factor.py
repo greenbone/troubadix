@@ -36,5 +36,7 @@ class CheckRiskFactor(FilePlugin):
             return
 
         yield LinterError(
-            f'Deprecated function "risk factor" found: {match.group("risk")}'
+            f'Deprecated function "risk factor" found: {match.group("risk")}',
+            file=self.context.nasl_file,
+            plugin=self.name,
         )

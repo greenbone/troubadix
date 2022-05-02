@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+
 from pathlib import Path
 from typing import Iterator
 
@@ -86,7 +87,9 @@ class CheckCopyrightText(FileContentPlugin):
                 "The VT is using an incorrect syntax for its copyright "
                 "statement. Please start (EXACTLY) with:\n"
                 "'script_copyright(\"Copyright (C) followed by the year "
-                "(matching the one in creation_date) and the author/company."
+                "(matching the one in creation_date) and the author/company.",
+                file=nasl_file,
+                plugin=self.name,
             )
 
         match = re.search(
@@ -105,7 +108,9 @@ class CheckCopyrightText(FileContentPlugin):
             )
 
             yield LinterError(
-                "The VT was using an incorrect copyright statement."
+                "The VT was using an incorrect copyright statement.",
+                file=nasl_file,
+                plugin=self.name,
             )
 
     def fix(self) -> Iterator[LinterResult]:
@@ -118,5 +123,7 @@ class CheckCopyrightText(FileContentPlugin):
         )
 
         yield LinterFix(
-            f"The copyright has been updated to {CORRECT_COPYRIGHT_PHRASE}"
+            f"The copyright has been updated to {CORRECT_COPYRIGHT_PHRASE}",
+            file=nasl_file,
+            plugin=self.name,
         )

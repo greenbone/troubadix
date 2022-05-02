@@ -86,5 +86,7 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
                         "VT is using an invalid or misspelled string "
                         f"({pref_type}) passed to the type parameter of "
                         "script_add_preference in "
-                        f"'{preferences_match.group(0)}'"
+                        f"'{preferences_match.group(0)}'",
+                        file=nasl_file,
+                        plugin=self.name,
                     )

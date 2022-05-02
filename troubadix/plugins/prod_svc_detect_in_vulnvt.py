@@ -77,7 +77,9 @@ class CheckProdSvcDetectInVulnvt(FilePlugin):
                 "VT has a severity but is placed in the family '"
                 f"{match_family.group('value')}' which is not allowed for this "
                 "VT. Please split this VT into a separate Product/Service "
-                "detection and Vulnerability-VT."
+                "detection and Vulnerability-VT.",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )
 
         matches = re.finditer(
@@ -100,5 +102,7 @@ class CheckProdSvcDetectInVulnvt(FilePlugin):
                         "VT has a severity but is using the function '"
                         f"{match.group('function')}' which is not allowed for "
                         "this VT. Please split this VT into a separate "
-                        "Product/Service detection and Vulnerability-VT."
+                        "Product/Service detection and Vulnerability-VT.",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )

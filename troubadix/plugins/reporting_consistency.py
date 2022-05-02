@@ -52,15 +52,23 @@ class CheckReportingConsistency(FileContentPlugin):
         cvss_base = cvss_base_pattern.search(file_content)
 
         if not cvss_base:
-            yield LinterError("VT/Include has no cvss_base tag")
+            yield LinterError(
+                "VT/Include has no cvss_base tag",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         if log_message and cvss_base.group("value") != "0.0":
             yield LinterError(
-                "Tag cvss_base is not 0.0 use report function security_message"
+                "Tag cvss_base is not 0.0 use report function security_message",
+                file=nasl_file,
+                plugin=self.name,
             )
 
         if security_message and cvss_base.group("value") == "0.0":
             yield LinterError(
-                "Tag cvss_base is 0.0 use report function log_message"
+                "Tag cvss_base is 0.0 use report function log_message",
+                file=nasl_file,
+                plugin=self.name,
             )

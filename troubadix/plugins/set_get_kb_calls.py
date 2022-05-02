@@ -63,7 +63,9 @@ class CheckWrongSetGetKBCalls(FilePlugin):
                     if not set_param_match or len(set_param_match) != 2:
                         yield LinterError(
                             "The VT/Include is missing a 'name:' and/or "
-                            f"'value:' parameter: {set_match.group(0)}"
+                            f"'value:' parameter: {set_match.group(0)}",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )
 
         get_matches = re.finditer(
@@ -76,5 +78,7 @@ class CheckWrongSetGetKBCalls(FilePlugin):
                     if get_param_match and len(get_param_match) > 0:
                         yield LinterError(
                             "The VT/Include is using a non-existent 'name:' "
-                            f"and/or 'value:' parameter: {get_match.group(0)}"
+                            f"and/or 'value:' parameter: {get_match.group(0)}",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )

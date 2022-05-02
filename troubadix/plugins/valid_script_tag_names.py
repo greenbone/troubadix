@@ -116,4 +116,6 @@ class CheckValidScriptTagNames(FileContentPlugin):
                     yield LinterError(
                         f"The script_tag name '{match.group('name')}' "
                         "is not allowed.",
+                        file=nasl_file,
+                        plugin=self.name,
                     )

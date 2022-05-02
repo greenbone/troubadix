@@ -51,6 +51,7 @@ class CheckTabsTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Found tabs in line 1.",
             results[0].message,
+            "VT uses tabs instead of spaces.",
         )
+        self.assertEqual(results[0].line, 1)

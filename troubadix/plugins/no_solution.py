@@ -23,7 +23,6 @@ from troubadix.helper import (
     CURRENT_ENCODING,
     ScriptTag,
     get_script_tag_pattern,
-    get_path_from_root,
 )
 from troubadix.plugin import (
     LinterError,
@@ -56,7 +55,6 @@ class CheckNoSolution(FilesPlugin):
             if nasl_file.suffix == ".inc":
                 continue
 
-            file_name = get_path_from_root(nasl_file, self.context.root)
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             solution_match = get_script_tag_pattern(ScriptTag.SOLUTION).search(
                 content
@@ -67,7 +65,9 @@ class CheckNoSolution(FilesPlugin):
                     r"as\s+of\s*(?P<date>.+?)\.\s*", re.DOTALL
                 ).search(solution_match.group("value"))
             else:
-                yield LinterError(f"{file_name}: No Solution tag found.")
+                yield LinterError(
+                    "No Solution tag found.", file=nasl_file, plugin=self.name
+                )
                 continue
 
             # total number of missing solutions
@@ -79,8 +79,9 @@ class CheckNoSolution(FilesPlugin):
             no_solution_since = parse_date(date_match.group("date"))
             if not no_solution_since:
                 yield LinterError(
-                    f"{file_name}: Can not convert "
-                    f"'{date_match.group('date')}' to datetime"
+                    f"Can not convert '{date_match.group('date')}' to datetime",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
                 continue
 
@@ -88,7 +89,9 @@ class CheckNoSolution(FilesPlugin):
             if no_solution_since <= NO_SOLUTION_DATE_TOO_OLDER_1_YEAR:
                 missing_solutions_older_than_1_year += 1
                 yield LinterWarning(
-                    f"{file_name}: Missing solution, older than 1 year."
+                    "Missing solution, older than 1 year.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
                 continue
 
@@ -96,7 +99,9 @@ class CheckNoSolution(FilesPlugin):
             if no_solution_since <= NO_SOLUTION_DATE_TOO_OLDER_6_MONTH:
                 missing_solutions_older_than_6_months += 1
                 yield LinterWarning(
-                    f"{file_name}: Missing solution, older than 6 months."
+                    "Missing solution, older than 6 months.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
                 continue
 
@@ -104,24 +109,30 @@ class CheckNoSolution(FilesPlugin):
             if no_solution_since >= NO_SOLUTION_DATE_TOO_YOUNG:
                 missing_solutions_younger_1_month += 1
                 yield LinterWarning(
-                    f"{file_name}: Missing solution, but younger than 31 days."
+                    "Missing solution, but younger than 31 days.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
 
         if total_missing_solutions > 0:
             yield LinterWarning(
-                "total missing solutions:" f" {total_missing_solutions}"
+                "total missing solutions:" f" {total_missing_solutions}",
+                plugin=self.name,
             )
             yield LinterWarning(
                 "missing solutions younger 1 month:"
-                f" {missing_solutions_younger_1_month}"
+                f" {missing_solutions_younger_1_month}",
+                plugin=self.name,
             )
             yield LinterWarning(
                 "missing solutions older than 6 months:"
-                f" {missing_solutions_older_than_6_months}"
+                f" {missing_solutions_older_than_6_months}",
+                plugin=self.name,
             )
             yield LinterWarning(
                 "missing solutions older than 1 year:"
-                f" {missing_solutions_older_than_1_year}"
+                f" {missing_solutions_older_than_1_year}",
+                plugin=self.name,
             )
 
 

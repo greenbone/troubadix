@@ -26,8 +26,11 @@ class CheckTabs(FilePlugin):
     def run(self) -> Iterator[LinterResult]:
         """This script checks if a VT is using one or
         more tabs instead of spaces."""
-        count = 1
-        for line in self.context.lines:
+        for nr, line in enumerate(self.context.lines, 1):
             if "\t" in line:
-                yield LinterError(f"Found tabs in line {count}.")
-            count += 1
+                yield LinterError(
+                    "VT uses tabs instead of spaces.",
+                    file=self.context.nasl_file,
+                    plugin=self.name,
+                    line=nr,
+                )

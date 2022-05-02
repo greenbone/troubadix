@@ -105,7 +105,11 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                 script=nasl_file.name,
             )
         except CategoryError as e:
-            yield LinterError(str(e))
+            yield LinterError(
+                str(e),
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         dependencies_pattern = get_special_script_tag_pattern(
@@ -131,7 +135,9 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                     if not dependency_path.exists():
                         yield LinterError(
                             f"The script dependency {dep} could not "
-                            "be found within the VTs."
+                            "be found within the VTs.",
+                            file=nasl_file,
+                            plugin=self.name,
                         )
                     else:
                         # TODO: gsf/PCIDSS/PCI-DSS.nasl,
@@ -152,7 +158,11 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                                 script=dependency_path.name,
                             )
                         except CategoryError as e:
-                            yield LinterError(str(e))
+                            yield LinterError(
+                                str(e),
+                                file=nasl_file,
+                                plugin=self.name,
+                            )
 
                         if category.value < dependency_category.value:
                             yield LinterError(
@@ -160,7 +170,9 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                                 f"({category.value}) is lower than "
                                 f"the category {dependency_category.name}"
                                 f"({dependency_category.value}) of the "
-                                f"dependency {dep}."
+                                f"dependency {dep}.",
+                                file=nasl_file,
+                                plugin=self.name,
                             )
                         # nb: Currently not sure about the
                         # host_alive_detection.nasl dependency so
@@ -174,5 +186,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                                 f"category {dependency_category.name}"
                                 f"({dependency_category.value}), but no VT"
                                 " is allowed to have a direct dependency "
-                                "to VTs in this category."
+                                "to VTs in this category.",
+                                file=nasl_file,
+                                plugin=self.name,
                             )

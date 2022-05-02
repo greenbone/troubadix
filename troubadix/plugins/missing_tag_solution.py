@@ -47,9 +47,11 @@ class CheckMissingTagSolution(FileContentPlugin):
         """
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
+
         # Not all VTs have/require a solution_type text
         if "solution_type" not in file_content:
             return
+
         # Avoid unnecessary message against deprecated VTs.
         deprecated_pattern = get_script_tag_pattern(ScriptTag.DEPRECATED)
         deprecated_match = deprecated_pattern.search(string=file_content)
@@ -68,5 +70,7 @@ class CheckMissingTagSolution(FileContentPlugin):
         if not solution_match or solution_match.group(0) is None:
             yield LinterError(
                 "'solution_type' script_tag but no 'solution' script_tag "
-                "found in the description block."
+                "found in the description block.",
+                file=nasl_file,
+                plugin=self.name,
             )

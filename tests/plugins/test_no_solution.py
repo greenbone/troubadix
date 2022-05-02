@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.no_solution import CheckNoSolution
 
@@ -29,7 +30,7 @@ here = Path(__file__).parent
 
 class CheckNoSolutionTestCase(PluginTestCase):
     def test_ok(self):
-        file1 = here / "test_files/nasl/21.04/test.nasl"
+        file1 = here / "test_files" / "nasl" / "21.04" / "test.nasl"
         context = MagicMock()
         context.nasl_files = [file1]
         context.root = here
@@ -39,7 +40,13 @@ class CheckNoSolutionTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_too_old_1_year(self):
-        file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
+        file1 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template.nasl"
+        )
         context = MagicMock()
         context.nasl_files = [file1]
         context.root = here
@@ -49,18 +56,24 @@ class CheckNoSolutionTestCase(PluginTestCase):
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            "test_files/nasl/21.04/fail_solution_template.nasl:"
-            " Missing solution, older than 1 year.",
+            "Missing solution, older than 1 year.",
             results[0].message,
         )
 
     def test_too_old_6_months(self):
-        file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
+        file1 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template.nasl"
+        )
         new_date = (datetime.now() - timedelta(days=200)).strftime("%Y/%m/%d")
 
-        text = file1.read_text(encoding="latin-1")
+        text = file1.read_text(encoding=CURRENT_ENCODING)
         file1.write_text(
-            text.replace("02nd February, 2021", new_date), encoding="latin-1"
+            text.replace("02nd February, 2021", new_date),
+            encoding=CURRENT_ENCODING,
         )
 
         context = MagicMock()
@@ -70,23 +83,29 @@ class CheckNoSolutionTestCase(PluginTestCase):
         results = list(plugin.run())
 
         # reverse change to file
-        file1.write_text(text, encoding="latin-1")
+        file1.write_text(text, encoding=CURRENT_ENCODING)
 
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            "test_files/nasl/21.04/fail_solution_template.nasl:"
-            " Missing solution, older than 6 months.",
+            "Missing solution, older than 6 months.",
             results[0].message,
         )
 
     def test_too_young_31_days(self):
-        file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
+        file1 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template.nasl"
+        )
         new_date = (datetime.now() - timedelta(days=10)).strftime("%Y/%m/%d")
 
-        text = file1.read_text(encoding="latin-1")
+        text = file1.read_text(encoding=CURRENT_ENCODING)
         file1.write_text(
-            text.replace("02nd February, 2021", new_date), encoding="latin-1"
+            text.replace("02nd February, 2021", new_date),
+            encoding=CURRENT_ENCODING,
         )
 
         context = MagicMock()
@@ -96,35 +115,55 @@ class CheckNoSolutionTestCase(PluginTestCase):
         results = list(plugin.run())
 
         # reverse change to file
-        file1.write_text(text, encoding="latin-1")
+        file1.write_text(text, encoding=CURRENT_ENCODING)
 
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
-            "test_files/nasl/21.04/fail_solution_template.nasl:"
-            " Missing solution, but younger than 31 days.",
+            "Missing solution, but younger than 31 days.",
             results[0].message,
         )
 
     def test_multiples(self):
-        file1 = here / "test_files/nasl/21.04/fail_solution_template.nasl"
-        file2 = here / "test_files/nasl/21.04/fail_solution_template2.nasl"
-        file3 = here / "test_files/nasl/21.04/fail_solution_template3.nasl"
+        file1 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template.nasl"
+        )
+        file2 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template2.nasl"
+        )
+        file3 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template3.nasl"
+        )
 
         date1 = (datetime.now() - timedelta(days=200)).strftime("%Y/%m/%d")
         date2 = (datetime.now() - timedelta(days=400)).strftime("%Y/%m/%d")
         date3 = (datetime.now() - timedelta(days=10)).strftime("%Y/%m/%d")
 
-        text = file1.read_text(encoding="latin-1")
+        text = file1.read_text(encoding=CURRENT_ENCODING)
 
         file1.write_text(
-            text.replace("02nd February, 2021", date1), encoding="latin-1"
+            text.replace("02nd February, 2021", date1),
+            encoding=CURRENT_ENCODING,
         )
         file2.write_text(
-            text.replace("02nd February, 2021", date2), encoding="latin-1"
+            text.replace("02nd February, 2021", date2),
+            encoding=CURRENT_ENCODING,
         )
         file3.write_text(
-            text.replace("02nd February, 2021", date3), encoding="latin-1"
+            text.replace("02nd February, 2021", date3),
+            encoding=CURRENT_ENCODING,
         )
 
         context = MagicMock()
@@ -134,7 +173,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         results = list(plugin.run())
 
         # reverse change to file
-        file1.write_text(text, encoding="latin-1")
+        file1.write_text(text, encoding=CURRENT_ENCODING)
         file2.unlink()
         file3.unlink()
 

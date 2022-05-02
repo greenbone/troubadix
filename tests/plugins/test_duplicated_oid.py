@@ -56,7 +56,7 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "test_files/nasl/21.04/fail_badwords.nasl: Could not find an OID.",
+            "Could not find an OID.",
             results[0].message,
         )
 
@@ -73,8 +73,8 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "test_files/nasl/21.04/test.nasl: OID 1.3.6.1.4.1.25623.1.0.100312"
-            " already used by 'test_files/nasl/21.04/fail.nasl'",
+            "OID 1.3.6.1.4.1.25623.1.0.100312 already used by "
+            "'test_files/nasl/21.04/fail.nasl'",
             results[0].message,
         )
 
@@ -96,7 +96,6 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "test_files/nasl/21.04/fail_name_and_copyright_newline.nasl: "
             "Invalid OID 1.2.3.4.5.6.78909.8.7.654321 found.",
             results[0].message,
         )
