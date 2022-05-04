@@ -136,6 +136,9 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             "34. According to www.tcpdump.org:",
             "35. According to www.kde.org:",
             "36. From the www.info-zip.org site:",
+            # pylint: disable=line-too-long
+            "37.  (www.isg.rhul.ac.uk) for discovering this flaw and Adam Langley and",
+            "38. Sorry about having to reissue this one -- I pulled it from ftp.gnu.org not",
         ]
 
         for testcase in testcases:
