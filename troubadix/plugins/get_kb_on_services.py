@@ -85,5 +85,7 @@ class CheckGetKBOnServices(FileContentPlugin):
                     yield LinterError(
                         f"The following get_kb_{kb_match.group('type')}() call"
                         " should use a function instead of a direct access to "
-                        f"the Services/KB key: {kb_match.group('value')}"
+                        f"the Services/KB key: {kb_match.group('value')}",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )

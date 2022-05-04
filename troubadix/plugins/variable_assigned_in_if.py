@@ -94,4 +94,8 @@ class CheckVariableAssignedInIf(FileContentPlugin):
                     lint_error = True
 
         if lint_error:
-            yield LinterError(output)
+            yield LinterError(
+                output,
+                file=nasl_file,
+                plugin=self.name,
+            )

@@ -40,7 +40,11 @@ class CheckCreationDate(FileContentPlugin):
             return
 
         if not "creation_date" in file_content:
-            yield LinterError("No creation date has been found.")
+            yield LinterError(
+                "No creation date has been found.",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         tag_pattern = get_script_tag_pattern(ScriptTag.CREATION_DATE)
@@ -60,7 +64,9 @@ class CheckCreationDate(FileContentPlugin):
                 week_day_parsed = date_right.strftime("%a")
             except ValueError:
                 yield LinterError(
-                    "False or incorrectly formatted creation_date."
+                    "False or incorrectly formatted creation_date.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
                 return
 
@@ -68,15 +74,23 @@ class CheckCreationDate(FileContentPlugin):
             # Wed, 29 Nov 2017
             if date_left.date() != date_right.date():
                 yield LinterError(
-                    "The creation_date consists of two different dates."
+                    "The creation_date consists of two different dates.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
             # Check correct weekday
             elif week_day_str != week_day_parsed:
                 formatted_date = week_day_parsed
                 yield LinterError(
                     f"Wrong day of week. Please change it from '{week_day_str}"
-                    f"' to '{formatted_date}'."
+                    f"' to '{formatted_date}'.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
         else:
-            yield LinterError("False or incorrectly formatted creation_date.")
+            yield LinterError(
+                "False or incorrectly formatted creation_date.",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return

@@ -51,10 +51,15 @@ class CheckLogMessages(FileContentPlugin):
             re.MULTILINE,
         )
         if log_match:
-            yield LinterError("The VT is using an empty log_message() function")
+            yield LinterError(
+                "The VT is using an empty log_message() function",
+                file=nasl_file,
+                plugin=self.name,
+            )
 
         if nasl_file.suffix == ".inc":
             return
+
         # Policy VTs might use both, security_message and log_message
         if "Policy/" in str(nasl_file):
             return
@@ -77,5 +82,7 @@ class CheckLogMessages(FileContentPlugin):
         )
         if log_match:
             yield LinterWarning(
-                "The VT is using a log_message in a VT with a severity"
+                "The VT is using a log_message in a VT with a severity",
+                file=nasl_file,
+                plugin=self.name,
             )

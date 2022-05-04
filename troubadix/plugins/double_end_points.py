@@ -63,5 +63,7 @@ class CheckDoubleEndPoints(FilePlugin):
                         yield LinterError(
                             f"The script tag '{tag_match.group('name')}' "
                             "is ending with two or more points: "
-                            f"'{tag_match.group('value')}'."
+                            f"'{tag_match.group('value')}'.",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )

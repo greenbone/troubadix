@@ -78,7 +78,9 @@ class CheckIllegalCharacters(FilePlugin):
                         )
                         self.new_file_content = file_content
                         yield LinterWarning(
-                            f"Found illegal character in {match.group(0)}"
+                            f"Found illegal character in {match.group(0)}",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )
 
     def fix(self) -> Iterator[LinterResult]:
@@ -89,4 +91,8 @@ class CheckIllegalCharacters(FilePlugin):
             self.new_file_content, encoding=CURRENT_ENCODING
         )
 
-        yield LinterFix("Replaced Illegal Characters.")
+        yield LinterFix(
+            "Replaced Illegal Characters.",
+            file=self.context.nasl_file,
+            plugin=self.name,
+        )

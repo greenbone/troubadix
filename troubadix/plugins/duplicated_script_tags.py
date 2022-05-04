@@ -46,11 +46,14 @@ class CheckDuplicatedScriptTags(FilePlugin):
                     continue
                 if tag.value == "xref":
                     continue
+
                 match = list(match)
                 if len(match) > 1:
                     yield LinterError(
                         f"The VT is using the script tag 'script_"
-                        f"{tag.value}' multiple number of times."
+                        f"{tag.value}' multiple number of times.",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )
 
         script_tag_patterns = get_script_tag_patterns()
@@ -62,5 +65,7 @@ class CheckDuplicatedScriptTags(FilePlugin):
                 if len(match) > 1:
                     yield LinterError(
                         f"The VT is using the script tag '{tag.value}' "
-                        "multiple number of times."
+                        "multiple number of times.",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )

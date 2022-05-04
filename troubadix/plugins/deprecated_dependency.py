@@ -73,7 +73,9 @@ class CheckDeprecatedDependency(FilePlugin):
                     if not dependency_path.exists():
                         yield LinterError(
                             f"The script dependency {dep} could not "
-                            "be found within the VTs."
+                            "be found within the VTs.",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
                         )
                     else:
                         # TODO: gsf/PCIDSS/PCI-DSS.nasl,
@@ -93,5 +95,7 @@ class CheckDeprecatedDependency(FilePlugin):
                         if dependency_deprecated:
                             yield LinterError(
                                 f"VT depends on {dep}, which is marked "
-                                "as deprecated."
+                                "as deprecated.",
+                                file=self.context.nasl_file,
+                                plugin=self.name,
                             )

@@ -114,7 +114,9 @@ class CheckForkingNaslFunctions(FileContentPlugin):
                         "multiple times or in conjunction with other "
                         "forking functions. Please either use get_app_port_from"
                         "_list() from host_details.inc or split your VT into "
-                        f"several VTs for each covered protocol."
+                        f"several VTs for each covered protocol.",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )
             return
 
@@ -139,10 +141,13 @@ class CheckForkingNaslFunctions(FileContentPlugin):
                     if any(e in str(nasl_file) for e in exceptions):
                         if "nofork:TRUE" in tag[0]:
                             continue
+
                     yield LinterError(
                         f"The VT is using the {tag[0]} multiple times or in "
                         "conjunction with other forking functions. Please use "
                         "e.g. get_app_version_and_location(), "
                         "get_app_version_and_location_from_list() or similar "
-                        "functions from host_details.inc."
+                        "functions from host_details.inc.",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )

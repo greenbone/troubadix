@@ -45,7 +45,9 @@ class CheckScriptCopyright(FileContentPlugin):
                 "The VT is using an incorrect syntax for its "
                 "copyright statement. Please start (EXACTLY) with: "
                 "'script_copyright(\"Copyright (C)' followed by the year "
-                "(matching the one in creation_date) and the author/company."
+                "(matching the one in creation_date) and the author/company.",
+                file=nasl_file,
+                plugin=self.name,
             )
 
         if re.search(
@@ -63,5 +65,7 @@ class CheckScriptCopyright(FileContentPlugin):
                 "statement. Please use (EXACTLY): "
                 "# Some text descriptions might be excerpted from (a) "
                 "referenced\n# source(s), and are Copyright (C) by the "
-                "respective right holder(s)."
+                "respective right holder(s).",
+                file=nasl_file,
+                plugin=self.name,
             )

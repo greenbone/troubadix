@@ -41,7 +41,11 @@ class CheckScriptCategory(FileContentPlugin):
         )
 
         if own_category_match is None or own_category_match.group(1) is None:
-            yield LinterError("VT is missing a script_category.")
+            yield LinterError(
+                "VT is missing a script_category.",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         # pylint: disable=line-too-long
@@ -50,6 +54,8 @@ class CheckScriptCategory(FileContentPlugin):
         own_category = own_category_match.group(1)
         if own_category not in SCRIPT_CATEGORIES:
             yield LinterError(
-                f"VT is using an unsupported category '{own_category}'."
+                f"VT is using an unsupported category '{own_category}'.",
+                file=nasl_file,
+                plugin=self.name,
             )
             return

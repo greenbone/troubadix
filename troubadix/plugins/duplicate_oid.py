@@ -47,16 +47,12 @@ class CheckDuplicateOID(FilesPlugin):
         """Run PRE_RUN_COLLECTOR."""
 
         mapping = dict()
-        duplicates = []
-        absents = []
-        invalids = []
 
         for nasl_file in self.context.nasl_files:
             if not nasl_file.suffix == ".nasl":
                 continue
 
             oid = None
-            file_name = get_path_from_root(nasl_file, self.context.root)
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             # search for deprecated script_id
             match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
@@ -73,25 +69,24 @@ class CheckDuplicateOID(FilesPlugin):
                     oid = OPENVAS_OID_PREFIX + match.group("oid")
 
             if not oid:
-                absents.append(file_name)
-                yield LinterError(f"{file_name}: Could not find an OID.")
-
-            elif not OID_RE.match(oid):
-                invalids.append(file_name)
-                yield LinterError(f"{file_name}: Invalid OID {oid} found.")
-
-            elif oid not in mapping:
-                mapping[oid] = str(file_name)
-            else:
-                duplicates.append(
-                    {
-                        "oid": oid,
-                        "duplicate": file_name,
-                        "first_usage": mapping[oid],
-                    }
+                yield LinterError(
+                    "Could not find an OID.",
+                    plugin=self.name,
+                    file=nasl_file,
                 )
 
+            elif not OID_RE.match(oid):
                 yield LinterError(
-                    f"{file_name}: OID {oid} already "
-                    f"used by '{mapping[oid]}'"
+                    f"Invalid OID {oid} found.",
+                    plugin=self.name,
+                    file=nasl_file,
+                )
+
+            elif oid not in mapping:
+                mapping[oid] = get_path_from_root(nasl_file, self.context.root)
+            else:
+                yield LinterError(
+                    f"OID {oid} already used by '{mapping[oid]}'",
+                    file=nasl_file,
+                    plugin=self.name,
                 )

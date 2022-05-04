@@ -63,9 +63,15 @@ class CheckMissingDescExit(FileContentPlugin):
             )
             if not submatch:
                 yield LinterError(
-                    "No mandatory exit(0); found in the description block."
+                    "No mandatory exit(0); found in the description block.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
 
             return
 
-        yield LinterError("No description block extracted/found.")
+        yield LinterError(
+            "No description block extracted/found.",
+            file=nasl_file,
+            plugin=self.name,
+        )

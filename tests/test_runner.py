@@ -18,16 +18,13 @@
 
 import io
 import unittest
-
 from contextlib import redirect_stdout
 from pathlib import Path
 
 from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
-
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
-
 from troubadix.plugins import _PLUGINS
 from troubadix.plugins.badwords import CheckBadwords
 from troubadix.plugins.copyright_text import CheckCopyrightText
@@ -395,7 +392,7 @@ class TestRunner(unittest.TestCase):
 
     def test_runner_log_file(self):
         included_plugins = [
-            "CheckMissingDescExit",
+            CheckMissingDescExit.name,
         ]
         nasl_file = (
             _here
@@ -423,12 +420,11 @@ class TestRunner(unittest.TestCase):
 
         compare_content = (
             "\tPre-Run Plugins: check_duplicate_oid, check_no_solution\n"
-            "\tIncluded Plugins: CheckMissingDescExit\n"
+            "\tIncluded Plugins: check_missing_desc_exit\n"
             "\tRunning plugins: check_missing_desc_exit\n"
             "\n\nRun plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
-            f"\t\t{get_path_from_root(nasl_file, self.root)}: Invalid OID "
-            "1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
+            "\t\tInvalid OID 1.2.3.4.5.6.78909.1.7.654321 found.\n\n\n"
             "Run plugin check_no_solution\n"
             "\t\tNo results for plugin check_no_solution\n\n\n"
             f"Checking {get_path_from_root(nasl_file, self.root)} (1/1)\n\t\t"

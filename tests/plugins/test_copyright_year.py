@@ -36,7 +36,6 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
-        print(results)
         self.assertEqual(len(results), 0)
 
     def test_missing_creation_date(self):

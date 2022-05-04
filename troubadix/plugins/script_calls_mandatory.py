@@ -57,5 +57,7 @@ class CheckScriptCallsMandatory(FileContentPlugin):
             if not get_special_script_tag_pattern(call).search(file_content):
                 yield LinterError(
                     "VT does not contain the following mandatory call: "
-                    f"'script_{call}'"
+                    f"'script_{call}'",
+                    file=nasl_file,
+                    plugin=self.name,
                 )

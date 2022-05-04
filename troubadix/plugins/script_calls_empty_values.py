@@ -42,14 +42,26 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
 
         matches = _get_tag_pattern(name=r".*", value=r"").finditer(file_content)
         for match in matches:
-            yield LinterError(f"{match.group(0)} does not contain a value")
+            yield LinterError(
+                f"{match.group(0)} does not contain a value",
+                file=nasl_file,
+                plugin=self.name,
+            )
 
         matches = get_xref_pattern(name=r".*", value=r"").finditer(file_content)
         for match in matches:
-            yield LinterError(f"{match.group(0)} does not contain a value")
+            yield LinterError(
+                f"{match.group(0)} does not contain a value",
+                file=nasl_file,
+                plugin=self.name,
+            )
 
         matches = _get_special_script_tag_pattern(
             name=r"(?!add_preferences).*", value=""
         ).finditer(file_content)
         for match in matches:
-            yield LinterError(f"{match.group(0)} does not contain a value")
+            yield LinterError(
+                f"{match.group(0)} does not contain a value",
+                file=nasl_file,
+                plugin=self.name,
+            )

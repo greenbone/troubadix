@@ -43,4 +43,8 @@ class CheckScriptXrefUrl(FileContentPlugin):
         for match in matches:
             if match:
                 if not url(match.group("value")):
-                    yield LinterError(f"{match.group(0)}: Invalid URL value")
+                    yield LinterError(
+                        f"{match.group(0)}: Invalid URL value",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )

@@ -52,7 +52,9 @@ class UpdateModificationDate(FilePlugin):
         )
         if not match:
             yield LinterError(
-                "VT does not contain a modification day script tag."
+                "VT does not contain a modification day script tag.",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )
             return
 
@@ -79,7 +81,11 @@ class UpdateModificationDate(FilePlugin):
             string=file_content,
         )
         if not match:
-            yield LinterError("VT does not contain a script version.")
+            yield LinterError(
+                "VT does not contain a script version.",
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
             return
 
         old_version = match.groups()[0]
@@ -98,7 +104,9 @@ class UpdateModificationDate(FilePlugin):
 
         yield LinterWarning(
             f"Outdated last_modification date. Was {old_datetime} "
-            f"and should be {correctly_formated_datetime}"
+            f"and should be {correctly_formated_datetime}",
+            file=self.context.nasl_file,
+            plugin=self.name,
         )
 
     def fix(self) -> Iterator[LinterResult]:
@@ -110,5 +118,7 @@ class UpdateModificationDate(FilePlugin):
             yield LinterFix(
                 f"Replaced modification_date {self.old_datetime} "
                 f"with {self.new_datetime} and script_version "
-                f"{self.old_version} with {self.new_version}."
+                f"{self.old_version} with {self.new_version}.",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )

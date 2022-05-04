@@ -72,7 +72,9 @@ class CheckHttpLinksInTags(FilePlugin):
                                 "One script_tag in the VT is using a HTTP "
                                 "link/URL which should be moved to a separate "
                                 '\'script_xref(name:"URL", value:"");\''
-                                f" tag instead: '{tag_match.group(0)}'"
+                                f" tag instead: '{tag_match.group(0)}'",
+                                file=self.context.nasl_file,
+                                plugin=self.name,
                             )
 
     def contains_nvd_mitre_link_in_xref(self) -> Iterator[LinterResult]:
@@ -110,7 +112,9 @@ class CheckHttpLinksInTags(FilePlugin):
                         "The following script_xref is pointing "
                         "to Mitre/NVD which is already covered by the "
                         "script_cve_id. This is a redundant info and the "
-                        f"script_xref needs to be removed: {match.group(0)}"
+                        f"script_xref needs to be removed: {match.group(0)}",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )
 
     @staticmethod

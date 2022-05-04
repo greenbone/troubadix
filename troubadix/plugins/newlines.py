@@ -51,7 +51,11 @@ class CheckNewlines(FilePlugin):
             if whitespaces_match:
                 for i in range(1, 5):
                     if whitespaces_match.group(f"w{i}") != "":
-                        yield LinterError(f"Found whitespaces in script_{tag}.")
+                        yield LinterError(
+                            f"Found whitespaces in script_{tag}.",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
+                        )
                         break
 
             newline_match = re.search(
@@ -61,5 +65,7 @@ class CheckNewlines(FilePlugin):
             )
             if newline_match:
                 yield LinterError(
-                    f"Found a newline within the tag script_{tag}."
+                    f"Found a newline within the tag script_{tag}.",
+                    file=self.context.nasl_file,
+                    plugin=self.name,
                 )

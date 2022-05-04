@@ -104,6 +104,8 @@ class CheckSolutionText(FilePlugin):
                 "The VT with solution type 'NoneAvailable' is using an "
                 "incorrect syntax in the solution text. Please use "
                 f"(EXACTLY):\n{correct_none_available_syntax}",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )
         elif _get_tag_pattern(
             name=ScriptTag.SOLUTION_TYPE.value, value="WillNotFix"
@@ -114,4 +116,6 @@ class CheckSolutionText(FilePlugin):
                 "The VT with solution type 'WillNotFix' is using an incorrect "
                 "syntax in the solution text. Please use one of these "
                 f"(EXACTLY):\n{correct_will_not_fix_syntax}",
+                file=self.context.nasl_file,
+                plugin=self.name,
             )

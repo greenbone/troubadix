@@ -78,5 +78,7 @@ class CheckMisplacedCompareInIf(FilePlugin):
                 if misplaced_compare_match:
                     yield LinterError(
                         f"VT/Include is using a misplaced compare "
-                        f"within an if() call in {if_match.group(0)}"
+                        f"within an if() call in {if_match.group(0)}",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
                     )

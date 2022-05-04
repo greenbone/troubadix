@@ -100,7 +100,7 @@ class CheckBadwords(LineContentPlugin):
         if is_ignore_file(nasl_file, _IGNORE_FILES):
             return
 
-        for i, line in enumerate(lines):
+        for i, line in enumerate(lines, 1):
             if any(badword in line for badword in DEFAULT_BADWORDS):
                 if (
                     not any(exception in line for exception in EXCEPTIONS)
@@ -113,4 +113,9 @@ class CheckBadwords(LineContentPlugin):
                         for filename, value in COMBINED
                     )
                 ):
-                    yield LinterError(f"Badword in line {i+1:5}: {line}")
+                    yield LinterError(
+                        f"Badword in line {i:5}: {line}",
+                        plugin=self.name,
+                        file=nasl_file,
+                        line=i,
+                    )

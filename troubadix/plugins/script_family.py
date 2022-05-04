@@ -106,15 +106,25 @@ class CheckScriptFamily(FileContentPlugin):
         matches = list(family_pattern.finditer(file_content))
 
         if not matches:
-            yield LinterError("No script family exist")
+            yield LinterError(
+                "No script family exist",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         if len(matches) > 1:
-            yield LinterError("More then one script family exist")
+            yield LinterError(
+                "More then one script family exist",
+                file=nasl_file,
+                plugin=self.name,
+            )
             return
 
         if matches[0].group("value") not in VALID_FAMILIES:
             yield LinterError(
                 "Invalid or misspelled script family "
-                f"'{matches[0].group('value')}'"
+                f"'{matches[0].group('value')}'",
+                file=nasl_file,
+                plugin=self.name,
             )

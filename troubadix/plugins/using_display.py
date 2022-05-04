@@ -104,12 +104,16 @@ class CheckUsingDisplay(FileContentPlugin):
                     and if_comment_match.group(0) is not None
                 ):
                     yield LinterWarning(
-                        f"VT '{nasl_file}' is using a display() function which "
+                        f"VT is using a display() function which "
                         f"is protected by a comment or an if statement at: "
-                        f"{dis_match}."
+                        f"{dis_match}.",
+                        file=nasl_file,
+                        plugin=self.name,
                     )
                 else:
                     yield LinterError(
-                        f"VT/Include '{nasl_file}' is using a display() "
-                        f"function at: {dis_match}"
+                        f"VT/Include is using a display() "
+                        f"function at: {dis_match}",
+                        file=nasl_file,
+                        plugin=self.name,
                     )

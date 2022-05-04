@@ -46,5 +46,7 @@ class CheckScriptTagForm(FileContentPlugin):
                 ):
                     yield LinterError(
                         f"{match.group(0)}: does not conform to"
-                        ' script_tag(name:"<name>", value:<value>);'
+                        ' script_tag(name:"<name>", value:<value>);',
+                        file=nasl_file,
+                        plugin=self.name,
                     )
