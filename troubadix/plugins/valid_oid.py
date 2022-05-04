@@ -197,6 +197,28 @@ class CheckValidOID(FileContentPlugin):
                         plugin=self.name,
                     )
                 return
+
+            elif "1.3.6.1.4.1.25623.1.1.13." in oid:
+                if family != f"Slackware {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Slackware "
+                        f"'{str(oid)}'"
+                    )
+                    return
+
+                slackware_sa_match = re.search(
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.13\.20[0-4][0-9]\.[0-9]"
+                    r"{3,4}\.[0-9]{2}$",
+                    oid,
+                )
+                if slackware_sa_match is None:
+                    yield LinterError(
+                        f"script_oid() {invalid_oid} '{str(oid)}' (Slackware "
+                        "pattern: 1.3.6.1.4.1.25623.1.1.13.[ADVISORY_YEAR]"
+                        ".[ADVISORY_ID].[ADVISORY_REVISION])"
+                    )
+                return
+
             else:
                 vendor_number_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid
@@ -315,15 +337,6 @@ class CheckValidOID(FileContentPlugin):
                         )
                         return
 
-                elif vendor_number == "13":
-                    if family != f"Slackware {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Slackware VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
                 else:
                     yield LinterError(
                         f"script_oid() {invalid_oid} '{str(oid)}' (Vendor OID "
