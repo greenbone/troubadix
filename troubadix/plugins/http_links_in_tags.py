@@ -156,6 +156,9 @@ class CheckHttpLinksInTags(FilePlugin):
             "According to www.tcpdump.org:",
             "According to www.kde.org:",
             "From the www.info-zip.org site:",
+            # pylint: disable=line-too-long
+            " (www.isg.rhul.ac.uk) for discovering this flaw and Adam Langley and",
+            "Sorry about having to reissue this one -- I pulled it from ftp.gnu.org not",
             # e.g.:
             # Since gedit supports opening files via 'http://' URLs
             "'http://'",

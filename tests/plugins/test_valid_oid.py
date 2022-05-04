@@ -588,7 +588,7 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_slackware_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.13.2256");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");'
             'script_family("Slackware Local Security Checks");'
         )
         fake_context = self.create_file_plugin_context(
@@ -603,7 +603,7 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_slackware(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.13.2256");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");'
             'script_family("SUSE Local Security Checks");'
         )
         fake_context = self.create_file_plugin_context(
@@ -619,7 +619,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "Slackware VTs '1.3.6.1.4.1.25623.1.1.13.2256'"
+                "Slackware '1.3.6.1.4.1.25623.1.1.13.2022.123.01'"
             ),
             results[0].message,
         )
