@@ -24,7 +24,7 @@ from troubadix.helper.patterns import (
     get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
-from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckScriptVersionAndLastModificationTags(FileContentPlugin):

@@ -16,12 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from typing import Iterator, Union
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import get_common_tag_patterns
-from troubadix.plugin import LinterFix, LinterResult, LinterWarning, FilePlugin
+from troubadix.plugin import FilePlugin, LinterFix, LinterResult, LinterWarning
 
 # import magic
 

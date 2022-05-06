@@ -19,8 +19,8 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 from troubadix.helper.helper import SCRIPT_CATEGORIES
+from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckScriptCategory(FileContentPlugin):

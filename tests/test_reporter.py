@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # pylint: disable=protected-access
 
-from contextlib import redirect_stdout
 import io
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 
 from pontos.terminal.terminal import Terminal

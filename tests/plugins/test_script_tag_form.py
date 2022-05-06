@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_tag_form import CheckScriptTagForm
-from tests.plugins import PluginTestCase
 
 
 class CheckScriptTagFormTestCase(PluginTestCase):

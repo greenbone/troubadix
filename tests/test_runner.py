@@ -23,6 +23,7 @@ from pathlib import Path
 
 from pontos.terminal import _set_terminal
 from pontos.terminal.terminal import Terminal
+
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
 from troubadix.plugins import _PLUGINS

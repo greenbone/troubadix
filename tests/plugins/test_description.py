@@ -19,6 +19,7 @@ from pathlib import Path
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.description import CheckDescription
+
 from . import PluginTestCase
 
 

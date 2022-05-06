@@ -17,11 +17,11 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_calls_empty_values import (
     CheckScriptCallsEmptyValues,
 )
-from tests.plugins import PluginTestCase
 
 
 class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):

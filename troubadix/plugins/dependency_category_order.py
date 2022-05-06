@@ -18,7 +18,6 @@
 # pylint: disable=fixme
 
 import re
-
 from enum import IntEnum
 from pathlib import Path
 from typing import Iterator, Union

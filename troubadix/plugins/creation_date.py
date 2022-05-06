@@ -19,10 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.patterns import (
-    ScriptTag,
-    get_script_tag_pattern,
-)
+from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 LENGTH = 44

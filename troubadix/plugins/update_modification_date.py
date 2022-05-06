@@ -19,15 +19,14 @@
 
 import datetime
 import re
-
 from typing import Iterator
-from troubadix.helper import CURRENT_ENCODING
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.plugin import (
+    FilePlugin,
     LinterError,
     LinterFix,
     LinterResult,
-    FilePlugin,
     LinterWarning,
 )
 

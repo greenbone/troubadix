@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_calls_mandatory import CheckScriptCallsMandatory
-from tests.plugins import PluginTestCase
 
 
 class CheckScriptCallsMandatoryTestCase(PluginTestCase):

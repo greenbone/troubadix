@@ -21,7 +21,7 @@ from troubadix.helper.patterns import (
     get_script_tag_patterns,
     get_special_script_tag_patterns,
 )
-from troubadix.plugin import LinterError, LinterResult, FilePlugin
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 class CheckDuplicatedScriptTags(FilePlugin):

@@ -34,8 +34,8 @@ from .encoding import CheckEncoding
 from .forking_nasl_functions import CheckForkingNaslFunctions
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
-from .illegal_characters import CheckIllegalCharacters
 from .http_links_in_tags import CheckHttpLinksInTags
+from .illegal_characters import CheckIllegalCharacters
 from .log_messages import CheckLogMessages
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit

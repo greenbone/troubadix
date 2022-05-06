@@ -17,7 +17,7 @@
 
 from typing import Iterator
 
-from troubadix.plugin import LinterResult, LinterError, FilePlugin
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 class CheckTabs(FilePlugin):

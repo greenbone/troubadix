@@ -17,11 +17,11 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.script_calls_recommended import (
     CheckScriptCallsRecommended,
 )
-from tests.plugins import PluginTestCase
 
 
 class CheckScriptCallsRecommendedTestCase(PluginTestCase):

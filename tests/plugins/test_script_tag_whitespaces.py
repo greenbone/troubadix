@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_tag_whitespaces import CheckScriptTagWhitespaces
-from tests.plugins import PluginTestCase
 
 
 class CheckScriptTagWhitespacesTestCase(PluginTestCase):

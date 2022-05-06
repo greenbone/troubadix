@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_xref_form import CheckScriptXrefForm
-from tests.plugins import PluginTestCase
 
 
 class CheckScriptXrefFormTestCase(PluginTestCase):

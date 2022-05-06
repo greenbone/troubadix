@@ -23,8 +23,8 @@ from troubadix.helper.patterns import get_script_tag_pattern
 from troubadix.plugin import (
     FileContentPlugin,
     LinterError,
-    LinterWarning,
     LinterResult,
+    LinterWarning,
 )
 
 

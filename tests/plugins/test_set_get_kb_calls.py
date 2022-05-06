@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.set_get_kb_calls import CheckWrongSetGetKBCalls
-from tests.plugins import PluginTestCase
 
 
 class CheckWrongSetGetKBCallTestCase(PluginTestCase):

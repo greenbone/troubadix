@@ -17,9 +17,10 @@
 
 from pathlib import Path
 from typing import Iterable, List
-from pontos.terminal.terminal import Terminal
-from troubadix.helper.helper import get_path_from_root
 
+from pontos.terminal.terminal import Terminal
+
+from troubadix.helper.helper import get_path_from_root
 from troubadix.plugin import (
     FilesPlugin,
     LinterError,

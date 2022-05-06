@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
-
 from pathlib import Path
 from subprocess import PIPE, Popen
-from typing import List, Optional, Union, Tuple, AnyStr
+from typing import AnyStr, List, Optional, Tuple, Union
 
 # Script categories
 SCRIPT_CATEGORIES = {

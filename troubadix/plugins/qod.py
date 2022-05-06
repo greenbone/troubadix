@@ -18,7 +18,7 @@
 from typing import Iterator
 
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
-from troubadix.plugin import LinterError, LinterResult, FilePlugin
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 VALID_QOD_NUM_VALUES = [
     1,

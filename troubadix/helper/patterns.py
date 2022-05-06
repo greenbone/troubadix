@@ -16,11 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from enum import Enum
 from typing import Dict
-from troubadix.helper.helper import SCRIPT_CATEGORIES
 
+from troubadix.helper.helper import SCRIPT_CATEGORIES
 
 # regex patterns for script tags
 _TAG_PATTERN = (

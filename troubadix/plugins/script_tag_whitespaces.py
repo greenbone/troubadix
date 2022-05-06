@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from pathlib import Path
 from typing import Iterator
+
 from troubadix.helper.patterns import _get_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 

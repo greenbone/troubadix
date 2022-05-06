@@ -17,9 +17,9 @@
 
 from pathlib import Path
 
+from tests.plugins import PluginTestCase
 from troubadix.plugin import LinterError
 from troubadix.plugins.security_messages import CheckSecurityMessages
-from tests.plugins import PluginTestCase
 
 
 class CheckSecurityMessagesTestCase(PluginTestCase):
