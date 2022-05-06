@@ -78,6 +78,7 @@ version-module-file = "troubadix/__version__.py"
 
 [tool.poetry.scripts]
 troubadix = 'troubadix.troubadix:main'
+troubadix-change-oid = 'troubadix.standalone-plugins.changed_oid:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
