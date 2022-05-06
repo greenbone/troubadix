@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Iterable, Iterator
 
 from ..helper import is_ignore_file
-from ..plugin import LineContentPlugin, LinterWarning, LinterResult
+from ..plugin import LineContentPlugin, LinterResult, LinterWarning
 
 _IGNORE_FILES = [
     "gb_openvas",

@@ -16,10 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from typing import Iterator
 
-from troubadix.plugin import LinterError, LinterResult, FilePlugin
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 class CheckDeprecatedFunctions(FilePlugin):

@@ -17,7 +17,6 @@
 
 import datetime
 import signal
-
 from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable
@@ -26,11 +25,7 @@ from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,
 )
-from troubadix.plugin import (
-    FilesPluginContext,
-    FilePluginContext,
-    FilesPlugin,
-)
+from troubadix.plugin import FilePluginContext, FilesPlugin, FilesPluginContext
 from troubadix.plugins import (
     _PRE_RUN_PLUGINS,
     Plugins,

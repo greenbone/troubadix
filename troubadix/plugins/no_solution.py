@@ -16,21 +16,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from datetime import datetime, timedelta
 from typing import Iterator
-from datetime import timedelta, datetime
 
-from troubadix.helper import (
-    CURRENT_ENCODING,
-    ScriptTag,
-    get_script_tag_pattern,
-)
+from troubadix.helper import CURRENT_ENCODING, ScriptTag, get_script_tag_pattern
 from troubadix.plugin import (
+    FilesPlugin,
     LinterError,
     LinterResult,
     LinterWarning,
-    FilesPlugin,
 )
-
 
 NO_SOLUTION_DATE_TOO_YOUNG = datetime.now() - timedelta(days=31)
 NO_SOLUTION_DATE_TOO_OLDER_6_MONTH = datetime.now() - timedelta(days=186)

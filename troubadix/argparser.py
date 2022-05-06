@@ -18,7 +18,6 @@
 """ Argument parser for troubadix """
 
 import sys
-
 from argparse import ArgumentParser, Namespace
 from multiprocessing import cpu_count
 from pathlib import Path

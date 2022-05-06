@@ -15,11 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-
 from typing import Iterator
 
 from troubadix.helper.patterns import ScriptTag, _get_tag_pattern
-from troubadix.plugin import LinterError, LinterResult, FilePlugin
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 class CheckSolutionText(FilePlugin):

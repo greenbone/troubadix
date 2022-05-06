@@ -18,12 +18,10 @@
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
-
 from troubadix.plugin import LinterError
 from troubadix.plugins.badwords import CheckBadwords
 
 from . import PluginTestCase
-
 
 root = Path(__file__).parent / "test_files"
 

@@ -18,11 +18,8 @@
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.patterns import (
-    get_script_tag_patterns,
-)
-
 from troubadix.helper import is_ignore_file
+from troubadix.helper.patterns import get_script_tag_patterns
 
 from ..plugin import FileContentPlugin, LinterError, LinterResult
 

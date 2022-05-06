@@ -17,6 +17,7 @@
 
 from pathlib import Path
 from typing import Iterator
+
 from validators import url
 
 from troubadix.helper.patterns import get_xref_pattern

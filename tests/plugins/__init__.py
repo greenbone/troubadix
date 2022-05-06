@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest
 import tempfile
-
+import unittest
 from pathlib import Path
 from typing import Iterable
 from unittest.mock import MagicMock

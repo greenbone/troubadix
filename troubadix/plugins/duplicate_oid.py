@@ -16,20 +16,15 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-
 from typing import Iterator
 
 from troubadix.helper import (
     CURRENT_ENCODING,
     SpecialScriptTag,
-    get_special_script_tag_pattern,
     get_path_from_root,
+    get_special_script_tag_pattern,
 )
-from troubadix.plugin import (
-    FilesPlugin,
-    LinterError,
-    LinterResult,
-)
+from troubadix.plugin import FilesPlugin, LinterError, LinterResult
 
 # import json
 

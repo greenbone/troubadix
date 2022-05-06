@@ -17,12 +17,12 @@
 
 from pathlib import Path
 from typing import Iterator
+
 from troubadix.helper.patterns import (
     SpecialScriptTag,
     get_special_script_tag_pattern,
 )
-
-from troubadix.plugin import FileContentPlugin, LinterResult, LinterError
+from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 VALID_FAMILIES = [
     "AIX Local Security Checks",

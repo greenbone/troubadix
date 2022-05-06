@@ -18,12 +18,12 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.helper import which, subprocess_cmd
+from troubadix.helper.helper import subprocess_cmd, which
 from troubadix.plugin import (
+    FilePlugin,
     LinterError,
     LinterResult,
     LinterWarning,
-    FilePlugin,
 )
 
 PluginPath = Path(__file__).parent.resolve()

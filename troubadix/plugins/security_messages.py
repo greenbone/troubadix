@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
-from troubadix.plugin import LinterError, FileContentPlugin, LinterResult
+from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckSecurityMessages(FileContentPlugin):

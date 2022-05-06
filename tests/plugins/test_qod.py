@@ -22,6 +22,7 @@ from troubadix.plugins.qod import (
     VALID_QOD_TYPES,
     CheckQod,
 )
+
 from . import PluginTestCase
 
 
