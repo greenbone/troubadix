@@ -26,7 +26,7 @@ import sys
 import os
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, Iterable
 
 
 def file_type(string: str) -> Path:
@@ -36,7 +36,7 @@ def file_type(string: str) -> Path:
     return file_path
 
 
-def parse_args() -> Namespace:
+def parse_args(args: Iterable[str]) -> Namespace:
     parser = ArgumentParser(
         description="Check for changed oid",
     )
@@ -63,12 +63,12 @@ def parse_args() -> Namespace:
             " commit range"
         ),
     )
-    return parser.parse_args()
+    return parser.parse_args(args=args)
 
 
-def git(args: list) -> subprocess.CompletedProcess:
+def git(*args) -> subprocess.CompletedProcess:
     return subprocess.run(
-        ["git"] + args, capture_output=True, encoding="utf-8", check=True
+        ["git"] + list(args), capture_output=True, encoding="utf-8", check=True
     )
 
 
@@ -86,7 +86,7 @@ def check_oid(args: Namespace) -> Iterator[Path]:
         args.files += [
             Path(_file)
             for _file in git(
-                ["diff", "--name-only", "--diff-filter=AM", args.commit_range]
+                "diff", "--name-only", "--diff-filter=AM", args.commit_range
             ).stdout.splitlines()
         ]
 
@@ -96,14 +96,12 @@ def check_oid(args: Namespace) -> Iterator[Path]:
 
         print(f"Check file {nasl_file}")
         text = git(
-            [
-                "-c",
-                "color.status=false",
-                "--no-pager",
-                "diff",
-                args.commit_range,
-                nasl_file,
-            ]
+            "-c",
+            "color.status=false",
+            "--no-pager",
+            "diff",
+            args.commit_range,
+            nasl_file,
         ).stdout
 
         oid_added = re.search(
@@ -131,19 +129,19 @@ def check_oid(args: Namespace) -> Iterator[Path]:
             yield nasl_file
 
 
-def main() -> int:
+def main(args) -> int:
     try:
-        git_base = git(["rev-parse", "--show-toplevel"])
+        git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.stdout.rstrip("\n"))
     except subprocess.SubprocessError:
         print("In your current working directory is no git repository")
         return 1
 
-    if len(list(check_oid(parse_args()))):
+    if len(list(check_oid(parse_args(args)))):
         return 2
 
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
