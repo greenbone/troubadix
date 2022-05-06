@@ -26,6 +26,7 @@ import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator
+from subprocess import SubprocessError
 from troubadix.standalone_plugins.changed_oid import check_oid, git, parse_args
 
 
@@ -43,24 +44,52 @@ def tempgitdir() -> Generator[Path, None, None]:
     os.chdir(str(cwd))
 
 
-def testgit(tmpdir: Path) -> None:
+def testgit(tmpdir: Path, ok: bool = False) -> None:
     test_file = tmpdir / "test.nasl"
     test_file.write_text('script_oid("1.3.6.1.4.1.25623.1.0.100313");')
     git("add", str(test_file))
     git("commit", "-m", "test")
     git("checkout", "-b", "test")
-    test_file.write_text('script_oid("2.3.6.1.4.1.25623.1.0.100313");')
+    if ok:
+        test_file.write_text(
+            'script_oid("1.3.6.1.4.1.25623.1.0.100313");\ntest'
+        )
+    else:
+        test_file.write_text('script_oid("2.3.6.1.4.1.25623.1.0.100313");')
     git("add", "-u")
     git("commit", "-m", "test2")
 
 
 class TestChangeOid(unittest.TestCase):
-    def test_check_oid(self):
+    def test_check_oid_ok(self):
+        with tempgitdir() as tmpdir:
+            testgit(tmpdir, True)
+            parsed_args = parse_args(["-c", "main..test"])
+            self.assertFalse(check_oid(parsed_args))
+
+    def test_check_oid_fail(self):
         with tempgitdir() as tmpdir:
             testgit(tmpdir)
             parsed_args = parse_args(["-c", "main..test"])
-            results = check_oid(parsed_args)
-            self.assertEqual(len(list(results)), 1)
+            self.assertTrue(check_oid(parsed_args))
+
+    def test_git_fail(self):
+        with self.assertRaises(SubprocessError):
+            git("bla")
+
+    def test_git_ok(self):
+        git("--version")
+
+    def test_args_ok(self):
+        with tempgitdir() as tmpdir:
+            testgit(tmpdir)
+            self.assertEqual(
+                parse_args(["-c", "main..test"]).commit_range, "main..test"
+            )
+            self.assertEqual(
+                parse_args(["-c", "main..test", "-f", "test.nasl"]).files,
+                [Path("test.nasl")],
+            )
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ import sys
 import os
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Iterator, Iterable
+from typing import Iterable
 
 
 def file_type(string: str) -> Path:
@@ -66,13 +66,13 @@ def parse_args(args: Iterable[str]) -> Namespace:
     return parser.parse_args(args=args)
 
 
-def git(*args) -> subprocess.CompletedProcess:
+def git(*args) -> str:
     return subprocess.run(
         ["git"] + list(args), capture_output=True, encoding="utf-8", check=True
-    )
+    ).stdout
 
 
-def check_oid(args: Namespace) -> Iterator[Path]:
+def check_oid(args: Namespace) -> bool:
     """The script checks (via git diff) if the passed VT has changed the
     OID in the following tag:
 
@@ -87,9 +87,10 @@ def check_oid(args: Namespace) -> Iterator[Path]:
             Path(_file)
             for _file in git(
                 "diff", "--name-only", "--diff-filter=AM", args.commit_range
-            ).stdout.splitlines()
+            ).splitlines()
         ]
 
+    rcode = False
     for nasl_file in args.files:
         if nasl_file.suffix != ".nasl":
             continue
@@ -102,7 +103,7 @@ def check_oid(args: Namespace) -> Iterator[Path]:
             "diff",
             args.commit_range,
             nasl_file,
-        ).stdout
+        )
 
         oid_added = re.search(
             r'^\+\s*script_oid\s*\(\s*["\'](?P<oid>[0-9.]+)["\']\s*\)\s*;',
@@ -126,18 +127,19 @@ def check_oid(args: Namespace) -> Iterator[Path]:
                 f"OID_NEW: {oid_added.group('oid')} "
                 f"OID OLD: {oid_removed.group('oid')}"
             )
-            yield nasl_file
+            rcode = True
+    return rcode
 
 
 def main(args) -> int:
     try:
         git_base = git("rev-parse", "--show-toplevel")
-        os.chdir(git_base.stdout.rstrip("\n"))
+        os.chdir(git_base.rstrip("\n"))
     except subprocess.SubprocessError:
         print("In your current working directory is no git repository")
         return 1
 
-    if len(list(check_oid(parse_args(args)))):
+    if check_oid(parse_args(args)):
         return 2
 
     return 0
