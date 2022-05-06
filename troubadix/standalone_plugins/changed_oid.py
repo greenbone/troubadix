@@ -136,7 +136,9 @@ def main(args) -> int:
         git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.rstrip("\n"))
     except subprocess.SubprocessError:
-        print("In your current working directory is no git repository")
+        print(
+            "Your current working directory doesn't belong to a git repository"
+        )
         return 1
 
     if check_oid(parse_args(args)):
