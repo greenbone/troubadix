@@ -60,7 +60,7 @@ def testgit(tmpdir: Path, ok: bool = False) -> None:
     git("commit", "-m", "test2")
 
 
-class TestChangeOid(unittest.TestCase):
+class TestChangedOid(unittest.TestCase):
     def test_check_oid_ok(self):
         with tempgitdir() as tmpdir:
             testgit(tmpdir, True)
