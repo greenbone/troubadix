@@ -86,13 +86,13 @@ def check_oid(args: Namespace) -> bool:
         args.files += [
             Path(_file)
             for _file in git(
-                "diff", "--name-only", "--diff-filter=AM", args.commit_range
+                "diff", "--name-only", "--diff-filter=d", args.commit_range
             ).splitlines()
         ]
 
     rcode = False
     for nasl_file in args.files:
-        if nasl_file.suffix != ".nasl":
+        if nasl_file.suffix != ".nasl" or not nasl_file.exists():
             continue
 
         print(f"Check file {nasl_file}")
