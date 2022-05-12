@@ -36,7 +36,7 @@ chardet = "^4.0.0"
 validators = "^0.18.2"
 
 [tool.poetry.dev-dependencies]
-pylint = "^2.13.7"
+pylint = "^2.13.8"
 black = "^22.3"
 autohooks = "^21.7.0"
 autohooks-plugin-black = "^21.12.0"
