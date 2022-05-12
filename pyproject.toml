@@ -33,7 +33,7 @@ pontos = "^22.2.1"
 codespell = "^2.0.0"
 python-magic = "^0.4.25"
 chardet = "^4.0.0"
-validators = "^0.18.2"
+validators = ">=0.18.2,<0.20.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.13.8"
