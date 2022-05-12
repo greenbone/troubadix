@@ -625,14 +625,14 @@ reenable php7-dba support of Berkeley DB (bsc#1108554)");
     reg_xml = '\t\t<registry_item' + status + ' xmlns="http://oval.mitre.org/' +
 ** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.(CVE-2020-16598)
 Reject invalid eliptic curve point coordinates (bsc#1131291)");
-rejection for EXTRAVERSION = -xfs, but likely little else will be
+ rejection for EXTRAVERSION = -xfs, but likely little else will be
   - Remote Command Execution via WAN and LAN
   - Remote Unauthenticated Information Disclosure via WAN and LAN
 	Remove all mitre.org links from the script descriptions as
 	Removed script_xref references to cve.mitre.org. This
 	Remove reference to cve.mitre.org from insight tag.
 report_dead = script_get_preference( "Report about unrechable Hosts", id:6 );
-Reported by Aurelien Delaitre (SATE 2009).
+ Reported by Aurelien Delaitre (SATE 2009).
   reporter of CVE-2010-0542 Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
   reporter of CVE-2010-0542, Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
     report = "Keiner der unter Punkt 2.2.1.2 geforderten Ciphers wurde auf dem System unter Port " + port + " gefunden.";
@@ -657,6 +657,7 @@ Revert 'ipc,sem: remove uneeded sem_undo_list lock usage in exit_sem()'
   * revoke mis-issued intermediate CAs from TURKTRUST.");
 Rick Macklem, Christopher Key and Tim Zingelman reported that the
 Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
+Rogue backends can cause DoS of guests via high frequency events T[his CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
 Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28713)
 Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if ... [Please see the references for more information on the vulnerabilities]");
 root CAs when using an https connection.
@@ -938,6 +939,7 @@ specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series E
 "statics/html",
 "statics/script",
 string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
+supply input to this crate, they could have caused a denial of service in the
   supporting the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.");
  support was already present, but it was not enforcable).");
 support was enhanced and fixed, support for HDA sound on Acer Aspire
@@ -985,6 +987,7 @@ The GOST ENGINE in OpenSSL before 1.0.0f does not properly handle
   the only recommendations are to deny any access to ports 10000 and 10001 from WAN (if port-forwarding is enabled to allow remote
 The previous update of tcpdump already fixed variuous Buffer overflow/overread vulnerabilities [bsc#1153098, bsc#1153332]
 the router to stop forwarding data traffic across Traffic Engineering (TE) tunnels, resulting in a denial of
+The rust regex crate did not properly prevent crafted regular expressions from
 The rust regex crate did not properly prevent crafted regular expressions from taking an arbitrary amount of time during parsing. If an attacker was able to supply input to this crate, they could have caused a denial of service in the browser.
   The sbni_ioctl function in drivers/net/wan/sbni.c in the wan
   The SER product has been found to contain a vulnerability where ACKs
@@ -1062,6 +1065,7 @@ Upstream acknowledges sushi Anton Larsson, firehack, Jordi Chancel,
   Upstream acknowledges Tim Brown and Mark Lowe of Portcullis Computer
   url = dir + "/ang/shared/flags.php?g_lang=../../../../../../../" + file;
 url = dir + "/cds.php?interpret=%22><script>alert(document.cookie)</script>&titel=title&jahr=1" ;
+  url = dir + "/config.xml.sav";
     url = dir +'/includes/wysiwyg/spaw/editor/plugins/imgpopup/img_popup.php?'+
 url = dir + "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt";
 url = dir + "/profiles/index.php?gud=<script>alert(document.cookie)</script>";
