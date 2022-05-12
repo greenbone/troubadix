@@ -131,7 +131,10 @@ def check_oid(args: Namespace) -> bool:
     return rcode
 
 
-def main(args) -> int:
+def main(args=None) -> int:
+    if not args:
+        args = sys.argv[1:]
+
     try:
         git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.rstrip("\n"))
