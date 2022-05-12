@@ -2,4 +2,4 @@
 *                         @greenbone/devops
 
 # exceptions
-/troubadix/codespell/*.   @greenbone/vulnerability-test-maintainers
+/troubadix/codespell/*   @greenbone/vulnerability-test-maintainers
