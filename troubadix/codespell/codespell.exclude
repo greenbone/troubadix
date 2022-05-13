@@ -774,6 +774,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Multiple flaws are present due to errors in Liquify save mesh, Sharpen,
   script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in nd, a command-line WebDAV
   script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in nd, a command-line WebDAV interface, whereby long strings received from the remote server could overflow fixed-length buffers. This vulnerability could be exploited by a remote attacker in control of a malicious WebDAV server to execute arbitrary code if the server was accessed by a vulnerable version of nd.
+  script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in the dissectors for the MS-MMS, RTPS, RTPS2, Mount, ACN, CIMD and DTLS protocols, which could result in denial of service or the execution of arbitrary code.
   script_tag(name:"insight", value:"Ning Zhang & Amin Tora discovered that the mod_dav module
   script_tag(name:"insight", value:"** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Notes: none.(CVE-2021-20095)");
   script_tag(name:"insight", value:"Robert Merget, Marcus Brinkmann, Nimrod Aviram, and Juraj Somorovsky
@@ -938,6 +939,7 @@ specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series E
 "statics",
 "statics/html",
 "statics/script",
+Stephen Mc Guiness discovered empty passwords could be entered in some circumstances.
 string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
 supply input to this crate, they could have caused a denial of service in the
   supporting the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.");
