@@ -84,8 +84,8 @@ def check_oid(args: Namespace) -> bool:
 
     if not args.files:
         args.files += [
-            Path(_file)
-            for _file in git(
+            Path(f)
+            for f in git(
                 "diff", "--name-only", "--diff-filter=d", args.commit_range
             ).splitlines()
         ]
@@ -131,9 +131,8 @@ def check_oid(args: Namespace) -> bool:
     return rcode
 
 
-def main(args=None) -> int:
-    if not args:
-        args = sys.argv[1:]
+def main() -> int:
+    args = sys.argv[1:]
 
     try:
         git_base = git("rev-parse", "--show-toplevel")
@@ -151,4 +150,4 @@ def main(args=None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())
