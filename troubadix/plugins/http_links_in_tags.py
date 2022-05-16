@@ -159,6 +159,7 @@ class CheckHttpLinksInTags(FilePlugin):
             # Since gedit supports opening files via 'http://' URLs
             "'http://'",
             "'https://'",
+            "http://internal-host$1 is still insecure",
         ]
 
         return any(
