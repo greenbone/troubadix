@@ -71,6 +71,7 @@ VALID_FAMILIES = [
     "RPC",
     "Red Hat Local Security Checks",
     "Remote file access",
+    "Rocky Linux Local Security Checks",
     "SMTP problems",
     "SNMP",
     "SSL and TLS",
