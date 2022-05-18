@@ -403,6 +403,7 @@ class CheckValidOID(FileContentPlugin):
         exceptions = [
             "ossim_server_detect.nasl",
             "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_"
+            "stack_memory_usage_vuln_macosx.nasl",
             "enterprise/2018/vmware/gb_vmware_fusion_vmxnet3_"
             "stack_memory_usage_vuln_macosx.nasl",
             "2008/asterisk_sdp_header_overflow.nasl",
