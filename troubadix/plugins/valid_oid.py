@@ -308,7 +308,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "14":
                 if family != f"Rocky Linux {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Rocky Linux VTs "
+                        f"script_oid() {is_using_reserved} Rocky Linux "
                         f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,

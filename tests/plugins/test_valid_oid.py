@@ -624,10 +624,49 @@ class CheckValidOIDTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_rocky_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");'
+            'script_family("Rocky Linux Local Security Checks");'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_rocky(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");'
+            'script_family("SUSE Local Security Checks");'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for "
+                "Rocky Linux '1.3.6.1.4.1.25623.1.1.14.2022.123'"
+            ),
+            results[0].message,
+        )
+
     def test_unknown(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.14.2256");'
+            'script_oid("1.3.6.1.4.1.25623.1.1.99.2256");'
             'script_family("SUSE Local Security Checks");'
         )
         fake_context = self.create_file_plugin_context(
@@ -643,7 +682,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an invalid OID '1.3.6.1.4.1.25623.1.1."
-                "14.2256' (Vendor OID with unknown Vendor-Prefix)"
+                "99.2256' (Vendor OID with unknown Vendor-Prefix)"
             ),
             results[0].message,
         )
