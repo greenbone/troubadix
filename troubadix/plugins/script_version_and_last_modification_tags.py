@@ -48,6 +48,9 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             nasl_file: The VT that shall be checked
             file_content: The content of the VT that shall be checked
         """
+        if nasl_file.suffix == ".inc":
+            return
+
         # script_version("2019-03-21T12:19:01+0000");")
         version_pattern = get_special_script_tag_pattern(
             SpecialScriptTag.VERSION
