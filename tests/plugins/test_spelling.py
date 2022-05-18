@@ -16,7 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from pathlib import Path
 
-from troubadix.plugin import LinterWarning
+from troubadix.plugin import LinterError
 from troubadix.plugins.spelling import CheckSpelling
 
 from . import PluginTestCase
@@ -46,7 +46,7 @@ class CheckSpellingTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterWarning)
+        self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"{nasl_file}:1: soltuion ==> solution\n"
             f"{nasl_file}:1: aviaalable ==> available\n"

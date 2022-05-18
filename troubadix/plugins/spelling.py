@@ -23,7 +23,6 @@ from troubadix.plugin import (
     FilePlugin,
     LinterError,
     LinterResult,
-    LinterWarning,
 )
 
 PluginPath = Path(__file__).parent.resolve()
@@ -85,6 +84,11 @@ class CheckSpelling(FilePlugin):
                 # Same for a few other files:
                 if "smtp_AV_42zip_DoS.nasl" in line and re.search(
                     r"BA\s+==>\s+BY, BE", line
+                ):
+                    continue
+
+                if "bad_ssh_host_keys.inc" in line and re.search(
+                    r"ba\s+==>\s+by, be", line
                 ):
                     continue
 
@@ -188,7 +192,7 @@ class CheckSpelling(FilePlugin):
                 codespell += line + "\n"
 
         if codespell and "==>" in codespell:
-            yield LinterWarning(
+            yield LinterError(
                 codespell,
                 file=self.context.nasl_file,
                 plugin=self.name,
