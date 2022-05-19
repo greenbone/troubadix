@@ -212,14 +212,14 @@ class Reporter:
 
         if self._fix:
             self._term.info(
-                f"{'sum':48} {self._result_counts.warning_count:8}"
-                f" {self._result_counts.error_count:8}"
+                f"{'sum':48} {self._result_counts.error_count:8}"
+                f" {self._result_counts.warning_count:8}"
                 f" {self._result_counts.fix_count:8}"
             )
         else:
             self._term.info(
-                f"{'sum':48} {self._result_counts.warning_count:8}"
-                f" {self._result_counts.error_count:8}"
+                f"{'sum':48} {self._result_counts.error_count:8}"
+                f" {self._result_counts.warning_count:8}"
             )
 
     def _log_append(self, message: str):
