@@ -40,6 +40,7 @@ class TestNASLinter(unittest.TestCase):
             dirs=[cwd],
             exclude_patterns=[
                 "**/test.nasl",
+                "**/*.inc",
                 "**/templates/*/*.nasl",
                 "**/test_files/*",
                 "**/test_files/**/*.nasl",
