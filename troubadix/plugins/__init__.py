@@ -117,8 +117,9 @@ _PRE_RUN_PLUGINS = [
 
 
 class Plugins:
-    def __init__(self, plugins: List[Plugin]):
+    def __init__(self, plugins: List[Plugin], prerun_plugins: List[Plugin]):
         self._plugins = plugins
+        self._prerun_plugins = prerun_plugins
 
     def __len__(self) -> int:
         return len(self._plugins)
@@ -126,10 +127,13 @@ class Plugins:
     def __iter__(self) -> Iterable[Plugin]:
         return iter(self._plugins)
 
+    def get_prerun_plugins(self) -> Iterable[Plugin]:
+        return self._prerun_plugins
+
 
 class UpdatePlugins(Plugins):
     def __init__(self):
-        super().__init__([UpdateModificationDate])
+        super().__init__([UpdateModificationDate], [])
 
 
 class StandardPlugins(Plugins):
@@ -138,7 +142,7 @@ class StandardPlugins(Plugins):
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
     ) -> None:
-        super().__init__(_PLUGINS)
+        super().__init__(_PLUGINS, _PRE_RUN_PLUGINS)
 
         if excluded_plugins:
             self._plugins = [
@@ -147,10 +151,22 @@ class StandardPlugins(Plugins):
                 if plugin.__name__ not in excluded_plugins
                 and plugin.name not in excluded_plugins
             ]
+            self._prerun_plugins = [
+                plugin
+                for plugin in self._prerun_plugins
+                if plugin.__name__ not in excluded_plugins
+                and plugin.name not in excluded_plugins
+            ]
         if included_plugins:
             self._plugins = [
                 plugin
-                for plugin in _PLUGINS
+                for plugin in self._plugins
+                if plugin.__name__ in included_plugins
+                or plugin.name in included_plugins
+            ]
+            self._prerun_plugins = [
+                plugin
+                for plugin in self._prerun_plugins
                 if plugin.__name__ in included_plugins
                 or plugin.name in included_plugins
             ]

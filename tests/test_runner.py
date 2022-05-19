@@ -30,7 +30,9 @@ from troubadix.plugins import _PLUGINS
 from troubadix.plugins.badwords import CheckBadwords
 from troubadix.plugins.copyright_text import CheckCopyrightText
 from troubadix.plugins.cvss_format import CheckCVSSFormat
+from troubadix.plugins.duplicate_oid import CheckDuplicateOID
 from troubadix.plugins.missing_desc_exit import CheckMissingDescExit
+from troubadix.plugins.no_solution import CheckNoSolution
 from troubadix.reporter import Reporter
 from troubadix.runner import Runner, TroubadixException
 
@@ -148,7 +150,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "fail.nasl"
         )
-        included_plugins = [CheckCVSSFormat.name]
+        included_plugins = [CheckCVSSFormat.name, CheckNoSolution.name]
         runner = Runner(
             n_jobs=1,
             reporter=self._reporter,
@@ -161,7 +163,7 @@ class TestRunner(unittest.TestCase):
 
         self.assertFalse(sys_exit)
 
-        self.assertEqual(self._reporter._result_counts.error_count, 4)
+        self.assertEqual(self._reporter._result_counts.error_count, 3)
         self.assertEqual(self._reporter._result_counts.warning_count, 0)
         self.assertEqual(self._reporter._result_counts.fix_count, 0)
         self.assertEqual(
@@ -393,7 +395,9 @@ class TestRunner(unittest.TestCase):
 
     def test_runner_log_file(self):
         included_plugins = [
+            CheckDuplicateOID.name,
             CheckMissingDescExit.name,
+            CheckNoSolution.name,
         ]
         nasl_file = (
             _here
@@ -421,7 +425,8 @@ class TestRunner(unittest.TestCase):
 
         compare_content = (
             "\tPre-Run Plugins: check_duplicate_oid, check_no_solution\n"
-            "\tIncluded Plugins: check_missing_desc_exit\n"
+            "\tIncluded Plugins: check_duplicate_oid, check_missing_desc_exit"
+            ", check_no_solution\n"
             "\tRunning plugins: check_missing_desc_exit\n"
             "\n\nRun plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
