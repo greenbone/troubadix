@@ -57,6 +57,4 @@ class CheckDeprecatedBugtraqIdTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "Found bugtraq id.", results[0].message
-        )
+        self.assertEqual("Found bugtraq id.", results[0].message)
