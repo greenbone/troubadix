@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" checking badwords in NASL scripts with the NASLinter """
-
 import re
 from pathlib import Path
 from typing import Iterator
@@ -96,8 +94,33 @@ class CheckValidOID(FileContentPlugin):
 
             family = family_match.group("value")
 
-            # Fixed OID-scheme for (Huawei) Euler OS OIDs
-            if "1.3.6.1.4.1.25623.1.1.2." in oid:
+            vendor_number_match = re.search(
+                r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid
+            )
+            if (
+                vendor_number_match is None
+                or vendor_number_match.group(1) is None
+            ):
+                yield LinterError(
+                    f"script_oid() {invalid_oid} '{str(oid)}' (last digits)",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                return
+
+            vendor_number = vendor_number_match.group(1)
+
+            if vendor_number == "1":
+                if family != f"Debian {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Debian VTs "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "2":
                 if family != f"Huawei EulerOS {family_template}":
                     yield LinterError(
                         f"script_oid() {is_using_reserved} EulerOS "
@@ -107,6 +130,7 @@ class CheckValidOID(FileContentPlugin):
                     )
                     return
 
+                # Fixed OID-scheme for (Huawei) Euler OS OIDs
                 euler_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.2\.20[0-4][0-9]\.[0-9]{"
                     r"4}$",
@@ -122,8 +146,7 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
-            # Fixed OID-scheme for SUSE SLES OS OIDs
-            elif "1.3.6.1.4.1.25623.1.1.4." in oid:
+            elif vendor_number == "4":
                 if family != f"SuSE {family_template}":
                     yield LinterError(
                         f"script_oid() {is_using_reserved} SUSE SLES "
@@ -133,6 +156,7 @@ class CheckValidOID(FileContentPlugin):
                     )
                     return
 
+                # Fixed OID-scheme for SUSE SLES OS OIDs
                 sles_sa_match = re.search(
                     r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.20[0-4][0-9]\.[0-9]{"
                     r"4,5}\.[0-9]$",
@@ -148,7 +172,7 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
-            elif "1.3.6.1.4.1.25623.1.1.5." in oid:
+            elif vendor_number == "5":
                 if family != f"Amazon Linux {family_template}":
                     yield LinterError(
                         f"script_oid() {is_using_reserved} Amazon Linux "
@@ -172,7 +196,47 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
-            elif "1.3.6.1.4.1.25623.1.1.10." in oid:
+            elif vendor_number == "6":
+                if family != f"Gentoo {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Gentoo VTs "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "7":
+                if family != "FreeBSD Local Security Checks":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} FreeBSD VTs "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "8":
+                if family != f"Oracle Linux {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Oracle Linux "
+                        f"VTs '{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "9":
+                if family != f"Fedora {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Fedora VTs "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "10":
                 if family != f"Mageia Linux {family_template}":
                     yield LinterError(
                         f"script_oid() {is_using_reserved} Mageia Linux "
@@ -197,7 +261,27 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
-            elif "1.3.6.1.4.1.25623.1.1.13." in oid:
+            elif vendor_number == "11":
+                if family != f"RedHat {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} RedHat VTs "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "12":
+                if family != f"Ubuntu {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Ubuntu VTs "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+            elif vendor_number == "13":
                 if family != f"Slackware {family_template}":
                     yield LinterError(
                         f"script_oid() {is_using_reserved} Slackware "
@@ -218,134 +302,26 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
+            elif vendor_number == "14":
+                if family != f"Rocky Linux {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Rocky Linux "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
             else:
-                vendor_number_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid
+                yield LinterError(
+                    f"script_oid() {invalid_oid} '{str(oid)}' (Vendor OID "
+                    "with unknown Vendor-Prefix)",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
-                if (
-                    vendor_number_match is None
-                    or vendor_number_match.group(1) is None
-                ):
-                    yield LinterError(
-                        f"script_oid() {invalid_oid} '{str(oid)}' "
-                        "(last digits)",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-                    return
-
-                vendor_number = vendor_number_match.group(1)
-
-                if vendor_number == "1":
-                    if family != f"Debian {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Debian VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "4":
-                    if family != f"SuSE {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} SuSE VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "5":
-                    if family != f"Amazon Linux {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Amazon Linux "
-                            f"VTs '{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "6":
-                    if family != f"Gentoo {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Gentoo VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "7":
-                    if family != "FreeBSD Local Security Checks":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} FreeBSD VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "8":
-                    if family != f"Oracle Linux {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Oracle Linux "
-                            f"VTs '{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "9":
-                    if family != f"Fedora {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Fedora VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "10":
-                    if family != f"Mageia Linux {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Mageia Linux "
-                            f"VTs '{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "11":
-                    if family != f"RedHat {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} RedHat VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                elif vendor_number == "12":
-                    if family != f"Ubuntu {family_template}":
-                        yield LinterError(
-                            f"script_oid() {is_using_reserved} Ubuntu VTs "
-                            f"'{str(oid)}'",
-                            file=nasl_file,
-                            plugin=self.name,
-                        )
-                        return
-
-                else:
-                    yield LinterError(
-                        f"script_oid() {invalid_oid} '{str(oid)}' (Vendor OID "
-                        "with unknown Vendor-Prefix)",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-                    return
-
                 return
+
+            return
 
         # product-specific OIDs
         if "1.3.6.1.4.1.25623.1.2." in oid:
