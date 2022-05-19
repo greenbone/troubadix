@@ -47,6 +47,8 @@ class CheckDuplicateOID(FilesPlugin):
             if not nasl_file.suffix == ".nasl":
                 continue
 
+            nasl_file_root = get_path_from_root(nasl_file, self.context.root)
+
             oid = None
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             # search for deprecated script_id
@@ -65,20 +67,20 @@ class CheckDuplicateOID(FilesPlugin):
 
             if not oid:
                 yield LinterError(
-                    "Could not find an OID.",
+                    f"Could not find an OID in '{nasl_file_root}'.",
                     plugin=self.name,
                     file=nasl_file,
                 )
 
             elif not OID_RE.match(oid):
                 yield LinterError(
-                    f"Invalid OID {oid} found.",
+                    f"Invalid OID {oid} found in '{nasl_file_root}'.",
                     plugin=self.name,
                     file=nasl_file,
                 )
 
             elif oid not in mapping:
-                mapping[oid] = get_path_from_root(nasl_file, self.context.root)
+                mapping[oid] = nasl_file_root
             else:
                 yield LinterError(
                     f"OID {oid} already used by '{mapping[oid]}'",
