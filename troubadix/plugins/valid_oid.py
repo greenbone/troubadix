@@ -146,7 +146,6 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
-
             elif vendor_number == "4":
                 if family != f"SuSE {family_template}":
                     yield LinterError(
