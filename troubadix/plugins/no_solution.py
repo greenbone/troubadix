@@ -51,6 +51,13 @@ class CheckNoSolution(FilesPlugin):
                 continue
 
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+            tag_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+            # don't need to check detection scripts since they don't refer
+            # to CVEs. all detection scripts have a cvss of 0.0
+            cvss_detect = tag_pattern.search(content)
+            if cvss_detect and cvss_detect.group("value") == "0.0":
+                continue
+
             solution_match = get_script_tag_pattern(ScriptTag.SOLUTION).search(
                 content
             )

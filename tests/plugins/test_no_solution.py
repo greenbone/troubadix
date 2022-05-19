@@ -31,6 +31,35 @@ here = Path(__file__).parent
 class CheckNoSolutionTestCase(PluginTestCase):
     def test_ok(self):
         file1 = here / "test_files" / "nasl" / "21.04" / "test.nasl"
+        text = file1.read_text(encoding=CURRENT_ENCODING)
+        file1.write_text(
+            text.replace(
+                'name:"cvss_base", value:"0.0"', 'name:"cvss_base", value:"1.0"'
+            ),
+            encoding=CURRENT_ENCODING,
+        )
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+        file1.write_text(text, encoding=CURRENT_ENCODING)
+
+    def test_ok_no_score(self):
+        file1 = here / "test_files" / "nasl" / "21.04" / "test.nasl"
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_ok_inc(self):
+        file1 = here / "test_files" / "nasl" / "21.04" / "test.inc"
+
         context = MagicMock()
         context.nasl_files = [file1]
         context.root = here

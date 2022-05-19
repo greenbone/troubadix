@@ -45,11 +45,6 @@ class CheckCVEFormat(FileContentPlugin):
         # don't need to check detection scripts since they don't refer to CVEs.
         # all detection scripts have a cvss of 0.0
         cvss_detect = tag_pattern.search(file_content)
-        # cvss_detect = re.search(
-        #     r'script_tag\s*\(name\s*:\s*"cvss_base",'
-        #     r'\s*value:\s*"(\d{1,2}\.\d)"',
-        #     file_content,
-        # )
         if cvss_detect and cvss_detect.group("value") == "0.0":
             return
 
