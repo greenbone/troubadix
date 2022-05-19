@@ -146,8 +146,6 @@ class CheckValidOID(FileContentPlugin):
                     )
                 return
 
-            # TBD: 3 is n/a in Confluence
-            # elif vendor_number == "3":
 
             elif vendor_number == "4":
                 if family != f"SuSE {family_template}":
