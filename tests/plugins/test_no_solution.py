@@ -20,6 +20,7 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 from troubadix.helper import CURRENT_ENCODING
+from troubadix.helper.helper import get_path_from_root
 from troubadix.plugin import LinterWarning
 from troubadix.plugins.no_solution import CheckNoSolution
 
@@ -82,9 +83,15 @@ class CheckNoSolutionTestCase(PluginTestCase):
         plugin = CheckNoSolution(context)
         results = list(plugin.run())
 
+        from_root = get_path_from_root(file1, context.root)
+
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterWarning)
-        self.assertEqual(
+        self.assertIn(
+            f"{from_root}: ",
+            results[0].message,
+        )
+        self.assertIn(
             "Missing solution, older than 1 year.",
             results[0].message,
         )
@@ -113,10 +120,15 @@ class CheckNoSolutionTestCase(PluginTestCase):
 
         # reverse change to file
         file1.write_text(text, encoding=CURRENT_ENCODING)
+        from_root = get_path_from_root(file1, context.root)
 
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterWarning)
-        self.assertEqual(
+        self.assertIn(
+            f"{from_root}: ",
+            results[0].message,
+        )
+        self.assertIn(
             "Missing solution, older than 6 months.",
             results[0].message,
         )
@@ -145,10 +157,15 @@ class CheckNoSolutionTestCase(PluginTestCase):
 
         # reverse change to file
         file1.write_text(text, encoding=CURRENT_ENCODING)
+        from_root = get_path_from_root(file1, context.root)
 
         self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterWarning)
-        self.assertEqual(
+        self.assertIn(
+            f"{from_root}: ",
+            results[0].message,
+        )
+        self.assertIn(
             "Missing solution, but younger than 31 days.",
             results[0].message,
         )
