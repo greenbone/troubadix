@@ -20,6 +20,7 @@ from datetime import datetime, timedelta
 from typing import Iterator
 
 from troubadix.helper import CURRENT_ENCODING, ScriptTag, get_script_tag_pattern
+from troubadix.helper.helper import get_path_from_root
 from troubadix.plugin import (
     FilesPlugin,
     LinterError,
@@ -32,7 +33,7 @@ NO_SOLUTION_DATE_TOO_OLDER_6_MONTH = datetime.now() - timedelta(days=186)
 NO_SOLUTION_DATE_TOO_OLDER_1_YEAR = datetime.now() - timedelta(days=365)
 
 # Add the solutions date's here
-STRPTIMES = ["%d %B, %Y", "%Y/%m/%d"]
+STRPTIMES = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 
 
 class CheckNoSolution(FilesPlugin):
@@ -68,7 +69,10 @@ class CheckNoSolution(FilesPlugin):
                 ).search(solution_match.group("value"))
             else:
                 yield LinterError(
-                    "No Solution tag found.", file=nasl_file, plugin=self.name
+                    f"{get_path_from_root(nasl_file, self.context.root)}: "
+                    "No Solution tag found.",
+                    file=nasl_file,
+                    plugin=self.name,
                 )
                 continue
 
@@ -81,6 +85,7 @@ class CheckNoSolution(FilesPlugin):
             no_solution_since = parse_date(date_match.group("date"))
             if not no_solution_since:
                 yield LinterError(
+                    f"{get_path_from_root(nasl_file, self.context.root)}: "
                     f"Can not convert '{date_match.group('date')}' to datetime",
                     file=nasl_file,
                     plugin=self.name,
@@ -91,6 +96,7 @@ class CheckNoSolution(FilesPlugin):
             if no_solution_since <= NO_SOLUTION_DATE_TOO_OLDER_1_YEAR:
                 missing_solutions_older_than_1_year += 1
                 yield LinterWarning(
+                    f"{get_path_from_root(nasl_file, self.context.root)}: "
                     "Missing solution, older than 1 year.",
                     file=nasl_file,
                     plugin=self.name,
@@ -101,6 +107,7 @@ class CheckNoSolution(FilesPlugin):
             if no_solution_since <= NO_SOLUTION_DATE_TOO_OLDER_6_MONTH:
                 missing_solutions_older_than_6_months += 1
                 yield LinterWarning(
+                    f"{get_path_from_root(nasl_file, self.context.root)}: "
                     "Missing solution, older than 6 months.",
                     file=nasl_file,
                     plugin=self.name,
@@ -111,6 +118,7 @@ class CheckNoSolution(FilesPlugin):
             if no_solution_since >= NO_SOLUTION_DATE_TOO_YOUNG:
                 missing_solutions_younger_1_month += 1
                 yield LinterWarning(
+                    f"{get_path_from_root(nasl_file, self.context.root)}: "
                     "Missing solution, but younger than 31 days.",
                     file=nasl_file,
                     plugin=self.name,
@@ -141,7 +149,9 @@ class CheckNoSolution(FilesPlugin):
 def parse_date(date_string: str) -> datetime:
     """Convert date string to date trying different formats"""
 
-    date_string = re.sub(r"(st|nd|rd|th)", "", date_string)
+    date_string = re.sub(
+        r"(?P<date>.\d{1,2})(st|nd|rd|th)", r"\g<date>", date_string
+    )
 
     for strptime in STRPTIMES:
         try:
