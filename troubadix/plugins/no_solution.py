@@ -149,7 +149,9 @@ class CheckNoSolution(FilesPlugin):
 def parse_date(date_string: str) -> datetime:
     """Convert date string to date trying different formats"""
 
-    date_string = re.sub(r"(st|nd|rd|th)", "", date_string)
+    date_string = re.sub(
+        r"(?P<date>.\d{1,2})(st|nd|rd|th)", r"\g<date>", date_string
+    )
 
     for strptime in STRPTIMES:
         try:
