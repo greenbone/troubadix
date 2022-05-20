@@ -30,7 +30,6 @@ if(description)
   script_tag(name:"cvss_base", value:"0.0");
   script_tag(name:"cvss_base_vector", value:"AV:N/AC:Lo/Au:N/C:N/I:N/A:N");
   script_cve_id("CVE-2011-12345", "CVE-2011-54321");
-  script_bugtraq_id(00000);
   script_name("foo detection");
   script_category(ACT_GATHER_INFO);
   script_copyright("Copyright (c) Greenbone Networks GmbH");

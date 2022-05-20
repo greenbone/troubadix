@@ -31,7 +31,6 @@ if(description)
   script_tag(name:"cvss_base_vector", value:"AV:N/AC:L/Au:N/C:N/I:N/A:N");
   script_tag(name:"last_modification", value:"2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)");
   script_cve_id("CVE-2011-12345", "CVE-2011-54321");
-  script_bugtraq_id(00000);
   script_name("foo 
   detection");
   script_category(ACT_GATHER_INFO);

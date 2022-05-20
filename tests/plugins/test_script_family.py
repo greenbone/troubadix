@@ -29,7 +29,6 @@ class CheckScriptFamilyTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_bugtraq_id(00000);\n"
             'script_family("FreeBSD Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
@@ -46,7 +45,6 @@ class CheckScriptFamilyTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_bugtraq_id(00000);\n"
             'script_family("TestTest");\n'
         )
         fake_context = self.create_file_plugin_context(
@@ -67,7 +65,6 @@ class CheckScriptFamilyTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_bugtraq_id(00000);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -87,7 +84,6 @@ class CheckScriptFamilyTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             'script_family("???\\");\n'
             'script_family("???\\");\n'
-            "script_bugtraq_id(00000);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
