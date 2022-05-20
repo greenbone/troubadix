@@ -34,6 +34,7 @@ class CheckDeprecatedFunctions(FilePlugin):
         security_hole()
         script_description()
         script_tag("risk_factor", SEVERITY);
+        script_bugtraq_id()
 
         This script checks if any of those are used
 
@@ -51,6 +52,7 @@ class CheckDeprecatedFunctions(FilePlugin):
             "script_description()": r"script_description\s*\([^)]*\)",
             'script_tag(name:"risk_factor", value: '
             "SEVERITY)": r'script_tag\s*\(\s*name:\s*"risk_factor"[^)]*\)',
+            "script_bugtraq_id()": r"script_bugtraq_id\s*\([^)]*\)",
         }
 
         for description, pattern in deprecated_functions.items():
