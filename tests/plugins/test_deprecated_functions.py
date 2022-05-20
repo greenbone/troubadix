@@ -53,6 +53,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "script_description()": "script_description('stop it!')\n",
             'script_tag(name:"risk_factor", value: '
             "SEVERITY)": 'script_tag(name:"risk_factor", value: 0.1);\n',
+            "script_bugtraq_id()": "script_bugtraq_id('00000');",
         }
         path = Path("some/file.nasl")
         for msg, cont in deprecated_output.items():
