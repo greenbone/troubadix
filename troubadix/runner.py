@@ -26,12 +26,7 @@ from troubadix.helper.patterns import (
     init_special_script_tag_patterns,
 )
 from troubadix.plugin import FilePluginContext, FilesPlugin, FilesPluginContext
-from troubadix.plugins import (
-    _PRE_RUN_PLUGINS,
-    Plugins,
-    StandardPlugins,
-    UpdatePlugins,
-)
+from troubadix.plugins import Plugins, StandardPlugins, UpdatePlugins
 from troubadix.reporter import Reporter
 from troubadix.results import FileResults
 
@@ -67,8 +62,7 @@ class Runner:
         )
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
-
-        self.pre_run_plugins = _PRE_RUN_PLUGINS
+        self.pre_run_plugins = self.plugins.get_prerun_plugins()
 
         self._reporter = reporter
         self._n_jobs = n_jobs
@@ -138,7 +132,7 @@ class Runner:
     def run(self, files: Iterable[Path]) -> bool:
         """The function that should be executed to run
         the Plugins over all files"""
-        if not len(self.plugins):
+        if not len(self.plugins) and not len(self.pre_run_plugins):
             raise TroubadixException("No Plugin found.")
 
         # print plugins that will be executed
@@ -150,9 +144,10 @@ class Runner:
         )
 
         start = datetime.datetime.now()
-
-        self._check_files(files)
-        self._check_single_files(files)
+        if len(self.pre_run_plugins):
+            self._check_files(files)
+        if len(self.plugins):
+            self._check_single_files(files)
 
         self._reporter.report_info(
             f"Time elapsed: {datetime.datetime.now() - start}"
