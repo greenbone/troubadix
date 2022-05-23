@@ -205,7 +205,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "Debian VTs '1.3.6.1.4.1.25623.1.1.1.2256'"
+                "Debian '1.3.6.1.4.1.25623.1.1.1.2256'"
             ),
             results[0].message,
         )
@@ -346,7 +346,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "Gentoo VTs '1.3.6.1.4.1.25623.1.1.6.2256'"
+                "Gentoo '1.3.6.1.4.1.25623.1.1.6.2256'"
             ),
             results[0].message,
         )
@@ -385,7 +385,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "FreeBSD VTs '1.3.6.1.4.1.25623.1.1.7.2256'"
+                "FreeBSD '1.3.6.1.4.1.25623.1.1.7.2256'"
             ),
             results[0].message,
         )
@@ -424,7 +424,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "Oracle Linux VTs '1.3.6.1.4.1.25623.1.1.8.2256'"
+                "Oracle Linux '1.3.6.1.4.1.25623.1.1.8.2256'"
             ),
             results[0].message,
         )
@@ -463,7 +463,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "Fedora VTs '1.3.6.1.4.1.25623.1.1.9.2256'"
+                "Fedora '1.3.6.1.4.1.25623.1.1.9.2256'"
             ),
             results[0].message,
         )
@@ -541,7 +541,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "RedHat VTs '1.3.6.1.4.1.25623.1.1.11.2256'"
+                "RedHat '1.3.6.1.4.1.25623.1.1.11.2256'"
             ),
             results[0].message,
         )
@@ -580,7 +580,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "Ubuntu VTs '1.3.6.1.4.1.25623.1.1.12.2256'"
+                "Ubuntu '1.3.6.1.4.1.25623.1.1.12.2256'"
             ),
             results[0].message,
         )
