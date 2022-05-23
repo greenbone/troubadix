@@ -315,7 +315,7 @@ diagrams = ["railroad-diagrams", "jinja2"]
 
 [[package]]
 name = "python-magic"
-version = "0.4.25"
+version = "0.4.26"
 description = "File type identification using libmagic"
 category = "main"
 optional = false
@@ -588,8 +588,8 @@ pyparsing = [
     {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
 ]
 python-magic = [
-    {file = "python-magic-0.4.25.tar.gz", hash = "sha256:21f5f542aa0330f5c8a64442528542f6215c8e18d2466b399b0d9d39356d83fc"},
-    {file = "python_magic-0.4.25-py2.py3-none-any.whl", hash = "sha256:1a2c81e8f395c744536369790bd75094665e9644110a6623bcc3bbea30f03973"},
+    {file = "python-magic-0.4.26.tar.gz", hash = "sha256:8262c13001f904ad5b724d38b5e5b5f17ec0450ae249def398a62e4e33108a50"},
+    {file = "python_magic-0.4.26-py2.py3-none-any.whl", hash = "sha256:b978c4b69a20510d133a7f488910c2f07e7796f1f31703e61c241973f2bbf5fb"},
 ]
 requests = [
     {file = "requests-2.27.1-py2.py3-none-any.whl", hash = "sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d"},
