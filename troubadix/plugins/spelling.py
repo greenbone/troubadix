@@ -189,6 +189,22 @@ class CheckSpelling(FilePlugin):
                 ):
                     continue
 
+                # Similar to the corrections above, with some additional
+                # exclusions like e.g. names
+                if re.search(r"ELSA-\d{4}-\d{4,5}\.nasl", line):
+                    if (
+                        re.search(r"Stange\s+==>\s+Strange", line)
+                        or re.search(r"chang\s+==>\s+change, charge", line)
+                        or re.search(
+                            r"IST\s+==>\s+IS, IT, ITS, IT'S, SIT, LIST", line
+                        )
+                        or re.search(r"hda\s+==>\s+had", line)
+                        or re.search(r"Readded\s+==>\s+Read", line)
+                        or re.search(r"ACI\s+==>\s+ACPI", line, re.IGNORECASE)
+                        or re.search(r"UE\s+==>\s+USE, DUE", line)
+                    ):
+                        continue
+
                 codespell += line + "\n"
 
         if codespell and "==>" in codespell:

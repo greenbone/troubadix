@@ -291,6 +291,7 @@ examined with fuzzing by Tim Blazytko, Cornelius Aschermann, Sergej
 EXP=CustomIE.dll
 EXP=expext.dll
  * extended EAP-SIM/AKA fast re-authentication to allow use with FILS
+extended EAP-SIM/AKA fast re-authentication to allow use with FILS
  external emulators, which may have cuased Xen to crash, resulting in a
 'facsimiletelephonenumber' to the Access Control Instruction (ACI) for user
   family_id = 'oval:org.mitre.oval:obj:99';
