@@ -45,7 +45,6 @@ if(description)
   script_tag(name:"summary", value:"The remote foo foos the bar");
 
   script_tag(name:"qod_type", value:"package");
-  script_tag(name:"solution_type", value:"VendorFix");
-
+  script_tag(name:"solution_type", value:"NoneAvailable");
   exit(0);
 }

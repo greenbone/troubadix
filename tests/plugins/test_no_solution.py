@@ -58,6 +58,28 @@ class CheckNoSolutionTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_solution_type(self):
+        file1 = (
+            here
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "fail_solution_template.nasl"
+        )
+        text = file1.read_text(encoding=CURRENT_ENCODING)
+        file1.write_text(
+            text.replace("NoneAvailable", "WillNotFix"),
+            encoding=CURRENT_ENCODING,
+        )
+        context = MagicMock()
+        context.nasl_files = [file1]
+        context.root = here
+        plugin = CheckNoSolution(context)
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+        file1.write_text(text, encoding=CURRENT_ENCODING)
+
     def test_ok_inc(self):
         file1 = here / "test_files" / "nasl" / "21.04" / "test.inc"
 
