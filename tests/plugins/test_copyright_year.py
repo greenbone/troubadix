@@ -27,7 +27,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013)");',
+            '+0200 (Tue, 14 May 2022)");',
             'script_copyright("Copyright (C) 2022 Greenbone Networks GmbH");',
         )
         fake_context = self.create_file_plugin_context(
@@ -37,6 +37,41 @@ class CheckCopyrightYearTestCase(PluginTestCase):
 
         results = list(plugin.run())
         self.assertEqual(len(results), 0)
+
+    def test_pre_ok(self):
+        path = Path("some/pre2008/file.nasl")
+        content = (
+            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2022)");',
+            'script_copyright("Copyright (C) 2020 Greenbone Networks GmbH");',
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content
+        )
+        plugin = CheckCopyrightYear(fake_context)
+
+        results = list(plugin.run())
+        self.assertEqual(len(results), 0)
+
+    def test_pre_fail(self):
+        path = Path("some/pre2008/file.nasl")
+        content = (
+            'script_tag(name:"creation_date", value:"2020-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2020)");',
+            'script_copyright("Copyright (C) 2021 Greenbone Networks GmbH");',
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content
+        )
+        plugin = CheckCopyrightYear(fake_context)
+
+        results = list(plugin.run())
+        self.assertEqual(len(results), 1)
+        self.assertEqual(
+            "VT contains a Copyright year not matching "
+            "the year 2020 at line 2",
+            results[0].message,
+        )
 
     def test_missing_creation_date(self):
         path = Path("some/file.nasl")
