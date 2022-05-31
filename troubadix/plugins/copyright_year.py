@@ -80,10 +80,20 @@ class CheckCopyrightYear(LineContentPlugin):
         # within that line
         for nr, line, copyright_year in copyrights:
             if copyright_year != creation_year:
-                yield LinterError(
-                    "VT contains a Copyright year not matching "
-                    f"the year {creation_year} at line {nr}",
-                    file=nasl_file,
-                    plugin=self.name,
-                    line=nr,
-                )
+                if "pre2008" in str(nasl_file):
+                    if copyright_year > creation_year:
+                        yield LinterError(
+                            "VT contains a Copyright year not matching "
+                            f"the year {creation_year} at line {nr}",
+                            file=nasl_file,
+                            plugin=self.name,
+                            line=nr,
+                        )
+                else:
+                    yield LinterError(
+                        "VT contains a Copyright year not matching "
+                        f"the year {creation_year} at line {nr}",
+                        file=nasl_file,
+                        plugin=self.name,
+                        line=nr,
+                    )
