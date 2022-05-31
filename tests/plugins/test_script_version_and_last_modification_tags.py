@@ -45,6 +45,26 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_old_ok(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            'script_version("$Revision: 12345 $");\n'
+            'script_tag(name: "last_modification", value: "$Date: 2021-07-19 '
+            '12:32:02 +0000 (Mon, 19 Jul 2021) $");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
