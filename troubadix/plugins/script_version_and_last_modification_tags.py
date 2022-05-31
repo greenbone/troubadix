@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from pathlib import Path
 from typing import Iterator
 
@@ -55,14 +56,21 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         version_pattern = get_special_script_tag_pattern(
             SpecialScriptTag.VERSION
         )
-        match_ver_modified = version_pattern.search(file_content)
+        version_match = version_pattern.search(file_content)
 
-        if not match_ver_modified:
-            yield LinterError(
-                "VT is missing script_version(); or is using a wrong syntax.",
-                file=nasl_file,
-                plugin=self.name,
+        if not version_match:
+            revision_pattern = re.compile(
+                r'script_(?P<name>version)\s*\((?P<quote99>[\'"])?(?P<value>\$'
+                r"Revision:\s*[0-9]{1,6}\s* \$)(?P=quote99)?\s*\)\s*;"
             )
+            revision_match = revision_pattern.search(file_content)
+            if not revision_match:
+                yield LinterError(
+                    "VT is missing script_version(); or is using a wrong "
+                    "syntax.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
         # script_tag(name:"last_modification",
         # value:"2019-03-21 12:19:01 +0000 (Thu, 21 Mar 2019)");
@@ -72,10 +80,18 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         match_last_modified = last_modification_pattern.search(file_content)
 
         if not match_last_modified:
-            yield LinterError(
-                "VT is missing script_tag("
-                'name:"last_modification" or is using a wrong '
-                "syntax.",
-                file=nasl_file,
-                plugin=self.name,
+            old_pattern = re.compile(
+                r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>'
+                r"last_modification)(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>"
+                r'[\'"])?(?P<value>\$Date:\s*[A-Za-z0-9\:\-\+\,\s\(\)]{44}'
+                r"\s*\$)(?P=quote2)?\s*\)\s*;"
             )
+            match_last_modified = old_pattern.search(file_content)
+            if not match_last_modified:
+                yield LinterError(
+                    "VT is missing script_tag("
+                    'name:"last_modification" or is using a wrong '
+                    "syntax.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
