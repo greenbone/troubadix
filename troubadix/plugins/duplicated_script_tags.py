@@ -24,6 +24,13 @@ from troubadix.helper.patterns import (
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
+allowed_dup_dependencies = [
+    "GSHB/EL15/GSHB.nasl",
+    "gsf/PCIDSS/PCI-DSS.nasl",
+    "gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl",
+]
+
+
 class CheckDuplicatedScriptTags(FilePlugin):
     name = "check_duplicated_script_tags"
 
@@ -36,6 +43,11 @@ class CheckDuplicatedScriptTags(FilePlugin):
 
             if tag.name == "ADD_PREFERENCE":
                 continue
+
+            if tag.name == "DEPENDENCIES":
+                file_path = str(self.context.nasl_file)
+                if any(f in file_path for f in allowed_dup_dependencies):
+                    continue
 
             match = pattern.finditer(file_content)
 

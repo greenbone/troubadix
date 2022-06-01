@@ -97,3 +97,33 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
+
+    def test_excluded_dependencies(self):
+        path = Path("gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl")
+        content = (
+            'script_dependencies(name:"Test", type:"checkbox");\n'
+            'script_dependencies(name:"Test2", type:"checkbox");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckDuplicatedScriptTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_not_excluded_dependencies(self):
+        path = Path("v2.0/PCI-DSS-2.0.nasl")
+        content = (
+            'script_dependencies(name:"Test", type:"checkbox");\n'
+            'script_dependencies(name:"Test2", type:"checkbox");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckDuplicatedScriptTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
