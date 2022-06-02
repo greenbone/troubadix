@@ -56,6 +56,9 @@ class CheckProdSvcDetectInVulnvt(FilePlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the VT
         """
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         file_content = self.context.file_content
         # Don't need to check VTs having a cvss of 0.0
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
