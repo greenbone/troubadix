@@ -17,7 +17,7 @@
 
 import re
 from pathlib import Path
-from typing import AnyStr, Iterable, Iterator
+from typing import Iterable, Iterator
 
 from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
@@ -89,9 +89,7 @@ class CheckGrammar(LineContentPlugin):
         for nr, line in enumerate(lines, 1):
             match = pattern.search(line)
             if match:
-                if self.check_for_false_positives(
-                    match.group(0), str(nasl_file)
-                ):
+                if self.check_for_false_positives(line, str(nasl_file)):
                     continue
 
                 yield LinterError(
@@ -102,74 +100,70 @@ class CheckGrammar(LineContentPlugin):
                 )
 
     @staticmethod
-    def check_for_false_positives(match: AnyStr, nasl_file: str) -> bool:
+    def check_for_false_positives(line: str, nasl_file: str) -> bool:
         """
         Checks for false positives in the findings.
         """
         # Exclude a few known false positives
         if (
-            "a few " in match
-            or "A few " in match
-            or "a multiple keyboard " in match
+            "a few " in line
+            or "A few " in line
+            or "a multiple keyboard " in line
         ):
             return True
 
-        if "A A S Application Access Server" in match:
+        if "A A S Application Access Server" in line:
             return True
 
-        if "a Common Vulnerabilities and Exposures" in match:
+        if "a Common Vulnerabilities and Exposures" in line:
             return True
 
-        if "Multiple '/' Vulnerability" in match:
+        if "Multiple '/' Vulnerability" in line:
             return True
 
-        if "an attackers choise" in match:
+        if "an attackers choise" in line:
             return True
 
         if (
             "2012/gb_VMSA-2010-0007.nasl" in nasl_file
             and "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
-            "  Vulnerabilities in the" in match
+            "  Vulnerabilities in the" in line
         ):
             return True
 
         # nb: Valid sentence
-        if (
-            "gb_opensuse_2018_1900_1.nasl" in nasl_file
-            and "(Note that" in match
-        ):
+        if "gb_opensuse_2018_1900_1.nasl" in nasl_file and "(Note that" in line:
             return True
 
         # same as above
-        if "gb_sles_2021_3215_1.nasl" in nasl_file and "with\n WITH" in match:
+        if "gb_sles_2021_3215_1.nasl" in nasl_file and "with\n WITH" in line:
             return True
 
         # same as above
-        if "gb_sles_2021_2320_1.nasl" in nasl_file and "with WITH" in match:
+        if "gb_sles_2021_2320_1.nasl" in nasl_file and "with WITH" in line:
             return True
 
         # same
-        if "multiple error handling vulnerabilities" in match:
+        if "multiple error handling vulnerabilities" in line:
             return True
 
         # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
-        if re.search(r'(\s+|")[Aa]\s+multiple\s+of', match):
+        if re.search(r'(\s+|")[Aa]\s+multiple\s+of', line):
             return True
 
         # Like seen in 2022/debian/deb_dla_2981.nasl
-        if "a multiple concurrency" in match:
+        if "a multiple concurrency" in line:
             return True
 
         # WITH can be used like e.g. the following which is valid:
         # "with WITH stack unwinding"
-        if "with WITH" in match:
+        if "with WITH" in line:
             return True
 
         # From 2008/debian/deb_1017_1.nasl
         if (
             "Harald Welte discovered that if a process issues a "
-            "USB Request Block (URB)" in match
+            "USB Request Block (URB)" in line
         ):
             return True
-
         return False
