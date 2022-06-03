@@ -51,6 +51,9 @@ class CheckOverlongScriptTags(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
+        if nasl_file.suffix == ".inc":
+            return
+
         if is_ignore_file(nasl_file, IGNORE_FILES):
             return
 
