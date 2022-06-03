@@ -35,6 +35,7 @@ class CheckDuplicatedScriptTags(FilePlugin):
     name = "check_duplicated_script_tags"
 
     def run(self) -> Iterator[LinterResult]:
+
         if self.context.nasl_file.suffix == ".inc":
             return
 

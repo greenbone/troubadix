@@ -42,6 +42,7 @@ class CheckDependencies(FilePlugin):
         exist on the local filesystem.
         An error will be thrown if a dependency could not be found.
         """
+
         if self.context.nasl_file.suffix == ".inc":
             return
 
