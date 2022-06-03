@@ -31,9 +31,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_tag(name:"summary", value:"Foo Bar.");\n'
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
-        ).splitlines()
+        )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckGrammar(fake_context)
 
@@ -49,10 +49,10 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
             "# is prone to a security bypass vulnerabilities\n"
-        ).splitlines()
+        )
 
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckGrammar(fake_context)
 
@@ -75,10 +75,10 @@ class CheckNewlinesTestCase(PluginTestCase):
             'script_tag(name:"solution", value:"meh");\n'
             "# is prone to a security bypass vulnerabilities\n"
             "# refer the Reference\n"
-        ).splitlines()
+        )
 
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckGrammar(fake_context)
 
