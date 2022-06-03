@@ -16,14 +16,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from pathlib import Path
-from typing import AnyStr, Iterable, Iterator
+from typing import AnyStr, Iterator
 
-from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
+from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 def get_grammer_pattern() -> re.Pattern:
     return re.compile(
+        r".*("
         r"refer\s+(the\s+)?Reference|"
         r"\s+an?\s+(multiple|errors)|"
         r"the\s+(References?\s+link|multiple\s+flaw)|"
@@ -63,19 +63,15 @@ def get_grammer_pattern() -> re.Pattern:
         r"[\s-]+(escalation|elevation)|(authentication|security|access)"
         r"\s+bypass|(buffer|heap)\s+overflow)\s+vulnerability|"
         # e.g. "is prone to a security bypass vulnerabilities"
-        r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities",
+        r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities" r").*",
         re.IGNORECASE,
     )
 
 
-class CheckGrammar(LineContentPlugin):
+class CheckGrammar(FilePlugin):
     name = "check_grammar"
 
-    def check_lines(
-        self,
-        nasl_file: Path,
-        lines: Iterable[str],
-    ) -> Iterator[LinterResult]:
+    def run(self) -> Iterator[LinterResult]:
         """This script checks the passed VT / Include for common grammar
         problems
 
@@ -86,19 +82,18 @@ class CheckGrammar(LineContentPlugin):
         """
         pattern = get_grammer_pattern()
 
-        for nr, line in enumerate(lines, 1):
-            match = pattern.search(line)
+        for match in pattern.finditer(self.context.file_content):
             if match:
                 if self.check_for_false_positives(
-                    match.group(0), str(nasl_file)
+                    match.group(0), str(self.context.nasl_file)
                 ):
                     continue
 
                 yield LinterError(
-                    f"VT/Include has the following grammar problem: {line}",
+                    "VT/Include has the following grammar problem:"
+                    f" {match.group(0)}",
                     file=self.context.nasl_file,
                     plugin=self.name,
-                    line=nr,
                 )
 
     @staticmethod
