@@ -57,6 +57,10 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
         Args:
             file: The VT that is going to be checked
         """
+
+        if nasl_file.suffix == ".inc":
+            return
+
         # don't need to check VTs not having a script_add_preference() call
         if "script_add_preference" not in file_content:
             return

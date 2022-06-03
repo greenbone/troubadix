@@ -58,6 +58,10 @@ class CheckQod(FilePlugin):
         """
         The script checks the passed VT for the existence / validity of its QoD
         """
+
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         file_content = self.context.file_content
 
         qod_pattern = get_script_tag_pattern(ScriptTag.QOD)

@@ -38,6 +38,10 @@ class CheckDoubleEndPoints(FilePlugin):
             script_tag(name:"insight", value:"My insight.
             .");
         """
+
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         tag_matches = get_common_tag_patterns().finditer(
             self.context.file_content
         )

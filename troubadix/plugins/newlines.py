@@ -31,6 +31,10 @@ class CheckNewlines(FilePlugin):
         - Search for (\r or \r\n).
         - Search for whitespaces in script_name( "myname") or script_copyright
         """
+
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         # Need to be loaded as bytes or \r is converted to \n
         data = self.context.nasl_file.read_bytes()
         if b"\r" in data or b"\r\n" in data:
