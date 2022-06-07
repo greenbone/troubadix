@@ -72,6 +72,11 @@ EXCEPTIONS = [
     "OpenVAS Manager",
     "OpenVAS Administrator",
     "OpenVAS / Greenbone Vulnerability Manager",
+    "openvas_1808149858",
+    "evil.zip -> openvas.jsp",
+    'url = "/openvas.jsp";',
+    'if( "OpenVAS RCE Test" >< buf )',
+    'the file "/openvas.jsp" was created',
 ]
 
 STARTS_WITH_EXCEPTIONS = [
