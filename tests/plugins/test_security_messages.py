@@ -40,6 +40,15 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckSecurityMessages(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_ok2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
