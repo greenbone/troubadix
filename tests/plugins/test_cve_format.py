@@ -40,6 +40,15 @@ class CheckCVEFormatTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckCVEFormat(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_detection_script(self):
         path = Path("some/file.nasl")
         content = 'script_tag(name:"cvss_base", value:"0.0");\n'

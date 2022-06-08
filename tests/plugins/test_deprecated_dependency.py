@@ -56,6 +56,15 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = self.dir / "file.inc"
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckDeprecatedDependency(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_no_dependency(self):
         path = self.dir / "file.nasl"
         content = (

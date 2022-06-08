@@ -61,6 +61,10 @@ class CheckIllegalCharacters(FilePlugin):
         Currently the following chars are not allowed in
         every script_tag(name:"", value:"") :
         """
+
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         pattern = get_common_tag_patterns()
         file_content = self.context.file_content
 

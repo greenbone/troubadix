@@ -35,6 +35,10 @@ class CheckDeprecatedDependency(FilePlugin):
         script_tag(name:"deprecated", value:TRUE);
         exit(66);
         """
+
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         file_content = self.context.file_content
 
         if not "script_dependencies(" in file_content:

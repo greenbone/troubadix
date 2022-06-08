@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pathlib import Path
+
 from troubadix.plugin import LinterError
 from troubadix.plugins.vt_placement import CheckVTPlacement
 
@@ -39,6 +41,15 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 results = list(plugin.run())
 
                 self.assertEqual(len(results), 0)
+
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckVTPlacement(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
 
     def test_ok_dirs(self):
         with self.create_directory() as tempdir:

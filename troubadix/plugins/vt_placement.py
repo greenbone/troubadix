@@ -51,6 +51,10 @@ class CheckVTPlacement(FileContentPlugin):
         Returns:
             if no problem
         """
+
+        if nasl_file.suffix == ".inc":
+            return
+
         root = self.context.root
 
         match = _get_special_script_tag_pattern(

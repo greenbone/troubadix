@@ -41,6 +41,15 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckIllegalCharacters(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_illegal_chars_in_various_tags(self):
         tags = [
             "summary",

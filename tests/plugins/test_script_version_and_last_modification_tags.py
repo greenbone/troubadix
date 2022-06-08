@@ -45,6 +45,15 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_old_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
