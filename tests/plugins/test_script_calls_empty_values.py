@@ -52,7 +52,6 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-
     def test_missing_values(self):
         content = (
             'script_category("");\n'

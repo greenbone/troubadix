@@ -39,6 +39,15 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckScriptTagForm(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_wrong_name(self):
         content = 'script_tag(nammmme: "foo", value:"bar");'
         fake_context = self.create_file_plugin_context(

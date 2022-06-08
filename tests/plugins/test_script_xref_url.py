@@ -36,6 +36,15 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_exclude_inc_file(self):
+        path = Path("some/file.inc")
+        fake_context = self.create_file_plugin_context(nasl_file=path)
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_invalid_url(self):
         content = 'script_xref(name:"URL", value:"www.example.com");'
         fake_context = self.create_file_plugin_context(
