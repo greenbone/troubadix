@@ -496,7 +496,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckCVEFormat",
         ]
-        nasl_file = _here / "plugins" / "test_files" / "nasl" / "waring.nasl"
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "warning.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         reporter = Reporter(
@@ -523,7 +523,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckCVEFormat",
         ]
-        nasl_file = _here / "plugins" / "test_files" / "nasl" / "waring.nasl"
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "warning.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         reporter = Reporter(term=self._term, root=self.root)
