@@ -78,7 +78,9 @@ def parse_args(
     )
 
     parser.add_argument(
-        "--ignore-warnings", action="store_true", help="Set warnings be quiet."
+        "--ignore-warnings",
+        action="store_true",
+        help="Set warnings to be quiet.",
     )
 
     parser.add_argument(
