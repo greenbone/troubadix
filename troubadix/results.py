@@ -19,23 +19,28 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Iterable, Iterator
 
-from troubadix.plugin import LinterResult
+from troubadix.plugin import LinterResult, LinterWarning
 
 
 class FileResults:
     """Class to store results from different plugins for a file"""
 
-    def __init__(self, file_path: Path):
+    def __init__(self, file_path: Path, ignore_warnings: bool = False):
         self.file_path = file_path
         self.plugin_results: Dict[str, Iterable[LinterResult]] = defaultdict(
             list
         )
         self.has_plugin_results = False
+        self._ignore_warnings = ignore_warnings
 
     def add_plugin_results(
         self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "FileResults":
         results = list(results)
+        if self._ignore_warnings:
+            for result in list(results):
+                if isinstance(result, LinterWarning):
+                    results.remove(result)
         self.has_plugin_results = self.has_plugin_results or bool(results)
         self.plugin_results[plugin_name] += results
         return self
