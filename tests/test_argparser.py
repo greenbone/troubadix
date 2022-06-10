@@ -137,3 +137,8 @@ class TestArgparsing(unittest.TestCase):
         parsed_args = parse_args(["--fix"])
 
         self.assertTrue(parsed_args.fix)
+
+    def test_parse_ignore_warnings(self):
+        parsed_args = parse_args(["--ignore-warnings"])
+
+        self.assertTrue(parsed_args.ignore_warnings)

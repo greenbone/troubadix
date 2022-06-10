@@ -491,3 +491,55 @@ class TestRunner(unittest.TestCase):
             compare_content.splitlines()[:-1],
             gen_content.splitlines()[:-1],
         )
+
+    def test_runner_run_ok_with_ignore_warnings(self):
+        included_plugins = [
+            "CheckCVEFormat",
+        ]
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "warning.nasl"
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+
+        reporter = Reporter(
+            term=self._term, root=self.root, ignore_warnings=True
+        )
+
+        runner = Runner(
+            n_jobs=1,
+            reporter=reporter,
+            included_plugins=included_plugins,
+            root=self.root,
+        )
+
+        with redirect_stdout(io.StringIO()) as f:
+            runner.run([nasl_file])
+
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+            self.assertEqual(content, new_content)
+
+        output = f.getvalue()
+        self.assertIn(f"{'sum':48} {0:8} {0:8}", output)
+
+    def test_runner_run_fail_without_ignore_warnings(self):
+        included_plugins = [
+            "CheckCVEFormat",
+        ]
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "warning.nasl"
+        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+
+        reporter = Reporter(term=self._term, root=self.root)
+
+        runner = Runner(
+            n_jobs=1,
+            reporter=reporter,
+            included_plugins=included_plugins,
+            root=self.root,
+        )
+
+        with redirect_stdout(io.StringIO()) as f:
+            runner.run([nasl_file])
+
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+            self.assertEqual(content, new_content)
+
+        output = f.getvalue()
+        self.assertIn(f"{'sum':48} {0:8} {1:8}", output)

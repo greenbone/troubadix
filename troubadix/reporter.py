@@ -42,11 +42,13 @@ class Reporter:
         log_file: Path = None,
         statistic: bool = True,
         verbose: int = 0,
+        ignore_warnings: bool = False,
     ) -> None:
         self._term = term
         self._log_file = log_file
         self._statistic = statistic
         self._verbose = verbose
+        self._ignore_warnings = ignore_warnings
         self._fix = fix
         self._files_count = 0
         self._root = root
@@ -95,18 +97,22 @@ class Reporter:
             for plugin_result in plugin_results:
                 if isinstance(plugin_result, LinterError):
                     self._result_counts.add_error(plugin_name)
-                    report = self._report_error
-                elif isinstance(plugin_result, LinterWarning):
+                    if self._verbose > 0:
+                        self._report_error(plugin_result.message)
+                elif (
+                    isinstance(plugin_result, LinterWarning)
+                    and not self._ignore_warnings
+                ):
                     self._result_counts.add_warning(plugin_name)
-                    report = self._report_warning
+                    if self._verbose > 0:
+                        self._report_warning(plugin_result.message)
                 elif isinstance(plugin_result, LinterFix):
                     self._result_counts.add_fix(plugin_name)
-                    report = self._report_ok
+                    if self._verbose > 0:
+                        self._report_ok(plugin_result.message)
                 elif isinstance(plugin_result, LinterResult):
-                    report = self._report_ok
-
-                if self._verbose > 0:
-                    report(plugin_result.message)
+                    if self._verbose > 0:
+                        self._report_ok(plugin_result.message)
 
     def report_single_run_plugin(
         self, plugin_name: str, plugin_results: List
