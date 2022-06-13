@@ -499,15 +499,14 @@ class TestRunner(unittest.TestCase):
         nasl_file = _here / "plugins" / "test_files" / "nasl" / "warning.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
-        reporter = Reporter(
-            term=self._term, root=self.root, ignore_warnings=True
-        )
+        reporter = Reporter(term=self._term, root=self.root)
 
         runner = Runner(
             n_jobs=1,
             reporter=reporter,
             included_plugins=included_plugins,
             root=self.root,
+            ignore_warnings=True,
         )
 
         with redirect_stdout(io.StringIO()) as f:

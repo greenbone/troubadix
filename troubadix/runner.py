@@ -25,7 +25,12 @@ from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,
 )
-from troubadix.plugin import FilePluginContext, FilesPlugin, FilesPluginContext
+from troubadix.plugin import (
+    FilePluginContext,
+    FilesPlugin,
+    FilesPluginContext,
+    LinterWarning,
+)
 from troubadix.plugins import Plugins, StandardPlugins, UpdatePlugins
 from troubadix.reporter import Reporter
 from troubadix.results import FileResults
@@ -53,6 +58,7 @@ class Runner:
         included_plugins: Iterable[str] = None,
         update_date: bool = False,
         fix: bool = False,
+        ignore_warnings: bool = False,
     ) -> bool:
         # plugins initialization
         self.plugins: Plugins = (
@@ -68,6 +74,7 @@ class Runner:
         self._n_jobs = n_jobs
         self._root = root
         self._fix = fix or update_date
+        self._ignore_warnings = ignore_warnings
 
         init_script_tag_patterns()
         init_special_script_tag_patterns()
@@ -85,6 +92,11 @@ class Runner:
 
             results = list(plugin.run())
 
+            if self._ignore_warnings:
+                for result in list(results):
+                    if isinstance(result, LinterWarning):
+                        results.remove(result)
+
             if self._fix:
                 results.extend(plugin.fix())
 
@@ -93,7 +105,7 @@ class Runner:
             )
 
     def _check_file(self, file_path: Path) -> FileResults:
-        results = FileResults(file_path)
+        results = FileResults(file_path, ignore_warnings=self._ignore_warnings)
         context = FilePluginContext(
             root=self._root, nasl_file=file_path.resolve()
         )

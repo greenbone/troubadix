@@ -161,7 +161,6 @@ def main(args=None):
         root=root,
         statistic=True if not parsed_args.no_statistic else False,
         verbose=parsed_args.verbose,
-        ignore_warnings=parsed_args.ignore_warnings,
     )
 
     runner = Runner(
@@ -171,6 +170,7 @@ def main(args=None):
         included_plugins=parsed_args.included_plugins,
         update_date=parsed_args.update_date,
         fix=parsed_args.fix,
+        ignore_warnings=parsed_args.ignore_warnings,
         root=root,
     )
 
