@@ -28,8 +28,8 @@ from troubadix.plugin import (
     LinterResult,
 )
 
-PluginPath = Path(__file__).parent.resolve()
-CodespellConfigPath = (PluginPath.parent / "codespell").resolve()
+plugin_path = Path(__file__).parent.resolve()
+codespell_config_path = (plugin_path.parent / "codespell").resolve()
 
 
 class CheckSpelling(FilePlugin):
@@ -47,7 +47,6 @@ class CheckSpelling(FilePlugin):
             _file_content: The content of the VT
 
         """
-        codespell = ""
 
         # Run codespell as internal process
         with redirect_stdout(io.StringIO()) as codespell:
@@ -55,19 +54,17 @@ class CheckSpelling(FilePlugin):
                 *(
                     "--hard-encoding-detection",
                     "--dictionary=-",
-                    f"--dictionary={CodespellConfigPath}/codespell.additions",
-                    f"--exclude-file={CodespellConfigPath}/codespell.exclude",
-                    f"--ignore-words={CodespellConfigPath}/codespell.ignore",
+                    f"--dictionary={codespell_config_path}/codespell.additions",
+                    f"--exclude-file={codespell_config_path}/codespell.exclude",
+                    f"--ignore-words={codespell_config_path}/codespell.ignore",
                     "--disable-colors",
                     f"{str(self.context.nasl_file)}",
                 )
             )
 
-        if (
-            codespell is not None
-            and "Traceback (most recent call last):" not in codespell
-        ):
-            _codespell = codespell.getvalue().splitlines()
+        codespell = codespell.getvalue()
+        if "Traceback (most recent call last):" not in codespell:
+            _codespell = codespell.splitlines()
             codespell = ""
             for line in _codespell:
 
