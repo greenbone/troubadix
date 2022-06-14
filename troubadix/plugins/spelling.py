@@ -202,13 +202,13 @@ class CheckSpelling(FilePlugin):
 
                 codespell += line + "\n"
 
-        if codespell and "==>" in codespell:
+        if "==>" in codespell:
             yield LinterError(
                 codespell,
                 file=self.context.nasl_file,
                 plugin=self.name,
             )
-        elif codespell and "Traceback (most recent call last):" in codespell:
+        elif "Traceback (most recent call last):" in codespell:
             yield LinterError(
                 codespell,
                 file=self.context.nasl_file,
