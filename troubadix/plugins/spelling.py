@@ -14,19 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import re
+import io
+from contextlib import redirect_stdout
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.helper import subprocess_cmd, which
+from codespell_lib import main as codespell_main
 from troubadix.plugin import (
     FilePlugin,
     LinterError,
     LinterResult,
 )
 
-PluginPath = Path(__file__).parent.resolve()
-CodespellConfigPath = (PluginPath.parent / "codespell").resolve()
+plugin_path = Path(__file__).parent.resolve()
+codespell_config_path = (plugin_path.parent / "codespell").resolve()
 
 
 class CheckSpelling(FilePlugin):
@@ -44,31 +47,23 @@ class CheckSpelling(FilePlugin):
             _file_content: The content of the VT
 
         """
-        codespell = ""
-        program = which("codespell")
-        if program is None:
-            yield LinterError(
-                "codespell tool not found within your PATH. Please install it "
-                "via e.g. 'pip3 install codespell' or 'apt-get install "
-                "codespell' and make sure it is available within your PATH.",
-                file=self.context.nasl_file,
-                plugin=self.name,
+
+        # Run codespell as internal process
+        with redirect_stdout(io.StringIO()) as codespell:
+            codespell_main(
+                *(
+                    "--hard-encoding-detection",
+                    "--dictionary=-",
+                    f"--dictionary={codespell_config_path}/codespell.additions",
+                    f"--exclude-file={codespell_config_path}/codespell.exclude",
+                    f"--ignore-words={codespell_config_path}/codespell.ignore",
+                    "--disable-colors",
+                    f"{str(self.context.nasl_file)}",
+                )
             )
-            return
 
-        out, err = subprocess_cmd(
-            "codespell --hard-encoding-detection --dictionary=- "
-            f"--dictionary={CodespellConfigPath}/codespell.additions "
-            f"--exclude-file={CodespellConfigPath}/codespell.exclude "
-            f"--ignore-words={CodespellConfigPath}/codespell.ignore "
-            f"--disable-colors {str(self.context.nasl_file)}",
-        )
-        codespell = (out + "\n" + err).strip("\n")
-
-        if (
-            codespell is not None
-            and "Traceback (most recent call last):" not in codespell
-        ):
+        codespell = codespell.getvalue()
+        if "Traceback (most recent call last):" not in codespell:
             _codespell = codespell.splitlines()
             codespell = ""
             for line in _codespell:
@@ -207,13 +202,13 @@ class CheckSpelling(FilePlugin):
 
                 codespell += line + "\n"
 
-        if codespell and "==>" in codespell:
+        if "==>" in codespell:
             yield LinterError(
                 codespell,
                 file=self.context.nasl_file,
                 plugin=self.name,
             )
-        elif codespell and "Traceback (most recent call last):" in codespell:
+        elif "Traceback (most recent call last):" in codespell:
             yield LinterError(
                 codespell,
                 file=self.context.nasl_file,
