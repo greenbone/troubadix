@@ -189,21 +189,21 @@ class Reporter:
 
         if self._fix and self._ignore_warnings:
             line = f"{'Plugin':48} {'  Errors':8} {'   Fixes':8}"
-            length = 67
+            length = "-" * 67
         elif self._fix:
             line = f"{'Plugin':48} {'  Errors':8} {'Warnings':8} {'   Fixes':8}"
-            length = 75
+            length = "-" * 75
         elif self._ignore_warnings:
             line = f"{'Plugin':48} {'  Errors':8}"
-            length = 59
+            length = "-" * 59
         else:
             line = f"{'Plugin':48} {'  Errors':8} {'Warnings':8}"
-            length = 67
+            length = "-" * 67
 
         self._term.print(line)
         self._log_statistic_append(line)
-        self._term.print("-" * length)
-        self._log_statistic_append("-" * length)
+        self._term.print(length)
+        self._log_statistic_append(length)
 
         for (plugin, count) in self._result_counts.result_counts.items():
             if self._fix and self._ignore_warnings:
@@ -225,8 +225,8 @@ class Reporter:
                 self._term.warning(line)
                 self._log_statistic_append(line)
 
-        self._term.print("-" * length)
-        self._log_statistic_append("-" * length)
+        self._term.print(length)
+        self._log_statistic_append(length)
 
         if self._fix and self._ignore_warnings:
             line = (
