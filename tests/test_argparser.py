@@ -142,3 +142,8 @@ class TestArgparsing(unittest.TestCase):
         parsed_args = parse_args(["--ignore-warnings"])
 
         self.assertTrue(parsed_args.ignore_warnings)
+
+    def test_parse_log_file_statistic(self):
+        parsed_args = parse_args(["--log-file-statistic", "foo"])
+
+        self.assertEqual(parsed_args.log_file_statistic, Path("foo"))
