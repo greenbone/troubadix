@@ -42,6 +42,7 @@ class Reporter:
         log_file: Path = None,
         statistic: bool = True,
         verbose: int = 0,
+        ignore_warnings: bool = False,
     ) -> None:
         self._term = term
         self._log_file = log_file
@@ -50,7 +51,7 @@ class Reporter:
         self._fix = fix
         self._files_count = 0
         self._root = root
-
+        self._ignore_warnings = ignore_warnings
         self._result_counts = ResultCounts()
 
     def set_files_count(self, count: int):
@@ -184,22 +185,33 @@ class Reporter:
         if not self._statistic:
             return
 
-        if self._fix:
+        if self._fix and self._ignore_warnings:
+            self._term.print(f"{'Plugin':48} {'  Errors':8} {'   Fixes':8}")
+            length = 67
+        elif self._fix:
             self._term.print(
                 f"{'Plugin':48} {'  Errors':8} {'Warnings':8} {'   Fixes':8}"
             )
+            length = 75
+        elif self._ignore_warnings:
+            self._term.print(f"{'Plugin':48} {'  Errors':8}")
+            length = 59
         else:
             self._term.print(f"{'Plugin':48} {'  Errors':8} {'Warnings':8}")
+            length = 67
 
-        length = 75 if self._fix else 67
         self._term.print("-" * length)
 
         for (plugin, count) in self._result_counts.result_counts.items():
-            if self._fix:
+            if self._fix and self._ignore_warnings:
+                line = f"{plugin:48} {count['error']:8} {count['fix']:8}"
+            elif self._fix:
                 line = (
                     f"{plugin:48} {count['error']:8} {count['warning']:8}"
                     f" {count['fix']:8}"
                 )
+            elif self._ignore_warnings:
+                line = f"{plugin:48} {count['error']:8}"
             else:
                 line = f"{plugin:48} {count['error']:8} {count['warning']:8}"
 
@@ -210,12 +222,19 @@ class Reporter:
 
         self._term.print("-" * length)
 
-        if self._fix:
+        if self._fix and self._ignore_warnings:
+            self._term.info(
+                f"{'sum':48} {self._result_counts.error_count:8}"
+                f" {self._result_counts.fix_count:8}"
+            )
+        elif self._fix:
             self._term.info(
                 f"{'sum':48} {self._result_counts.error_count:8}"
                 f" {self._result_counts.warning_count:8}"
                 f" {self._result_counts.fix_count:8}"
             )
+        elif self._ignore_warnings:
+            self._term.info(f"{'sum':48} {self._result_counts.error_count:8}")
         else:
             self._term.info(
                 f"{'sum':48} {self._result_counts.error_count:8}"
