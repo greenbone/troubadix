@@ -158,6 +158,7 @@ def main(args=None):
         term=term,
         fix=parsed_args.fix or parsed_args.update_date,
         log_file=parsed_args.log_file,
+        log_file_statistic=parsed_args.log_file_statistic,
         root=root,
         statistic=True if not parsed_args.no_statistic else False,
         verbose=parsed_args.verbose,

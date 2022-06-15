@@ -133,6 +133,13 @@ def parse_args(
     )
 
     parser.add_argument(
+        "--log-file-statistic",
+        dest="log_file_statistic",
+        type=file_type,
+        help=("Log file path for troubadix statistic"),
+    )
+
+    parser.add_argument(
         "--non-recursive",
         action="store_true",
         help=(
