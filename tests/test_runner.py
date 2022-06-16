@@ -542,3 +542,96 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(f"{'sum':48} {0:8} {1:8}", output)
+
+    def test_runner_log_file_statistic(self):
+        included_plugins = [
+            CheckDuplicateOID.name,
+            CheckMissingDescExit.name,
+            CheckNoSolution.name,
+        ]
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
+        gen_log_file = _here / "gen_log.txt"
+
+        reporter = Reporter(
+            term=self._term,
+            root=self.root,
+            verbose=3,
+            log_file_statistic=gen_log_file,
+            ignore_warnings=True,
+        )
+
+        runner = Runner(
+            reporter=reporter,
+            n_jobs=1,
+            included_plugins=included_plugins,
+            root=self.root,
+        )
+        with redirect_stdout(io.StringIO()):
+            runner.run([nasl_file])
+
+        compare_content = (
+            f"{'Plugin':50} Errors\n"
+            f"{'-' * 59}\n"
+            f"{'check_duplicate_oid':48} {1:8}\n"
+            f"{'-' * 59}\n"
+            f"{'sum':48} {1:8}\n"
+        )
+        gen_content = gen_log_file.read_text(encoding="utf-8")
+        gen_log_file.unlink()
+
+        self.assertEqual(compare_content, gen_content)
+
+    def test_runner_fail_log_file_statistic(self):
+        included_plugins = [
+            CheckDuplicateOID.name,
+            CheckMissingDescExit.name,
+            CheckNoSolution.name,
+        ]
+        nasl_file = (
+            _here
+            / "plugins"
+            / "test_files"
+            / "nasl"
+            / "21.04"
+            / "runner"
+            / "test.nasl"
+        )
+        gen_log_file = _here / "gen_log.txt"
+
+        reporter = Reporter(
+            term=self._term,
+            root=self.root,
+            verbose=3,
+            log_file_statistic=gen_log_file,
+            ignore_warnings=True,
+            fix=True,
+        )
+
+        runner = Runner(
+            reporter=reporter,
+            n_jobs=1,
+            included_plugins=included_plugins,
+            root=self.root,
+        )
+        with redirect_stdout(io.StringIO()):
+            runner.run([nasl_file])
+
+        compare_content = (
+            f"{'Plugin':50} Errors\n"
+            f"{'-' * 59}\n"
+            f"{'check_duplicate_oid':48} {1:8}\n"
+            f"{'-' * 59}\n"
+            f"{'sum':48} {1:8}\n"
+        )
+        gen_content = gen_log_file.read_text(encoding="utf-8")
+        gen_log_file.unlink()
+
+        self.assertNotEqual(compare_content, gen_content)

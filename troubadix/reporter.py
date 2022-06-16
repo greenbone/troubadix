@@ -40,17 +40,20 @@ class Reporter:
         *,
         fix: bool = False,
         log_file: Path = None,
+        log_file_statistic: Path = None,
         statistic: bool = True,
         verbose: int = 0,
+        ignore_warnings: bool = False,
     ) -> None:
         self._term = term
         self._log_file = log_file
+        self._log_file_statistic = log_file_statistic
         self._statistic = statistic
         self._verbose = verbose
         self._fix = fix
         self._files_count = 0
         self._root = root
-
+        self._ignore_warnings = ignore_warnings
         self._result_counts = ResultCounts()
 
     def set_files_count(self, count: int):
@@ -184,47 +187,77 @@ class Reporter:
         if not self._statistic:
             return
 
-        if self._fix:
-            self._term.print(
-                f"{'Plugin':48} {'  Errors':8} {'Warnings':8} {'   Fixes':8}"
-            )
+        if self._fix and self._ignore_warnings:
+            line = f"{'Plugin':48} {'  Errors':8} {'   Fixes':8}"
+            length = "-" * 67
+        elif self._fix:
+            line = f"{'Plugin':48} {'  Errors':8} {'Warnings':8} {'   Fixes':8}"
+            length = "-" * 75
+        elif self._ignore_warnings:
+            line = f"{'Plugin':48} {'  Errors':8}"
+            length = "-" * 59
         else:
-            self._term.print(f"{'Plugin':48} {'  Errors':8} {'Warnings':8}")
+            line = f"{'Plugin':48} {'  Errors':8} {'Warnings':8}"
+            length = "-" * 67
 
-        length = 75 if self._fix else 67
-        self._term.print("-" * length)
+        self._term.print(line)
+        self._log_statistic_append(line)
+        self._term.print(length)
+        self._log_statistic_append(length)
 
         for (plugin, count) in self._result_counts.result_counts.items():
-            if self._fix:
+            if self._fix and self._ignore_warnings:
+                line = f"{plugin:48} {count['error']:8} {count['fix']:8}"
+            elif self._fix:
                 line = (
                     f"{plugin:48} {count['error']:8} {count['warning']:8}"
                     f" {count['fix']:8}"
                 )
+            elif self._ignore_warnings:
+                line = f"{plugin:48} {count['error']:8}"
             else:
                 line = f"{plugin:48} {count['error']:8} {count['warning']:8}"
 
             if count["error"] > 0:
                 self._term.error(line)
+                self._log_statistic_append(line)
             else:
                 self._term.warning(line)
+                self._log_statistic_append(line)
 
-        self._term.print("-" * length)
+        self._term.print(length)
+        self._log_statistic_append(length)
 
-        if self._fix:
-            self._term.info(
+        if self._fix and self._ignore_warnings:
+            line = (
+                f"{'sum':48} {self._result_counts.error_count:8}"
+                f" {self._result_counts.fix_count:8}"
+            )
+        elif self._fix:
+            line = (
                 f"{'sum':48} {self._result_counts.error_count:8}"
                 f" {self._result_counts.warning_count:8}"
                 f" {self._result_counts.fix_count:8}"
             )
+        elif self._ignore_warnings:
+            line = f"{'sum':48} {self._result_counts.error_count:8}"
         else:
-            self._term.info(
+            line = (
                 f"{'sum':48} {self._result_counts.error_count:8}"
                 f" {self._result_counts.warning_count:8}"
             )
 
+        self._term.info(line)
+        self._log_statistic_append(line)
+
     def _log_append(self, message: str):
         if self._log_file:
             with self._log_file.open(mode="a", encoding="utf-8") as f:
+                f.write(f"{message}\n")
+
+    def _log_statistic_append(self, message: str):
+        if self._log_file_statistic:
+            with self._log_file_statistic.open(mode="a", encoding="utf-8") as f:
                 f.write(f"{message}\n")
 
     def plugin_not_found(self, plugin_name):
