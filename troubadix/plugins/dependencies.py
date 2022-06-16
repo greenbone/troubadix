@@ -64,6 +64,14 @@ class CheckDependencies(FilePlugin):
                 ).split(",")
 
                 for dep in dependencies:
+                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
+                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
+                    # and GSHB/EL15/GSHB.nasl
+                    # are using a variable which we currently
+                    # can't handle.
+                    if "+d+.nasl" in dep:
+                        continue
+
                     if not (root / dep).exists():
                         yield LinterError(
                             f"The script dependency {dep} could not "
@@ -71,14 +79,6 @@ class CheckDependencies(FilePlugin):
                             file=self.context.nasl_file,
                             plugin=self.name,
                         )
-                        continue
-
-                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                    # and GSHB/EL15/GSHB.nasl
-                    # are using a variable which we currently
-                    # can't handle.
-                    if "+d+.nasl" in dep:
                         continue
 
                     dependency = Path(dep)
