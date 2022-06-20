@@ -100,7 +100,7 @@ def get_root(path: Path) -> Path:
     """Get the root directory of the VTs"""
     path = path.resolve().absolute()
     for parent in path.parents:
-        if parent.name in ["", "nasl", "common", "21.04", "22.04"]:
+        if parent.name in ["", "nasl"]:
             return parent
 
     return path
