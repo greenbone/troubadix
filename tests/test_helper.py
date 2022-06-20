@@ -60,10 +60,8 @@ class IsEnterpriseFolderTestCase(unittest.TestCase):
 class GetRootTestCase(unittest.TestCase):
     def test_get_root(self):
         self.assertEqual(get_root(Path("/nasl/foo/bar")), Path("/nasl"))
-        self.assertEqual(
-            get_root(Path("/nasl/common/bar")), Path("/nasl/common")
-        )
-        self.assertEqual(get_root(Path("/nasl/21.04/bar")), Path("/nasl/21.04"))
-        self.assertEqual(get_root(Path("/nasl/22.04/bar")), Path("/nasl/22.04"))
+        self.assertEqual(get_root(Path("/nasl/common/bar")), Path("/nasl"))
+        self.assertEqual(get_root(Path("/nasl/21.04/bar")), Path("/nasl"))
+        self.assertEqual(get_root(Path("/nasl/22.04/bar")), Path("/nasl"))
         self.assertEqual(get_root(Path("/foo/bar")), Path("/"))
         self.assertEqual(get_root(Path("")), Path("/"))
