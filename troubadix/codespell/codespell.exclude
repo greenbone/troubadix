@@ -285,6 +285,7 @@ drbd: Avoid Clang warning about pointless switch statment (bsc#1051510).
 Enable log information of starting/stoping services. (bsc#1144923,
 Engineering (TE) tunnel's physical source interface is not propagated to hardware after the adjacency is lost.
   eSpace IAD, eSpace U1981 and eSpace USM.");
+  establishment of the Cisco Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch
   exact-width integer types int{N}_t and uint{N}_t.
 examined with fuzzing by Tim Blazytko, Cornelius Aschermann, Sergej
  executuon (bsc#966437).
@@ -697,6 +698,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Cisco Nexus 9000 Series ACI Mode Switch Software Link Layer Discovery Protocol Buffer Overflow Vulnerability");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Arbitrary File Read Vulnerability (cisco-sa-naci-afr-UtjfO2D7)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Border Leaf Endpoint Learning Vulnerability");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Fabric Infrastructure VLAN Unauthorized Access Vulnerability (cisco-sa-20190703-n9kaci-bypass)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Multi-Pod and Multi-Site TCP DoS Vulnerability (cisco-sa-n9kaci-tcp-dos-YXukt6gM)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Privilege Escalation Vulnerability (cisco-sa-naci-mdvul-vrKVgNU)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Queue Wedge DoS Vulnerability (cisco-sa-n9kaci-queue-wedge-cLDDEfKF)");
@@ -942,6 +944,7 @@ specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series E
 "statics/script",
 Stephen Mc Guiness discovered empty passwords could be entered in some circumstances.
 string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
+  subnet to the Cisco Nexus 9000 Series Switch in ACI mode.");
 supply input to this crate, they could have caused a denial of service in the
   supporting the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.");
  support was already present, but it was not enforcable).");
