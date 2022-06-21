@@ -126,6 +126,7 @@ class CheckSpelling(FilePlugin):
                 if (
                     "PCIDSS/" in line
                     or "GSHB/" in line
+                    or "attic/PCIDSS_" in line
                     or "ITG_Kompendium/" in line
                 ):
                     if re.search(
@@ -143,7 +144,11 @@ class CheckSpelling(FilePlugin):
                 # string('\nIn the file sent\nin milliseconds
                 # There are too many hits to maintain them in codespell.exclude
                 # so exclude them for now here.
-                if "PCIDSS/" in line or "GSHB/" in line:
+                if (
+                    "PCIDSS/" in line
+                    or "GSHB/" in line
+                    or "attic/PCIDSS_" in line
+                ):
                     if re.search(r"n[iI]n\s+==>\s+inn", line):
                         continue
 
