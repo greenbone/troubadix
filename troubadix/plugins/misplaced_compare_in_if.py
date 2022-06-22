@@ -17,7 +17,75 @@
 import re
 from typing import Iterator
 
+from troubadix.helper import is_ignore_file
+
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
+
+# nb: Those are files which have this misplaced compare since their very first
+# version. As changing the if now might change their behavior and the VTs are
+# candidates for deprecation they are ignored for now.
+IGNORE_FILES = [
+    "PCIDSS_M8.2.4.a.nasl",
+    "PCIDSS_M10.3.2.nasl",
+    "PCIDSS_M10.2.6.nasl",
+    "PCIDSS_M10.2.4.nasl",
+    "PCIDSS_M8.2.5.a.nasl",
+    "PCIDSS_M10.3.1.nasl",
+    "PCI-DSS.nasl",
+    "PCIDSS_M8.1.4.nasl",
+    "PCIDSS_M10.3.3.nasl",
+    "PCIDSS_M10.2.5.nasl",
+    "PCIDSS_M8.1.7.nasl",
+    "PCIDSS_M10.3.5.nasl",
+    "PCIDSS_M8.1.8.nasl",
+    "PCIDSS_M10.3.6.nasl",
+    "PCIDSS_M8.2.3.a.nasl",
+    "PCIDSS_M8.1.6.a.nasl",
+    "PCIDSS_M10.3.4.nasl",
+    "PCIDSS_M5.2.a.nasl",
+    "PCIDSS_M5.1.nasl",
+    "GSHB_WMI_Apache.nasl",
+    "GSHB_WMI_EFS.nasl",
+    "GSHB_WMI_Antivir.nasl",
+    "GSHB_WMI_ProtectedMode.nasl",
+    "GSHB_WMI_WinAdminTools.nasl",
+    "GSHB_WMI_PolSecSet.nasl",
+    "GSHB_WMI_BootDrive.nasl",
+    "GSHB_WMI_W2K3_ClientFunk.nasl",
+    "GSHB_WMI_IIS_Protect_SynAttack.nasl",
+    "GSHB_WMI_NtpServer.nasl",
+    "GSHB_WMI_IPSec_Policy.nasl",
+    "GSHB_WMI_removable-media.nasl",
+    "GSHB_WMI_get_AdminUsers.nasl",
+    "GSHB_WMI_SNMP_Communities.nasl",
+    "GSHB_WMI_IIS_UrlScanFilter.nasl",
+    "GSHB_Read_Apache_Config.nasl",
+    "GSHB_SMB_SDDL.nasl",
+    "GSHB_WMI_IIS_RDS.nasl",
+    "GSHB_WMI_PathVariables.nasl",
+    "GSHB_WMI_Hibernate.nasl",
+    "GSHB_Kompendium.nasl",
+    "GSHB_WMI_XP-InetComm.nasl",
+    "GSHB_WMI_EventLogPolSet.nasl",
+    "GSHB_WMI_get_Shares.nasl",
+    "GSHB_WMI_CD-FD-User-only-access.nasl",
+    "GSHB_WMI_IIS_Samplefiles.nasl",
+    "GSHB_WMI_list_Services.nasl",
+    "GSHB_WMI_TerminalServerSettings.nasl",
+    "GSHB_WMI_Driver-Autostart.nasl",
+    "GSHB_WMI_Loginscreen.nasl",
+    "GSHB_WMI_IIS_exec_cmd.nasl",
+    "GSHB_WMI_AllowRemoteDASD.nasl",
+    "GSHB_WMI_Passfilt.nasl",
+    "GSHB_WMI_ScreenSaver_Status.nasl",
+    "GSHB_WMI_WinFirewallStat.nasl",
+    "GSHB_WMI_CD-Autostart.nasl",
+    "GSHB_WMI_WIN_Subsystem.nasl",
+    "GSHB_WMI_pre2000comp.nasl",
+    "GSHB_WMI_PasswdPolicie.nasl",
+    "GSHB_WMI_DomContrTest.nasl",
+    "GSHB_WMI_get_ODBCINST.nasl",
+]
 
 
 class CheckMisplacedCompareInIf(FilePlugin):
@@ -41,6 +109,10 @@ class CheckMisplacedCompareInIf(FilePlugin):
             nasl_file: The VT/Include that is going to be checked
             file_content: The content of the VT
         """
+
+        if is_ignore_file(self.context.nasl_file, IGNORE_FILES):
+            return
+
         # pylint: disable=W0511
         # TODO: Find a better way to parse if calls as this would miss
         #  something like e.g.:
