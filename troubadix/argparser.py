@@ -68,6 +68,14 @@ def parse_args(
     )
 
     parser.add_argument(
+        "-V",
+        "--version",
+        dest="version",
+        action="store_true",
+        help=("Print the version of troubadix"),
+    )
+
+    parser.add_argument(
         "-f",
         "--full",
         action="store_true",

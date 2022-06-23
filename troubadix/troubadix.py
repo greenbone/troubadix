@@ -24,6 +24,7 @@ from typing import Iterable, List, Tuple
 from pontos.terminal import _set_terminal, info, warning
 from pontos.terminal.terminal import Terminal
 
+from troubadix.__version__ import __version__
 from troubadix.argparser import parse_args
 from troubadix.helper import get_root
 from troubadix.reporter import Reporter
@@ -114,6 +115,10 @@ def main(args=None):
         args = sys.argv[1:]
 
     parsed_args = parse_args(args=args)
+
+    if parsed_args.version:
+        term.info(f"troubadix version {__version__}")
+        sys.exit(1)
 
     # Full will run in the root directory of executing. (Like pwd)
     if parsed_args.full:
