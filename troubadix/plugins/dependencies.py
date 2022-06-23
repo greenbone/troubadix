@@ -31,7 +31,7 @@ from troubadix.plugin import (
     LinterWarning,
 )
 
-FEED_VERSIONS = ["common", "21.04", "22.04"]
+FEED_VERSIONS = ["common", "21.04", "22.04", ""]
 
 
 class CheckDependencies(FilePlugin):
