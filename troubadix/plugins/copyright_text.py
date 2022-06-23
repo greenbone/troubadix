@@ -41,15 +41,8 @@ class CheckCopyrightText(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        """This step checks a VT for the correct use of the copyright text.
-
-        Prior to this step, most VTs are using
-        "This script is Copyright (C) [...]",
-        however the introductory text ("This script is") is to be discarded
-        from now on.
-
-        In addition it will also report any occurrence of the following
-        outdated text pattern:
+        """This plugin will report any occurrence of the following outdated text
+        pattern:
 
         # Text descriptions are largely excerpted from the referenced
         # advisory, and are Copyright (C) of their respective author(s)
@@ -78,18 +71,6 @@ class CheckCopyrightText(FileContentPlugin):
 
         if nasl_file.suffix == ".inc":
             return
-
-        if not re.search(
-            r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content
-        ):
-            yield LinterError(
-                "The VT is using an incorrect syntax for its copyright "
-                "statement. Please start (EXACTLY) with:\n"
-                "'script_copyright(\"Copyright (C) followed by the year "
-                "(matching the one in creation_date) and the author/company.",
-                file=nasl_file,
-                plugin=self.name,
-            )
 
         match = re.search(
             r"^# (Text descriptions are largely excerpted from the referenced"
