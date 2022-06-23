@@ -31,6 +31,8 @@ from troubadix.plugin import (
     LinterWarning,
 )
 
+FEED_VERSIONS = ["common", "21.04", "22.04"]
+
 
 class CheckDependencies(FilePlugin):
     name = "check_dependencies"
@@ -72,7 +74,9 @@ class CheckDependencies(FilePlugin):
                     if "+d+.nasl" in dep:
                         continue
 
-                    if not (root / dep).exists():
+                    if not any(
+                        (root / vers / dep).exists() for vers in FEED_VERSIONS
+                    ):
                         yield LinterError(
                             f"The script dependency {dep} could not "
                             "be found within the VTs.",
