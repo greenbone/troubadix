@@ -53,7 +53,8 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_dependency_existing(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "example.inc"
+            example = tmpdir / "common" / "example.inc"
+            example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -95,8 +96,8 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_enterprise_dependency(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "enterprise" / "example.inc"
-            example.parent.mkdir()
+            example = tmpdir / "common" / "enterprise" / "example.inc"
+            example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -115,8 +116,8 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_policy_warning(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "Policy" / "example.inc"
-            example.parent.mkdir()
+            example = tmpdir / "common" / "Policy" / "example.inc"
+            example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -142,8 +143,8 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_error(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "foo" / "example.inc"
-            example.parent.mkdir()
+            example = tmpdir / "common" / "foo" / "example.inc"
+            example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
