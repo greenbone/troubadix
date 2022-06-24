@@ -22,7 +22,7 @@ from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 class CheckRiskFactor(FilePlugin):
-    name = "risk_factor"
+    name = "check_risk_factor"
 
     def run(self) -> Iterator[LinterResult]:
         """This script checks if a VT with risk_factor tag exist."""
