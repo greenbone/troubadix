@@ -82,19 +82,12 @@ class CheckCopyrightTextTestCase(PluginTestCase):
         plugin = CheckCopyrightText(fake_context)
 
         results = list(plugin.run())
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 1)
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT is using an incorrect syntax for its copyright "
-            "statement. Please start (EXACTLY) with:\n"
-            "'script_copyright(\"Copyright (C) followed by the year "
-            "(matching the one in creation_date) and the author/company.",
-            results[0].message,
-        )
-        self.assertEqual(
             "The VT was using an incorrect copyright statement.",
-            results[1].message,
+            results[0].message,
         )
 
     def test_wrong_copyright_text(self):

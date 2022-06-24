@@ -30,7 +30,16 @@ class CheckScriptCopyright(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        """
+        """This plugin checks a VT for the correct use of the copyright text.
+
+        Prior to this plugin, most VTs had used a
+        'script_copyright("This script is Copyright (C) [...]");'
+        tag, however the introductory text ("This script is") is to be discarded
+        from now on.
+
+        In addition this plugin will also report if the syntax of the
+        'script_copyright();' tag is generally missing or malformed.
+
         Args:
             nasl_file: The VT that shall be checked
             file_content: str representing the file content
@@ -46,26 +55,6 @@ class CheckScriptCopyright(FileContentPlugin):
                 "copyright statement. Please start (EXACTLY) with: "
                 "'script_copyright(\"Copyright (C)' followed by the year "
                 "(matching the one in creation_date) and the author/company.",
-                file=nasl_file,
-                plugin=self.name,
-            )
-
-        if re.search(
-            r"^# (Text descriptions are largely excerpted from the "
-            r"referenced\n# advisory, and are Copyright "
-            r"\([cC]\) (of )?(the |their )respective author"
-            r"\(s\)|Some text descriptions might be excerpted "
-            r"from the referenced\n# advisories, and are Copyright \(C\) by "
-            r"the respective right holder\(s\))",
-            file_content,
-            re.MULTILINE,
-        ):
-            yield LinterError(
-                "The VT is using an incorrect copyright "
-                "statement. Please use (EXACTLY): "
-                "# Some text descriptions might be excerpted from (a) "
-                "referenced\n# source(s), and are Copyright (C) by the "
-                "respective right holder(s).",
                 file=nasl_file,
                 plugin=self.name,
             )
