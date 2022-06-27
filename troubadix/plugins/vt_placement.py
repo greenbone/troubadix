@@ -25,6 +25,8 @@ from troubadix.helper.helper import ENTERPRISE_FOLDERS
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+FEED_VERSIONS = ["common", "21.04", "22.04", ""]
+
 
 class CheckVTPlacement(FileContentPlugin):
     """The script checks if the passed VT is using one of the
@@ -71,11 +73,17 @@ class CheckVTPlacement(FileContentPlugin):
         if match is not None:
             return
 
-        if root / nasl_file.name == nasl_file:
+        if any(
+            (root / vers / nasl_file.name) == nasl_file
+            for vers in FEED_VERSIONS
+        ):
             return
 
         for folder in chain(["attic"], ENTERPRISE_FOLDERS):
-            if root / folder / nasl_file.name == nasl_file:
+            if any(
+                (root / vers / folder / nasl_file.name) == nasl_file
+                for vers in FEED_VERSIONS
+            ):
                 return
 
         yield LinterError(
