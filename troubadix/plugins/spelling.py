@@ -48,15 +48,29 @@ class CheckSpelling(FilePlugin):
 
         """
 
+        # Overwrite with local repository files if exist
+        if Path("codespell/codespell.additions").exists():
+            codespell_additions = Path("codespell/codespell.additions").resolve()
+        else:
+            codespell_additions = f"{codespell_config_path}/codespell.additions"
+        if Path("codespell/codespell.exclude").exists():
+            codespell_exclude = Path("codespell/codespell.exclude").resolve()
+        else:
+            codespell_exclude = f"{codespell_config_path}/codespell.exclude"
+        if Path("codespell/codespell.ignore").exists():
+            codespell_ignore = Path("codespell/codespell.ignore").resolve()
+        else:
+            codespell_ignore = f"{codespell_config_path}/codespell.ignore"
+
         # Run codespell as internal process
         with redirect_stdout(io.StringIO()) as codespell:
             codespell_main(
                 *(
                     "--hard-encoding-detection",
                     "--dictionary=-",
-                    f"--dictionary={codespell_config_path}/codespell.additions",
-                    f"--exclude-file={codespell_config_path}/codespell.exclude",
-                    f"--ignore-words={codespell_config_path}/codespell.ignore",
+                    f"--dictionary={codespell_additions}",
+                    f"--exclude-file={codespell_exclude}",
+                    f"--ignore-words={codespell_ignore}",
                     "--disable-colors",
                     f"{str(self.context.nasl_file)}",
                 )
