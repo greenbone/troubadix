@@ -86,7 +86,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT was using an incorrect copyright statement.",
+            "The VT is using an incorrect copyright statement.",
             results[0].message,
         )
 
@@ -110,7 +110,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
 
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "The VT was using an incorrect copyright statement.",
+                "The VT is using an incorrect copyright statement.",
                 results[0].message,
             )
 
@@ -138,7 +138,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
 
                 self.assertIsInstance(results[0], LinterFix)
                 self.assertEqual(
-                    "The copyright has been updated to "
+                    "The copyright statement has been updated to "
                     f"{CORRECT_COPYRIGHT_PHRASE}",
                     results[0].message,
                 )
