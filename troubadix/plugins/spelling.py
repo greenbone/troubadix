@@ -50,7 +50,9 @@ class CheckSpelling(FilePlugin):
 
         # Overwrite with local repository files if exist
         if Path("codespell/codespell.additions").exists():
-            codespell_additions = Path("codespell/codespell.additions").resolve()
+            codespell_additions = Path(
+                "codespell/codespell.additions"
+            ).resolve()
         else:
             codespell_additions = f"{codespell_config_path}/codespell.additions"
         if Path("codespell/codespell.exclude").exists():
