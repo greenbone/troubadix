@@ -55,10 +55,8 @@ class CheckSpellingTestCase(PluginTestCase):
         )
 
     def test_local_files_nok(self):
-        folder = Path("codespell")
-        folder.mkdir(parents=True, exist_ok=True)
-        codespell_additions = folder / "codespell.additions"
-        codespell_additions.write_text("")
+        codespell_additions = Path("codespell.additions")
+        codespell_additions.write_text("", encoding="utf-8")
 
         nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
         content = "# this is not used, it use the nasl_file instead\n"
@@ -68,8 +66,8 @@ class CheckSpellingTestCase(PluginTestCase):
         plugin = CheckSpelling(fake_context)
 
         results = list(plugin.run())
+
         codespell_additions.unlink()
-        folder.rmdir()
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)

@@ -49,18 +49,16 @@ class CheckSpelling(FilePlugin):
         """
 
         # Overwrite with local repository files if exist
-        if Path("codespell/codespell.additions").exists():
-            codespell_additions = Path(
-                "codespell/codespell.additions"
-            ).resolve()
+        if Path("codespell.additions").exists():
+            codespell_additions = Path("codespell.additions").resolve()
         else:
             codespell_additions = f"{codespell_config_path}/codespell.additions"
-        if Path("codespell/codespell.exclude").exists():
-            codespell_exclude = Path("codespell/codespell.exclude").resolve()
+        if Path("codespell.exclude").exists():
+            codespell_exclude = Path("codespell.exclude").resolve()
         else:
             codespell_exclude = f"{codespell_config_path}/codespell.exclude"
-        if Path("codespell/codespell.ignore").exists():
-            codespell_ignore = Path("codespell/codespell.ignore").resolve()
+        if Path("codespell.ignore").exists():
+            codespell_ignore = Path("codespell.ignore").resolve()
         else:
             codespell_ignore = f"{codespell_config_path}/codespell.ignore"
 
