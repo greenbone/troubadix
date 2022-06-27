@@ -88,7 +88,7 @@ class CheckCopyrightText(FileContentPlugin):
             )
 
             yield LinterError(
-                "The VT was using an incorrect copyright statement.",
+                "The VT is using an incorrect copyright statement.",
                 file=nasl_file,
                 plugin=self.name,
             )
@@ -103,7 +103,8 @@ class CheckCopyrightText(FileContentPlugin):
         )
 
         yield LinterFix(
-            f"The copyright has been updated to {CORRECT_COPYRIGHT_PHRASE}",
+            f"The copyright statement has been updated to "
+            f"{CORRECT_COPYRIGHT_PHRASE}",
             file=nasl_file,
             plugin=self.name,
         )
