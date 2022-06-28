@@ -53,3 +53,25 @@ class CheckSpellingTestCase(PluginTestCase):
             f"{nasl_file}:2: upated ==> updated\n",
             results[0].message,
         )
+
+    def test_local_files_nok(self):
+        codespell_additions = Path("codespell.additions")
+        codespell_additions.write_text("", encoding="utf-8")
+
+        nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
+        content = "# this is not used, it use the nasl_file instead\n"
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckSpelling(fake_context)
+
+        results = list(plugin.run())
+
+        codespell_additions.unlink()
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"{nasl_file}:2: upated ==> updated\n",
+            results[0].message,
+        )
