@@ -26,7 +26,10 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 # nb: Those are files which are correctly using a log_message() to do e.g. some
 # additional reporting for the user. This is a valid case which doesn't need to
-# be changed.
+# be changed. The example and template files shouldn't be checked at all because
+# the plugin would throw an unecessary error for them if e.g. not running from
+# within the nasl/common folder. But all three files are just examples and don't
+# need to be checked at all.
 IGNORE_FILES = [
     "mssql_version.nasl",
     "pre2008/domino_default_db.nasl",
@@ -48,6 +51,9 @@ IGNORE_FILES = [
     "2015/gb_vnc_brute_force.nasl",
     "2012/gb_secpod_ssl_ciphers_weak_report.nasl",
     "GSHB/GSHB_Kompendium.nasl",
+    "/policy_control_template.nasl",
+    "/template.nasl",
+    "/examples/test_ipv6_packet_forgery.nasl",
 ]
 
 
