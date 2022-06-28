@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag
-from troubadix.helper.helper import is_enterprise_folder
+from troubadix.helper.helper import is_enterprise_folder, FEED_VERSIONS
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import (
     FilePlugin,
@@ -30,8 +30,6 @@ from troubadix.plugin import (
     LinterResult,
     LinterWarning,
 )
-
-FEED_VERSIONS = ["common", "21.04", "22.04", ""]
 
 
 class CheckDependencies(FilePlugin):

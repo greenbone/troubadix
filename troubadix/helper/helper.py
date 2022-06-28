@@ -49,6 +49,9 @@ ENTERPRISE_FOLDERS = (
     "gsf",
 )
 
+# Supported feed directories
+FEED_VERSIONS = ["common", "21.04", "22.04", ""]
+
 
 def is_enterprise_folder(folder: Union[Path, str]) -> bool:
     return str(folder) in ENTERPRISE_FOLDERS
