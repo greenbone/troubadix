@@ -19,8 +19,36 @@ import re
 from pathlib import Path
 from typing import Iterator
 
+from troubadix.helper import is_ignore_file
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
+
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+
+# nb: Those are files which are correctly using a log_message() to do e.g. some
+# additional reporting for the user. This is a valid case which doesn't need to
+# be changed.
+IGNORE_FILES = [
+    "mssql_version.nasl",
+    "pre2008/domino_default_db.nasl",
+    "pre2008/oracle_tnslsnr_security.nasl",
+    "pre2008/smtp_AV_42zip_DoS.nasl",
+    "pre2008/shoutcast_version.nasl",
+    "2017/gb_default_http_credentials_report.nasl",
+    "2017/gb_dcetest_report.nasl",
+    "2021/gb_ntp_mode6_response_check.nasl",
+    "GSHB/GSHB_WMI_get_Shares.nasl",
+    "GSHB/GSHB_WMI_Loginscreen.nasl",
+    "GSHB/GSHB_WMI_CD-FD-User-only-access.nasl",
+    "gb_dicom_service_ae_title_brute_force.nasl",
+    "Policy/policy_controls_fail.nasl",
+    "PCIDSS/PCI-DSS.nasl",
+    "2016/gb_ssl_tls_weak_hash_algo.nasl",
+    "2018/gb_unquoted_path_vulnerabilities_win.nasl",
+    "2009/remote-net-hub-3com.nasl",
+    "2015/gb_vnc_brute_force.nasl",
+    "2012/gb_secpod_ssl_ciphers_weak_report.nasl",
+    "GSHB/GSHB_Kompendium.nasl",
+]
 
 
 class CheckReportingConsistency(FileContentPlugin):
@@ -36,6 +64,9 @@ class CheckReportingConsistency(FileContentPlugin):
         the cvss base value.
         """
         if nasl_file.suffix == ".inc":
+            return
+
+        if is_ignore_file(nasl_file, IGNORE_FILES):
             return
 
         security_message = re.compile(
