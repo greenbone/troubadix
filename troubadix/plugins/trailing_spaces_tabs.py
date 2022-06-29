@@ -37,7 +37,9 @@ class CheckTrailingSpacesTabs(FilePlugin):
                     to find special tags
 
         """
-        spaces_tabs_matches = re.finditer("[\t ]+$", self.context.file_content)
+        spaces_tabs_matches = re.finditer(
+            r"[\t ]+$", self.context.file_content, flags=re.MULTILINE
+        )
 
         if spaces_tabs_matches:
             for spaces_tabs_match in spaces_tabs_matches:
