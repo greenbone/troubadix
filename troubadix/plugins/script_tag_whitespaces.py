@@ -38,13 +38,13 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        matches = _get_tag_pattern(name=r".*", flags=re.S).finditer(
+        matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(
             file_content
         )
 
         for match in matches:
-            if re.match(r"\s+.*", match.group("value")) or re.match(
-                r".*\s+", match.group("value")
+            if re.match(r"^\s+.*", match.group("value")) or re.match(
+                r".*\s+$", match.group("value")
             ):
                 yield LinterError(
                     f"{match.group(0)}: value contains a leading or"
