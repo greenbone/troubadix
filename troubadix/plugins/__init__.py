@@ -49,6 +49,7 @@ from .risk_factor import CheckRiskFactor
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .script_family import CheckScriptFamily
+from .script_tag_whitespaces import CheckScriptTagWhitespaces
 from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
@@ -99,6 +100,7 @@ _PLUGINS = [
     CheckSolutionText,
     CheckSolutionType,
     CheckSpelling,
+    CheckScriptTagWhitespaces,
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
     CheckUsingDisplay,
