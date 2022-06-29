@@ -123,9 +123,11 @@ def check_oid(args: Namespace) -> bool:
 
         if oid_added.group("oid") != oid_removed.group("oid"):
             print(
-                f"Change OID IN {nasl_file} "
-                f"OID_NEW: {oid_added.group('oid')} "
-                f"OID OLD: {oid_removed.group('oid')}"
+                f"OID of VT {nasl_file} was changed. This is only allowed in "
+                f"rare cases (e.g. a duplicate OID got fixed or a single VT "
+                f"was split into two VTs)."
+                f"\nOID NEW: {oid_added.group('oid')}"
+                f"\nOID OLD: {oid_removed.group('oid')}"
             )
             rcode = True
     return rcode
