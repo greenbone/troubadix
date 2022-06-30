@@ -67,8 +67,12 @@ def parse_args(args: Iterable[str]) -> Namespace:
 
 
 def git(*args) -> str:
+    # git diff output uses raw bytes
     return subprocess.run(
-        ["git"] + list(args), capture_output=True, encoding="utf-8", check=True
+        ["git"] + list(args),
+        capture_output=True,
+        encoding="latin-1",
+        check=True,
     ).stdout
 
 
