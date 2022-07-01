@@ -72,6 +72,13 @@ class CheckDeprecatedDependency(FilePlugin):
                 ).split(",")
 
                 for dep in dependencies:
+                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
+                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
+                    # and GSHB/EL15/GSHB.nasl
+                    # are using a variable which we currently can't handle.
+                    if "+d+.nasl" in dep:
+                        continue
+
                     dependency_path = None
                     for vers in FEED_VERSIONS:
                         if (root / vers / dep).exists():
@@ -85,13 +92,6 @@ class CheckDeprecatedDependency(FilePlugin):
                             plugin=self.name,
                         )
                     else:
-                        # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                        # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                        # and GSHB/EL15/GSHB.nasl
-                        # are using a variable which we currently can't handle.
-                        if "+d+.nasl" in dep:
-                            continue
-
                         dependency_content = dependency_path.read_text(
                             encoding=CURRENT_ENCODING
                         )
