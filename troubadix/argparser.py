@@ -228,7 +228,7 @@ def parse_args(
         default=cpu_count() // 2,
         type=check_cpu_count,
         help=(
-            "Define number of jobs, that should run simultaneously"
+            "Define number of jobs, that should run simultaneously. "
             "Default: %(default)s"
         ),
     )
