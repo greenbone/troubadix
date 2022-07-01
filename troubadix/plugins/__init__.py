@@ -26,6 +26,8 @@ from .creation_date import CheckCreationDate
 from .cve_format import CheckCVEFormat
 from .cvss_format import CheckCVSSFormat
 from .dependencies import CheckDependencies
+from .dependency_category_order import CheckDependencyCategoryOrder
+from .deprecated_dependency import CheckDeprecatedDependency
 from .description import CheckDescription
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
@@ -46,13 +48,20 @@ from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .reporting_consistency import CheckReportingConsistency
 from .risk_factor import CheckRiskFactor
+from .script_add_preference_type import CheckScriptAddPreferenceType
+from .script_calls_empty_values import CheckScriptCallsEmptyValues
+from .script_calls_mandatory import CheckScriptCallsMandatory
+from .script_calls_recommended import CheckScriptCallsRecommended
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .script_family import CheckScriptFamily
 from .script_tag_whitespaces import CheckScriptTagWhitespaces
+from .script_tag_form import CheckScriptTagForm
 from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
+from .script_xref_form import CheckScriptXrefForm
+from .script_xref_url import CheckScriptXrefUrl
 from .security_messages import CheckSecurityMessages
 from .set_get_kb_calls import CheckWrongSetGetKBCalls
 from .solution_text import CheckSolutionText
@@ -63,9 +72,12 @@ from .todo_tbd import CheckTodoTbd
 from .trailing_spaces_tabs import CheckTrailingSpacesTabs
 from .update_modification_date import UpdateModificationDate
 from .using_display import CheckUsingDisplay
+from .qod import CheckQod
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
+from .variable_assigned_in_if import CheckVariableAssignedInIf
 from .vt_placement import CheckVTPlacement
+
 
 _PLUGINS = [
     CheckBadwords,
@@ -75,6 +87,8 @@ _PLUGINS = [
     CheckCopyrightYear,
     CheckCreationDate,
     CheckDependencies,
+    CheckDependencyCategoryOrder,
+    CheckDeprecatedDependency,
     CheckDescription,
     CheckDoubleEndPoints,
     CheckDuplicatedScriptTags,
@@ -92,10 +106,17 @@ _PLUGINS = [
     CheckProdSvcDetectInVulnvt,
     CheckReportingConsistency,
     CheckRiskFactor,
+    CheckScriptAddPreferenceType,
+    CheckScriptCallsEmptyValues,
+    CheckScriptCallsMandatory,
+    CheckScriptCallsRecommended,
     CheckScriptCategory,
     CheckScriptCopyright,
     CheckScriptFamily,
+    CheckScriptTagForm,
     CheckScriptVersionAndLastModificationTags,
+    CheckScriptXrefForm,
+    CheckScriptXrefUrl,
     CheckSecurityMessages,
     CheckSolutionText,
     CheckSolutionType,
@@ -104,12 +125,14 @@ _PLUGINS = [
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
     CheckUsingDisplay,
+    CheckQod,
     CheckVTPlacement,
     CheckValidOID,
     CheckValidScriptTagNames,
     CheckWrongSetGetKBCalls,
     CheckEncoding,
     CheckTabs,
+    CheckVariableAssignedInIf,
 ]
 
 _PRE_RUN_PLUGINS = [
