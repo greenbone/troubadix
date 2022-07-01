@@ -23,9 +23,9 @@ from pathlib import Path
 from typing import Iterator, Union
 
 from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag
+from troubadix.helper.helper import FEED_VERSIONS
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
-
 
 # See https://shorturl.at/jBGJT for a list of the category numbers.
 class VTCategory(IntEnum):
@@ -130,8 +130,12 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
                 ).split(",")
 
                 for dep in dependencies:
-                    dependency_path = Path(root / dep)
-                    if not dependency_path.exists():
+                    dependency_path = None
+                    for vers in FEED_VERSIONS:
+                        if (root / vers / dep).exists():
+                            dependency_path = root / vers / dep
+
+                    if not dependency_path:
                         yield LinterError(
                             f"The script dependency {dep} could not "
                             "be found within the VTs.",
