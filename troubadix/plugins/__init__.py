@@ -28,10 +28,11 @@ from .cvss_format import CheckCVSSFormat
 from .dependencies import CheckDependencies
 from .dependency_category_order import CheckDependencyCategoryOrder
 from .deprecated_dependency import CheckDeprecatedDependency
+from .deprecated_functions import CheckDeprecatedFunctions
 from .description import CheckDescription
 from .double_end_points import CheckDoubleEndPoints
-from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
+from .duplicate_oid import CheckDuplicateOID
 from .encoding import CheckEncoding
 from .forking_nasl_functions import CheckForkingNaslFunctions
 from .get_kb_on_services import CheckGetKBOnServices
@@ -46,6 +47,7 @@ from .newlines import CheckNewlines
 from .no_solution import CheckNoSolution
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
+from .qod import CheckQod
 from .reporting_consistency import CheckReportingConsistency
 from .risk_factor import CheckRiskFactor
 from .script_add_preference_type import CheckScriptAddPreferenceType
@@ -55,8 +57,8 @@ from .script_calls_recommended import CheckScriptCallsRecommended
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .script_family import CheckScriptFamily
-from .script_tag_whitespaces import CheckScriptTagWhitespaces
 from .script_tag_form import CheckScriptTagForm
+from .script_tag_whitespaces import CheckScriptTagWhitespaces
 from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
@@ -72,7 +74,6 @@ from .todo_tbd import CheckTodoTbd
 from .trailing_spaces_tabs import CheckTrailingSpacesTabs
 from .update_modification_date import UpdateModificationDate
 from .using_display import CheckUsingDisplay
-from .qod import CheckQod
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .variable_assigned_in_if import CheckVariableAssignedInIf
@@ -81,17 +82,19 @@ from .vt_placement import CheckVTPlacement
 
 _PLUGINS = [
     CheckBadwords,
-    CheckCVEFormat,
-    CheckCVSSFormat,
     CheckCopyrightText,
     CheckCopyrightYear,
     CheckCreationDate,
+    CheckCVEFormat,
+    CheckCVSSFormat,
     CheckDependencies,
     CheckDependencyCategoryOrder,
     CheckDeprecatedDependency,
+    CheckDeprecatedFunctions,
     CheckDescription,
     CheckDoubleEndPoints,
     CheckDuplicatedScriptTags,
+    CheckEncoding,
     CheckForkingNaslFunctions,
     CheckGetKBOnServices,
     CheckGrammar,
@@ -104,6 +107,7 @@ _PLUGINS = [
     CheckNewlines,
     CheckOverlongScriptTags,
     CheckProdSvcDetectInVulnvt,
+    CheckQod,
     CheckReportingConsistency,
     CheckRiskFactor,
     CheckScriptAddPreferenceType,
@@ -114,6 +118,7 @@ _PLUGINS = [
     CheckScriptCopyright,
     CheckScriptFamily,
     CheckScriptTagForm,
+    CheckScriptTagWhitespaces,
     CheckScriptVersionAndLastModificationTags,
     CheckScriptXrefForm,
     CheckScriptXrefUrl,
@@ -121,18 +126,15 @@ _PLUGINS = [
     CheckSolutionText,
     CheckSolutionType,
     CheckSpelling,
-    CheckScriptTagWhitespaces,
+    CheckTabs,
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
     CheckUsingDisplay,
-    CheckQod,
-    CheckVTPlacement,
     CheckValidOID,
     CheckValidScriptTagNames,
-    CheckWrongSetGetKBCalls,
-    CheckEncoding,
-    CheckTabs,
     CheckVariableAssignedInIf,
+    CheckVTPlacement,
+    CheckWrongSetGetKBCalls,
 ]
 
 _PRE_RUN_PLUGINS = [
