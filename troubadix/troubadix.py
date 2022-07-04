@@ -152,6 +152,9 @@ def main(args=None):
         warning("No files given/found.")
         sys.exit(1)
 
+    # Remove duplicate files
+    files = list(set(files))
+
     # Get the root of the nasl files
     if parsed_args.root:
         root = parsed_args.root
