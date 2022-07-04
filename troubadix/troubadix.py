@@ -94,7 +94,7 @@ def generate_patterns(
     return include_patterns, exclude_patterns
 
 
-def from_file(include_file: Path, term: Terminal) -> Iterable[Path]:
+def from_file(include_file: Path, term: Terminal) -> List[Path]:
     """Parse the given file containing a list of files into"""
     try:
         # Return file list and remove duplicate files
