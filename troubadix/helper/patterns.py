@@ -195,7 +195,7 @@ __special_script_tag_values = {
     SpecialScriptTag.ID: r"(?P<oid>([0-9.]+))",
     SpecialScriptTag.CATEGORY: r"(?P<category>("
     rf"{'|'.join([k for k, _ in SCRIPT_CATEGORIES.items()])}))",
-    SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}",
+    SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}|\$Revision: [0-9]+ \$",
     SpecialScriptTag.REQUIRE_PORTS: __PORT_VALUE,
     SpecialScriptTag.REQUIRE_UDP_PORTS: __PORT_VALUE,
     SpecialScriptTag.XREF: r"name:\"(?P<ref_type>[\w\s]+)\","
