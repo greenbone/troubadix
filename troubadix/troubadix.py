@@ -97,10 +97,17 @@ def generate_patterns(
 def from_file(include_file: Path, term: Terminal) -> Iterable[Path]:
     """Parse the given file containing a list of files into"""
     try:
-        return [
-            Path(f)
-            for f in include_file.read_text(encoding="utf-8").splitlines()
-        ]
+        # Return file list and remove duplicate files
+        return list(
+            set(
+                [
+                    Path(f)
+                    for f in include_file.read_text(
+                        encoding="utf-8"
+                    ).splitlines()
+                ]
+            )
+        )
     except FileNotFoundError:
         term.error(f"File {include_file} containing the file list not found.")
         sys.exit(1)
