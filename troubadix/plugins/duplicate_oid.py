@@ -51,19 +51,12 @@ class CheckDuplicateOID(FilesPlugin):
 
             oid = None
             content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-            # search for deprecated script_id
             match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
                 content
             )
 
             if match:
                 oid = match.group("oid")
-            else:
-                match = get_special_script_tag_pattern(
-                    SpecialScriptTag.ID
-                ).search(content)
-                if match:
-                    oid = OPENVAS_OID_PREFIX + match.group("oid")
 
             if not oid:
                 yield LinterError(
