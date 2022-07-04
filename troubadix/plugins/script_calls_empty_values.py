@@ -22,6 +22,7 @@ from troubadix.helper.patterns import (
     _get_special_script_tag_pattern,
     _get_tag_pattern,
     get_xref_pattern,
+    SpecialScriptTag,
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -57,12 +58,16 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
                 plugin=self.name,
             )
 
-        matches = _get_special_script_tag_pattern(
-            name=r"(?!add_preferences).*", value=""
-        ).finditer(file_content)
-        for match in matches:
-            yield LinterError(
-                f"{match.group(0)} does not contain a value",
-                file=nasl_file,
-                plugin=self.name,
-            )
+        for call in SpecialScriptTag:
+            # Special script tag name can not be a regex
+            matches = _get_special_script_tag_pattern(
+                name=call.value, value=""
+            ).finditer(file_content)
+            for match in matches:
+                # if "script_add_preference" in match.group(0):
+                #    continue
+                yield LinterError(
+                    f"{match.group(0)} does not contain a value",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
