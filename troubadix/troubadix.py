@@ -153,7 +153,8 @@ def main(args=None):
         files = from_file(include_file=parsed_args.from_file, term=term)
 
     elif parsed_args.files:
-        files = parsed_args.files
+        # Get file list and remove duplicate files
+        files = list(set(parsed_args.files))
 
     if not files:
         warning("No files given/found.")
