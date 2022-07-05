@@ -18,10 +18,10 @@
 # pylint: disable=fixme
 
 import re
-from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag
+from troubadix.helper.helper import FEED_VERSIONS
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
@@ -72,8 +72,19 @@ class CheckDeprecatedDependency(FilePlugin):
                 ).split(",")
 
                 for dep in dependencies:
-                    dependency_path = Path(root / dep)
-                    if not dependency_path.exists():
+                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
+                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
+                    # and GSHB/EL15/GSHB.nasl
+                    # are using a variable which we currently can't handle.
+                    if "+d+.nasl" in dep:
+                        continue
+
+                    dependency_path = None
+                    for vers in FEED_VERSIONS:
+                        if (root / vers / dep).exists():
+                            dependency_path = root / vers / dep
+
+                    if not dependency_path:
                         yield LinterError(
                             f"The script dependency {dep} could not "
                             "be found within the VTs.",
@@ -81,13 +92,6 @@ class CheckDeprecatedDependency(FilePlugin):
                             plugin=self.name,
                         )
                     else:
-                        # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                        # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                        # and GSHB/EL15/GSHB.nasl
-                        # are using a variable which we currently can't handle.
-                        if "+d+.nasl" in dep:
-                            continue
-
                         dependency_content = dependency_path.read_text(
                             encoding=CURRENT_ENCODING
                         )
