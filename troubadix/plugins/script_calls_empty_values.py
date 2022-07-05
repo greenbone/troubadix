@@ -61,7 +61,6 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
         for call in SpecialScriptTag:
             if call == SpecialScriptTag.ADD_PREFERENCE:
                 continue
-            # Special script tag name can not be a regex
             matches = _get_special_script_tag_pattern(
                 name=call.value, value=""
             ).finditer(file_content)
