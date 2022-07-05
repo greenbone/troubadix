@@ -59,7 +59,7 @@ def is_enterprise_folder(folder: Union[Path, str]) -> bool:
 
 def get_path_from_root(file_name: Path, root: Path):
     file_name = file_name.resolve()
-    return file_name.relative_to(root)
+    return file_name.relative_to(root.absolute())
 
 
 # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python

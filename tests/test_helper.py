@@ -19,7 +19,11 @@ import unittest
 from pathlib import Path
 
 from troubadix.helper import is_ignore_file
-from troubadix.helper.helper import get_root, is_enterprise_folder
+from troubadix.helper.helper import (
+    get_path_from_root,
+    get_root,
+    is_enterprise_folder,
+)
 
 
 class IgnoreFile(unittest.TestCase):
@@ -65,3 +69,37 @@ class GetRootTestCase(unittest.TestCase):
         self.assertEqual(get_root(Path("/nasl/22.04/bar")), Path("/nasl"))
         self.assertEqual(get_root(Path("/foo/bar")), Path("/"))
         self.assertEqual(get_root(Path("")), Path("/"))
+
+
+class GetPathFromRootTestCase(unittest.TestCase):
+    def test_get_path_from_root_relative(self):
+        self.assertEqual(
+            get_path_from_root(Path("nasl/foo"), Path("nasl/foo")), Path(".")
+        )
+        self.assertEqual(
+            get_path_from_root(Path("nasl/foo"), Path("nasl")), Path("foo")
+        )
+        self.assertEqual(
+            get_path_from_root(Path("nasl/foo/bar"), Path("nasl")),
+            Path("foo/bar"),
+        )
+
+    def test_get_path_from_root_absolute(self):
+        self.assertEqual(
+            get_path_from_root(Path("/nasl/foo"), Path("/nasl/foo")), Path(".")
+        )
+        self.assertEqual(
+            get_path_from_root(Path("/nasl/foo"), Path("/nasl")), Path("foo")
+        )
+        self.assertEqual(
+            get_path_from_root(Path("/nasl/foo/bar"), Path("/nasl")),
+            Path("foo/bar"),
+        )
+
+    # pylint: disable=expression-not-assigned
+    def test_no_root_path(self):
+        with self.assertRaises(ValueError):
+            get_path_from_root(Path("nasl/foo/bar"), Path("nasl/baz/bar")),
+
+        with self.assertRaises(ValueError):
+            get_path_from_root(Path("/nasl/foo/bar"), Path("/nasl/baz/bar")),
