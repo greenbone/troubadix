@@ -217,7 +217,7 @@ class TestRunner(unittest.TestCase):
             f"Checking {get_path_from_root(nasl_file, self.root)}",
             output,
         )
-        self.assertIn("Results for plugin update_modification_date", output)
+        self.assertIn("Results for plugin check_last_modification", output)
         # CI terminal formats for 80 chars per line
         self.assertIn(
             "VT does not contain a modification day script tag.",
@@ -256,7 +256,7 @@ class TestRunner(unittest.TestCase):
             "Checking " f"{get_path_from_root(nasl_file, self.root)}",
             output,
         )
-        self.assertIn("Results for plugin update_modification_date", output)
+        self.assertIn("Results for plugin check_last_modification", output)
         self.assertIn(
             "Replaced modification_date 2021-03-24 10:08:26 +0000"
             " (Wed, 24 Mar 2021",
