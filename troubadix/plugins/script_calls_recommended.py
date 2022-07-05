@@ -62,7 +62,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
 
         recommended_single_call = [r"dependencies"]
         recommended_many_call = [
-            r"required_ports",
+            r"require_ports",
             r"require_udp_ports",
             r"require_keys",
             r"mandatory_keys",
