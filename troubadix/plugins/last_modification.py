@@ -29,6 +29,9 @@ class CheckLastModification(FilePlugin):
     name = "check_last_modification"
 
     def run(self) -> Iterator[LinterResult]:
+        if self.context.nasl_file.suffix == ".inc":
+            return
+
         self.new_file_content = None
 
         # update modification date
