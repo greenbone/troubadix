@@ -21,8 +21,8 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Tuple
 
-from pontos.terminal import _set_terminal, info, warning
-from pontos.terminal.terminal import Terminal
+from pontos.terminal import Terminal
+from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.__version__ import __version__
 from troubadix.argparser import parse_args
@@ -63,6 +63,7 @@ def generate_file_list(
 
 
 def generate_patterns(
+    terminal: ConsoleTerminal,
     include_patterns: List[str],
     exclude_patterns: List[str],
     non_recursive: bool,
@@ -89,7 +90,7 @@ def generate_patterns(
         if exclude_patterns:
             exclude_patterns = [f"**/{pattern}" for pattern in exclude_patterns]
     else:
-        warning("Running in non-recursive mode!")
+        terminal.warning("Running in non-recursive mode!")
 
     return include_patterns, exclude_patterns
 
@@ -108,13 +109,12 @@ def from_file(include_file: Path, term: Terminal) -> Iterable[Path]:
 
 def main(args=None):
     """Main process of greenbone-docker"""
-    term = Terminal()
-    _set_terminal(term)
+    term = ConsoleTerminal()
 
     if not args:
         args = sys.argv[1:]
 
-    parsed_args = parse_args(args=args)
+    parsed_args = parse_args(terminal=term, args=args)
 
     if parsed_args.version:
         term.info(f"troubadix version {__version__}")
@@ -124,13 +124,14 @@ def main(args=None):
     if parsed_args.full:
         cwd = Path.cwd()
         dirs = [cwd]
-        info(f"Running full lint from {cwd}")
+        term.info(f"Running full lint from {cwd}")
     else:
         dirs = parsed_args.dirs
 
     files = None
     if dirs:
         include_patterns, exclude_patterns = generate_patterns(
+            terminal=term,
             include_patterns=parsed_args.include_patterns,
             exclude_patterns=parsed_args.exclude_patterns,
             non_recursive=parsed_args.non_recursive,
@@ -149,7 +150,7 @@ def main(args=None):
         files = parsed_args.files
 
     if not files:
-        warning("No files given/found.")
+        term.warning("No files given/found.")
         sys.exit(1)
 
     # Remove duplicate files
@@ -184,7 +185,7 @@ def main(args=None):
         root=root,
     )
 
-    info(f"Start linting {len(files)} files ... ")
+    term.info(f"Start linting {len(files)} files ... ")
 
     # Return exit with 1 if error exist
     if not runner.run(files):

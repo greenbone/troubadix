@@ -23,7 +23,7 @@ from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Iterable
 
-from pontos.terminal import warning
+from pontos.terminal import Terminal
 
 
 def directory_type(string: str) -> Path:
@@ -55,6 +55,7 @@ def check_cpu_count(number: str) -> int:
 
 
 def parse_args(
+    terminal: Terminal,
     args: Iterable[str] = None,
 ) -> Namespace:
     """Parsing args for troubadix
@@ -251,7 +252,7 @@ def parse_args(
         and not parsed_args.dirs
         and (parsed_args.include_patterns or parsed_args.exclude_patterns)
     ):
-        warning(
+        terminal.warning(
             "The arguments '--include-patterns' and '--exclude-patterns' "
             "must be used with '-f/--full' or '-d'/'--dirs'"
         )
@@ -262,7 +263,7 @@ def parse_args(
         and not parsed_args.dirs
         and parsed_args.non_recursive
     ):
-        warning(
+        terminal.warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"
         )

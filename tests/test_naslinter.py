@@ -20,7 +20,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock
 
-from pontos.terminal import _set_terminal
+from pontos.terminal import Terminal
 
 from troubadix.troubadix import generate_file_list, generate_patterns
 
@@ -74,11 +74,12 @@ class TestNASLinter(unittest.TestCase):
         self.assertEqual(files, expected_files)
 
     def test_generate_patterns_non_recursive(self):
-        _set_terminal(Mock())
+        terminal = Mock(spec=Terminal)
         include_patterns = ["*.nasl", "*.inc"]
         exclude_patterns = ["test.nasl", "templates/*/*.nasl"]
 
         new_include_patterns, new_exclude_patterns = generate_patterns(
+            terminal=terminal,
             include_patterns=include_patterns,
             exclude_patterns=exclude_patterns,
             non_recursive=True,
@@ -88,11 +89,12 @@ class TestNASLinter(unittest.TestCase):
         self.assertEqual(new_exclude_patterns, exclude_patterns)
 
     def test_generate_patterns_recursive(self):
-        _set_terminal(Mock())
+        terminal = Mock(spec=Terminal)
         include_patterns = ["*.nasl", "*.inc"]
         exclude_patterns = ["test.nasl", "templates/*/*.nasl"]
 
         new_include_patterns, new_exclude_patterns = generate_patterns(
+            terminal=terminal,
             include_patterns=include_patterns,
             exclude_patterns=exclude_patterns,
             non_recursive=False,

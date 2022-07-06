@@ -21,8 +21,7 @@ import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from pontos.terminal import _set_terminal
-from pontos.terminal.terminal import Terminal
+from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
@@ -41,9 +40,8 @@ _here = Path(__file__).parent
 
 class TestRunner(unittest.TestCase):
     def setUp(self):
-        self._term = Terminal()
+        self._term = ConsoleTerminal()
         self.root = _here / "plugins" / "test_files" / "nasl"
-        _set_terminal(self._term)
         self._reporter = Reporter(term=self._term, root=self.root)
 
     def test_runner_with_all_plugins(self):
