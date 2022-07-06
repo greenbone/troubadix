@@ -25,7 +25,7 @@ from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import get_path_from_root
-from troubadix.plugins import _PLUGINS
+from troubadix.plugins import _FILE_PLUGINS, _FILES_PLUGINS
 from troubadix.plugins.badwords import CheckBadwords
 from troubadix.plugins.copyright_text import CheckCopyrightText
 from troubadix.plugins.cvss_format import CheckCVSSFormat
@@ -51,7 +51,7 @@ class TestRunner(unittest.TestCase):
             root=self.root,
         )
 
-        plugins = _PLUGINS
+        plugins = _FILE_PLUGINS + _FILES_PLUGINS
 
         for plugin in runner.plugins:
             self.assertIn(plugin, plugins)
@@ -63,7 +63,7 @@ class TestRunner(unittest.TestCase):
         ]
         included_plugins = [
             plugin.__name__
-            for plugin in _PLUGINS
+            for plugin in _FILE_PLUGINS + _FILES_PLUGINS
             if plugin.__name__ not in excluded_plugins
         ]
         runner = Runner(
@@ -422,10 +422,10 @@ class TestRunner(unittest.TestCase):
             runner.run([nasl_file])
 
         compare_content = (
-            "\tPre-Run Plugins: check_duplicate_oid, check_no_solution\n"
             "\tIncluded Plugins: check_duplicate_oid, check_missing_desc_exit"
             ", check_no_solution\n"
-            "\tRunning plugins: check_missing_desc_exit\n"
+            "\tRunning plugins: check_duplicate_oid, check_no_solution, "
+            "check_missing_desc_exit\n"
             "\n\nRun plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
             "\t\tInvalid OID 1.2.3.4.5.6.78909.1.7.654321 found"
