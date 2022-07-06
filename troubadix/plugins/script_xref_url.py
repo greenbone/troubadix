@@ -23,6 +23,26 @@ from validators import url
 from troubadix.helper.patterns import get_xref_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+ALLOWED_URLS = [
+    "https://lists.apache.org/thread.html/e1ef853fc0079cdb55be"
+    "fbd2dac042934e49288b476d5f6a649e5da2@<announce.tomcat.apache.org>",
+    "https://lists.apache.org/thread.html/e1ef853fc0079cdb55be"
+    "fbd2dac042934e49288b476d5f6a649e5da2@<announce.tomcat.apache.org>",
+    "https://m0ze.ru/vulnerability/[2021-05-26]-[WordPress]-[C"
+    "WE-79]-WP-Reset-WordPress-Plugin-v1.86.txt",
+    "http://yehg.net/lab/pr0js/advisories/joomla/core/[joomla_"
+    "1.0.x~15]_cross_site_scripting",
+    "http://yehg.net/lab/pr0js/advisories/eclipse/[eclipse_hel"
+    "p_server]_cross_site_scripting",
+    "http://core.yehg.net/lab/pr0js/advisories/dll_hijacking/["
+    "flash_player]_10.1.x_insecure_dll_hijacking_(dwmapi.dll)",
+    "https://lists.apache.org/thread.html/773c93c2d8a6a52bbe9"
+    "7610c2b1c2ad205b970e1b8c04fb5b2fccad6@<general.hadoop.apache.org>",
+    "http://mail-archives.apache.org/mod_mbox/perl-advocacy/2"
+    "00904.mbox/<ad28918e0904011458h273a71d4x408f1ed286c9dfbc@mail.gmail.com>",
+    "http://yehg.net/lab/pr0js/advisories/[mybb1.6]_cross_site_scripting",
+]
+
 
 class CheckScriptXrefUrl(FileContentPlugin):
     name = "check_script_xref_url"
@@ -43,7 +63,9 @@ class CheckScriptXrefUrl(FileContentPlugin):
         )
         for match in matches:
             if match:
-                if not url(match.group("value")):
+                if not match.group("value") in ALLOWED_URLS and not url(
+                    match.group("value")
+                ):
                     yield LinterError(
                         f"{match.group(0)}: Invalid URL value",
                         file=nasl_file,
