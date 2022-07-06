@@ -31,14 +31,15 @@ from .deprecated_dependency import CheckDeprecatedDependency
 from .deprecated_functions import CheckDeprecatedFunctions
 from .description import CheckDescription
 from .double_end_points import CheckDoubleEndPoints
-from .duplicated_script_tags import CheckDuplicatedScriptTags
 from .duplicate_oid import CheckDuplicateOID
+from .duplicated_script_tags import CheckDuplicatedScriptTags
 from .encoding import CheckEncoding
 from .forking_nasl_functions import CheckForkingNaslFunctions
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
 from .illegal_characters import CheckIllegalCharacters
+from .last_modification import CheckLastModification
 from .log_messages import CheckLogMessages
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
@@ -72,13 +73,11 @@ from .spelling import CheckSpelling
 from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
 from .trailing_spaces_tabs import CheckTrailingSpacesTabs
-from .update_modification_date import UpdateModificationDate
 from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .variable_assigned_in_if import CheckVariableAssignedInIf
 from .vt_placement import CheckVTPlacement
-
 
 _PLUGINS = [
     CheckBadwords,
@@ -100,6 +99,7 @@ _PLUGINS = [
     CheckGrammar,
     CheckHttpLinksInTags,
     CheckIllegalCharacters,
+    CheckLastModification,
     CheckLogMessages,
     CheckMisplacedCompareInIf,
     CheckMissingDescExit,
@@ -160,7 +160,7 @@ class Plugins:
 
 class UpdatePlugins(Plugins):
     def __init__(self):
-        super().__init__([UpdateModificationDate], [])
+        super().__init__([CheckLastModification], [])
 
 
 class StandardPlugins(Plugins):

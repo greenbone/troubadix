@@ -22,17 +22,11 @@ import re
 from typing import Iterator
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import (
-    FilePlugin,
-    LinterError,
-    LinterFix,
-    LinterResult,
-    LinterWarning,
-)
+from troubadix.plugin import FilePlugin, LinterError, LinterFix, LinterResult
 
 
-class UpdateModificationDate(FilePlugin):
-    name = "update_modification_date"
+class CheckLastModification(FilePlugin):
+    name = "check_last_modification"
 
     def run(self) -> Iterator[LinterResult]:
         self.new_file_content = None
@@ -100,13 +94,6 @@ class UpdateModificationDate(FilePlugin):
         self.new_version = correctly_formated_version
         self.old_datetime = old_datetime
         self.new_datetime = correctly_formated_datetime
-
-        yield LinterWarning(
-            f"Outdated last_modification date. Was {old_datetime} "
-            f"and should be {correctly_formated_datetime}",
-            file=self.context.nasl_file,
-            plugin=self.name,
-        )
 
     def fix(self) -> Iterator[LinterResult]:
         if self.new_file_content:

@@ -18,8 +18,8 @@
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import LinterError, LinterFix, LinterWarning
-from troubadix.plugins.update_modification_date import UpdateModificationDate
+from troubadix.plugin import LinterError, LinterFix
+from troubadix.plugins.last_modification import CheckLastModification
 
 from . import PluginTestCase
 
@@ -32,11 +32,11 @@ class TestUpdateModificationDate(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
         )
-        plugin = UpdateModificationDate(fake_context)
+        plugin = CheckLastModification(fake_context)
 
         results = list(plugin.run())
 
-        self.assertIsInstance(results[0], LinterWarning)
+        self.assertEqual(len(results), 0)
 
         results = list(plugin.fix())
 
@@ -55,7 +55,7 @@ class TestUpdateModificationDate(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
         )
-        plugin = UpdateModificationDate(fake_context)
+        plugin = CheckLastModification(fake_context)
 
         output = plugin.run()
 
@@ -76,7 +76,7 @@ class TestUpdateModificationDate(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
         )
-        plugin = UpdateModificationDate(fake_context)
+        plugin = CheckLastModification(fake_context)
 
         output = plugin.run()
         error = next(output)
