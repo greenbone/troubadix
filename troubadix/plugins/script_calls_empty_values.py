@@ -22,9 +22,11 @@ from troubadix.helper.patterns import (
     _get_special_script_tag_pattern,
     _get_tag_pattern,
     get_xref_pattern,
-    SpecialScriptTag,
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+
+# For the future
+SPECIAL_SCRIPT_TAG_LIST = []
 
 
 class CheckScriptCallsEmptyValues(FileContentPlugin):
@@ -58,9 +60,7 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
                 plugin=self.name,
             )
 
-        for call in SpecialScriptTag:
-            if call == SpecialScriptTag.ADD_PREFERENCE:
-                continue
+        for call in SPECIAL_SCRIPT_TAG_LIST:
             matches = _get_special_script_tag_pattern(
                 name=call.value, value=""
             ).finditer(file_content)
