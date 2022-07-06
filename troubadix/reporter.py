@@ -23,7 +23,7 @@ from pontos.terminal import Terminal
 from troubadix.helper.helper import get_path_from_root
 from troubadix.plugin import LinterError, LinterFix, LinterResult, LinterWarning
 from troubadix.plugins import Plugins
-from troubadix.results import FileResults, ResultCounts
+from troubadix.results import FileResults, ResultCounts, Results
 
 
 class Reporter:
@@ -105,22 +105,21 @@ class Reporter:
                 if self._verbose > 0:
                     report(plugin_result.message)
 
-    def report_single_run_plugin(
-        self, plugin_name: str, plugin_results: List
-    ) -> None:
-        """Print/log the report of a single run plugin
+    def report_by_plugin(self, results: Results) -> None:
+        """Print/log results per plugins
 
         Arguments:
-            plugin_name     name of the plugin
-            plugin_results  a List of results for the plugin
+            results    a results object
         """
-        with self._term.indent():
-            if plugin_results and self._verbose > 0 or self._verbose > 1:
+        for (
+            plugin_name,
+            plugin_results,
+        ) in results.plugin_results.items():
+            if results and self._verbose > 0 or self._verbose > 1:
                 self._report_bold_info(f"Run plugin {plugin_name}")
 
-            self._process_plugin_results(
-                plugin_name=plugin_name, plugin_results=plugin_results
-            )
+            with self._term.indent():
+                self._process_plugin_results(plugin_name, plugin_results)
 
     def report_by_file_plugin(
         self, file_results: FileResults, pos: int
@@ -142,8 +141,6 @@ class Reporter:
             )
 
         with self._term.indent():
-
-            # print the files plugin results
             for (
                 plugin_name,
                 plugin_results,
