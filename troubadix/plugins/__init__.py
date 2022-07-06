@@ -17,7 +17,7 @@
 
 from typing import Iterable, List
 
-from troubadix.plugin import Plugin
+from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
 
 from .badwords import CheckBadwords
 from .copyright_text import CheckCopyrightText
@@ -79,7 +79,8 @@ from .valid_script_tag_names import CheckValidScriptTagNames
 from .variable_assigned_in_if import CheckVariableAssignedInIf
 from .vt_placement import CheckVTPlacement
 
-_PLUGINS = [
+# plugins checking single files
+_FILE_PLUGINS = [
     CheckBadwords,
     CheckCopyrightText,
     CheckCopyrightYear,
@@ -137,25 +138,27 @@ _PLUGINS = [
     CheckWrongSetGetKBCalls,
 ]
 
-_PRE_RUN_PLUGINS = [
+# plugins checking all files
+_FILES_PLUGINS = [
     CheckDuplicateOID,
     CheckNoSolution,
 ]
 
 
 class Plugins:
-    def __init__(self, plugins: List[Plugin], prerun_plugins: List[Plugin]):
-        self._plugins = plugins
-        self._prerun_plugins = prerun_plugins
+    def __init__(
+        self,
+        file_plugins: Iterable[FilePlugin] = None,
+        files_plugins: Iterable[FilesPlugin] = None,
+    ):
+        self.file_plugins = tuple(file_plugins) or tuple()
+        self.files_plugins = tuple(files_plugins) or tuple()
 
     def __len__(self) -> int:
-        return len(self._plugins)
+        return len(self.files_plugins + self.file_plugins)
 
     def __iter__(self) -> Iterable[Plugin]:
-        return iter(self._plugins)
-
-    def get_prerun_plugins(self) -> Iterable[Plugin]:
-        return self._prerun_plugins
+        return iter(self.files_plugins + self.file_plugins)
 
 
 class UpdatePlugins(Plugins):
@@ -168,32 +171,39 @@ class StandardPlugins(Plugins):
         self,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
-    ) -> None:
-        super().__init__(_PLUGINS, _PRE_RUN_PLUGINS)
-
+    ):
+        file_plugins = _FILE_PLUGINS
+        files_plugins = _FILES_PLUGINS
         if excluded_plugins:
-            self._plugins = [
-                plugin
-                for plugin in self._plugins
-                if plugin.__name__ not in excluded_plugins
-                and plugin.name not in excluded_plugins
-            ]
-            self._prerun_plugins = [
-                plugin
-                for plugin in self._prerun_plugins
-                if plugin.__name__ not in excluded_plugins
-                and plugin.name not in excluded_plugins
-            ]
+            file_plugins = self._exclude_plugins(excluded_plugins, file_plugins)
+            files_plugins = self._exclude_plugins(
+                excluded_plugins, files_plugins
+            )
+
         if included_plugins:
-            self._plugins = [
-                plugin
-                for plugin in self._plugins
-                if plugin.__name__ in included_plugins
-                or plugin.name in included_plugins
-            ]
-            self._prerun_plugins = [
-                plugin
-                for plugin in self._prerun_plugins
-                if plugin.__name__ in included_plugins
-                or plugin.name in included_plugins
-            ]
+            file_plugins = self._include_plugins(included_plugins, file_plugins)
+            files_plugins = self._include_plugins(
+                included_plugins, files_plugins
+            )
+
+        super().__init__(file_plugins=file_plugins, files_plugins=files_plugins)
+
+    @staticmethod
+    def _exclude_plugins(
+        excluded: Iterable[str], plugins: Iterable[Plugin]
+    ) -> List[Plugin]:
+        return [
+            plugin
+            for plugin in plugins
+            if plugin.__name__ not in excluded and plugin.name not in excluded
+        ]
+
+    @staticmethod
+    def _include_plugins(
+        included: Iterable[str], plugins: Iterable[Plugin]
+    ) -> List[Plugin]:
+        return [
+            plugin
+            for plugin in plugins
+            if plugin.__name__ in included or plugin.name in included
+        ]
