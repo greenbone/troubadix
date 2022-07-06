@@ -21,13 +21,7 @@ from typing import Iterable, List
 from pontos.terminal import Terminal
 
 from troubadix.helper.helper import get_path_from_root
-from troubadix.plugin import (
-    FilesPlugin,
-    LinterError,
-    LinterFix,
-    LinterResult,
-    LinterWarning,
-)
+from troubadix.plugin import LinterError, LinterFix, LinterResult, LinterWarning
 from troubadix.plugins import Plugins
 from troubadix.results import FileResults, ResultCounts
 
@@ -161,17 +155,10 @@ class Reporter:
         plugins: Plugins,
         excluded: Iterable[str],
         included: Iterable[str],
-        pre_run: Iterable[FilesPlugin],
     ) -> None:
         """Print/log an overview, which plugins are in-/excluded and which one
         will be executed"""
         if self._verbose > 2:
-            if pre_run:
-                self.report_info(
-                    "Pre-Run Plugins: "
-                    f"{', '.join([p.name for p in pre_run])}"
-                )
-
             if excluded:
                 self.report_info(f"Excluded Plugins: {', '.join(excluded)}")
 
