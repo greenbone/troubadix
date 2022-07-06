@@ -20,22 +20,23 @@ from multiprocessing import cpu_count
 from pathlib import Path
 from unittest.mock import Mock
 
-from pontos.terminal import _set_terminal
+from pontos.terminal import Terminal
 
 from troubadix.argparser import parse_args
 
 
 class TestArgparsing(unittest.TestCase):
     def setUp(self):
-        _set_terminal(Mock())
+        self.terminal = Mock(spec=Terminal)
 
     def test_parse_files(self):
         parsed_args = parse_args(
+            self.terminal,
             [
                 "--files",
                 "tests/plugins/test.nasl",
                 "tests/plugins/fail2.nasl",
-            ]
+            ],
         )
 
         expected_files = [
@@ -46,10 +47,11 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_include_tests(self):
         parsed_args = parse_args(
+            self.terminal,
             [
                 "--include-tests",
                 "CheckBadwords",
-            ]
+            ],
         )
         self.assertEqual(parsed_args.included_plugins, ["CheckBadwords"])
         self.assertIsNone(parsed_args.excluded_plugins)
@@ -57,51 +59,58 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_exclude_tests(self):
         parsed_args = parse_args(
+            self.terminal,
             [
                 "--exclude-tests",
                 "CheckBadwords",
-            ]
+            ],
         )
         self.assertEqual(parsed_args.excluded_plugins, ["CheckBadwords"])
         self.assertIsNone(parsed_args.included_plugins)
         self.assertFalse(parsed_args.update_date)
 
     def test_parse_include_patterns(self):
-        parsed_args = parse_args(["-f", "--include-patterns", "troubadix/*"])
+        parsed_args = parse_args(
+            self.terminal, ["-f", "--include-patterns", "troubadix/*"]
+        )
 
         self.assertTrue(parsed_args.full)
         self.assertEqual(parsed_args.include_patterns, ["troubadix/*"])
 
     def test_parse_include_patterns_fail(self):
         with self.assertRaises(SystemExit):
-            parse_args(["--include-patterns", "troubadix/*"])
+            parse_args(self.terminal, ["--include-patterns", "troubadix/*"])
 
     def test_parse_files_non_recursive_fail(self):
         with self.assertRaises(SystemExit):
             parse_args(
+                self.terminal,
                 [
                     "--files",
                     "tests/plugins/test.nasl",
                     "tests/plugins/fail2.nasl",
                     "--non-recursive",
-                ]
+                ],
             )
 
     def test_parse_exclude_patterns(self):
-        parsed_args = parse_args(["-f", "--exclude-patterns", "troubadix/*"])
+        parsed_args = parse_args(
+            self.terminal, ["-f", "--exclude-patterns", "troubadix/*"]
+        )
 
         self.assertTrue(parsed_args.full)
         self.assertEqual(parsed_args.exclude_patterns, ["troubadix/*"])
 
     def test_parse_max_cpu(self):
         parsed_args = parse_args(
+            self.terminal,
             [
                 "-f",
                 "--exclude-patterns",
                 "troubadix/*",
                 "-j",
                 "1337",
-            ]
+            ],
         )
 
         self.assertTrue(parsed_args.full)
@@ -111,6 +120,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_min_cpu_update_date(self):
         parsed_args = parse_args(
+            self.terminal,
             [
                 "-f",
                 "--exclude-patterns",
@@ -118,7 +128,7 @@ class TestArgparsing(unittest.TestCase):
                 "-j",
                 "-1337",
                 "--update-date",
-            ]
+            ],
         )
 
         self.assertTrue(parsed_args.full)
@@ -129,21 +139,21 @@ class TestArgparsing(unittest.TestCase):
         self.assertTrue(parsed_args.update_date)
 
     def test_parse_root(self):
-        parsed_args = parse_args(["--root", "foo"])
+        parsed_args = parse_args(self.terminal, ["--root", "foo"])
 
         self.assertEqual(parsed_args.root, Path("foo"))
 
     def test_parse_fix(self):
-        parsed_args = parse_args(["--fix"])
+        parsed_args = parse_args(self.terminal, ["--fix"])
 
         self.assertTrue(parsed_args.fix)
 
     def test_parse_ignore_warnings(self):
-        parsed_args = parse_args(["--ignore-warnings"])
+        parsed_args = parse_args(self.terminal, ["--ignore-warnings"])
 
         self.assertTrue(parsed_args.ignore_warnings)
 
     def test_parse_log_file_statistic(self):
-        parsed_args = parse_args(["--log-file-statistic", "foo"])
+        parsed_args = parse_args(self.terminal, ["--log-file-statistic", "foo"])
 
         self.assertEqual(parsed_args.log_file_statistic, Path("foo"))

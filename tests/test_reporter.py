@@ -21,7 +21,7 @@ import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
 
-from pontos.terminal.terminal import Terminal
+from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.reporter import Reporter
 
@@ -30,7 +30,7 @@ _here = Path(__file__).parent
 
 class TestReporter(unittest.TestCase):
     def setUp(self):
-        self._term = Terminal()
+        self._term = ConsoleTerminal()
         self.root = _here / "plugins" / "test_files" / "nasl"
 
     def test_set_files_count(self):
