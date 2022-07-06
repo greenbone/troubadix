@@ -25,7 +25,7 @@ from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,
 )
-from troubadix.plugin import FilePluginContext, Plugin
+from troubadix.plugin import FilePluginContext, FilesPluginContext, Plugin
 from troubadix.plugins import Plugins, StandardPlugins, UpdatePlugins
 from troubadix.reporter import Reporter
 from troubadix.results import FileResults, Results
@@ -107,6 +107,18 @@ class Runner:
         self._reporter.set_files_count(len(files))
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
             try:
+                # run files plugins
+                context = FilesPluginContext(root=self._root, nasl_files=files)
+                files_plugins = [
+                    plugin_class(context)
+                    for plugin_class in self.plugins.files_plugins
+                ]
+
+                for results in pool.imap_unordered(
+                    self._check_files, files_plugins, chunksize=CHUNKSIZE
+                ):
+                    self._reporter.report_by_plugin(results)
+
                 # run file plugins
                 for i, results in enumerate(
                     iterable=pool.imap_unordered(
