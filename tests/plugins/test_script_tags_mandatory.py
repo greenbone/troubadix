@@ -26,7 +26,6 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        # js: check if these are used correctly, not if they are "there" -_-
         content = 'script_tag(name:"summary", value:"foo");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
