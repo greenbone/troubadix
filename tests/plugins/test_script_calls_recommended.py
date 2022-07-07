@@ -64,3 +64,20 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterWarning)
+
+    def test_dependencies_multiline(self):
+        content = (
+            'script_dependencies("123",\n"456");\n'
+            "script_require_ports();\n"
+            "script_require_udp_ports();\n"
+            "script_require_keys();\n"
+            "script_mandatory_keys();"
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptCallsRecommended(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
