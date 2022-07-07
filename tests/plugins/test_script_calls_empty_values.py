@@ -65,5 +65,5 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 3)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)

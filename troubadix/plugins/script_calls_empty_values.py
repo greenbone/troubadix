@@ -25,6 +25,9 @@ from troubadix.helper.patterns import (
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+# For the future
+SPECIAL_SCRIPT_TAG_LIST = []
+
 
 class CheckScriptCallsEmptyValues(FileContentPlugin):
     name = "check_script_calls_empty_values"
@@ -57,12 +60,13 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
                 plugin=self.name,
             )
 
-        matches = _get_special_script_tag_pattern(
-            name=r"(?!add_preferences).*", value=""
-        ).finditer(file_content)
-        for match in matches:
-            yield LinterError(
-                f"{match.group(0)} does not contain a value",
-                file=nasl_file,
-                plugin=self.name,
-            )
+        for call in SPECIAL_SCRIPT_TAG_LIST:
+            matches = _get_special_script_tag_pattern(
+                name=call.value, value=""
+            ).finditer(file_content)
+            for match in matches:
+                yield LinterError(
+                    f"{match.group(0)} does not contain a value",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
