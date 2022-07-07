@@ -79,7 +79,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
             )
         for call in recommended_single_call:
             if not _get_special_script_tag_pattern(
-                name=call, value=".*"
+                name=call, value="(?s:.)*"
             ).search(file_content):
                 yield LinterWarning(
                     "VT does not contain the following recommended call: "
