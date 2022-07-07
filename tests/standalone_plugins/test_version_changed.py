@@ -52,7 +52,7 @@ def tempgitdir() -> Generator[Path, None, None]:
 def setupgit(tmpdir: Path) -> None:
     test_file = tmpdir / "test.nasl"
     test_file.write_text(
-        'script_version("2021-03-02T12:11:43+0000");\n”'
+        'script_version("2021-03-02T12:11:43+0000");”\n'
         'script_tag(name:"last_modification", '
         'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");'
     )
@@ -63,10 +63,9 @@ def setupgit(tmpdir: Path) -> None:
 def change_nothing(tmpdir: Path) -> None:
     test_file = tmpdir / "test.nasl"
     test_file.write_text(
-        'script_version("2021-03-02T12:11:43+0000");\n”'
+        'script_version("2021-03-02T12:11:43+0000");”\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");'
-        "123"
+        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");123'
     )
     git("add", str(test_file))
     git("commit", "-m", "test_nothing")
@@ -75,7 +74,7 @@ def change_nothing(tmpdir: Path) -> None:
 def change_version(tmpdir: Path):
     test_file = tmpdir / "test.nasl"
     test_file.write_text(
-        'script_version("2021-03-02T12:11:43+0001");\n”'
+        'script_version("2021-03-02T12:11:43+0001");”\n'
         'script_tag(name:"last_modification", '
         'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");'
     )
@@ -86,9 +85,9 @@ def change_version(tmpdir: Path):
 def change_last_modification(tmpdir: Path):
     test_file = tmpdir / "test.nasl"
     test_file.write_text(
-        'script_version("2021-03-02T12:11:43+0000");\n”'
+        'script_version("2021-03-02T12:11:43+0000");”\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2022)");'
+        'value:"2021-03-02 12:11:43 +0010 (Tue, 02 Mar 2021)");'
     )
     git("add", str(test_file))
     git("commit", "-m", "test_last_modification")
