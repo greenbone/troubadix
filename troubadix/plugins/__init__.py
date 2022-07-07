@@ -171,7 +171,7 @@ class StandardPlugins(Plugins):
         self,
         excluded_plugins: List[str] = None,
         included_plugins: List[str] = None,
-    ):
+    ) -> None:
         file_plugins = _FILE_PLUGINS
         files_plugins = _FILES_PLUGINS
         if excluded_plugins:
