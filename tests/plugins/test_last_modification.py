@@ -18,7 +18,7 @@
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import LinterError, LinterFix
+from troubadix.plugin import LinterFix
 from troubadix.plugins.last_modification import CheckLastModification
 
 from . import PluginTestCase
@@ -26,29 +26,32 @@ from . import PluginTestCase
 
 class TestUpdateModificationDate(PluginTestCase):
     def test_fix_last_modifaction_date(self):
-        nasl_file = Path(__file__).parent / "test.nasl"
+        with self.create_directory() as testdir:
+            nasl_file = testdir / "test.nasl"
+            content = (
+                'script_tag(name:"last_modification", '
+                'value:"2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)");\n'
+                'script_version("2021-03-24T10:08:26+0000");\n'
+            )
+            nasl_file.write_text(content, encoding=CURRENT_ENCODING)
+            fake_context = self.create_file_plugin_context(
+                nasl_file=nasl_file, file_content=content
+            )
+            plugin = CheckLastModification(fake_context)
 
-        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
-        plugin = CheckLastModification(fake_context)
+            results = list(plugin.run())
 
-        results = list(plugin.run())
+            self.assertEqual(len(results), 0)
 
-        self.assertEqual(len(results), 0)
+            results = list(plugin.fix())
 
-        results = list(plugin.fix())
+            self.assertEqual(len(results), 1)
+            self.assertIsInstance(results[0], LinterFix)
 
-        self.assertIsInstance(results[0], LinterFix)
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+            self.assertNotEqual(content, new_content)
 
-        new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        self.assertNotEqual(content, new_content)
-
-        # revert changes for the next time
-        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
-
-    def test_fail_modification_date(self):
+    def test_ignore(self):
         nasl_file = Path(__file__).parent / "fail.nasl"
 
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
@@ -57,18 +60,16 @@ class TestUpdateModificationDate(PluginTestCase):
         )
         plugin = CheckLastModification(fake_context)
 
-        output = plugin.run()
+        results = list(plugin.run())
+        self.assertEqual(len(results), 0)
 
-        error = next(output)
-        self.assertIsInstance(error, LinterError)
-        self.assertEqual(
-            error.message, "VT does not contain a modification day script tag."
-        )
+        results = list(plugin.fix())
+        self.assertEqual(len(results), 0)
 
         new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)
 
-    def test_fail_script_version(self):
+    def test_ignore_missing_script_version(self):
         nasl_file = Path(__file__).parent / "fail2.nasl"
 
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
@@ -78,11 +79,11 @@ class TestUpdateModificationDate(PluginTestCase):
         )
         plugin = CheckLastModification(fake_context)
 
-        output = plugin.run()
-        error = next(output)
+        results = list(plugin.run())
+        self.assertEqual(len(results), 0)
 
-        self.assertIsInstance(error, LinterError)
-        self.assertEqual(error.message, "VT does not contain a script version.")
+        results = list(plugin.fix())
+        self.assertEqual(len(results), 0)
 
         new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
         self.assertEqual(content, new_content)
