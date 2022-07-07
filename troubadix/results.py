@@ -22,11 +22,8 @@ from typing import Dict, Iterable, Iterator
 from troubadix.plugin import LinterResult, LinterWarning
 
 
-class FileResults:
-    """Class to store results from different plugins for a file"""
-
-    def __init__(self, file_path: Path, ignore_warnings: bool = False):
-        self.file_path = file_path
+class Results:
+    def __init__(self, ignore_warnings: bool = False) -> None:
         self.plugin_results: Dict[str, Iterable[LinterResult]] = defaultdict(
             list
         )
@@ -35,18 +32,30 @@ class FileResults:
 
     def add_plugin_results(
         self, plugin_name: str, results: Iterator[LinterResult]
-    ) -> "FileResults":
-        results = list(results)
+    ) -> "Results":
         if self._ignore_warnings:
-            for result in list(results):
-                if isinstance(result, LinterWarning):
-                    results.remove(result)
+            results = [
+                result
+                for result in results
+                if not isinstance(result, LinterWarning)
+            ]
+        else:
+            results = list(results)
+
         self.has_plugin_results = self.has_plugin_results or bool(results)
         self.plugin_results[plugin_name] += results
         return self
 
     def __bool__(self):
         return self.has_plugin_results
+
+
+class FileResults(Results):
+    """Class to store results from different plugins for a file"""
+
+    def __init__(self, file_path: Path, ignore_warnings: bool = False):
+        self.file_path = file_path
+        super().__init__(ignore_warnings)
 
 
 def resultsdict():

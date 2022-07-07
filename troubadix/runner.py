@@ -25,15 +25,10 @@ from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,
 )
-from troubadix.plugin import (
-    FilePluginContext,
-    FilesPlugin,
-    FilesPluginContext,
-    LinterWarning,
-)
+from troubadix.plugin import FilePluginContext, FilesPluginContext, Plugin
 from troubadix.plugins import Plugins, StandardPlugins, UpdatePlugins
 from troubadix.reporter import Reporter
-from troubadix.results import FileResults
+from troubadix.results import FileResults, Results
 
 CHUNKSIZE = 1  # default 1
 
@@ -66,9 +61,9 @@ class Runner:
             if update_date
             else StandardPlugins(excluded_plugins, included_plugins)
         )
+
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
-        self.pre_run_plugins = self.plugins.get_prerun_plugins()
 
         self._reporter = reporter
         self._n_jobs = n_jobs
@@ -79,54 +74,52 @@ class Runner:
         init_script_tag_patterns()
         init_special_script_tag_patterns()
 
-    def _check_files(self, nasl_files: Iterable[Path]) -> None:
-        """Running Plugins that do not require a run per file,
-        but a single execution"""
-        context = FilesPluginContext(root=self._root, nasl_files=nasl_files)
-        for plugin_class in self.pre_run_plugins:
-            if not issubclass(plugin_class, FilesPlugin):
-                self._reporter.plugin_unknown(plugin_name=plugin_class.name)
-                continue
+    def _check(self, plugin: Plugin, results: Results) -> Results:
+        """Run a single plugin and collect the results"""
+        results.add_plugin_results(plugin.name, plugin.run())
 
-            plugin = plugin_class(context)
+        if self._fix:
+            results.add_plugin_results(plugin.name, plugin.fix())
 
-            results = list(plugin.run())
+        return results
 
-            if self._ignore_warnings:
-                for result in list(results):
-                    if isinstance(result, LinterWarning):
-                        results.remove(result)
-
-            if self._fix:
-                results.extend(plugin.fix())
-
-            self._reporter.report_single_run_plugin(
-                plugin_name=plugin.name, plugin_results=results
-            )
+    def _check_files(self, plugin: Plugin) -> Results:
+        """Run a files plugin and collect the results"""
+        results = Results(ignore_warnings=self._ignore_warnings)
+        return self._check(plugin, results)
 
     def _check_file(self, file_path: Path) -> FileResults:
+        """Run all file plugins on a single file and collect the results"""
         results = FileResults(file_path, ignore_warnings=self._ignore_warnings)
         context = FilePluginContext(
             root=self._root, nasl_file=file_path.resolve()
         )
 
-        for plugin_class in self.plugins:
+        for plugin_class in self.plugins.file_plugins:
             plugin = plugin_class(context)
-            results.add_plugin_results(
-                plugin.name,
-                plugin.run(),
-            )
 
-            if self._fix:
-                results.add_plugin_results(plugin.name, plugin.fix())
+            self._check(plugin, results)
 
         return results
 
-    def _check_single_files(self, files: Iterable[Path]):
+    def _run_pooled(self, files: Iterable[Path]):
         """Run all plugins that check single files"""
         self._reporter.set_files_count(len(files))
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
             try:
+                # run files plugins
+                context = FilesPluginContext(root=self._root, nasl_files=files)
+                files_plugins = [
+                    plugin_class(context)
+                    for plugin_class in self.plugins.files_plugins
+                ]
+
+                for results in pool.imap_unordered(
+                    self._check_files, files_plugins, chunksize=CHUNKSIZE
+                ):
+                    self._reporter.report_by_plugin(results)
+
+                # run file plugins
                 for i, results in enumerate(
                     iterable=pool.imap_unordered(
                         self._check_file, files, chunksize=CHUNKSIZE
@@ -144,7 +137,7 @@ class Runner:
     def run(self, files: Iterable[Path]) -> bool:
         """The function that should be executed to run
         the Plugins over all files"""
-        if not len(self.plugins) and not len(self.pre_run_plugins):
+        if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
         # print plugins that will be executed
@@ -152,14 +145,10 @@ class Runner:
             plugins=self.plugins,
             excluded=self._excluded_plugins,
             included=self._included_plugins,
-            pre_run=self.pre_run_plugins,
         )
 
         start = datetime.datetime.now()
-        if len(self.pre_run_plugins):
-            self._check_files(files)
-        if len(self.plugins):
-            self._check_single_files(files)
+        self._run_pooled(files)
 
         self._reporter.report_info(
             f"Time elapsed: {datetime.datetime.now() - start}"
