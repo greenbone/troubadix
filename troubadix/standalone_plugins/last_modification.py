@@ -28,6 +28,10 @@ from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.helper import CURRENT_ENCODING
+from troubadix.helper.patterns import (
+    LAST_MODIFICATION_ANY_VALUE_PATTERN,
+    SCRIPT_VERSION_ANY_VALUE_PATTERN,
+)
 from troubadix.troubadix import from_file
 
 
@@ -45,14 +49,9 @@ def update(nasl_file: Path, terminal: Terminal):
 
     # update modification date
     tag_template = 'script_tag(name:"last_modification", value:"{date}");'
-    last_modification_any_value_pattern = (
-        r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(last_modification)'
-        r'(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>[\'"])?'
-        r"(?P<value>.*)(?P=quote2)?\s*\)\s*;"
-    )
 
     match_last_modification_any_value = re.search(
-        pattern=last_modification_any_value_pattern,
+        pattern=LAST_MODIFICATION_ANY_VALUE_PATTERN,
         string=file_content,
     )
 
@@ -75,12 +74,9 @@ def update(nasl_file: Path, terminal: Terminal):
 
     # update script version
     script_version_template = 'script_version("{date}");'
-    script_version_any_pattern = (
-        r'script_version\(\s*(?P<quote>[\'"])(?P<value>.*)(?P=quote)\s*\);'
-    )
 
     match_script_version = re.search(
-        pattern=script_version_any_pattern,
+        pattern=SCRIPT_VERSION_ANY_VALUE_PATTERN,
         string=file_content,
     )
     if not match_script_version:
