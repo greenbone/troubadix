@@ -22,7 +22,7 @@ import re
 import sys
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Sequence
 
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
@@ -97,7 +97,7 @@ def update(nasl_file: Path, terminal: Terminal):
     nasl_file.write_text(new_file_content, encoding=CURRENT_ENCODING)
 
 
-def parse_args() -> Namespace:
+def parse_args(args: Sequence[str] = None) -> Namespace:
     parser = ArgumentParser(
         description="Update script_version and last_modification tags"
     )
@@ -117,7 +117,7 @@ def parse_args() -> Namespace:
             "updated. Files should be separated by newline."
         ),
     )
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def main() -> int:
