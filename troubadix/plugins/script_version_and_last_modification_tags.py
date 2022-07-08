@@ -15,17 +15,24 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
 import re
 from pathlib import Path
 from typing import Iterator
 
+from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import (
     ScriptTag,
     SpecialScriptTag,
     get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.plugin import (
+    FileContentPlugin,
+    LinterError,
+    LinterFix,
+    LinterResult,
+)
 
 
 class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
@@ -49,8 +56,29 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             nasl_file: The VT that shall be checked
             file_content: The content of the VT that shall be checked
         """
+        self.fix_last_modification_and_version = False
+
         if nasl_file.suffix == ".inc":
             return
+
+        script_version_any_pattern = (
+            r'script_version\(\s*(?P<quote>[\'"])(?P<value>.*)(?P=quote)\s*\);'
+        )
+
+        match_script_version_any = re.search(
+            pattern=script_version_any_pattern,
+            string=file_content,
+        )
+        if not match_script_version_any:
+            yield LinterError(
+                "VT is missing script_version();.",
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
+            return
+
+        self.old_script_version = match_script_version_any.group(0)
+        self.old_script_version_value = match_script_version_any.group("value")
 
         # script_version("2019-03-21T12:19:01+0000");")
         version_pattern = get_special_script_tag_pattern(
@@ -59,18 +87,45 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         version_match = version_pattern.search(file_content)
 
         if not version_match:
+            # check for old format:
+            # script_version("$Revision: 12345 $");
             revision_pattern = re.compile(
                 r'script_(?P<name>version)\s*\((?P<quote99>[\'"])?(?P<value>\$'
                 r"Revision:\s*[0-9]{1,6}\s* \$)(?P=quote99)?\s*\)\s*;"
             )
             revision_match = revision_pattern.search(file_content)
             if not revision_match:
+                self.fix_last_modification_and_version = True
                 yield LinterError(
-                    "VT is missing script_version(); or is using a wrong "
-                    "syntax.",
+                    "VT is using a wrong script_version(); syntax.",
                     file=nasl_file,
                     plugin=self.name,
                 )
+
+        last_modification_any_value_pattern = (
+            r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(last_modification)'
+            r'(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>[\'"])?'
+            r"(?P<value>.*)(?P=quote2)?\s*\)\s*;"
+        )
+
+        match_last_modification_any_value = re.search(
+            pattern=last_modification_any_value_pattern,
+            string=file_content,
+        )
+
+        if not match_last_modification_any_value:
+            self.fix_last_modification_and_version = False
+            yield LinterError(
+                'VT is missing script_tag(name:"last_modification".',
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
+            return
+
+        self.old_last_modification = match_last_modification_any_value.group(0)
+        self.old_last_modification_value = (
+            match_last_modification_any_value.group("value")
+        )
 
         # script_tag(name:"last_modification",
         # value:"2019-03-21 12:19:01 +0000 (Thu, 21 Mar 2019)");
@@ -80,6 +135,9 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         match_last_modified = last_modification_pattern.search(file_content)
 
         if not match_last_modified:
+            # check for old format:
+            # script_tag(name: "last_modification",
+            #   value: "$Date: 2021-07-19 12:32:02 +0000 (Mon, 19 Jul 2021) $")
             old_pattern = re.compile(
                 r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>'
                 r"last_modification)(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>"
@@ -88,10 +146,54 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             )
             match_last_modified = old_pattern.search(file_content)
             if not match_last_modified:
+                self.fix_last_modification_and_version = True
                 yield LinterError(
-                    "VT is missing script_tag("
-                    'name:"last_modification" or is using a wrong '
-                    "syntax.",
+                    "VT is is using a wrong syntax for script_tag("
+                    'name:"last_modification".',
                     file=nasl_file,
                     plugin=self.name,
                 )
+
+    def fix(self) -> Iterator[LinterResult]:
+        if not self.fix_last_modification_and_version:
+            return
+
+        tag_template = 'script_tag(name:"last_modification", value:"{date}");'
+        version_template = 'script_version("{date}");'
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        file_content = self.context.file_content
+
+        # get that version date formatted correctly:
+        # "2021-03-24T10:08:26+0000"
+        correctly_formatted_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
+
+        file_content = file_content.replace(
+            self.old_script_version,
+            version_template.format(date=correctly_formatted_version),
+        )
+
+        # get that last modification date formatted correctly:
+        # "2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)"
+        correctly_formatted_last_modification = (
+            f"{now:%Y-%m-%d %H:%M:%S %z (%a, %d %b %Y)}"
+        )
+
+        file_content = file_content.replace(
+            self.old_last_modification,
+            tag_template.format(date=correctly_formatted_last_modification),
+        )
+
+        self.context.nasl_file.write_text(
+            file_content, encoding=CURRENT_ENCODING
+        )
+
+        yield LinterFix(
+            f"Replaced last_modification {self.old_last_modification_value} "
+            f"with {correctly_formatted_last_modification} and script_version "
+            f"{self.old_script_version_value} with "
+            f"{correctly_formatted_version}.",
+            file=self.context.nasl_file,
+            plugin=self.name,
+        )

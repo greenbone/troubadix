@@ -18,7 +18,8 @@
 from pathlib import Path
 
 from tests.plugins import PluginTestCase
-from troubadix.plugin import LinterError
+from troubadix.helper import CURRENT_ENCODING
+from troubadix.plugin import LinterError, LinterFix
 from troubadix.plugins.script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
@@ -74,7 +75,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_nok(self):
+    def test_missing_script_version(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
@@ -89,14 +90,36 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is missing script_version(); or is using a wrong syntax.",
+            "VT is missing script_version();.",
             results[0].message,
         )
-        self.assertEqual(
-            "VT is missing script_tag("
-            'name:"last_modification" or is using a wrong syntax.',
-            results[1].message,
-        )
+
+    def test_fix_last_modification_date(self):
+        with self.create_directory() as testdir:
+            nasl_file = testdir / "test.nasl"
+            content = (
+                'script_version("12345");\n'
+                'script_tag(name: "last_modification", '
+                'value: "2021/07/19");\n'
+            )
+            nasl_file.write_text(content, encoding=CURRENT_ENCODING)
+            fake_context = self.create_file_plugin_context(
+                nasl_file=nasl_file, file_content=content
+            )
+
+            plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 2)
+
+            results = list(plugin.fix())
+
+            self.assertEqual(len(results), 1)
+            self.assertIsInstance(results[0], LinterFix)
+
+            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+            self.assertNotEqual(content, new_content)

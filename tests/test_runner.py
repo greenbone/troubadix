@@ -32,6 +32,9 @@ from troubadix.plugins.cvss_format import CheckCVSSFormat
 from troubadix.plugins.duplicate_oid import CheckDuplicateOID
 from troubadix.plugins.missing_desc_exit import CheckMissingDescExit
 from troubadix.plugins.no_solution import CheckNoSolution
+from troubadix.plugins.script_version_and_last_modification_tags import (
+    CheckScriptVersionAndLastModificationTags,
+)
 from troubadix.reporter import Reporter
 from troubadix.runner import Runner, TroubadixException
 
@@ -200,7 +203,7 @@ class TestRunner(unittest.TestCase):
         runner = Runner(
             n_jobs=1,
             reporter=reporter,
-            update_date=True,
+            included_plugins=[CheckScriptVersionAndLastModificationTags.name],
             root=self.root,
         )
 
@@ -215,10 +218,14 @@ class TestRunner(unittest.TestCase):
             f"Checking {get_path_from_root(nasl_file, self.root)}",
             output,
         )
-        self.assertIn("Results for plugin check_last_modification", output)
+        self.assertIn(
+            "Results for plugin "
+            "check_script_version_and_last_modification_tags",
+            output,
+        )
         # CI terminal formats for 80 chars per line
         self.assertIn(
-            "VT does not contain a modification day script tag.",
+            "VT is missing script_version();.",
             output,
         )
 

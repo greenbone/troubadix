@@ -22,13 +22,19 @@ import re
 from typing import Iterator
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.plugin import FilePlugin, LinterError, LinterFix, LinterResult
+from troubadix.plugin import FilePlugin, LinterFix, LinterResult
 
 
 class CheckLastModification(FilePlugin):
     name = "check_last_modification"
 
     def run(self) -> Iterator[LinterResult]:
+        # this plugin is deprecated and will be removed in future
+
+        if False:  # pylint: disable=using-constant-test
+            # ensure this is a generator method
+            yield
+
         if self.context.nasl_file.suffix == ".inc":
             return
 
@@ -47,11 +53,6 @@ class CheckLastModification(FilePlugin):
             string=file_content,
         )
         if not match:
-            yield LinterError(
-                "VT does not contain a modification day script tag.",
-                file=self.context.nasl_file,
-                plugin=self.name,
-            )
             return
 
         old_datetime = match.groups()[0]
@@ -59,13 +60,13 @@ class CheckLastModification(FilePlugin):
         now = datetime.datetime.now(datetime.timezone.utc)
         # get that date formatted correctly:
         # "2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)"
-        correctly_formated_datetime = (
+        correctly_formatted_datetime = (
             f"{now:%Y-%m-%d %H:%M:%S %z (%a, %d %b %Y)}"
         )
 
         file_content = file_content.replace(
             tag_template.format(date=old_datetime),
-            tag_template.format(date=correctly_formated_datetime),
+            tag_template.format(date=correctly_formatted_datetime),
         )
 
         # update script version
@@ -77,26 +78,21 @@ class CheckLastModification(FilePlugin):
             string=file_content,
         )
         if not match:
-            yield LinterError(
-                "VT does not contain a script version.",
-                file=self.context.nasl_file,
-                plugin=self.name,
-            )
             return
 
         old_version = match.groups()[0]
         # get that date formatted correctly:
         # "2021-03-24T10:08:26+0000"
-        correctly_formated_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
+        correctly_formatted_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
 
         self.new_file_content = file_content.replace(
             version_template.format(date=old_version),
-            version_template.format(date=correctly_formated_version),
+            version_template.format(date=correctly_formatted_version),
         )
         self.old_version = old_version
-        self.new_version = correctly_formated_version
+        self.new_version = correctly_formatted_version
         self.old_datetime = old_datetime
-        self.new_datetime = correctly_formated_datetime
+        self.new_datetime = correctly_formatted_datetime
 
     def fix(self) -> Iterator[LinterResult]:
         if self.new_file_content:
