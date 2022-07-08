@@ -55,7 +55,6 @@ class TestArgparsing(unittest.TestCase):
         )
         self.assertEqual(parsed_args.included_plugins, ["CheckBadwords"])
         self.assertIsNone(parsed_args.excluded_plugins)
-        self.assertFalse(parsed_args.update_date)
 
     def test_parse_exclude_tests(self):
         parsed_args = parse_args(
@@ -67,7 +66,6 @@ class TestArgparsing(unittest.TestCase):
         )
         self.assertEqual(parsed_args.excluded_plugins, ["CheckBadwords"])
         self.assertIsNone(parsed_args.included_plugins)
-        self.assertFalse(parsed_args.update_date)
 
     def test_parse_include_patterns(self):
         parsed_args = parse_args(
@@ -118,7 +116,7 @@ class TestArgparsing(unittest.TestCase):
 
         self.assertEqual(parsed_args.n_jobs, cpu_count())
 
-    def test_parse_min_cpu_update_date(self):
+    def test_parse_min_cpu(self):
         parsed_args = parse_args(
             self.terminal,
             [
@@ -127,7 +125,6 @@ class TestArgparsing(unittest.TestCase):
                 "troubadix/*",
                 "-j",
                 "-1337",
-                "--update-date",
             ],
         )
 
@@ -135,8 +132,6 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args.exclude_patterns, ["troubadix/*"])
 
         self.assertEqual(parsed_args.n_jobs, cpu_count() // 2)
-
-        self.assertTrue(parsed_args.update_date)
 
     def test_parse_root(self):
         parsed_args = parse_args(self.terminal, ["--root", "foo"])

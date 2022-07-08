@@ -26,7 +26,7 @@ from troubadix.helper.patterns import (
     init_special_script_tag_patterns,
 )
 from troubadix.plugin import FilePluginContext, FilesPluginContext, Plugin
-from troubadix.plugins import Plugins, StandardPlugins, UpdatePlugins
+from troubadix.plugins import StandardPlugins
 from troubadix.reporter import Reporter
 from troubadix.results import FileResults, Results
 
@@ -51,16 +51,11 @@ class Runner:
         root: Path,
         excluded_plugins: Iterable[str] = None,
         included_plugins: Iterable[str] = None,
-        update_date: bool = False,
         fix: bool = False,
         ignore_warnings: bool = False,
     ) -> bool:
         # plugins initialization
-        self.plugins: Plugins = (
-            UpdatePlugins()
-            if update_date
-            else StandardPlugins(excluded_plugins, included_plugins)
-        )
+        self.plugins = StandardPlugins(excluded_plugins, included_plugins)
 
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
@@ -68,7 +63,7 @@ class Runner:
         self._reporter = reporter
         self._n_jobs = n_jobs
         self._root = root
-        self._fix = fix or update_date
+        self._fix = fix
         self._ignore_warnings = ignore_warnings
 
         init_script_tag_patterns()
