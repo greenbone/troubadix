@@ -21,6 +21,20 @@ from typing import Dict
 
 from troubadix.helper.helper import SCRIPT_CATEGORIES
 
+# regexp pattern for getting any value of
+# script_tag(name:"last_modification", value:"<value>");
+LAST_MODIFICATION_ANY_VALUE_PATTERN = (
+    r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(last_modification)'
+    r'(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>[\'"])?'
+    r"(?P<value>.*)(?P=quote2)?\s*\)\s*;"
+)
+
+# regexp pattern for getting any value of
+# script_version("<value>");
+SCRIPT_VERSION_ANY_VALUE_PATTERN = (
+    r'script_version\(\s*(?P<quote>[\'"])(?P<value>.*)(?P=quote)\s*\);'
+)
+
 # regex patterns for script tags
 _TAG_PATTERN = (
     r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>{name})(?P=quote)\s*,'
