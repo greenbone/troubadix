@@ -46,7 +46,8 @@ def _get_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
-    The returned pattern catches all `script_tags(name="{name}", value="{value}");`
+    The returned pattern catches all
+    `script_tags(name="{name}", value="{value}");`
     of a specific script tag name
 
     Arguments:
@@ -153,7 +154,8 @@ def get_xref_pattern(
     flags: re.RegexFlag = 0,
 ) -> re.Pattern:
     """
-    The returned pattern catchs all `script_xref(name="{type}", value="{value}");`
+    The returned pattern catchs all
+    `script_xref(name="{type}", value="{value}");`
 
     Arguments:
         name        script xref type e.g. URL
