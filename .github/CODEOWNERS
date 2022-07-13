@@ -1,5 +1,5 @@
 # default reviewers
 *                         @greenbone/devops
-
+*                         @n-thumann @mbrinkhoff
 # exceptions
 /troubadix/codespell/*   @greenbone/vulnerability-test-maintainers
