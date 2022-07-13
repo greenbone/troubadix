@@ -46,7 +46,7 @@ def _get_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
-    The returned pattern catches all `script_tags(name="", value="");`
+    The returned pattern catches all `script_tags(name="{name}", value="{value}");`
     of a specific script tag name
 
     Arguments:
