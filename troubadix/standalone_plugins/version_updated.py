@@ -28,15 +28,14 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterable
 
-SCRIPT_VERSION_PATTERN = re.compile(
-    r'^\+\s*script_version\s*\(\s*["\']'
-    r'(?P<version>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{4})["\']\s*\)\s*;',
-    re.MULTILINE,
+from troubadix.helper.patterns import (
+    LAST_MODIFICATION_ANY_VALUE_PATTERN,
+    SCRIPT_VERSION_ANY_VALUE_PATTERN,
 )
+
+SCRIPT_VERSION_PATTERN = re.compile(SCRIPT_VERSION_ANY_VALUE_PATTERN)
 SCRIPT_LAST_MODIFICATION_PATTERN = re.compile(
-    r'^\+\s*script_tag\s*\(\s*name\s*:\s*["\']last_modification["\']\s*,'
-    r'\s*value\s*:\s*["\'].*["\']\s*\)\s*;',
-    re.MULTILINE,
+    LAST_MODIFICATION_ANY_VALUE_PATTERN
 )
 
 
