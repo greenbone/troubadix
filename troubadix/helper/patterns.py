@@ -159,7 +159,7 @@ def get_xref_pattern(
 
     Arguments:
         name        script xref type e.g. URL
-        value       script tag value (default: at least on char)
+        value       script tag value (default: at least one char)
         flags       regex flags for compile (default: 0)
 
     The returned `Match`s by this pattern will have group strings
@@ -215,7 +215,7 @@ def _get_special_script_tag_pattern(
 
     Arguments:
         name        a SpecialScriptTag Enum type
-        value       script tag value (default: at least on char)
+        value       script tag value (default: at least one char)
         flags       regex flags for compile (default: 0)
 
     The returned `Match`s by this pattern will have group strings
