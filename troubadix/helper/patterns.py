@@ -46,7 +46,9 @@ def _get_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
-    The returned pattern catches all `script_tags(name="", value="");`
+    The returned pattern catches all
+    `script_tags(name="{name}", value="{value}");`
+    of a specific script tag name
 
     Arguments:
         name        a SpecialScriptTag Enum type
@@ -116,6 +118,7 @@ def init_script_tag_patterns() -> None:
 
 
 def get_script_tag_patterns() -> Dict[ScriptTag, re.Pattern]:
+    """Returns a dict that contains all precompiled script tag patterns"""
     if not __script_tag_pattern:
         init_script_tag_patterns()
 
@@ -123,6 +126,17 @@ def get_script_tag_patterns() -> Dict[ScriptTag, re.Pattern]:
 
 
 def get_script_tag_pattern(script_tag: ScriptTag) -> re.Pattern:
+    """Returns a precompiled script tag pattern by the given tag name
+
+    Arguments:
+        script_tag      one of the special script tags from the
+                        ScriptTag enum
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
     script_tag_patterns = get_script_tag_patterns()
     return script_tag_patterns[script_tag]
 
@@ -140,15 +154,16 @@ def get_xref_pattern(
     flags: re.RegexFlag = 0,
 ) -> re.Pattern:
     """
-    The returned pattern catchs all `script_tags(name="", value="");`
+    The returned pattern catchs all
+    `script_xref(name="{type}", value="{value}");`
 
     Arguments:
-        name        script tag name
-        value       script tag value (default: at least on char)
+        name        script xref type e.g. URL
+        value       script tag value (default: at least one char)
         flags       regex flags for compile (default: 0)
 
     The returned `Match`s by this pattern will have group strings
-    .group('name') and .group('value')
+    .group('type') and .group('value')
     Returns
         `re.Pattern` object
     """
@@ -194,6 +209,20 @@ class SpecialScriptTag(Enum):
 def _get_special_script_tag_pattern(
     name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
+    """
+    The returned pattern catches all `script_<name>("<value>");` tags
+    of the given script tag name
+
+    Arguments:
+        name        a SpecialScriptTag Enum type
+        value       script tag value (default: at least one char)
+        flags       regex flags for compile (default: 0)
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
     return re.compile(
         _SPECIAL_TAG_PATTERN.format(name=name, value=value), flags=flags
     )
@@ -236,6 +265,8 @@ def init_special_script_tag_patterns() -> None:
 
 
 def get_special_script_tag_patterns() -> Dict[SpecialScriptTag, re.Pattern]:
+    """Returns a dict that contains all precompiled special
+    script tag patterns"""
     if not __special_script_tag_patterns:
         init_special_script_tag_patterns()
 
@@ -245,6 +276,17 @@ def get_special_script_tag_patterns() -> Dict[SpecialScriptTag, re.Pattern]:
 def get_special_script_tag_pattern(
     special_script_tag: SpecialScriptTag,
 ) -> re.Pattern:
+    """Returns a precompiled special script tag pattern by the given tag name
+
+    Arguments:
+        special_script_tag      one of the special script tags from the
+                                SpecialScriptTag enum
+
+    The returned `Match`s by this pattern will have group strings
+    .group('name') and .group('value')
+    Returns
+        `re.Pattern` object
+    """
     special_script_tag_patterns = get_special_script_tag_patterns()
     return special_script_tag_patterns[special_script_tag]
 
