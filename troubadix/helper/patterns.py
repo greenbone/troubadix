@@ -198,7 +198,6 @@ class SpecialScriptTag(Enum):
     MANDATORY_KEYS = "mandatory_keys"
     NAME = "name"
     OID = "oid"  # script_oid("1.3.6.1.4.1.25623.1.0.XXXXXX");
-    ID = "id"  # deprecated for OID but kept for backward compatibility
     REQUIRE_KEYS = "require_keys"
     REQUIRE_PORTS = "require_ports"
     REQUIRE_UDP_PORTS = "require_udp_ports"
@@ -235,7 +234,6 @@ __special_script_tag_patterns = None
 
 __special_script_tag_values = {
     SpecialScriptTag.OID: r"(?P<oid>([0-9.]+))",
-    SpecialScriptTag.ID: r"(?P<oid>([0-9.]+))",
     SpecialScriptTag.CATEGORY: r"(?P<category>("
     rf"{'|'.join([k for k, _ in SCRIPT_CATEGORIES.items()])}))",
     SpecialScriptTag.VERSION: r"[0-9\-\:\+T]{24}|\$Revision: [0-9]+ \$",
