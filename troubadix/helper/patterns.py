@@ -153,7 +153,7 @@ def get_xref_pattern(
     flags: re.RegexFlag = 0,
 ) -> re.Pattern:
     """
-    The returned pattern catchs all `script_xref(name="", value="");`
+    The returned pattern catchs all `script_xref(name="{type}", value="{value}");`
 
     Arguments:
         name        script xref type e.g. URL
