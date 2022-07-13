@@ -149,6 +149,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             "37.  (www.isg.rhul.ac.uk) for discovering this flaw and Adam Langley and",
             "38. Sorry about having to reissue this one -- I pulled it from ftp.gnu.org not",
             "39. http://internal-host$1 is still insecure",
+            "40. from online sources (ftp://, http:// etc.).",
         ]
 
         for testcase in testcases:
