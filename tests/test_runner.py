@@ -229,48 +229,6 @@ class TestRunner(unittest.TestCase):
             output,
         )
 
-    def test_runner_run_changed_with_verbose_level_1(self):
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
-        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-
-        reporter = Reporter(term=self._term, root=self.root, verbose=1)
-
-        runner = Runner(
-            n_jobs=1,
-            reporter=reporter,
-            update_date=True,
-            root=self.root,
-        )
-
-        with redirect_stdout(io.StringIO()) as f:
-            runner.run([nasl_file])
-
-            new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-            self.assertNotEqual(content, new_content)
-
-        output = f.getvalue()
-        self.assertIn(
-            "Checking " f"{get_path_from_root(nasl_file, self.root)}",
-            output,
-        )
-        self.assertIn("Results for plugin check_last_modification", output)
-        self.assertIn(
-            "Replaced modification_date 2021-03-24 10:08:26 +0000"
-            " (Wed, 24 Mar 2021",
-            output,
-        )
-
-        # revert changes for the next time
-        nasl_file.write_text(content, encoding=CURRENT_ENCODING)
-
     def test_runner_run_ok_with_verbose_level_3(self):
         included_plugins = [
             "CheckMissingDescExit",

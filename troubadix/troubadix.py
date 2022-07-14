@@ -165,7 +165,7 @@ def main(args=None):
 
     reporter = Reporter(
         term=term,
-        fix=parsed_args.fix or parsed_args.update_date,
+        fix=parsed_args.fix,
         log_file=parsed_args.log_file,
         log_file_statistic=parsed_args.log_file_statistic,
         root=root,
@@ -179,7 +179,6 @@ def main(args=None):
         n_jobs=parsed_args.n_jobs,
         excluded_plugins=parsed_args.excluded_plugins,
         included_plugins=parsed_args.included_plugins,
-        update_date=parsed_args.update_date,
         fix=parsed_args.fix,
         ignore_warnings=parsed_args.ignore_warnings,
         root=root,

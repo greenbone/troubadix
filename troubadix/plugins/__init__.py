@@ -39,7 +39,6 @@ from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
 from .illegal_characters import CheckIllegalCharacters
-from .last_modification import CheckLastModification
 from .log_messages import CheckLogMessages
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
@@ -100,7 +99,6 @@ _FILE_PLUGINS = [
     CheckGrammar,
     CheckHttpLinksInTags,
     CheckIllegalCharacters,
-    CheckLastModification,
     CheckLogMessages,
     CheckMisplacedCompareInIf,
     CheckMissingDescExit,
@@ -159,11 +157,6 @@ class Plugins:
 
     def __iter__(self) -> Iterable[Plugin]:
         return iter(self.files_plugins + self.file_plugins)
-
-
-class UpdatePlugins(Plugins):
-    def __init__(self):
-        super().__init__([CheckLastModification], [])
 
 
 class StandardPlugins(Plugins):

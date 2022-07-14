@@ -206,16 +206,6 @@ def parse_args(
         ),
     )
 
-    tests_group.add_argument(
-        "--update-date",
-        action="store_true",
-        help=(
-            "Run troubadix in update modification_date and "
-            "script_version mode. Attention: This will modify all "
-            "passed files."
-        ),
-    )
-
     parser.add_argument(
         "--fix",
         action="store_true",
