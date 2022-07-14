@@ -20,14 +20,14 @@ from typing import Iterator
 
 from troubadix.helper.patterns import (
     ScriptTag,
-    get_script_tag_pattern,
     SpecialScriptTag,
+    get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 MANDATORY_TAGS = [ScriptTag.SUMMARY]
-MANDATORY_CALLS = [
+MANDATORY_SPECIAL_TAGS = [
     SpecialScriptTag.NAME,
     SpecialScriptTag.VERSION,
     SpecialScriptTag.CATEGORY,
@@ -48,7 +48,7 @@ class CheckScriptTagsMandatory(FileContentPlugin):
         This script checks for the existence of the following
         mandatory tags:
         - summary
-        and calls:
+        and special tags:
         - script_name
         - script_version
         - script_category
@@ -67,11 +67,13 @@ class CheckScriptTagsMandatory(FileContentPlugin):
                     plugin=self.name,
                 )
 
-        for call in MANDATORY_CALLS:
-            if not get_special_script_tag_pattern(call).search(file_content):
+        for special_tag in MANDATORY_SPECIAL_TAGS:
+            if not get_special_script_tag_pattern(special_tag).search(
+                file_content
+            ):
                 yield LinterError(
-                    "VT does not contain the following mandatory call: "
-                    f"'script_{call.value}'",
+                    "VT does not contain the following mandatory tag: "
+                    f"'script_{special_tag.value}'",
                     file=nasl_file,
                     plugin=self.name,
                 )
