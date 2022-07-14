@@ -18,10 +18,22 @@
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
+from troubadix.helper.patterns import (
+    ScriptTag,
+    get_script_tag_pattern,
+    SpecialScriptTag,
+    get_special_script_tag_pattern,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 MANDATORY_TAGS = [ScriptTag.SUMMARY]
+MANDATORY_CALLS = [
+    SpecialScriptTag.NAME,
+    SpecialScriptTag.VERSION,
+    SpecialScriptTag.CATEGORY,
+    SpecialScriptTag.FAMILY,
+    SpecialScriptTag.COPYRIGHT,
+]
 
 
 class CheckScriptTagsMandatory(FileContentPlugin):
@@ -36,6 +48,12 @@ class CheckScriptTagsMandatory(FileContentPlugin):
         This script checks for the existence of the following
         mandatory tags:
         - summary
+        and calls:
+        - script_name
+        - script_version
+        - script_category
+        - script_family
+        - script_copyright
         """
         if nasl_file.suffix == ".inc":
             return
@@ -45,6 +63,15 @@ class CheckScriptTagsMandatory(FileContentPlugin):
                 yield LinterError(
                     "VT does not contain the following mandatory tag: "
                     f"'script_{tag.value}'",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+
+        for call in MANDATORY_CALLS:
+            if not get_special_script_tag_pattern(call).search(file_content):
+                yield LinterError(
+                    "VT does not contain the following mandatory call: "
+                    f"'script_{call.value}'",
                     file=nasl_file,
                     plugin=self.name,
                 )

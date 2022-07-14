@@ -52,7 +52,6 @@ from .reporting_consistency import CheckReportingConsistency
 from .risk_factor import CheckRiskFactor
 from .script_add_preference_type import CheckScriptAddPreferenceType
 from .script_calls_empty_values import CheckScriptCallsEmptyValues
-from .script_calls_mandatory import CheckScriptCallsMandatory
 from .script_calls_recommended import CheckScriptCallsRecommended
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
@@ -112,7 +111,6 @@ _FILE_PLUGINS = [
     CheckRiskFactor,
     CheckScriptAddPreferenceType,
     CheckScriptCallsEmptyValues,
-    CheckScriptCallsMandatory,
     CheckScriptCallsRecommended,
     CheckScriptCategory,
     CheckScriptCopyright,

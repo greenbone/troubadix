@@ -26,7 +26,14 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        content = 'script_tag(name:"summary", value:"foo");\n'
+        content = (
+            "script_name('foo');\n"
+            "script_version(1234-56-78T90:98:76+5432);\n"
+            "script_category(ACT_INIT);\n"
+            "script_family(FAMILY);\n"
+            'script_copyright("COPYRIGHT");\n'
+            'script_tag(name:"summary", value:"foo");\n'
+        )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -45,8 +52,26 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_missing_tags_calls(self):
+        content = 'script_xref(name: "URL", value:"");'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagsMandatory(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 6)
+        self.assertIsInstance(results[0], LinterError)
+
     def test_missing_tags(self):
-        content = 'script_tag(name:"qod_type", value:"remote_banner");'
+        content = (
+            "script_name('foo');\n"
+            "script_version(1234-56-78T90:98:76+5432);\n"
+            "script_category(ACT_INIT);\n"
+            "script_family(FAMILY);\n"
+            'script_copyright("COPYRIGHT");\n'
+        )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -55,4 +80,16 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_missing_calls(self):
+        content = 'script_tag(name:"summary", value:"foo");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagsMandatory(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 5)
         self.assertIsInstance(results[0], LinterError)
