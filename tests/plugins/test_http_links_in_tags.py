@@ -150,6 +150,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             "38. Sorry about having to reissue this one -- I pulled it from ftp.gnu.org not",
             "39. http://internal-host$1 is still insecure",
             "40. from online sources (ftp://, http:// etc.).",
+            "41. this and https:// and that.",
         ]
 
         for testcase in testcases:
