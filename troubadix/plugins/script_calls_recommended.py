@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from pathlib import Path
 from typing import Iterator
 
@@ -79,7 +80,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
             )
         for call in recommended_single_call:
             if not _get_special_script_tag_pattern(
-                name=call, value=".*"
+                name=call, value=".*", flags=re.DOTALL
             ).search(file_content):
                 yield LinterWarning(
                     "VT does not contain the following recommended call: "
