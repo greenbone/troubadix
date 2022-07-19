@@ -52,12 +52,12 @@ from .reporting_consistency import CheckReportingConsistency
 from .risk_factor import CheckRiskFactor
 from .script_add_preference_type import CheckScriptAddPreferenceType
 from .script_calls_empty_values import CheckScriptCallsEmptyValues
-from .script_calls_mandatory import CheckScriptCallsMandatory
 from .script_calls_recommended import CheckScriptCallsRecommended
 from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .script_family import CheckScriptFamily
 from .script_tag_form import CheckScriptTagForm
+from .script_tags_mandatory import CheckScriptTagsMandatory
 from .script_tag_whitespaces import CheckScriptTagWhitespaces
 from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
@@ -111,12 +111,12 @@ _FILE_PLUGINS = [
     CheckRiskFactor,
     CheckScriptAddPreferenceType,
     CheckScriptCallsEmptyValues,
-    CheckScriptCallsMandatory,
     CheckScriptCallsRecommended,
     CheckScriptCategory,
     CheckScriptCopyright,
     CheckScriptFamily,
     CheckScriptTagForm,
+    CheckScriptTagsMandatory,
     CheckScriptTagWhitespaces,
     CheckScriptVersionAndLastModificationTags,
     CheckScriptXrefForm,

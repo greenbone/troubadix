@@ -19,14 +19,25 @@ from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper.patterns import (
+    ScriptTag,
     SpecialScriptTag,
+    get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+MANDATORY_TAGS = [ScriptTag.SUMMARY]
+MANDATORY_SPECIAL_TAGS = [
+    SpecialScriptTag.NAME,
+    SpecialScriptTag.VERSION,
+    SpecialScriptTag.CATEGORY,
+    SpecialScriptTag.FAMILY,
+    SpecialScriptTag.COPYRIGHT,
+]
 
-class CheckScriptCallsMandatory(FileContentPlugin):
-    name = "check_script_calls_mandatory"
+
+class CheckScriptTagsMandatory(FileContentPlugin):
+    name = "check_script_tags_mandatory"
 
     def check_content(
         self,
@@ -34,8 +45,10 @@ class CheckScriptCallsMandatory(FileContentPlugin):
         file_content: str,
     ) -> Iterator[LinterResult]:
         """
-        This script checks for the existence of the following mandatory script
-        calls:
+        This script checks for the existence of the following
+        mandatory tags:
+        - summary
+        and special tags:
         - script_name
         - script_version
         - script_category
@@ -45,19 +58,22 @@ class CheckScriptCallsMandatory(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        mandatory_calls = [
-            SpecialScriptTag.NAME,
-            SpecialScriptTag.VERSION,
-            SpecialScriptTag.CATEGORY,
-            SpecialScriptTag.FAMILY,
-            SpecialScriptTag.COPYRIGHT,
-        ]
-
-        for call in mandatory_calls:
-            if not get_special_script_tag_pattern(call).search(file_content):
+        for tag in MANDATORY_TAGS:
+            if not get_script_tag_pattern(tag).search(file_content):
                 yield LinterError(
-                    "VT does not contain the following mandatory call: "
-                    f"'script_{call.value}'",
+                    "VT does not contain the following mandatory tag: "
+                    f"'script_{tag.value}'",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+
+        for special_tag in MANDATORY_SPECIAL_TAGS:
+            if not get_special_script_tag_pattern(special_tag).search(
+                file_content
+            ):
+                yield LinterError(
+                    "VT does not contain the following mandatory tag: "
+                    f"'script_{special_tag.value}'",
                     file=nasl_file,
                     plugin=self.name,
                 )
