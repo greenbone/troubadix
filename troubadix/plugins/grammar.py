@@ -62,6 +62,10 @@ def get_grammer_pattern() -> re.Pattern:
         r"|file\s+inclusion)|SQL\s+injection|security|(local )?privilege"
         r"[\s-]+(escalation|elevation)|(authentication|security|access)"
         r"\s+bypass|(buffer|heap)\s+overflow)\s+vulnerability|"
+        # e.g.:
+        # "is prone a to denial of service (DoS) vulnerability"
+        # "is prone an information disclosure vulnerability"
+        r"\s+(is|are)\s+(prone|vulnerable|affected)\s+an?\s+|"
         # e.g. "is prone to a security bypass vulnerabilities"
         r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities" r").*",
         re.IGNORECASE,

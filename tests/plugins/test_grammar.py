@@ -98,3 +98,57 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# refer the Reference",
             results[1].message,
         )
+
+    def test_grammar3(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            'script_tag(name:"summary", value:"Adobe Digital Edition is prone '
+            'a to denial of service (DoS) vulnerability.");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem: "
+            'script_tag(name:"summary", value:"Adobe Digital Edition is prone '
+            'a to denial of service (DoS) vulnerability.");',
+            results[0].message,
+        )
+
+    def test_grammar4(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            'script_tag(name:"summary", value:"Splunk Enterprise is prone an '
+            'open redirect vulnerability.");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem: "
+            'script_tag(name:"summary", value:"Splunk Enterprise is prone an '
+            'open redirect vulnerability.");',
+            results[0].message,
+        )
