@@ -1,8 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-#
-#  check_last_modification.py
-#
 # Copyright (C) 2022 Greenbone Networks GmbH
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
