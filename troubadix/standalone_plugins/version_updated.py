@@ -21,7 +21,7 @@ import subprocess
 import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, List
 
 from troubadix.helper.patterns import (
     LAST_MODIFICATION_ANY_VALUE_PATTERN,
@@ -84,7 +84,7 @@ def git(*args) -> str:
     ).stdout
 
 
-def check_version_updated(args: Namespace) -> bool:
+def check_version_updated(files: List[Path], commit_range: str) -> bool:
     """The script checks (via git diff) if the passed VT has changed the
     the following tags:
 
@@ -92,16 +92,16 @@ def check_version_updated(args: Namespace) -> bool:
     - script_tag(name:"last_modification", value:"[...]");
     """
 
-    if not args.files:
-        args.files += [
+    if not files:
+        files += [
             Path(f)
             for f in git(
-                "diff", "--name-only", "--diff-filter=d", args.commit_range
+                "diff", "--name-only", "--diff-filter=d", commit_range
             ).splitlines()
         ]
 
     rcode = True
-    for nasl_file in args.files:
+    for nasl_file in files:
         if nasl_file.suffix != ".nasl" or not nasl_file.exists():
             continue
 
@@ -111,7 +111,7 @@ def check_version_updated(args: Namespace) -> bool:
             "color.status=false",
             "--no-pager",
             "diff",
-            args.commit_range,
+            commit_range,
             nasl_file,
         )
 
@@ -143,7 +143,8 @@ def main() -> int:
         )
         return 1
 
-    if check_version_updated(parse_args(args)):
+    parsed_args = parse_args(args)
+    if check_version_updated(parsed_args.files, parsed_args.commit_range):
         return 2
 
     return 0
