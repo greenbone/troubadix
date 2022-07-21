@@ -93,7 +93,7 @@ def check_version_updated(files: List[Path], commit_range: str) -> bool:
     """
 
     if not files:
-        files += [
+        files = [
             Path(f)
             for f in git(
                 "diff", "--name-only", "--diff-filter=d", commit_range
