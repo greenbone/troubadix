@@ -175,7 +175,7 @@ class CheckSpelling(FilePlugin):
                 # "ALSA: hda" or a codec called "Conexant". There are too
                 # many hits to maintain them in codespell.exclude so exclude
                 # them for now here.
-                if re.search(r"gb_(sles|(open)?suse)_.+\.nasl", line):
+                if re.search(r"(gb_(sles|(open)?suse)_|mgasa-).+\.nasl", line):
                     if re.search(
                         r"(hda|conexant)\s+==>\s+(had|connexant)",
                         line,
