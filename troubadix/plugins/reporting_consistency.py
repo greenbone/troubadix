@@ -27,7 +27,7 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 # nb: Those are files which are correctly using a log_message() to do e.g. some
 # additional reporting for the user. This is a valid case which doesn't need to
 # be changed. The example and template files shouldn't be checked at all because
-# the plugin would throw an unecessary error for them if e.g. not running from
+# the plugin would throw an unnecessary error for them if e.g. not running from
 # within the nasl/common folder. But all three files are just examples and don't
 # need to be checked at all.
 IGNORE_FILES = [
