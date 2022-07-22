@@ -154,7 +154,7 @@ def get_xref_pattern(
     flags: re.RegexFlag = 0,
 ) -> re.Pattern:
     """
-    The returned pattern catchs all
+    The returned pattern catches all
     `script_xref(name="{type}", value="{value}");`
 
     Arguments:
