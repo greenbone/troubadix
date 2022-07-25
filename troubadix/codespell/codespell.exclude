@@ -90,7 +90,6 @@ All FreeS/WAN 2.x users should upgrade to the latest stable version:
  allowed for informations leaks and potentially privilege escalation
 All Super-FreeS/WAN users should migrate to the latest stable version of
                         "/alog.nsf", "/archive/a_domlog.nsf", "/archive/l_domlog.nsf",
-alsa: hda/realtek: Add suppor... [Please see the references for more information on the vulnerabilities]");
 ALSA: usb-audio: Add Schiit Hel device to mixer map quirk table
 Also a bug was fixed where qemu-img convert could occasionaly corrupt images. (bsc#908380)");
 ALS... [Please see the references for more information on the vulnerabilities]");
@@ -162,7 +161,6 @@ cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip 
   common_files_dir_id = 'oval:org.mitre.oval:obj:281';
 # Comparison Engine Power 'product.comparision.php' SQL Injection Vulnerability
 complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:ind-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:oval-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:win-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows windows-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd">');
-  Conexant cx231xx USB video capture driver in the Linux kernel did not properly
 "config.sys", "io.sys", "msdos.sys", "pagefile.sys",
   "Connection: TE, close\r\n",
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
@@ -269,7 +267,6 @@ Die Standard-Anforderung 'A7: Lokale Sicherheitsrichtlinien' beschreibt, dass un
                           dir + "/ans/ans.pl?p=../../../../../usr/bin/id|&blah" ) ) {
  * Disable all weak EXPORT ciphers by default. These can be reenabled if
 disable, or enable CAs causing various denial of service problems with
-  discovered that the Conexant USB driver in the Linux kernel improperly handled
 distrust all of DigiNotar's CAs. In this update, this is done in the
  (divide-by-zero error and QEMU process crash) via a larg... [Please see the references for more information on the vulnerabilities]");
   # <div style="float: right; margin-top: 5px; margin-right: 5px;">Rev. 1.04.06&nbsp;&nbsp;&nbsp;&nbsp;Bulid. 20150226142928 </div>
@@ -436,6 +433,7 @@ If you enable this policy setting, Windows PowerShell will enable transcripting 
  image. This occured because of a lack of proper validation that cached
   Imaging and Communications in Medicine (DICOM) service accessible from a public WAN (Internet) /
   Imaging and Communications in Medicine (DICOM) web viewer accessible from a public WAN (Internet)
+ Improper Input Validation when SETing malformed OIDs in master agent and
  improved over the 2.40 series. The API/ABI there remain unchaged, so
  Inbuilt protection in ps maped a guard page at the end of the overflowed
 include("CAs.inc");
@@ -485,13 +483,12 @@ Jouni Knuutinen from Synopsys discovered flaws in the Samba DCE-RPC
     key = "HostDetails/Cert/" + fpr + "/";
 keyserv		100029	keyserver
 "keyserver",
-  Konovalov discovered that the Conexant cx231xx USB video capture driver in the
 # Kubernetes Dashboard Public WAN (Internet) Accessible
 L3: conring size for XEN HV's with huge memory to small. Inital Xen logs
  leaks because of a missing check when transfering pages via
 library: Increment to 7:0:1 No changes, no removals New fuctions:
 [link moved to references] has more informations.
-Linux PV device frontends vulnerable to attacks by backends T[his CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Several Linux PV device frontends are using the grant table interfaces for removing access rights of the backends in ways being subject to race conditions, resulting in potential data leaks, data corruption by malicious backends, and denial of service triggered by malicious backends: blkfront, netfront, scsifront and the gntalloc driver are testing whether a grant reference is still in use. If this is not the case, they assume that a following removal of the granted access will always succeed, which is not true in case the backend has mapped the granted page between those two operations. As a result the backend can keep access to the memory page of the guest no matter how the page will be used after the frontend I/O has finished. The xenbus driver has a similar problem, as it doesn't check the success of removing the granted access of a shared ring buffer. blkfront: CVE-2022-23036 netfront: CVE-2022-23037 scsifront: CVE-2022-23038 gntalloc: CVE-2022-23039 xenbus: CVE-2022-23040 blkfront, netfront, scsifront, usbfront, dmabuf, xenbus, 9p, kbdfront, and pvcalls are using a functionality to delay freeing a grant reference until it is no longer in use, but the freeing of the related data page is ... [Please see the references for more information on the vulnerabilities]");
+Linux PV device frontends vulnerable to attacks by backends [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Several Linux PV device frontends are using the grant table interfaces for removing access rights of the backends in ways being subject to race conditions, resulting in potential data leaks, data corruption by malicious backends, and denial of service triggered by malicious backends: blkfront, netfront, scsifront and the gntalloc driver are testing whether a grant reference is still in use. If this is not the case, they assume that a following removal of the granted access will always succeed, which is not true in case the backend has mapped the granted page between those two operations. As a result the backend can keep access to the memory page of the guest no matter how the page will be used after the frontend I/O has finished. The xenbus driver has a similar problem, as it doesn't check the success of removing the granted access of a shared ring buffer. blkfront: CVE-2022-23036 netfront: CVE-2022-23037 scsifront: CVE-2022-23038 gntalloc: CVE-2022-23039 xenbus: CVE-2022-23040 blkfront, netfront, scsifront, usbfront, dmabuf, xenbus, 9p, kbdfront, and pvcalls are using a functionality to delay freeing a grant reference until it is no longer in use, but the freeing of the related data page is ... [Please see the references for more information on the vulnerabilities]");
 list to be autodetected, STAC92HD71Bx and STAC92HD75Bx based HDA
       log_message(data: build_detection_report(app: "OpenMairie Open Presse", version: version,
     log_message( port:0, data:"'Log nmap output' was set to 'yes' but 'Report about unrechable Hosts' and 'Mark unrechable Hosts as dead (not scanning)' to no. Plugin will exit without logging." );
@@ -660,7 +657,6 @@ Revert 'ipc,sem: remove uneeded sem_undo_list lock usage in exit_sem()'
   * revoke mis-issued intermediate CAs from TURKTRUST.");
 Rick Macklem, Christopher Key and Tim Zingelman reported that the
 Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
-Rogue backends can cause DoS of guests via high frequency events T[his CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
 Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28713)
 Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if ... [Please see the references for more information on the vulnerabilities]");
 root CAs when using an https connection.
