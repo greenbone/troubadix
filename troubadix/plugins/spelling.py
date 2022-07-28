@@ -33,16 +33,12 @@ class CheckSpelling(FilesPlugin):
     name = "check_spelling"
 
     def run(self) -> Iterator[LinterResult]:
-        """'codespell' is required to execute this step!
-        This script opens a shell in a subprocess and executes 'codespell' to
-        check the VT for spelling mistakes. An error will be thrown if
-        'codespell' is not installed or corrections could be found via
-        'codespell'.
+        """This script checks, via the codespell library, wether
+        the provided nasl files contain spelling errors.
+        Certain errors are ignored based on listed exceptions
 
-        Args:
-            nasl_file: The VT that is going to be checked
-            _file_content: The content of the VT
-
+        Yields:
+            Iterator[LinterResult]: The detected spelling errors
         """
 
         # Overwrite with local repository files if exist
