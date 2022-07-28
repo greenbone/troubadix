@@ -63,20 +63,18 @@ class CheckSpelling(FilesPlugin):
             #     for nasl_file in self.context.nasl_files[i : i + batch_size]
             # ]
 
-            files_parameters = tuple(
-                [
-                    str(nasl_file)
-                    for nasl_file in self.context.nasl_files[i : i + batch_size]
-                ]
-            )
-            codespell_arguments = (
+            files_parameters = [
+                str(nasl_file)
+                for nasl_file in self.context.nasl_files[i : i + batch_size]
+            ]
+            codespell_arguments = [
                 "--hard-encoding-detection",
                 "--dictionary=-",
                 f"--dictionary={codespell_additions}",
                 f"--exclude-file={codespell_exclude}",
                 f"--ignore-words={codespell_ignore}",
                 "--disable-colors",
-            ) + files_parameters
+            ] + files_parameters
 
             with redirect_stdout(io.StringIO()) as codespell:
                 codespell_main(*codespell_arguments)
