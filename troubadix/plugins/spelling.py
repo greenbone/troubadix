@@ -55,13 +55,8 @@ class CheckSpelling(FilesPlugin):
         else:
             codespell_ignore = f"{codespell_config_path}/codespell.ignore"
 
-        # Run codespell as internal process
         batch_size = 10_000
         for i in range(0, len(self.context.nasl_files), batch_size):
-            # files_parameter = [
-            #     str(nasl_file)
-            #     for nasl_file in self.context.nasl_files[i : i + batch_size]
-            # ]
 
             files_parameters = [
                 str(nasl_file)
