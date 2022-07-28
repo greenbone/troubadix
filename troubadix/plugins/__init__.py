@@ -57,8 +57,8 @@ from .script_category import CheckScriptCategory
 from .script_copyright import CheckScriptCopyright
 from .script_family import CheckScriptFamily
 from .script_tag_form import CheckScriptTagForm
-from .script_tags_mandatory import CheckScriptTagsMandatory
 from .script_tag_whitespaces import CheckScriptTagWhitespaces
+from .script_tags_mandatory import CheckScriptTagsMandatory
 from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
@@ -124,7 +124,6 @@ _FILE_PLUGINS = [
     CheckSecurityMessages,
     CheckSolutionText,
     CheckSolutionType,
-    CheckSpelling,
     CheckTabs,
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
@@ -140,6 +139,7 @@ _FILE_PLUGINS = [
 _FILES_PLUGINS = [
     CheckDuplicateOID,
     CheckNoSolution,
+    CheckSpelling,
 ]
 
 

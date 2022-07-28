@@ -25,10 +25,7 @@ from . import PluginTestCase
 class CheckSpellingTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        content = "# this is not used, it use the nasl_file instead\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_files_plugin_context(nasl_files=[nasl_file])
         plugin = CheckSpelling(fake_context)
 
         results = list(plugin.run())
@@ -37,15 +34,12 @@ class CheckSpellingTestCase(PluginTestCase):
 
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
-        content = "# this is not used, it use the nasl_file instead\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_files_plugin_context(nasl_files=[nasl_file])
         plugin = CheckSpelling(fake_context)
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 4)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"{nasl_file}:1: soltuion ==> solution\n"
@@ -59,17 +53,14 @@ class CheckSpellingTestCase(PluginTestCase):
         codespell_additions.write_text("", encoding="utf-8")
 
         nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
-        content = "# this is not used, it use the nasl_file instead\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_files_plugin_context(nasl_files=[nasl_file])
         plugin = CheckSpelling(fake_context)
 
         results = list(plugin.run())
 
         codespell_additions.unlink()
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             f"{nasl_file}:2: upated ==> updated\n",

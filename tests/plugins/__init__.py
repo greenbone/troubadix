@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Iterable
 from unittest.mock import MagicMock
 
-from troubadix.plugin import FilePluginContext
+from troubadix.plugin import FilePluginContext, FilesPluginContext
 
 
 class TemporaryDirectory:
@@ -62,5 +62,17 @@ class PluginTestCase(unittest.TestCase):
         fake_context.nasl_file = nasl_file
         fake_context.file_content = file_content
         fake_context.lines = lines
+        fake_context.root = root
+        return fake_context
+
+    def create_files_plugin_context(
+        self,
+        *,
+        nasl_files: Iterable[Path] = None,
+        root: Path = None,
+    ) -> FilesPluginContext:
+        """Create a FilePluginContext mock"""
+        fake_context = MagicMock()
+        fake_context.nasl_files = nasl_files
         fake_context.root = root
         return fake_context
