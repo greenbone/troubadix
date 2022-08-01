@@ -91,7 +91,7 @@ def change_last_modification(tmpdir: Path):
 def change_version_and_last_modification(tmpdir: Path):
     test_file = tmpdir / "test.nasl"
     test_file.write_text(
-        'script_version("2021-03-02T12:11:43+0001");\n”'
+        'script_version("2021-03-02T12:11:43+0001");\n'
         'script_tag(name:"last_modification", '
         'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2022)");'
     )
@@ -137,7 +137,7 @@ class TestVersionChanged(unittest.TestCase):
         with tempgitdir() as tmpdir:
             setupgit(tmpdir)
             change_version_and_last_modification(tmpdir)
-            parsed_args = parse_args(["-c", "HEAD"])
+            parsed_args = parse_args(["-c", "HEAD~1"])
             self.assertTrue(
                 check_version_updated(
                     parsed_args.files, parsed_args.commit_range
