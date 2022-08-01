@@ -144,7 +144,7 @@ def main() -> int:
         return 1
 
     parsed_args = parse_args(args)
-    if check_version_updated(parsed_args.files, parsed_args.commit_range):
+    if not check_version_updated(parsed_args.files, parsed_args.commit_range):
         return 2
 
     return 0
