@@ -22,12 +22,14 @@ from contextlib import contextmanager
 from pathlib import Path
 from subprocess import SubprocessError
 from typing import Generator
+from unittest.mock import MagicMock, patch
 
 from troubadix.standalone_plugins.version_updated import (
     check_version_updated,
     git,
-    parse_args,
 )
+from troubadix.standalone_plugins.version_updated import main as plugin_main
+from troubadix.standalone_plugins.version_updated import parse_args
 
 
 @contextmanager
@@ -99,6 +101,14 @@ def change_version_and_last_modification(tmpdir: Path):
     git("commit", "-m", "test_both")
 
 
+def get_mocked_arguments():
+    mock = MagicMock()
+    mock.commit_range = "HEAD~1"
+    mock.files = []
+
+    return mock
+
+
 class TestVersionChanged(unittest.TestCase):
     def test_change_nothing(self):
         with tempgitdir() as tmpdir:
@@ -159,6 +169,28 @@ class TestVersionChanged(unittest.TestCase):
                 parse_args(["-c", "HEAD", "-f", "test.nasl"]).files,
                 [Path("test.nasl")],
             )
+
+    @patch("troubadix.standalone_plugins.version_updated.parse_args")
+    def test_main_ok(self, mock_args):
+        mock_args.return_value = get_mocked_arguments()
+        with tempgitdir() as tmpdir:
+            setupgit(tmpdir)
+            change_version_and_last_modification(tmpdir)
+
+            exit_code = plugin_main()
+
+            self.assertEqual(exit_code, 0)
+
+    @patch("troubadix.standalone_plugins.version_updated.parse_args")
+    def test_main_nok(self, mock_args):
+        mock_args.return_value = get_mocked_arguments()
+        with tempgitdir() as tmpdir:
+            setupgit(tmpdir)
+            change_version(tmpdir)
+
+            exit_code = plugin_main()
+
+            self.assertEqual(exit_code, 2)
 
 
 if __name__ == "__main__":
