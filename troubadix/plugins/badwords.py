@@ -50,6 +50,7 @@ EXCEPTIONS = [
     "openvas-cli",
     "openvas-manager",
     "openvassd",
+    "openvasd",
     "lists.wald.intevation.org",
     "lib64openvas-devel",
     "lib64openvas6",
