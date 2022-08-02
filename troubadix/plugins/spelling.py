@@ -230,7 +230,7 @@ class CheckSpelling(FilesPlugin):
             for codespell_entry in codespell.split("\n"):
                 if "==>" in codespell:
                     yield LinterError(
-                        codespell,
+                        codespell_entry,
                         file=codespell_entry.split(":")[0],
                         plugin=self.name,
                     )
