@@ -19,30 +19,8 @@ import re
 from pathlib import Path
 from typing import Iterator
 
+from troubadix.helper.patterns import _get_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
-
-
-class AllScriptTagsPattern:
-    instance = False
-
-    def __init__(self) -> None:
-
-        self.pattern = re.compile(
-            pattern=(
-                r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])'
-                r"(?P<name>[a-zA-Z0-9\s\+\-\_]+)(?P=quote)\s*.+\s*\)\s*;"
-            ),
-            # flags=re.MULTILINE, # It seems that there is no multiline
-            # script_tag here
-        )
-        self.instance = self
-
-
-def get_all_tag_patterns() -> re.Pattern:
-    """Get all script tags **without** matching the value!!!"""
-    if AllScriptTagsPattern.instance:
-        return AllScriptTagsPattern.instance.pattern
-    return AllScriptTagsPattern().pattern
 
 
 class CheckValidScriptTagNames(FileContentPlugin):
@@ -107,7 +85,9 @@ class CheckValidScriptTagNames(FileContentPlugin):
             "solution_method",
         ]
 
-        matches = get_all_tag_patterns().finditer(file_content)
+        matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(
+            file_content
+        )
 
         if matches:
             for match in matches:
