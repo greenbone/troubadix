@@ -367,6 +367,7 @@ i40e: Fix kernel oops whe... [Please see the references for more information on 
   if (AUDITRULES =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITRULES =~ ".*No such file or directory.*") AUDITRULES = "no audit.rules";
   if (AUDITSTATUS =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITSTATUS =~ ".*No such file or directory.*") AUDITSTATUS = "no auditctl";
 if( banner =~ " (A\. A\. Milne|Albert Einstein|Anonimo|Antico proverbio cinese|Autor desconocido|Charles Dickens|Francisco de Quevedo y Villegas|George Bernard Shaw|Jaime Balmes|Johann Wolfgang von Goethe|Jil Sander|Juana de Asbaje|Konfucius|Lord Philip Chesterfield|Montaigne|Petrarca|Ralph Waldo Emerson|Seneca|Syrus|Werner von Siemens)" ||
+if(!banner = get_kb_item("shttp/" + port + "/banner"))
 if (banner =~ "Huawei TE[0-9]0") {
   if( ( buf =~ "<title>GLPI - Authentification" || buf =~ "<title>GLPI - Authentication" ) && ( buf =~ "Powered By Indepnet" ||
 if( "CONEXANT SYSTEMS, INC." >< r &&
@@ -688,6 +689,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_copyright("Copyright (C) 2009 Tim Brown");
   script_copyright("(c) Tim Brown and Portcullis Computer Security Ltd, 2008");
   script_mandatory_keys("Jasig CAS server/Installed");
+  script_mandatory_keys("shttp/detected");
   script_mandatory_keys("telnet/huawei/te/detected");
   script_name("AIDA64 <= 6.25.5400 SEH Buffer Overflow Vulnerability");
   script_name("Apache James Server Web Admin Public WAN (Internet) / Public LAN Accessible without Authentication");
@@ -908,6 +910,9 @@ send(socket: soc, data: triggerD);
  SessionTicket extention and ECDHE-ECDSA (bsc#1015499).
     set_kb_item(name:"cas/commserver_ua/win/detected", value:TRUE);
     set_kb_item( name:"Jasig CAS server/Installed", value:TRUE );
+  set_kb_item(name:"shttp/detected", value:TRUE);
+  set_kb_item(name:"shttp/" + port + "/banner", value:banner);
+  set_kb_item(name:"shttp/" + port + "/detected", value:TRUE);
     set_kb_item( name:"telnet/huawei/te/detected", value:TRUE );
 set_kb_item(name:"WMI/Antivir/UptoDate", value:AntiVir_UpDate);
     set_kb_item( name:"www/" + port + "/cas", value:version );
