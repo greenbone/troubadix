@@ -22,6 +22,7 @@
 # 0x50:  72 6F 2E 70 72 6F 64 75 63 74 2E 64 65 76 69 63    ro.product.devic
 # 0x50:  A1 37 43 6F 6E 6E 65 63 74 69 6F 6E 20 66 72 6F    .7Connection fro
 #0x60:  AC 13 28 D3 B3 A5 BA F0 FD D6 FA 22 BF 4D F2 4D    ..(........".M.M
+  10001 from WAN (if port-forwarding is enabled to allow remote configuration, then it is a good
                      1047, "WIT",
                      1153, "Alga Automacao e controle LTDA",
                      1212, "HSA Systems",
@@ -63,6 +64,7 @@
 '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access',
   accessible from a public WAN (Internet) / public LAN.
   accessible from a public WAN (Internet) / public LAN.");
+  access to the pCOWeb service ports from WAN (if port-forwarding is enabled to allow remote
   - ACI - DO not encode query_string
   (ACI) mode could allow an unauthenticated, remote attacker to unexpectedly restart the device,
   - ACI modules - Fix non-signature authentication
@@ -328,7 +330,6 @@ foreach dir( make_list_unique( "/", "/cas", "/cas-server-webapp", http_cgi_dirs(
     fpr = tmpfpr[0];
   from a public WAN (Internet) / public LAN.");
   from both LAN and WAN.");
-  from WAN (if port-forwarding is enabled to allow remote configuration, then it is a good idea to disable port-forwarding
  function may have writen data beyond the target buffer, leading to a
 Furthemore, the following bugs were fixed:
 Furthermore, a severe flaw had been discovered by Tim Duesterhus in
@@ -987,7 +988,6 @@ The fst_get_iface function in drivers/net/wan/farsync.c in the Linux kernel befo
 The GOST ENGINE in OpenSSL before 1.0.0f does not properly handle
  the guest to leak information. It occured while processing transmit(tx)
  * The HART/IP dissectory could go into an infinite loop. wnpa-sec-2013-11 CVE-2013-2476
-  the only recommendations are to deny any access to ports 10000 and 10001 from WAN (if port-forwarding is enabled to allow remote
 The previous update of tcpdump already fixed variuous Buffer overflow/overread vulnerabilities [bsc#1153098, bsc#1153332]
 the router to stop forwarding data traffic across Traffic Engineering (TE) tunnels, resulting in a denial of
 The rust regex crate did not properly prevent crafted regular expressions from
