@@ -111,7 +111,6 @@ class CheckValidScriptTagNames(FileContentPlugin):
 
         if matches:
             for match in matches:
-                # print(match)
                 if match.group("name") not in allowed_script_tag_names:
                     yield LinterError(
                         f"The script_tag name '{match.group('name')}' "
