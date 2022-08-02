@@ -22,12 +22,14 @@ from contextlib import contextmanager
 from pathlib import Path
 from subprocess import SubprocessError
 from typing import Generator
+from unittest.mock import MagicMock, patch
 
 from troubadix.standalone_plugins.version_updated import (
     check_version_updated,
     git,
-    parse_args,
 )
+from troubadix.standalone_plugins.version_updated import main as plugin_main
+from troubadix.standalone_plugins.version_updated import parse_args
 
 
 @contextmanager
@@ -49,7 +51,7 @@ def setupgit(tmpdir: Path) -> None:
     test_file.write_text(
         'script_version("2021-03-02T12:11:43+0000");”\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");'
+        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");\n'
     )
     git("add", str(test_file))
     git("commit", "-m", "test")
@@ -60,7 +62,7 @@ def change_nothing(tmpdir: Path) -> None:
     test_file.write_text(
         'script_version("2021-03-02T12:11:43+0000");”\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");123'
+        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");123\n'
     )
     git("add", str(test_file))
     git("commit", "-m", "test_nothing")
@@ -71,7 +73,7 @@ def change_version(tmpdir: Path):
     test_file.write_text(
         'script_version("2021-03-02T12:11:43+0001");”\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");'
+        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2021)");\n'
     )
     git("add", str(test_file))
     git("commit", "-m", "test_version")
@@ -82,7 +84,7 @@ def change_last_modification(tmpdir: Path):
     test_file.write_text(
         'script_version("2021-03-02T12:11:43+0000");”\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0010 (Tue, 02 Mar 2021)");'
+        'value:"2021-03-02 12:11:43 +0010 (Tue, 02 Mar 2021)");\n'
     )
     git("add", str(test_file))
     git("commit", "-m", "test_last_modification")
@@ -91,12 +93,20 @@ def change_last_modification(tmpdir: Path):
 def change_version_and_last_modification(tmpdir: Path):
     test_file = tmpdir / "test.nasl"
     test_file.write_text(
-        'script_version("2021-03-02T12:11:43+0001");\n”'
+        'script_version("2021-03-02T12:11:43+0001");\n'
         'script_tag(name:"last_modification", '
-        'value:"2021-03-02 12:11:43 +0000 (Tue, 02 Mar 2022)");'
+        'value:"2021-03-02 12:11:43 +0001 (Tue, 02 Mar 2021)");\n'
     )
     git("add", str(test_file))
     git("commit", "-m", "test_both")
+
+
+def get_mocked_arguments():
+    mock = MagicMock()
+    mock.commit_range = "HEAD~1"
+    mock.files = []
+
+    return mock
 
 
 class TestVersionChanged(unittest.TestCase):
@@ -137,7 +147,7 @@ class TestVersionChanged(unittest.TestCase):
         with tempgitdir() as tmpdir:
             setupgit(tmpdir)
             change_version_and_last_modification(tmpdir)
-            parsed_args = parse_args(["-c", "HEAD"])
+            parsed_args = parse_args(["-c", "HEAD~1"])
             self.assertTrue(
                 check_version_updated(
                     parsed_args.files, parsed_args.commit_range
@@ -159,6 +169,28 @@ class TestVersionChanged(unittest.TestCase):
                 parse_args(["-c", "HEAD", "-f", "test.nasl"]).files,
                 [Path("test.nasl")],
             )
+
+    @patch("troubadix.standalone_plugins.version_updated.parse_args")
+    def test_main_ok(self, mock_args):
+        mock_args.return_value = get_mocked_arguments()
+        with tempgitdir() as tmpdir:
+            setupgit(tmpdir)
+            change_version_and_last_modification(tmpdir)
+
+            exit_code = plugin_main()
+
+            self.assertEqual(exit_code, 0)
+
+    @patch("troubadix.standalone_plugins.version_updated.parse_args")
+    def test_main_nok(self, mock_args):
+        mock_args.return_value = get_mocked_arguments()
+        with tempgitdir() as tmpdir:
+            setupgit(tmpdir)
+            change_version(tmpdir)
+
+            exit_code = plugin_main()
+
+            self.assertEqual(exit_code, 2)
 
 
 if __name__ == "__main__":
