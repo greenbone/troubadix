@@ -40,12 +40,23 @@ class CheckSpellingTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 4)
+
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"{nasl_file}:1: soltuion ==> solution\n"
-            f"{nasl_file}:1: aviaalable ==> available\n"
-            f"{nasl_file}:2: upated ==> updated\n",
+            f"{nasl_file}:1: soltuion ==> solution",
             results[0].message,
+        )
+
+        self.assertIsInstance(results[1], LinterError)
+        self.assertEqual(
+            f"{nasl_file}:1: aviaalable ==> available",
+            results[1].message,
+        )
+
+        self.assertIsInstance(results[2], LinterError)
+        self.assertEqual(
+            f"{nasl_file}:2: upated ==> updated",
+            results[2].message,
         )
 
     def test_local_files_nok(self):
@@ -63,6 +74,6 @@ class CheckSpellingTestCase(PluginTestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"{nasl_file}:2: upated ==> updated\n",
+            f"{nasl_file}:2: upated ==> updated",
             results[0].message,
         )
