@@ -24,13 +24,15 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
 class CheckValidScriptTagNames(FileContentPlugin):
-    """This step checks if the name of the following script tag:
+    """This plugin checks if the 'name' parameter of the script tags having the
+    following form:
 
     - script_tag(name:"", value:"");
 
     is one of the following allowed ones:
 
     - script_tag(name:"solution", value:"");
+    - script_tag(name:"solution_type", value:"");
     - script_tag(name:"qod_type", value:"");
     - script_tag(name:"cvss_base", value:"");
     - script_tag(name:"cvss_base_vector", value:"");
@@ -46,8 +48,9 @@ class CheckValidScriptTagNames(FileContentPlugin):
     - script_tag(name:"severity_vector", value:"");
     - script_tag(name:"severity_origin", value:"");
     - script_tag(name:"severity_date", value:"");
+    nb: The following is not fully implemented in GVM yet (further
+    implementation "on hold")
     - script_tag(name:"solution_method", value:"");
-    # nb: Not fully implemented in GVM yet (further implementation "on hold").
     """
 
     name = "check_valid_script_tag_names"
