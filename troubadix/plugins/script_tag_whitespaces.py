@@ -43,9 +43,9 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
         )
 
         for match in matches:
-            if re.match(r"^\s+.*", match.group("value")) or re.match(
-                r".*\s+$", match.group("value")
-            ):
+            if re.match(
+                r"^\s+.*", match.group("value"), flags=re.S
+            ) or re.match(r".*\s+$", match.group("value"), flags=re.S):
                 yield LinterError(
                     f"{match.group(0)}: value contains a leading or"
                     " trailing whitespace character",
