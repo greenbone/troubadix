@@ -73,3 +73,15 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
+
+    def test_trailing_whitespace_newline(self):
+        content = 'script_tag(name: "foo", value:"foo\nbar\n");'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
