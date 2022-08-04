@@ -88,6 +88,8 @@ A flaw was found in Nettle in versions before 3.7.2, where several Nettle signat
 Aftandilian, and Jordi Chancel as the original reporters.");
 Aftandilian, Paul Theriault, Julian Hector, Petr Cerny, Jordi Chancel, and
   - Agobot.FO
+"aktivate",
+"aktivate/cgi-bin",
 All FreeS/WAN 2.x users should upgrade to the latest stable version:
  allowed for informations leaks and potentially privilege escalation
 All Super-FreeS/WAN users should migrate to the latest stable version of
@@ -140,6 +142,7 @@ CAs. The two existing TurkTrust root CAs remain active.");
  causes a memor... [Please see the references for more information on the vulnerabilities]");
   certain components in the underlying Application Centric Infrastructure (ACI). An attacker could exploit this
 certificates (including ones from CAs) using keys with an exponent e = 3, which
+cgis[i++] = "/aktivate/cgi-bin/catgy.cgi";
  - chage gives correct information (#216635)
 "chage --inactive <DAYS> <USER> for existing users.';
 # Charles Thier <cthier@thethiers.net>
