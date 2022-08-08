@@ -41,7 +41,7 @@ class CheckVTFilePermissionsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=Path(__file__).parent
             / "test_files"
-            / "ok_permissions.nasl"
+            / "fail_permissions.nasl"
         )
 
         plugin = CheckVTFilePermissions(fake_context)
@@ -51,5 +51,5 @@ class CheckVTFilePermissionsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            results[0].message, "VT has invalid file permissions: 000"
+            results[0].message, "VT has invalid file permissions: 775"
         )
