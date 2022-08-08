@@ -112,6 +112,14 @@ class CheckSpelling(FilesPlugin):
                         if re.search(r"fpr\s+==>\s+for, far, fps", line):
                             continue
 
+                    # Codespell has currently cna->can in the dictionary.txt
+                    # which is causing false positives for CNA (widely used term
+                    # in VTs) because codespell doesn't look at the casing. For
+                    # now we're excluding any uppercase "CNA" results because
+                    # these are usually false positives we don't want to report.
+                    if re.search(r"CNA\s+==>\s+CAN", line):
+                        continue
+
                     # Name of a Huawei product
                     if (
                         "gb_huawei" in line
