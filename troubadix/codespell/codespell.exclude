@@ -157,7 +157,6 @@ Claus Wahlers reported that random images from GPU memory
 cmd = 'for usr in $(cut -d: -f1 /etc/shadow); do [[ $(chage --list $usr | grep \'^Last password change\' | cut -d: -f2) > $(date) ]] && echo "$usr :$(chage --list $usr | grep \'^Last password change\' | cut -d: -f2)"; done';
 cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip saddr,ip6 saddr]\'';
 cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip sddr,ip6 sddr]\'';
-  CNA, but CVE is not intended to cover defense-in-depth issues that are
   command execution by remote attackers who have access to the ANS page.");
  Commit frame and insufficent validation of elliptic curve points
   common_files_dir_id = 'oval:org.mitre.oval:obj:281';
@@ -344,7 +343,6 @@ Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an 
   * groupd no longer allows the default fence d ...
   Grundschutz. Die detaillierte Beschreibung zu dieser Massnahme findet sich unter
     guess += '\n- Huawei TE Device';
-Guest can force Linux netback driver to hog large amounts of kernel memory [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Incoming data packets for a guest in the Linux kernel's netback driver are buffered until the guest is ready to process them. There are some measures taken for avoiding to pile up too much data, but those can be bypassed by the guest: There is a timeout how long the client side of an interface can stop consuming new packets before it is assumed to have stalled, but this timeout is rather long (60 seconds by default). Using a UDP connection on a fast interface can easily accumulate gigabytes of data in that time. (CVE-2021-28715) The timeout could even never trigger if the guest manages to have only one free slot in its RX queue ring page and the next package would require more than one free slot, which may be the case when using GSO, XDP, or software hashing.(CVE-2021-28715)
 "hanlder\n",
  have resul... [Please see the references for more information on the vulnerabilities]");
  * Heap-based buffer overflow when scanning crypted PE files
@@ -490,7 +488,6 @@ L3: conring size for XEN HV's with huge memory to small. Inital Xen logs
  leaks because of a missing check when transfering pages via
 library: Increment to 7:0:1 No changes, no removals New fuctions:
 [link moved to references] has more informations.
-Linux PV device frontends vulnerable to attacks by backends [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Several Linux PV device frontends are using the grant table interfaces for removing access rights of the backends in ways being subject to race conditions, resulting in potential data leaks, data corruption by malicious backends, and denial of service triggered by malicious backends: blkfront, netfront, scsifront and the gntalloc driver are testing whether a grant reference is still in use. If this is not the case, they assume that a following removal of the granted access will always succeed, which is not true in case the backend has mapped the granted page between those two operations. As a result the backend can keep access to the memory page of the guest no matter how the page will be used after the frontend I/O has finished. The xenbus driver has a similar problem, as it doesn't check the success of removing the granted access of a shared ring buffer. blkfront: CVE-2022-23036 netfront: CVE-2022-23037 scsifront: CVE-2022-23038 gntalloc: CVE-2022-23039 xenbus: CVE-2022-23040 blkfront, netfront, scsifront, usbfront, dmabuf, xenbus, 9p, kbdfront, and pvcalls are using a functionality to delay freeing a grant reference until it is no longer in use, but the freeing of the related data page is ... [Please see the references for more information on the vulnerabilities]");
 list to be autodetected, STAC92HD71Bx and STAC92HD75Bx based HDA
       log_message(data: build_detection_report(app: "OpenMairie Open Presse", version: version,
     log_message( port:0, data:"'Log nmap output' was set to 'yes' but 'Report about unrechable Hosts' and 'Mark unrechable Hosts as dead (not scanning)' to no. Plugin will exit without logging." );
@@ -625,7 +622,6 @@ reenable php7-dba support of Berkeley DB (bsc#1108554)");
         register_and_report_cpe( app:"Netsparker - Web Application Security Scanner", ver:netVer, base:"cpe:/a:netsparker:wass:", expr:"^([0-9.]+)", insloc:netPath );
     register_and_report_cpe(app:"Wiesemann & Theis GmbH " + appName, ver:version, concluded:concluded,
     reg_xml = '\t\t<registry_item' + status + ' xmlns="http://oval.mitre.org/' +
-** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.(CVE-2020-16598)
 Reject invalid eliptic curve point coordinates (bsc#1131291)");
  rejection for EXTRAVERSION = -xfs, but likely little else will be
   - Remote Command Execution via WAN and LAN
@@ -658,9 +654,6 @@ req = string("POST /UE/ProcessForm HTTP/1.1\r\n",
 Revert 'ipc,sem: remove uneeded sem_undo_list lock usage in exit_sem()'
   * revoke mis-issued intermediate CAs from TURKTRUST.");
 Rick Macklem, Christopher Key and Tim Zingelman reported that the
-Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28711)
-Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if a driver domain gets compromised, it doesn't have the privileges to take over the system. However, a malicious driver domain could try to attack other guests via sending events at a high frequency leading to a Denial of Service in the guest due to trying to service interrupts for elongated amounts of time. There are three affected backends: * blkfront patch 1, CVE-2021-28711 * netfront patch 2, CVE-2021-28712 * hvc_xen (console) patch 3, CVE-2021-28713(CVE-2021-28713)
-Rogue backends can cause DoS of guests via high frequency events [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Xen offers the ability to run PV backends in regular unprivileged guests, typically referred to as 'driver domains'. Running PV backends in driver domains has one primary security advantage: if ... [Please see the references for more information on the vulnerabilities]");
 root CAs when using an https connection.
   Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers version 1.0.02.16 and earlier");
  (R) processor graphics whichs may have allowed an authenticated user to
@@ -673,8 +666,6 @@ RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remot
  + S8048147: Privilege tests with JAAS Subject.doAs
  - S8168724, CVE-2016-5549: ECDSA signing improvments
  - S8168728, CVE-2016-5548: DSA signing improvments
-same vulnerability as CVE-2012-3455, but it was SPLIT by the CNA even
-same vulnerability as CVE-2012-3456, but it was SPLIT by the CNA even
 SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_add_preference(name:"Delete hash test Programm after the test", type:"checkbox", value:"yes", id:3);
   script_add_preference(name:"Install hash test Programm on the Target", type:"checkbox", value:"no", id:2);
@@ -764,7 +755,6 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Cisco TelePresence TC and TE Software are prone to
   script_tag(name:"insight", value:"_core_/plugins/medias in SPIP allows remote authenticated authors to inject
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
-  script_tag(name:"insight", value:"Guest can force Linux netback driver to hog large amounts of kernel memory [This CNA information record relates to multiple CVEs, the text explains which aspects/vulnerabilities correspond to which CVE.] Incoming data packets for a guest in the Linux kernel's netback driver are buffered until the guest is ready to process them. There are some measures taken for avoiding to pile up too much data, but those can be bypassed by the guest: There is a timeout how long the client side of an interface can stop consuming new packets before it is assumed to have stalled, but this timeout is rather long (60 seconds by default). Using a UDP connection on a fast interface can easily accumulate gigabytes of data in that time. (CVE-2021-28715) The timeout could even never trigger if the guest manages to have only one free slot in its RX queue ring page and the next package would require more than one free slot, which may be the case when using GSO, XDP, or software hashing.(CVE-2021-28714)
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered that
@@ -779,7 +769,6 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in nd, a command-line WebDAV interface, whereby long strings received from the remote server could overflow fixed-length buffers. This vulnerability could be exploited by a remote attacker in control of a malicious WebDAV server to execute arbitrary code if the server was accessed by a vulnerable version of nd.
   script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in the dissectors for the MS-MMS, RTPS, RTPS2, Mount, ACN, CIMD and DTLS protocols, which could result in denial of service or the execution of arbitrary code.
   script_tag(name:"insight", value:"Ning Zhang & Amin Tora discovered that the mod_dav module
-  script_tag(name:"insight", value:"** REJECT ** DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Notes: none.(CVE-2021-20095)");
   script_tag(name:"insight", value:"Robert Merget, Marcus Brinkmann, Nimrod Aviram, and Juraj Somorovsky
   script_tag(name:"insight", value:"Several vulnerabilities have been discovered in phpCAS, a CAS client
   script_tag(name:"insight", value:"Simo Sorce discovered that a NULL pointer dereference existed in
