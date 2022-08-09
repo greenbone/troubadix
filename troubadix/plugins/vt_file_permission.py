@@ -31,7 +31,7 @@ class CheckVTFilePermissions(FilePlugin):
 
         permissions = oct(self.context.nasl_file.stat().st_mode)[-3:]
 
-        if permissions != "664":
+        if permissions != "644":
             yield LinterError(
                 f"VT has invalid file permissions: {permissions}",
                 file=self.context.nasl_file,

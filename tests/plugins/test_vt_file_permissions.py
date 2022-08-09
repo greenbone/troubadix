@@ -51,5 +51,5 @@ class CheckVTFilePermissionsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            results[0].message, "VT has invalid file permissions: 775"
+            results[0].message, "VT has invalid file permissions: 755"
         )
