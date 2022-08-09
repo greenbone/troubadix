@@ -33,7 +33,9 @@ class CheckVTFilePermissions(FilePlugin):
 
         if permissions != "644":
             yield LinterError(
-                f"VT has invalid file permissions: {permissions}",
+                f"VT has invalid file permissions: {permissions}.\n"
+                "NASL scripts must not be executable and are required "
+                "to have the file permission '644'",
                 file=self.context.nasl_file,
                 plugin=self.name,
             )
