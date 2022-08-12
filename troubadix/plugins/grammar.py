@@ -35,8 +35,10 @@ def get_grammer_pattern() -> re.Pattern:
         r"vulnerabilit(y|ies)\s+vulnerabilit(y|ies)|"
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
-        r"this\s+vulnerabilities|"
-        r"these\s+vulnerability|"
+        # e.g. "this flaws"
+        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature)s)|"
+        # e.g. "these flaw "
+        r"these\s+(vulnerability|(flaw|error|problem|issue|feature)\s+)|"
         r"\s+or\s+not\.?(\"\);)?$|"
         r"from(\s+the)?(\s+below)?mentioned\s+References?\s+link|"
         r"software\s+it\s+fail|"
@@ -169,6 +171,10 @@ class CheckGrammar(FilePlugin):
             "Harald Welte discovered that if a process issues a "
             "USB Request Block (URB)" in match
         ):
+            return True
+
+        # Valid sentences
+        if re.search(r"these\s+error\s+(messages|reports)", match):
             return True
 
         return False
