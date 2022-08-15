@@ -174,7 +174,7 @@ class CheckGrammar(FilePlugin):
             return True
 
         # Valid sentences
-        if re.search(r"these\s+error\s+(messages|reports)", match):
+        if re.search(r"these\s+error\s+(messages|reports|conditions)", match):
             return True
 
         return False
