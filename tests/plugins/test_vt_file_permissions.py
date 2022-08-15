@@ -52,7 +52,8 @@ class CheckVTFilePermissionsTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             results[0].message,
-            "VT has invalid file permissions: 755.\n"
-            "NASL scripts must not be executable and are required "
-            "to have the file permission '644'",
+            "VT has invalid file permissions: -rwxr-xr-x.\n"
+            "NASL scripts must not be executable.\n"
+            "Typical file permissions are '644' (-rw-r--r-) "
+            "and `664` (-rw-rw-r-)",
         )

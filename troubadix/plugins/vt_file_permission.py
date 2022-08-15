@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from stat import filemode
 from typing import Iterator
 
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
@@ -29,13 +30,14 @@ class CheckVTFilePermissions(FilePlugin):
 
     def run(self) -> Iterator[LinterResult]:
 
-        permissions = oct(self.context.nasl_file.stat().st_mode)[-3:]
+        permissions = filemode(self.context.nasl_file.stat().st_mode)
 
-        if permissions != "644":
+        if "x" in permissions:
             yield LinterError(
                 f"VT has invalid file permissions: {permissions}.\n"
-                "NASL scripts must not be executable and are required "
-                "to have the file permission '644'",
+                "NASL scripts must not be executable.\n"
+                "Typical file permissions are '644' (-rw-r--r-) "
+                "and `664` (-rw-rw-r-)",
                 file=self.context.nasl_file,
                 plugin=self.name,
             )
