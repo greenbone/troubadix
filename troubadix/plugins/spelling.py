@@ -235,7 +235,7 @@ class CheckSpelling(FilesPlugin):
 
                     codespell += line + "\n"
 
-            for codespell_entry in codespell.split("\n"):
+            for codespell_entry in codespell.splitlines():
                 if "==>" in codespell:
                     yield LinterError(
                         codespell_entry,
