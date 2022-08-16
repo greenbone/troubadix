@@ -26,6 +26,7 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 VALID_FAMILIES = [
     "AIX Local Security Checks",
+    "Alma Linux Local Security Checks",
     "Amazon Linux Local Security Checks",
     "Brute force attacks",
     "Buffer overflow",
