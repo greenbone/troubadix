@@ -312,6 +312,16 @@ class CheckValidOID(FileContentPlugin):
                     )
                     return
 
+            elif vendor_number == "15":
+                if family != f"Alma Linux {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} Alma Linux "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
             else:
                 yield LinterError(
                     f"script_oid() {invalid_oid} '{str(oid)}' (Vendor OID "
