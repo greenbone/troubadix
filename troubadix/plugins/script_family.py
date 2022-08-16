@@ -88,7 +88,6 @@ VALID_FAMILIES = [
     "Web application abuses",
     "Windows",
     "Windows : Microsoft Bulletins",
-    "Alma Linux Local Security Checks",
 ]
 
 
