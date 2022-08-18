@@ -102,6 +102,7 @@ and all recent Fedora versions (which is almost all current versions of sysstat 
   and CVE-2013-1667. Upstream acknowledges Tim Brown as the original
   - An error in the epan/dissectors/packet-dof.c script within the DOF dissector
 An input validation issue was addressed with improved memory handling. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to read restricted memory.(CVE-2020-10001)");
+An issue was discovered in Linux: KVM through Improper handling of VM_IO<pipe>VM_PFNMAP vmas in KVM can bypass RO checks and can lead to pages being freed while still accessible by the VMM and guest. This allows users with the ability to start and control a VM to read/write random pages of memory and can result in local privilege escalation.(CVE-2021-22543)
 Application Centric Infrastructure (ACI) could allow an unauthenticated, adjacent attacker to cause a denial of
   Application Centric Infrastructure (ACI) mode could allow an authenticated, local attacker to
   Application Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to
@@ -745,6 +746,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Adrian Pastor and Tim Starling discovered that the CUPS web interface
   script_tag(name:"insight", value:"A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)
   script_tag(name:"insight", value:"A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)");
+  script_tag(name:"insight", value:"A flaw was found in the vhost library in DPDK. Function vhost_user_set_inflight_fd() does not validate `msg->payload.inflight.num_queues`, possibly causing out-of-bounds memory read/write. Any software using DPDK vhost library may crash as a result of this vulnerability.(CVE-2021-3839)
   script_tag(name:"insight", value:"An external control of filename vulnerability in the SD WAN component of Palo
   script_tag(name:"insight", value:"An input validation issue was addressed with improved memory handling. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to read restricted memory.(CVE-2020-10001)");
   script_tag(name:"insight", value:"A security feature bypass exists in Azure SSH Keypairs, due to a change in the provisioning logic for some Linux images that use cloud-init, aka 'Azure SSH Keypairs Security Feature Bypass Vulnerability'.(CVE-2019-0816)");
@@ -940,6 +942,7 @@ specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series E
 Stephen Mc Guiness discovered empty passwords could be entered in some circumstances.
 string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
   subnet to the Cisco Nexus 9000 Series Switch in ACI mode.");
+- SUNRPC: Fix READ_PLUS crasher (Chuck Lever)
 supply input to this crate, they could have caused a denial of service in the
   supporting the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.");
  support was already present, but it was not enforcable).");
@@ -966,6 +969,7 @@ TCP 9871 Theef.B
 ## TE and CE affected but pattern coming like this only
 ##TE and CE affected but pattern coming like this only
   "TE: deflate,gzip;q=0.3\r\n",
+       ("<!-- Temperatur Speicher" >< res3 && "<!-- Vorlauftemperatur" >< res3)) {
  * The ACN dissector could attempt to divide by zero.
   the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.
 The Binary File Descriptor (BFD) library (aka libbfd), as distributed in GNU Binutils 2.28, is vulnerable to a global buffer over-read error because of an assumption made by code that runs for objcopy and strip, that SHT_REL/SHR_RELA sections are always named starting with a .rel/.rela prefix. This vulnerability causes programs that conduct an analysis of binary programs using the libbfd library, such as objcopy and strip, to crash.(CVE-2017-8393)

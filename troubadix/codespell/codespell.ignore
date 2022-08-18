@@ -8,5 +8,6 @@ keypairs
 files'
 packages'
 process'
-# covert is currently included in dictionary_rare.txt and prone to false positives
+# covert and complies are currently included in dictionary_rare.txt and are prone to false positives
 covert
+complies
