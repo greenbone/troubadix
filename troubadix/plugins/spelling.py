@@ -117,7 +117,11 @@ class CheckSpelling(FilesPlugin):
                     # in VTs) because codespell doesn't look at the casing. For
                     # now we're excluding any uppercase "CNA" results because
                     # these are usually false positives we don't want to report.
-                    if re.search(r"CNA\s+==>\s+CAN", line):
+                    # Similar with "RO" because that is also very likely a false
+                    # positive.
+                    if re.search(r"CNA\s+==>\s+CAN", line) or re.search(
+                        r"RO\s+==>\s+TO", line
+                    ):
                         continue
 
                     # Name of a Huawei product
@@ -171,6 +175,18 @@ class CheckSpelling(FilesPlugin):
                         or "attic/PCIDSS_" in line
                     ):
                         if re.search(r"n[iI]n\s+==>\s+inn", line):
+                            continue
+
+                    # False positives in the GSHB/ and ITG_Kompendium/ VTs on
+                    # bsi.bund.de URLs.
+                    if (
+                        "GSHB/" in line
+                        or "ITG_Kompendium/" in line
+                        or "Policy/gb_policy_cipher_suites.nasl" in line
+                        or "Policy/policy_BSI-TR-03116-4.nasl" in line
+                        or "2012/gb_secpod_ssl_ciphers_weak_report.nasl" in line
+                    ):
+                        if re.search(r"bund\s+==>\s+bind", line):
                             continue
 
                     # False positive in this VT in German example responses.
