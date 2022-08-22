@@ -16,11 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import Iterator, Union
+from typing import Iterator, List
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import get_common_tag_patterns
-from troubadix.plugin import FilePlugin, LinterError, LinterFix, LinterResult
+from troubadix.plugin import (
+    FilePlugin,
+    LinterError,
+    LinterFix,
+    LinterResult,
+    LinterWarning,
+)
 
 # import magic
 
@@ -30,27 +36,60 @@ from troubadix.plugin import FilePlugin, LinterError, LinterFix, LinterResult
 # | =               are delimiter in the internal VT cache
 #                   (e.g. Tag1=Foo|Tag2=Bar|Tag3=Baz)
 #                   in all script_tag(name:"", value:"")
-FORBIDDEN_CHARS = ["|", "=", ";"]
+FORBIDDEN_CHARS = ["|", ";"]
+WARNING_CHARS = ["="]
 
 # replacement character will be a whitespace
 REPLACE_CHAR = " "
 
 
-def check_match(match: re.Match) -> Union[str, None]:
-    """Replace all FORBIDDEN characters with the replace character defined.
+def check_forbidden(match: re.match) -> List[str]:
+    """Check the given tag for forbidden characters
+
+    Args:
+        match (re.match): The tag to check
+
     Returns:
-        The fixed string or None"""
-    if match and match.group("value") is not None:
-        changes: bool = False
-        line: str = match.group(0)
-        value: str = match.group("value")
-        for char in FORBIDDEN_CHARS:
-            if char in value:
-                changes = True
-                value = value.replace(char, REPLACE_CHAR)
-        if changes:
-            return line.replace(match.group("value"), value)
-    return None
+        List[str]: The list of forbidden characters that were found
+    """
+    return [
+        f"'{char}'" for char in FORBIDDEN_CHARS if char in match.group("value")
+    ]
+
+
+def fix_forbidden(
+    match: re.Match, found_forbidden_characters: List[str]
+) -> str:
+    """Returns the fixed version of the tag with
+       the forbidden characters replaced
+
+    Args:
+        match (re.Match): The tag containing forbidden characters
+        found_forbidden_characters (List[str]): The list of forbidden
+                                                characters found
+
+    Returns:
+        str: The sanitized tag
+    """
+    line: str = match.group(0)
+    value: str = match.group("value")
+    for char in found_forbidden_characters:
+        value = value.replace(char, REPLACE_CHAR)
+    return line.replace(match.group("value"), value)
+
+
+def check_warning(match: re.Match) -> List[str]:
+    """Checks the given tag for warning characters
+
+    Args:
+        match (re.Match): The tag to check
+
+    Returns:
+        List[str]: The list of warning characters found
+    """
+    return [
+        f"'{char}'" for char in WARNING_CHARS if char in match.group("value")
+    ]
 
 
 class CheckIllegalCharacters(FilePlugin):
@@ -66,22 +105,39 @@ class CheckIllegalCharacters(FilePlugin):
             return
 
         pattern = get_common_tag_patterns()
-        file_content = self.context.file_content
 
         self.new_file_content = None
 
-        tag_matches = pattern.finditer(file_content)
+        tag_matches = pattern.finditer(self.context.file_content)
         if tag_matches:
             for match in tag_matches:
                 if match and match.group(0) is not None:
-                    new_tag = check_match(match)
-                    if new_tag:
-                        file_content = file_content.replace(
-                            match.group(0), new_tag
+
+                    found_forbidden_characters = check_forbidden(match)
+                    if found_forbidden_characters:
+                        self.new_file_content = (
+                            self.context.file_content.replace(
+                                match.group(0),
+                                fix_forbidden(
+                                    match, found_forbidden_characters
+                                ),
+                            )
                         )
-                        self.new_file_content = file_content
+
                         yield LinterError(
-                            f"Found illegal character in {match.group(0)}",
+                            "Found illegal characters "
+                            f"[{', '.join(found_forbidden_characters)}] "
+                            f"in {match.group(0)}",
+                            file=self.context.nasl_file,
+                            plugin=self.name,
+                        )
+
+                    found_warning_characters = check_warning(match)
+                    if found_warning_characters:
+                        yield LinterWarning(
+                            "Found characters "
+                            f"[{', '.join(found_warning_characters)}] "
+                            f"in {match.group(0)}",
                             file=self.context.nasl_file,
                             plugin=self.name,
                         )
