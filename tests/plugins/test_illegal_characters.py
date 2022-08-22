@@ -17,7 +17,7 @@
 
 from pathlib import Path
 
-from troubadix.plugin import LinterWarning
+from troubadix.plugin import LinterError, LinterWarning
 from troubadix.plugins.illegal_characters import CheckIllegalCharacters
 
 from . import PluginTestCase
@@ -75,10 +75,17 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
 
             results = list(plugin.run())
 
-            self.assertEqual(len(results), 1)
-            self.assertIsInstance(results[0], LinterWarning)
+            self.assertEqual(len(results), 2)
+            self.assertIsInstance(results[0], LinterError)
+            self.assertIsInstance(results[1], LinterWarning)
             self.assertEqual(
                 results[0].message,
-                f'Found illegal character in script_tag(name:"{tag}", '
+                f"Found illegal characters ['|', ';'] "
+                f'in script_tag(name:"{tag}", '
+                'value:"Foo|Bar;Baz=Bad.");',
+            )
+            self.assertEqual(
+                results[1].message,
+                f"Found characters ['='] in script_tag(name:\"{tag}\", "
                 'value:"Foo|Bar;Baz=Bad.");',
             )
