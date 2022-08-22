@@ -143,6 +143,7 @@ CAs. The two existing TurkTrust root CAs remain active.");
  causes a memor... [Please see the references for more information on the vulnerabilities]");
   certain components in the underlying Application Centric Infrastructure (ACI). An attacker could exploit this
 certificates (including ones from CAs) using keys with an exponent e = 3, which
+"cgi-bin/fom",
 cgis[i++] = "/aktivate/cgi-bin/catgy.cgi";
  - chage gives correct information (#216635)
 "chage --inactive <DAYS> <USER> for existing users.';
@@ -402,6 +403,7 @@ if( "Login successed" >< recv ) {
 if( ( model =~ '^RP200' || model =~ '^TE[3456]0' ) && revcomp( a: version, b: "v600r006c00spc500" ) < 0) {
 if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 ) {
   if (mountd =~ 'program 100005 version . ready and waiting' || mountd =~ 'Program 100005 Version . ist bereit und wartet') mountd = "true";
+  if( "NAM application image" >< show_ver )
   if (nfsd =~ 'program 100003 version . ready and waiting' || nfsd =~ 'Program 100003 Version . ist bereit und wartet') nfsd = "true";
                     if "nvd.nist.gov/vuln/detail/CVE-" in match.group(2) or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-" in match.group(2):
   if ("presse" >< res1) {
