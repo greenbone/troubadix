@@ -20,7 +20,7 @@ from typing import Iterator, Union
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import get_common_tag_patterns
-from troubadix.plugin import FilePlugin, LinterFix, LinterResult, LinterWarning
+from troubadix.plugin import FilePlugin, LinterError, LinterFix, LinterResult
 
 # import magic
 
@@ -80,7 +80,7 @@ class CheckIllegalCharacters(FilePlugin):
                             match.group(0), new_tag
                         )
                         self.new_file_content = file_content
-                        yield LinterWarning(
+                        yield LinterError(
                             f"Found illegal character in {match.group(0)}",
                             file=self.context.nasl_file,
                             plugin=self.name,
