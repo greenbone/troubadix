@@ -71,9 +71,13 @@ class CheckSpellingTestCase(PluginTestCase):
 
         codespell_additions.unlink()
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"{nasl_file}:2: upated ==> updated",
+            f"{nasl_file}:1: soltuion ==> solution",
             results[0].message,
+        )
+        self.assertEqual(
+            f"{nasl_file}:2: upated ==> updated",
+            results[1].message,
         )
