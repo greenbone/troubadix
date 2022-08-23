@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "troubadix"
-version = "22.8.8.dev1"
+version = "22.8.8"
 description = "A linting and QA check tool for NASL files"
 authors = ["Greenbone <info@greenbone.net>"]
 license = "GPL-3.0-or-later"
