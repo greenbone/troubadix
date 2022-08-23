@@ -75,17 +75,53 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
 
             results = list(plugin.run())
 
-            self.assertEqual(len(results), 2)
+            self.assertEqual(len(results), 3)
             self.assertIsInstance(results[0], LinterError)
-            self.assertIsInstance(results[1], LinterWarning)
+            self.assertIsInstance(results[1], LinterError)
+            self.assertIsInstance(results[2], LinterWarning)
             self.assertEqual(
                 results[0].message,
-                f"Found illegal characters ['|', ';'] "
+                f"Found illegal character '|' "
                 f'in script_tag(name:"{tag}", '
                 'value:"Foo|Bar;Baz=Bad.");',
             )
             self.assertEqual(
                 results[1].message,
-                f"Found characters ['='] in script_tag(name:\"{tag}\", "
+                f"Found illegal character ';' "
+                f'in script_tag(name:"{tag}", '
                 'value:"Foo|Bar;Baz=Bad.");',
             )
+            self.assertEqual(
+                results[2].message,
+                f"Found illegal character '=' "
+                f'in script_tag(name:"{tag}", '
+                'value:"Foo|Bar;Baz=Bad.");',
+            )
+
+    def test_fix_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo | Bar ; Baz = Test");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckIllegalCharacters(fake_context)
+
+        results = list(plugin.run())
+
+        fixed_content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo <pipe> Bar , Baz = Test");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+        )
+
+        self.assertEqual(len(results), 3)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[1], LinterError)
+        self.assertIsInstance(results[2], LinterWarning)
+        self.assertEqual(plugin.new_file_content, fixed_content)
