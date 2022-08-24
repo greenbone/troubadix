@@ -15,10 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import re
 import subprocess
 import sys
-import os
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterable
@@ -126,7 +126,8 @@ def check_oid(args: Namespace) -> bool:
                 f"rare cases (e.g. a duplicate OID got fixed or a single VT "
                 f"was split into two VTs)."
                 f"\nOID NEW: {oid_added.group('oid')}"
-                f"\nOID OLD: {oid_removed.group('oid')}"
+                f"\nOID OLD: {oid_removed.group('oid')}",
+                file=sys.stderr,
             )
             rcode = True
     return rcode
