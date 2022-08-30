@@ -160,6 +160,7 @@ Claus Wahlers reported that random images from GPU memory
   Clemens Huebner and Kevin Stange discovered that Pidgin incorrectly handled
 "cliente",
 cmd = 'for usr in $(cut -d: -f1 /etc/shadow); do [[ $(chage --list $usr | grep \'^Last password change\' | cut -d: -f2) > $(date) ]] && echo "$usr :$(chage --list $usr | grep \'^Last password change\' | cut -d: -f2)"; done';
+cmd = "mount | grep -w ro";
 cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip saddr,ip6 saddr]\'';
 cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip sddr,ip6 sddr]\'';
   command execution by remote attackers who have access to the ANS page.");
@@ -394,6 +395,7 @@ if(http_vuln_check(port:port, url:url, pattern:"Current Configuration", extra_ch
 if (http_vuln_check(port: port, url: url, pattern: "<title>WAN Setup", check_header: TRUE)) {
   if( "Huawei TE" >< banner ) {
   if( ! iif || ! ip || ! ip6 ) {
+    if(in_array(search:"ro", array:options_list)){
 if(!isnull(res = isdpkgvuln(pkg:"nd", ver:"0.5.0-1woody1", rls:"DEB3.0"))) {
   if(!isnull(res = isrpmvuln(pkg:"libell", rpm:"libell~0.26~1.fc31", rls:"FC31"))) {
 if( "Login successed" >< recv ) {
@@ -928,6 +930,7 @@ sndReq = http_get(item:"/olt/Login.do", port:oatPort);
   sndReq = http_get(item:string(dir , "/doc/catalogue.html"), port:openPort);
   sndReq = http_get(item:string(dir, "/LiveTime/WebObjects/LiveTime.woa"), port:novPort);
   # SNPP, HylaFAX FTP, HylaFAX SPP, agobot.fo, IRC bots, WinSock server,
+solution = "mount -o remount,ro PARTITION";
  * some OSCP improvments
 Soyeon Park and Wen Xu discovered a type error in the v8 javascript
 Soyeon Park and Wen Xu discovered memory corruption issues that

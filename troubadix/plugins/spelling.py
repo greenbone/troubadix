@@ -249,6 +249,16 @@ class CheckSpelling(FilesPlugin):
                         ):
                             continue
 
+                    # "Unsecure" is used in the references so we shouldn't
+                    # change that.
+                    if (
+                        "office2013_allow_insecure_apps_catalogs.nasl" in line
+                        or "gb_sap_rfc_default_pw.nasl" in line
+                        or "gb_sap_webgui_default_pw.nasl" in line
+                    ):
+                        if re.search(r"[Uu]nsecure\s+==>\s+[Ii]nsecure", line):
+                            continue
+
                     codespell += line + "\n"
 
             for codespell_entry in codespell.splitlines():
