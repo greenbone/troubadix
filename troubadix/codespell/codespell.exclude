@@ -195,6 +195,8 @@ Create all system-defined macros defore processing command-line given
   csd_version_id = 'oval:org.mitre.oval:obj:717';
     csrsrv_file_id = 'oval:org.mitre.oval:obj:2045';
     csrsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
+  - Ctdb: open the ro tracking db with perms 0600 instead of 0000
+- Ctdb: open the ro tracking db with perms 0600 instead of 0000,
   CVE-2008-4210: When creating a file, open()/creat() allowed the setgid
 CVE-2009-3985: Jordi Chanel discovered a spoofing vulnerability of the URL location bar using the document.location property.
  CVE-2011-2928: The befs_follow_linkl function in fs/befs/linuxvfs.c in the Linux kernel did not validate the lenght attribute of long symlinsk, which allowed local users to cause a denial of service (incorrect pointer dereference and Ooops) by accessing a long symlink on a malformed Be filesystem.
@@ -763,6 +765,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Calle Dybedahl discovered a bug in lyskom-server which could result in a denial of service where an unauthenticated user could cause the server to become unresponsive as it processes a large query.
   script_tag(name:"insight", value:"Cisco TelePresence TC and TE Software are prone to
   script_tag(name:"insight", value:"_core_/plugins/medias in SPIP allows remote authenticated authors to inject
+  script_tag(name:"insight", value:"Erik Sjoelund discovered that a race condition in the stap tool shipped by Systemtap, an instrumentation system for Linux 2.6, allows local privilege escalation for members of the stapusr group.
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered
