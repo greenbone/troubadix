@@ -177,4 +177,8 @@ class CheckGrammar(FilePlugin):
         if re.search(r"these\s+error\s+(messages|reports|conditions)", match):
             return True
 
+        # From several Ubuntu LSCs, e.g. 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
+        if "An attacker with access to at least one LUN in a multiple" in match:
+            return True
+
         return False
