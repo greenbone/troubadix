@@ -36,9 +36,9 @@ def get_grammer_pattern() -> re.Pattern:
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
         # e.g. "this flaws"
-        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature)s)|"
+        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file)s)|"
         # e.g. "these flaw "
-        r"these\s+(vulnerability|(flaw|error|problem|issue|feature)\s+)|"
+        r"these\s+(vulnerability|(flaw|error|problem|issue|feature|file)\s+)|"
         r"\s+or\s+not\.?(\"\);)?$|"
         r"from(\s+the)?(\s+below)?mentioned\s+References?\s+link|"
         r"software\s+it\s+fail|"
@@ -155,6 +155,13 @@ class CheckGrammar(FilePlugin):
 
         # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
         if re.search(r'(\s+|")[Aa]\s+multiple\s+of', match):
+            return True
+
+        # Like seen in e.g. 2022/suse/gb_sles_2022_3198_1.nasl and similar to
+        # the above. As we're currently not using re.IGNORECASE in the initial
+        # regex the previous wasn't able to catch this because the "of" was
+        # placed in the next line.
+        if "is a multiple" in match:
             return True
 
         # Like seen in 2022/debian/deb_dla_2981.nasl
