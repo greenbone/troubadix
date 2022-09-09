@@ -100,6 +100,7 @@ ALS... [Please see the references for more information on the vulnerabilities]")
   An attacker could use this to cause a denial of service. (CVE-2016-4429) Tim
 and all recent Fedora versions (which is almost all current versions of sysstat verified). o Added a number of additional metrics into the importer for people starting to use it to analyse sar data from real customer incidents. o Rework use of C99 'restrict' keyword in pmdalogger (Debian bug: 689552) o Alot of work on the PCP QA suite, special thanks to Tomas Dohnalek for all his efforts there. o Win32 build updates o Add 'raw' disk active metrics so that existing tools like iostat can be emulated o Allow sar2pcp to accept XML input directly (.xml suffix), allowing it to not have to run on the same platform as the sadc/sadf that originally generated it. o Add PMI error codes into the PCP::LogImport perl module. o Fix a typo in pmiUnits man page synopsis section o Resolve pmdalinux ordering issue in NUMA/CPU indom setup (Redhat bug: 858384) o Remove unused pmcollectl imports (Redhat bug: 863210) o Allow event traces to be used in libpcp interpolate mode
   and CVE-2013-1667. Upstream acknowledges Tim Brown as the original
+Andrey Kulikov discovered that the GOST block cipher engine in OpenSSL
   - An error in the epan/dissectors/packet-dof.c script within the DOF dissector
 An input validation issue was addressed with improved memory handling. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to read restricted memory.(CVE-2020-10001)");
 An issue was discovered in Linux: KVM through Improper handling of VM_IO<pipe>VM_PFNMAP vmas in KVM can bypass RO checks and can lead to pages being freed while still accessible by the VMM and guest. This allows users with the ability to start and control a VM to read/write random pages of memory and can result in local privilege escalation.(CVE-2021-22543)
@@ -158,6 +159,8 @@ Christian Loos discovered a remote denial of service vulnerability,
 Claus Jorgensen reported that a text input box can be pre-filled with a filename and then turned into a file-upload control, allowing a malicious website to steal any local file whose name they can guess. [MFSA-2006-23]
 Claus Wahlers reported that random images from GPU memory
   Clemens Huebner and Kevin Stange discovered that Pidgin incorrectly handled
+               clen +
+  clen = data_len( data:_ciphers );
 "cliente",
 cmd = 'for usr in $(cut -d: -f1 /etc/shadow); do [[ $(chage --list $usr | grep \'^Last password change\' | cut -d: -f2) > $(date) ]] && echo "$usr :$(chage --list $usr | grep \'^Last password change\' | cut -d: -f2)"; done';
 cmd = "mount | grep -w ro";
@@ -257,7 +260,9 @@ CVE-2020-5208: Fixed multiple remote code executtion vulnerabilities
 CVE-2020-8492: Fixed a regular expression in urrlib that was prone to
 CVE-2021-30004: Fixed an issue where forging attacks might have occured
   David Bloom and Jordi Chancel discovered that Firefox did not always
+David Bloom and Jordi Chancel discovered that Firefox did not always
   David Bloom and Jordi Chancel discovered that Thunderbird did not always
+David Bloom and Jordi Chancel discovered that Thunderbird did not always
 David Miller and Jan Lieskovsky discovered issues with the virtual address range checking of mmaped regions on the sparc architecture that may be exploited by local users to cause a denial of service.
 David Watson reported an issue in the open()/creat() system calls
 David Watson reported an issue in the open()/creat() system calls which, under certain conditions, can be exploited by local users to obtain the privileges of a group for which they are not a member.
@@ -354,6 +359,7 @@ Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an 
 "hanlder\n",
  have resul... [Please see the references for more information on the vulnerabilities]");
  * Heap-based buffer overflow when scanning crypted PE files
+  hello_data += clen + _ciphers;
 "H", "HSI",
   - HP Helion Eucalyptus does not correctly check IAM user's permissions for accessing versioned objects and ACLs.
     hp_printer['login_success'] = '<?hp te.includeSubPage';
@@ -390,7 +396,6 @@ if( found = egrep( string:dir_recv, pattern:"^(c:\\te?mp|/var/spool/cron|/etc/cr
     if( fpr[0] == "[" ) {
     if (fstab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  fstab =~ ".*No such file or directory.*") cryptdisks = "none";
 if (fstab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  fstab =~ ".*No such file or directory.*") fstab = "none";
-  if("^HTTP/1\.[01] 200" >< rcvRes && eregmatch(pattern:"IST [0-9]+", string:rcvRes)){
 if(http_vuln_check(port:port, url:'/hag/pages/toolbox.htm',pattern:"<title>Advanced Setup", extra_check:make_list("WAN Configuration","ADSL Status"))) {
 if(http_vuln_check(port:port, url:url, pattern:"Current Configuration", extra_check:make_list("System Description","System Software Version","network parms"))) {
   if(http_vuln_check(port:port, url:url, pattern:"Password found\. Loging in\.\.\.<script>")) {
@@ -469,25 +474,39 @@ item = "EnableTranscripting";
   it was added support for Cirrus Logic CS420x HDA codec, Wacom driver
 It was discovered that a buffer overflow in IFF ILBM image parsing
 It was discovered that the HSA Linux kernel driver for AMD GPU devices did
+It was discovered that the PEAK-System Technik USB driver in the Linux
   It was discovered that the SBNI WAN driver did not correctly check for the
 It was found that 389 Directory Server was vulnerable to a flaw in which the default ACI (Access Control Instructions) could be read by an anonymous user. This could lead to leakage of sensitive information.
 It was found that if a Non-Maskable Interrupt (NMI) occurred immediately after a SYSCALL call or before a SYSRET call with the user RSP pointing to the NMI IST stack, the kernel could skip that NMI.(CVE-2015-3291)
+ James Troup discovered that snap did not properly manage the permissions for
   James web admin endpoints to a public WAN (Internet) / public LAN without authentication.");
+Jan-Ivar Bruaroey, Jesse Ruderman, Markus Stange, Olli Pettay, Ehsan
  javax/security/auth/Subject/doAs/NestedActions.java fails if extra
 "jave",
 Jesse Hertz and Tim Newsham discovered that the Linux netfilter
   Jordi Chancel discovered a buffer overflow in the JPEG decoding engine. An
+ Jordi Chancel discovered a buffer overflow in the JPEG decoding engine. An
+Jordi Chancel discovered a buffer overflow in the JPEG decoding engine. An
 Jordi Chancel discovered an address spoofing issue.
   Jordi Chancel discovered a vulnerability on multipart/x-mixed-replace
+ Jordi Chancel discovered a vulnerability on multipart/x-mixed-replace
+Jordi Chancel discovered a vulnerability on multipart/x-mixed-replace
+Jordi Chancel discovered a way to use a persistent menu within a <select>
 Jordi Chancel discovered a way to use a persistent menu within a select
   Jordi Chancel discovered that Firefox did not properly display invalid URLs
+ Jordi Chancel discovered that Firefox did not properly display invalid URLs
 Jordi Chancel discovered that Firefox did not properly display invalid URLs
   Jordi Chancel discovered that Firefox did not properly handle when a server
+ Jordi Chancel discovered that Firefox did not properly handle when a server
+Jordi Chancel discovered that Firefox did not properly handle when a server
 Jordi Chancel discovered that HTML select elements could display arbitrary
+ Jordi Chancel discovered that the downloads dialog did not implement a
 Jordi Chancel discovered that the downloads dialog did not implement a
 Jordi Chancel discovered that the location could be spoofed to
 Jordi Chancel discovered that the location could be spoofed to appear like a secured page.
   Jordi Chancel, Eddy Bordi, and Chris McGowen discovered that Firefox
+ Jordi Chancel, Eddy Bordi, and Chris McGowen discovered that Firefox
+Jordi Chancel, Eddy Bordi, and Chris McGowen discovered that Firefox
 Jordi Chanel discovered a spoofing vulnerability of the URL location bar
 Jouni Knuutinen from Synopsys discovered flaws in the Samba DCE-RPC
     key = "HostDetails/Cert/" + fpr + "/";
@@ -499,6 +518,8 @@ L3: conring size for XEN HV's with huge memory to small. Inital Xen logs
 library: Increment to 7:0:1 No changes, no removals New fuctions:
 [link moved to references] has more informations.
 list to be autodetected, STAC92HD71Bx and STAC92HD75Bx based HDA
+  local_var _ciphers, _cipher, clen, time, _random, hello_data, ec_type, default_extension, tls_kb_vers, hde, hde_len, hdlen, data, hello_len, hello;
+  local_var version, type, _ciphers, _cipher, clen, sessionid_len, challenge, challenge_len, hello_data, hd_len, hello;
       log_message(data: build_detection_report(app: "OpenMairie Open Presse", version: version,
     log_message( port:0, data:"'Log nmap output' was set to 'yes' but 'Report about unrechable Hosts' and 'Mark unrechable Hosts as dead (not scanning)' to no. Plugin will exit without logging." );
   log_message( port:port, data:"A Conexant configuration interface is running on this port" );
@@ -587,6 +608,7 @@ Ohter bug fixes:
 Openswan. Note that Portage will force a move for Super-FreeS/WAN users to
 or CAS service provider is enable and the administrator has chosen to store
 or potentially have unspecified futher impact.
+  os_register_and_report( os:"Cisco NAM", cpe:"cpe:/o:cisco:prime_network_analysis_module_firmware", banner_type:BANNER_TYPE, port:port, proto:"udp", banner:sysdesc, desc:SCRIPT_DESC, runs_key:"unixoide" );
                'oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#linux linux-system-characteristics-schema.xsd">\n\n' );
                        '//oval.mitre.org/XMLSchema/oval-system-characteristi' +
                'oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 ',
@@ -641,6 +663,7 @@ Reject invalid eliptic curve point coordinates (bsc#1131291)");
 	Remove reference to cve.mitre.org from insight tag.
 report_dead = script_get_preference( "Report about unrechable Hosts", id:6 );
  Reported by Aurelien Delaitre (SATE 2009).
+Reported by Jesper van den Ende (Pelican Party Studios) on 2021-11-08
   reporter of CVE-2010-0542 Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
   reporter of CVE-2010-0542, Adrian 'pagvac' Pastor of GNUCITIZEN and Tim
     report = "Keiner der unter Punkt 2.2.1.2 geforderten Ciphers wurde auf dem System unter Port " + port + " gefunden.";
@@ -664,6 +687,8 @@ req = string("POST /UE/ProcessForm HTTP/1.1\r\n",
 Revert 'ipc,sem: remove uneeded sem_undo_list lock usage in exit_sem()'
   * revoke mis-issued intermediate CAs from TURKTRUST.");
 Rick Macklem, Christopher Key and Tim Zingelman reported that the
+Robert Merget discovered that OpenJDK incorrectly handled certificate messages
+Robert Merget discovered that OpenJDK incorrectly handled CertificateVerify
 root CAs when using an https connection.
   Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers version 1.0.02.16 and earlier");
  (R) processor graphics whichs may have allowed an authenticated user to
@@ -768,6 +793,8 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Erik Sjoelund discovered that a race condition in the stap tool shipped by Systemtap, an instrumentation system for Linux 2.6, allows local privilege escalation for members of the stapusr group.
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
+  script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ authentication
+  script_tag(name:"insight", value:"James Troup discovered that snap did not properly manage the permissions for
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered
   script_tag(name:"insight", value:"Jesse Hertz and Tim Newsham discovered that
   script_tag(name:"insight", value:"Juraj Somorovsky, Robert Merget, and Nimrod Aviram discovered that certain
