@@ -127,6 +127,10 @@ class CheckGrammar(FilePlugin):
         if "an attackers choise" in match:
             return True
 
+        # nb: The regex to catch "this files" might catch this wrongly...
+        if "this filesystem" in match:
+            return True
+
         if (
             "2012/gb_VMSA-2010-0007.nasl" in nasl_file
             and "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
