@@ -161,7 +161,7 @@ class CheckGrammar(FilePlugin):
             else:
                 raise NotImplementedError(
                     "Invalid type for known_fps entry. "
-                    "Valid types: str, re.Pattern, Tuple[str,str]"
+                    "Valid types: str, re.Pattern, Tuple[str, str]"
                 )
 
         return False
