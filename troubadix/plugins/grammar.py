@@ -108,53 +108,60 @@ class CheckGrammar(FilePlugin):
         Checks for false positives in the findings.
         """
 
-        if (
-            re.search(r"[Aa] few ", match)
-            or "a multiple keyboard " in match
-            or "A A S Application Access Server" in match
-            or "a Common Vulnerabilities and Exposures" in match
-            or "Multiple '/' Vulnerability" in match
-            or "an attackers choise" in match
-            or "multiple error handling vulnerabilities" in match
+        # List of known false positives, valid entries are:
+        # strings, regex patterns and Tuples
+        # in the format of: (filename, content)
+        known_fps = [
+            re.compile(r"[Aa] few "),
+            "a multiple keyboard ",
+            "A A S Application Access Server",
+            "a Common Vulnerabilities and Exposures",
+            "an attackers choise",
+            "multiple error handling vulnerabilities",
             # Like seen in 2022/debian/deb_dla_2981.nasl
-            or "a multiple concurrency" in match
+            "a multiple concurrency",
             # From 2008/debian/deb_1017_1.nasl
-            or "Harald Welte discovered that if a process issues a "
-            "USB Request Block (URB)" in match
+            "Harald Welte discovered that if a process issues"
+            " a USB Request Block (URB)",
             # From several Ubuntu LSCs like e.g.:
             # 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
-            or "An attacker with access to at least one LUN in a multiple"
-            in match
+            "An attacker with access to at least one LUN in a multiple",
             # nb: The regex to catch "this files" might catch this wrongly...
-            or re.search(r"th(is|ese)\s+filesystem", match)
+            re.compile(r"th(is|ese)\s+filesystem"),
             # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
-            or re.search(r'(\s+|")[Aa]\s+multiple\s+of', match)
+            re.compile(r'(\s+|")[Aa]\s+multiple\s+of'),
             # WITH can be used like e.g. the following which is valid:
             # "with WITH stack unwinding"
             # see e.g. gb_sles_2021_3215_1.nasl or gb_sles_2021_2320_1.nasl
-            or re.search(r"with\s+WITH", match)
+            re.compile(r"with\s+WITH"),
             # Valid sentences
-            or re.search(
-                r"these\s+error\s+(messages|reports|conditions)", match
-            )
-            or re.search(
-                r"these\s+file\s+(permissions|overwrites|names)", match
-            )
-        ):
-            return True
+            re.compile(r"these\s+error\s+(messages|reports|conditions)"),
+            re.compile(r"these\s+file\s+(permissions|overwrites|names)"),
+            (
+                "2012/gb_VMSA-2010-0007.nasl",
+                "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
+                "  Vulnerabilities in the",
+            ),
+            # nb: Valid sentence
+            ("gb_opensuse_2018_1900_1.nasl", "(Note that"),
+        ]
 
-        if (
-            "2012/gb_VMSA-2010-0007.nasl" in nasl_file
-            and "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
-            "  Vulnerabilities in the" in match
-        ):
-            return True
+        for known_fp in known_fps:
 
-        # nb: Valid sentence
-        if (
-            "gb_opensuse_2018_1900_1.nasl" in nasl_file
-            and "(Note that" in match
-        ):
-            return True
+            if isinstance(known_fp, re.Pattern):
+                return bool(known_fp.search(match))
+
+            elif isinstance(known_fp, str):
+                return known_fp in match
+
+            elif isinstance(known_fp, tuple):
+                (filename, content_fp) = known_fp
+                return filename in nasl_file and content_fp in match
+
+            else:
+                raise NotImplementedError(
+                    "Invalid type for known_fps entry. "
+                    "Valid types: str, re.Pattern, Tuple[str,str]"
+                )
 
         return False
