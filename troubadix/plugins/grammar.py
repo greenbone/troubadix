@@ -107,28 +107,40 @@ class CheckGrammar(FilePlugin):
         """
         Checks for false positives in the findings.
         """
-        # Exclude a few known false positives
+
         if (
-            "a few " in match
-            or "A few " in match
+            re.search(r"[Aa] few ", match)
             or "a multiple keyboard " in match
+            or "A A S Application Access Server" in match
+            or "a Common Vulnerabilities and Exposures" in match
+            or "Multiple '/' Vulnerability" in match
+            or "an attackers choise" in match
+            or "multiple error handling vulnerabilities" in match
+            # Like seen in 2022/debian/deb_dla_2981.nasl
+            or "a multiple concurrency" in match
+            # From 2008/debian/deb_1017_1.nasl
+            or "Harald Welte discovered that if a process issues a "
+            "USB Request Block (URB)" in match
+            # From several Ubuntu LSCs like e.g.:
+            # 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
+            or "An attacker with access to at least one LUN in a multiple"
+            in match
+            # nb: The regex to catch "this files" might catch this wrongly...
+            or re.search(r"th(is|ese)\s+filesystem", match)
+            # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
+            or re.search(r'(\s+|")[Aa]\s+multiple\s+of', match)
+            # WITH can be used like e.g. the following which is valid:
+            # "with WITH stack unwinding"
+            # see e.g. gb_sles_2021_3215_1.nasl or gb_sles_2021_2320_1.nasl
+            or re.search(r"with\s+WITH", match)
+            # Valid sentences
+            or re.search(
+                r"these\s+error\s+(messages|reports|conditions)", match
+            )
+            or re.search(
+                r"these\s+file\s+(permissions|overwrites|names)", match
+            )
         ):
-            return True
-
-        if "A A S Application Access Server" in match:
-            return True
-
-        if "a Common Vulnerabilities and Exposures" in match:
-            return True
-
-        if "Multiple '/' Vulnerability" in match:
-            return True
-
-        if "an attackers choise" in match:
-            return True
-
-        # nb: The regex to catch "this files" might catch this wrongly...
-        if "this filesystem" in match:
             return True
 
         if (
@@ -143,53 +155,6 @@ class CheckGrammar(FilePlugin):
             "gb_opensuse_2018_1900_1.nasl" in nasl_file
             and "(Note that" in match
         ):
-            return True
-
-        # same as above
-        if "gb_sles_2021_3215_1.nasl" in nasl_file and "with\n WITH" in match:
-            return True
-
-        # same as above
-        if "gb_sles_2021_2320_1.nasl" in nasl_file and "with WITH" in match:
-            return True
-
-        # same
-        if "multiple error handling vulnerabilities" in match:
-            return True
-
-        # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
-        if re.search(r'(\s+|")[Aa]\s+multiple\s+of', match):
-            return True
-
-        # Like seen in e.g. 2022/suse/gb_sles_2022_3198_1.nasl and similar to
-        # the above. As we're currently not using re.IGNORECASE in the initial
-        # regex the previous wasn't able to catch this because the "of" was
-        # placed in the next line.
-        if "is a multiple" in match:
-            return True
-
-        # Like seen in 2022/debian/deb_dla_2981.nasl
-        if "a multiple concurrency" in match:
-            return True
-
-        # WITH can be used like e.g. the following which is valid:
-        # "with WITH stack unwinding"
-        if "with WITH" in match:
-            return True
-
-        # From 2008/debian/deb_1017_1.nasl
-        if (
-            "Harald Welte discovered that if a process issues a "
-            "USB Request Block (URB)" in match
-        ):
-            return True
-
-        # Valid sentences
-        if re.search(r"these\s+error\s+(messages|reports|conditions)", match):
-            return True
-
-        # From several Ubuntu LSCs, e.g. 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
-        if "An attacker with access to at least one LUN in a multiple" in match:
             return True
 
         return False
