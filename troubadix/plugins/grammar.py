@@ -155,7 +155,7 @@ class CheckGrammar(FilePlugin):
                 return known_fp in match
 
             elif isinstance(known_fp, tuple):
-                (filename, content_fp) = known_fp
+                filename, content_fp = known_fp
                 return filename in nasl_file and content_fp in match
 
             else:
