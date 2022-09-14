@@ -16,7 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import AnyStr, Iterator
+from typing import AnyStr, Iterator, List, Tuple, Union
 
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
@@ -146,22 +146,31 @@ class CheckGrammar(FilePlugin):
             ("gb_opensuse_2018_1900_1.nasl", "(Note that"),
         ]
 
-        for known_fp in known_fps:
+        return any(
+            [
+                CheckGrammar._check_false_positive(fp, match, nasl_file)
+                for fp in known_fps
+            ]
+        )
 
-            if isinstance(known_fp, re.Pattern):
-                return bool(known_fp.search(match))
+    @staticmethod
+    def _check_false_positive(
+        false_positive: List[Union[re.Pattern, str, Tuple[str, str]]],
+        match: re.Match,
+        nasl_filename: str,
+    ) -> bool:
+        if isinstance(false_positive, re.Pattern):
+            return bool(false_positive.search(match))
 
-            elif isinstance(known_fp, str):
-                return known_fp in match
+        elif isinstance(false_positive, str):
+            return false_positive in match
 
-            elif isinstance(known_fp, tuple):
-                filename, content_fp = known_fp
-                return filename in nasl_file and content_fp in match
+        elif isinstance(false_positive, tuple):
+            filename, content_fp = false_positive
+            return filename in nasl_filename and content_fp in match
 
-            else:
-                raise NotImplementedError(
-                    "Invalid type for known_fps entry. "
-                    "Valid types: str, re.Pattern, Tuple[str, str]"
-                )
-
-        return False
+        else:
+            raise NotImplementedError(
+                "Invalid type for false_positives entry. "
+                "Valid types: str, re.Pattern, Tuple[str, str]"
+            )
