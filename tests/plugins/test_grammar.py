@@ -152,3 +152,21 @@ class CheckNewlinesTestCase(PluginTestCase):
             'open redirect vulnerability.");',
             results[0].message,
         )
+
+    def test_grammar_fp(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.'
+            ' a multiple keyboard .");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
