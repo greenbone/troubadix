@@ -116,6 +116,7 @@ class CheckGrammar(FilePlugin):
             "a multiple keyboard ",
             "A A S Application Access Server",
             "a Common Vulnerabilities and Exposures",
+            "Multiple '/' Vulnerability",
             "an attackers choise",
             "multiple error handling vulnerabilities",
             # Like seen in 2022/debian/deb_dla_2981.nasl
@@ -127,7 +128,7 @@ class CheckGrammar(FilePlugin):
             # 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
             "An attacker with access to at least one LUN in a multiple",
             # nb: The regex to catch "this files" might catch this wrongly...
-            re.compile(r"th(is|ese)\s+filesystem"),
+            re.compile(r"th(is|ese)\s+filesystem", re.IGNORECASE),
             # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
             re.compile(r'(\s+|")[Aa]\s+multiple\s+of'),
             # WITH can be used like e.g. the following which is valid:
@@ -135,8 +136,13 @@ class CheckGrammar(FilePlugin):
             # see e.g. gb_sles_2021_3215_1.nasl or gb_sles_2021_2320_1.nasl
             re.compile(r"with\s+WITH"),
             # Valid sentences
-            re.compile(r"these\s+error\s+(messages|reports|conditions)"),
-            re.compile(r"these\s+file\s+(permissions|overwrites|names)"),
+            re.compile(
+                r"these\s+error\s+(messages|reports|conditions)", re.IGNORECASE
+            ),
+            re.compile(
+                r"these\s+file\s+(permissions|overwrites|names|includes)",
+                re.IGNORECASE,
+            ),
             (
                 "2012/gb_VMSA-2010-0007.nasl",
                 "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
