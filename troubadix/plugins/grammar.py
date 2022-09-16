@@ -112,7 +112,7 @@ class CheckGrammar(FilePlugin):
         # strings, regex patterns and Tuples
         # in the format of: (filename, content)
         known_fps = [
-            re.compile(r"[Aa] few "),
+            re.compile(r'(\s+|"|#\s*)[Aa] few (issues|vulnerabilities)'),
             "a multiple keyboard ",
             "A A S Application Access Server",
             "a Common Vulnerabilities and Exposures",
