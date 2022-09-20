@@ -259,6 +259,19 @@ class CheckSpelling(FilesPlugin):
                         if re.search(r"[Uu]nsecure\s+==>\s+[Ii]nsecure", line):
                             continue
 
+                    # NAM / nam is the abbreviation of these products. In
+                    # netop_infopublic.nasl there is a "nam" parameter.
+                    if (
+                        re.search(
+                            r"gb_((cisco|solarwinds)_nam|"
+                            "netiq_access_manager)_",
+                            line,
+                        )
+                        or "/netop_infopublic.nasl" in line
+                    ):
+                        if re.search(r"nam\s+==>\s+name", line, re.IGNORECASE):
+                            continue
+
                     codespell += line + "\n"
 
             for codespell_entry in codespell.splitlines():
