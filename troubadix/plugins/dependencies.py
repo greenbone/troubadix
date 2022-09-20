@@ -21,9 +21,8 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper import SpecialScriptTag
-from troubadix.helper.helper import is_enterprise_folder, FEED_VERSIONS
-from troubadix.helper.patterns import get_special_script_tag_pattern
+from troubadix.helper.helper import FEED_VERSIONS, is_enterprise_folder
+from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import (
     FilePlugin,
     LinterError,
@@ -46,8 +45,8 @@ class CheckDependencies(FilePlugin):
         if self.context.nasl_file.suffix == ".inc":
             return
 
-        dependencies_pattern = get_special_script_tag_pattern(
-            SpecialScriptTag.DEPENDENCIES
+        dependencies_pattern = _get_special_script_tag_pattern(
+            "dependencies", flags=re.DOTALL | re.MULTILINE
         )
 
         root = self.context.root
