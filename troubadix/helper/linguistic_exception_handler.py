@@ -18,7 +18,7 @@
 
 import re
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Union
+from typing import Iterable, List, Tuple, Union
 
 
 class LinguisticCheck(ABC):
@@ -87,16 +87,11 @@ class PatternsCheck(LinguisticCheck):
 
 
 class CompositeCheck(LinguisticCheck):
-    def __init__(
-        self, file_check: LinguisticCheck, text_check: LinguisticCheck
-    ) -> None:
-        self.file_check = file_check
-        self.text_check = text_check
+    def __init__(self, *checks: Iterable[LinguisticCheck]) -> None:
+        self.checks = checks
 
     def execute(self, file: str, content: str):
-        return self.file_check.execute(
-            file, content
-        ) and self.text_check.execute(file, content)
+        return all(check.execute(file, content) for check in self.checks)
 
 
 class TextInFileCheck(CompositeCheck):
