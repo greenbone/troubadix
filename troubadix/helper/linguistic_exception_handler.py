@@ -149,9 +149,7 @@ class PatternsInFilePatternCheck(CompositeCheck):
         )
 
 
-class LinguisticExceptionHandler:
-    def __init__(self, checks: List[LinguisticCheck]) -> None:
-        self.checks = checks
-
-    def check(self, file: str, content: str) -> bool:
-        return any(check.execute(file, content) for check in self.checks)
+def handle_linguistic_checks(
+    file: str, content: str, checks: Iterable[LinguisticCheck]
+) -> bool:
+    return any(check.execute(file, content) for check in checks)
