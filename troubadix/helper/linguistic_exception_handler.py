@@ -86,59 +86,48 @@ class PatternsCheck(LinguisticCheck):
         return any(bool(pattern.search(content)) for pattern in self.patterns)
 
 
-class TextInFileCheck(FileCheck, TextCheck):
+class CompositeCheck(LinguisticCheck):
+    def __init__(
+        self, file_check: LinguisticCheck, text_check: LinguisticCheck
+    ) -> None:
+        self.file_check = file_check
+        self.text_check = text_check
+
+    def execute(self, file: str, content: str):
+        return self.file_check.execute(
+            file, content
+        ) and self.text_check.execute(file, content)
+
+
+class TextInFileCheck(CompositeCheck):
     def __init__(self, file, text) -> None:
-        FileCheck.__init__(self, file)
-        TextCheck.__init__(self, text)
-
-    def execute(self, file, content):
-        return FileCheck.execute(self, file, content) and TextCheck.execute(
-            self, file, content
-        )
+        super().__init__(FileCheck(file), TextCheck(text))
 
 
-class PatternInFileCheck(FileCheck, PatternCheck):
+class PatternInFileCheck(CompositeCheck):
     def __init__(
         self, file: str, pattern: str, flags: re.RegexFlag = 0
     ) -> None:
-        FileCheck.__init__(self, file)
-        PatternCheck.__init__(self, pattern, flags)
-
-    def execute(self, file, content):
-        return FileCheck.execute(self, file, content) and PatternCheck.execute(
-            self, file, content
-        )
+        super().__init__(FileCheck(file), PatternCheck(pattern, flags))
 
 
-class PatternsInFileCheck(FileCheck, PatternsCheck):
+class PatternsInFileCheck(CompositeCheck):
     def __init__(
         self,
         file: str,
         patterns: Union[List[str], List[Tuple[str, re.RegexFlag]]],
     ) -> None:
-        FileCheck.__init__(self, file)
-        PatternsCheck.__init__(self, patterns)
-
-    def execute(self, file, content):
-        return FileCheck.execute(self, file, content) and PatternsCheck.execute(
-            self, file, content
-        )
+        super().__init__(FileCheck(file), PatternsCheck(patterns))
 
 
-class PatternInFilesCheck(FilesCheck, PatternCheck):
+class PatternInFilesCheck(CompositeCheck):
     def __init__(
         self, files: List[str], pattern: str, flags: re.RegexFlag = 0
     ) -> None:
-        FilesCheck.__init__(self, files)
-        PatternCheck.__init__(self, pattern, flags)
-
-    def execute(self, file, content):
-        return FilesCheck.execute(self, file, content) and PatternCheck.execute(
-            self, file, content
-        )
+        super().__init__(FilesCheck(files), PatternCheck(pattern, flags))
 
 
-class PatternInFilePatternCheck(FilePatternCheck, PatternCheck):
+class PatternInFilePatternCheck(CompositeCheck):
     def __init__(
         self,
         file_pattern: str,
@@ -146,29 +135,23 @@ class PatternInFilePatternCheck(FilePatternCheck, PatternCheck):
         file_pattern_flags: re.RegexFlag = 0,
         text_pattern_flags: re.RegexFlag = 0,
     ) -> None:
-        FilePatternCheck.__init__(self, file_pattern, file_pattern_flags)
-        PatternCheck.__init__(self, text_pattern, text_pattern_flags)
-
-    def execute(self, file, content):
-        return FilePatternCheck.execute(
-            self, file, content
-        ) and PatternCheck.execute(self, file, content)
+        super().__init__(
+            FilePatternCheck(file_pattern, file_pattern_flags),
+            PatternCheck(text_pattern, text_pattern_flags),
+        )
 
 
-class PatternsInFilePatternCheck(FilePatternCheck, PatternsCheck):
+class PatternsInFilePatternCheck(CompositeCheck):
     def __init__(
         self,
         file_pattern: str,
         patterns: Union[List[str], List[Tuple[str, re.RegexFlag]]],
         file_pattern_flags: re.RegexFlag = 0,
     ) -> None:
-        FilePatternCheck.__init__(self, file_pattern, file_pattern_flags)
-        PatternsCheck.__init__(self, patterns)
-
-    def execute(self, file, content):
-        return FilePatternCheck.execute(
-            self, file, content
-        ) and PatternsCheck.execute(self, file, content)
+        super().__init__(
+            FilePatternCheck(file_pattern, file_pattern_flags),
+            PatternsCheck(patterns),
+        )
 
 
 class LinguisticExceptionHandler:
@@ -177,4 +160,3 @@ class LinguisticExceptionHandler:
 
     def check(self, file: str, content: str) -> bool:
         return any(check.execute(file, content) for check in self.checks)
-        # return any([check.execute(file, content) for check in self.checks])
