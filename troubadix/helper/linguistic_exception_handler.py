@@ -40,7 +40,7 @@ class FilesCheck(LinguisticCheck):
         self.files = files
 
     def execute(self, file: str, content: str):
-        return any([_file in file for _file in self.files])
+        return any(_file in file for _file in self.files)
 
 
 class FilePatternCheck(LinguisticCheck):
