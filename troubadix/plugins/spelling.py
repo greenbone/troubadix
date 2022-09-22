@@ -19,18 +19,172 @@ import io
 import re
 from contextlib import redirect_stdout
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, Tuple
 
 from codespell_lib import main as codespell_main
 
+from troubadix.helper.linguistic_exception_handler import (
+    LinguisticExceptionHandler,
+    PatternInFileCheck,
+    PatternInFilePatternCheck,
+    PatternInFilesCheck,
+    PatternsCheck,
+    PatternsInFileCheck,
+    PatternsInFilePatternCheck,
+)
 from troubadix.plugin import FilesPlugin, LinterError, LinterResult
 
 plugin_path = Path(__file__).parent.resolve()
 codespell_config_path = (plugin_path.parent / "codespell").resolve()
 
 
+exceptions = [
+    # From /Policy which is just a huge blob of text
+    # and too large for codespell.exclude:
+    PatternsInFileCheck(
+        "policy_file_checksums_win.nasl",
+        [r"nD\s+==>\s+and, 2nd", r"oD\s+==>\s+of"],
+    ),
+    # Same for a few other files:
+    PatternInFileCheck("smtp_AV_42zip_DoS.nasl", r"BA\s+==>\s+BY, BE"),
+    PatternInFileCheck("bad_ssh_host_keys.inc", r"ba\s+==>\s+by, be"),
+    PatternsInFileCheck(
+        "wmi_misc.inc", [r"BA\s+==>\s+BY, BE", r"OD\s+==>\s+OF"]
+    ),
+    PatternInFilesCheck(
+        ["ssl_funcs.inc", "gb_ssl_tls_cert_details.nasl"],
+        r"fpr\s+==>\s+for, far, fps",
+    ),
+    # Codespell has currently cna->can in the dictionary.txt
+    # which is causing false positives for CNA (widely used term
+    # in VTs) because codespell doesn't look at the casing. For
+    # now we're excluding any uppercase "CNA" results because
+    # these are usually false positives we don't want to report.
+    # Similar with "RO" because that is also very likely a false
+    # positive.
+    PatternsCheck([r"CNA\s+==>\s+CAN", r"RO\s+==>\s+TO"]),
+    # Name of a Huawei product
+    PatternInFilesCheck(
+        ["gb_huawei", "telnetserver_detect_type_nd_version.nasl"],
+        r"eSpace\s+==>\s+escape",
+        re.IGNORECASE,
+    ),
+    # "ure" is a Debian package, again too many hits for
+    # codespell.exclude.
+    PatternInFilePatternCheck(
+        r"(deb_(dla_)?[0-9]+(_[" r"0-9]+)?|gb_ubuntu_.+)\.nasl",
+        r"ure\s+==>\s+sure",
+    ),
+    # gsf/PCIDSS VTs are currently using some german text parts
+    # nb: codespell seems to have some issues with
+    # german umlauts in the codespell.exclude so a few of these
+    # were also excluded here instead of directly
+    # via codespell.exclude.
+    PatternInFilesCheck(
+        ["PCIDSS/", "GSHB/", "attic/PCIDSS_", "ITG_Kompendium/"],
+        r"(sie|ist|oder|prozess|manuell|unter|funktion|"
+        r"alle|als|tage|lokale|uptodate|paket|titel|ba|"
+        r"ordner|modul|interaktive|programm|explizit|"
+        r"normale|applikation|attributen|lokal|signatur|"
+        r"modell|klick|generell)\s+==>\s+",
+        re.IGNORECASE,
+    ),
+    # False positives in the gsf/PCIDSS and GSHB/ VTs:
+    # string('\nIn the file sent\nin milliseconds
+    # There are too many hits to maintain
+    # them in codespell.exclude so exclude them for now here.
+    PatternInFilesCheck(
+        ["PCIDSS/", "GSHB/", "attic/PCIDSS_"], r"n[iI]n\s+==>\s+inn"
+    ),
+    # False positives in the GSHB/ and ITG_Kompendium/ VTs on
+    # bsi.bund.de URLs.
+    PatternInFilesCheck(
+        [
+            "GSHB/",
+            "ITG_Kompendium/",
+            "Policy/gb_policy_cipher_suites.nasl",
+            "Policy/policy_BSI-TR-03116-4.nasl",
+            "2012/gb_secpod_ssl_ciphers_weak_report.nasl",
+        ],
+        r"bund\s+==>\s+bind",
+    ),
+    # False positive in this VT in German example responses.
+    PatternInFileCheck(
+        "gb_exchange_server_CVE-2021-26855_active.nasl", r"ist\s+==>\s+is"
+    ),
+    # Mostly a false positive in LSCs because of things like
+    # "ALSA: hda" or a codec called "Conexant". There are too
+    # many hits to maintain them in codespell.exclude so exclude
+    # them for now here.
+    PatternInFilePatternCheck(
+        r"gb_(sles|(open)?suse|ubuntu_USN)_.+\.nasl",
+        r"(hda|conexant)\s+==>\s+(had|connexant)",
+        text_pattern_flags=re.IGNORECASE,
+    ),
+    # Jodie Chancel is a security researcher who is mentioned
+    # many times in Mozilla advisories
+    PatternInFilePatternCheck(
+        r"gb_mozilla_firefox_mfsa_\d{4}-\d{2,4}_lin\.nasl",
+        r"Chancel\s+==>\s+Cancel",
+    ),
+    # Look like correct as this is also in dictionary_rare.txt
+    PatternInFileCheck("deb_dla_2896.nasl", r"dependant\s+==>\s+dependent"),
+    # Similar to the one above for e.g. SLES.
+    # Also exclude "tre", because it's a package name.
+    PatternInFilePatternCheck(
+        r"mgasa-\d{4}-\d{4}.nasl",
+        r"(hda|tre|conexant)\s+==>\s+(had|tree|connexant)",
+        file_pattern_flags=re.IGNORECASE,
+    ),
+    # Similar to the corrections above, with some additional
+    # exclusions like e.g. names
+    PatternsInFilePatternCheck(
+        r"ELSA-\d{4}-\d{4,5}\.nasl",
+        [
+            (r"Stange\s+==>\s+Strange", 0),
+            (r"chang\s+==>\s+change, charge", 0),
+            (r"IST\s+==>\s+IS, IT, ITS, IT'S, SIT, LIST", 0),
+            (r"hda\s+==>\s+had", 0),
+            (r"Readded\s+==>\s+Read", 0),
+            (r"ACI\s+==>\s+ACPI", re.IGNORECASE),
+            (r"UE\s+==>\s+USE, DUE", 0),
+        ],
+    ),
+    # "Unsecure" is used in the references so we shouldn't
+    # change that.
+    PatternInFilesCheck(
+        [
+            "office2013_allow_insecure_apps_catalogs.nasl",
+            "gb_sap_rfc_default_pw.nasl",
+            "gb_sap_webgui_default_pw.nasl",
+        ],
+        r"[Uu]nsecure\s+==>\s+[Ii]nsecure",
+    ),
+    # NAM / nam is the abbreviation of these products. In
+    # netop_infopublic.nasl there is a "nam" parameter.
+    PatternInFilePatternCheck(
+        r"gb_((cisco|solarwinds)_nam|netiq_access_manager)_",
+        r"nam\s+==>\s+name",
+        text_pattern_flags=re.IGNORECASE,
+    ),
+    PatternInFileCheck(
+        "/netop_infopublic.nasl", r"nam\s+==>\s+name", flags=re.IGNORECASE
+    ),
+]
+
+linguistic_handler = LinguisticExceptionHandler(exceptions)
+
+
 class CheckSpelling(FilesPlugin):
     name = "check_spelling"
+
+    def _parse_codespell_line(self, line: str) -> Tuple[str, str]:
+        if not "==>" in line:
+            raise ValueError("Invalid codespell line")
+
+        file, _, correction = line.split(":")
+
+        return file, correction
 
     def run(self) -> Iterator[LinterResult]:
         """This script checks, via the codespell library, wether
@@ -79,198 +233,10 @@ class CheckSpelling(FilesPlugin):
                 _codespell = codespell.splitlines()
                 codespell = ""
                 for line in _codespell:
+                    file, correction = self._parse_codespell_line(line)
 
-                    # From /Policy which is just a huge blob of text
-                    # and too large for codespell.exclude:
-                    if "policy_file_checksums_win.nasl" in line:
-                        if re.search(r"nD\s+==>\s+and, 2nd", line) or re.search(
-                            r"oD\s+==>\s+of", line
-                        ):
-                            continue
-
-                    # Same for a few other files:
-                    if "smtp_AV_42zip_DoS.nasl" in line and re.search(
-                        r"BA\s+==>\s+BY, BE", line
-                    ):
+                    if linguistic_handler.check(file, correction):
                         continue
-
-                    if "bad_ssh_host_keys.inc" in line and re.search(
-                        r"ba\s+==>\s+by, be", line
-                    ):
-                        continue
-
-                    if "wmi_misc.inc" in line:
-                        if re.search(r"BA\s+==>\s+BY, BE", line) or re.search(
-                            r"OD\s+==>\s+OF", line
-                        ):
-                            continue
-
-                    if (
-                        "ssl_funcs.inc" in line
-                        or "gb_ssl_tls_cert_details.nasl" in line
-                    ):
-                        if re.search(r"fpr\s+==>\s+for, far, fps", line):
-                            continue
-
-                    # Codespell has currently cna->can in the dictionary.txt
-                    # which is causing false positives for CNA (widely used term
-                    # in VTs) because codespell doesn't look at the casing. For
-                    # now we're excluding any uppercase "CNA" results because
-                    # these are usually false positives we don't want to report.
-                    # Similar with "RO" because that is also very likely a false
-                    # positive.
-                    if re.search(r"CNA\s+==>\s+CAN", line) or re.search(
-                        r"RO\s+==>\s+TO", line
-                    ):
-                        continue
-
-                    # Name of a Huawei product
-                    if (
-                        "gb_huawei" in line
-                        or "telnetserver_detect_type_nd_version.nasl" in line
-                    ):
-                        if re.search(
-                            r"eSpace\s+==>\s+escape", line, flags=re.IGNORECASE
-                        ):
-                            continue
-
-                    # "ure" is a Debian package, again too many hits for
-                    # codespell.exclude.
-                    if re.search(
-                        r"(deb_(dla_)?[0-9]+(_[" r"0-9]+)?|gb_ubuntu_.+)\.nasl",
-                        line,
-                    ):
-                        if re.search(r"ure\s+==>\s+sure", line):
-                            continue
-
-                    # gsf/PCIDSS VTs are currently using some german text parts
-                    # nb: codespell seems to have some issues with
-                    # german umlauts in the codespell.exclude so a few of these
-                    # were also excluded here instead of directly
-                    # via codespell.exclude.
-                    if (
-                        "PCIDSS/" in line
-                        or "GSHB/" in line
-                        or "attic/PCIDSS_" in line
-                        or "ITG_Kompendium/" in line
-                    ):
-                        if re.search(
-                            r"(sie|ist|oder|prozess|manuell|unter|funktion|"
-                            r"alle|als|tage|lokale|uptodate|paket|titel|ba|"
-                            r"ordner|modul|interaktive|programm|explizit|"
-                            r"normale|applikation|attributen|lokal|signatur|"
-                            r"modell|klick|generell)\s+==>\s+",
-                            line,
-                            flags=re.IGNORECASE,
-                        ):
-                            continue
-
-                    # False positives in the gsf/PCIDSS and GSHB/ VTs:
-                    # string('\nIn the file sent\nin milliseconds
-                    # There are too many hits to maintain
-                    # them in codespell.exclude so exclude them for now here.
-                    if (
-                        "PCIDSS/" in line
-                        or "GSHB/" in line
-                        or "attic/PCIDSS_" in line
-                    ):
-                        if re.search(r"n[iI]n\s+==>\s+inn", line):
-                            continue
-
-                    # False positives in the GSHB/ and ITG_Kompendium/ VTs on
-                    # bsi.bund.de URLs.
-                    if (
-                        "GSHB/" in line
-                        or "ITG_Kompendium/" in line
-                        or "Policy/gb_policy_cipher_suites.nasl" in line
-                        or "Policy/policy_BSI-TR-03116-4.nasl" in line
-                        or "2012/gb_secpod_ssl_ciphers_weak_report.nasl" in line
-                    ):
-                        if re.search(r"bund\s+==>\s+bind", line):
-                            continue
-
-                    # False positive in this VT in German example responses.
-                    if "gb_exchange_server_CVE-2021-26855_active.nasl" in line:
-                        if re.search(r"ist\s+==>\s+is", line):
-                            continue
-
-                    # Mostly a false positive in LSCs because of things like
-                    # "ALSA: hda" or a codec called "Conexant". There are too
-                    # many hits to maintain them in codespell.exclude so exclude
-                    # them for now here.
-                    if re.search(
-                        r"gb_(sles|(open)?suse|ubuntu_USN)_.+\.nasl", line
-                    ):
-                        if re.search(
-                            r"(hda|conexant)\s+==>\s+(had|connexant)",
-                            line,
-                            flags=re.IGNORECASE,
-                        ):
-                            continue
-
-                    # Jodie Chancel is a security researcher who is mentioned
-                    # many times in Mozilla advisories
-                    if re.search(
-                        r"gb_mozilla_firefox_mfsa_\d{4}-\d{2,4}_lin\.nasl", line
-                    ) and re.search(r"Chancel\s+==>\s+Cancel", line):
-                        continue
-
-                    # Look like correct as this is also in dictionary_rare.txt
-                    if "deb_dla_2896.nasl" in line and re.search(
-                        r"dependant\s+==>\s+dependent", line
-                    ):
-                        continue
-
-                    # Similar to the one above for e.g. SLES.
-                    # Also exclude "tre", because it's a package name.
-                    if re.search(r"mgasa-\d{4}-\d{4}.nasl", line) and re.search(
-                        r"(hda|tre|conexant)\s+==>\s+(had|tree|connexant)",
-                        line,
-                        flags=re.IGNORECASE,
-                    ):
-                        continue
-
-                    # Similar to the corrections above, with some additional
-                    # exclusions like e.g. names
-                    if re.search(r"ELSA-\d{4}-\d{4,5}\.nasl", line):
-                        if (
-                            re.search(r"Stange\s+==>\s+Strange", line)
-                            or re.search(r"chang\s+==>\s+change, charge", line)
-                            or re.search(
-                                r"IST\s+==>\s+IS, IT, ITS, IT'S, SIT, LIST",
-                                line,
-                            )
-                            or re.search(r"hda\s+==>\s+had", line)
-                            or re.search(r"Readded\s+==>\s+Read", line)
-                            or re.search(
-                                r"ACI\s+==>\s+ACPI", line, re.IGNORECASE
-                            )
-                            or re.search(r"UE\s+==>\s+USE, DUE", line)
-                        ):
-                            continue
-
-                    # "Unsecure" is used in the references so we shouldn't
-                    # change that.
-                    if (
-                        "office2013_allow_insecure_apps_catalogs.nasl" in line
-                        or "gb_sap_rfc_default_pw.nasl" in line
-                        or "gb_sap_webgui_default_pw.nasl" in line
-                    ):
-                        if re.search(r"[Uu]nsecure\s+==>\s+[Ii]nsecure", line):
-                            continue
-
-                    # NAM / nam is the abbreviation of these products. In
-                    # netop_infopublic.nasl there is a "nam" parameter.
-                    if (
-                        re.search(
-                            r"gb_((cisco|solarwinds)_nam|"
-                            "netiq_access_manager)_",
-                            line,
-                        )
-                        or "/netop_infopublic.nasl" in line
-                    ):
-                        if re.search(r"nam\s+==>\s+name", line, re.IGNORECASE):
-                            continue
 
                     codespell += line + "\n"
 
