@@ -23,7 +23,6 @@ from troubadix.helper.linguistic_exception_handler import (
     FileCheck,
     FilePatternCheck,
     FilesCheck,
-    LinguisticExceptionHandler,
     PatternCheck,
     PatternInFileCheck,
     PatternInFilePatternCheck,
@@ -33,6 +32,7 @@ from troubadix.helper.linguistic_exception_handler import (
     PatternsInFilePatternCheck,
     TextCheck,
     TextInFileCheck,
+    handle_linguistic_checks,
 )
 
 
@@ -199,9 +199,16 @@ class LinguisticExceptionHandlerTestCase(unittest.TestCase):
 
     def test_linguistic_exception_handler(self):
         checks = [FileCheck("test"), TextCheck("foo")]
-        handler = LinguisticExceptionHandler(checks)
 
-        self.assertEqual(handler.check("test1", "foo1"), True)
-        self.assertEqual(handler.check("test1", "bar1"), True)
-        self.assertEqual(handler.check("hello1", "foo1"), True)
-        self.assertEqual(handler.check("hello1", "bar1"), False)
+        self.assertEqual(
+            handle_linguistic_checks("test1", "foo1", checks), True
+        )
+        self.assertEqual(
+            handle_linguistic_checks("test1", "bar1", checks), True
+        )
+        self.assertEqual(
+            handle_linguistic_checks("hello1", "foo1", checks), True
+        )
+        self.assertEqual(
+            handle_linguistic_checks("hello1", "bar1", checks), False
+        )

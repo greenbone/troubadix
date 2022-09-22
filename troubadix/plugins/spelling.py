@@ -24,13 +24,13 @@ from typing import Iterator, Tuple
 from codespell_lib import main as codespell_main
 
 from troubadix.helper.linguistic_exception_handler import (
-    LinguisticExceptionHandler,
     PatternInFileCheck,
     PatternInFilePatternCheck,
     PatternInFilesCheck,
     PatternsCheck,
     PatternsInFileCheck,
     PatternsInFilePatternCheck,
+    handle_linguistic_checks,
 )
 from troubadix.plugin import FilesPlugin, LinterError, LinterResult
 
@@ -172,8 +172,6 @@ exceptions = [
     ),
 ]
 
-linguistic_handler = LinguisticExceptionHandler(exceptions)
-
 
 class CheckSpelling(FilesPlugin):
     name = "check_spelling"
@@ -235,7 +233,7 @@ class CheckSpelling(FilesPlugin):
                 for line in _codespell:
                     file, correction = self._parse_codespell_line(line)
 
-                    if linguistic_handler.check(file, correction):
+                    if handle_linguistic_checks(file, correction, exceptions):
                         continue
 
                     codespell += line + "\n"
