@@ -44,7 +44,7 @@ class FilesCheck(LinguisticCheck):
 
 
 class FilePatternCheck(LinguisticCheck):
-    def __init__(self, file_pattern, flags=0) -> None:
+    def __init__(self, file_pattern: str, flags: re.RegexFlag = 0) -> None:
         self.file_pattern = re.compile(file_pattern, flags=flags)
 
     def execute(self, file: str, content: str):
@@ -60,7 +60,7 @@ class TextCheck(LinguisticCheck):
 
 
 class PatternCheck(LinguisticCheck):
-    def __init__(self, pattern, flags=0) -> None:
+    def __init__(self, pattern: str, flags: re.RegexFlag = 0) -> None:
         self.pattern = re.compile(pattern, flags=flags)
 
     def execute(self, file: str, content: str):
@@ -82,7 +82,7 @@ class PatternsCheck(LinguisticCheck):
         else:
             self.patterns = [re.compile(pattern) for pattern in patterns]
 
-    def execute(self, file, content):
+    def execute(self, file: str, content: str):
         return any(bool(pattern.search(content)) for pattern in self.patterns)
 
 
@@ -95,7 +95,7 @@ class CompositeCheck(LinguisticCheck):
 
 
 class TextInFileCheck(CompositeCheck):
-    def __init__(self, file, text) -> None:
+    def __init__(self, file: str, text: str) -> None:
         super().__init__(FileCheck(file), TextCheck(text))
 
 
