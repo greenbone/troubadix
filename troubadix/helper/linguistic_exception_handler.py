@@ -23,7 +23,7 @@ from typing import Iterable, List, Tuple, Union
 
 class LinguisticCheck(ABC):
     @abstractmethod
-    def execute(self, file, correction):
+    def execute(self, file_path: str, correction: str):
         pass
 
 
@@ -31,31 +31,31 @@ class FileCheck(LinguisticCheck):
     def __init__(self, file: str) -> None:
         self.file = file
 
-    def execute(self, file: str, correction: str) -> bool:
-        return self.file in file
+    def execute(self, file_path: str, correction: str) -> bool:
+        return self.file in file_path
 
 
 class FilesCheck(LinguisticCheck):
     def __init__(self, files: List[str]) -> None:
         self.files = files
 
-    def execute(self, file: str, correction: str):
-        return any(_file in file for _file in self.files)
+    def execute(self, file_path: str, correction: str):
+        return any(_file in file_path for _file in self.files)
 
 
 class FilePatternCheck(LinguisticCheck):
     def __init__(self, file_pattern: str, flags: re.RegexFlag = 0) -> None:
         self.file_pattern = re.compile(file_pattern, flags=flags)
 
-    def execute(self, file: str, correction: str):
-        return bool(self.file_pattern.search(file))
+    def execute(self, file_path: str, correction: str):
+        return bool(self.file_pattern.search(file_path))
 
 
 class TextCheck(LinguisticCheck):
     def __init__(self, text: str) -> None:
         self.text = text
 
-    def execute(self, file: str, correction: str):
+    def execute(self, file_path: str, correction: str):
         return self.text in correction
 
 
@@ -63,7 +63,7 @@ class PatternCheck(LinguisticCheck):
     def __init__(self, pattern: str, flags: re.RegexFlag = 0) -> None:
         self.pattern = re.compile(pattern, flags=flags)
 
-    def execute(self, file: str, correction: str):
+    def execute(self, file_path: str, correction: str):
         return bool(self.pattern.search(correction))
 
 
@@ -82,7 +82,7 @@ class PatternsCheck(LinguisticCheck):
         else:
             self.patterns = [re.compile(pattern) for pattern in patterns]
 
-    def execute(self, file: str, correction: str):
+    def execute(self, file_path: str, correction: str):
         return any(
             bool(pattern.search(correction)) for pattern in self.patterns
         )
@@ -92,8 +92,10 @@ class CompositeCheck(LinguisticCheck):
     def __init__(self, *checks: Iterable[LinguisticCheck]) -> None:
         self.checks = checks
 
-    def execute(self, file: str, correction: str):
-        return all(check.execute(file, correction) for check in self.checks)
+    def execute(self, file_path: str, correction: str):
+        return all(
+            check.execute(file_path, correction) for check in self.checks
+        )
 
 
 class TextInFileCheck(CompositeCheck):
