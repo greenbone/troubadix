@@ -182,7 +182,7 @@ class CheckSpelling(FilesPlugin):
 
         file, _, correction = line.split(":")
 
-        return file, correction
+        return file, correction.strip()
 
     def run(self) -> Iterator[LinterResult]:
         """This script checks, via the codespell library, wether
