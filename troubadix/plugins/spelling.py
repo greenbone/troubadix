@@ -223,30 +223,31 @@ class CheckSpelling(FilesPlugin):
                 "--disable-colors",
             ] + files_parameters
 
-            with redirect_stdout(io.StringIO()) as codespell:
+            with redirect_stdout(io.StringIO()) as codespell_stream:
                 codespell_main(*codespell_arguments)
 
-            codespell = codespell.getvalue()
-            if "Traceback (most recent call last):" not in codespell:
-                _codespell = codespell.splitlines()
-                codespell = ""
-                for line in _codespell:
-                    file, correction = self._parse_codespell_line(line)
+            codespell_output = codespell_stream.getvalue()
 
-                    if handle_linguistic_checks(file, correction, exceptions):
-                        continue
+            if "Traceback (most recent call last):" in codespell_output:
+                yield LinterError(
+                    codespell_output,
+                    plugin=self.name,
+                )
 
-                    codespell += line + "\n"
+                continue
 
-            for codespell_entry in codespell.splitlines():
-                if "==>" in codespell:
+            codespell_entries = [
+                line
+                for line in codespell_output.splitlines()
+                if not handle_linguistic_checks(
+                    *self._parse_codespell_line(line), exceptions
+                )
+            ]
+
+            for codespell_entry in codespell_entries:
+                if "==>" in codespell_entry:
                     yield LinterError(
                         codespell_entry,
                         file=codespell_entry.split(":")[0],
-                        plugin=self.name,
-                    )
-                elif "Traceback (most recent call last):" in codespell:
-                    yield LinterError(
-                        codespell,
                         plugin=self.name,
                     )
