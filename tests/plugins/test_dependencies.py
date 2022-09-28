@@ -192,3 +192,47 @@ class CheckDependenciesTestCase(PluginTestCase):
                 "not be found within the VTs.",
                 results[0].message,
             )
+
+    def test_inline_comment_dependency(self):
+        with self.create_directory() as tmpdir:
+            path = tmpdir / "file.nasl"
+            example = tmpdir / "common" / "example.inc"
+            example2 = tmpdir / "common" / "example2.inc"
+            example.parent.mkdir(parents=True)
+            example.touch()
+            example2.touch()
+            content = (
+                'script_tag(name:"cvss_base", value:"4.0");\n'
+                'script_tag(name:"summary", value:"Foo Bar...");\n'
+                'script_dependencies("example.inc", #Comment\n'
+                '"example2.inc");\n'
+            )
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content, root=tmpdir
+            )
+            plugin = CheckDependencies(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 0)
+
+    def test_inline_comment_dependency_nok(self):
+        with self.create_directory() as tmpdir:
+            path = tmpdir / "file.nasl"
+            example = tmpdir / "common" / "example.inc"
+            example.parent.mkdir(parents=True)
+            example.touch()
+            content = (
+                'script_tag(name:"cvss_base", value:"4.0");\n'
+                'script_tag(name:"summary", value:"Foo Bar...");\n'
+                'script_dependencies("example.inc", #Comment\n '
+                '"example2.inc");\n'
+            )
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content, root=tmpdir
+            )
+            plugin = CheckDependencies(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 1)
