@@ -58,9 +58,13 @@ class CheckDependencies(FilePlugin):
             if match:
                 # Remove single and/or double quotes, spaces
                 # and create a list by using the comma as a separator
-                dependencies = re.sub(
-                    r'[\'"\s]', "", match.group("value")
-                ).split(",")
+                # additionally, check and filter for inline comments
+                dependencies = []
+
+                for line in match.group("value").splitlines():
+                    subject = line[: line.find("#")] if "#" in line else line
+                    _dependencies = re.sub(r'[\'"\s]', "", subject).split(",")
+                    dependencies += [dep for dep in _dependencies if dep != ""]
 
                 for dep in dependencies:
                     # TODO: gsf/PCIDSS/PCI-DSS.nasl,
