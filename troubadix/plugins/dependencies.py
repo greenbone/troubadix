@@ -62,7 +62,7 @@ class CheckDependencies(FilePlugin):
                 dependencies = []
 
                 for line in match.group("value").splitlines():
-                    subject = line[: line.find("#")] if "#" in line else line
+                    subject = line[: line.index("#")] if "#" in line else line
                     _dependencies = re.sub(r'[\'"\s]', "", subject).split(",")
                     dependencies += [dep for dep in _dependencies if dep != ""]
 
