@@ -196,16 +196,16 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_inline_comment_dependency(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "example.inc"
-            example2 = tmpdir / "common" / "example2.inc"
+            example = tmpdir / "common" / "example.nasl"
+            example2 = tmpdir / "common" / "example2.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             example2.touch()
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
                 'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.inc", #Comment\n'
-                '"example2.inc");\n'
+                'script_dependencies("example.nasl", #Comment\n'
+                '"example2.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -219,14 +219,14 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_inline_comment_dependency_nok(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "example.inc"
+            example = tmpdir / "common" / "example.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 'script_tag(name:"cvss_base", value:"4.0");\n'
                 'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.inc", #Comment\n '
-                '"example2.inc");\n'
+                'script_dependencies("example.nasl", #Comment\n '
+                '"example2.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
