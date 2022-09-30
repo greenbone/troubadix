@@ -160,6 +160,9 @@ exceptions = [
     PatternInFileCheck(
         "/netop_infopublic.nasl", r"nam\s+==>\s+name", flags=re.IGNORECASE
     ),
+    # Product names used in a few VTs (no re.IGNORECASE is expected)
+    PatternsCheck([r"renderD\s+==>\s+rendered", r"VertX\s+==>\s+vertex"]),
+    PatternInFileCheck("_vertx_", r"vertx\s+==>\s+vertex"),
 ]
 
 
