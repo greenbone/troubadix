@@ -132,7 +132,7 @@ exceptions = [
     # Similar to the one above for e.g. SLES.
     # Also exclude "tre", because it's a package name.
     PatternInFilePatternCheck(
-        r"mgasa-\d{4}-\d{4}.nasl",
+        r"mgasa-\d{4}-\d{4}\.nasl",
         r"(hda|tre|conexant)\s+==>\s+(had|tree|connexant)",
         file_pattern_flags=re.IGNORECASE,
     ),
