@@ -150,16 +150,6 @@ exceptions = [
             (r"UE\s+==>\s+USE, DUE", 0),
         ],
     ),
-    # "Unsecure" is used in the references so we shouldn't
-    # change that.
-    PatternInFilesCheck(
-        [
-            "office2013_allow_insecure_apps_catalogs.nasl",
-            "gb_sap_rfc_default_pw.nasl",
-            "gb_sap_webgui_default_pw.nasl",
-        ],
-        r"[Uu]nsecure\s+==>\s+[Ii]nsecure",
-    ),
     # NAM / nam is the abbreviation of these products. In
     # netop_infopublic.nasl there is a "nam" parameter.
     PatternInFilePatternCheck(

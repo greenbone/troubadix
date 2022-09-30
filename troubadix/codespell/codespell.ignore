@@ -8,6 +8,10 @@ keypairs
 files'
 packages'
 process'
+# Currently in dictionary_code.txt, too short and causes too many false positives
+ro
+# Currently in dictionary_rare.txt and a fairly standard computing term
+unsecure
 # covert and complies are currently included in dictionary_rare.txt and are prone to false positives
 covert
 complies
