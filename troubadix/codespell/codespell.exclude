@@ -4,9 +4,8 @@
 # 00000004 nb: Once the whole directory is codespell "free" we might want to generate this file automatically
 # 00000005 nb2: The strings before are used like this so we can call "sort | uniq" on the file more easily.
 # 00000006 nb3: After adding new entries to this file, it is advised to run:
-# 00000007 cat codespell.exclude | sort | uniq > codespellnew.exclude
-# 00000008 mv codespellnew.exclude codespell.exclude
-# 00000009 To ensure that entries are kept unique and ordered
+# 00000007 cat codespell.exclude | sort | uniq > codespellnew.exclude && mv codespellnew.exclude codespell.exclude
+# 00000008 To ensure that entries are kept unique and ordered
 # 000300Dedected burute force atack from your ip adress   <--- alternative response
     '000300Dedected burute force atack from your ip adress' >< r ||
 # 00: 33 20 2d 2d 36 20 42 61 64 20 52 65 71 75 65 73    3 --6 Bad Reques
@@ -15,6 +14,7 @@
 # 0x0010:  73 65 72 20 20 20 20 20 20 48 6F 73 74 28 73 29    ser      Host(s)
 # 0x00E0:  74 65 20 69 6E 64 65 78 20 69 68 61 76 65 20 64    te index ihave d
 # 0x00F0:  75 70 6C 69 63 61 74 65 20 6D 69 6D 65 20 66 6F    uplicate mime fo
+# 0x01D0:  45 20 63 6F 6D 6D 61 6E 64 20 72 65 63 65 69 76    E command receiv
                    0x02,			# ByteOrder (little endian)
 # 0x10:  70 65 63 69 66 69 65 64 20 75 73 65 72 2E 0D 0A    pecified user...
 # 0x20:  64 79 0D 0A 45 52 52 4F 52 20 43 6F 6D 6D 61 6E    dy..ERROR Comman
@@ -346,10 +346,17 @@ fixtext = 'Add rules to audit the system calls "creat", "open/openat" and "trunc
   #<FONT SIZE="+3">S</FONT>EARCH
  - For backwards compatability, setting --log-driver=json-file in podman
 foreach dir( make_list_unique( "/ag", "/ang", "/guestbook", "/anguestbook", http_cgi_dirs( port:port ) ) ) {
+foreach dir(make_list_unique("/", "/annonce", http_cgi_dirs(port:port))) {
 foreach dir( make_list_unique( "/", "/cas", "/cas-server-webapp", http_cgi_dirs( port:port ) ) ) {
 foreach dir( make_list_unique( "/", "/fom", http_cgi_dirs( port:port ) ) ) {
   foreach url( make_list( dir + "/ans.pl?p=../../../../../usr/bin/id|&blah",
 - For the full release notse, see:
+For the oldstable distribution (lenny), this problem has been fixed in version 1.4.7.dfsg1-6+lenny4. Due to a technical problem with the buildd infrastructure the update is not yet available, but will be installed into the archive soon.
+For the old stable distribution (sarge), these problems have been fixed in version 1.2.4-1etch1. Due to a copy & paste error etch1 was appended to the version number instead of sarge1. Since the update is otherwise technically correct, the update was not rebuilt on the buildd network.
+For the old stable distribution (sarge), the update cannot currently be processed on the buildd security network due to a bug in the archive management script. This will be resolved soon. An update for i386 is temporarily available at .
+For the stable distribution (sarge) these problems have been fixed in version 0.10.10-2sarge9. Due to technical problems with the security buildd infrastructure this update lacks builds for the hppa and sparc architecture. They will be released as soon as the problems are resolved.
+For the stable distribution (sarge) this problem has been fixed in version 178-1sarge3. Due to technical problems with the security buildd infrastructure this update lacks a build for the Sun Sparc architecture. It will be released as soon as the problems are resolved.
+For the stable distribution (sarge) this problem has been fixed in version 4.0.2-4.1sarge1. Due to technical problems with the security buildd infrastructure this update lacks a build for the Sun Sparc architecture. It will be released as soon as the problems are resolved.
 "foto",
  found/known outside kde4 enviroment/session
     fpr = tmpfpr[0];
@@ -430,6 +437,7 @@ if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 )
   if( "NAM application image" >< show_ver )
   if (nfsd =~ 'program 100003 version . ready and waiting' || nfsd =~ 'Program 100003 Version . ist bereit und wartet') nfsd = "true";
                     if "nvd.nist.gov/vuln/detail/CVE-" in match.group(2) or "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-" in match.group(2):
+  if("petite annonce" >< res && ">DEPOSER UNE ANNONCE<" >< res) {
   if ("presse" >< res1) {
 if (prod == "BMX NOC 0401" || prod == "BMX NOE 0100" || prod = "BMX NOE 0110" || prod == "BMX NOE 0110H" ||
 if (prod == "BMX NOC 0401" || prod == "BMX NOE 0100" || prod == "BMX NOE 0110" || prod == "BMX NOE 0110H" ||
@@ -778,6 +786,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Mesosphere Marathon Web UI Public WAN (Internet) / Public LAN Accessible");
   script_name("Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability - Windows");
   script_name("Palo Alto PAN-OS SD WAN Vulnerability (CVE-2020-2009)");
+  script_name("Petite Annonce <= 1.0 'categoriemoteur' XSS Vulnerability");
   script_name("Siemens SICWEB Auto-Logon on Public WAN (Internet) / Public LAN (HTTP)");
   script_name("Sphinx Search Server Public WAN (Internet) / Public LAN Accessible");
   script_name("Swarmpit Web UI Public WAN (Internet) / Public LAN Accessible");
@@ -785,10 +794,12 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Wiesemann & Theis GmbH W&T OPC Server Version Detection (Windows)");
   script_name("Wireshark Steam IHS Discovery/CoAP Dissector DoS Vulnerabilities (Mac OS X)");
   script_name("Wireshark Steam IHS Discovery/CoAP Dissector DoS Vulnerabilities (Windows)");
+  script_name("WordPress Annonces Plugin 'abspath' Parameter RFI Vulnerability");
 	* scripts/CAs.inc:
   script_tag(name:"affected", value:"Apple Mac OS X Big Sur versions 11.x before
   script_tag(name:"affected", value:"BA SYSTEMS BAS Web on BAS920 devices with
   script_tag(name:"affected", value:"Cisco Nexus 9000 Series ACI Mode Switches when running software versions prior to 11.0(3h) and 11.1(1j)");
+  script_tag(name:"affected", value:"Petite Annonce version 1.0 is known to be affected. Other
   script_tag(name:"affected", value:"RV320 Dual Gigabit WAN VPN Router and RV325 Dual Gigabit WAN
   script_tag(name:"affected", value:"RV320 Dual Gigabit WAN VPN Router and RV325 Dual Gigabit WAN VPN Router.");
   script_tag(name:"affected", value:"tre on Fedora 23");
@@ -796,6 +807,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"affected", value:"tre on Fedora 25");
   script_tag(name:"affected", value:"Visicom Medias AceFTP Freeware/Pro Version 3.80.3 and prior on Windows.");
   script_tag(name:"affected", value:"WAN Emulator 2.3 is vulnerable. Other versions may also be affected.");
+  script_tag(name:"affected", value:"WordPress Annonces plugin 1.2.0.0 is vulnerable. Other versions
   script_tag(name:"impact", value:"A successful exploit could allow the attacker to cause the wireless WAN (WWAN)
   script_tag(name:"impact", value:"Successful exploit could allow an unauthenticated, remote attacker to cause an affected device to start dropping legitimate IPv6 neighbors as legitimate ND times out, leading to DOS.");
   script_tag(name:"insight", value:"Adam Langley and Wan-Teh Chang discovered that OpenSSL
@@ -879,11 +891,13 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"summary", value:"Meh Chang discovered a buffer overflow flaw in a utility function used
   script_tag(name:"summary", value:"Nidesoft MP3 Converter is prone to an SEH local buffer overflow
   script_tag(name:"summary", value:"Palo Alto PAN-OS is prone to a vulnerability in Panorama SD WAN.");
+  script_tag(name:"summary", value:"Petite Annonce is prone to a cross-site scripting (XSS)
   script_tag(name:"summary", value:"Telnet based detection of Huawei TE (Telepresence and
   script_tag(name:"summary", value:"The remote host is a SIP Express Router (SER).
   script_tag(name:"summary", value:"The remote host is missing an update for the 'Recommended udpate for SUSE Manager Client Tools' package(s) announced via the SUSE-SU-2016:1366-1 advisory.");
   script_tag(name:"summary", value:"The remote host is missing an update for the 'tre'
   script_tag(name:"summary", value:"The remote host is missing an update to nd
+  script_tag(name:"summary", value:"The WordPress plugin 'Annonces' is prone to a remote file
   script_tag(name:"summary", value:"Tim McLean discovered that pyjwt, a Python implementation of JSON Web
   script_tag(name:"summary", value:"WAN Emulator is prone to a remote command-execution vulnerability because
   script_tag(name:"summary", value:"Wen Bin discovered that bchunk, an application that converts a CD
@@ -896,6 +910,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_xref(name:"URL", value:"https://oval.cisecurity.org/repository/search/definition/oval%3Aorg.mitre.oval%3Adef%3A9894");
   script_xref(name:"URL", value:"https://packetstormsecurity.com/files/130797/raritanpoweriq-staticsecret.txt");
   script_xref(name:"URL", value:"https://ths.sh/posts/zoomzoo/");
+  script_xref(name:"URL", value:"https://wordpress.org/plugins/annonces/");
   script_xref(name:"URL", value:"https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Reaktion/CERT-Bund/CERT-Bund-Reports/HowTo/Offene-Sphinx-Server/Offene-Sphinx-Server_node.html");
   script_xref(name:"URL", value:"https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03111/BSI-TR-03111_V-2-0_pdf.pdf");
   script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/GLPI_9.4.0_stored_XSS.pdf");
@@ -918,6 +933,8 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/xine-lib.txt");
   script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/yamt.txt");
   script_xref(name:"URL", value:"http://wiki.peiqi.tech/PeiQi_Wiki/OA%E4%BA%A7%E5%93%81%E6%BC%8F%E6%B4%9E/%E5%B8%86%E8%BD%AFOA/%E5%B8%86%E8%BD%AF%E6%8A%A5%E8%A1%A8%202012%20%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E.html");
+  script_xref(name:"URL", value:"http://www.glpi-project.org/spip.php?page=annonce&id_breve=161&lang=en");
+  script_xref(name:"URL", value:"http://www.glpi-project.org/spip.php?page=annonce&id_breve=237&lang=en");
   script_xref(name:"URL", value:"http://www.iptel.org/ser/security/");
   script_xref(name:"URL", value:"http://www.iptel.org/ser/security/secalert-002-0_8_10.patch");
   script_xref(name:"URL", value:"http://www.nd.edu/~jsmith30/xul/test/spoof.html");
@@ -1034,6 +1051,7 @@ TCP 9871 Theef.B
   TE30, TE40, TE50, TE60, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030 and eSpace U1981.");
 ## TE and CE affected but pattern coming like this only
 ##TE and CE affected but pattern coming like this only
+technically correct, the update was not rebuild to the buildd network.");
   "TE: deflate,gzip;q=0.3\r\n",
        ("<!-- Temperatur Speicher" >< res3 && "<!-- Vorlauftemperatur" >< res3)) {
  * The ACN dissector could attempt to divide by zero.
@@ -1116,6 +1134,8 @@ title = "Lokale Sicherheitsrichtlinien";
           + "/toAdmin.php?uE=1&uC=');alert(document.cookie);%3C/script%3E";
  * Tolerating bad MIME headers in ANS.1 parser.
   to or through a WAN interface of an affected device.");
+to the buildd network.");
+to the buildd network are needed (to provide the new Rust-based toolchain
   to the router from the WAN IP address.");
  to use of unitialized use of memory (bsc#1133037).
   TP3106, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030, eCNS210_TD and eSpace U1981.");
@@ -1135,6 +1155,7 @@ upon the close() system call. As a consequence, the iput() final was
 Upstream acknowledges sushi Anton Larsson, firehack, Jordi Chancel,
   Upstream acknowledges Tim Brown and Mark Lowe of Portcullis Computer
   url = dir + "/ang/shared/flags.php?g_lang=../../../../../../../" + file;
+    url = dir + '/annonce/moteur-prix.php?categoriemoteur=1"><script>alert(document.cookie);</script>';
 url = dir + "/cds.php?interpret=%22><script>alert(document.cookie)</script>&titel=title&jahr=1" ;
   url = dir + "/config.xml.sav";
   url = dir + "/CoupleDB.php?Parametre=0&DataDirectory=xyz/VT-RemoteFileInclusion.txt";
@@ -1143,6 +1164,7 @@ url = dir + "/cds.php?interpret=%22><script>alert(document.cookie)</script>&tite
 url = dir + "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt";
 url = dir + "/profiles/index.php?gud=<script>alert(document.cookie)</script>";
 url = dir + "/te<script>alert(document.cookie);</script>st";
+  url = dir + "/wp-content/plugins/annonces/includes/lib/photo/uploadPhoto.php?mainPluginFile=/" + files[file] + "&abspath=../../../../../../";
 URL=http://www.us-cert.gov/cas/techalerts/TA04-041A.html
   url = '/medias/?context=' + payload_encoded;
   url = "/olt/pages/" + uploadfile;
