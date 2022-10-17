@@ -16,9 +16,56 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import AnyStr, Iterator, List, Tuple, Union
+from typing import Iterator
 
+from troubadix.helper.linguistic_exception_handler import (
+    PatternCheck,
+    TextCheck,
+    TextInFileCheck,
+    handle_linguistic_checks,
+)
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
+
+exceptions = [
+    PatternCheck(r'(\s+|"|#\s*)[Aa] few (issues|vulnerabilities)'),
+    TextCheck("a multiple keyboard "),
+    TextCheck("A A S Application Access Server"),
+    TextCheck("a Common Vulnerabilities and Exposures"),
+    TextCheck("Multiple '/' Vulnerability"),
+    TextCheck("an attackers choise"),
+    TextCheck("multiple error handling vulnerabilities"),
+    # Like seen in 2022/debian/deb_dla_2981.nasl
+    TextCheck("a multiple concurrency"),
+    # From 2008/debian/deb_1017_1.nasl
+    TextCheck("Harald Welte discovered that if a process issues"),
+    TextCheck(" a USB Request Block (URB)"),
+    # From several Ubuntu LSCs like e.g.:
+    # 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
+    TextCheck("An attacker with access to at least one LUN in a multiple"),
+    # nb: The regex to catch "this files" might catch this wrongly...
+    PatternCheck(r"th(is|ese)\s+filesystem", re.IGNORECASE),
+    # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
+    PatternCheck(r'(\s+|")[Aa]\s+multiple\s+of'),
+    # WITH can be used like e.g. the following which is valid:
+    # "with WITH stack unwinding"
+    # see e.g. gb_sles_2021_3215_1.nasl or gb_sles_2021_2320_1.nasl
+    PatternCheck(r"with\s+WITH"),
+    # Valid sentences
+    PatternCheck(
+        r"these\s+error\s+(messages|reports|conditions)", re.IGNORECASE
+    ),
+    PatternCheck(
+        r"these\s+file\s+(permissions|overwrites|names|includes)",
+        re.IGNORECASE,
+    ),
+    # nb: Valid sentence
+    TextInFileCheck(
+        "2012/gb_VMSA-2010-0007.nasl",
+        "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
+        "  Vulnerabilities in the",
+    ),
+    TextInFileCheck("gb_opensuse_2018_1900_1.nasl", "(Note that"),
+]
 
 
 def get_grammer_pattern() -> re.Pattern:
@@ -90,8 +137,9 @@ class CheckGrammar(FilePlugin):
 
         for match in pattern.finditer(self.context.file_content):
             if match:
-                if self.check_for_false_positives(
-                    match.group(0), str(self.context.nasl_file)
+
+                if handle_linguistic_checks(
+                    str(self.context.nasl_file), match.group(0), exceptions
                 ):
                     continue
 
@@ -101,82 +149,3 @@ class CheckGrammar(FilePlugin):
                     file=self.context.nasl_file,
                     plugin=self.name,
                 )
-
-    @staticmethod
-    def check_for_false_positives(match: AnyStr, nasl_file: str) -> bool:
-        """
-        Checks for false positives in the findings.
-        """
-
-        # List of known false positives, valid entries are:
-        # strings, regex patterns and Tuples
-        # in the format of: (filename, content)
-        known_fps = [
-            re.compile(r'(\s+|"|#\s*)[Aa] few (issues|vulnerabilities)'),
-            "a multiple keyboard ",
-            "A A S Application Access Server",
-            "a Common Vulnerabilities and Exposures",
-            "Multiple '/' Vulnerability",
-            "an attackers choise",
-            "multiple error handling vulnerabilities",
-            # Like seen in 2022/debian/deb_dla_2981.nasl
-            "a multiple concurrency",
-            # From 2008/debian/deb_1017_1.nasl
-            "Harald Welte discovered that if a process issues"
-            " a USB Request Block (URB)",
-            # From several Ubuntu LSCs like e.g.:
-            # 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
-            "An attacker with access to at least one LUN in a multiple",
-            # nb: The regex to catch "this files" might catch this wrongly...
-            re.compile(r"th(is|ese)\s+filesystem", re.IGNORECASE),
-            # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
-            re.compile(r'(\s+|")[Aa]\s+multiple\s+of'),
-            # WITH can be used like e.g. the following which is valid:
-            # "with WITH stack unwinding"
-            # see e.g. gb_sles_2021_3215_1.nasl or gb_sles_2021_2320_1.nasl
-            re.compile(r"with\s+WITH"),
-            # Valid sentences
-            re.compile(
-                r"these\s+error\s+(messages|reports|conditions)", re.IGNORECASE
-            ),
-            re.compile(
-                r"these\s+file\s+(permissions|overwrites|names|includes)",
-                re.IGNORECASE,
-            ),
-            (
-                "2012/gb_VMSA-2010-0007.nasl",
-                "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
-                "  Vulnerabilities in the",
-            ),
-            # nb: Valid sentence
-            ("gb_opensuse_2018_1900_1.nasl", "(Note that"),
-        ]
-
-        return any(
-            [
-                CheckGrammar._check_false_positive(fp, match, nasl_file)
-                for fp in known_fps
-            ]
-        )
-
-    @staticmethod
-    def _check_false_positive(
-        false_positive: List[Union[re.Pattern, str, Tuple[str, str]]],
-        match: re.Match,
-        nasl_filename: str,
-    ) -> bool:
-        if isinstance(false_positive, re.Pattern):
-            return bool(false_positive.search(match))
-
-        elif isinstance(false_positive, str):
-            return false_positive in match
-
-        elif isinstance(false_positive, tuple):
-            filename, content_fp = false_positive
-            return filename in nasl_filename and content_fp in match
-
-        else:
-            raise NotImplementedError(
-                "Invalid type for false_positives entry. "
-                "Valid types: str, re.Pattern, Tuple[str, str]"
-            )
