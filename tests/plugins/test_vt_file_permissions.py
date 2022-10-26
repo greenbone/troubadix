@@ -18,7 +18,7 @@
 from pathlib import Path
 
 from troubadix.plugin import LinterError
-from troubadix.plugins.vt_file_permission import CheckVTFilePermissions
+from troubadix.plugins.vt_file_permissions import CheckVTFilePermissions
 
 from . import PluginTestCase
 

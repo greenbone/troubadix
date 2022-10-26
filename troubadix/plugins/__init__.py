@@ -76,7 +76,7 @@ from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .variable_assigned_in_if import CheckVariableAssignedInIf
-from .vt_file_permission import CheckVTFilePermissions
+from .vt_file_permissions import CheckVTFilePermissions
 from .vt_placement import CheckVTPlacement
 
 # plugins checking single files
