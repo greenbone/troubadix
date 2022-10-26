@@ -61,7 +61,7 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
             results[0].message,
         )
 
-    def test_duplicated_oid_function(self):
+    def test_duplicate_oid_function(self):
         file1 = here / "test_files" / "nasl" / "21.04" / "fail.nasl"
         file2 = here / "test_files" / "nasl" / "21.04" / "test.nasl"
         context = MagicMock()
