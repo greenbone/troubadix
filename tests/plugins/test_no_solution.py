@@ -107,7 +107,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
 
         from_root = get_path_from_root(file1, context.root)
 
-        self.assertEqual(len(results), 5)
+        self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertIn(
             f"{from_root}: ",
@@ -144,7 +144,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file1.write_text(text, encoding=CURRENT_ENCODING)
         from_root = get_path_from_root(file1, context.root)
 
-        self.assertEqual(len(results), 5)
+        self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertIn(
             f"{from_root}: ",
@@ -181,7 +181,7 @@ class CheckNoSolutionTestCase(PluginTestCase):
         file1.write_text(text, encoding=CURRENT_ENCODING)
         from_root = get_path_from_root(file1, context.root)
 
-        self.assertEqual(len(results), 5)
+        self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertIn(
             f"{from_root}: ",
@@ -190,75 +190,4 @@ class CheckNoSolutionTestCase(PluginTestCase):
         self.assertIn(
             "Missing solution, but younger than 31 days.",
             results[0].message,
-        )
-
-    def test_multiples(self):
-        file1 = (
-            here
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "fail_solution_template.nasl"
-        )
-        file2 = (
-            here
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "fail_solution_template2.nasl"
-        )
-        file3 = (
-            here
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "fail_solution_template3.nasl"
-        )
-
-        date1 = (datetime.now() - timedelta(days=200)).strftime("%Y/%m/%d")
-        date2 = (datetime.now() - timedelta(days=400)).strftime("%Y/%m/%d")
-        date3 = (datetime.now() - timedelta(days=10)).strftime("%Y/%m/%d")
-
-        text = file1.read_text(encoding=CURRENT_ENCODING)
-
-        file1.write_text(
-            text.replace("02nd February, 2021", date1),
-            encoding=CURRENT_ENCODING,
-        )
-        file2.write_text(
-            text.replace("02nd February, 2021", date2),
-            encoding=CURRENT_ENCODING,
-        )
-        file3.write_text(
-            text.replace("02nd February, 2021", date3),
-            encoding=CURRENT_ENCODING,
-        )
-
-        context = MagicMock()
-        context.nasl_files = [file1, file2, file3]
-        context.root = here
-        plugin = CheckNoSolution(context)
-        results = list(plugin.run())
-
-        # reverse change to file
-        file1.write_text(text, encoding=CURRENT_ENCODING)
-        file2.unlink()
-        file3.unlink()
-
-        self.assertEqual(len(results), 7)
-        self.assertEqual(
-            "total missing solutions: 3",
-            results[3].message,
-        )
-        self.assertEqual(
-            "missing solutions younger 1 month: 1",
-            results[4].message,
-        )
-        self.assertEqual(
-            "missing solutions older than 6 months: 1",
-            results[5].message,
-        )
-        self.assertEqual(
-            "missing solutions older than 1 year: 1",
-            results[6].message,
         )
