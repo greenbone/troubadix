@@ -130,27 +130,6 @@ class CheckNoSolution(FilesPlugin):
                     plugin=self.name,
                 )
 
-        if total_missing_solutions > 0:
-            yield LinterWarning(
-                "total missing solutions:" f" {total_missing_solutions}",
-                plugin=self.name,
-            )
-            yield LinterWarning(
-                "missing solutions younger 1 month:"
-                f" {missing_solutions_younger_1_month}",
-                plugin=self.name,
-            )
-            yield LinterWarning(
-                "missing solutions older than 6 months:"
-                f" {missing_solutions_older_than_6_months}",
-                plugin=self.name,
-            )
-            yield LinterWarning(
-                "missing solutions older than 1 year:"
-                f" {missing_solutions_older_than_1_year}",
-                plugin=self.name,
-            )
-
 
 def parse_date(date_string: str) -> datetime:
     """Convert date string to date trying different formats"""
