@@ -69,6 +69,9 @@ def parse_solution_date(date_string: str) -> datetime:
 
 def parse_args() -> Namespace:
     parser = ArgumentParser(
+        description="Check VTs for solution type NoneAvailable",
+    )
+
     parser.add_argument(
         "-d",
         "--directory",
