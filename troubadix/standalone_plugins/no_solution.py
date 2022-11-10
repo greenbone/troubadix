@@ -42,10 +42,10 @@ SOLUTION_DATE_FORMATS = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 CREATION_DATE_FORMAT = "%Y-%m-%d"
 
 
-def file_type(string: str) -> Path:
+def directory_type(string: str) -> Path:
     file_path = Path(string)
-    if not file_path.is_file():
-        raise ValueError(f"{string} is not a file.")
+    if not file_path.is_dir():
+        raise ValueError(f"{string} is not a directory.")
     return file_path
 
 
@@ -69,7 +69,12 @@ def parse_solution_date(date_string: str) -> datetime:
 
 def parse_args() -> Namespace:
     parser = ArgumentParser(
-        description="Check VTs for missing solutions",
+    parser.add_argument(
+        "-d",
+        "--directory",
+        dest="directory",
+        type=directory_type,
+        help="Specify the directory to scan for nasl scripts",
     )
 
     parser.add_argument(
@@ -189,6 +194,12 @@ def report(
 def main():
     root = Path.cwd()
     arguments = parse_args()
+
+    if arguments.directory:
+        root = arguments.directory
+    else:
+        root = Path.cwd()
+
     files = list(root.rglob("*.nasl"))
 
     milestones = sorted(arguments.milestones, reverse=True)
