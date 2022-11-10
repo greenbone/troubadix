@@ -21,7 +21,7 @@ from argparse import ArgumentParser, Namespace
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, Iterable, List, Set
+from typing import Iterable, List, Set, Tuple
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -37,7 +37,6 @@ SOLUTION_TYPE_PATTERN = get_script_tag_pattern(ScriptTag.SOLUTION_TYPE)
 CREATION_DATE_PATTERN = get_script_tag_pattern(ScriptTag.CREATION_DATE)
 CVSS_PATTERN = get_script_tag_pattern(ScriptTag.CVSS_BASE)
 
-# Add the solutions date's here
 SOLUTION_DATE_FORMATS = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 CREATION_DATE_FORMAT = "%Y-%m-%d"
 
@@ -120,7 +119,7 @@ def check_skip_script(file_content: str) -> bool:
 
 def check_no_solutions(
     files: Iterable[Path], milestones: List[int]
-) -> Dict[str, Set]:
+) -> List[Tuple[int, Set[Path]]]:
     summary = defaultdict(set)
 
     for nasl_file in files:
@@ -159,43 +158,54 @@ def check_no_solutions(
                 summary[milestone].add(nasl_file)
                 break
 
-    return summary
+    return sorted(
+        [(milestone, vts) for milestone, vts in summary.items()],
+        key=lambda tuple: tuple[0],
+        reverse=True,
+    )
 
 
-def report(
-    summary: Dict[str, Set], milestones: List[int], threshold: int, root: Path
+def print_info(
+    term: ConsoleTerminal, milestones: List[int], threshold: int, root: Path
 ):
-    term = ConsoleTerminal()
-    total = sum(len(items) for _, items in summary.items())
-
-    term.bold_info("Reported VTs with no available solution")
+    term.bold_info("Reported VTs with solution type 'NoneAvailable'")
     with term.indent():
+        term.print(f"Root directory: {root}")
         milestone_str = ", ".join(str(milestone) for milestone in milestones)
         term.print(f"Milestones: {milestone_str} months")
         term.print(f"Expect no solution threshold: {threshold} months")
-        term.print(f"Total VTs without solution: {total}")
 
-    for milestone in milestones:
+
+def print_report(
+    term: ConsoleTerminal,
+    summary: Iterable[Tuple[int, Set[Path]]],
+    threshold: int,
+    root: Path,
+):
+    total = sum(len(vts) for _, vts in summary)
+
+    term.info(f"Total VTs without solution: {total}")
+
+    for milestone, vts in summary:
 
         if milestone >= threshold:
             term.bold_info(
-                f"{len(summary[milestone])} VTs with no solution "
+                f"{len(vts)} VTs with no solution "
                 f"for more than {milestone} month(s).\n"
                 "No solution should be expected at this point. "
             )
         else:
             term.bold_info(
-                f"{len(summary[milestone])} VTs with no solution for "
+                f"{len(vts)} VTs with no solution for "
                 f"more than {milestone} month(s)"
             )
 
         with term.indent():
-            for vt in summary[milestone]:
+            for vt in vts:
                 term.print(str(vt.relative_to(root)))
 
 
 def main():
-    root = Path.cwd()
     arguments = parse_args()
 
     if arguments.directory:
@@ -207,9 +217,13 @@ def main():
 
     milestones = sorted(arguments.milestones, reverse=True)
 
+    term = ConsoleTerminal()
+
+    print_info(term, milestones, arguments.threshold, root)
+
     summary = check_no_solutions(files, milestones)
 
-    report(summary, milestones, arguments.threshold, root)
+    print_report(term, summary, arguments.threshold, root)
 
 
 if __name__ == "__main__":
