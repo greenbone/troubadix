@@ -21,12 +21,17 @@ from argparse import ArgumentParser, Namespace
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Iterable, List, Set, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.helper import CURRENT_ENCODING
-from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
+from troubadix.helper.patterns import (
+    ScriptTag,
+    SpecialScriptTag,
+    get_script_tag_pattern,
+    get_special_script_tag_pattern,
+)
 
 SOLUTION_TYPE_NONE_AVAILABLE = "NoneAvailable"
 CVSS_DETECTION_SCRIPT = "0.0"
@@ -36,6 +41,7 @@ SOLUTION_DATE_PATTERN = re.compile(r"as\s+of\s*(?P<date>.+?)\.\s*", re.DOTALL)
 SOLUTION_TYPE_PATTERN = get_script_tag_pattern(ScriptTag.SOLUTION_TYPE)
 CREATION_DATE_PATTERN = get_script_tag_pattern(ScriptTag.CREATION_DATE)
 CVSS_PATTERN = get_script_tag_pattern(ScriptTag.CVSS_BASE)
+OID_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.OID)
 
 SOLUTION_DATE_FORMATS = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 CREATION_DATE_FORMAT = "%Y-%m-%d"
@@ -117,10 +123,40 @@ def check_skip_script(file_content: str) -> bool:
     return False
 
 
+def extract_tags(content: str) -> Optional[Tuple[datetime, datetime, str]]:
+    solution_match = SOLUTION_PATTERN.search(content)
+    if not solution_match:
+        return None
+
+    date_match = SOLUTION_DATE_PATTERN.search(solution_match.group("value"))
+    if not date_match:
+        return None
+
+    solution_date = parse_solution_date(date_match.group("date"))
+    if not solution_date:
+        return None
+
+    creation_match = CREATION_DATE_PATTERN.search(content)
+    if not creation_match:
+        return None
+
+    creation_date = datetime.strptime(
+        creation_match.group("value")[:10], CREATION_DATE_FORMAT
+    )
+
+    oid_match = OID_PATTERN.search(content)
+    if not oid_match:
+        return None
+
+    oid = oid_match.group("value")
+
+    return solution_date, creation_date, oid
+
+
 def check_no_solutions(
     files: Iterable[Path], milestones: List[int]
-) -> List[Tuple[int, Set[Path]]]:
-    summary = defaultdict(set)
+) -> List[Tuple[int, List[Tuple[Path, str, datetime]]]]:
+    summary = defaultdict(list)
 
     for nasl_file in files:
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
@@ -128,38 +164,23 @@ def check_no_solutions(
         if check_skip_script(content):
             continue
 
-        solution_match = SOLUTION_PATTERN.search(content)
-        if not solution_match:
-            continue
+        extracted_tags = extract_tags(content)
+        if not extracted_tags:
+            raise ValueError(content)
 
-        date_match = SOLUTION_DATE_PATTERN.search(solution_match.group("value"))
-        if not date_match:
-            continue
-
-        solution_date = parse_solution_date(date_match.group("date"))
-
-        if not solution_date:
-            continue
-
-        creation_match = CREATION_DATE_PATTERN.search(content)
-        if not creation_match:
-            continue
-
-        creation_date = datetime.strptime(
-            creation_match.group("value")[:10], CREATION_DATE_FORMAT
-        )
+        solution_date, creation_date, oid = extracted_tags
 
         date_diff = solution_date - creation_date
 
         for milestone in milestones:
-            # 365 / 12 = 30.4 ... This is as close as it will get
-            delta = timedelta(days=milestone * 30.4)
+            # 365 / 12 = 30.4175, close as it will get
+            delta = timedelta(days=milestone * 30.4175)
             if date_diff >= delta:
-                summary[milestone].add(nasl_file)
+                summary[milestone].append((nasl_file, oid, solution_date))
                 break
 
     return sorted(
-        [(milestone, vts) for milestone, vts in summary.items()],
+        [(milestone, vts) for milestone, vts, in summary.items()],
         key=lambda tuple: tuple[0],
         reverse=True,
     )
@@ -178,13 +199,13 @@ def print_info(
 
 def print_report(
     term: ConsoleTerminal,
-    summary: Iterable[Tuple[int, Set[Path]]],
+    summary: Iterable[Tuple[int, List[Tuple[Path, str, datetime]]]],
     threshold: int,
     root: Path,
 ):
     total = sum(len(vts) for _, vts in summary)
 
-    term.info(f"Total VTs without solution: {total}")
+    term.info(f"Total VTs without solution: {total}\n")
 
     for milestone, vts in summary:
 
@@ -200,9 +221,15 @@ def print_report(
                 f"more than {milestone} month(s)"
             )
 
-        with term.indent():
-            for vt in vts:
-                term.print(str(vt.relative_to(root)))
+        for vt, oid, date in vts:
+            term.info(vt.name)
+
+            with term.indent():
+                term.print(f"File: {str(vt.relative_to(root))}")
+                term.print(f"OID: {oid}")
+                term.print(f"Last solution update: {date.strftime('%Y-%m-%d')}")
+
+        term.print()
 
 
 def main():
