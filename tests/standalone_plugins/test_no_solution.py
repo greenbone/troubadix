@@ -196,6 +196,7 @@ class ParseArgsTestCase(unittest.TestCase):
                             test_file,
                             "1.3.6.1.4.1.25623.1.0.118132",
                             datetime(2022, 8, 5),
+                            datetime(2021, 7, 21),
                         )
                     ],
                 )

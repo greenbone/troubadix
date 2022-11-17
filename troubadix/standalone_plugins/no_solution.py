@@ -46,6 +46,8 @@ OID_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.OID)
 SOLUTION_DATE_FORMATS = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 CREATION_DATE_FORMAT = "%Y-%m-%d"
 
+MONTH_AS_DAYS = 30.4175
+
 
 def directory_type(string: str) -> Path:
     file_path = Path(string)
@@ -74,7 +76,7 @@ def parse_solution_date(date_string: str) -> datetime:
 
 def parse_args() -> Namespace:
     parser = ArgumentParser(
-        description="Check VTs for solution type NoneAvailable",
+        description="Check VTs for solution type 'NoneAvailable'",
     )
 
     parser.add_argument(
@@ -90,7 +92,8 @@ def parse_args() -> Namespace:
         "--milestones",
         dest="milestones",
         help="Defines the milestones for which to report VTs "
-        "without a solution for, in months",
+        "without a solution for, in months. VTs with no solution newer"
+        "than the smallest milestone will not be reported.",
         nargs="+",
         default=[12, 6, 1],
     )
@@ -155,7 +158,7 @@ def extract_tags(content: str) -> Optional[Tuple[datetime, datetime, str]]:
 
 def check_no_solutions(
     files: Iterable[Path], milestones: List[int]
-) -> List[Tuple[int, List[Tuple[Path, str, datetime]]]]:
+) -> List[Tuple[int, List[Tuple[Path, str, datetime, datetime]]]]:
     summary = defaultdict(list)
 
     for nasl_file in files:
@@ -170,13 +173,21 @@ def check_no_solutions(
 
         solution_date, creation_date, oid = extracted_tags
 
-        date_diff = solution_date - creation_date
+        solution_diff = datetime.now() - solution_date
+        milestone_min = min(milestones)
+
+        if solution_diff < timedelta(days=MONTH_AS_DAYS * milestone_min):
+            continue
+
+        creation_diff = datetime.now() - creation_date
 
         for milestone in milestones:
             # 365 / 12 = 30.4175, close as it will get
-            delta = timedelta(days=milestone * 30.4175)
-            if date_diff >= delta:
-                summary[milestone].append((nasl_file, oid, solution_date))
+            delta = timedelta(days=milestone * MONTH_AS_DAYS)
+            if creation_diff >= delta:
+                summary[milestone].append(
+                    (nasl_file, oid, solution_date, creation_date)
+                )
                 break
 
     return sorted(
@@ -199,7 +210,7 @@ def print_info(
 
 def print_report(
     term: ConsoleTerminal,
-    summary: Iterable[Tuple[int, List[Tuple[Path, str, datetime]]]],
+    summary: Iterable[Tuple[int, List[Tuple[Path, str, datetime, datetime]]]],
     threshold: int,
     root: Path,
 ):
@@ -221,13 +232,16 @@ def print_report(
                 f"more than {milestone} month(s)"
             )
 
-        for vt, oid, date in vts:
+        for vt, oid, solution, creation in vts:
             term.info(vt.name)
 
             with term.indent():
                 term.print(f"File: {str(vt.relative_to(root))}")
                 term.print(f"OID: {oid}")
-                term.print(f"Last solution update: {date.strftime('%Y-%m-%d')}")
+                term.print(f"Created: {creation.strftime('%Y-%m-%d')}")
+                term.print(
+                    f"Last solution update: {solution.strftime('%Y-%m-%d')}"
+                )
 
         term.print()
 
