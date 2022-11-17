@@ -15,22 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import io
 import tempfile
 import unittest
-from contextlib import redirect_stdout
 from datetime import datetime
 from pathlib import Path
-
-from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.standalone_plugins.no_solution import (
     check_no_solutions,
     check_skip_script,
     extract_tags,
     parse_solution_date,
-    print_info,
-    print_report,
 )
 
 
@@ -208,100 +202,3 @@ class ParseArgsTestCase(unittest.TestCase):
             ]
 
             self.assertEqual(result, expected_result)
-
-    def test_print_info(self):
-
-        term = ConsoleTerminal()
-
-        with redirect_stdout(io.StringIO()) as f:
-            print_info(term, [12, 6, 1], 12, "/home/test")
-
-        result = f.getvalue()
-
-        # Control chars from terminal output included
-        expected_result = (
-            "\x1b[1m\x1b[38;2;0;255;255mℹ\x1b[39m\x1b[1m Reported VTs "
-            "with solution type 'NoneAvailable'\x1b[22m\n\x1b[0m\x1b["
-            "38;2;255;255;255m \x1b[39m\x1b[0m     Root directory: "
-            "/home/test\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m "
-            "\x1b[39m\x1b[0m     Milestones: 12, 6, 1 "
-            "months\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m "
-            "\x1b[39m\x1b[0m     Expect no solution threshold: "
-            "12 months\x1b[0m\n"
-        )
-
-        self.assertEqual(result, expected_result)
-
-    def test_print_report(self):
-        term = ConsoleTerminal()
-
-        summary = [
-            (
-                12,
-                [
-                    (
-                        Path("/home/test/vt1.nasl"),
-                        "1.2.3",
-                        datetime(2022, 1, 1),
-                    )
-                ],
-            ),
-            (
-                6,
-                [
-                    (
-                        Path("/home/test/vt2.nasl"),
-                        "1.2.4",
-                        datetime(2021, 7, 1),
-                    )
-                ],
-            ),
-            (
-                1,
-                [
-                    (
-                        Path("/home/test/vt3.nasl"),
-                        "1.2.5",
-                        datetime(2021, 1, 1),
-                    )
-                ],
-            ),
-        ]
-
-        with redirect_stdout(io.StringIO()) as f:
-            print_report(term, summary, 12, Path("/home/test"))
-
-        result = f.getvalue()
-
-        # Control chars from terminal output included
-        expected_result = (
-            "\x1b[0m\x1b[38;2;0;255;255mℹ\x1b[39m\x1b[0m"
-            " Total VTs without solution: 3\n  "
-            "\x1b[0m\n\x1b[1m\x1b[38;2;0;255;255mℹ\x1b[39m\x1b[1m "
-            "1 VTs with no solution for more than 12 month(s).\n  "
-            "No solution should be expected at this point. "
-            "\x1b[22m\n\x1b[0m\x1b[38;2;0;255;255mℹ\x1b[39m\x1b[0m "
-            "vt1.nasl\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m \x1b[39m\x1b[0m"
-            "     File: vt1.nasl\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m "
-            "\x1b[39m\x1b[0m     OID: 1.2.3\x1b[0m\n\x1b[0m\x1b"
-            "[38;2;255;255;255m \x1b[39m\x1b[0m     Last solution "
-            "update: 2022-01-01\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m "
-            "\x1b[39m\x1b[0m \x1b[0m\n\x1b[1m\x1b[38;2;0;255;255mℹ\x1b"
-            "[39m\x1b[1m 1 VTs with no solution for more than 6 month(s)"
-            "\x1b[22m\n\x1b[0m\x1b[38;2;0;255;255mℹ\x1b[39m\x1b[0m "
-            "vt2.nasl\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m \x1b[39m\x1b[0m"
-            "     File: vt2.nasl\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m "
-            "\x1b[39m\x1b[0m     OID: 1.2.4\x1b[0m\n\x1b[0m\x1b"
-            "[38;2;255;255;255m \x1b[39m\x1b[0m     Last solution update: "
-            "2021-07-01\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m \x1b[39m\x1b[0m "
-            "\x1b[0m\n\x1b[1m\x1b[38;2;0;255;255mℹ\x1b[39m\x1b[1m 1 VTs with "
-            "no solution for more than 1 month(s)\x1b[22m\n\x1b[0m\x1b"
-            "[38;2;0;255;255mℹ\x1b[39m\x1b[0m vt3.nasl\x1b[0m\n\x1b[0m\x1b"
-            "[38;2;255;255;255m \x1b[39m\x1b[0m     File: vt3.nasl\x1b"
-            "[0m\n\x1b[0m\x1b[38;2;255;255;255m \x1b[39m\x1b[0m     OID: "
-            "1.2.5\x1b[0m\n\x1b[0m\x1b[38;2;255;255;255m \x1b[39m\x1b[0m"
-            "     Last solution update: 2021-01-01\x1b[0m\n\x1b[0m\x1b"
-            "[38;2;255;255;255m \x1b[39m\x1b[0m \x1b[0m\n"
-        )
-
-        self.assertEqual(result, expected_result)
