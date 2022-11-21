@@ -46,7 +46,7 @@ OID_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.OID)
 SOLUTION_DATE_FORMATS = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 CREATION_DATE_FORMAT = "%Y-%m-%d"
 
-MONTH_AS_DAYS = 30.4175
+MONTH_AS_DAYS = 365 / 12
 
 
 def directory_type(string: str) -> Path:
