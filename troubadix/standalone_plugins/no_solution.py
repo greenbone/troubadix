@@ -191,9 +191,8 @@ def check_no_solutions(
         creation_diff = datetime.now() - creation_date
 
         for milestone in milestones:
-            # 365 / 12 = 30.4175, close as it will get
-            delta = timedelta(days=milestone * MONTH_AS_DAYS)
-            if creation_diff >= delta:
+            milestone_delta = timedelta(days=milestone * MONTH_AS_DAYS)
+            if creation_diff >= milestone_delta:
                 summary[milestone].append(
                     (nasl_file, oid, solution_date, creation_date)
                 )
