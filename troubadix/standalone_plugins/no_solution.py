@@ -169,7 +169,7 @@ def check_no_solutions(
 
         extracted_tags = extract_tags(content)
         if not extracted_tags:
-            raise ValueError(content)
+            raise ValueError(f"Could not extract tags from {nasl_file}")
 
         solution_date, creation_date, oid = extracted_tags
 
