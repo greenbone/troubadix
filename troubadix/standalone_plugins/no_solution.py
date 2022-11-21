@@ -249,10 +249,7 @@ def print_report(
 def main():
     arguments = parse_args()
 
-    if arguments.directory:
-        root = arguments.directory
-    else:
-        root = Path.cwd()
+    root = arguments.directory or Path.cwd()
 
     files = list(root.rglob("*.nasl"))
 
