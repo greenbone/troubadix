@@ -186,7 +186,7 @@ class ParseArgsTestCase(unittest.TestCase):
                 )
                 file_stream.write(content)
 
-            result = check_no_solutions([test_file], [12, 6, 1])
+            result = check_no_solutions([test_file], [12, 6, 1], 1)
 
             expected_result = [
                 (
