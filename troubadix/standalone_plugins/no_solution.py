@@ -108,6 +108,16 @@ def parse_args() -> Namespace:
         "will be provived anymore",
     )
 
+    parser.add_argument(
+        "-s",
+        "--snooze",
+        dest="snooze",
+        type=int,
+        default=1,
+        help="The duration to suppress reporting VTs for based"
+        "on the date stated in solution, in months.",
+    )
+
     return parser.parse_args()
 
 
@@ -157,7 +167,7 @@ def extract_tags(content: str) -> Optional[Tuple[datetime, datetime, str]]:
 
 
 def check_no_solutions(
-    files: Iterable[Path], milestones: List[int]
+    files: Iterable[Path], milestones: List[int], snooze_duration: int
 ) -> List[Tuple[int, List[Tuple[Path, str, datetime, datetime]]]]:
     summary = defaultdict(list)
 
@@ -174,9 +184,8 @@ def check_no_solutions(
         solution_date, creation_date, oid = extracted_tags
 
         solution_diff = datetime.now() - solution_date
-        milestone_min = min(milestones)
 
-        if solution_diff < timedelta(days=MONTH_AS_DAYS * milestone_min):
+        if solution_diff < timedelta(days=snooze_duration * MONTH_AS_DAYS):
             continue
 
         creation_diff = datetime.now() - creation_date
@@ -259,7 +268,7 @@ def main():
 
     print_info(term, milestones, arguments.threshold, root)
 
-    summary = check_no_solutions(files, milestones)
+    summary = check_no_solutions(files, milestones, arguments.snooze)
 
     print_report(term, summary, arguments.threshold, root)
 
