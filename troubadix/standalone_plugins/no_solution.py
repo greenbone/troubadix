@@ -251,7 +251,7 @@ def main():
 
     root = arguments.directory or Path.cwd()
 
-    files = list(root.rglob("*.nasl"))
+    files = root.rglob("*.nasl")
 
     milestones = sorted(arguments.milestones, reverse=True)
 
