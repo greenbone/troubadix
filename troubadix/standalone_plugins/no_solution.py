@@ -114,8 +114,8 @@ def parse_args() -> Namespace:
         dest="snooze",
         type=int,
         default=1,
-        help="The duration to suppress reporting VTs for based"
-        "on the date stated in solution, in months.",
+        help="The duration, in months, to suppress reporting VTs after, based"
+        "on the date stated in the solution text.",
     )
 
     return parser.parse_args()
