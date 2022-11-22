@@ -31,7 +31,6 @@ from troubadix.plugins.copyright_text import CheckCopyrightText
 from troubadix.plugins.cvss_format import CheckCVSSFormat
 from troubadix.plugins.duplicate_oid import CheckDuplicateOID
 from troubadix.plugins.missing_desc_exit import CheckMissingDescExit
-from troubadix.plugins.no_solution import CheckNoSolution
 from troubadix.plugins.script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
@@ -151,7 +150,7 @@ class TestRunner(unittest.TestCase):
             / "runner"
             / "fail.nasl"
         )
-        included_plugins = [CheckCVSSFormat.name, CheckNoSolution.name]
+        included_plugins = [CheckCVSSFormat.name, CheckCopyrightText.name]
         runner = Runner(
             n_jobs=1,
             reporter=self._reporter,
@@ -164,7 +163,7 @@ class TestRunner(unittest.TestCase):
 
         self.assertFalse(sys_exit)
 
-        self.assertEqual(self._reporter._result_counts.error_count, 3)
+        self.assertEqual(self._reporter._result_counts.error_count, 2)
         self.assertEqual(self._reporter._result_counts.warning_count, 0)
         self.assertEqual(self._reporter._result_counts.fix_count, 0)
         self.assertEqual(
@@ -360,7 +359,6 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             CheckDuplicateOID.name,
             CheckMissingDescExit.name,
-            CheckNoSolution.name,
         ]
         nasl_file = (
             _here
@@ -387,16 +385,12 @@ class TestRunner(unittest.TestCase):
             runner.run([nasl_file])
 
         compare_content = (
-            "\tIncluded Plugins: check_duplicate_oid, check_missing_desc_exit"
-            ", check_no_solution\n"
-            "\tRunning plugins: check_duplicate_oid, check_no_solution, "
-            "check_missing_desc_exit\n"
+            "\tIncluded Plugins: check_duplicate_oid, check_missing_desc_exit\n"
+            "\tRunning plugins: check_duplicate_oid, check_missing_desc_exit\n"
             "\n\nRun plugin check_duplicate_oid\n"
             "\tResults for plugin check_duplicate_oid\n"
             "\t\tInvalid OID 1.2.3.4.5.6.78909.1.7.654321 found"
             " in '21.04/runner/test.nasl'.\n\n\n"
-            "Run plugin check_no_solution\n"
-            "\t\tNo results for plugin check_no_solution\n\n\n"
             f"Checking {get_path_from_root(nasl_file, self.root)} (1/1)\n\t\t"
             "No results for plugin"
             " check_missing_desc_exit\n\tTime elapsed: 0:00:00.013967"
@@ -510,7 +504,6 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             CheckDuplicateOID.name,
             CheckMissingDescExit.name,
-            CheckNoSolution.name,
         ]
         nasl_file = (
             _here
@@ -556,7 +549,6 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             CheckDuplicateOID.name,
             CheckMissingDescExit.name,
-            CheckNoSolution.name,
         ]
         nasl_file = (
             _here
