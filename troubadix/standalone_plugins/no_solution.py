@@ -206,14 +206,19 @@ def check_no_solutions(
 
 
 def print_info(
-    term: ConsoleTerminal, milestones: List[int], threshold: int, root: Path
+    term: ConsoleTerminal,
+    milestones: List[int],
+    threshold: int,
+    snooze: int,
+    root: Path,
 ):
-    term.bold_info("Reported VTs with solution type 'NoneAvailable'")
+    term.bold_info("Report VTs with solution type 'NoneAvailable'")
     with term.indent():
         term.print(f"Root directory: {root}")
         milestone_str = ", ".join(str(milestone) for milestone in milestones)
         term.print(f"Milestones: {milestone_str} months")
         term.print(f"Expect no solution threshold: {threshold} months")
+        term.print(f"Snooze duration: {snooze} months")
 
 
 def print_report(
@@ -265,7 +270,7 @@ def main():
 
     term = ConsoleTerminal()
 
-    print_info(term, milestones, arguments.threshold, root)
+    print_info(term, milestones, arguments.threshold, arguments.snooze, root)
 
     summary = check_no_solutions(files, milestones, arguments.snooze)
 
