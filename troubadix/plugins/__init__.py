@@ -40,6 +40,7 @@ from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
 from .illegal_characters import CheckIllegalCharacters
 from .log_messages import CheckLogMessages
+from .malformed_dependencies import CheckMalformedDependencies
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
@@ -100,6 +101,7 @@ _FILE_PLUGINS = [
     CheckHttpLinksInTags,
     CheckIllegalCharacters,
     CheckLogMessages,
+    CheckMalformedDependencies,
     CheckMisplacedCompareInIf,
     CheckMissingDescExit,
     CheckMissingTagSolution,
