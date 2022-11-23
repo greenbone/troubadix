@@ -143,3 +143,26 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         self.assertIsInstance(results[1], LinterError)
         self.assertEqual(results[0].message, expected_result_1)
         self.assertEqual(results[1].message, expected_result_2)
+
+    def test_nok_5(self):
+        path = here / "file.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_dependencies("example .inc", "example2.inc");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content, root=here
+        )
+        plugin = CheckMalformedDependencies(fake_context)
+
+        results = list(plugin.run())
+
+        expected_result = (
+            "The script dependency value is malformed and contains "
+            "whitespace within the dependency value: 'example .inc'"
+        )
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(results[0].message, expected_result)
