@@ -31,7 +31,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.inc", "example2.inc");\n'
+            'script_dependencies("example.nasl", "example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -47,7 +47,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.inc,example2.inc");\n'
+            'script_dependencies("example.nasl,example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -58,7 +58,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
 
         expected_result = (
             "The script dependency value is malformed and contains a "
-            "comma in the dependency value: 'example.inc,example2.inc'"
+            "comma in the dependency value: 'example.nasl,example2.nasl'"
         )
 
         self.assertEqual(len(results), 1)
@@ -70,8 +70,8 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.inc,example2.inc",'
-            ' "example3.inc");\n'
+            'script_dependencies("example.nasl,example2.nasl",'
+            ' "example3.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -82,7 +82,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
 
         expected_result = (
             "The script dependency value is malformed and contains a "
-            "comma in the dependency value: 'example.inc,example2.inc'"
+            "comma in the dependency value: 'example.nasl,example2.nasl'"
         )
 
         self.assertEqual(len(results), 1)
@@ -94,7 +94,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.inc example2.inc");\n'
+            'script_dependencies("example.nasl example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -106,7 +106,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         expected_result = (
             "The script dependency value is malformed and contains "
             "whitespace within the dependency value: "
-            "'example.inc example2.inc'"
+            "'example.nasl example2.nasl'"
         )
 
         self.assertEqual(len(results), 1)
@@ -118,7 +118,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.inc, example2.inc");\n'
+            'script_dependencies("example.nasl, example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -129,13 +129,13 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
 
         expected_result_1 = (
             "The script dependency value is malformed and contains "
-            "a comma in the dependency value: 'example.inc, example2.inc'"
+            "a comma in the dependency value: 'example.nasl, example2.nasl'"
         )
 
         expected_result_2 = (
             "The script dependency value is malformed and contains "
             "whitespace within the dependency value: "
-            "'example.inc, example2.inc'"
+            "'example.nasl, example2.nasl'"
         )
 
         self.assertEqual(len(results), 2)
@@ -149,7 +149,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example .inc", "example2.inc");\n'
+            'script_dependencies("example .nasl", "example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -160,7 +160,7 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
 
         expected_result = (
             "The script dependency value is malformed and contains "
-            "whitespace within the dependency value: 'example .inc'"
+            "whitespace within the dependency value: 'example .nasl'"
         )
 
         self.assertEqual(len(results), 1)
