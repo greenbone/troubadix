@@ -18,11 +18,15 @@
 # pylint: disable=fixme
 
 import re
-from collections import Counter
 from typing import Iterator
 
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
+
+INNER_WHITESPACE_PATTERN = re.compile(r"^\s*[^\s]+\s*$")
+DEPENDENCY_ENTRY_PATTERN = re.compile(
+    r'(?P<quote>[\'"])(?P<value>[^\'"]*)(?P=quote)'
+)
 
 
 class CheckMalformedDependencies(FilePlugin):
@@ -51,17 +55,33 @@ class CheckMalformedDependencies(FilePlugin):
             if not match:
                 continue
 
-            counter = Counter(
+            tag_value = (
                 f'"{match.group("value")}"' if match.group("value") else ""
             )
-            quote_count = counter.get('"', 0) + counter.get("'", 0)
-            comma_count = counter.get(",", 0)
 
-            required_comma_count = quote_count / 2 - 1
-            if quote_count >= 2 and comma_count != required_comma_count:
-                yield LinterError(
-                    "The script dependency value is malformed and "
-                    "contains an invalid ratio of quoted entries to commas",
-                    file=self.context.nasl_file,
-                    plugin=self.name,
-                )
+            dependency_entries = DEPENDENCY_ENTRY_PATTERN.finditer(tag_value)
+
+            for dependency_entry in dependency_entries:
+
+                if not dependency_entry:
+                    continue
+
+                dependency_value = dependency_entry.group("value")
+
+                if "," in dependency_value:
+                    yield LinterError(
+                        "The script dependency value is malformed and "
+                        "contains a comma in the dependency value: "
+                        f"'{dependency_value}'",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
+                    )
+
+                if not INNER_WHITESPACE_PATTERN.match(dependency_value):
+                    yield LinterError(
+                        "The script dependency value is malformed and "
+                        "contains whitespace within the dependency value: "
+                        f"'{dependency_value}'",
+                        file=self.context.nasl_file,
+                        plugin=self.name,
+                    )
