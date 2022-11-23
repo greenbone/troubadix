@@ -23,10 +23,10 @@ from typing import Iterator
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
-INNER_WHITESPACE_PATTERN = re.compile(r"^\s*[^\s]+\s*$")
 DEPENDENCY_ENTRY_PATTERN = re.compile(
     r'(?P<quote>[\'"])(?P<value>[^\'"]*)(?P=quote)'
 )
+WHITESPACE_PATTERN = re.compile(r"\s")
 
 
 class CheckMalformedDependencies(FilePlugin):
@@ -77,7 +77,7 @@ class CheckMalformedDependencies(FilePlugin):
                         plugin=self.name,
                     )
 
-                if not INNER_WHITESPACE_PATTERN.match(dependency_value):
+                if WHITESPACE_PATTERN.search(dependency_value):
                     yield LinterError(
                         "The script dependency value is malformed and "
                         "contains whitespace within the dependency value: "
