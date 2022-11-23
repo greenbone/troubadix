@@ -18,6 +18,7 @@
 # pylint: disable=fixme
 
 import re
+from collections import Counter
 from typing import Iterator
 
 from troubadix.helper.patterns import _get_special_script_tag_pattern
@@ -47,22 +48,20 @@ class CheckMalformedDependencies(FilePlugin):
         matches = dependencies_pattern.finditer(file_content)
 
         for match in matches:
-            if match:
+            if not match:
+                continue
 
-                tag_value = (
-                    f'"{match.group("value")}"' if match.group("value") else ""
+            counter = Counter(
+                f'"{match.group("value")}"' if match.group("value") else ""
+            )
+            quote_count = counter.get('"', 0) + counter.get("'", 0)
+            comma_count = counter.get(",", 0)
+
+            required_comma_count = quote_count / 2 - 1
+            if quote_count >= 2 and comma_count != required_comma_count:
+                yield LinterError(
+                    "The script dependency value is malformed and "
+                    "contains an invalid ratio of quoted entries to commas",
+                    file=self.context.nasl_file,
+                    plugin=self.name,
                 )
-
-                quote_count = len(
-                    [char for char in tag_value if char in ['"', "'"]]
-                )
-                comma_count = len([char for char in tag_value if char == ","])
-
-                required_ratio = quote_count / 2 - 1
-                if quote_count >= 2 and comma_count != required_ratio:
-                    yield LinterError(
-                        "The script dependency value is malformed and "
-                        "contains an invalid ratio of quoted entries to commas",
-                        file=self.context.nasl_file,
-                        plugin=self.name,
-                    )
