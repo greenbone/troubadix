@@ -130,3 +130,7 @@ dmypy.json
 
 .vscode
 .idea
+
+# Helper script to link vts/nasl dir into troubadix for testing
+link.sh
+
