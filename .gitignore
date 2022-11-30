@@ -134,3 +134,5 @@ dmypy.json
 # Helper script to link vts/nasl dir into troubadix for testing
 link.sh
 
+# vts/nasl folder used for testing
+nasl
