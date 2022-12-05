@@ -95,6 +95,7 @@ def parse_args() -> Namespace:
         "without a solution for, in months. VTs with no solution newer"
         "than the smallest milestone will not be reported.",
         nargs="+",
+        type=int,
         default=[12, 6, 1],
     )
 
