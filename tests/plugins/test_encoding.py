@@ -76,3 +76,27 @@ class CheckEncodingTestCase(PluginTestCase):
                 "Found invalid character",
                 results[2].message,
             )
+
+    def test_invisible_whitespace(self):
+        with self.create_directory() as tempdir:
+            path = tempdir / "file.nasl"
+
+            # It seems, that these are the only valid characters for this
+            path.write_text(
+                "Local Privilege Escalation Vulnerability",
+                encoding="utf-8",
+            )
+            content = path.read_text(encoding=CURRENT_ENCODING)
+            fake_context = self.create_file_plugin_context(
+                nasl_file=path, file_content=content, lines=content.splitlines()
+            )
+            plugin = CheckEncoding(fake_context)
+
+            results = list(plugin.run())
+
+            self.assertEqual(len(results), 1)
+            self.assertIsInstance(results[0], LinterError)
+            self.assertEqual(
+                "VT uses a wrong encoding. Detected encoding is utf-8.",
+                results[0].message,
+            )
