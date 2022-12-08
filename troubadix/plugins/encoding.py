@@ -49,7 +49,7 @@ class CheckEncoding(LineContentPlugin):
         ]:
             yield LinterError(
                 f"VT uses a wrong encoding. Detected "
-                f"encoding is {detection.get('encoding')}.",
+                f"encoding is {encoding}.",
                 file=nasl_file,
                 plugin=self.name,
             )
