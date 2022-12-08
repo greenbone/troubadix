@@ -38,21 +38,21 @@ class CheckEncoding(LineContentPlugin):
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
 
-        for detection in chardet.detect_all(nasl_file.read_bytes()):
-            encoding = detection.get("encoding")
-            language = detection.get("language")
-            if (
-                encoding
-                and not language
-                and encoding not in ["ascii", "latin1", "ISO-8859-1"]
-            ):
-                yield LinterError(
-                    f"VT uses a wrong encoding. Detected "
-                    f"encoding is {encoding}.",
-                    file=nasl_file,
-                    plugin=self.name,
-                )
-                break
+        content = nasl_file.read_bytes()
+
+        detection = chardet.detect(content)
+        encoding = detection.get("encoding")
+        if encoding and encoding not in [
+            "ascii",
+            "latin1",
+            "ISO-8859-1",
+        ]:
+            yield LinterError(
+                f"VT uses a wrong encoding. Detected "
+                f"encoding is {detection.get('encoding')}.",
+                file=nasl_file,
+                plugin=self.name,
+            )
 
         for index, line in enumerate(lines, 1):
             encoding = re.search(CHAR_SET, line)
