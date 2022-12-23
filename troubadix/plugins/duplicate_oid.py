@@ -31,9 +31,6 @@ from troubadix.plugin import FilesPlugin, LinterError, LinterResult
 OPENVAS_OID_PREFIX = r"1.3.6.1.4.1.25623.1.[0-9]+."
 OID_RE = re.compile(r"^1\.3\.6\.1\.4\.1\.25623\.1\.[0-9]+\.[\d.]+$")
 
-KNOWN_DUPS = {"1.3.6.1.4.1.25623.1.0.850001", "1.3.6.1.4.1.25623.1.0.95888"}
-KNOWN_ABSENTS = {"template.nasl"}
-
 
 class CheckDuplicateOID(FilesPlugin):
     name = "check_duplicate_oid"
