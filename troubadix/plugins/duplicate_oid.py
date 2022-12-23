@@ -76,7 +76,9 @@ class CheckDuplicateOID(FilesPlugin):
                 mapping[oid] = nasl_file_root
             else:
                 yield LinterError(
-                    f"OID {oid} already used by '{mapping[oid]}'",
+                    f"OID {oid} is duplicated in the following files:\n"
+                    f"{nasl_file_root}\n"
+                    f"{mapping[oid]}",
                     file=nasl_file,
                     plugin=self.name,
                 )
