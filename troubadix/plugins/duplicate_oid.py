@@ -26,9 +26,6 @@ from troubadix.helper import (
 )
 from troubadix.plugin import FilesPlugin, LinterError, LinterResult
 
-# import json
-
-OPENVAS_OID_PREFIX = r"1.3.6.1.4.1.25623.1.[0-9]+."
 OID_RE = re.compile(r"^1\.3\.6\.1\.4\.1\.25623\.1\.[0-9]+\.[\d.]+$")
 
 
