@@ -92,7 +92,7 @@ def parse_args() -> Namespace:
         "--milestones",
         dest="milestones",
         help="Defines the milestones for which to report VTs "
-        "without a solution for, in months. VTs with no solution newer"
+        "without a solution for, in months. VTs with no solution newer "
         "than the smallest milestone will not be reported.",
         nargs="+",
         type=int,
@@ -106,7 +106,7 @@ def parse_args() -> Namespace:
         type=int,
         default=12,
         help="The threshold after which to assume no solution "
-        "will be provived anymore",
+        "will be provided anymore",
     )
 
     parser.add_argument(
@@ -115,7 +115,7 @@ def parse_args() -> Namespace:
         dest="snooze",
         type=int,
         default=1,
-        help="The duration, in months, to suppress reporting VTs after, based"
+        help="The duration, in months, to suppress reporting VTs after, based "
         "on the date stated in the solution text.",
     )
 
