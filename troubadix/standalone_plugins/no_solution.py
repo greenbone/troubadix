@@ -279,7 +279,7 @@ def main():
 
     print_report(term, summary, arguments.threshold, root, found_vts)
 
-    return 1 if len(found_vts) > 0 else 0
+    sys.exit(1 if found_vts > 0 else 0)
 
 
 if __name__ == "__main__":
