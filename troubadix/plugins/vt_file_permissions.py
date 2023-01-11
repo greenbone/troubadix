@@ -22,7 +22,7 @@ from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 
 class CheckVTFilePermissions(FilePlugin):
-    """This script checks wether the nasl file
+    """This script checks whether the nasl file
     has the correct file permissions
     """
 
