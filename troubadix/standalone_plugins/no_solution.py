@@ -227,9 +227,8 @@ def print_report(
     summary: Iterable[Tuple[int, List[Tuple[Path, str, datetime, datetime]]]],
     threshold: int,
     root: Path,
+    total: int,
 ):
-    total = sum(len(vts) for _, vts in summary)
-
     term.info(f"Total VTs without solution: {total}\n")
 
     for milestone, vts in summary:
@@ -261,6 +260,7 @@ def print_report(
 
 
 def main():
+
     arguments = parse_args()
 
     root = arguments.directory or Path.cwd()
@@ -275,7 +275,11 @@ def main():
 
     summary = check_no_solutions(files, milestones, arguments.snooze)
 
-    print_report(term, summary, arguments.threshold, root)
+    found_vts = sum(len(entries) for _, entries in summary)
+
+    print_report(term, summary, arguments.threshold, root, found_vts)
+
+    return 1 if len(found_vts) > 0 else 0
 
 
 if __name__ == "__main__":
