@@ -246,10 +246,9 @@ def print_report(
             )
 
         for vt, oid, solution, creation in vts:
-            term.info(vt.name)
+            term.info(str(vt.relative_to(root)))
 
             with term.indent():
-                term.print(f"File: {str(vt.relative_to(root))}")
                 term.print(f"OID: {oid}")
                 term.print(f"Created: {creation.strftime('%Y-%m-%d')}")
                 term.print(
