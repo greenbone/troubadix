@@ -343,7 +343,7 @@ fix SOLVER_FLAG_FOCUS_BEST updateing packages without reason
 Fix source-download commnds help (bsc#1180663)
 fixtext = 'Add rules to audit the system calls "creat", "open/openat" and "truncate/ftruncate" in
 	Fix typo in preference name: "password" misspelled as "pasword".
-  #<FONT SIZE="+3">S</FONT>EARCH
+#<FONT SIZE="+3">S</FONT>EARCH
  - For backwards compatability, setting --log-driver=json-file in podman
 foreach dir( make_list_unique( "/ag", "/ang", "/guestbook", "/anguestbook", http_cgi_dirs( port:port ) ) ) {
 foreach dir(make_list_unique("/", "/annonce", http_cgi_dirs(port:port))) {
@@ -595,6 +595,7 @@ NAME=Expext/MetaDirect hijacker
 # nb: Programm is a typo, see above...
 ND advertisements.");
 (ND) packets. An attacker could exploit this vulnerability by sending a number of IPv6 ND packets to be processed
+Ned Williamson and Nathan Wachholz discovered a vulnerability when
 Ned Williamson and Niklas Baumstark discovered a remote code execution
 Ned Williamson and Niklas Baumstark discovered a way to escape the sandbox.
 Ned Williamson discovered an out-of-bounds read issue.
@@ -608,6 +609,7 @@ Ned Williamson discovered a way to escape the sandbox.
 - [net] be2net: Remove code that stops further access to BE NIC based on UE bits (Alexander Gordeev) ... [Please see the references for more information on the vulnerabilities]");
  Nettle, this only affects GOST curves. [CVE-2021-20305]
   Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch Software could allow an adjacent,
+  Nexus 9000 Series Switches running in Application Centric Infrastructure (ACI) mode could allow
 # nft add rule inet filter input iif lo accept
 # Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability (Windows)
 nname[count]    = "Agobot.FO";
@@ -643,6 +645,7 @@ or potentially have unspecified futher impact.
                'oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 ',
  overflow might have occured that allowed a malicious or buggy PV guest
  package. They're not used anymore becuse of systemd (bsc#1178396).
+  packets are received on a specific port from outside the ACI fabric and destined to an endpoint
            "pass=&Servers-0-verbose_check=on&Servers-0-bookmarktable=&Ser",
  * Pasword lockout not enforced for SAMR password changes.
 paths = ssh_find_bin(prog_name:"stap", sock:sock);
@@ -754,9 +757,9 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Apache James Server Web Admin Public WAN (Internet) / Public LAN Accessible without Authentication");
   script_name("Apache JServ Protocol (AJP) Public WAN (Internet) / Public LAN Accessible");
   script_name("CAS CommServer UA Version Detection (Windows)");
-  script_name("Cisco Nexus 9000 Series ACI Mode Switch Software Link Layer Discovery Protocol Buffer Overflow Vulnerability");
+  script_name("Cisco Nexus 9000 Series ACI Mode Switch Software Link Layer Discovery Protocol Buffer Overflow Vulnerability (cisco-sa-20190731-nxos-bo)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Arbitrary File Read Vulnerability (cisco-sa-naci-afr-UtjfO2D7)");
-  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Border Leaf Endpoint Learning Vulnerability");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Border Leaf Endpoint Learning Vulnerability (cisco-sa-20190828-nexus-aci-dos)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Fabric Infrastructure VLAN Unauthorized Access Vulnerability (cisco-sa-20190703-n9kaci-bypass)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Multi-Pod and Multi-Site TCP DoS Vulnerability (cisco-sa-n9kaci-tcp-dos-YXukt6gM)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Privilege Escalation Vulnerability (cisco-sa-naci-mdvul-vrKVgNU)");
@@ -971,7 +974,7 @@ Security vulnerability addresed:
     seh  = raw_string(0x67,0x1a,0x48);
 send(socket: soc, data: triggerD);
 "|SER",
-  Series Switches running in Application Centric Infrastructure (ACI) mode could allow an unauthenticated, remote
+  Series Fabric Switches in Application-Centric Infrastructure (ACI) Mode could allow an
   Series VPN Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers
        '    </ser>\r\n' +
        '    <ser>\r\n' +
@@ -1025,12 +1028,14 @@ Stephen Mc Guiness discovered empty passwords could be entered in some circumsta
 string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
 # Submitted by Brian Spindel - Gopher on Windows NT
   subnet to the Cisco Nexus 9000 Series Switch in ACI mode.");
+  subsystem of Cisco Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch
 - SUNRPC: Fix READ_PLUS crasher (Chuck Lever)
 supply input to this crate, they could have caused a denial of service in the
   supporting the Apache JServ Protocol (AJP) accessible from a public WAN (Internet) / public LAN.");
  support was already present, but it was not enforcable).");
 support was enhanced and fixed, support for HDA sound on Acer Aspire
 # Swarmpit Web UI Public WAN (Internet) Accessible
+  Switches for Application Centric Infrastructure (ACI) could allow an unauthenticated, adjacent
 Switches in Application-Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to cause
 syntax. As a consequence, removing an ACI failed with a syntax error.
   system_root_id = 'oval:org.mitre.oval:obj:219';
@@ -1201,6 +1206,7 @@ version of nd.
     vgx_file_id = 'oval:org.mitre.oval:obj:308';
     vgx_file_variable_id = 'oval:org.mitre.oval:var:209';
   vulnerability by flooding an adjacent IOS XE device with specific ND messages.");
+  vulnerability by sending crafted IPv6 Neighbor Discovery (ND) packets to an affected device for
 vuln_url = "/olt/Login.do/../../olt/UploadFileUpload.do";
 # WAN Emulator Remote Command Execution Vulnerabilities
        && '">WAN IP<' >< res && '">LAN IP<' >< res ) {
