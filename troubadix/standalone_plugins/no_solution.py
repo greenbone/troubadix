@@ -260,25 +260,36 @@ def print_report(
 
 def main():
 
-    arguments = parse_args()
+    try:
 
-    root = arguments.directory or Path.cwd()
+        arguments = parse_args()
 
-    files = root.rglob("*.nasl")
+        root = arguments.directory or Path.cwd()
 
-    milestones = sorted(arguments.milestones, reverse=True)
+        files = root.rglob("*.nasl")
 
-    term = ConsoleTerminal()
+        milestones = sorted(arguments.milestones, reverse=True)
 
-    print_info(term, milestones, arguments.threshold, arguments.snooze, root)
+        term = ConsoleTerminal()
 
-    summary = check_no_solutions(files, milestones, arguments.snooze)
+        print_info(
+            term, milestones, arguments.threshold, arguments.snooze, root
+        )
 
-    found_vts = sum(len(entries) for _, entries in summary)
+        summary = check_no_solutions(files, milestones, arguments.snooze)
 
-    print_report(term, summary, arguments.threshold, root, found_vts)
+        found_vts = sum(len(entries) for _, entries in summary)
 
-    sys.exit(1 if found_vts > 0 else 0)
+        print_report(term, summary, arguments.threshold, root, found_vts)
+
+        sys.exit(1 if found_vts > 0 else 0)
+
+    # pylint: disable=broad-except
+    except Exception as e:
+
+        print(f"troubadix-no-solution encountered an error: {e}")
+
+        sys.exit(-1)
 
 
 if __name__ == "__main__":
