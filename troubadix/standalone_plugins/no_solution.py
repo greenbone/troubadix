@@ -289,7 +289,7 @@ def main():
 
         print(f"troubadix-no-solution encountered an error: {e}")
 
-        sys.exit(-1)
+        sys.exit(2)
 
 
 if __name__ == "__main__":
