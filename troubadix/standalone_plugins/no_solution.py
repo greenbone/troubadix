@@ -233,6 +233,8 @@ def print_report(
 
     for milestone, vts in summary:
 
+        vts = sorted(vts)
+
         if milestone >= threshold:
             term.bold_info(
                 f"{len(vts)} VTs with no solution "
