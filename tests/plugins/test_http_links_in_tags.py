@@ -151,6 +151,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             "39. http://internal-host$1 is still insecure",
             "40. from online sources (ftp://, http:// etc.).",
             "41. this and https:// and that.",
+            "42. such as 'http://:80'",
         ]
 
         for testcase in testcases:

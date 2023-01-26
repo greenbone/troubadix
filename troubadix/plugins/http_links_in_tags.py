@@ -166,6 +166,7 @@ class CheckHttpLinksInTags(FilePlugin):
             "http://internal-host$1 is still insecure",
             "http:// ",
             "https:// ",
+            "such as 'http://:80'",
         ]
 
         return any(
