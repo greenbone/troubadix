@@ -22,6 +22,26 @@ from troubadix.plugins.solution_text import CheckSolutionText
 
 from . import PluginTestCase
 
+CORRECT_WILLNOTFIX_SUGGESTION = (
+    "The VT with solution type 'WillNotFix' is using an incorrect syntax in "
+    "the solution text. Please use one of these (EXACTLY):\n  "
+    'script_tag(name:"solution", value:"No known solution was made available '
+    "for at least one year\n  since the disclosure of this vulnerability. "
+    "Likely none will be provided anymore. General solution\n  options are to "
+    "upgrade to a newer release, disable respective features, remove the "
+    'product or\n  replace the product by another one.");\n\n  '
+    'script_tag(name:"solution", value:"No solution was made available by the '
+    "vendor. General solution\n  options are to upgrade to a newer release, "
+    "disable respective features, remove the product or\n  replace the product "
+    'by another one.");\n\n  script_tag(name:"solution", value:"No solution '
+    "was made available by the vendor.\n\n  Note: <add a specific note for the "
+    'reason here>.");\n\n  script_tag(name:"solution", value:"No solution was '
+    "made available by the vendor.\n\n  Vendor statement: <add specific vendor "
+    'statement here>.");\n\n  script_tag(name:"solution", value:"No solution '
+    "is required.\n\n  Note: <add a specific note for the reason here, e.g. "
+    'CVE was disputed>.");'
+)
+
 
 class CheckSolutionTextTestCase(PluginTestCase):
     def test_ok(self):
@@ -111,24 +131,50 @@ class CheckSolutionTextTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT with solution type 'WillNotFix' is using an incorrect "
-            "syntax in the solution text. Please use one of these (EXACTLY):"
-            '\n  script_tag(name:"solution", value:"No known solution was '
-            "made available for at least one year\n  since the disclosure of "
-            "this vulnerability. Likely none will be provided anymore. "
-            "General solution\n  options are to upgrade to a newer release, "
-            "disable respective features, remove the product or\n  replace "
-            'the product by another one.");\n\n  script_tag(name:"solution", '
-            'value:"No solution was made available by the vendor. General '
-            "solution\n  options are to upgrade to a newer release, disable "
-            "respective features, remove the product or\n  replace the "
-            'product by another one.");\n\n  script_tag(name:"solution", '
-            'value:"No solution was made available by the vendor.\n\n  Note: '
-            '<add a specific note for the reason here>.");\n\n  s'
-            'cript_tag(name:"solution", value:"No solution was made available '
-            "by the vendor.\n\n  Vendor statement: <add specific vendor "
-            'statement here>.");\n\n  script_tag(name:"solution", value:"No '
-            "solution is required.\n\n  Note: <add a specific note for the "
-            'reason here, e.g. CVE was disputed>.");',
+            CORRECT_WILLNOTFIX_SUGGESTION,
+            results[0].message,
+        )
+
+    def test_nok3(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"solution_type", value:"WillNotFix");\n'
+            'script_tag(name:"solution", '
+            'value:"No solution was made available by the vendor.\n\n  Notice: '
+            '<add a specific note for the reason here>.");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckSolutionText(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            CORRECT_WILLNOTFIX_SUGGESTION,
+            results[0].message,
+        )
+
+    def test_nok4(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"solution_type", value:"WillNotFix");\n'
+            'script_tag(name:"solution", '
+            'value:"No solution was made available by the vendor.\n\n  Vendor '
+            'statment: <add specific vendor statement here>.");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckSolutionText(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            CORRECT_WILLNOTFIX_SUGGESTION,
             results[0].message,
         )
