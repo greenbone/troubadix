@@ -59,6 +59,23 @@ class CheckSolutionTextTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_ok3(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"solution_type", value:"WillNotFix");\n'
+            'script_tag(name:"solution", '
+            'value:"No solution was made available by the vendor.\n\n  Vendor '
+            'statement: <add specific vendor statement here>.");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckSolutionText(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = 'script_tag(name:"solution_type", value:"NoneAvailable");\n'
@@ -108,8 +125,10 @@ class CheckSolutionTextTestCase(PluginTestCase):
             'product by another one.");\n\n  script_tag(name:"solution", '
             'value:"No solution was made available by the vendor.\n\n  Note: '
             '<add a specific note for the reason here>.");\n\n  s'
-            'cript_tag(name:"solution", value:"No solution is required.\n\n  '
-            "Note: <add a specific note for the reason here, e.g. CVE "
-            'was disputed>.");',
+            'cript_tag(name:"solution", value:"No solution was made available '
+            "by the vendor.\n\n  Vendor statement: <add specific vendor "
+            'statement here>.");\n\n  script_tag(name:"solution", value:"No '
+            "solution is required.\n\n  Note: <add a specific note for the "
+            'reason here, e.g. CVE was disputed>.");',
             results[0].message,
         )
