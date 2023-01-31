@@ -62,14 +62,14 @@ class CheckSolutionText(FilePlugin):
             r"script_tag\s*\("
             r'\s*name\s*:\s*"solution"\s*,\s*value\s*:\s*"(No\s+solution\s+'
             r"(was\s+made\s+available\s+by\s+the\s+vendor|is\s+required)\."
-            r"\s+Note:.+|(No\s+solution\s+was\s+made\s+available\s+by\s+"
-            r"the\s+vendor|No\s+known\s+solution\s+was\s+made\s+available\s+"
-            r"for\s+at\s+least\s+one\s+year\s+since\s+the\s+disclosure\s+of"
-            r"\s+this\s+vulnerability\.\s+Likely\s+none\s+will\s+be\s+provided"
-            r"\s+anymore)\.\s+General\s+solution\s+options\s+are\s+to\s+"
-            r"upgrade\s+to\s+a\s+newer\s+release,\s+disable\s+respective\s+"
-            r"features,\s+remove\s+the\s+product\s+or\s+replace\s+the\s+product"
-            r"\s+by\s+another\s+one\.)"
+            r"\s+(Note|Vendor statement):.+|(No\s+solution\s+was\s+made\s+"
+            r"available\s+by\s+the\s+vendor|No\s+known\s+solution\s+was\s+made"
+            r"\s+available\s+for\s+at\s+least\s+one\s+year\s+since\s+the\s+"
+            r"disclosure\s+of\s+this\s+vulnerability\.\s+Likely\s+none\s+will"
+            r"\s+be\s+provided\s+anymore)\.\s+General\s+solution\s+options\s+"
+            r"are\s+to\s+upgrade\s+to\s+a\s+newer\s+release,\s+disable\s+"
+            r"respective\s+features,\s+remove\s+the\s+product\s+or\s+replace\s+"
+            r"the\s+product\s+by\s+another\s+one\.)"
         )
         correct_will_not_fix_syntax = (
             '  script_tag(name:"solution", '
@@ -88,6 +88,10 @@ class CheckSolutionText(FilePlugin):
             'value:"No solution was made '
             "available by the vendor.\n\n  Note: "
             '<add a specific note for the reason here>.");\n\n'
+            '  script_tag(name:"solution", '
+            'value:"No solution was made '
+            "available by the vendor.\n\n  Vendor statement: "
+            '<add specific vendor statement here>.");\n\n'
             '  script_tag(name:"solution", '
             'value:"No solution is required.\n\n  Note: <add a specific note '
             'for the reason here, e.g. CVE was disputed>.");'
