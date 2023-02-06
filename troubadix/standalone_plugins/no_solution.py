@@ -232,7 +232,6 @@ def print_report(
     term.info(f"Total VTs without solution: {total}\n")
 
     for milestone, vts in summary:
-
         vts = sorted(vts)
 
         if milestone >= threshold:
@@ -261,9 +260,7 @@ def print_report(
 
 
 def main():
-
     try:
-
         arguments = parse_args()
 
         root = arguments.directory or Path.cwd()
@@ -288,7 +285,6 @@ def main():
 
     # pylint: disable=broad-except
     except Exception as e:
-
         print(f"troubadix-no-solution encountered an error: {e}")
 
         sys.exit(2)

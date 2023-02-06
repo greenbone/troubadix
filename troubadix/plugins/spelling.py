@@ -202,7 +202,6 @@ class CheckSpelling(FilesPlugin):
 
         batch_size = 10_000
         for i in range(0, len(self.context.nasl_files), batch_size):
-
             files_parameters = [
                 str(nasl_file)
                 for nasl_file in self.context.nasl_files[i : i + batch_size]

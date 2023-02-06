@@ -62,7 +62,6 @@ class CheckMalformedDependencies(FilePlugin):
             dependency_entries = DEPENDENCY_ENTRY_PATTERN.finditer(tag_value)
 
             for dependency_entry in dependency_entries:
-
                 if not dependency_entry:
                     continue
 

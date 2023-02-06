@@ -27,6 +27,7 @@ from troubadix.helper.helper import FEED_VERSIONS
 from troubadix.helper.patterns import get_special_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+
 # See https://shorturl.at/jBGJT for a list of the category numbers.
 class VTCategory(IntEnum):
     ACT_INIT = 0

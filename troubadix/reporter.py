@@ -189,7 +189,7 @@ class Reporter:
         self._term.print(length)
         self._log_statistic_append(length)
 
-        for (plugin, count) in self._result_counts.result_counts.items():
+        for plugin, count in self._result_counts.result_counts.items():
             if self._fix and self._ignore_warnings:
                 line = f"{plugin:48} {count['error']:8} {count['fix']:8}"
             elif self._fix:

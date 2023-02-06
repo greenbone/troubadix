@@ -25,7 +25,6 @@ class CheckDescription(FilePlugin):
     name = "check_description"
 
     def run(self) -> Iterator[LinterResult]:
-
         """This script checks if some NVTs are still using script_description
 
         Args:

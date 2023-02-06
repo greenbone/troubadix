@@ -98,7 +98,6 @@ class CheckIllegalCharacters(FilePlugin):
         if tag_matches:
             for match in tag_matches:
                 if match and match.group(0) is not None:
-
                     found_forbidden_characters = check_forbidden(match)
                     if found_forbidden_characters:
                         self.new_file_content = (

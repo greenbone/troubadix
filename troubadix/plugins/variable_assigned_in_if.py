@@ -71,7 +71,6 @@ class CheckVariableAssignedInIf(FileContentPlugin):
 
         for match in matches:
             if match is not None and match.group(1) is not None:
-
                 var_assign_match = re.search(
                     r"((if|}?\s*else if)\s*\(\s*?|\|{2}\s*|&{2}\s*)"
                     r'[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*("|\'|TRUE|0|1)',
