@@ -55,7 +55,6 @@ class CheckDoubleEndPoints(FilePlugin):
                         re.MULTILINE,
                     )
                     if doubled_end_points_match:
-
                         # Valid string used in a few VTs.
                         if (
                             'and much more...");'

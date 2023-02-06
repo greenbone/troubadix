@@ -28,7 +28,6 @@ class CheckHttpLinksInTags(FilePlugin):
     name = "check_http_links_in_tags"
 
     def run(self) -> Iterator[LinterResult]:
-
         if self.context.nasl_file.suffix == ".inc":
             return chain()
 

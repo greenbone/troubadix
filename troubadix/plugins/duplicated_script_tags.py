@@ -23,7 +23,6 @@ from troubadix.helper.patterns import (
 )
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
-
 allowed_dup_dependencies = [
     "GSHB/EL15/GSHB.nasl",
     "gsf/PCIDSS/PCI-DSS.nasl",
@@ -35,7 +34,6 @@ class CheckDuplicatedScriptTags(FilePlugin):
     name = "check_duplicated_script_tags"
 
     def run(self) -> Iterator[LinterResult]:
-
         if self.context.nasl_file.suffix == ".inc":
             return
 

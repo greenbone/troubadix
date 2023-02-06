@@ -37,7 +37,6 @@ class CheckEncoding(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
-
         content = nasl_file.read_bytes()
 
         detection = chardet.detect(content)

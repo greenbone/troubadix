@@ -29,7 +29,6 @@ class CheckVTFilePermissions(FilePlugin):
     name = "check_vt_file_permissions"
 
     def run(self) -> Iterator[LinterResult]:
-
         permissions = filemode(self.context.nasl_file.stat().st_mode)
 
         if "x" in permissions:

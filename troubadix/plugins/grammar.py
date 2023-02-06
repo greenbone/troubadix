@@ -137,7 +137,6 @@ class CheckGrammar(FilePlugin):
 
         for match in pattern.finditer(self.context.file_content):
             if match:
-
                 if handle_linguistic_checks(
                     str(self.context.nasl_file), match.group(0), exceptions
                 ):

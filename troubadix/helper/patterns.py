@@ -291,6 +291,7 @@ def get_special_script_tag_pattern(
 
 class CommonScriptTagsPattern:
     instance = False
+
     # re.DOTALL is needed to get multiline tag values
     def __init__(self) -> None:
         self.pattern = _get_tag_pattern(

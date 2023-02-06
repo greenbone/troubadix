@@ -73,10 +73,8 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
 
         for preferences_match in preferences_matches:
             if preferences_match:
-
                 pref_type = preferences_match.group("type")
                 if pref_type not in [t.value for t in ValidType]:
-
                     # nb: This exists since years and it is currently
                     # unclear if we can change it so
                     # we're excluding it here for now.
