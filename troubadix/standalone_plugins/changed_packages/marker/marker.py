@@ -22,8 +22,15 @@ from troubadix.standalone_plugins.changed_packages.package import Package
 
 class Marker:
     @staticmethod
-    def _find_package(needle: Package, haystack: Iterable[Package]):
+    def _find_package(package: Package, packages: Iterable[Package]):
         result = next(
-            (package for package in haystack if package == needle), None
+            (
+                other_package
+                for other_package in packages
+                if other_package.name == package.name
+                and other_package.version == package.version
+                and other_package.release == package.release
+            ),
+            None,
         )
         return result

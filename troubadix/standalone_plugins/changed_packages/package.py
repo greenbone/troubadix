@@ -61,6 +61,7 @@ class Package:
             self.name == other.name
             and self.version == other.version
             and self.release == other.release
+            and self.reasons == other.reasons
         )
 
     def __lt__(self, other: "Package") -> bool:
