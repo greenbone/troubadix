@@ -23,6 +23,8 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterable
 
+from troubadix.standalone_plugins.common import git
+
 
 def file_type(string: str) -> Path:
     file_path = Path(string)
@@ -58,16 +60,6 @@ def parse_args(args: Iterable[str]) -> Namespace:
         ),
     )
     return parser.parse_args(args=args)
-
-
-def git(*args) -> str:
-    # git diff output uses raw bytes
-    return subprocess.run(
-        ["git"] + list(args),
-        capture_output=True,
-        encoding="latin-1",
-        check=True,
-    ).stdout
 
 
 def check_oid(args: Namespace) -> bool:

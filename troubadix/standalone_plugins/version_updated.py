@@ -27,6 +27,7 @@ from troubadix.helper.patterns import (
     LAST_MODIFICATION_ANY_VALUE_PATTERN,
     SCRIPT_VERSION_ANY_VALUE_PATTERN,
 )
+from troubadix.standalone_plugins.common import git
 
 SCRIPT_VERSION_PATTERN = re.compile(
     r"^\+\s*" + SCRIPT_VERSION_ANY_VALUE_PATTERN, re.MULTILINE
@@ -71,16 +72,6 @@ def parse_args(args: Iterable[str]) -> Namespace:
         ),
     )
     return parser.parse_args(args=args)
-
-
-def git(*args) -> str:
-    # git diff output uses raw bytes
-    return subprocess.run(
-        ["git"] + list(args),
-        capture_output=True,
-        encoding="latin-1",
-        check=True,
-    ).stdout
 
 
 def check_version_updated(files: List[Path], commit_range: str) -> bool:
