@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List
+
 from troubadix.standalone_plugins.changed_packages.package import (
     Direction,
     Package,
@@ -26,7 +28,7 @@ from .marker import Marker
 
 class AddedRelease(Marker):
     @staticmethod
-    def mark(old_packages: list[Package], new_packages: list[Package]):
+    def mark(old_packages: List[Package], new_packages: List[Package]):
         # Example: ...2015/debian/deb_3257.nasl now has DEB8 next to DEB7
         new_releases = set([package.release for package in new_packages])
         old_releases = set([package.release for package in old_packages])

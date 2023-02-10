@@ -21,7 +21,7 @@ import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import Iterable
+from typing import Iterable, List
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -61,7 +61,7 @@ def compare(old_content: str, content: str):
     return missing_packages, new_packages
 
 
-def filter_reasons(packages: list[Package], reasons: Iterable[Reasons]):
+def filter_reasons(packages: List[Package], reasons: Iterable[Reasons]):
     return [
         package
         for package in packages
@@ -71,8 +71,8 @@ def filter_reasons(packages: list[Package], reasons: Iterable[Reasons]):
 
 
 def print_results(
-    missing_packages: list[Package],
-    new_packages: list[Package],
+    missing_packages: List[Package],
+    new_packages: List[Package],
     file: Path,
     terminal: ConsoleTerminal,
 ):
@@ -88,7 +88,7 @@ def print_results(
 
 
 def print_packages(
-    packages: list[Package],
+    packages: List[Package],
     terminal: ConsoleTerminal,
 ):
     with terminal.indent():
