@@ -78,3 +78,43 @@ class DroppedArchitectureTestCase(TestCase):
 
         self.assertEqual(expected_missing_packages, missing_packages)
         self.assertEqual(expected_new_packages, new_packages)
+
+    def test_mark_no_other_package(self):
+        missing_packages = [
+            Package("foo:amd64", "1.2.3", "DEB11"),
+            Package("foo:i386", "1.2.3", "DEB11"),
+            Package("bar", "4.5.6", "DEB11"),
+        ]
+        new_packages = [
+            Package("bar", "4.5.6", "DEB11"),
+        ]
+
+        expected_missing_packages = [
+            Package(
+                "foo:amd64",
+                "1.2.3",
+                "DEB11",
+            ),
+            Package(
+                "foo:i386",
+                "1.2.3",
+                "DEB11",
+            ),
+            Package(
+                "bar",
+                "4.5.6",
+                "DEB11",
+            ),
+        ]
+        expected_new_packages = [
+            Package(
+                "bar",
+                "4.5.6",
+                "DEB11",
+            ),
+        ]
+
+        DroppedArchitecture.mark(missing_packages, new_packages)
+
+        self.assertEqual(expected_missing_packages, missing_packages)
+        self.assertEqual(expected_new_packages, new_packages)

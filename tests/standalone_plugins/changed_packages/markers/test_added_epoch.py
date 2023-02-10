@@ -77,3 +77,23 @@ class AddedEpochTestCase(TestCase):
 
         self.assertEqual(expected_missing_packages, missing_packages)
         self.assertEqual(expected_new_packages, expected_new_packages)
+
+    def test_epoch_no_other_package(self):
+        missing_packages = [
+            Package("foo", "1.2.3", "DEB11"),
+        ]
+        new_packages = [
+            Package("foo", "1:4.5.6", "DEB11"),
+        ]
+
+        expected_missing_packages = [
+            Package("foo", "1.2.3", "DEB11"),
+        ]
+        expected_new_packages = [
+            Package("foo", "1:4.5.6", "DEB11"),
+        ]
+
+        AddedEpoch.mark(missing_packages, new_packages)
+
+        self.assertEqual(expected_missing_packages, missing_packages)
+        self.assertEqual(expected_new_packages, expected_new_packages)
