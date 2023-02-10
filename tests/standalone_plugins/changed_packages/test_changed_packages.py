@@ -18,9 +18,14 @@
 from unittest import TestCase
 
 from troubadix.standalone_plugins.changed_packages.changed_packages import (
+    filter_reasons,
     get_packages,
 )
-from troubadix.standalone_plugins.changed_packages.package import Package
+from troubadix.standalone_plugins.changed_packages.package import (
+    Direction,
+    Package,
+    Reasons,
+)
 
 
 class ChangedPackagesTestCase(TestCase):
@@ -70,3 +75,41 @@ class ChangedPackagesTestCase(TestCase):
 
         with self.assertRaises(Exception):
             get_packages(content)
+
+    def test_filter_reasons(self):
+        packages = [
+            Package(
+                "foo", "1.2.3", "DEB11", {Reasons.ADDED_EPOCH: Direction.ACTIVE}
+            ),
+            Package(
+                "bar",
+                "1.2.3",
+                "DEB11",
+                {
+                    Reasons.ADDED_EPOCH: Direction.ACTIVE,
+                    Reasons.ADDED_RELEASE: Direction.PASSIVE,
+                },
+            ),
+            Package(
+                "baz", "1.2.3", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}
+            ),
+        ]
+
+        expected_packages = [
+            Package(
+                "bar",
+                "1.2.3",
+                "DEB11",
+                {
+                    Reasons.ADDED_EPOCH: Direction.ACTIVE,
+                    Reasons.ADDED_RELEASE: Direction.PASSIVE,
+                },
+            ),
+            Package(
+                "baz", "1.2.3", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}
+            ),
+        ]
+
+        result = filter_reasons(packages, [Reasons.ADDED_EPOCH])
+
+        self.assertEqual(expected_packages, result)
