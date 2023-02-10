@@ -67,11 +67,14 @@ class Package:
 
     def __lt__(self, other: "Package") -> bool:
         # Sort by release first, then the other fields
-        return (self.release, self.name, other.version) < (
-            other.release,
-            other.name,
-            other.version,
-        )
+        if self.release != other.release:
+            return self.release < other.release
+        if self.name != other.name:
+            return self.name < other.name
+        if self.version != other.version:
+            return self.version < other.version
+
+        return False
 
     def __str__(self) -> str:
         result = f"{self.name : <50} {self.version : <40} {self.release : <10}"
