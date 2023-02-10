@@ -44,7 +44,7 @@ class ChangedUpdate(Marker):
                     for old_package in missing_packages
                     if package.name == old_package.name
                     and old_package.version.startswith(
-                        package.version.removesuffix(suffix)
+                        package.version.replace(suffix, "")
                     )
                     and package.release == old_package.release
                 ),

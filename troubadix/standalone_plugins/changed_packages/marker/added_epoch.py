@@ -40,7 +40,7 @@ class AddedEpoch(Marker):
             other_package = cls._find_package(
                 Package(
                     package.name,
-                    package.version.removeprefix(epoch + ":"),
+                    package.version.replace(epoch + ":", ""),
                     package.release,
                 ),
                 missing_packages,
