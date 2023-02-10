@@ -127,11 +127,7 @@ def parse_args() -> Namespace:
         type=file_type,
         default=[],
         required=True,
-        help=(
-            "List of files to diff."
-            "If empty use all files added or modifyed in the"
-            " commit range"
-        ),
+        help="List of files to check.",
     )
     parser.add_argument(
         "--start-commit",
