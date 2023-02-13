@@ -64,3 +64,10 @@ class PackageTestCase(TestCase):
 
         self.assertFalse(package < other_package)
         self.assertFalse(package > other_package)
+
+    def test_lt_release_first(self):
+        package = Package("b", "1.2.3", "DEB10")
+        other_package = Package("a", "1.2.3", "DEB11")
+
+        self.assertLess(package, other_package)
+        self.assertFalse(other_package < package)
