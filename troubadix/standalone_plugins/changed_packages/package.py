@@ -80,11 +80,9 @@ class Package:
         result = f"{self.name : <50} {self.version : <40} {self.release : <10}"
 
         reasons = ", ".join(
-            [
-                f"{change}"
-                f"{' in new package' if direction == Direction.PASSIVE else ''}"
-                for change, direction in self.reasons.items()
-            ]
+            f"{change}"
+            f"{' in new package' if direction == Direction.PASSIVE else ''}"
+            for change, direction in self.reasons.items()
         )
         result += f"{reasons : <10}"
 

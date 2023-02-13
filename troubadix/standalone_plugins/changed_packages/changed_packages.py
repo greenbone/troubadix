@@ -98,12 +98,10 @@ def print_packages(
 
 def get_packages(content: str):
     package_checks = PACKAGE_CHECK_PATTERN.findall(content)
-    result = set(
-        [
-            Package(name=name, version=version, release=release)
-            for name, version, release in package_checks
-        ]
-    )
+    result = {
+        Package(name=name, version=version, release=release)
+        for name, version, release in package_checks
+    }
 
     if len(result) != len(package_checks):
         raise Exception(
