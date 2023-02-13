@@ -1,0 +1,97 @@
+import re
+from argparse import ArgumentParser, Namespace
+from subprocess import CalledProcessError
+
+from pontos.terminal.terminal import ConsoleTerminal
+
+from troubadix.argparser import file_type
+from troubadix.helper.patterns import (
+    SpecialScriptTag,
+    get_special_script_tag_pattern,
+)
+
+from .changed_oid import git
+
+CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,7}")
+
+
+def get_cves_from_content(content: str):
+    pattern = get_special_script_tag_pattern(SpecialScriptTag.CVE_ID)
+    match = pattern.search(content)
+    if not match:
+        return set()
+
+    cves = CVE_PATTERN.findall(match.group("value"))
+    return set(cves)
+
+
+def get_merge_base():
+    return git("merge-base", "main", "HEAD").strip()
+
+
+def parse_args() -> Namespace:
+    parser = ArgumentParser(
+        description="Check for changed packages in dpkg-based LSCs",
+    )
+    parser.add_argument(
+        "--files",
+        nargs="+",
+        type=file_type,
+        default=[],
+        required=True,
+        help="List of files to check.",
+    )
+    parser.add_argument(
+        "--start-commit",
+        type=str,
+        required=False,
+        help=(
+            "The commit before the changes to check have been introduced. "
+            "If the files have been renamed before, choose that commit. "
+            "Defaults to the merge-base with main"
+        ),
+        default=get_merge_base(),
+    )
+    parser.add_argument(
+        "--hide-equal",
+        action="store_true",
+        help="Omit log message, if a file has equal CVEs",
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    terminal = ConsoleTerminal()
+
+    terminal.info(
+        f"Checking {len(args.files)} file(s) from {args.start_commit} to HEAD"
+    )
+
+    for file in args.files:
+        try:
+            old_content = git("show", f"{args.start_commit}:{file}")
+            content = git("show", f"HEAD:{file}")
+        except CalledProcessError:
+            terminal.error(
+                f"Could not find {file} at {args.start_commit} or HEAD"
+            )
+            continue
+
+        old_cves = get_cves_from_content(old_content)
+        cves = get_cves_from_content(content)
+
+        if old_cves == cves:
+            if not args.hide_equal:
+                terminal.info(f"{file} has equal CVEs")
+            continue
+
+        missing_cves = sorted(old_cves.difference(cves))
+        new_cves = sorted(cves.difference(old_cves))
+
+        terminal.warning(f"CVEs for {file} differ")
+        if missing_cves:
+            terminal.print("Missing CVEs: ", ", ".join(missing_cves))
+        if new_cves:
+            terminal.print("New CVEs: ", ", ".join(new_cves))
