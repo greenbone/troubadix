@@ -17,7 +17,6 @@
 
 
 import re
-import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from subprocess import CalledProcessError
@@ -104,9 +103,7 @@ def get_packages(content: str):
     }
 
     if len(result) != len(package_checks):
-        raise Exception(
-            "There are duplicate checks in the file. Cannot compare."
-        )
+        raise ValueError("There are duplicate checks. Cannot compare.")
 
     return result
 
@@ -168,12 +165,16 @@ def main():
     for file in args.files:
         try:
             old_content = git("show", f"{args.start_commit}:{file}")
+            content = git("show", f"HEAD:{file}")
+            missing_packages, new_packages = compare(old_content, content)
         except CalledProcessError:
-            terminal.error(f"Could not find {file} at {args.start_commit}. ")
-            sys.exit(1)
-
-        content = git("show", f"HEAD:{file}")
-        missing_packages, new_packages = compare(old_content, content)
+            terminal.error(
+                f"Could not find {file} at {args.start_commit} or HEAD"
+            )
+            continue
+        except ValueError as e:
+            terminal.error(f"Error while handling {file}: {e}")
+            continue
 
         if not missing_packages and not new_packages:
             if not args.hide_equal:
