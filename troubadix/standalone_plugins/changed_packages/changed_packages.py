@@ -36,7 +36,7 @@ from troubadix.standalone_plugins.changed_packages.package import (
     Package,
     Reasons,
 )
-from troubadix.standalone_plugins.common import git
+from troubadix.standalone_plugins.common import get_merge_base, git
 
 PACKAGE_CHECK_PATTERN = re.compile(
     r'isdpkgvuln\(pkg:"(?P<package>[^"]+)", ver:"(?P<version>[^"]+)", '
@@ -108,10 +108,6 @@ def get_packages(content: str):
     return result
 
 
-def get_merge_base():
-    return git("merge-base", "main", "HEAD").strip()
-
-
 def parse_args() -> Namespace:
     parser = ArgumentParser(
         description="Check for changed packages in dpkg-based LSCs",
@@ -133,7 +129,7 @@ def parse_args() -> Namespace:
             "If the files have been renamed before, choose that commit. "
             "Defaults to the merge-base with main"
         ),
-        default=get_merge_base(),
+        default=get_merge_base("main", "HEAD"),
     )
     parser.add_argument(
         "--hide-equal",

@@ -9,6 +9,7 @@ from troubadix.helper.patterns import (
     SpecialScriptTag,
     get_special_script_tag_pattern,
 )
+from troubadix.standalone_plugins.common import get_merge_base
 
 from .changed_oid import git
 
@@ -23,10 +24,6 @@ def get_cves_from_content(content: str):
 
     cves = CVE_PATTERN.findall(match.group("value"))
     return set(cves)
-
-
-def get_merge_base():
-    return git("merge-base", "main", "HEAD").strip()
 
 
 def parse_args() -> Namespace:
@@ -50,7 +47,7 @@ def parse_args() -> Namespace:
             "If the files have been renamed before, choose that commit. "
             "Defaults to the merge-base with main"
         ),
-        default=get_merge_base(),
+        default=get_merge_base("main", "HEAD"),
     )
     parser.add_argument(
         "--hide-equal",
