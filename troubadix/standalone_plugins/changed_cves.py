@@ -16,6 +16,16 @@ from .changed_oid import git
 CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,7}")
 
 
+def compare(old_content: str, content: str):
+    old_cves = get_cves_from_content(old_content)
+    cves = get_cves_from_content(content)
+
+    missing_cves = sorted(old_cves.difference(cves))
+    new_cves = sorted(cves.difference(old_cves))
+
+    return missing_cves, new_cves
+
+
 def get_cves_from_content(content: str):
     pattern = get_special_script_tag_pattern(SpecialScriptTag.CVE_ID)
     match = pattern.search(content)
@@ -76,16 +86,12 @@ def main():
             )
             continue
 
-        old_cves = get_cves_from_content(old_content)
-        cves = get_cves_from_content(content)
+        missing_cves, new_cves = compare(old_content, content)
 
-        if old_cves == cves:
+        if not missing_cves and not new_cves:
             if not args.hide_equal:
                 terminal.info(f"{file} has equal CVEs")
             continue
-
-        missing_cves = sorted(old_cves.difference(cves))
-        new_cves = sorted(cves.difference(old_cves))
 
         terminal.warning(f"CVEs for {file} differ")
         if missing_cves:
