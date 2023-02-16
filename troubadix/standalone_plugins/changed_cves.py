@@ -15,14 +15,16 @@ from troubadix.standalone_plugins.common import get_merge_base, git
 CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,}")
 
 
-def compare(old_content: str, content: str) -> Tuple[List[str], List[str]]:
+def compare(
+    old_content: str, current_content: str
+) -> Tuple[List[str], List[str]]:
     old_cves = get_cves_from_content(old_content)
-    cves = get_cves_from_content(content)
+    current_cves = get_cves_from_content(current_content)
 
-    missing_cves = sorted(old_cves.difference(cves))
-    new_cves = sorted(cves.difference(old_cves))
+    missing_cves = sorted(old_cves.difference(current_cves))
+    added_cves = sorted(current_cves.difference(old_cves))
 
-    return missing_cves, new_cves
+    return missing_cves, added_cves
 
 
 def get_cves_from_content(content: str) -> Set[str]:
@@ -78,16 +80,16 @@ def main():
     for file in args.files:
         try:
             old_content = git("show", f"{args.start_commit}:{file}")
-            content = git("show", f"HEAD:{file}")
+            current_content = git("show", f"HEAD:{file}")
         except CalledProcessError:
             terminal.error(
                 f"Could not find {file} at {args.start_commit} or HEAD"
             )
             continue
 
-        missing_cves, new_cves = compare(old_content, content)
+        missing_cves, added_cves = compare(old_content, current_content)
 
-        if not missing_cves and not new_cves:
+        if not missing_cves and not added_cves:
             if not args.hide_equal:
                 terminal.info(f"{file} has equal CVEs")
             continue
@@ -95,5 +97,5 @@ def main():
         terminal.warning(f"CVEs for {file} differ")
         if missing_cves:
             terminal.print("Missing CVEs: ", ", ".join(missing_cves))
-        if new_cves:
-            terminal.print("New CVEs: ", ", ".join(new_cves))
+        if added_cves:
+            terminal.print("Added CVEs: ", ", ".join(added_cves))
