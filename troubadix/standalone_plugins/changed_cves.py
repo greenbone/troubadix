@@ -12,7 +12,7 @@ from troubadix.helper.patterns import (
 )
 from troubadix.standalone_plugins.common import get_merge_base, git
 
-CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,7}")
+CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,}")
 
 
 def compare(old_content: str, content: str) -> Tuple[List[str], List[str]]:
