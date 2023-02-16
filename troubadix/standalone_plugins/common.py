@@ -26,3 +26,7 @@ def git(*args) -> str:
         encoding="latin-1",
         check=True,
     ).stdout
+
+
+def get_merge_base(*commits: str):
+    return git("merge-base", *commits).strip()
