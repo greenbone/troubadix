@@ -37,7 +37,7 @@ def get_cves_from_content(content: str) -> Set[str]:
 
 def parse_args() -> Namespace:
     parser = ArgumentParser(
-        description="Check for changed packages in dpkg-based LSCs",
+        description="Check for changed CVEs in VTs",
     )
     parser.add_argument(
         "--files",
