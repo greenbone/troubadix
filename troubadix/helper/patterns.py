@@ -255,7 +255,7 @@ def init_special_script_tag_patterns() -> None:
 
         if value is None:
             value = r".+?"
-            flags = re.MULTILINE | re.DOTALL
+            flags = re.MULTILINE
 
         __special_script_tag_patterns[tag] = _get_special_script_tag_pattern(
             name=tag.value, value=value, flags=flags

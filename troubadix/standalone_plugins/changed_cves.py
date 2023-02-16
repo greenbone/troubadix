@@ -6,10 +6,7 @@ from typing import List, Set, Tuple
 from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.argparser import file_type
-from troubadix.helper.patterns import (
-    SpecialScriptTag,
-    get_special_script_tag_pattern,
-)
+from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.standalone_plugins.common import get_merge_base, git
 
 CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,}")
@@ -28,7 +25,9 @@ def compare(
 
 
 def get_cves_from_content(content: str) -> Set[str]:
-    pattern = get_special_script_tag_pattern(SpecialScriptTag.CVE_ID)
+    pattern = _get_special_script_tag_pattern(
+        name="cve_id", flags=re.MULTILINE | re.DOTALL
+    )
     match = pattern.search(content)
     if not match:
         return set()
