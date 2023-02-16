@@ -1,6 +1,7 @@
 import re
 from argparse import ArgumentParser, Namespace
 from subprocess import CalledProcessError
+from typing import List, Set, Tuple
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -14,7 +15,7 @@ from troubadix.standalone_plugins.common import get_merge_base, git
 CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,7}")
 
 
-def compare(old_content: str, content: str):
+def compare(old_content: str, content: str) -> Tuple[List[str], List[str]]:
     old_cves = get_cves_from_content(old_content)
     cves = get_cves_from_content(content)
 
@@ -24,7 +25,7 @@ def compare(old_content: str, content: str):
     return missing_cves, new_cves
 
 
-def get_cves_from_content(content: str):
+def get_cves_from_content(content: str) -> Set[str]:
     pattern = get_special_script_tag_pattern(SpecialScriptTag.CVE_ID)
     match = pattern.search(content)
     if not match:
