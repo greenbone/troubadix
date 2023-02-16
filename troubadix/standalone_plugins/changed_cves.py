@@ -9,9 +9,7 @@ from troubadix.helper.patterns import (
     SpecialScriptTag,
     get_special_script_tag_pattern,
 )
-from troubadix.standalone_plugins.common import get_merge_base
-
-from .changed_oid import git
+from troubadix.standalone_plugins.common import get_merge_base, git
 
 CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,7}")
 
