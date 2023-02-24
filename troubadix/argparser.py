@@ -216,7 +216,7 @@ def parse_args(
         "-j",
         "--n-jobs",
         dest="n_jobs",
-        default=cpu_count() // 2,
+        default=max(1, cpu_count() // 2),
         type=check_cpu_count,
         help=(
             "Define number of jobs, that should run simultaneously. "
