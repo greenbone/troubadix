@@ -29,6 +29,8 @@ class CheckNewlinesTestCase(PluginTestCase):
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
+            'requests and checks the responses.");\n'
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )
@@ -153,12 +155,85 @@ class CheckNewlinesTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_grammar5(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
+            'request and checks the responses.");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem: "
+            'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
+            'request and checks the responses.");',
+            results[0].message,
+        )
+
+    def test_grammar6(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar is prone to multiple '
+            'unknown vulnerability.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem: "
+            'script_tag(name:"summary", value:"Foo Bar is prone to multiple '
+            'unknown vulnerability.");',
+            results[0].message,
+        )
+
     def test_grammar_fp(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
             'script_tag(name:"cvss_base", value:"4.0");\n'
             'script_tag(name:"summary", value:"Foo Bar.'
             ' a multiple keyboard .");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_grammar_fp1(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"4.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar is prone to '
+            ' multiple cross-site request forgery (CSRF) vulnerabilities.");\n'
+            'script_tag(name:"insight", value:"A Cross Site Request '
+            ' Forgery flaw exists.");\n'
             'script_tag(name:"solution_type", value:"VendorFix");\n'
             'script_tag(name:"solution", value:"meh");\n'
         )

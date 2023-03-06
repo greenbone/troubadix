@@ -65,6 +65,32 @@ exceptions = [
         "  Vulnerabilities in the",
     ),
     TextInFileCheck("gb_opensuse_2018_1900_1.nasl", "(Note that"),
+    # e.g.:
+    # multiple cross-site request forgery (CSRF) vulnerabilities
+    # Multiple cross-site request forgery vulnerabilities
+    PatternCheck(
+        r"multiple\s+cross(\s+|-)site(\s+|-)request(\s+|-)forgery",
+        re.IGNORECASE,
+    ),
+    # multiple HTTP request smuggling issues
+    # multiple request smuggling vulnerabilities
+    PatternCheck(
+        r"multiple(\s+HTTP)?\s+request\s+smuggling",
+        re.IGNORECASE,
+    ),
+    # multiple request parameters
+    # creates multiple request streams
+    PatternCheck(
+        r"multiple\s+request\s+(parameters|streams)",
+        re.IGNORECASE,
+    ),
+    # Multiple server-side request forgery (SSRF) vulnerabilities
+    # Multiple server-side request forgery vulnerabilities
+    # Multiple Server-Side Request Forgery (SSRF) (CVE-2020-4786, CVE-2020-4787)
+    PatternCheck(
+        r"multiple\s+server(\s+|-)side(\s+|-)request(\s+|-)forgery",
+        re.IGNORECASE,
+    ),
 ]
 
 
@@ -75,7 +101,7 @@ def get_grammer_pattern() -> re.Pattern:
         r"\s+an?\s+(multiple|errors)|"
         r"the\s+(References?\s+link|multiple\s+flaw)|"
         r"multiple\s+(unknown\s+)?("
-        r"vulnerability|flaw|error|problem|issue|feature)\s+|"
+        r"vulnerability|flaw|error|problem|issue|feature|request)(\.|\s+)|"
         r"\s+(with\s+with|and\s+and|this\s+this|for\s+for|as\s+as|a\s+a"
         r"|of\s+of|to\s+to|an\s+an|the\s+the|is\s+is|in\s+in|are\s+are|have"
         r"\s+have|has\s+has|that\s+that)\s+|"
@@ -83,9 +109,11 @@ def get_grammer_pattern() -> re.Pattern:
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
         # e.g. "this flaws"
-        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file)s)|"
+        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file|"
+        r"request)s)|"
         # e.g. "these flaw "
-        r"these\s+(vulnerability|(flaw|error|problem|issue|feature|file)\s+)|"
+        r"these\s+(vulnerability|(flaw|error|problem|issue|feature|file|"
+        r"request)\s+)|"
         r"\s+or\s+not\.?(\"\);)?$|"
         r"from(\s+the)?(\s+below)?mentioned\s+References?\s+link|"
         r"software\s+it\s+fail|"
@@ -94,9 +122,9 @@ def get_grammer_pattern() -> re.Pattern:
         r"(vulnerability|flaw|error|problem|issue|feature)\s+exist\s+|"
         r"(vulnerabilitie|flaw|error|problem|issue|feature)s\s+exists|"
         r"multiple\s+[^\s]+((and\s+)?[^\s]+)?\s+("
-        r"vulnerability|flaw|error|problem|issue|feature)\s+|"
+        r"vulnerability|flaw|error|problem|issue|feature|request)(\.|\s+)|"
         r"(\s+|^|\"|- )A\s+[^\s]*((and\s+)?[^\s]+\s+)?("
-        r"vulnerabilitie|flaw|error|problem|issue)s|"
+        r"vulnerabilitie|flaw|error|problem|issue|feature|request)s|"
         r"(\s+|^|\"|- )An?\+(unspecified|multiple|unknown)\s+("
         r"vulnerabilitie|flaw|error|problem|issue)s|"
         r"is\s+(prone|vulnerable|affected)\s+(to|by)\s+("
@@ -115,6 +143,10 @@ def get_grammer_pattern() -> re.Pattern:
         # "is prone a to denial of service (DoS) vulnerability"
         # "is prone an information disclosure vulnerability"
         r"\s+(is|are)\s+(prone|vulnerable|affected)\s+an?\s+|"
+        # e.g.:
+        # "Sends multiple HTTP request and checks the responses."
+        # "Sends multiple HTTP GET request and checks the responses."
+        r"multiple\s+([^ ]+\s+)?([^ ]+\s+)?request\s+|"
         # e.g. "is prone to a security bypass vulnerabilities"
         r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities" r").*",
         re.IGNORECASE,
