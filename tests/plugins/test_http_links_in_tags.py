@@ -152,6 +152,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             "40. from online sources (ftp://, http:// etc.).",
             "41. this and https:// and that.",
             "42. such as 'http://:80'",
+            "43. <http://localhost/moodle/admin/>",
         ]
 
         for testcase in testcases:
