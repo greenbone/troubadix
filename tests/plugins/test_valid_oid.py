@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Greenbone Networks GmbH
+# Copyright (c) 2022 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #

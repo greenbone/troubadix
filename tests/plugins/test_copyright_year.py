@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Greenbone Networks GmbH
+# Copyright (C) 2022 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -28,7 +28,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         content = (
             'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2022)");',
-            'script_copyright("Copyright (C) 2022 Greenbone Networks GmbH");',
+            'script_copyright("Copyright (C) 2022 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -52,7 +52,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         content = (
             'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2022)");',
-            'script_copyright("Copyright (C) 2020 Greenbone Networks GmbH");',
+            'script_copyright("Copyright (C) 2020 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -67,7 +67,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         content = (
             'script_tag(name:"creation_date", value:"2020-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2020)");',
-            'script_copyright("Copyright (C) 2021 Greenbone Networks GmbH");',
+            'script_copyright("Copyright (C) 2021 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -104,7 +104,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         content = (
             'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");',
-            'script_copyright("Copyright (C) 2020 Greenbone Networks GmbH");',
+            'script_copyright("Copyright (C) 2020 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content

@@ -65,7 +65,7 @@ Validate the activated git hooks by running
 
 ## Maintainer
 
-This project is maintained by [Greenbone Networks GmbH][Greenbone Networks]
+This project is maintained by [Greenbone AG][Greenbone Networks]
 
 ## Contributing
 
@@ -77,7 +77,7 @@ first.
 
 ## License
 
-Copyright (C) 2021-2022 [Greenbone Networks GmbH][Greenbone Networks]
+Copyright (C) 2021-2022 [Greenbone AG][Greenbone Networks]
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
