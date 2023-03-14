@@ -65,7 +65,7 @@ Validate the activated git hooks by running
 
 ## Maintainer
 
-This project is maintained by [Greenbone AG][Greenbone Networks]
+This project is maintained by [Greenbone AG][Greenbone]
 
 ## Contributing
 
@@ -77,11 +77,11 @@ first.
 
 ## License
 
-Copyright (C) 2021-2022 [Greenbone AG][Greenbone Networks]
+Copyright (C) 2021-2022 [Greenbone AG][Greenbone]
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
-[Greenbone Networks]: https://www.greenbone.net/
+[Greenbone]: https://www.greenbone.net/
 [poetry]: https://python-poetry.org/
 [pip]: https://pip.pypa.io/
 [pipenv]: https://pipenv.pypa.io/
