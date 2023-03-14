@@ -48,5 +48,4 @@ if(description)
   script_tag(name:"solution_type", value:"VendorFix");
 
   exit(0);
-}
-aa
+}aa
