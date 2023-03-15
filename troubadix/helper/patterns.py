@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Greenbone Networks GmbH
+# Copyright (C) 2022 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -189,7 +189,7 @@ class SpecialScriptTag(Enum):
     ADD_PREFERENCE = "add_preference"
     BUGTRAQ_ID = "bugtraq_id"
     CATEGORY = "category"
-    # script_copyright("Copyright (C) 2021 Greenbone Networks GmbH");
+    # script_copyright("Copyright (C) 2021 Greenbone AG");
     COPYRIGHT = "copyright"
     CVE_ID = "cve_id"
     DEPENDENCIES = "dependencies"

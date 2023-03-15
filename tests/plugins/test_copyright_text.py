@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Greenbone Networks GmbH
+# Copyright (C) 2022 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -42,7 +42,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("tests/file.nasl")
         content = (
-            "# Copyright (C) 2016 Greenbone Networks GmbH\n"
+            "# Copyright (C) 2016 Greenbone AG\n"
             "# Some text descriptions might be excerpted from (a) referenced\n"
             "# source(s), and are Copyright (C) by the respective "
             "right holder(s).\n"
@@ -95,7 +95,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
 
         for wrong_text in WRONG_TEXTS:
             content = (
-                "# Copyright (C) 2017 Greenbone Networks GmbH\n"
+                "# Copyright (C) 2017 Greenbone AG\n"
                 f"{wrong_text}"
                 '  script_copyright("Copyright (C) 1234");'
             )
@@ -119,7 +119,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             with self.create_directory() as tempdir:
                 path = tempdir / "file.nasl"
                 content = (
-                    "# Copyright (C) 2017 Greenbone Networks GmbH\n"
+                    "# Copyright (C) 2017 Greenbone AG\n"
                     f"{wrong_text}"
                     '  script_copyright("Copyright (C) 1234");'
                 )

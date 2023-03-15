@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Greenbone Networks GmbH
+# Copyright (C) 2022 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -90,8 +90,8 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
         content = (
             'script_name( "foodetection");\n'
-            'script_copyright ( "Copyright(c) Greenbone Networks GmbH" ) ; \n'
-            'script_copyright ("Copyright(c) Greenbone Networks GmbH");\n'
+            'script_copyright ( "Copyright(c) Greenbone AG" ) ; \n'
+            'script_copyright ("Copyright(c) Greenbone AG");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -118,8 +118,8 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
         content = (
             'script_name("foo detection");'
-            'script_copyright("Copyright(c) Greenbone Networks GmbH");\r\n'
-            'script_copyright("Copyrigh(c) Greenbone Networks GmbH");\n'
+            'script_copyright("Copyright(c) Greenbone AG");\r\n'
+            'script_copyright("Copyrigh(c) Greenbone AG");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
