@@ -207,7 +207,8 @@ class CheckSpelling(FilesPlugin):
                 for nasl_file in self.context.nasl_files[i : i + batch_size]
             ]
             codespell_arguments = [
-                "--hard-encoding-detection",
+                # nb: Temporarily disabled due to an issue in codespell 2.2.4.
+                # "--hard-encoding-detection",
                 "--dictionary=-",
                 f"--dictionary={codespell_additions}",
                 f"--exclude-file={codespell_exclude}",
