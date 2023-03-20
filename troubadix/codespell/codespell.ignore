@@ -15,3 +15,9 @@ unsecure
 # covert and complies are currently included in dictionary_rare.txt and are prone to false positives
 covert
 complies
+# There is "raccoon" (the animal) and "racoon" (the vulnerability). Because of the following
+# correction in codespell:
+# racoon->raccoon
+# we see a lot of false positives for the vulnerability. As we usually only have the vulnerability
+# mentioned here this correction is fully ingored.
+racoon
