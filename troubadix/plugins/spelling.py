@@ -163,6 +163,12 @@ exceptions = [
     # Product names used in a few VTs (no re.IGNORECASE is expected)
     PatternsCheck([r"renderD\s+==>\s+rendered", r"VertX\s+==>\s+vertex"]),
     PatternInFileCheck("_vertx_", r"vertx\s+==>\s+vertex"),
+    # This is a class name of Tomcat which is getting checked / mentioned in
+    # these, e.g.:
+    # org.apache.juli.AsyncFileHandler.directory
+    # JULI logging
+    PatternInFileCheck("/Tomcat/tomcat_", r"juli\s+==>\s+july"),
+    PatternInFileCheck("tomcat", r"JULI\s+==>\s+JULY"),
 ]
 
 
