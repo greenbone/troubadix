@@ -91,6 +91,16 @@ exceptions = [
         r"multiple\s+server(\s+|-)side(\s+|-)request(\s+|-)forgery",
         re.IGNORECASE,
     ),
+    # when a page requests a
+    # If a report requests external
+    # when a client requests a date/time that
+    # If a client requests DNS SEC records
+    # when a client requests an interactive session
+    # a few requests
+    PatternCheck(
+        r"\s+a\s+(page|client|report|few)\s+requests",
+        re.IGNORECASE,
+    ),
 ]
 
 
