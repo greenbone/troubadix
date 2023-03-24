@@ -169,6 +169,8 @@ exceptions = [
     # JULI logging
     PatternInFileCheck("/Tomcat/tomcat_", r"juli\s+==>\s+july"),
     PatternInFileCheck("tomcat", r"JULI\s+==>\s+JULY"),
+    # Some valid abbreviation for e.g. Cisco or VLC VTs
+    PatternInFileCheck("caf", r"CAF\s+==>\s+CALF"),
 ]
 
 
