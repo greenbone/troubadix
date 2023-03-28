@@ -79,6 +79,7 @@ Additionally, the popd build-in now ensures that the normalized stack offset is 
 Add more important informations
  * Add suppor... [Please see the references for more information on the vulnerabilities]");
   a denial of service. (CVE-2016-4429) Tim Ruehsen discovered that the
+  - A division by zero in the CAF demuxer
 "admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp:all,ftp",
   Admin endpoints to a public WAN (Internet) / public LAN without authentication.
 "Administrator:admin:cisco,conexant,corecess,gvc:all",
@@ -189,6 +190,7 @@ complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http:/
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
   control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
 # Copyright (C) 2005 Charles Thier
+# Copyright (C) 2005 Holm Diening / SLITE IT-Security (holm.diening@slite.de)
 # Copyright (c) 2008 Tim Brown
 # Copyright (C) 2008 Tim Brown
 # Copyright (c) 2008 Tim Brown and Portcullis Computer Security Ltd
@@ -281,6 +283,7 @@ David Miller and Jan Lieskovsky discovered issues with the virtual address range
 David Watson reported an issue in the open()/creat() system calls
 David Watson reported an issue in the open()/creat() system calls which, under certain conditions, can be exploited by local users to obtain the privileges of a group for which they are not a member.
 default, although transcripting can still be enabled through the Start-Transcript cmdlet.
+default and are set to the default of HIGH:!aNULL:!MD5).";
 default_cgis = make_list( "/v2/api/product/manger/getInfo", "/v2/api/product/manager/getInfo" );
 delete  = script_get_preference( "Delete hash test Programm after the test", id:3 );
  demuxer that could result in excessive amount of ressource allocation
@@ -387,8 +390,10 @@ Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an 
 "hanlder\n",
  have resul... [Please see the references for more information on the vulnerabilities]");
  * Heap-based buffer overflow when scanning crypted PE files
+Helin, Andre Bargull, Massimiliano Tomassoli, laf.intel, Massimiliano
   hello_data += clen + _ciphers;
 "H", "HSI",
+# Holm Diening / SLITE IT-Security (holm.diening@slite.de)
   - HP Helion Eucalyptus does not correctly check IAM user's permissions for accessing versioned objects and ACLs.
     hp_printer['login_success'] = '<?hp te.includeSubPage';
 # <HTML>Acess not granted.</HTML>
@@ -504,6 +509,7 @@ invalid parameters for the GOST block cipher, which allows remote
  * iscsiadm: Optimize the the verification of mode paramters
   issue. Upstream acknowledges Tim Zingelman as the original reporter.
  It could have occured with FUSE requests. (bnc#1133190)
+item[count]     = "Norton.Thar";
 item = "EnableTranscripting";
   it was added support for Cirrus Logic CS420x HDA codec, Wacom driver
 It was discovered that a buffer overflow in IFF ILBM image parsing
@@ -848,6 +854,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Calle Dybedahl discovered a bug in lyskom-server which could result in a denial of service where an unauthenticated user could cause the server to become unresponsive as it processes a large query.
   script_tag(name:"insight", value:"Cisco TelePresence TC and TE Software are prone to
   script_tag(name:"insight", value:"_core_/plugins/medias in SPIP allows remote authenticated authors to inject
+  script_tag(name:"insight", value:"Crafted data - channels per frame value - in CAF files enables remote
   script_tag(name:"insight", value:"Erik Sjoelund discovered that a race condition in the stap tool shipped by Systemtap, an instrumentation system for Linux 2.6, allows local privilege escalation for members of the stapusr group.
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
   script_tag(name:"insight", value:"In Apache::Session::Browseable before 1.3.6, validity of the X.509 certificate is not checked by default when connecting to remote LDAP backends, because the default configuration of the Net::LDAPS module for Perl is used.
@@ -992,6 +999,7 @@ sd-bus: if we receive an invalid dbus message, ignore and proceeed
 - sd-netlink: don't take possesion of netlink fd from caller on failure
   Secospace AntiDDoS8030, Secospace USG6600, UPS2000, USG9500 and eSpace VCN3000.");
   Security researcher Jordi Chancel reported a crash on
+Security researcher laf.intel reported a buffer overflow and
   Security researchers Jordi Chancel and Eddy Bordi reported that they
  Security researchers Jordi Chancel and Eddy Bordi reported that they could short-circuit page loads to show the address of a different site than what is loaded in the ... [Please see the references for more information on the vulnerabilities]");
 Security vulnerability addresed:
@@ -1036,6 +1044,8 @@ sndReq = http_get(item:"/olt/Login.do", port:oatPort);
   sndReq = http_get(item:string(dir , "/doc/catalogue.html"), port:openPort);
   sndReq = http_get(item:string(dir, "/LiveTime/WebObjects/LiveTime.woa"), port:novPort);
   # SNPP, HylaFAX FTP, HylaFAX SPP, agobot.fo, IRC bots, WinSock server,
+solution = "Ensure the SSLCipherSuite includes all of the following:!NULL:!SSLv2:!RC4:!aNULL:!3DES:!IDEA values.
+solution = "Ensure the SSLCipherSuite includes all of the following:!NULL:!SSLv2:!RC4:!aNULL values.
 solution = "mount -o remount,ro PARTITION";
  * some OSCP improvments
 Soyeon Park and Wen Xu discovered a type error in the v8 javascript
@@ -1045,12 +1055,15 @@ specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series E
  Specially crafted MIME headers could cause openssl's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
  * Specially crafted MIME headers could cause OpenSSL's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
  spurrious errors due to Go returning -EINTR from I/O syscalls much more
+SSLCipherSuite ALL:!EXP:!NULL:!LOW:!SSLv2:!RC4:!aNULL";
+SSLCipherSuite ALL:!EXP:!NULL:!LOW:!SSLv2:!RC4:!aNULL:!3DES:!IDEA";
  stack oveflow allowing local root escalation (bsc#1130116).");
   Stange, Olli Pettay, Ehsan Akhgari, Gary Kwong, Tooru Fujisawa, and Randell
 "statics",
 "statics/html",
 "statics/script",
 Stephen Mc Guiness discovered empty passwords could be entered in some circumstances.
+  str2 = 'SSLCipherSuite ALL:!EXP:!NULL:!LOW:!SSLv2:!RC4:!aNULL:!3DES:!IDEA';
 string(r1, "TE: deflate, ", crap(4096), "\r\n\r\n"));
 # Submitted by Brian Spindel - Gopher on Windows NT
   subnet to the Cisco Nexus 9000 Series Switch in ACI mode.");
@@ -1097,6 +1110,7 @@ The CVE-2015-8631 issue was discovered by Simo Sorce of Red Hat.
 The CVE-2015-8631 issue was discovered by Simo Sorce of Red Hat.");
  the deamon (bsc#1128937).
 the default ACI (Access Control Instructions) could be read by an anonymous
+  The default catalina.policy in the JULI logging component did not
   The exec module in Kamailio, Opensips and probably every other SER fork passes the received SIP
 - The ext2 filesystem got reenabled and supported to allow support for
 The fst_get_iface function in drivers/net/wan/farsync.c in the Linux kernel before 3.11.7 does not properly initialize a certain data structure, which allows local users to obtain sensitive information from kernel memory by leveraging the CAP_NET_ADMIN capability for an SIOCWANDEV ioctl call.(CVE-2014-1444)
@@ -1126,6 +1140,7 @@ The wanxl_ioctl function in drivers/net/wan/wanxl.c in the Linux kernel before 3
   This issue is tracked by the Mitre CVE ID CVE-2006-6104 and only
   This issue is tracked by the Mitre CVE ID CVE-2006-6799.");
   This issue is tracked by the Mitre CVE ID CVE-2007-2799.");
+This issue was independently reported by security researcher laf.intel.");
 This is the result of mImageBufferSize in the encoder being initialized with a value different than the size of the source image. There is the possibility of sensitive data from uninitialized memory being appended to a PNG image when converted fron an ICO format image. This sensitive data may then be disclosed in the resulting image. ((MFSA 2012-06)
  This package can be installed additionaly, and the SysV Init script will pick the openssl1 variant on the next start, offering TLS 1.2 support
   This problem is tracked by the Mitre CVE ID CVE-2006-6772.");
@@ -1233,6 +1248,7 @@ version of nd.
  + vfs_recycle: Prevent flooding the log if we're called on non-existant
     vgx_file_id = 'oval:org.mitre.oval:obj:308';
     vgx_file_variable_id = 'oval:org.mitre.oval:var:209';
+via crafted description chunks in a CAF audio file, leading to a
   vulnerability by flooding an adjacent IOS XE device with specific ND messages.");
   vulnerability by sending crafted IPv6 Neighbor Discovery (ND) packets to an affected device for
 vuln_url = "/olt/Login.do/../../olt/UploadFileUpload.do";
