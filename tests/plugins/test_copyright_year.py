@@ -112,7 +112,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(
             "VT contains a Copyright year not matching "
-            "the year 2020 at line 2",
+            "the creation year 2020 at line 2",
             results[0].message,
         )
 
@@ -149,7 +149,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(
             "VT contains a Copyright year not matching "
-            "the year 2022 at line 2",
+            "the creation year 2022 at line 2",
             results[0].message,
         )
 
@@ -169,7 +169,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(
             "VT contains a Copyright year not matching "
-            "the year 2022 at line 1",
+            "the creation year 2022 at line 1",
             results[0].message,
         )
 
@@ -189,6 +189,6 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(
             "VT contains a Copyright year not matching "
-            "the year 2022 at line 1",
+            "the creation year 2022 at line 1",
             results[0].message,
         )

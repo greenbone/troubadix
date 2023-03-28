@@ -72,7 +72,7 @@ class CheckCopyrightYear(LineContentPlugin):
                     if copyright_year > creation_year:
                         yield LinterError(
                             "VT contains a Copyright year not matching "
-                            f"the year {creation_year} at line {nr}",
+                            f"the creation year {creation_year} at line {nr}",
                             file=nasl_file,
                             plugin=self.name,
                             line=nr,
@@ -80,7 +80,7 @@ class CheckCopyrightYear(LineContentPlugin):
                 else:
                     yield LinterError(
                         "VT contains a Copyright year not matching "
-                        f"the year {creation_year} at line {nr}",
+                        f"the creation year {creation_year} at line {nr}",
                         file=nasl_file,
                         plugin=self.name,
                         line=nr,
