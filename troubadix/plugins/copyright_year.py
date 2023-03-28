@@ -1,19 +1,6 @@
-# Copyright (C) 2021 Greenbone AG
+# SPDX-FileCopyrightText: 2021 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
 from pathlib import Path
@@ -59,15 +46,16 @@ class CheckCopyrightYear(LineContentPlugin):
                         creation_year = expre.group(1)
 
             copyright_match = re.search(
-                r"(# |script_copyright.*)[Cc]opyright \([Cc]\) ([0-9]+)",
+                r"((# |script_copyright.+)[Cc]opyright \([Cc]\)|"
+                r"# SPDX-FileCopyrightText:) ([0-9]+)",
                 line,
             )
             if (
                 copyright_match is not None
-                and copyright_match.group(2) is not None
+                and copyright_match.group(3) is not None
                 and not is_ignore_file(nasl_file, _IGNORE_FILES)
             ):
-                copyrights.append((i, line, copyright_match.group(2)))
+                copyrights.append((i, line, copyright_match.group(3)))
 
         if not creation_year:
             yield LinterError(
