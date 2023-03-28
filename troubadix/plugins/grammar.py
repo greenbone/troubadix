@@ -101,6 +101,10 @@ exceptions = [
         r"\s+a\s+(page|client|report|few)\s+requests",
         re.IGNORECASE,
     ),
+    # From 2021/mozilla/gb_mozilla_firefox_mfsa_2012-63_lin.nasl
+    TextCheck("when an element with a 'requiredFeatures' attribute"),
+    # e.g. Multiple Products $something Vulnerability
+    PatternCheck(r"Multiple\s+Products.+Vulnerability", re.IGNORECASE),
 ]
 
 
