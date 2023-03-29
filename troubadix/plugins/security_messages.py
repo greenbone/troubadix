@@ -29,6 +29,12 @@ security_message_implementations = [
 
 
 def _file_contains_security_message(file_content: str) -> bool:
+    """Checks wether a VT content contains a call to security_message
+    or any function known to implement it
+
+    Args:
+        file_content (str): The content of the VT
+    """
     return any(
         sec_msg in file_content for sec_msg in security_message_implementations
     )
@@ -39,7 +45,14 @@ class CheckSecurityMessages(FileContentPlugin):
 
     def _check_security_message_present(
         self, nasl_file: Path, file_content: str
-    ) -> LinterResult:
+    ) -> Iterator[LinterResult]:
+        """Checks that the VT does have a
+        security_message or implementing function call
+
+        Args:
+            nasl_file (Path): The VTs path
+            file_content (str): The content of the VT
+        """
         deprecated_pattern = get_script_tag_pattern(
             script_tag=ScriptTag.DEPRECATED
         )
@@ -56,7 +69,14 @@ class CheckSecurityMessages(FileContentPlugin):
 
     def _check_security_message_absent(
         self, nasl_file: Path, file_content: str
-    ) -> LinterResult:
+    ) -> Iterator[LinterResult]:
+        """Checks that the VT does not have a
+        security_message or implementing function call
+
+        Args:
+            nasl_file (Path): The VTs path
+            file_content (str): The content of the VT
+        """
         # Policy VTs might use both, security_message and log_message
         if (
             "Policy/" in str(nasl_file)
@@ -76,6 +96,13 @@ class CheckSecurityMessages(FileContentPlugin):
     def _determinate_security_message_by_severity(
         self, file_content: str
     ) -> bool:
+        """Determinates wether a VT requires a
+        security_message or implementing function
+        call
+
+        Args:
+            file_content (str): The content of the VT
+        """
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
         cvss_detect = cvss_base_pattern.search(file_content)
 
@@ -88,7 +115,7 @@ class CheckSecurityMessages(FileContentPlugin):
     ) -> Iterator[LinterResult]:
         """This script checks the passed VT if it is using a security_message
         and having no severity (CVSS score) assigned or has a severity assigned
-        but dies not call security_message or an implementing function
+        but does not call security_message or an implementing function
 
         Args:
             nasl_file: The VT that is going to be checked
