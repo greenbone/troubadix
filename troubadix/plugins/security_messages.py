@@ -39,7 +39,7 @@ class CheckSecurityMessages(FileContentPlugin):
 
     def _check_security_message_present(
         self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    ) -> LinterResult:
         deprecated_pattern = get_script_tag_pattern(
             script_tag=ScriptTag.DEPRECATED
         )
@@ -48,14 +48,15 @@ class CheckSecurityMessages(FileContentPlugin):
 
         if not _file_contains_security_message(file_content):
             yield LinterError(
-                "VT is missing a security_message or implementing function in a VT with severity",
+                "VT is missing a security_message or implementing"
+                " function in a VT with severity",
                 file=nasl_file,
                 plugin=self.name,
             )
 
     def _check_security_message_absent(
         self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    ) -> LinterResult:
         # Policy VTs might use both, security_message and log_message
         if (
             "Policy/" in str(nasl_file)
@@ -66,7 +67,8 @@ class CheckSecurityMessages(FileContentPlugin):
 
         if _file_contains_security_message(file_content):
             yield LinterError(
-                "VT is using a security_message or implementing function in a VT without severity",
+                "VT is using a security_message or implementing"
+                " function in a VT without severity",
                 file=nasl_file,
                 plugin=self.name,
             )
@@ -101,6 +103,10 @@ class CheckSecurityMessages(FileContentPlugin):
         )
 
         if security_message_required:
-            return self._check_security_message_present(nasl_file, file_content)
+            yield from self._check_security_message_present(
+                nasl_file, file_content
+            )
         else:
-            return self._check_security_message_absent(nasl_file, file_content)
+            yield from self._check_security_message_absent(
+                nasl_file, file_content
+            )

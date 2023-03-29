@@ -90,7 +90,8 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is using a security_message or implementing function in a VT without severity",
+            "VT is using a security_message or implementing"
+            " function in a VT without severity",
             results[0].message,
         )
 
@@ -114,6 +115,33 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is using a security_message or implementing function in a VT without severity",
+            "VT is using a security_message or implementing "
+            "function in a VT without severity",
+            results[0].message,
+        )
+
+    def test_nok3(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            'script_tag(name:"cvss_base", value:"0.0");\n'
+            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            'script_tag(name:"solution_type", value:"VendorFix");\n'
+            'script_tag(name:"solution", value:"meh");\n'
+            "security_message( port:port, data:'It was possible to get the "
+            "csrf token `' + token[1] + '` via a jsonp request to: ' + "
+            "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckSecurityMessages(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT is using a security_message or implementing"
+            " function in a VT without severity",
             results[0].message,
         )
