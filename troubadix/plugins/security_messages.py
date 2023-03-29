@@ -20,7 +20,7 @@ from typing import Iterator
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
-security_message_implementations = [
+SECURITY_MESSAGE_IMPLEMENTATIONS = [
     "security_message",
     "http_check_remote_code",
     "citrix_xenserver_check_report_is_vulnerable",
