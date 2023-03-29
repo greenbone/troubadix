@@ -36,7 +36,8 @@ def _file_contains_security_message(file_content: str) -> bool:
         file_content (str): The content of the VT
     """
     return any(
-        sec_msg in file_content for sec_msg in security_message_implementations
+        security_message in file_content
+        for security_message in SECURITY_MESSAGE_IMPLEMENTATIONS
     )
 
 
