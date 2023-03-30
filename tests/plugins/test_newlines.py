@@ -89,9 +89,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             / "fail_name_and_copyright_newline.nasl"
         )
         content = (
-            'script_name( "foodetection");\n'
-            'script_copyright ( "Copyright(c) Greenbone AG" ) ; \n'
-            'script_copyright ("Copyright(c) Greenbone AG");\n'
+            '  script_name( "foodetection");\n'
+            '  script_copyright ( "Copyright(c) Greenbone AG" ) ; \n'
+            '  script_copyright ("Copyright(c) Greenbone AG");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -117,9 +117,9 @@ class CheckNewlinesTestCase(PluginTestCase):
             Path(__file__).parent / "test_files" / "fail_bad_new_line.nasl"
         )
         content = (
-            'script_name("foo detection");'
-            'script_copyright("Copyright(c) Greenbone AG");\r\n'
-            'script_copyright("Copyrigh(c) Greenbone AG");\n'
+            '  script_name("foo detection");'
+            '  script_copyright("Copyright(c) Greenbone AG");\r\n'
+            '  script_copyright("Copyrigh(c) Greenbone AG");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

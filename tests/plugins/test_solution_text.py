@@ -47,8 +47,8 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"solution_type", value:"NoneAvailable");\n'
-            'script_tag(name:"solution", value:"No known solution is '
+            '  script_tag(name:"solution_type", value:"NoneAvailable");\n'
+            '  script_tag(name:"solution", value:"No known solution is '
             "available as of 01st September, 2021.\n  Information "
             "regarding this issue will be updated once solution details "
             'are available.");\n'
@@ -65,8 +65,8 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_ok2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"solution_type", value:"WillNotFix");\n'
-            'script_tag(name:"solution", '
+            '  script_tag(name:"solution_type", value:"WillNotFix");\n'
+            '  script_tag(name:"solution", '
             'value:"No solution was made available by the vendor.\n\n  Note: '
             '<add a specific note for the reason here>.");\n'
         )
@@ -82,8 +82,8 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_ok3(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"solution_type", value:"WillNotFix");\n'
-            'script_tag(name:"solution", '
+            '  script_tag(name:"solution_type", value:"WillNotFix");\n'
+            '  script_tag(name:"solution", '
             'value:"No solution was made available by the vendor.\n\n  Vendor '
             'statement: <add specific vendor statement here>.");\n'
         )
@@ -98,7 +98,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
 
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        content = 'script_tag(name:"solution_type", value:"NoneAvailable");\n'
+        content = '  script_tag(name:"solution_type", value:"NoneAvailable");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
         )
@@ -120,7 +120,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
 
     def test_nok2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
-        content = 'script_tag(name:"solution_type", value:"WillNotFix");\n'
+        content = '  script_tag(name:"solution_type", value:"WillNotFix");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
         )
@@ -138,8 +138,8 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_nok3(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"solution_type", value:"WillNotFix");\n'
-            'script_tag(name:"solution", '
+            '  script_tag(name:"solution_type", value:"WillNotFix");\n'
+            '  script_tag(name:"solution", '
             'value:"No solution was made available by the vendor.\n\n  Notice: '
             '<add a specific note for the reason here>.");\n'
         )
@@ -160,8 +160,8 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_nok4(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"solution_type", value:"WillNotFix");\n'
-            'script_tag(name:"solution", '
+            '  script_tag(name:"solution_type", value:"WillNotFix");\n'
+            '  script_tag(name:"solution", '
             'value:"No solution was made available by the vendor.\n\n  Vendor '
             'statment: <add specific vendor statement here>.");\n'
         )

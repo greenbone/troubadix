@@ -27,9 +27,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"summary", value:"TBD");\n'
-            'script_tag(name:"solution", value:"TODO");\n'
-            'script_tag(name:"impact", value:"@todo");\n'
+            '  script_tag(name:"summary", value:"TBD");\n'
+            '  script_tag(name:"solution", value:"TODO");\n'
+            '  script_tag(name:"impact", value:"@todo");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()
@@ -44,9 +44,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
         path = Path("http_func.inc")
         content = (
             "#TBD"
-            'script_tag(name:"summary", value:"A value");#TBD\n'
-            'script_tag(name:"solution", value:"A value");\n'
-            'script_tag(name:"impact", value:"A value");\n'
+            '  script_tag(name:"summary", value:"A value");#TBD\n'
+            '  script_tag(name:"solution", value:"A value");\n'
+            '  script_tag(name:"impact", value:"A value");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()
@@ -61,9 +61,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "##TBD\n"
-            'script_tag(name:"summary", value:"A value");#TBD\n'
-            'script_tag(name:"solution", value:"A value");\n'
-            'script_tag(name:"impact", value:"A value");\n'
+            '  script_tag(name:"summary", value:"A value");#TBD\n'
+            '  script_tag(name:"solution", value:"A value");\n'
+            '  script_tag(name:"impact", value:"A value");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()
@@ -98,9 +98,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "##TODO\n"
-            'script_tag(name:"summary", value:"A value");#TBD\n'
-            'script_tag(name:"solution", value:"A value");\n'
-            'script_tag(name:"impact", value:"A value");\n'
+            '  script_tag(name:"summary", value:"A value");#TBD\n'
+            '  script_tag(name:"solution", value:"A value");\n'
+            '  script_tag(name:"impact", value:"A value");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()
@@ -129,9 +129,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "##@todo\n"
-            'script_tag(name:"summary", value:"A value");#@todo\n'
-            'script_tag(name:"solution", value:"A value");\n'
-            'script_tag(name:"impact", value:"A value");\n'
+            '  script_tag(name:"summary", value:"A value");#@todo\n'
+            '  script_tag(name:"solution", value:"A value");\n'
+            '  script_tag(name:"impact", value:"A value");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()
@@ -160,9 +160,9 @@ class CheckTodoTbdTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "##TBD\n"
-            'script_tag(name:"summary", value:"A value");#TODO\n'
-            'script_tag(name:"solution", value:"A value");\n'
-            'script_tag(name:"impact", value:"A value");##@todo\n'
+            '  script_tag(name:"summary", value:"A value");#TODO\n'
+            '  script_tag(name:"solution", value:"A value");\n'
+            '  script_tag(name:"impact", value:"A value");##@todo\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()

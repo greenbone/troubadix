@@ -28,10 +28,10 @@ class ChangedCVEsTest(TestCase):
     def test_get_cves_from_content(self):
         content = (
             "...\n"
-            'script_oid("1.3.6.1.4.1.25623.1.0.705311");\n'
-            'script_version("2023-01-10T10:12:01+0000");\n'
-            'script_cve_id("CVE-2022-32749", "CVE-2022-37392");\n'
-            'script_tag(name:"cvss_base", value:"5.0");\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.705311");\n'
+            '  script_version("2023-01-10T10:12:01+0000");\n'
+            '  script_cve_id("CVE-2022-32749", "CVE-2022-37392");\n'
+            '  script_tag(name:"cvss_base", value:"5.0");\n'
             "..."
         )
 
@@ -44,11 +44,11 @@ class ChangedCVEsTest(TestCase):
     def test_get_cves_from_content_multiline(self):
         content = (
             "...\n"
-            'script_oid("1.3.6.1.4.1.25623.1.0.705311");\n'
-            'script_version("2023-01-10T10:12:01+0000");\n'
-            'script_cve_id("CVE-2022-32749",\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.705311");\n'
+            '  script_version("2023-01-10T10:12:01+0000");\n'
+            '  script_cve_id("CVE-2022-32749",\n'
             '"CVE-2022-37392");\n'
-            'script_tag(name:"cvss_base", value:"5.0");\n'
+            '  script_tag(name:"cvss_base", value:"5.0");\n'
             "..."
         )
 
@@ -61,9 +61,9 @@ class ChangedCVEsTest(TestCase):
     def test_get_cves_from_content_empty(self):
         content = (
             "...\n"
-            'script_oid("1.3.6.1.4.1.25623.1.0.705311");\n'
-            'script_version("2023-01-10T10:12:01+0000");\n'
-            'script_tag(name:"cvss_base", value:"5.0");\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.705311");\n'
+            '  script_version("2023-01-10T10:12:01+0000");\n'
+            '  script_tag(name:"cvss_base", value:"5.0");\n'
             "..."
         )
 

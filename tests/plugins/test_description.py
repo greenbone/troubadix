@@ -27,10 +27,10 @@ class CheckDescriptionTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_cve_id("CVE-2021-03807");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_cve_id("CVE-2019-04879");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_cve_id("CVE-2021-03807");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_cve_id("CVE-2019-04879");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -44,11 +44,11 @@ class CheckDescriptionTestCase(PluginTestCase):
     def test_description(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_cve_id("CVE-2021-03807");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_cve_id("CVE-2019-04879");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_description("TestTest");\n'
+            '  script_cve_id("CVE-2021-03807");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_cve_id("CVE-2019-04879");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_description("TestTest");\n'
         )
 
         fake_context = self.create_file_plugin_context(
@@ -68,11 +68,11 @@ class CheckDescriptionTestCase(PluginTestCase):
     def test_description2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_cve_id("CVE-2021-03807");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'TTTTTTTscrIpt_descriPtion("TestTest");\n'
-            'script_cve_id("CVE-2019-04879");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_cve_id("CVE-2021-03807");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  TTTTTTTscrIpt_descriPtion("TestTest");\n'
+            '  script_cve_id("CVE-2019-04879");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
 
         fake_context = self.create_file_plugin_context(

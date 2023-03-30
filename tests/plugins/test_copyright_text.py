@@ -46,7 +46,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "# Some text descriptions might be excerpted from (a) referenced\n"
             "# source(s), and are Copyright (C) by the respective "
             "right holder(s).\n"
-            'script_copyright("Copyright (C) 1234");'
+            '  script_copyright("Copyright (C) 1234");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -73,7 +73,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
         content = (
             "# Text descriptions are largely excerpted from the referenced\n"
             "# advisory, and are Copyright (C) the respective author(s)\n"
-            '  script_copyright("Copyright (C) 134");'
+            '  script_copyright("Copyright (C) 134");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -97,7 +97,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             content = (
                 "# Copyright (C) 2017 Greenbone AG\n"
                 f"{wrong_text}"
-                '  script_copyright("Copyright (C) 1234");'
+                '  script_copyright("Copyright (C) 1234");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content
@@ -121,7 +121,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 content = (
                     "# Copyright (C) 2017 Greenbone AG\n"
                     f"{wrong_text}"
-                    '  script_copyright("Copyright (C) 1234");'
+                    '  script_copyright("Copyright (C) 1234");\n'
                 )
                 path.write_text(content, encoding=CURRENT_ENCODING)
 

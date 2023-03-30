@@ -29,10 +29,10 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
 
     def test_ok(self):
         content = (
-            "script_category(ACT_INIT);\n"
-            'script_xref(name: "URL", value:"http://example.com");\n'
-            'script_tag(name:"foo", value:"bar");\n'
-            'script_add_preferences("");'
+            "  script_category(ACT_INIT);\n"
+            '  script_xref(name: "URL", value:"http://example.com");\n'
+            '  script_tag(name:"foo", value:"bar");\n'
+            '  script_add_preferences("");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
@@ -54,9 +54,9 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
 
     def test_missing_values(self):
         content = (
-            'script_category("");\n'
-            'script_xref(name: "URL",value:"");\n'
-            'script_tag(name:"", value:"");'
+            '  script_category("");\n'
+            '  script_xref(name: "URL",value:"");\n'
+            '  script_tag(name:"", value:"");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content

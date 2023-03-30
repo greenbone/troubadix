@@ -26,7 +26,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        content = 'script_xref(name:"URL", value:"http://www.example.com");'
+        content = '  script_xref(name:"URL", value:"http://www.example.com");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -46,7 +46,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_invalid_url(self):
-        content = 'script_xref(name:"URL", value:"www.example.com");'
+        content = '  script_xref(name:"URL", value:"www.example.com");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )

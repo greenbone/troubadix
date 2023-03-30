@@ -26,11 +26,11 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
     def test_ok_nonewline(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"vuldetect", value:"Without newline");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"vuldetect", value:"Without newline");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -44,11 +44,11 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
     def test_ok_newline(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"vuldetect", value:"With\nnewline");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"vuldetect", value:"With\nnewline");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -62,11 +62,11 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
     def test_nok_nonewline(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"vulndetect", value:"Without newline");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"vulndetect", value:"Without newline");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -85,11 +85,11 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
     def test_nok_newline(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"vulndetect", value:"With\nnewline");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"vulndetect", value:"With\nnewline");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

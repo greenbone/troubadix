@@ -29,8 +29,8 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_ok(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -57,9 +57,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.inc");\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("example.inc");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -74,9 +74,9 @@ class CheckDependenciesTestCase(PluginTestCase):
         dependency = "example2.inc"
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            f'script_dependencies("{dependency}");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            f'  script_dependencies("{dependency}");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -100,9 +100,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("enterprise/example.inc");\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("enterprise/example.inc");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -120,9 +120,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("Policy/example.inc");\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("Policy/example.inc");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -147,9 +147,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("foo/example.inc");\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("foo/example.inc");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -174,9 +174,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.inc", \n"example2.inc");\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("example.inc", \n"example2.inc");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -202,9 +202,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.touch()
             example2.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.nasl", #Comment\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("example.nasl", #Comment\n'
                 '"example2.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
@@ -223,9 +223,9 @@ class CheckDependenciesTestCase(PluginTestCase):
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.nasl", #Comment\n '
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("example.nasl", #Comment\n '
                 '"example2.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(

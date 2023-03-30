@@ -27,9 +27,9 @@ class CheckScriptFamilyTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_family("FreeBSD Local Security Checks");\n'
+            '  script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_family("FreeBSD Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -52,9 +52,9 @@ class CheckScriptFamilyTestCase(PluginTestCase):
     def test_script_family(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_family("TestTest");\n'
+            '  script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_family("TestTest");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -72,8 +72,8 @@ class CheckScriptFamilyTestCase(PluginTestCase):
     def test_script_family2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -89,10 +89,10 @@ class CheckScriptFamilyTestCase(PluginTestCase):
     def test_script_family3(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_family("???\\");\n'
-            'script_family("???\\");\n'
+            '  script_tag(name:"cvss_base_vector", value:"AV:N/A:N");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_family("???\\");\n'
+            '  script_family("???\\");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

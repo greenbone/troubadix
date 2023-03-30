@@ -27,9 +27,9 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "# SPDX-FileCopyrightText: 2022 Greenbone AG",
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2022)");',
-            'script_copyright("Copyright (C) 2022 Greenbone AG");',
+            '  script_copyright("Copyright (C) 2022 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -43,9 +43,9 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "# Copyright (C) 2022 Greenbone AG",
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2022)");',
-            'script_copyright("Copyright (C) 2022 Greenbone AG");',
+            '  script_copyright("Copyright (C) 2022 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -68,9 +68,9 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/pre2008/file.nasl")
         content = (
             "# SPDX-FileCopyrightText: 2020 Greenbone AG",
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2022)");',
-            'script_copyright("Copyright (C) 2020 Greenbone AG");',
+            '  script_copyright("Copyright (C) 2020 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -84,9 +84,9 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/pre2008/file.nasl")
         content = (
             "# Copyright (C) 2020 Greenbone AG",
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2022)");',
-            'script_copyright("Copyright (C) 2020 Greenbone AG");',
+            '  script_copyright("Copyright (C) 2020 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -99,9 +99,9 @@ class CheckCopyrightYearTestCase(PluginTestCase):
     def test_pre_fail(self):
         path = Path("some/pre2008/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2020-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2020-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2020)");',
-            'script_copyright("Copyright (C) 2021 Greenbone AG");',
+            '  script_copyright("Copyright (C) 2021 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -119,8 +119,8 @@ class CheckCopyrightYearTestCase(PluginTestCase):
     def test_missing_creation_date(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"qod_type", value:"remote_banner");',
-            'script_family("Product detection");',
+            '  script_tag(name:"qod_type", value:"remote_banner");',
+            '  script_family("Product detection");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -136,9 +136,9 @@ class CheckCopyrightYearTestCase(PluginTestCase):
     def test_creation_date_not_script_copyright_year(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");',
-            'script_copyright("Copyright (C) 2020 Greenbone AG");',
+            '  script_copyright("Copyright (C) 2020 Greenbone AG");',
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content
@@ -157,7 +157,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "# Copyright (C) 2020 Greenbone AG",
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");',
         )
         fake_context = self.create_file_plugin_context(
@@ -177,7 +177,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             "# SPDX-FileCopyrightText: 2020 Greenbone AG",
-            'script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
             '+0200 (Tue, 14 May 2013)");',
         )
         fake_context = self.create_file_plugin_context(

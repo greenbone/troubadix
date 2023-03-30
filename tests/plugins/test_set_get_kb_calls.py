@@ -26,10 +26,10 @@ class CheckWrongSetGetKBCallTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'set_kb_item(name:"kb/key", value:"value");\n'
-            'replace_kb_item(name:"kb/key", value:"value");\n'
-            'get_kb_item("kb/key");\n'
-            'get_kb_list("kb/key");\n'
+            '  set_kb_item(name:"kb/key", value:"value");\n'
+            '  replace_kb_item(name:"kb/key", value:"value");\n'
+            '  get_kb_item("kb/key");\n'
+            '  get_kb_list("kb/key");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -43,11 +43,11 @@ class CheckWrongSetGetKBCallTestCase(PluginTestCase):
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'set_kb_item("kbkey", value:"value");\n'
-            'replace_kb_item(name:"kbkey", "value");\n'
-            'replace_kb_item(name:"kbkey");\n'
-            'replace_kb_item(name:"kbkey", name:"kbkey");\n'
-            'get_kb_item(name:"kbkey");\n'
+            '  set_kb_item("kbkey", value:"value");\n'
+            '  replace_kb_item(name:"kbkey", "value");\n'
+            '  replace_kb_item(name:"kbkey");\n'
+            '  replace_kb_item(name:"kbkey", name:"kbkey");\n'
+            '  get_kb_item(name:"kbkey");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

@@ -28,11 +28,11 @@ class CheckForkingNaslFunctionsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            'port = get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -55,10 +55,10 @@ class CheckForkingNaslFunctionsTestCase(PluginTestCase):
     def test_not_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
             "if( ! infos = get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, "
             'service:"www" ) )\nexit( 0 );\n'
             "if( ! infos = get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, "
@@ -85,10 +85,10 @@ class CheckForkingNaslFunctionsTestCase(PluginTestCase):
     def test_not_ok2(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
             "if(!infos = get_app_full(cpe:CPE, port:port, exit_no_version:TRUE)"
             ")\nexit(0);\n"
             "if(!infos = get_app_full(cpe:CPE, port:port, exit_no_version:TRUE)"

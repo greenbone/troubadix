@@ -28,11 +28,11 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            'port = get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -55,11 +55,11 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
     def test_not_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar. '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar. '
             'https://www.website.de/demo");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -82,11 +82,11 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
     def test_not_ok2(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_xref(name:"URL", '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_xref(name:"URL", '
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");\n'
         )
         fake_context = self.create_file_plugin_context(

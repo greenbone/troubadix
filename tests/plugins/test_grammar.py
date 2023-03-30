@@ -27,12 +27,12 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
             'requests and checks the responses.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -46,10 +46,10 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
             "# is prone to a security bypass vulnerabilities\n"
         )
 
@@ -71,10 +71,10 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
             "# is prone to a security bypass vulnerabilities\n"
             "# refer the Reference\n"
         )
@@ -104,12 +104,12 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar3(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"summary", value:"Adobe Digital Edition is prone '
-            'a to denial of service (DoS) vulnerability.");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"summary", value:"Adobe Digital Edition is '
+            'prone a to denial of service (DoS) vulnerability.");\n'
         )
 
         fake_context = self.create_file_plugin_context(
@@ -122,7 +122,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
+            "VT/Include has the following grammar problem:   "
             'script_tag(name:"summary", value:"Adobe Digital Edition is prone '
             'a to denial of service (DoS) vulnerability.");',
             results[0].message,
@@ -131,11 +131,11 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar4(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"summary", value:"Splunk Enterprise is prone an '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"summary", value:"Splunk Enterprise is prone an '
             'open redirect vulnerability.");\n'
         )
 
@@ -149,7 +149,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
+            "VT/Include has the following grammar problem:   "
             'script_tag(name:"summary", value:"Splunk Enterprise is prone an '
             'open redirect vulnerability.");',
             results[0].message,
@@ -158,11 +158,11 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar5(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
             'request and checks the responses.");\n'
         )
 
@@ -176,7 +176,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
+            "VT/Include has the following grammar problem:   "
             'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
             'request and checks the responses.");',
             results[0].message,
@@ -185,11 +185,11 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar6(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar is prone to multiple '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar is prone to multiple '
             'unknown vulnerability.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
 
         fake_context = self.create_file_plugin_context(
@@ -202,7 +202,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
+            "VT/Include has the following grammar problem:   "
             'script_tag(name:"summary", value:"Foo Bar is prone to multiple '
             'unknown vulnerability.");',
             results[0].message,
@@ -211,11 +211,11 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar_fp(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.'
             ' a multiple keyboard .");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -229,13 +229,13 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_grammar_fp1(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar is prone to '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar is prone to '
             ' multiple cross-site request forgery (CSRF) vulnerabilities.");\n'
-            'script_tag(name:"insight", value:"A Cross Site Request '
+            '  script_tag(name:"insight", value:"A Cross Site Request '
             ' Forgery flaw exists.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

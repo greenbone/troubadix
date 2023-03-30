@@ -26,7 +26,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        content = 'script_tag(name: "foo", value:"bar");'
+        content = '  script_tag(name: "foo", value:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -46,7 +46,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_leading_whitespace(self):
-        content = 'script_tag(name: "foo", value:" bar");'
+        content = '  script_tag(name: "foo", value:" bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -63,7 +63,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
         )
 
     def test_trailing_whitespace(self):
-        content = 'script_tag(name: "foo", value:"bar\n");'
+        content = '  script_tag(name: "foo", value:"bar\n");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -75,7 +75,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
 
     def test_trailing_whitespace_newline(self):
-        content = 'script_tag(name: "foo", value:"foo\nbar\n");'
+        content = '  script_tag(name: "foo", value:"foo\nbar\n");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )

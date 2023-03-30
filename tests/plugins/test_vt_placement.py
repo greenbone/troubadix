@@ -29,9 +29,9 @@ class CheckVTPlacementTestCase(PluginTestCase):
             path = tempdir / "file.nasl"
             for _type in ["Product", "Service"]:
                 content = (
-                    'script_tag(name:"cvss_base", value:"4.0");\n'
-                    'script_tag(name:"summary", value:"Foo Bar.");\n'
-                    f'script_family("{_type} detection");\n'
+                    '  script_tag(name:"cvss_base", value:"4.0");\n'
+                    '  script_tag(name:"summary", value:"Foo Bar.");\n'
+                    f'  script_family("{_type} detection");\n'
                 )
                 fake_context = self.create_file_plugin_context(
                     nasl_file=path, file_content=content, root=path.parent
@@ -57,9 +57,9 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 path = tempdir / _dir / "file.nasl"
                 for _type in ["Product", "Service"]:
                     content = (
-                        'script_tag(name:"cvss_base", value:"4.0");\n'
-                        'script_tag(name:"summary", value:"Foo Bar.");\n'
-                        f'script_family("{_type} detection");\n'
+                        '  script_tag(name:"cvss_base", value:"4.0");\n'
+                        '  script_tag(name:"summary", value:"Foo Bar.");\n'
+                        f'  script_family("{_type} detection");\n'
                     )
                     fake_context = self.create_file_plugin_context(
                         nasl_file=path, file_content=content, root=tempdir
@@ -75,10 +75,10 @@ class CheckVTPlacementTestCase(PluginTestCase):
             path = tempdir / "file.nasl"
             for _type in ["Product", "Service"]:
                 content = (
-                    'script_tag(name:"cvss_base", value:"4.0");\n'
-                    'script_tag(name:"summary", value:"Foo Bar.");\n'
-                    f'script_family("{_type} detection");\n'
-                    'script_tag(name:"deprecated", value=TRUE);\n'
+                    '  script_tag(name:"cvss_base", value:"4.0");\n'
+                    '  script_tag(name:"summary", value:"Foo Bar.");\n'
+                    f'  script_family("{_type} detection");\n'
+                    '  script_tag(name:"deprecated", value=TRUE);\n'
                 )
 
                 fake_context = self.create_file_plugin_context(
@@ -94,9 +94,9 @@ class CheckVTPlacementTestCase(PluginTestCase):
         with self.create_directory() as tempdir:
             path = tempdir / "file.nasl"
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar...");\n'
-                'script_dependencies("example.inc");\n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar...");\n'
+                '  script_dependencies("example.inc");\n'
             )
 
             fake_context = self.create_file_plugin_context(
@@ -113,9 +113,9 @@ class CheckVTPlacementTestCase(PluginTestCase):
             path = tempdir / "foo" / "bar" / "file.nasl"
             for _type in ["Product", "Service"]:
                 content = (
-                    'script_tag(name:"cvss_base", value:"4.0");\n'
-                    'script_tag(name:"summary", value:"Foo Bar.");\n'
-                    f'script_family("{_type} detection");\n'
+                    '  script_tag(name:"cvss_base", value:"4.0");\n'
+                    '  script_tag(name:"summary", value:"Foo Bar.");\n'
+                    f'  script_family("{_type} detection");\n'
                 )
                 fake_context = self.create_file_plugin_context(
                     nasl_file=path, file_content=content, root=tempdir

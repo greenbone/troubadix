@@ -54,8 +54,8 @@ class UpdateTestCase(unittest.TestCase):
         terminal = MagicMock()
         with TemporaryDirectory() as tempdir:
             content = (
-                'script_version("2021-07-19T12:32:02+0000");\n'
-                'script_tag(name: "last_modification", value: "2021-07-19 '
+                '  script_version("2021-07-19T12:32:02+0000");\n'
+                '  script_tag(name: "last_modification", value: "2021-07-19 '
                 '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
             )
             testfile1 = tempdir / "testfile1.nasl"
@@ -71,8 +71,8 @@ class UpdateTestCase(unittest.TestCase):
         terminal = MagicMock()
         with TemporaryDirectory() as tempdir:
             content = (
-                'script_version("foo");\n'
-                'script_tag(name: "last_modification", value: "bar");\n'
+                '  script_version("foo");\n'
+                '  script_tag(name: "last_modification", value: "bar");\n'
             )
             testfile1 = tempdir / "testfile1.nasl"
             testfile1.write_text(content, encoding="utf8")
@@ -86,7 +86,7 @@ class UpdateTestCase(unittest.TestCase):
     def test_no_update_missing_script_version(self):
         terminal = MagicMock()
         with TemporaryDirectory() as tempdir:
-            content = 'script_tag(name: "last_modification", value: "bar");\n'
+            content = '  script_tag(name: "last_modification", value: "bar");\n'
             testfile1 = tempdir / "testfile1.nasl"
             testfile1.write_text(content, encoding="utf8")
 
@@ -99,7 +99,7 @@ class UpdateTestCase(unittest.TestCase):
     def test_no_update_missing_last_modification_tag(self):
         terminal = MagicMock()
         with TemporaryDirectory() as tempdir:
-            content = 'script_version("2021-07-19T12:32:02+0000");\n'
+            content = '  script_version("2021-07-19T12:32:02+0000");\n'
             testfile1 = tempdir / "testfile1.nasl"
             testfile1.write_text(content, encoding="utf8")
 

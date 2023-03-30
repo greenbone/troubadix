@@ -27,9 +27,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -44,23 +44,23 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         deprecated_output = {
             'script_summary(), use script_tag(name:"'
             'summary", value:"") instead': "script_"
-            "summary('this is not okay!');\n",
+            "summary('this is not okay!');",
             "script_id(), use script_oid() with "
-            "the full OID instead": "script_id(123345);\n",
-            "security_note()": "security_note('nonono!');\n",
-            "security_warning()": "security_warning('nonono!');\n",
+            "the full OID instead": "script_id(123345);",
+            "security_note()": "security_note('nonono!');",
+            "security_warning()": "security_warning('nonono!');",
             "security_hole()": "security_hole('nonono!');",
-            "script_description()": "script_description('stop it!')\n",
+            "script_description()": "script_description('stop it!')",
             'script_tag(name:"risk_factor", value: '
-            "SEVERITY)": 'script_tag(name:"risk_factor", value: 0.1);\n',
+            "SEVERITY)": 'script_tag(name:"risk_factor", value: 0.1);',
             "script_bugtraq_id()": "script_bugtraq_id('00000');",
         }
         path = Path("some/file.nasl")
         for msg, cont in deprecated_output.items():
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"summary", value:"Foo Bar.");\n'
-                f"script_category(ACT_ATTACK);\n{cont}"
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"summary", value:"Foo Bar.");\n'
+                f"  script_category(ACT_ATTACK);\n{cont}\n"
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content

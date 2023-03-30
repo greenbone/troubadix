@@ -26,7 +26,7 @@ from . import PluginTestCase
 class CheckValidOIDTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
-        content = 'script_oid("1.3.6.1.4.1.25623.1.0.100376");'
+        content = '  script_oid("1.3.6.1.4.1.25623.1.0.100376");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
@@ -47,7 +47,7 @@ class CheckValidOIDTestCase(PluginTestCase):
 
     def test_empty_tag(self):
         path = Path("some/file.nasl")
-        content = "script_oid();"
+        content = "  script_oid();\n"
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
@@ -65,7 +65,7 @@ class CheckValidOIDTestCase(PluginTestCase):
 
     def test_invalid_oid(self):
         path = Path("some/file.nasl")
-        content = 'script_oid("1.3.6.1.4.1.25623.2.0.100376");'
+        content = '  script_oid("1.3.6.1.4.1.25623.2.0.100376");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
@@ -86,7 +86,7 @@ class CheckValidOIDTestCase(PluginTestCase):
 
     def test_missing__script_family(self):
         path = Path("some/file.nasl")
-        content = 'script_oid("1.3.6.1.4.1.25623.1.1.100376");'
+        content = '  script_oid("1.3.6.1.4.1.25623.1.1.100376");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
@@ -102,8 +102,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_euler_family_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.2.2025.5555");'
-            'script_family("Huawei EulerOS Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.2.2025.5555");\n'
+            '  script_family("Huawei EulerOS Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -117,8 +117,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_euler_family(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.2.2055.5555");'
-            'script_family("Huawei EulerOS Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.2.2055.5555");\n'
+            '  script_family("Huawei EulerOS Local Security Checks");\n'
         )
 
         fake_context = self.create_file_plugin_context(
@@ -143,8 +143,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_suse_family_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.4.2025.55555.5");'
-            'script_family("SuSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.4.2025.55555.5");\n'
+            '  script_family("SuSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -158,8 +158,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_suse_family(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.4.2025.555755.5");'
-            'script_family("SuSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.4.2025.555755.5");\n'
+            '  script_family("SuSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -183,8 +183,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_debian_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.1.2256");'
-            'script_family("Debian Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.1.2256");\n'
+            '  script_family("Debian Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -198,8 +198,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_debian(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.1.2256");'
-            'script_family("Suse Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.1.2256");\n'
+            '  script_family("Suse Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -222,8 +222,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_unused_oid(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.3.2256");'
-            'script_family("Suse Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.3.2256");\n'
+            '  script_family("Suse Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -246,8 +246,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_suse_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.4.2012.2256.1");'
-            'script_family("SuSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.4.2012.2256.1");\n'
+            '  script_family("SuSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -261,8 +261,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_suse(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.4.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.4.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -285,8 +285,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_amazon_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.5.2012.2256");'
-            'script_family("Amazon Linux Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.5.2012.2256");\n'
+            '  script_family("Amazon Linux Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -300,8 +300,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_amazon(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.5.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.5.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -324,8 +324,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_gentoo_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.6.2256");'
-            'script_family("Gentoo Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.6.2256");\n'
+            '  script_family("Gentoo Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -339,8 +339,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_gentoo(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.6.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.6.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -363,8 +363,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_freebsd_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.7.2256");'
-            'script_family("FreeBSD Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.7.2256");\n'
+            '  script_family("FreeBSD Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -378,8 +378,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_freebsd(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.7.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.7.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -402,8 +402,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_oracle_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.8.2256");'
-            'script_family("Oracle Linux Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.8.2256");\n'
+            '  script_family("Oracle Linux Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -417,8 +417,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_oracle(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.8.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.8.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -441,8 +441,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_fedora_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.9.2256");'
-            'script_family("Fedora Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.9.2256");\n'
+            '  script_family("Fedora Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -456,8 +456,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_fedora(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.9.2256");'
-            'script_family("Debian Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.9.2256");\n'
+            '  script_family("Debian Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -480,8 +480,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_mageia_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.10.2012.2256");'
-            'script_family("Mageia Linux Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.10.2012.2256");\n'
+            '  script_family("Mageia Linux Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -495,8 +495,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_mageia(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.10.2256");'
-            'script_family("Debian Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.10.2256");\n'
+            '  script_family("Debian Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -519,8 +519,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_redhat_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.11.2256");'
-            'script_family("RedHat Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.11.2256");\n'
+            '  script_family("RedHat Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -534,8 +534,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_redhat(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.11.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.11.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -558,8 +558,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_ubuntu_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.12.2012.2256.1");'
-            'script_family("Ubuntu Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.12.2012.2256.1");\n'
+            '  script_family("Ubuntu Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -573,8 +573,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_ubuntu(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.12.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.12.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -597,8 +597,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_slackware_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");'
-            'script_family("Slackware Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");\n'
+            '  script_family("Slackware Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -612,8 +612,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_slackware(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -636,8 +636,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_rocky_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");'
-            'script_family("Rocky Linux Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");\n'
+            '  script_family("Rocky Linux Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -651,8 +651,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_rocky(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -675,8 +675,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_unknown(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.1.99.2256");'
-            'script_family("SUSE Local Security Checks");'
+            '  script_oid("1.3.6.1.4.1.25623.1.1.99.2256");\n'
+            '  script_family("SUSE Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -699,9 +699,9 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_script_name__product_unknown(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.2.2025.2555");'
-            'script_family("Huawei EulerOS Local Security Checks");'
-            'script_name("AdaptBB Detection (HTTP)");'
+            '  script_oid("1.3.6.1.4.1.25623.1.2.2025.2555");\n'
+            '  script_family("Huawei EulerOS Local Security Checks");\n'
+            '  script_name("AdaptBB Detection (HTTP)");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -723,8 +723,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_script_name__product_firefox_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.2.1.2020.255");'
-            'script_name("Mozilla Firefox Security Advisory");'
+            '  script_oid("1.3.6.1.4.1.25623.1.2.1.2020.255");\n'
+            '  script_name("Mozilla Firefox Security Advisory");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -738,8 +738,8 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_script_name__product_firefox(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.3.6.1.4.1.25623.1.2.1.2020.255");'
-            'script_name("AdaptBB Detection (HTTP)");'
+            '  script_oid("1.3.6.1.4.1.25623.1.2.1.2020.255");\n'
+            '  script_name("AdaptBB Detection (HTTP)");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content

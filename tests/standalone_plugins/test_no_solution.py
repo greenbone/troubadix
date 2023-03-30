@@ -43,8 +43,8 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_check_skip_script_ok(self):
         content = (
-            'script_tag(name:"solution_type", value:"NoneAvailable");\n”'
-            'script_tag(name:"cvss_base", value:"6.4");\n'
+            '  script_tag(name:"solution_type", value:"NoneAvailable");\n”'
+            '  script_tag(name:"cvss_base", value:"6.4");\n'
         )
 
         result = check_skip_script(content)
@@ -52,8 +52,8 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_check_skip_script_nok_cvss(self):
         content = (
-            'script_tag(name:"solution_type", value:"NoneAvailable");\n”'
-            'script_tag(name:"cvss_base", value:"0.0");\n'
+            '  script_tag(name:"solution_type", value:"NoneAvailable");\n”'
+            '  script_tag(name:"cvss_base", value:"0.0");\n'
         )
 
         result = check_skip_script(content)
@@ -61,8 +61,8 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_check_skip_script_nok_solution_type(self):
         content = (
-            'script_tag(name:"solution_type", value:"VendorFix");\n”'
-            'script_tag(name:"cvss_base", value:"6.4");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n”'
+            '  script_tag(name:"cvss_base", value:"6.4");\n'
         )
 
         result = check_skip_script(content)
@@ -70,13 +70,13 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_extract_tags_ok(self):
         content = (
-            'script_tag(name:"solution", value:"No known solution is '
+            '  script_tag(name:"solution", value:"No known solution is '
             "available as of 05th August, 2022. Information regarding "
             "this issue will be updated once solution details"
             ' are available.");\n'
-            'script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
+            '  script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
             ' +0200 (Wed, 21 Jul 2021)");\n'
-            'script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
         )
 
         expected_result = (
@@ -91,9 +91,9 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_extract_tags_break_solution_1(self):
         content = (
-            'script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
+            '  script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
             ' +0200 (Wed, 21 Jul 2021)");\n'
-            'script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
         )
 
         expected_result = None
@@ -104,11 +104,11 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_extract_tags_break_solution_2(self):
         content = (
-            'script_tag(name:"solution", value:"No known solution is '
+            '  script_tag(name:"solution", value:"No known solution is '
             "available as in 05th August, 2022. Information regarding "
             "this issue will be updated once solution details"
             ' are available.");\n'
-            'script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
+            '  script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
             ' +0200 (Wed, 21 Jul 2021)");\n'
             'script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
         )
@@ -121,13 +121,13 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_extract_tags_break_solution_3(self):
         content = (
-            'script_tag(name:"solution", value:"No known solution is '
+            '  script_tag(name:"solution", value:"No known solution is '
             "available as of 05th Imaginary, 2022. Information regarding "
             "this issue will be updated once solution details"
             ' are available.");\n'
-            'script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
+            '  script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
             ' +0200 (Wed, 21 Jul 2021)");\n'
-            'script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
         )
 
         expected_result = None
@@ -138,11 +138,11 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_extract_tags_break_creation_date(self):
         content = (
-            'script_tag(name:"solution", value:"No known solution is '
+            '  script_tag(name:"solution", value:"No known solution is '
             "available as of 05th August, 2022. Information regarding "
             "this issue will be updated once solution details are"
             ' available.");\n'
-            'script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
+            '  script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
         )
 
         expected_result = None
@@ -153,11 +153,11 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_extract_tags_break_oid(self):
         content = (
-            'script_tag(name:"solution", value:"No known solution is '
+            '  script_tag(name:"solution", value:"No known solution is '
             "available as of 05th August, 2022. Information regarding "
             "this issue will be updated once solution details are "
             'available.");\n'
-            'script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
+            '  script_tag(name:"creation_date", value:"2021-07-21 16:20:50'
             ' +0200 (Wed, 21 Jul 2021)");\n'
         )
 
@@ -174,12 +174,13 @@ class ParseArgsTestCase(unittest.TestCase):
 
             with open(test_file, "w", encoding="LATIN-1") as file_stream:
                 content = (
-                    'script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
-                    'script_tag(name:"creation_date", value:"2021-07-21 '
+                    '  script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
+                    '  script_tag(name:"creation_date", value:"2021-07-21 '
                     '16:20:50 +0200 (Wed, 21 Jul 2021)");\n'
-                    'script_tag(name:"cvss_base", value:"6.4");\n'
-                    'script_tag(name:"solution_type", value:"NoneAvailable");\n'
-                    'script_tag(name:"solution", value:"No known solution'
+                    '  script_tag(name:"cvss_base", value:"6.4");\n'
+                    '  script_tag(name:"solution_type", value:"NoneAvailable");'
+                    "\n"
+                    '  script_tag(name:"solution", value:"No known solution'
                     " is available as of 05th August, 2022.Information "
                     "regarding this issue will be "
                     'updated once solution details are available.");\n'

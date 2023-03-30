@@ -26,10 +26,10 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -43,10 +43,10 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix"); \t \n'
-            'script_tag(name:"solution", value:"meh");\n\t '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix"); \t \n'
+            '  script_tag(name:"solution", value:"meh");\n\t '
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
