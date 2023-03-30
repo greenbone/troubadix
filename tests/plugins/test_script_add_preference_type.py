@@ -31,10 +31,10 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         for pref_type in ValidType:
             path = Path("some/file.nasl")
             content = (
-                'script_tag(name:"cvss_base", value:"4.0");\n'
-                'script_tag(name:"cvss_base_vector", \n'
+                '  script_tag(name:"cvss_base", value:"4.0");\n'
+                '  script_tag(name:"cvss_base_vector", \n'
                 'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
-                f'script_add_preference(type: "{pref_type.value}");\n'
+                f'  script_add_preference(type: "{pref_type.value}");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content
@@ -57,9 +57,9 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
     def test_no_add_preference(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base_vector", '
+            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -74,9 +74,9 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         add_pref = 'script_add_preference(type: "invalid");'
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_name("Foo Bar");\n'
-            'script_name("Foo Bar");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_name("Foo Bar");\n'
+            '  script_name("Foo Bar");\n'
             f"{add_pref}\n"
         )
         fake_context = self.create_file_plugin_context(

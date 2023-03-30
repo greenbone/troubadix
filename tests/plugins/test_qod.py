@@ -30,7 +30,7 @@ class CheckQodTestCase(PluginTestCase):
     nasl_file = Path("some/file.nasl")
 
     def test_ok_qod_num(self):
-        content = 'script_tag(name:"qod", value:97);'
+        content = '  script_tag(name:"qod", value:97);\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
         )
@@ -50,7 +50,7 @@ class CheckQodTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_ok_qod_type(self):
-        content = 'script_tag(name:"qod_type", value:"exploit");'
+        content = '  script_tag(name:"qod_type", value:"exploit");\n'
 
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
@@ -61,7 +61,7 @@ class CheckQodTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_missing_qod(self):
-        content = 'script_tag(name:"foo", value:"bar");'
+        content = '  script_tag(name:"foo", value:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
         )
@@ -74,8 +74,8 @@ class CheckQodTestCase(PluginTestCase):
 
     def test_too_many_qod(self):
         content = (
-            'script_tag(name:"qod_type", value:"exploit");\n'
-            'script_tag(name:"qod", value:97);'
+            '  script_tag(name:"qod_type", value:"exploit");\n'
+            '  script_tag(name:"qod", value:97);\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
@@ -88,7 +88,7 @@ class CheckQodTestCase(PluginTestCase):
         self.assertEqual("VT contains multiple QoD values", results[0].message)
 
     def test_wrong_qod_num_str(self):
-        content = 'script_tag(name:"qod", value:"foo");'
+        content = '  script_tag(name:"qod", value:"foo");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
         )
@@ -105,7 +105,7 @@ class CheckQodTestCase(PluginTestCase):
         )
 
     def test_wrong_qod_num_int(self):
-        content = 'script_tag(name:"qod", value:2);'
+        content = '  script_tag(name:"qod", value:2);\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
         )
@@ -122,7 +122,7 @@ class CheckQodTestCase(PluginTestCase):
         )
 
     def test_wrong_qod_type(self):
-        content = 'script_tag(name:"qod_type", value:"foo");'
+        content = '  script_tag(name:"qod_type", value:"foo");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.nasl_file, file_content=content
         )

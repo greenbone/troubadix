@@ -28,8 +28,8 @@ class CheckCreationDateTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013)");'
+            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2013)");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -51,9 +51,9 @@ class CheckCreationDateTestCase(PluginTestCase):
     def test_missing(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"7.5");\n'
-            'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:N/C:P/I:P/A:P");'
+            '  script_tag(name:"cvss_base", value:"7.5");\n'
+            '  script_tag(name:"cvss_base_vector", '
+            'value:"AV:N/AC:L/Au:N/C:P/I:P/A:P");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -73,8 +73,8 @@ class CheckCreationDateTestCase(PluginTestCase):
     def test_wrong_weekday(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
-            '(Mon, 14 May 2013)");'
+            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
+            '+0200 (Mon, 14 May 2013)");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -94,8 +94,8 @@ class CheckCreationDateTestCase(PluginTestCase):
     def test_no_timezone(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '(Tue, 14 May 2013)");'
+            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
+            '(Tue, 14 May 2013)");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -115,8 +115,8 @@ class CheckCreationDateTestCase(PluginTestCase):
     def test_different_dates(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
-            '(Tue, 15 May 2013)");'
+            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
+            '+0200 (Tue, 15 May 2013)");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -136,8 +136,8 @@ class CheckCreationDateTestCase(PluginTestCase):
     def test_wrong_length(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"creation_date", value:"2013-05-14 11:24:55 +0200 '
-            '(Tue, 14 May 2013 )");'
+            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2013 )");\n'
         )
         fake_context = MagicMock()
         fake_context.nasl_file = path

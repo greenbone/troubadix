@@ -27,8 +27,8 @@ class CheckGetKBOnServicesTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_oid("1.2.3.4.5.6.78909.8.7.000000");\n'
-            'script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_oid("1.2.3.4.5.6.78909.8.7.000000");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -51,9 +51,9 @@ class CheckGetKBOnServicesTestCase(PluginTestCase):
     def test_ok_no_script_oid(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'get_kb_item("Services/www");\n'
-            'get_kb_list("Services/udp/upnp");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            'port = get_kb_item("Services/www");\n'
+            'port = get_kb_list("Services/udp/upnp");\n'
         )
 
         fake_context = self.create_file_plugin_context(

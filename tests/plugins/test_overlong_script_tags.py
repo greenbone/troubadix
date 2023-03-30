@@ -27,12 +27,12 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"summary", value:"Shorter than 1000");\n'
-            'script_tag(name:"impact", value:"Shorter than 1000");\n'
-            'script_tag(name:"affected", value:"Shorter than 1000");\n'
-            'script_tag(name:"insight", value:"Shorter than 1000");\n'
-            'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
-            'script_tag(name:"solution", value:"Shorter than 1000");\n'
+            '  script_tag(name:"summary", value:"Shorter than 1000");\n'
+            '  script_tag(name:"impact", value:"Shorter than 1000");\n'
+            '  script_tag(name:"affected", value:"Shorter than 1000");\n'
+            '  script_tag(name:"insight", value:"Shorter than 1000");\n'
+            '  script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
+            '  script_tag(name:"solution", value:"Shorter than 1000");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -67,11 +67,11 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_ignore_file(self):
         path = Path("monstra_cms_mult_vuln")
         content = (
-            'script_tag(name:"summary", value:"Shorter than 1000");\n'
-            'script_tag(name:"impact", value:"Shorter than 1000");\n'
-            'script_tag(name:"affected", value:"Shorter than 1000");\n'
-            'script_tag(name:"insight", value:"Shorter than 1000");\n'
-            'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
+            '  script_tag(name:"summary", value:"Shorter than 1000");\n'
+            '  script_tag(name:"impact", value:"Shorter than 1000");\n'
+            '  script_tag(name:"affected", value:"Shorter than 1000");\n'
+            '  script_tag(name:"insight", value:"Shorter than 1000");\n'
+            '  script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -85,12 +85,12 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_one_wrong_entry(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"summary", value:"Shorter than 1000");\n'
-            'script_tag(name:"impact", value:"Shorter than 1000");\n'
-            'script_tag(name:"affected", value:"Shorter than 1000");\n'
-            'script_tag(name:"insight", value:"Shorter than 1000");\n'
-            'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
-            'script_tag(name:"solution", value:"Loooooooooooooooooooooooooooooo'
+            '  script_tag(name:"summary", value:"Shorter than 1000");\n'
+            '  script_tag(name:"impact", value:"Shorter than 1000");\n'
+            '  script_tag(name:"affected", value:"Shorter than 1000");\n'
+            '  script_tag(name:"insight", value:"Shorter than 1000");\n'
+            '  script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
+            '  script_tag(name:"solution", value:"Loooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -136,7 +136,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -156,7 +156,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_multiple_wrong_entries(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"summary", value:"Loooooooooooooooooooooooooooooo'
+            '  script_tag(name:"summary", value:"Looooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -202,12 +202,12 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
-            'script_tag(name:"impact", value:"Shorter than 1000");\n'
-            'script_tag(name:"affected", value:"Shorter than 1000");\n'
-            'script_tag(name:"insight", value:"Shorter than 1000");\n'
-            'script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
-            'script_tag(name:"solution", value:"Loooooooooooooooooooooooooooooo'
+            'ooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            '  script_tag(name:"impact", value:"Shorter than 1000");\n'
+            '  script_tag(name:"affected", value:"Shorter than 1000");\n'
+            '  script_tag(name:"insight", value:"Shorter than 1000");\n'
+            '  script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
+            '  script_tag(name:"solution", value:"Loooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -253,7 +253,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -279,7 +279,54 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_all_wrong_entries(self):
         path = Path("some/files.nasl")
         content = (
-            'script_tag(name:"summary", value:"Loooooooooooooooooooooooooooooo'
+            '  script_tag(name:"summary", value:"Looooooooooooooooooooooooooooo'
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
+            'ooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            '  script_tag(name:"impact", value:"Loooooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -326,7 +373,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
-            'script_tag(name:"impact", value:"Loooooooooooooooooooooooooooooo'
+            '  script_tag(name:"affected", value:"Loooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -372,8 +419,8 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
-            'script_tag(name:"affected", value:"Loooooooooooooooooooooooooooooo'
+            'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            '  script_tag(name:"insight", value:"Looooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -419,8 +466,8 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
-            'script_tag(name:"insight", value:"Loooooooooooooooooooooooooooooo'
+            'ooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            '  script_tag(name:"vuldetect", value:"Looooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -466,8 +513,8 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
-            'script_tag(name:"vuldetect", value:"Looooooooooooooooooooooooooooo'
+            'ooooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            '  script_tag(name:"solution", value:"Loooooooooooooooooooooooooooo'
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
@@ -513,54 +560,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'ooooooooooooooooooooooooooooooooooooooooooooo0ooonger");\n'
-            'script_tag(name:"solution", value:"Loooooooooooooooooooooooooooooo'
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
-            'oooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
+            'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content

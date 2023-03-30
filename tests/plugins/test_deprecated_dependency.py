@@ -31,7 +31,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text(
-            "script_category(ACT_ATTACK);\n exit(66);",
+            "  script_category(ACT_ATTACK);\n  exit(66);",
             encoding=CURRENT_ENCODING,
         )
 
@@ -43,9 +43,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_ok(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -68,9 +68,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_no_dependency(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -84,10 +84,10 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_deprecated(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);\n"
-            "exit(66);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
+            "exit(66);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -101,10 +101,10 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_deprecated2(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);\n"
-            'script_tag(name:"deprecated", value:TRUE);'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
+            '  script_tag(name:"deprecated", value:TRUE);\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -119,10 +119,10 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         dependency = "example2.inc"
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'script_dependencies("example2.inc");\n'
-            "script_category(ACT_SCANNER);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            '  script_dependencies("example2.inc");\n'
+            "  script_category(ACT_SCANNER);\n"
         )
 
         fake_context = self.create_file_plugin_context(
@@ -143,10 +143,10 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
     def test_deprecated_dependency(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'script_dependencies("example.inc");\n'
-            "script_category(ACT_SCANNER);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            '  script_dependencies("example.inc");\n'
+            "  script_category(ACT_SCANNER);\n"
         )
 
         fake_context = self.create_file_plugin_context(

@@ -26,11 +26,11 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"0.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "log_message('Test');\n"
+            '  script_tag(name:"cvss_base", value:"0.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  log_message('Test');\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -53,13 +53,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
     def test_ok2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "security_message( port:port, data:'It was possible to get the "
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  security_message( port:port, data:'It was possible to get the "
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
-            "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
+            "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -73,13 +73,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
     def test_fail(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"0.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "security_message( port:port, data:'It was possible to get the "
+            '  script_tag(name:"cvss_base", value:"0.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  security_message( port:port, data:'It was possible to get the "
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
-            "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
+            "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -98,12 +98,12 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
     def test_fail2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "security_message( port:port, data:'It was possible to get the "
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  security_message( port:port, data:'It was possible to get the "
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
-            "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
+            "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -122,13 +122,13 @@ class CheckReportingConsistencyTestCase(PluginTestCase):
     def test_fail3(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"5.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "log_message( port:port, data:'It was possible to get the "
+            '  script_tag(name:"cvss_base", value:"5.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  log_message( port:port, data:'It was possible to get the "
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
-            "http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
+            "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

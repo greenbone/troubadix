@@ -27,9 +27,9 @@ class CheckUsingDisplayTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base_vector", '
+            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -43,10 +43,10 @@ class CheckUsingDisplayTestCase(PluginTestCase):
     def test_using_display(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
-            'display("FOO");'
+            '  display("FOO");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -58,17 +58,17 @@ class CheckUsingDisplayTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'VT/Include is using a display() function at: display("FOO");',
+            'VT/Include is using a display() function at:   display("FOO");',
             results[0].message,
         )
 
     def test_using_if_display(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
-            'if (0) display("FOO");'
+            'if (0) display("FOO");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -89,10 +89,10 @@ class CheckUsingDisplayTestCase(PluginTestCase):
     def test_using_comment_display(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
-            '# display("FOO");'
+            '# display("FOO");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content

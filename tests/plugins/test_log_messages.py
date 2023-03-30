@@ -27,11 +27,11 @@ class CheckLogMessagesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"0.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'log_message("hello test");\n'
+            '  script_tag(name:"cvss_base", value:"0.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  log_message("hello test");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -45,16 +45,16 @@ class CheckLogMessagesTestCase(PluginTestCase):
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
             "\n"
-            "log_message( port:port, data:'The remote SSL/TLS server is using "
-            "the following certificate(s) with a ECC key with less than ' + "
+            "  log_message( port:port, data:'The remote SSL/TLS server is using"
+            " the following certificate(s) with a ECC key with less than ' + "
             "min_key_size + ' bits (key-size:algorithm:serial:issuer):\n' + "
             "report); \n\n"
-            "log_message(port2:port2, data:'The remote SSL/TLS server is "
+            "  log_message(port2:port2, data:'The remote SSL/TLS server is "
             "using "
             "the following certificate(s) with a ECC key with less than ' + "
             "min_key_size2 + ' bits (key-size:algorithm:serial:issuer):\n' + "
@@ -77,11 +77,11 @@ class CheckLogMessagesTestCase(PluginTestCase):
     def test_nok2(self):
         nasl_file = Path(__file__).parent / "test2.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "log_message('The remote SSL/TLS server is using "
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  log_message('The remote SSL/TLS server is using "
             "the following certificate(s) with a ECC key with less than ' + "
             "min_key_size + ' bits (key-size:algorithm:serial:issuer)');"
         )
@@ -102,11 +102,11 @@ class CheckLogMessagesTestCase(PluginTestCase):
     def test_nok3(self):
         nasl_file = Path(__file__).parent / "test2.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "log_message(  );"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  log_message(  );"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -129,11 +129,11 @@ class CheckLogMessagesTestCase(PluginTestCase):
     def test_nok4(self):
         nasl_file = Path(__file__).parent / "test2.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            "log_message(\t);\n"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  log_message(\t);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content

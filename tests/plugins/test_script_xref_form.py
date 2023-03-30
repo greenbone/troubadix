@@ -26,7 +26,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        content = 'script_xref(name: "foo", value:"bar");'
+        content = '  script_xref(name: "foo", value:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -46,7 +46,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_wrong_name(self):
-        content = 'script_xref(nammmme: "foo", value:"bar");'
+        content = '  script_xref(nammmme: "foo", value:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -63,7 +63,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
         )
 
     def test_wrong_value(self):
-        content = 'script_xref(name: "foo", valueeeee:"bar");'
+        content = '  script_xref(name: "foo", valueeeee:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -75,7 +75,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
 
     def test_wrong_missing_parameters(self):
-        content = 'script_xref("foo", "bar");'
+        content = '  script_xref("foo", "bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )

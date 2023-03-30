@@ -29,12 +29,12 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_version("2021-07-19T12:32:02+0000");\n'
-            'script_tag(name: "last_modification", value: "2021-07-19 '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
         )
         fake_context = self.create_file_plugin_context(
@@ -58,12 +58,12 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_old_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
-            'script_version("$Revision: 12345 $");\n'
-            'script_tag(name: "last_modification", value: "$Date: 2021-07-19 '
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_version("$Revision: 12345 $");\n'
+            '  script_tag(name: "last_modification", value: "$Date: 2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021) $");\n'
         )
         fake_context = self.create_file_plugin_context(
@@ -78,10 +78,10 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_missing_script_version(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_tag(name:"solution_type", value:"VendorFix");\n'
-            'script_tag(name:"solution", value:"meh");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -101,8 +101,8 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
         with self.create_directory() as testdir:
             nasl_file = testdir / "test.nasl"
             content = (
-                'script_version("12345");\n'
-                'script_tag(name: "last_modification", '
+                '  script_version("12345");\n'
+                '  script_tag(name: "last_modification", '
                 'value: "2021/07/19");\n'
             )
             nasl_file.write_text(content, encoding=CURRENT_ENCODING)

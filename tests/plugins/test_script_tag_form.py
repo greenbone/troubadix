@@ -27,8 +27,8 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_ok(self):
         content = (
-            'script_tag(name: "foo", value:"bar");\n'
-            'script_tag(name: "foo", value:42);'
+            '  script_tag(name: "foo", value:"bar");\n'
+            '  script_tag(name: "foo", value:42);\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
@@ -49,7 +49,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_wrong_name(self):
-        content = 'script_tag(nammmme: "foo", value:"bar");'
+        content = '  script_tag(nammmme: "foo", value:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -66,7 +66,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
         )
 
     def test_wrong_value(self):
-        content = 'script_tag(name: "foo", valueeeee:"bar");'
+        content = '  script_tag(name: "foo", valueeeee:"bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -78,7 +78,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
 
     def test_wrong_missing_parameters(self):
-        content = 'script_tag("foo", "bar");'
+        content = '  script_tag("foo", "bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )

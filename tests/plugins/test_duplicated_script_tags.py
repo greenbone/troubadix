@@ -27,9 +27,9 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base_vector", '
+            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -52,9 +52,9 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_duplicated_function(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_name("Foo Bar");\n'
-            'script_name("Foo Bar");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_name("Foo Bar");\n'
+            '  script_name("Foo Bar");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -74,8 +74,8 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_duplicated_tag(self):
         path = Path("some/file.nasl")
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"cvss_base", value:"5.0");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"cvss_base", value:"5.0");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -95,8 +95,8 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_excluded_tag(self):
         path = Path("some/file.nasl")
         content = (
-            'script_add_preference(name:"Test", type:"checkbox");\n'
-            'script_add_preference(name:"Test2", type:"checkbox");\n'
+            '  script_add_preference(name:"Test", type:"checkbox");\n'
+            '  script_add_preference(name:"Test2", type:"checkbox");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -110,8 +110,8 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_excluded_dependencies(self):
         path = Path("gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl")
         content = (
-            'script_dependencies("vt1.nasl", "vt2.nasl");\n'
-            'script_dependencies("vt3.nasl", "vt4.nasl");\n'
+            '  script_dependencies("vt1.nasl", "vt2.nasl");\n'
+            '  script_dependencies("vt3.nasl", "vt4.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -125,8 +125,8 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
     def test_not_excluded_dependencies(self):
         path = Path("v2.0/PCI-DSS-2.0.nasl")
         content = (
-            'script_dependencies("vt1.nasl", "vt2.nasl");\n'
-            'script_dependencies("vt3.nasl", "vt4.nasl");\n'
+            '  script_dependencies("vt1.nasl", "vt2.nasl");\n'
+            '  script_dependencies("vt3.nasl", "vt4.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content

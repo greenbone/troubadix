@@ -29,11 +29,11 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
 
     def test_ok(self):
         content = (
-            "script_dependencies();\n"
-            "script_require_ports();\n"
-            "script_require_udp_ports();\n"
-            "script_require_keys();\n"
-            "script_mandatory_keys();"
+            "  script_dependencies();\n"
+            "  script_require_ports();\n"
+            "  script_require_udp_ports();\n"
+            "  script_require_keys();\n"
+            "  script_mandatory_keys();\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
@@ -54,7 +54,7 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_missing_calls(self):
-        content = 'script_xref(name: "URL", value:"");'
+        content = '  script_xref(name: "URL", value:"");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -67,11 +67,11 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
 
     def test_dependencies_multiline(self):
         content = (
-            'script_dependencies("123",\n"456");\n'
-            "script_require_ports();\n"
-            "script_require_udp_ports();\n"
-            "script_require_keys();\n"
-            "script_mandatory_keys();"
+            '  script_dependencies("123",\n"456");\n'
+            "  script_require_ports();\n"
+            "  script_require_udp_ports();\n"
+            "  script_require_keys();\n"
+            "  script_mandatory_keys();\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content

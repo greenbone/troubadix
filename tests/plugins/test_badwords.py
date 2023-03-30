@@ -50,7 +50,7 @@ class TestBadwords(PluginTestCase):
 
     def test_combined(self):
         path = Path("some/find_service3.nasl")
-        content = "OpenVAS-8 and probably prior\nOpenVAS-9"
+        content = "  OpenVAS-8 and probably prior\nOpenVAS-9"
 
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()

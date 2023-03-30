@@ -29,9 +29,9 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
     def test_ok(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.nasl", "example2.nasl");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_dependencies("example.nasl", "example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -45,9 +45,9 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
     def test_nok_1(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.nasl,example2.nasl");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_dependencies("example.nasl,example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -68,9 +68,9 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
     def test_nok_2(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.nasl,example2.nasl",'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_dependencies("example.nasl,example2.nasl",'
             ' "example3.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
@@ -92,9 +92,9 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
     def test_nok_3(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.nasl example2.nasl");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_dependencies("example.nasl example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -116,9 +116,9 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
     def test_nok_4(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example.nasl, example2.nasl");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_dependencies("example.nasl, example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here
@@ -147,9 +147,9 @@ class CheckMalformedDependenciesTestCase(PluginTestCase):
     def test_nok_5(self):
         path = here / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            'script_dependencies("example .nasl", "example2.nasl");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_dependencies("example .nasl", "example2.nasl");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=here

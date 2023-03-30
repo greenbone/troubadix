@@ -33,7 +33,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.inc"
         self.dep.write_text(
-            "script_category(ACT_ATTACK);", encoding=CURRENT_ENCODING
+            "  script_category(ACT_ATTACK);", encoding=CURRENT_ENCODING
         )
 
         return super().setUp()
@@ -44,9 +44,9 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
     def test_ok(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -60,9 +60,9 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
     def test_no_dependency(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar.");\n'
-            "script_category(ACT_ATTACK);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            "  script_category(ACT_ATTACK);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -77,10 +77,10 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         dependency = "example2.inc"
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'script_dependencies("example2.inc");\n'
-            "script_category(ACT_SCANNER);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            '  script_dependencies("example2.inc");\n'
+            "  script_category(ACT_SCANNER);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=self.dir
@@ -100,10 +100,10 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
     def test_category_lower(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'script_dependencies("example.inc");\n'
-            "script_category(ACT_SCANNER);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            '  script_dependencies("example.inc");\n'
+            "  script_category(ACT_SCANNER);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=self.dir
@@ -124,9 +124,9 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         dependency = "example.inc"
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            f'script_dependencies("{dependency}");\n'
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            f'  script_dependencies("{dependency}");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=self.dir
@@ -145,10 +145,10 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
     def test_category_unsupported(self):
         path = self.dir / "file.nasl"
         content = (
-            'script_tag(name:"cvss_base", value:"4.0");\n'
-            'script_tag(name:"summary", value:"Foo Bar...");\n'
-            'script_dependencies("example.inc");\n'
-            "script_category(ACT_FOO);"
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar...");\n'
+            '  script_dependencies("example.inc");\n'
+            "  script_category(ACT_FOO);\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content, root=self.dir
