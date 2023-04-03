@@ -210,7 +210,7 @@ class CheckSpelling(FilesPlugin):
                 f"--exclude-file={codespell_exclude}",
                 f"--ignore-words={codespell_ignore}",
                 "--disable-colors",
-                "--uri-ignore-words-list *",
+                "--uri-ignore-words-list=*",
             ] + files_parameters
 
             with redirect_stdout(io.StringIO()) as codespell_stream:
