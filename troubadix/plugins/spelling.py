@@ -96,18 +96,6 @@ exceptions = [
     PatternInFilesCheck(
         ["PCIDSS/", "GSHB/", "attic/PCIDSS_"], r"n[iI]n\s+==>\s+inn"
     ),
-    # False positives in the GSHB/ and ITG_Kompendium/ VTs on
-    # bsi.bund.de URLs.
-    PatternInFilesCheck(
-        [
-            "GSHB/",
-            "ITG_Kompendium/",
-            "Policy/gb_policy_cipher_suites.nasl",
-            "Policy/policy_BSI-TR-03116-4.nasl",
-            "2012/gb_secpod_ssl_ciphers_weak_report.nasl",
-        ],
-        r"bund\s+==>\s+bind",
-    ),
     # False positive in this VT in German example responses.
     PatternInFileCheck(
         "gb_exchange_server_CVE-2021-26855_active.nasl", r"ist\s+==>\s+is"
@@ -222,6 +210,7 @@ class CheckSpelling(FilesPlugin):
                 f"--exclude-file={codespell_exclude}",
                 f"--ignore-words={codespell_ignore}",
                 "--disable-colors",
+                "--uri-ignore-words-list *",
             ] + files_parameters
 
             with redirect_stdout(io.StringIO()) as codespell_stream:
