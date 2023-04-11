@@ -352,6 +352,7 @@ fix SOLVER_FLAG_FOCUS_BEST updateing packages without reason
 Fix source-download commnds help (bsc#1180663)
 fixtext = 'Add rules to audit the system calls "creat", "open/openat" and "truncate/ftruncate" in
 	Fix typo in preference name: "password" misspelled as "pasword".
+"fo",
 #<FONT SIZE="+3">S</FONT>EARCH
  - For backwards compatability, setting --log-driver=json-file in podman
 foreach dir( make_list_unique( "/ag", "/ang", "/guestbook", "/anguestbook", http_cgi_dirs( port:port ) ) ) {
