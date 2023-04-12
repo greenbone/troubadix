@@ -26,39 +26,40 @@ class CheckDeprecatedFunctions(FilePlugin):
 
     def run(self) -> Iterator[LinterResult]:
         """
-        Following functions / description items are outdated:
+        Following functions / description items are deprecated:
         script_summary()
         script_id()
         security_note()
         security_warning()
         security_hole()
         script_description()
-        script_tag("risk_factor", SEVERITY);
+        script_tag(name:"risk_factor", value:"SEVERITY");
         script_bugtraq_id()
 
-        This script checks if any of those are used
+        This script checks and reports if any of those are used
 
         Args:
             nasl_file: Name of the VT to be checked
         """
         deprecated_functions = {
-            "script_summary(), use script_tag"
-            '(name:"summary", value:"") instead': r"script_summary\s*\([^)]*\)",
-            "script_id(), use script_oid() with "
-            "the full OID instead": r"script_id\s*\([0-9]+\)",
-            "security_note()": r"security_note\s*\([^)]*\)",
-            "security_warning()": r"security_warning\s*\([^)]*\)",
-            "security_hole()": r"security_hole\s*\([^)]*\)",
-            "script_description()": r"script_description\s*\([^)]*\)",
-            'script_tag(name:"risk_factor", value: '
-            "SEVERITY)": r'script_tag\s*\(\s*name:\s*"risk_factor"[^)]*\)',
-            "script_bugtraq_id()": r"script_bugtraq_id\s*\([^)]*\)",
+            'script_summary();, use script_tag(name:"summary", value:""); '
+            "instead": r"script_summary\s*\([^)]*\);",
+            "script_id();, use script_oid(); with "
+            "the full OID instead": r"script_id\s*\([0-9]+\);",
+            "security_note();": r"security_note\s*\([^)]*\);",
+            "security_warning();": r"security_warning\s*\([^)]*\);",
+            "security_hole();": r"security_hole\s*\([^)]*\);",
+            "script_description();": r"script_description\s*\([^)]*\);",
+            'script_tag(name:"risk_factor", value:'
+            '"SEVERITY");': r'script_tag\s*\(\s*name:\s*"risk_factor"[^)]*\);',
+            "script_bugtraq_id();": r"script_bugtraq_id\s*\([^)]*\);",
         }
 
         for description, pattern in deprecated_functions.items():
-            if re.search(pattern, self.context.file_content):
+            if re.search(pattern, self.context.file_content, re.MULTILINE):
                 yield LinterError(
-                    f"Found a deprecated function call: {description}",
+                    "Found a deprecated function call / description item: "
+                    f"{description}",
                     file=self.context.nasl_file,
                     plugin=self.name,
                 )
