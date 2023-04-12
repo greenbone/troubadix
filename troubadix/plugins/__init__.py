@@ -29,7 +29,6 @@ from .dependencies import CheckDependencies
 from .dependency_category_order import CheckDependencyCategoryOrder
 from .deprecated_dependency import CheckDeprecatedDependency
 from .deprecated_functions import CheckDeprecatedFunctions
-from .description import CheckDescription
 from .double_end_points import CheckDoubleEndPoints
 from .duplicate_oid import CheckDuplicateOID
 from .duplicated_script_tags import CheckDuplicatedScriptTags
@@ -49,7 +48,6 @@ from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .qod import CheckQod
 from .reporting_consistency import CheckReportingConsistency
-from .risk_factor import CheckRiskFactor
 from .script_add_preference_type import CheckScriptAddPreferenceType
 from .script_calls_empty_values import CheckScriptCallsEmptyValues
 from .script_calls_recommended import CheckScriptCallsRecommended
@@ -91,7 +89,6 @@ _FILE_PLUGINS = [
     CheckDependencyCategoryOrder,
     CheckDeprecatedDependency,
     CheckDeprecatedFunctions,
-    CheckDescription,
     CheckDoubleEndPoints,
     CheckDuplicatedScriptTags,
     CheckEncoding,
@@ -110,7 +107,6 @@ _FILE_PLUGINS = [
     CheckProdSvcDetectInVulnvt,
     CheckQod,
     CheckReportingConsistency,
-    CheckRiskFactor,
     CheckScriptAddPreferenceType,
     CheckScriptCallsEmptyValues,
     CheckScriptCallsRecommended,
