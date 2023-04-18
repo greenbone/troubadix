@@ -78,6 +78,7 @@ EXCEPTIONS = [
     'url = "/openvas.jsp";',
     'if( "OpenVAS RCE Test" >< buf )',
     'the file "/openvas.jsp" was created',
+    "/var/lib/openvas/plugins/",
 ]
 
 STARTS_WITH_EXCEPTIONS = [
