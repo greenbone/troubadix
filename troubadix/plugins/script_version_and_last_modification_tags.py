@@ -58,10 +58,13 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             nasl_file: The VT that shall be checked
             file_content: The content of the VT that shall be checked
         """
-        self.fix_last_modification_and_version = False
-
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
+
+        self.fix_last_modification_and_version = False
 
         match_script_version_any = re.search(
             pattern=SCRIPT_VERSION_ANY_VALUE_PATTERN,

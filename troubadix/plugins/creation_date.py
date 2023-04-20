@@ -33,7 +33,10 @@ class CheckCreationDate(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         if not "creation_date" in file_content:

@@ -30,7 +30,10 @@ class CheckCVSSFormat(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)

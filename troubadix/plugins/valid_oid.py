@@ -50,7 +50,10 @@ class CheckValidOID(FileContentPlugin):
             file_content: The content of the nasl_file
 
         """
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         security_template = "Security Advisory"
