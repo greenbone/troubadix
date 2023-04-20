@@ -53,7 +53,8 @@ IGNORE_FILES = [
     "GSHB/GSHB_Kompendium.nasl",
     "/policy_control_template.nasl",
     "/template.nasl",
-    "/examples/test_ipv6_packet_forgery.nasl",
+    "test_ipv6_packet_forgery.nasl",
+    "test_version_func_inc.nasl",
 ]
 
 

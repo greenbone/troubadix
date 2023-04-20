@@ -49,7 +49,10 @@ class CheckScriptCallsRecommended(FileContentPlugin):
         - script_require_keys
         - script_mandatory_keys
         """
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         if _get_special_script_tag_pattern(

@@ -101,7 +101,10 @@ class CheckScriptFamily(FileContentPlugin):
     ) -> Iterator[LinterResult]:
         """This script checks VT for the existence / validity
         of its script family"""
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         family_pattern = get_special_script_tag_pattern(SpecialScriptTag.FAMILY)

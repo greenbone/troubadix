@@ -45,12 +45,16 @@ class CheckDependencies(FilePlugin):
         if self.context.nasl_file.suffix == ".inc":
             return
 
+        file_content = self.context.file_content
+
+        if "# troubadix: disable=template_nd_test_files_fps" in file_content:
+            return
+
         dependencies_pattern = _get_special_script_tag_pattern(
             "dependencies", flags=re.DOTALL | re.MULTILINE
         )
 
         root = self.context.root
-        file_content = self.context.file_content
 
         matches = dependencies_pattern.finditer(file_content)
 

@@ -91,7 +91,11 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         In addition it is not allowed for VTs to have a direct dependency
         to VTs from within the ACT_SCANNER category.
         """
-        if not "script_dependencies(" in file_content:
+        if (
+            nasl_file.suffix == ".inc"
+            or not "script_dependencies(" in file_content
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         category_pattern = get_special_script_tag_pattern(

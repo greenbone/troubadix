@@ -64,6 +64,9 @@ class CheckQod(FilePlugin):
 
         file_content = self.context.file_content
 
+        if "# troubadix: disable=template_nd_test_files_fps" in file_content:
+            return
+
         qod_pattern = get_script_tag_pattern(ScriptTag.QOD)
         qod_type_pattern = get_script_tag_pattern(ScriptTag.QOD_TYPE)
 

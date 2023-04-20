@@ -44,7 +44,10 @@ class CheckScriptCopyright(FileContentPlugin):
             nasl_file: The VT that shall be checked
             file_content: str representing the file content
         """
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         if not re.search(

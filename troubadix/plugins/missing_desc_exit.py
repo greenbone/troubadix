@@ -49,7 +49,10 @@ class CheckMissingDescExit(FileContentPlugin):
             file_content: The content of the file that is going to be checked
 
         """
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         match = re.search(

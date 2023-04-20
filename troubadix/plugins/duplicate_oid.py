@@ -41,10 +41,15 @@ class CheckDuplicateOID(FilesPlugin):
             if not nasl_file.suffix == ".nasl":
                 continue
 
+            content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+
+            if "# troubadix: disable=template_nd_test_files_fps" in content:
+                continue
+
             nasl_file_root = get_path_from_root(nasl_file, self.context.root)
 
             oid = None
-            content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+
             match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
                 content
             )

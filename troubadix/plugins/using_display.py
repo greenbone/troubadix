@@ -35,6 +35,9 @@ class CheckUsingDisplay(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
+        if "# troubadix: disable=template_nd_test_files_fps" in file_content:
+            return
+
         display_matches = re.finditer(
             r".*(display\s*\([^)]+\)\s*;)", file_content
         )

@@ -41,7 +41,10 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
         Checks for empty 'value:""' in script calls. Excepted from this is
         script_add_preferences().
         """
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         matches = _get_tag_pattern(name=r".*", value=r"").finditer(file_content)

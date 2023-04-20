@@ -37,8 +37,13 @@ class CheckDuplicatedScriptTags(FilePlugin):
         if self.context.nasl_file.suffix == ".inc":
             return
 
-        special_script_tag_patterns = get_special_script_tag_patterns()
         file_content = self.context.file_content
+
+        if "# troubadix: disable=template_nd_test_files_fps" in file_content:
+            return
+
+        special_script_tag_patterns = get_special_script_tag_patterns()
+
         for tag, pattern in special_script_tag_patterns.items():
             # TBD: script_name might also look like this:
             # script_name("MyVT (Windows)");

@@ -23,6 +23,7 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterable, List
 
+from troubadix.helper import is_ignore_file
 from troubadix.helper.patterns import (
     LAST_MODIFICATION_ANY_VALUE_PATTERN,
     SCRIPT_VERSION_ANY_VALUE_PATTERN,
@@ -35,6 +36,12 @@ SCRIPT_VERSION_PATTERN = re.compile(
 SCRIPT_LAST_MODIFICATION_PATTERN = re.compile(
     r"^\+\s*" + LAST_MODIFICATION_ANY_VALUE_PATTERN, re.MULTILINE
 )
+
+_IGNORE_FILES = [
+    "/template.nasl",
+    "/policy_control_template.nasl",
+    "test_version_func_inc.nasl",
+]
 
 
 def file_type(string: str) -> Path:
@@ -92,8 +99,12 @@ def check_version_updated(files: List[Path], commit_range: str) -> bool:
 
     rcode = True
     for nasl_file in files:
-        if nasl_file.suffix != ".nasl" or not nasl_file.exists():
-            continue
+        if (
+            nasl_file.suffix != ".nasl"
+            or not nasl_file.exists()
+            or is_ignore_file(nasl_file, _IGNORE_FILES)
+        ):
+            return
 
         print(f"Check file {nasl_file}")
         text = git(

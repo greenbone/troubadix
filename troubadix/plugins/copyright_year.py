@@ -15,6 +15,13 @@ _IGNORE_FILES = (
     "gb_hirschmann_telnet_detect.nasl",
 )
 
+_FULL_IGNORE_FILES = (
+    "test_version_func_inc.nasl",
+    "policy_control_template.nasl",
+    "template.nasl",
+    "test_ipv6_packet_forgery.nasl",
+)
+
 
 class CheckCopyrightYear(LineContentPlugin):
     """This steps checks if a VT contains a Copyright statement containing a
@@ -29,7 +36,9 @@ class CheckCopyrightYear(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
-        if nasl_file.suffix == ".inc":
+        if nasl_file.suffix == ".inc" or is_ignore_file(
+            nasl_file, _FULL_IGNORE_FILES
+        ):
             return
 
         creation_date = ""

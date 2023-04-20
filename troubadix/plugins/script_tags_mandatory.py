@@ -55,7 +55,10 @@ class CheckScriptTagsMandatory(FileContentPlugin):
         - script_family
         - script_copyright
         """
-        if nasl_file.suffix == ".inc":
+        if (
+            nasl_file.suffix == ".inc"
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
 
         for tag in MANDATORY_TAGS:

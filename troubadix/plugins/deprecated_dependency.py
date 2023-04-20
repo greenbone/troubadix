@@ -41,10 +41,11 @@ class CheckDeprecatedDependency(FilePlugin):
 
         file_content = self.context.file_content
 
-        if not "script_dependencies(" in file_content:
+        if (
+            not "script_dependencies(" in file_content
+            or "# troubadix: disable=template_nd_test_files_fps" in file_content
+        ):
             return
-
-        root = self.context.root
 
         dependencies_pattern = get_special_script_tag_pattern(
             SpecialScriptTag.DEPENDENCIES
@@ -62,6 +63,8 @@ class CheckDeprecatedDependency(FilePlugin):
         deprecated = deprecated_pattern.search(file_content)
         if deprecated:
             return
+
+        root = self.context.root
 
         for match in matches:
             if match:
