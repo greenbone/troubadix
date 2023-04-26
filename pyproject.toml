@@ -34,6 +34,7 @@ codespell = "^2.0.0"
 python-magic = "^0.4.25"
 chardet = ">=4,<6"
 validators = ">=0.18.2,<0.21.0"
+gitpython = "^3.1.31"
 
 [tool.poetry.dev-dependencies]
 autohooks = ">=21.7.0"
@@ -82,6 +83,7 @@ troubadix-version-updated = 'troubadix.standalone_plugins.version_updated:main'
 troubadix-no-solution = 'troubadix.standalone_plugins.no_solution:main'
 troubadix-changed-packages = 'troubadix.standalone_plugins.changed_packages.changed_packages:main'
 troubadix-changed-cves = 'troubadix.standalone_plugins.changed_cves:main'
+troubadix-allowed-rev-diff = 'troubadix.standalone_plugins.allowed_rev_diff:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
