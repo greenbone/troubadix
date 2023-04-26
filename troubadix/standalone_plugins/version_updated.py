@@ -38,9 +38,10 @@ SCRIPT_LAST_MODIFICATION_PATTERN = re.compile(
 )
 
 _IGNORE_FILES = [
-    "/template.nasl",
-    "/policy_control_template.nasl",
+    "template.nasl",
+    "policy_control_template.nasl",
     "test_version_func_inc.nasl",
+    "test_ipv6_packet_forgery.nasl",
 ]
 
 
