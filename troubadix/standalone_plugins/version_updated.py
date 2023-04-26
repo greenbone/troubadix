@@ -104,7 +104,7 @@ def check_version_updated(files: List[Path], commit_range: str) -> bool:
             or not nasl_file.exists()
             or is_ignore_file(nasl_file, _IGNORE_FILES)
         ):
-            return
+            continue
 
         print(f"Check file {nasl_file}")
         text = git(
