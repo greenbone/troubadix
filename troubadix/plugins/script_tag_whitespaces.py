@@ -16,10 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from itertools import chain
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.patterns import _get_tag_pattern
+from troubadix.helper import SpecialScriptTag
+from troubadix.helper.patterns import (
+    _get_special_script_tag_pattern,
+    _get_tag_pattern,
+)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 
@@ -38,9 +43,15 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(
+        tag_matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(
             file_content
         )
+
+        name_matches = _get_special_script_tag_pattern(
+            name=SpecialScriptTag.NAME.value
+        ).finditer(file_content)
+
+        matches = chain(tag_matches, name_matches)
 
         for match in matches:
             if re.match(r"^\s+.*", match.group("value")) or re.match(
