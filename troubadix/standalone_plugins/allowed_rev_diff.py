@@ -43,7 +43,7 @@ def parse_arguments() -> Namespace:
         type=str,
         default=DEFAULT_IGNORED_LINESTARTS,
         help="A list of line starts which will make the line be ignored. "
-        f"Default: {', '.join(DEFAULT_IGNORED_LINESTARTS)}",
+        "Default: %(default)s",
     )
 
     ignored_linestart_group.add_argument(
@@ -53,7 +53,7 @@ def parse_arguments() -> Namespace:
         default=DEFAULT_IGNORED_LINESTARTS,
         help="The file containing a list of line starts, "
         "separated by newlines, which will make the line be ignored. "
-        f"Default values used: {', '.join(DEFAULT_IGNORED_LINESTARTS)}",
+        "Default values used: %(default)s",
     )
 
     pattern_group = argument_parser.add_mutually_exclusive_group(required=True)
