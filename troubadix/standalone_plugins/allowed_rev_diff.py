@@ -38,15 +38,19 @@ def parse_arguments() -> Namespace:
     ignored_linestart_group.add_argument(
         "-i",
         "--ignored-linestarts",
+        dest="ignored_linestarts",
         nargs="*",
         type=str,
+        default=DEFAULT_IGNORED_LINESTARTS,
         help="A list of line starts which will make the line be ignored. "
         f"Default: {', '.join(DEFAULT_IGNORED_LINESTARTS)}",
     )
 
     ignored_linestart_group.add_argument(
         "--ignored-linestart-file",
-        type=Path,
+        type=read_ignored_linestarts,
+        dest="ignored_linestarts",
+        default=DEFAULT_IGNORED_LINESTARTS,
         help="The file containing a list of line starts, "
         "separated by newlines, which will make the line be ignored. "
         f"Default values used: {', '.join(DEFAULT_IGNORED_LINESTARTS)}",
@@ -126,12 +130,6 @@ def read_patterns(path: Path) -> List[Pattern]:
 def main() -> int:
     arguments = parse_arguments()
 
-    ignored_linestarts = (
-        arguments.ignored_linestarts
-        or read_ignored_linestarts(arguments.ignored_linestart_file)
-        or DEFAULT_IGNORED_LINESTARTS
-    )
-
     patterns = arguments.patterns or read_patterns(arguments.pattern_file)
 
     repo = Repo(arguments.directory)
@@ -142,7 +140,9 @@ def main() -> int:
 
     diff = repo.git.diff(target, merge_base, unified=0)
 
-    result = check_diff(diff.splitlines(), ignored_linestarts, patterns)
+    result = check_diff(
+        diff.splitlines(), arguments.ignored_linestarts, patterns
+    )
 
     if result:
         print("The following lines don't match the any pattern:")
