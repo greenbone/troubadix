@@ -112,12 +112,15 @@ def read_ignored_linestarts(path: Path) -> List[str]:
         return None
 
     with open(path, "r", encoding="UTF-8") as file:
-        return [line[:-1] for line in file.readlines()]
+        return [line.removesuffix("\n") for line in file.readlines()]
 
 
 def read_patterns(path: Path) -> List[Pattern]:
     with open(path, "r", encoding="UTF-8") as file:
-        return [re.compile(pattern[:-1]) for pattern in file.readlines()]
+        return [
+            re.compile(pattern.removesuffix("\n"))
+            for pattern in file.readlines()
+        ]
 
 
 def main() -> int:
