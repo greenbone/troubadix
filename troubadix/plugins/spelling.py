@@ -81,7 +81,13 @@ exceptions = [
     # were also excluded here instead of directly
     # via codespell.exclude.
     PatternInFilesCheck(
-        ["PCIDSS/", "GSHB/", "attic/PCIDSS_", "ITG_Kompendium/"],
+        [
+            "PCIDSS/",
+            "GSHB/",
+            "attic/PCIDSS_",
+            "ITG_Kompendium/",
+            "Policy/ITG/",
+        ],
         r"(sie|ist|oder|prozess|manuell|unter|funktion|"
         r"alle|als|tage|lokale|uptodate|paket|titel|ba|"
         r"ordner|modul|interaktive|programm|explizit|"
@@ -94,7 +100,8 @@ exceptions = [
     # There are too many hits to maintain
     # them in codespell.exclude so exclude them for now here.
     PatternInFilesCheck(
-        ["PCIDSS/", "GSHB/", "attic/PCIDSS_"], r"n[iI]n\s+==>\s+inn"
+        ["PCIDSS/", "GSHB/", "attic/PCIDSS_", "Policy/ITG/"],
+        r"n[iI]n\s+==>\s+inn",
     ),
     # False positive in this VT in German example responses.
     PatternInFileCheck(
