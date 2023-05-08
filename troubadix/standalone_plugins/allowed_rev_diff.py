@@ -144,7 +144,13 @@ def main() -> int:
 
     result = check_diff(diff.splitlines(), ignored_linestarts, patterns)
 
-    return 1 if result else 0
+    if result:
+        print("The following lines don't match the any pattern:")
+        print("\n".join(result))
+
+        return 1
+
+    return 0
 
 
 if __name__ == "__main__":
