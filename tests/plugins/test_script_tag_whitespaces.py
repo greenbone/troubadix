@@ -26,7 +26,13 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        content = '  script_tag(name: "foo", value:"bar");\n'
+        content = (
+            '  script_name("MyProduct Multiple Vulnerabilities");\n'
+            '  script_tag(name:"summary", value:"foo\nbar");\n'
+            '  script_tag(name:"insight", value:"bar foo");\n'
+            '  script_tag(name:"impact", value:"- foo\n  - bar");\n'
+            '  script_tag(name:"affected", value:"foo\n  bar");\n'
+        )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -45,8 +51,8 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_leading_whitespace(self):
-        content = '  script_tag(name: "foo", value:" bar");\n'
+    def test_script_tag_leading_whitespace(self):
+        content = '  script_tag(name:"insight", value:" bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -57,13 +63,30 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'script_tag(name: "foo", value:" bar");: value contains a leading'
-            " or trailing whitespace character",
+            'script_tag(name:"insight", value:" bar");: value contains a'
+            " leading or trailing whitespace character",
             results[0].message,
         )
 
-    def test_trailing_whitespace(self):
-        content = '  script_tag(name: "foo", value:"bar\n");\n'
+    def test_script_name_leading_whitespace(self):
+        content = '  script_name(" MyProduct Multiple Vulnerabilities");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_name(" MyProduct Multiple Vulnerabilities");: value'
+            " contains a leading or trailing whitespace character",
+            results[0].message,
+        )
+
+    def test_script_tag_trailing_whitespace(self):
+        content = '  script_tag(name:"insight", value:"bar ");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
@@ -74,8 +97,58 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
 
-    def test_trailing_whitespace_newline(self):
-        content = '  script_tag(name: "foo", value:"foo\nbar\n");\n'
+    def test_script_name_trailing_whitespace(self):
+        content = '  script_name("MyProduct Multiple Vulnerabilities ");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    # nb: The script_name() tag is not allowed to contain newlines (checked in a
+    # dedicated plugin) so no specific test cases have been added here.
+    def test_script_tag_trailing_newline(self):
+        content = '  script_tag(name:"insight", value:"bar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_script_tag_trailing_newline_with_space(self):
+        content = '  script_tag(name:"insight", value:"foo bar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_script_tag_trailing_newline_with_newline(self):
+        content = '  script_tag(name:"insight", value:"foo\nbar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_script_tag_trailing_newline_with_newline_and_spaces(self):
+        content = '  script_tag(name:"insight", value:"foo\n  bar\n");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
