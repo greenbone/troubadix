@@ -41,7 +41,7 @@ def parse_arguments() -> Namespace:
         nargs="*",
         type=str,
         help="A list of line starts which will make the line be ignored. "
-        "Default: ['diff ', 'index ', '--- ', '+++ ', '@@ ']",
+        f"Default: {', '.join(DEFAULT_IGNORED_LINESTARTS)}",
     )
 
     ignored_linestart_group.add_argument(
@@ -49,7 +49,7 @@ def parse_arguments() -> Namespace:
         type=Path,
         help="The file containing a list of line starts, "
         "separated by newlines, which will make the line be ignored. "
-        "Default: ['diff ', 'index ', '--- ', '+++ ', '@@ ']",
+        f"Default values used: {', '.join(DEFAULT_IGNORED_LINESTARTS)}",
     )
 
     pattern_group = argument_parser.add_mutually_exclusive_group(required=True)
