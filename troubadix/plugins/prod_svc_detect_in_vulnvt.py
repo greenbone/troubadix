@@ -17,19 +17,27 @@
 import re
 from typing import Iterator
 
-from troubadix.helper import ScriptTag, SpecialScriptTag
+from troubadix.helper import is_ignore_file, ScriptTag, SpecialScriptTag
 from troubadix.helper.patterns import (
     _get_special_script_tag_pattern,
     get_script_tag_pattern,
 )
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
+IGNORE_FILES = [
+    # nb: VTD-1173 is a tracking ticket to update this so we don't need to
+    # report it on each run. Especially as:
+    # - this VT is a quite aged one and currently not problematic
+    # - the plugin should only prevent to introduce new VTs using this approach
+    "mssql_version.nasl",
+]
+
 
 class CheckProdSvcDetectInVulnvt(FilePlugin):
     name = "check_prod_svc_detect_in_vulnvt"
 
     def run(self) -> Iterator[LinterResult]:
-        """This script checks if the passed VT if it is doing a vulnerability
+        """This script checks if the passed VT is doing a vulnerability
         reporting and a product / service detection together in a single VT.
         More specific this step is checking and reporting VTs having a severity
         but are placed in these Families:
@@ -56,7 +64,9 @@ class CheckProdSvcDetectInVulnvt(FilePlugin):
             nasl_file: The VT that is going to be checked
             file_content: The content of the VT
         """
-        if self.context.nasl_file.suffix == ".inc":
+        if self.context.nasl_file.suffix == ".inc" or is_ignore_file(
+            self.context.nasl_file, IGNORE_FILES
+        ):
             return
 
         file_content = self.context.file_content
