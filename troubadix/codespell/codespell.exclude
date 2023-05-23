@@ -835,6 +835,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"affected", value:"WordPress Annonces plugin 1.2.0.0 is vulnerable. Other versions
   script_tag(name:"impact", value:"A successful exploit could allow the attacker to cause the wireless WAN (WWAN)
   script_tag(name:"impact", value:"Successful exploit could allow an unauthenticated, remote attacker to cause an affected device to start dropping legitimate IPv6 neighbors as legitimate ND times out, leading to DOS.");
+  script_tag(name:"impact", value:"The use of flate.NewReader in crewjam/saml does not limit the
   script_tag(name:"insight", value:"Adam Langley and Wan-Teh Chang discovered that OpenSSL
   script_tag(name:"insight", value:"Adrian Pastor and Tim Starling discovered that the CUPS web interface
   script_tag(name:"insight", value:"A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)
@@ -955,6 +956,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/WordPress_Duplicator-1.2.40-RCE.pdf");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cve-2018-18907/");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cyrc-advisory-nagios-xi/");
+  script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/opentsdb/");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/path-traversal-defects-oracles-jsf2-implementation/");
   script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/cups2.txt");
   script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/cups.txt");
@@ -1045,6 +1047,8 @@ sndReq = http_get(item:"/olt/Login.do", port:oatPort);
   sndReq = http_get(item:string(dir , "/doc/catalogue.html"), port:openPort);
   sndReq = http_get(item:string(dir, "/LiveTime/WebObjects/LiveTime.woa"), port:novPort);
   # SNPP, HylaFAX FTP, HylaFAX SPP, agobot.fo, IRC bots, WinSock server,
+  - soket.io, soket.js, foever
+                                "soket.io", "soket.js", "foever", "npm-script-demo", "regenraotr", "regenrator", "axois" );
 solution = "Ensure the SSLCipherSuite includes all of the following:!NULL:!SSLv2:!RC4:!aNULL:!3DES:!IDEA values.
 solution = "Ensure the SSLCipherSuite includes all of the following:!NULL:!SSLv2:!RC4:!aNULL values.
 solution = "mount -o remount,ro PARTITION";
