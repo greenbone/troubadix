@@ -60,3 +60,16 @@ class TestBadwords(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
+
+    def test_exception_ok(self):
+        path = Path("some/include.inc")
+        content = '# HostDetails/NVT                 => "1.2.3.4"'
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, lines=content.splitlines()
+        )
+
+        plugin = CheckBadwords(fake_context)
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
