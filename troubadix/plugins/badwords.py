@@ -31,6 +31,12 @@ DEFAULT_BADWORDS = [
     "OpenVAS",
     "4f70656e564153",
     "6f70656e766173",
+    # nb:
+    # - VT should be used instead
+    # - using a space before/after to make the check a little bit more strict
+    # - this could be made less strict later once the whole feed is "clean"
+    "NVT ",
+    " NVT",
 ]
 
 _IGNORE_FILES = [
@@ -79,6 +85,8 @@ EXCEPTIONS = [
     'if( "OpenVAS RCE Test" >< buf )',
     'the file "/openvas.jsp" was created',
     "/var/lib/openvas/plugins/",
+    "INVT ",  # INVT Electric VT Designer
+    "HostDetails/NVT",  # Can't be changed right now...
 ]
 
 STARTS_WITH_EXCEPTIONS = [
@@ -120,8 +128,13 @@ class CheckBadwords(LineContentPlugin):
                         for filename, value in COMBINED
                     )
                 ):
+                    report = f"Badword in line {i:5}: {line}"
+                    if "NVT" in line:
+                        report += (
+                            '\nNote/Hint: Please use the term "VT" instead.'
+                        )
                     yield LinterError(
-                        f"Badword in line {i:5}: {line}",
+                        report,
                         plugin=self.name,
                         file=nasl_file,
                         line=i,
