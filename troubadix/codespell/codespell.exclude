@@ -12,6 +12,7 @@
 # 0x00:  00 11 49 6E 76 61 6C 69 64 20 63 6F 6D 6D 61 6E    ..Invalid comman
 # 0x00:  01 67 65 74 6E 61 6D 65 69 6E 66 6F 3A 20 54 65    .getnameinfo: Te
 # 0x0010:  73 65 72 20 20 20 20 20 20 48 6F 73 74 28 73 29    ser      Host(s)
+# 0x0020:  0D 0A 46 72 6F 6D 3A 20 3C 73 69 70 3A 6D 69 73    ..From: <sip:mis
 # 0x00E0:  74 65 20 69 6E 64 65 78 20 69 68 61 76 65 20 64    te index ihave d
 # 0x00F0:  75 70 6C 69 63 61 74 65 20 6D 69 6D 65 20 66 6F    uplicate mime fo
 # 0x01D0:  45 20 63 6F 6D 6D 61 6E 64 20 72 65 63 65 69 76    E command receiv
@@ -26,6 +27,8 @@
                      1047, "WIT",
                      1153, "Alga Automacao e controle LTDA",
                      1212, "HSA Systems",
+                     1289, "HMS/BU Ewon",
+                     1638, "Hach",
 2007-11-08  Tim Brown <timb@openvas.org>
 2008-02-20  Tim Brown <timb@openvas.org>
 2008-09-10  Tim Brown <timb@openvas.org>
@@ -55,6 +58,7 @@
 # 50: 65 63 74 20 65 6e 76 65 6c 6f 70 65 20 76 61 63 ect envelope vac
                           52, "HART Device",
  6-4c-4/01 00000411 Atom X series Readded what missing in last
+                     798, "TE Connectivity",
                           "84:BA:3B","Canon",
                      879, "PULS GmbH",
 8930 was added, Dell Inspiron Mini 9 HDA sound support was added, CIFS
@@ -114,6 +118,8 @@ Application Centric Infrastructure (ACI) could allow an unauthenticated, adjacen
   Application Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to
 Ari Kauppi from Synopsys Ltd discovered that the NFSv2 and NFSv3 server implementations do not properly handle payload bounds checking of WRITE requests. A remote attacker with write access to a NFS mount can take advantage of this flaw to read chunks of arbitrary memory from both kernel-space and user-space.
   - arm64: ptrace: Avoid setting compat FPR to garbage if get_user fails
+  - arm: pxa: add the number of DMA requestor lines (bnc#1012382).
+  - arm: pxa: fix the number of DMA requestor lines (bnc#1012382).
  ascii art thats show the arcs between that start and end points of
   as demonstrated using the Connection: TE, , Keep-Alive header.");
 - A seperate sblim-sfcb-openssl1 package was added to the SECURITY Module.
@@ -275,6 +281,8 @@ CVE-2020-36158: Fixed an issue wich might have allowed a remote
 CVE-2020-5208: Fixed multiple remote code executtion vulnerabilities
 CVE-2020-8492: Fixed a regular expression in urrlib that was prone to
 CVE-2021-30004: Fixed an issue where forging attacks might have occured
+"DataArchivingService/webcontent/aas",
+  "/DataArchivingService/webcontent/aas/aas_store.jsp");
   David Bloom and Jordi Chancel discovered that Firefox did not always
 David Bloom and Jordi Chancel discovered that Firefox did not always
   David Bloom and Jordi Chancel discovered that Thunderbird did not always
@@ -298,6 +306,7 @@ Die Standard-Anforderung 'A7: Lokale Sicherheitsrichtlinien' beschreibt, dass un
                           dir + "/ans/ans.pl?p=../../../../../usr/bin/id|&blah" ) ) {
  * Disable all weak EXPORT ciphers by default. These can be reenabled if
 disable, or enable CAs causing various denial of service problems with
+  display debugging information to the requestor. It is recommended that such debug information be
 distrust all of DigiNotar's CAs. In this update, this is done in the
  (divide-by-zero error and QEMU process crash) via a larg... [Please see the references for more information on the vulnerabilities]");
   # <div style="float: right; margin-top: 5px; margin-right: 5px;">Rev. 1.04.06&nbsp;&nbsp;&nbsp;&nbsp;Bulid. 20150226142928 </div>
@@ -308,8 +317,6 @@ drbd: Avoid Clang warning about pointless switch statment (bsc#1051510).
 - drm/i915: Add Reenable Timer to turn Hotplug Detection back on (v4)
         egrep( string:ret, pattern:"^#?\s*-+\s*[Mm]ore\s*-+", icase:FALSE ) # nb: Huawei VRP (Yunshan)
  eliptic curve parameters were not sufficiently validated during
-  else if (AUDITLOGDAEMON_START =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITLOGDAEMON_START =~ ".*No such file or directory.*")  AUDITLOGDAEMON_START = "no audit.log";
-  else if (AUDITLOG_DATETIME =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITLOG_DATETIME =~ ".*No such file or directory.*")  AUDITLOGDATETIME_LAST = "no audit.log";
   } else if("diese Vorgabe muss manuell ueberprueft werden" >< tolower(status)) {
   else if( svc == "agobot.fo" )
 Enable log information of starting/stoping services. (bsc#1144923,
@@ -410,9 +417,6 @@ i40e: Fix kernel oops whe... [Please see the references for more information on 
     if(!appName || appName !~ "CAS.CommServerUA") continue;
     if(!appName || appName !~ "ICS Generic HART") continue;
 If a session backend is set to Apache::Session::LDAP or Apache::Session::Browseable::LDAP, then the complete fix involves upgrading the corresponding Apache::Session module (libapache-session-ldap-perl resp. libapache-session-browseable-perl) to 0.4-1+deb10u1 (or >=0.5) resp. 1.3.0-1+deb10u1 (or >=1.3.8). See related advisories DLA-3284-1 and DLA-3285-1 for details.
-  if (AUDITCONF =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITCONF =~ ".*No such file or directory.*") AUDITCONF = "no auditd.conf";
-  if (AUDITRULES =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITRULES =~ ".*No such file or directory.*") AUDITRULES = "no audit.rules";
-  if (AUDITSTATUS =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  AUDITSTATUS =~ ".*No such file or directory.*") AUDITSTATUS = "no auditctl";
 if( banner =~ " (A\. A\. Milne|Albert Einstein|Anonimo|Antico proverbio cinese|Autor desconocido|Charles Dickens|Francisco de Quevedo y Villegas|George Bernard Shaw|Jaime Balmes|Johann Wolfgang von Goethe|Jil Sander|Juana de Asbaje|Konfucius|Lord Philip Chesterfield|Montaigne|Petrarca|Ralph Waldo Emerson|Seneca|Syrus|Werner von Siemens)" ||
 if(!banner = get_kb_item("shttp/" + port + "/banner"))
 if (banner =~ "Huawei TE[0-9]0") {
@@ -422,16 +426,13 @@ if( "CONEXANT SYSTEMS, INC." >< r &&
 if( "CONEXANT SYSTEMS, INC" >< r && "ACCESS RUNNER ADSL CONSOLE PORT" >< r && "LOGON PASSWORD" >< r ) {
 if( cpe =~ "^cpe:/o:huawei:te(3|4|5|6)0_firmware" ) {
   if( ">CrawlTrack informations<" >< rcvRes ) {
-    if (cryptdisks =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  cryptdisks =~ ".*No such file or directory.*") cryptdisks = "none";
-    if (crypttab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  crypttab =~ ".*No such file or directory.*") crypttab = "none";
-  if (devaudio =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  devaudio =~ ".*No such file or directory.*") devaudio = "no audio";
 if( ect = egrep( pattern:"^Expect-CT\s*:", string:banner, icase:TRUE ) )
   if( ect_on_http )  report += '\nECT-Header:\n\n' + ect;
 if( egrep( pattern:"RTSP/1\.0 505( Protocol | RTSP | )Version [nN]ot [sS]upported", string:r ) ) {
+    if( egrep( pattern:"^[Ss]erver\s*:\s*AAS", string:banner, icase:FALSE ) ) {
+if(egrep(pattern: "^[Ss]erver\s*:\s*AAS", string: banner, icase: FALSE)) {
 if( found = egrep( string:dir_recv, pattern:"^(c:\\te?mp|/var/spool/cron|/etc/crontabs|/etc|/proc|/tmp)", icase:TRUE ) ) {
     if( fpr[0] == "[" ) {
-    if (fstab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  fstab =~ ".*No such file or directory.*") cryptdisks = "none";
-if (fstab =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  fstab =~ ".*No such file or directory.*") fstab = "none";
 if(http_vuln_check(port:port, url:'/hag/pages/toolbox.htm',pattern:"<title>Advanced Setup", extra_check:make_list("WAN Configuration","ADSL Status"))) {
 if(http_vuln_check(port:port, url:url, pattern:"Current Configuration", extra_check:make_list("System Description","System Software Version","network parms"))) {
   if(http_vuln_check(port:port, url:url, pattern:"Password found\. Loging in\.\.\.<script>")) {
@@ -443,8 +444,6 @@ if (http_vuln_check(port: port, url: url, pattern: "<title>WAN Setup", check_hea
   if(!isnull(res = isdpkgvuln(pkg:"nd", ver:"0.5.0-1woody1", rls:"DEB3.0"))) {
   if(!isnull(res = isrpmvuln(pkg:"libell", rpm:"libell~0.26~1.fc31", rls:"FC31"))) {
 if( "Login successed" >< recv ) {
-  if (lssendmailcnf =~ ".*Datei oder Verzeichnis nicht gefunden.*" || lssendmailcnf =~ ".*No such file or directory.*"){
-      if (lsstatusfile =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  lsstatusfile =~ ".*No such file or directory.*") lsstatusfile = "nofile";
   If-Match, If-None-Match, If-Range, If-Unmodified-Since, Max-Forwards, TE, Host)");
 if( ( model =~ '^RP200' || model =~ '^TE[3456]0' ) && revcomp( a: version, b: "v600r006c00spc500" ) < 0) {
 if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 ) {
@@ -471,16 +470,10 @@ if ((res = ispkgvuln(pkg:"app-admin/lsat", unaffected: make_list(), vulnerable: 
   if( ! res || res !~ "^HTTP/1\.[01] 200" || ( "/themes/" >!< res && "/datas/" >!< res && "/rss.php" >!< res ) )
 if(res =~ "<span>[Ss]arix&[Tt]rade;</span>" && res =~ "<span>Copyright\s*&copy;\s*[0-9]+-[0-9]+,\s*[Pp][Ee][Ll][Cc][Oo]\s*&middot;"
 if( res && "WAN SETTINGS" >< res && "value='3G Interface" >< res && "menu.html" >< res &&
-if (secretstdb =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  secretstdb =~ ".*No such file or directory.*") secretstdb = "none";
 if( "Server: Boa" >!< banner || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|POE)-") )
-if (smbconf =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  smbconf =~ ".*No such file or directory.*") smbconf = "none";
-if (smbpasswd =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  smbpasswd =~ ".*No such file or directory.*") smbpasswd = "none";
   if(strlen(res) && "nonexistant" >< res && "XJ004CSS" >< res) {
 if ("<title>Cisco NFVIS</title>" >< res && 'content="Xenon Boostrap Admin Panel"' >< res) {
 if ("<title>COMfortel</title>" >< res && "/statics/script/pageChallenge.js" >< res) {
-if (usbbus =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  usbbus =~ ".*No such file or directory.*" ) usbbus = "none";
-if (usbmodules =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  usbmodules =~ ".*No such file or directory.*" ) usbmodules = "none";
-if (usbstorage =~ ".*Datei oder Verzeichnis nicht gefunden.*" ||  usbstorage =~ ".*No such file or directory.*" || usbstorage =~ "cat: .* /sys/kernel/debug/usb/devices:.*") usbstorage = "none";
 If you disable this policy setting, transcripting of PowerShell-based applications is disabled by
 If you enable this policy setting, Windows PowerShell will enable transcripting for Windows
 	Ignore root CAs.
@@ -512,6 +505,7 @@ invalid parameters for the GOST block cipher, which allows remote
  It could have occured with FUSE requests. (bnc#1133190)
 item[count]     = "Norton.Thar";
 item = "EnableTranscripting";
+  - it is [mis]configured in that it does not return '404 Not Found' error codes when a non-existent
   it was added support for Cirrus Logic CS420x HDA codec, Wacom driver
 It was discovered that a buffer overflow in IFF ILBM image parsing
 It was discovered that the HSA Linux kernel driver for AMD GPU devices did
@@ -587,6 +581,7 @@ Mark Shepard discovered a double free in the TCP listener cleanup which could re
  MFSA 2012-75 / CVE-2012-3984: Security researcher David Bloom of Cue discovered that 'select' elements are always-on-top chromeless windows and that navigation away from a page with an active 'select' menu does not remove this window.When another menu is opened programmatically on a new page, the original 'select' menu can be retained and arbitrary HTML content within it rendered, allowing an attacker to cover arbitrary portions of the new page through absolute positioning/scrolling, leading to spoofing attacks. Security researcher Jordi Chancel found a variation that would allow for click-jacking attacks was well.
  MFSA 2013-23 / CVE-2013-0765: Mozilla developer Boris Zbarsky reported that in some circumstances a wrapped WebIDL object can be wrapped multiple times, overwriting the existing wrapp... [Please see the references for more information on the vulnerabilities]");
  MFSA 2013-54 / CVE-2013-1692: Security researcher Johnathan Kuskos reported that Firefox is sending data in the body of XMLHttpRequest (XHR) HEAD requests, which goes agains the XHR specification. This can potentially be used for Cross-Site Request Forgery (CSRF) attacks against sites which do not distinguish between HEAD and POST requests.
+  (mis)configured in this way can periodically send packets with spoofed source address to keep the rate limiting
   * missing capability checks were found in the SBNI WAN driver which could
 ML^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'
 MM]7>[YM~GC^@?_WK0@W/F>UDL^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/
@@ -771,6 +766,8 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_copyright("Copyright (C) 2008 Tim Brown and Vlatko Kosturjak");
   script_copyright("Copyright (C) 2009 Tim Brown");
   script_copyright("(c) Tim Brown and Portcullis Computer Security Ltd, 2008");
+  script_mandatory_keys("AAS/banner");
+  script_mandatory_keys("aas/detected");
   script_mandatory_keys("Jasig CAS server/Installed");
   script_mandatory_keys("shttp/detected");
   script_mandatory_keys("telnet/huawei/te/detected");
@@ -1015,6 +1012,7 @@ send(socket: soc, data: triggerD);
   Series VPN Routers version 1.0.00.15 and earlier and RV340 Series Dual WAN Gigabit VPN Routers
        '    </ser>\r\n' +
        '    <ser>\r\n' +
+    # Server: AAS/<someversion>
   server accessible from a public WAN (Internet) / public LAN.");
   # Server: WebLogic Server 10.3.6.0.171017 PSU Patch for BUG26519424 TUE SEP 12 18:34:42 IST 2017
   service accessible from a public WAN (Internet) / public LAN.
@@ -1022,6 +1020,8 @@ send(socket: soc, data: triggerD);
   service_register( port:port, proto:"agobot.fo" );
     service_report( port:port, svc:"agobot.fo", banner:banner );
  SessionTicket extention and ECDHE-ECDSA (bsc#1015499).
+  set_kb_item(name: "aas/detected", value: TRUE);
+  set_kb_item(name: "aas/http/detected", value: TRUE);
     set_kb_item(name:"cas/commserver_ua/win/detected", value:TRUE);
     set_kb_item( name:"Jasig CAS server/Installed", value:TRUE );
   set_kb_item(name:"shttp/detected", value:TRUE);
@@ -1030,6 +1030,7 @@ send(socket: soc, data: triggerD);
     set_kb_item( name:"telnet/huawei/te/detected", value:TRUE );
 set_kb_item(name:"WMI/Antivir/UptoDate", value:AntiVir_UpDate);
     set_kb_item( name:"www/" + port + "/cas", value:version );
+set_mandatory_key( key:"AAS", regex:"^Server\s*:\s*AAS", banner:banner );
   several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic
 Several other fixes for pg_dump, which includ... [Please see the references for more information on the vulnerabilities]");
  + Short curcuit the conditional for identifying the sysconfig renderer.
@@ -1248,6 +1249,7 @@ Vegard Nossum reported an issue with the UNIX socket garbage collector. Local us
   vers = eregmatch( pattern:"mandr(iva|ake).*inux ?(enterprise server)? release ([0-9.]+)", string:rls, icase:TRUE );
   vers = eregmatch(pattern: ">Rev\. ([0-9.]+)([^<]+Bu(li|il)d\. ([0-9]+))?", string: res);
       version = eregmatch( pattern:"Powered by.*ANG(</a>)? ([0-9.]+)", string:res );
+  version = eregmatch(string: banner, pattern: "^[Ss]erver\s*:\s*AAS/([0-9.]+)", icase: FALSE);
 version of nd.
   vers = ssh_get_bin_version(full_prog_name:file, version_argv:"--version", ver_pattern:"Kerberos 5 [Rr]elease ([0-9.]+)", sock:sock);
  + vfs_recycle: Prevent flooding the log if we're called on non-existant
@@ -1262,6 +1264,7 @@ vuln_url = "/olt/Login.do/../../olt/UploadFileUpload.do";
     # WAN Miniport (IPv6)|5|(null)|(null)
 Wan-Teh Chang as the original reporters of CVE-2013-5607.
   web-based interface for Cisco Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could
+  webcontent/aas/aas_store.jsp.");
 Wen Guanxing discovered that PCRE incorrectly handled certain regular
 Wen Xu and Po-Ning Tseng discovered that btrfs file system implementation
 Wen Xu and Po-Ning Tseng discovered that the btrfs filesystem
@@ -1292,6 +1295,7 @@ will execute user defined network requests to both WAN and LAN clients. A remote
     win32k_file_variable_id = 'oval:org.mitre.oval:var:200';
     winsrv_file_id = 'oval:org.mitre.oval:obj:1382';
     winsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
+  withheld from the requestor.");
 With this update, the ACI check is stopped when the ACI is going to be
 "/wls-wsat/CoordinatorPortType11", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.CoordinatorPort",
 "/wls-wsat/CoordinatorPortType", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.CoordinatorPort",
