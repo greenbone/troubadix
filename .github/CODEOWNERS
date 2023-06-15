@@ -1,5 +1,5 @@
 # default reviewers
-*                         @greenbone/troubadix-maintainers @greenbone/devops
+*                         @greenbone/troubadix-maintainers
 
 # exceptions
 /troubadix/codespell/*    @greenbone/troubadix-maintainers @greenbone/vulnerability-test-maintainers
