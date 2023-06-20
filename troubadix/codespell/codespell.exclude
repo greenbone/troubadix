@@ -146,6 +146,7 @@ btrfs: add hel... [Please see the references for more information on the vulnera
   bu = eregmatch(pattern: "Build ([0-9]+)", string: banner);
     build = bu[1];
 buil... [Please see the references for more information on the vulnerabilities]");
+Bui Quang Minh discovered that the XDP socket implementation in the Linux
   Business RV042 Dual WAN VPN Routers and Cisco Small Business RV042G Dual Gigabit WAN VPN Routers could allow
   Business RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers could allow an unauthenticated, remote
 can: gs_usb: fix endianess problem with candleLight fi... [Please see the references for more information on the vulnerabilities]");
@@ -173,6 +174,7 @@ China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.c
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt server auth
 Christian Loos discovered an information disclosure flaw which may reveal RSS feeds URLs, and thus ticket data.
 Christian Loos discovered a remote denial of service vulnerability, exploitable via the email gateway and affecting any installation which accepts mail from untrusted sources. Depending on RT's logging configuration, a remote attacker can take advantage of this flaw to cause CPU and excessive disk usage.
+chunks in CAF audio files. If a user or automated system were tricked into
   Cisco ACI Multi-Site Orchestrator (MSO) to send a specific API request to a managed Cisco APIC or
 # Cisco TelePresence TC and TE Software Multiple Security Vulnerabilities
 Claus Jorgensen reported that a text input box can be pre-filled with a filename and then turned into a file-upload control, allowing a malicious website to steal any local file whose name they can guess. [MFSA-2006-23]
@@ -343,6 +345,7 @@ extended EAP-SIM/AKA fast re-authentication to allow use with FILS
 # Fedora Update for tre FEDORA-2016-0a952a3bc0
 # Fedora Update for tre FEDORA-2016-0ff6c3d84b
 # Fedora Update for tre FEDORA-2016-cd09eab674
+files. If a user were tricked into opening a specially-crafted CAF file, a
   files to potentially execute code and it is tracked by the Mitre CVE
   file_xml = '\t\t<file_item' + status + ' xmlns="http://oval.mitre.org/XMLSchema/' +
 Fixed a bug where Podman could not run containers usin... [Please see the references for more information on the vulnerabilities]");
@@ -513,6 +516,7 @@ It was discovered that the JULI logging component did not restrict its target pa
 It was discovered that the PEAK-System Technik USB driver in the Linux
 It was discovered that the PEAK-System Technik USB driver in the ... [Please see the references for more information on the vulnerabilities]");
   It was discovered that the SBNI WAN driver did not correctly check for the
+It was discovered that WavPack incorrectly handled certain CAF files.
 It was found that 389 Directory Server was vulnerable to a flaw in which the default ACI (Access Control Instructions) could be read by an anonymous user. This could lead to leakage of sensitive information.
 It was found that if a Non-Maskable Interrupt (NMI) occurred immediately after a SYSCALL call or before a SYSRET call with the user RSP pointing to the NMI IST stack, the kernel could skip that NMI.(CVE-2015-3291)
  James Troup discovered that snap did not properly manage the permissions for
@@ -652,6 +656,7 @@ ofproto/bond: fix interal flow leak of tcp-balance bond
   of Wiesemann & Theis GmbH W&T OPC Server for Windows.");
 Ohter bug fixes:
       # on e.g. newer releases of the NAM appliance we're even getting an 403/forbidden
+opening a specially crafted CAF audio file, an attacker could execute
 Openswan. Note that Portage will force a move for Super-FreeS/WAN users to
 or CAS service provider is enable and the administrator has chosen to store
 or potentially have unspecified futher impact.
@@ -849,6 +854,8 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"A vulnerability in the implementation of the Short Message Service (SMS) handling functionality of Cisco IOS Software and Cisco IOS XE Software could allow an unauthenticated, remote attacker to trigger a denial of service (DoS) condition on an affected device. The vulnerability is due to improper processing of SMS protocol data units (PDUs) that are encoded with a special character set. An attacker could exploit this vulnerability by sending a malicious SMS message to an affected device. A successful exploit could allow the attacker to cause the wireless WAN (WWAN) cellular interface module on an affected device to crash, resulting in a DoS condition that would require manual intervention to restore normal operating conditions.(CVE-2019-1747)
   script_tag(name:"insight", value:"A vulnerability in the Network Access Manager (NAM) of Cisco
   script_tag(name:"insight", value:"A vulnerability was found in Linux kernel. There is an information leak in file 'sound/core/timer.c' of the latest mainline Linux kernel, the stack object tread has a total size of 32 bytes. It contains a 8-bytes padding, which is not initialized but sent to user via copy_to_user(), resulting a kernel leak.(CVE-2016-4569)
+  script_tag(name:"insight", value:"Benjamin Smedberg, Bob Clary, Jesse Ruderman, and Josh Aas discovered
+  script_tag(name:"insight", value:"Bui Quang Minh discovered that libxml2 did not properly process XPath
   script_tag(name:"insight", value:"Calle Dybedahl discovered a bug in lyskom-server which could result in
   script_tag(name:"insight", value:"Calle Dybedahl discovered a bug in lyskom-server which could result in a denial of service where an unauthenticated user could cause the server to become unresponsive as it processes a large query.
   script_tag(name:"insight", value:"Cisco TelePresence TC and TE Software are prone to
@@ -858,6 +865,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
   script_tag(name:"insight", value:"In Apache::Session::Browseable before 1.3.6, validity of the X.509 certificate is not checked by default when connecting to remote LDAP backends, because the default configuration of the Net::LDAPS module for Perl is used.
   script_tag(name:"insight", value:"It was discovered that a specially-crafted packet sent to the racoon ipsec key exchange server could cause a tunnel to crash, resulting in a denial of service.
+  script_tag(name:"insight", value:"It was discovered that the VLC CAF demuxer incorrectly handled certain
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ authentication
   script_tag(name:"insight", value:"James Troup discovered that snap did not properly manage the permissions for
@@ -876,6 +884,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in nd, a command-line WebDAV interface, whereby long strings received from the remote server could overflow fixed-length buffers. This vulnerability could be exploited by a remote attacker in control of a malicious WebDAV server to execute arbitrary code if the server was accessed by a vulnerable version of nd.
   script_tag(name:"insight", value:"Multiple vulnerabilities were discovered in the dissectors for the MS-MMS, RTPS, RTPS2, Mount, ACN, CIMD and DTLS protocols, which could result in denial of service or the execution of arbitrary code.
   script_tag(name:"insight", value:"Ning Zhang & Amin Tora discovered that the mod_dav module
+  script_tag(name:"insight", value:"Robert Merget, Marcus Brinkmann, Nimrod Aviram, and Juraj Somorovsky
   script_tag(name:"insight", value:"Robert Merget, Marcus Brinkmann, Nimrod Aviram, and Juraj Somorovsky discovered that certain Diffie-Hellman ciphersuites in the TLS specification and implemented by OpenSSL contained a flaw. A remote attacker could possibly use this issue to eavesdrop on encrypted communications. This was fixed in this update by disabling the insecure ciphersuites.
   script_tag(name:"insight", value:"Several remote vulnerabilities have been discovered in racoon, the Internet Key Exchange daemon of ipsec-tools. The Common Vulnerabilities and Exposures project identifies the following problems:
   script_tag(name:"insight", value:"Several vulnerabilities have been discovered in phpCAS, a CAS client

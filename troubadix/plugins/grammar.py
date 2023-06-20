@@ -105,6 +105,10 @@ exceptions = [
     TextCheck("when an element with a 'requiredFeatures' attribute"),
     # e.g. Multiple Products $something Vulnerability
     PatternCheck(r"Multiple\s+Products.+Vulnerability", re.IGNORECASE),
+    # From 2009/ubuntu/gb_ubuntu_USN_592_1.nasl:
+    # The default has been changed to prompt the user each time a website
+    # requests a client certificate.
+    TextCheck("a website requests a client certificate"),
 ]
 
 
