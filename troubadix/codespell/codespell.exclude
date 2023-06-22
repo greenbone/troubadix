@@ -168,7 +168,6 @@ cgis[i++] = "/cgi-bin/fom.cgi";
 cgis[i++] = "/cgi-bin/fom/fom.cgi";
  - chage gives correct information (#216635)
 "chage --inactive <DAYS> <USER> for existing users.';
-# Charles Thier <cthier@thethiers.net>
         check_matches = re.finditer('[^\r\n]*[#]+[ ]*([Tt]hunderbird|[Ss]ea[Mm]onkey|[Hh]ot[Ff]ix|[Ff]irefox|[Pp]ower[Pp]oint( Viewer)?)[ ]*[Cc]heck[^\r\n]*\n', text)
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt (server auth)
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt server auth
@@ -197,7 +196,6 @@ complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http:/
   "Connection: TE, close\r\n",
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
   control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
-# Copyright (C) 2005 Charles Thier
 # Copyright (C) 2005 Holm Diening / SLITE IT-Security (holm.diening@slite.de)
 # Copyright (c) 2008 Tim Brown
 # Copyright (C) 2008 Tim Brown
@@ -814,6 +812,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability - Windows");
   script_name("Palo Alto PAN-OS SD WAN Vulnerability (CVE-2020-2009)");
   script_name("Petite Annonce <= 1.0 'categoriemoteur' XSS Vulnerability");
+  script_name("Schneider Electric PowerLogic ION7400 / PM8000 / ION9000 Unsecure Protocol Vulnerability (SEVD-2023-129-03, OT:ICEFALL)");
   script_name("Siemens SICWEB Auto-Logon on Public WAN (Internet) / Public LAN (HTTP)");
   script_name("Sphinx Search Server Public WAN (Internet) / Public LAN Accessible");
   script_name("Swarmpit Web UI Public WAN (Internet) / Public LAN Accessible");
@@ -1066,6 +1065,7 @@ solution = "mount -o remount,ro PARTITION";
 Soyeon Park and Wen Xu discovered a type error in the v8 javascript
 Soyeon Park and Wen Xu discovered memory corruption issues that
 Soyeon Park and Wen Xu discovered the use of a wrong type in the v8
+# SPDX-FileCopyrightText: 2005 Charles Thier
 specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series Ethernet Switches to cause a slow
  Specially crafted MIME headers could cause openssl's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
  * Specially crafted MIME headers could cause OpenSSL's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
