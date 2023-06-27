@@ -31,12 +31,9 @@ DEFAULT_BADWORDS = [
     "OpenVAS",
     "4f70656e564153",
     "6f70656e766173",
-    # nb:
-    # - VT should be used instead
-    # - using a space before/after to make the check a little bit more strict
-    # - this could be made less strict later once the whole feed is "clean"
-    "NVT ",
-    " NVT",
+    # nb: VT/vt should be used instead
+    "NVT",
+    "nvt",
 ]
 
 _IGNORE_FILES = [
@@ -86,7 +83,13 @@ EXCEPTIONS = [
     'the file "/openvas.jsp" was created',
     "/var/lib/openvas/plugins/",
     "INVT ",  # INVT Electric VT Designer
+    "invt_",  # cpe:/a:invt_electric
     "HostDetails/NVT",  # Can't be changed right now...
+    "# LSS-NVT-",  # Identifier from a third-party which shouldn't be changed
+    ", nvt:",  # Can't be changed right now...
+    "Hu1nvt5qm",  # Part of a bigger blob
+    "gz3nvtPjk",  # Same as above
+    "0EAnvtBAK",  # Same as above
 ]
 
 STARTS_WITH_EXCEPTIONS = [
@@ -96,7 +99,14 @@ STARTS_WITH_EXCEPTIONS = [
     "# $Id: ",
 ]
 
-COMBINED = [("find_service3.nasl", "OpenVAS-")]
+COMBINED = [
+    ("find_service3.nasl", "OpenVAS-"),
+    # nb:
+    # - Only used as variables/function parameters and not user facing
+    # - Will be changed in one go in the future and we don't need to
+    #   report this on every plugin run
+    ("host_details.inc", "nvt"),
+]
 
 
 class CheckBadwords(LineContentPlugin):

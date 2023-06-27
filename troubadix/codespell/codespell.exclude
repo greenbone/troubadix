@@ -17,6 +17,7 @@
 # 0x00F0:  75 70 6C 69 63 61 74 65 20 6D 69 6D 65 20 66 6F    uplicate mime fo
 # 0x01D0:  45 20 63 6F 6D 6D 61 6E 64 20 72 65 63 65 69 76    E command receiv
                    0x02,			# ByteOrder (little endian)
+# 0x06B0:  0B A5 3D 1F FF AC 6A C7 1E 4A 4A 84 6E 44 FF 6A    ..=...j..JJ.nD.j
 # 0x10:  70 65 63 69 66 69 65 64 20 75 73 65 72 2E 0D 0A    pecified user...
 # 0x20:  64 79 0D 0A 45 52 52 4F 52 20 43 6F 6D 6D 61 6E    dy..ERROR Comman
 # 0x20:  6D 65 73 73 61 67 65 2E 48 61 6E 64 73 68 61 6B    message.Handshak
@@ -196,7 +197,6 @@ complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http:/
   "Connection: TE, close\r\n",
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
   control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
-# Copyright (C) 2005 Holm Diening / SLITE IT-Security (holm.diening@slite.de)
 # Copyright (c) 2008 Tim Brown
 # Copyright (C) 2008 Tim Brown
 # Copyright (c) 2008 Tim Brown and Portcullis Computer Security Ltd
@@ -402,7 +402,6 @@ Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an 
 Helin, Andre Bargull, Massimiliano Tomassoli, laf.intel, Massimiliano
   hello_data += clen + _ciphers;
 "H", "HSI",
-# Holm Diening / SLITE IT-Security (holm.diening@slite.de)
   - HP Helion Eucalyptus does not correctly check IAM user's permissions for accessing versioned objects and ACLs.
     hp_printer['login_success'] = '<?hp te.includeSubPage';
 # <HTML>Acess not granted.</HTML>
@@ -765,6 +764,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_add_preference(name:"Report about unrechable Hosts", type:"checkbox", value:"no", id:6);
   script_add_preference(name:"Value", type:"entry", value:"O:BAG:BAD:(A;;RC;;;BA)", id:1);
   script_copyright("Copyright (C) 2005 Charles Thier");
+  script_copyright("Copyright (C) 2005 Holm Diening / SLITE IT-Security");
   script_copyright("Copyright (C) 2008 E-Soft Inc. http://www.securityspace.com & Tim Brown");
   script_copyright("Copyright (C) 2008 Tim Brown and Vlatko Kosturjak");
   script_copyright("Copyright (C) 2009 Tim Brown");
@@ -1066,6 +1066,7 @@ Soyeon Park and Wen Xu discovered a type error in the v8 javascript
 Soyeon Park and Wen Xu discovered memory corruption issues that
 Soyeon Park and Wen Xu discovered the use of a wrong type in the v8
 # SPDX-FileCopyrightText: 2005 Charles Thier
+# SPDX-FileCopyrightText: 2005 Holm Diening / SLITE IT-Security
 specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series Ethernet Switches to cause a slow
  Specially crafted MIME headers could cause openssl's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
  * Specially crafted MIME headers could cause OpenSSL's ans1 parser to dereference a NULL pointer leading to a Denial of Service (CVE-2006-7250) or fail verfication
