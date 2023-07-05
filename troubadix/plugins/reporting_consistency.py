@@ -55,6 +55,7 @@ IGNORE_FILES = [
     "/template.nasl",
     "test_ipv6_packet_forgery.nasl",
     "test_version_func_inc.nasl",
+    "pre2008/mssql_brute_force.nasl",
 ]
 
 
