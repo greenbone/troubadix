@@ -88,6 +88,7 @@ Add more important informations
 "admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp:all,ftp",
   Admin endpoints to a public WAN (Internet) / public LAN without authentication.
 "Administrator:admin:cisco,conexant,corecess,gvc:all",
+  # admin:<redacted>:0:0:Adminstrator:/:/bin/sh
 "Admin|shs",
 "Adminstrator|",
 "adminstrator|changeme",
