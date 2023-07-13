@@ -48,6 +48,7 @@ VALID_QOD_TYPES = [
     "remote_banner_unreliable",
     "executable_version_unreliable",
     "general_note",
+    "package_unreliable",
 ]
 
 
