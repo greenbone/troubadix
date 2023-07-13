@@ -177,6 +177,7 @@ Christian Loos discovered an information disclosure flaw which may reveal RSS fe
 Christian Loos discovered a remote denial of service vulnerability, exploitable via the email gateway and affecting any installation which accepts mail from untrusted sources. Depending on RT's logging configuration, a remote attacker can take advantage of this flaw to cause CPU and excessive disk usage.
 chunks in CAF audio files. If a user or automated system were tricked into
   Cisco ACI Multi-Site Orchestrator (MSO) to send a specific API request to a managed Cisco APIC or
+# Cisco Network Analysis Module (NAM)
 # Cisco TelePresence TC and TE Software Multiple Security Vulnerabilities
 Claus Jorgensen reported that a text input box can be pre-filled with a filename and then turned into a file-upload control, allowing a malicious website to steal any local file whose name they can guess. [MFSA-2006-23]
 Claus Wahlers reported that random images from GPU memory
@@ -341,6 +342,7 @@ extended EAP-SIM/AKA fast re-authentication to allow use with FILS
 (FATE#314441). A seperate hyper-v package will be published to support this feature.
   feature for Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
   feature is available to ensure that nobody can gain remote access to the modem (via the WAN/DSL interface).
+  feature of Cisco Nexus 9000 Series Fabric Switches in ACI mode could allow an unauthenticated,
 # Fedora Update for tre FEDORA-2016-0a952a3bc0
 # Fedora Update for tre FEDORA-2016-0ff6c3d84b
 # Fedora Update for tre FEDORA-2016-cd09eab674
@@ -786,6 +788,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Multi-Pod and Multi-Site TCP DoS Vulnerability (cisco-sa-n9kaci-tcp-dos-YXukt6gM)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Privilege Escalation Vulnerability (cisco-sa-naci-mdvul-vrKVgNU)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Queue Wedge DoS Vulnerability (cisco-sa-n9kaci-queue-wedge-cLDDEfKF)");
+  script_name("Cisco Nexus 9000 Series Fabric Switches ACI Multi-Site CloudSec Encryption Information Disclosure Vulnerability (cisco-sa-aci-cloudsec-enc-Vs5Wn2sX)");
   script_name("Cisco Nexus 9000 Series Fabric Switches in ACI Mode Link Layer Discovery Protocol Memory Leak Denial of Service Vulnerability (cisco-sa-aci-lldp-dos-ySCNZOpX)");
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Authenticated Remote Code Execution Vulnerabilities (cisco-sa-sb-rv34x-rce-8bfG2h6b)");
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Local Privilege Escalation Vulnerability (cisco-sa-rv-34x-privesc-GLN8ZAQE)");
@@ -924,6 +927,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"solution", value:"Since LSAT is not actively maintained anymore, this package has been
   script_tag(name:"solution", value:"Upgrade to Apple Mac OS X Big Sur version
   script_tag(name:"summary", value:"A security vulnerability in Avenger's News System (ANS) allows
+  script_tag(name:"summary", value:"A vulnerability in the Cisco ACI Multi-Site CloudSec encryption
   script_tag(name:"summary", value:"A vulnerability in the IPv6 neighbor discovery (ND) handling of Cisco IOS XE Software on
   script_tag(name:"summary", value:"A vulnerability in the Network Access Manager (NAM) module of
   script_tag(name:"summary", value:"Cisco TelePresence TC and TE Software are prone to multiple
@@ -1092,6 +1096,7 @@ supply input to this crate, they could have caused a denial of service in the
 support was enhanced and fixed, support for HDA sound on Acer Aspire
 # Swarmpit Web UI Public WAN (Internet) Accessible
   Switches for Application Centric Infrastructure (ACI) could allow an unauthenticated, adjacent
+  Switches in ACI mode that are running releases 14.0 and later if they are part of a Multi-Site
 Switches in Application-Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to cause
 syntax. As a consequence, removing an ACI failed with a syntax error.
   system_root_id = 'oval:org.mitre.oval:obj:219';
@@ -1205,6 +1210,7 @@ to the buildd network are needed (to provide the new Rust-based toolchain
  to use of unitialized use of memory (bsc#1133037).
   TP3106, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030, eCNS210_TD and eSpace U1981.");
  transfered in cleartext (bsc#1158440).");
+  transit between sites on current ACI Spine Switches hardware.");
 - Transport of TE related metrics over OSPF, IS-IS.
 triggerD = raw_string(0x06,0x00,0x07,0x00,0x20,0x00,0x00,0x00,0x0e,0x00,0x32,
 Tuomas Haanpaa and Matti Kamunen from Synopsys Ltd discovered that the NFSv2 and NFSv3 server implementations are vulnerable to an out-of-bounds memory access issue while processing arbitrarily long arguments sent by NFSv2/NFSv3 PRC clients, leading to a denial of service.
@@ -1269,6 +1275,7 @@ version of nd.
 via crafted description chunks in a CAF audio file, leading to a
   vulnerability by flooding an adjacent IOS XE device with specific ND messages.");
   vulnerability by sending crafted IPv6 Neighbor Discovery (ND) packets to an affected device for
+  vulnerability that is described in this advisory. Customers who are using the Cisco ACI Multi-Site
 vuln_url = "/olt/Login.do/../../olt/UploadFileUpload.do";
 # WAN Emulator Remote Command Execution Vulnerabilities
        && '">WAN IP<' >< res && '">LAN IP<' >< res ) {
@@ -1306,6 +1313,7 @@ will execute user defined network requests to both WAN and LAN clients. A remote
     win32k_file_variable_id = 'oval:org.mitre.oval:var:200';
     winsrv_file_id = 'oval:org.mitre.oval:obj:1382';
     winsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
+  with an on-path position between the ACI sites could exploit this vulnerability by intercepting
   withheld from the requestor.");
 With this update, the ACI check is stopped when the ACI is going to be
 "/wls-wsat/CoordinatorPortType11", "weblogic\.wsee\.wstx\.wsat\.v1[01]\.endpoint\.CoordinatorPort",
