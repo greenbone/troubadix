@@ -20,7 +20,7 @@ jobs:
             echo "RELEASE_REF=${{ github.base_ref }}" >> $GITHUB_ENV
           fi
       - name: Release with release action
-        uses: greenbone/actions/release@v2
+        uses: greenbone/actions/release@v3
         with:
           conventional-commits: true
           github-user: ${{ secrets.GREENBONE_BOT }}
