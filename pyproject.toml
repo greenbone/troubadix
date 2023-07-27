@@ -14,10 +14,9 @@ classifiers=[
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",  # pylint: disable=line-too-long
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
@@ -28,7 +27,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 pontos = ">=22.7,<24.0"
 codespell = "^2.0.0"
 python-magic = "^0.4.25"
@@ -45,7 +44,7 @@ autohooks-plugin-isort = ">=22.3.0"
 
 [tool.black]
 line-length = 80
-target-version = ['py37', 'py38', 'py39', 'py310']
+target-version = ['py39', 'py310', 'py311']
 exclude = '''
 /(
     \.git
