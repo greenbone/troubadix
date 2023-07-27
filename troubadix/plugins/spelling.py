@@ -72,7 +72,7 @@ exceptions = [
     # "ure" is a Debian package, again too many hits for
     # codespell.exclude.
     PatternInFilePatternCheck(
-        r"(deb_(dla_)?[0-9]+(_[" r"0-9]+)?|gb_ubuntu_.+)\.nasl",
+        r"(deb_(dla_)?[0-9]+(_[0-9]+)?|gb_ubuntu_.+)\.nasl",
         r"ure\s+==>\s+sure",
     ),
     # gsf/PCIDSS VTs are currently using some german text parts
