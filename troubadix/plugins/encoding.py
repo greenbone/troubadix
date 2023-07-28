@@ -40,7 +40,7 @@ class CheckEncoding(LineContentPlugin):
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
         match = charset_normalizer.from_path(
-            nasl_file, cp_isolation=ALLOWED_ENCODINGS
+            nasl_file, threshold=0.4, cp_isolation=ALLOWED_ENCODINGS
         ).best()
 
         if not match:
