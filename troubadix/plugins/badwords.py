@@ -85,7 +85,6 @@ EXCEPTIONS = [
     "INVT ",  # INVT Electric VT Designer
     "invt_",  # cpe:/a:invt_electric
     "HostDetails/NVT",  # Can't be changed right now...
-    "# LSS-NVT-",  # Identifier from a third-party which shouldn't be changed
     ", nvt:",  # Can't be changed right now...
     "Hu1nvt5qm",  # Part of a bigger blob
     "gz3nvtPjk",  # Same as above
@@ -96,7 +95,6 @@ STARTS_WITH_EXCEPTIONS = [
     "# OpenVAS Vulnerability Test",
     "# OpenVAS Include File",
     "  script_",
-    "# $Id: ",
 ]
 
 COMBINED = [
