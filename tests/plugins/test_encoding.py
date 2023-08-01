@@ -65,7 +65,8 @@ class CheckEncodingTestCase(PluginTestCase):
 
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "VT uses a wrong encoding. Detected encoding is utf-8.",
+                "VT uses a wrong encoding. "
+                "Allowed encodings are ascii, latin_1.",
                 results[0].message,
             )
             self.assertEqual(
@@ -97,6 +98,7 @@ class CheckEncodingTestCase(PluginTestCase):
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "VT uses a wrong encoding. Detected encoding is utf-8.",
+                "VT uses a wrong encoding. "
+                "Allowed encodings are ascii, latin_1.",
                 results[0].message,
             )

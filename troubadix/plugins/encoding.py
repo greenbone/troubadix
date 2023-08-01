@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Iterable, Iterator
 
-import chardet
+import charset_normalizer
 
 from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
@@ -27,6 +27,8 @@ from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 # CHAR_SET = r"[^\x00-\xFF]"
 # Temporary only check for chars in between 7f-9f, like in the old Feed-QA...
 CHAR_SET = r"[\x7F-\x9F]"
+
+ALLOWED_ENCODINGS = ["ascii", "latin_1"]
 
 
 class CheckEncoding(LineContentPlugin):
@@ -37,18 +39,14 @@ class CheckEncoding(LineContentPlugin):
         nasl_file: Path,
         lines: Iterable[str],
     ) -> Iterator[LinterResult]:
-        content = nasl_file.read_bytes()
+        match = charset_normalizer.from_path(
+            nasl_file, threshold=0.4, cp_isolation=ALLOWED_ENCODINGS
+        ).best()
 
-        detection = chardet.detect(content)
-        encoding = detection.get("encoding")
-        if encoding and encoding not in [
-            "ascii",
-            "latin1",
-            "ISO-8859-1",
-        ]:
+        if not match:
             yield LinterError(
-                f"VT uses a wrong encoding. Detected "
-                f"encoding is {encoding}.",
+                f"VT uses a wrong encoding. "
+                f"Allowed encodings are {', '.join(ALLOWED_ENCODINGS)}.",
                 file=nasl_file,
                 plugin=self.name,
             )
