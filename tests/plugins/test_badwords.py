@@ -37,15 +37,19 @@ class TestBadwords(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 3)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "Badword in line     1: openvas is a bad word",
             results[0].message,
         )
         self.assertEqual(
-            "Badword in line    10: OpenVAS is a scanner",
+            "Badword in line     6: # OpenVAS Vulnerability Test",
             results[1].message,
+        )
+        self.assertEqual(
+            "Badword in line    10: OpenVAS is a scanner",
+            results[2].message,
         )
 
     def test_combined(self):
