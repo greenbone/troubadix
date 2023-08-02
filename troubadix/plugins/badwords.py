@@ -92,7 +92,6 @@ EXCEPTIONS = [
 ]
 
 STARTS_WITH_EXCEPTIONS = [
-    "# OpenVAS Vulnerability Test",
     "# OpenVAS Include File",
     "  script_",
 ]
