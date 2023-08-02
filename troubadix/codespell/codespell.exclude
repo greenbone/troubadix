@@ -1237,7 +1237,7 @@ url = dir + "/profiles/index.php?gud=<script>alert(document.cookie)</script>";
 url = dir + "/te<script>alert(document.cookie);</script>st";
   url = dir + "/wp-content/plugins/annonces/includes/lib/photo/uploadPhoto.php?mainPluginFile=/" + files[file] + "&abspath=../../../../../../";
 URL=http://www.us-cert.gov/cas/techalerts/TA04-041A.html
-  url = '/medias/?context=' + payload_encoded;
+  url = "/medias/?context=" + payload_encoded;
   url = "/olt/pages/" + uploadfile;
 url = "/statics/html/index.htm";
 url = "/statics/pageChallenge.html";
