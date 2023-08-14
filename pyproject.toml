@@ -32,7 +32,7 @@ pontos = ">=22.7,<24.0"
 codespell = "^2.0.0"
 python-magic = "^0.4.25"
 chardet = ">=4,<6"
-validators = ">=0.18.2,<0.21.0"
+validators = "^0.21.2"
 gitpython = "^3.1.31"
 charset-normalizer = "^3.2.0"
 
