@@ -174,6 +174,6 @@ class CheckCVEFormatTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'VT is using CVE "CVE-2021-3807" multiple ' "times.",
+            'VT is using CVE "CVE-2021-3807" multiple times.',
             results[0].message,
         )

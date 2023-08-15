@@ -13,7 +13,7 @@ A linting and QA check tool for NASL files
 
 ### Requirements
 
-Python 3.7 and later is supported.
+Python 3.9 and later is supported.
 
 ### Install using pip
 
