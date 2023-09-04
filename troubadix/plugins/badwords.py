@@ -89,6 +89,7 @@ EXCEPTIONS = [
     "Hu1nvt5qm",  # Part of a bigger blob
     "gz3nvtPjk",  # Same as above
     "0EAnvtBAK",  # Same as above
+    "technocrackers",  # Author name of a wordpress plugin
 ]
 
 STARTS_WITH_EXCEPTIONS = [
