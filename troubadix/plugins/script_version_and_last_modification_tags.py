@@ -88,20 +88,12 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         version_match = version_pattern.search(file_content)
 
         if not version_match:
-            # check for old format:
-            # script_version("$Revision: 12345 $");
-            revision_pattern = re.compile(
-                r'script_(?P<name>version)\s*\((?P<quote99>[\'"])?(?P<value>\$'
-                r"Revision:\s*[0-9]{1,6}\s* \$)(?P=quote99)?\s*\)\s*;"
+            self.fix_last_modification_and_version = True
+            yield LinterError(
+                "VT is using a wrong script_version(); syntax.",
+                file=nasl_file,
+                plugin=self.name,
             )
-            revision_match = revision_pattern.search(file_content)
-            if not revision_match:
-                self.fix_last_modification_and_version = True
-                yield LinterError(
-                    "VT is using a wrong script_version(); syntax.",
-                    file=nasl_file,
-                    plugin=self.name,
-                )
 
         match_last_modification_any_value = re.search(
             pattern=LAST_MODIFICATION_ANY_VALUE_PATTERN,
@@ -130,24 +122,13 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         match_last_modified = last_modification_pattern.search(file_content)
 
         if not match_last_modified:
-            # check for old format:
-            # script_tag(name: "last_modification",
-            #   value: "$Date: 2021-07-19 12:32:02 +0000 (Mon, 19 Jul 2021) $")
-            old_pattern = re.compile(
-                r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>'
-                r"last_modification)(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>"
-                r'[\'"])?(?P<value>\$Date:\s*[A-Za-z0-9\:\-\+\,\s\(\)]{44}'
-                r"\s*\$)(?P=quote2)?\s*\)\s*;"
+            self.fix_last_modification_and_version = True
+            yield LinterError(
+                "VT is is using a wrong syntax for script_tag("
+                'name:"last_modification".',
+                file=nasl_file,
+                plugin=self.name,
             )
-            match_last_modified = old_pattern.search(file_content)
-            if not match_last_modified:
-                self.fix_last_modification_and_version = True
-                yield LinterError(
-                    "VT is is using a wrong syntax for script_tag("
-                    'name:"last_modification".',
-                    file=nasl_file,
-                    plugin=self.name,
-                )
 
     def fix(self) -> Iterator[LinterResult]:
         if not self.fix_last_modification_and_version:
