@@ -55,7 +55,37 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_old_ok(self):
+    def test_nok(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_version("2021 07-19T12:32:02+0000");\n'
+            '  script_tag(name: "last_modification", value: "2021_07-19 '
+            '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 2)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT is using a wrong script_version(); syntax.",
+            results[0].message,
+        )
+        self.assertEqual(
+            "VT is is using a wrong syntax for script_tag(name:"
+            '"last_modification".',
+            results[1].message,
+        )
+
+    def test_old_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
@@ -73,7 +103,17 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 0)
+        self.assertEqual(len(results), 2)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT is using a wrong script_version(); syntax.",
+            results[0].message,
+        )
+        self.assertEqual(
+            "VT is is using a wrong syntax for script_tag(name:"
+            '"last_modification".',
+            results[1].message,
+        )
 
     def test_missing_script_version(self):
         nasl_file = Path(__file__).parent / "test.nasl"
