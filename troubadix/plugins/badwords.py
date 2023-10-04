@@ -90,6 +90,7 @@ EXCEPTIONS = [
     "gz3nvtPjk",  # Same as above
     "0EAnvtBAK",  # Same as above
     "technocrackers",  # Author name of a wordpress plugin
+    "firecracker",  # Valid package name on e.g. Fedora
 ]
 
 STARTS_WITH_EXCEPTIONS = [
