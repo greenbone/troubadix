@@ -92,7 +92,7 @@ exceptions = [
         r"alle|als|tage|lokale|uptodate|paket|titel|ba|"
         r"ordner|modul|interaktive|programm|explizit|"
         r"normale|applikation|attributen|lokal|signatur|"
-        r"modell|klick|generell)\s+==>\s+",
+        r"modell|klick|generell|vor)\s+==>\s+",
         re.IGNORECASE,
     ),
     # False positives in the gsf/PCIDSS and GSHB/ VTs:
