@@ -21,3 +21,8 @@ complies
 # we see a lot of false positives for the vulnerability. As we usually only have the vulnerability
 # mentioned here this correction is fully ingored.
 racoon
+# re-use vs. reuse currently unclear, e.g. there is the following from https://dict.leo.org/forum/viewGeneraldiscussion.php?idForum=4&idThread=5586&lp=ende&lang=en:
+# Not even the wise and educated English native speakers seem to have a rule on hyphenation and there are differences between BE and AE.
+# As e.g. the spelling correction in Mozilla Firefox is accepting both we're excluding this for now
+re-use
+re-usable
