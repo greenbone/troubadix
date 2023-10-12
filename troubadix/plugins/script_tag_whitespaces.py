@@ -24,6 +24,7 @@ from troubadix.helper import SpecialScriptTag
 from troubadix.helper.patterns import (
     _get_special_script_tag_pattern,
     _get_tag_pattern,
+    get_xref_pattern,
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -51,7 +52,11 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
             name=SpecialScriptTag.NAME.value
         ).finditer(file_content)
 
-        matches = chain(tag_matches, name_matches)
+        xref_matches = get_xref_pattern(name=r".+?", flags=re.S).finditer(
+            file_content
+        )
+
+        matches = chain(tag_matches, name_matches, xref_matches)
 
         for match in matches:
             if re.match(r"^\s+.*", match.group("value")) or re.match(
