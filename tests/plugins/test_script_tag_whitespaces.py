@@ -32,6 +32,10 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
             '  script_tag(name:"insight", value:"bar foo");\n'
             '  script_tag(name:"impact", value:"- foo\n  - bar");\n'
             '  script_tag(name:"affected", value:"foo\n  bar");\n'
+            '  script_xref(name:"foo1", value:"foo\nbar");\n'
+            '  script_xref(name:"foo2", value:"bar foo");\n'
+            '  script_xref(name:"foo3", value:"- foo\n  - bar");\n'
+            '  script_xref(name:"foo4", value:"foo\n  bar");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
@@ -85,6 +89,23 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_script_xref_leading_whitespace(self):
+        content = '  script_xref(name:"foo", value:" bar");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"foo", value:" bar");: value contains a'
+            " leading or trailing whitespace character",
+            results[0].message,
+        )
+
     def test_script_tag_trailing_whitespace(self):
         content = '  script_tag(name:"insight", value:"bar ");\n'
         fake_context = self.create_file_plugin_context(
@@ -108,6 +129,23 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
+
+    def test_script_xref_trailing_whitespace(self):
+        content = '  script_xref(name:"foo", value:"bar ");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"foo", value:"bar ");: value contains a'
+            " leading or trailing whitespace character",
+            results[0].message,
+        )
 
     # nb: The script_name() tag is not allowed to contain newlines (checked in a
     # dedicated plugin) so no specific test cases have been added here.
@@ -149,6 +187,57 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_tag_trailing_newline_with_newline_and_spaces(self):
         content = '  script_tag(name:"insight", value:"foo\n  bar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    # nb: The value of script_xref(name:"URL" are also checked separately in
+    # script_xref_url() and that one would also report trailing / leading
+    # newlines and similar for that specific case
+    def test_script_xref_trailing_newline(self):
+        content = '  script_xref(name:"foo", value:"bar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_script_xref_trailing_newline_with_space(self):
+        content = '  script_xref(name:"foo", value:"foo bar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_script_xref_trailing_newline_with_newline(self):
+        content = '  script_xref(name:"foo", value:"foo\nbar\n");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptTagWhitespaces(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_script_xref_trailing_newline_with_newline_and_spaces(self):
+        content = '  script_xref(name:"foo", value:"foo\n  bar\n");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )
