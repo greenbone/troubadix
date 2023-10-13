@@ -142,33 +142,30 @@ def get_script_tag_pattern(script_tag: ScriptTag) -> re.Pattern:
 
 
 _XREF_TAG_PATTERN = (
-    r'script_xref\(\s*name\s*:\s*["\'](?P<type>{type})["\']\s*,'
-    r'\s*value\s*:\s*["\']?(?P<value>{value})["\']?\s*\)\s*;'
+    r'script_xref\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>{name})(?P=quote)\s*,'
+    r'\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{value})(?P=quote2)?\s*\)\s*;'
 )
 
 
 def get_xref_pattern(
-    name: str,
-    *,
-    value: str = r".+",
-    flags: re.RegexFlag = 0,
+    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
 ) -> re.Pattern:
     """
     The returned pattern catches all
-    `script_xref(name="{type}", value="{value}");`
+    `script_xref(name="{name}", value="{value}");`
 
     Arguments:
-        name        script xref type e.g. URL
+        name        script xref name e.g. URL
         value       script tag value (default: at least one char)
         flags       regex flags for compile (default: 0)
 
     The returned `Match`s by this pattern will have group strings
-    .group('type') and .group('value')
+    .group('name') and .group('value')
     Returns
         `re.Pattern` object
     """
     return re.compile(
-        _XREF_TAG_PATTERN.format(type=name, value=value),
+        _XREF_TAG_PATTERN.format(name=name, value=value),
         flags=flags,
     )
 
