@@ -49,6 +49,7 @@
 2010-09-10  Tim Brown <timb@openvas.org>
 2011-07-01  Tim Brown <timb@openvas.org>
 # 20: 74 68 65 6e 74 69 63 61 74 69 6f 6e 20 53 65 72 thentication Ser
+                     229, "Matric Limited Inc.",
                      249, "Varian Vacuum Products",
                      303, "Binar Elektronik AB",
                           38, "CompoNet Repeater",
@@ -100,6 +101,9 @@ Aftandilian, Paul Theriault, Julian Hector, Petr Cerny, Jordi Chancel, and
   - Agobot.FO
 "aktivate",
 "aktivate/cgi-bin",
+Alejandro Cabrera Aldaya, Billy Brumley, Cesar Pereida Garcia and Luis Manuel Alvarez Tapia discovered that the OpenSSL RSA Key generation algorithm has been shown to be vulnerable to a cache timing side
+Alejandro Cabrera Aldaya, Billy Brumley, Cesar Pereida Garcia and Luis Manuel Alvarez Tapia discovered that the OpenSSL RSA Key generation algorithm has been shown to be vulnerable to a cache timing side channel attack. An attacker with sufficient access to mount cache timing attacks during the RSA key generation process could recover the private key.
+Alin Rad Pop discovered that a buffer overflow in the handler for Upack PE binaries may lead to the execution of arbitrary code.
 alis            100018
 All FreeS/WAN 2.x users should upgrade to the latest stable version:
  allowed for informations leaks and potentially privilege escalation
@@ -134,6 +138,7 @@ Ari Kauppi from Synopsys Ltd discovered that the NFSv2 and NFSv3 server implemen
   as demonstrated using the Connection: TE, , Keep-Alive header.");
 - A seperate sblim-sfcb-openssl1 package was added to the SECURITY Module.
   as the original reporter of CVE-2010-1168, and Tim Bunce and Rafal
+Attackers can cause a denial of service (crash) via a crafted EXE file that crashes the UPack unpacker.
   Autoloader '%{pear_phpdir}/CAS/Autoload.php'<semicolon>");
 "bakup\n",
                           base:"cpe:/a:cas:commserver_ua:", expr:"^([0-9.]+)", insloc:location, regService:"smb-login", regPort:0);
@@ -170,6 +175,8 @@ CAs. The two existing TurkTrust root CAs remain active.");
             '=categorie&cp=CONCAT(1,SQL-INJECTION-TEST)&lang=en&rpp=15';
  causes a memor... [Please see the references for more information on the vulnerabilities]");
   certain components in the underlying Application Centric Infrastructure (ACI). An attacker could exploit this
+ certain upack packer files. An attacker could possibly use this issue to
+certain upack packer files. An attacker could possibly use this issue to
 certificates (including ones from CAs) using keys with an exponent e = 3, which
   cfVer = ssh_get_bin_version(full_prog_name:binFile, sock:sock, version_argv:"--version", ver_pattern:"CFEngine.?([C|c]ore).?([0-9.]+)");
 cgi[29] = "fom.cgi";         cve[29] = "CVE-2002-0230";
@@ -180,6 +187,7 @@ cgis[i++] = "/cgi-bin/fom/fom.cgi";
  - chage gives correct information (#216635)
 "chage --inactive <DAYS> <USER> for existing users.';
         check_matches = re.finditer('[^\r\n]*[#]+[ ]*([Tt]hunderbird|[Ss]ea[Mm]onkey|[Hh]ot[Ff]ix|[Ff]irefox|[Pp]ower[Pp]oint( Viewer)?)[ ]*[Cc]heck[^\r\n]*\n', text)
+check_pattern = '^([Aa]ccept|[Cc]ontent)-[Ee]ncoding\\s*:[^\r\n]*(gzip|deflate)';
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt (server auth)
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt server auth
 Christian Loos discovered an information disclosure flaw which may reveal RSS feeds URLs, and thus ticket data.
@@ -315,6 +323,7 @@ delete  = script_get_preference( "Delete hash test Programm after the test", id:
  * Dependency needed for the MozillaThunderbird udpate");
   desc = "Diese Vorgabe muss manuell ueberprueft werden.";
   desc = "Host ist kein Microsoft Windows 10 System.";
+designVer = get_kb_item("Adobe/LiveCycle/Designer");
         detection_english_match = re.search('"(Run\s+Windows\s+Update\s+and\s+(update|install)\s+the\s+listed\s+hotfixes\s+or\s+download\s+and\s+(update|install\s+the)\s+(mentioned\s+)?hotfixes\s+(in|from)(\s+the)?(\s+referenced)?\s+(advisory|avdisory)\.?(\s*(For\s+(details|updates)\s+refer\s+to(\s+the)?\s+reference\s+links?|Please\s+see\s+the\s+references\s+for\s+more\s+information)\.?)?)"', text, re.IGNORECASE)
 "developement\n",
 # |/dev/hda|ST3160021A|UNK|*||/dev/hdc|???|ERR|*||/dev/hdg|Maxtor 6B200P0|UNK|*||/dev/hdh|Maxtor 6Y160P0|38|C|
@@ -359,6 +368,8 @@ extended EAP-SIM/AKA fast re-authentication to allow use with FILS
   feature for Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
   feature is available to ensure that nobody can gain remote access to the modem (via the WAN/DSL interface).
   feature of Cisco Nexus 9000 Series Fabric Switches in ACI mode could allow an unauthenticated,
+ Federico Manuel Bento discovered that the Linux kernel did not properly
+Federico Manuel Bento discovered that the Linux kernel did not properly
 # Fedora Update for tre FEDORA-2016-0a952a3bc0
 # Fedora Update for tre FEDORA-2016-0ff6c3d84b
 # Fedora Update for tre FEDORA-2016-cd09eab674
@@ -599,6 +610,8 @@ Mac OS X SMB2 implmenetation sees Input/output error or Resource
 Maks Polunin and Alberto Garcia discovered independently that
 Maks Polunin and Alberto Garcia discovered independently that using the pserver access method in connection with the repouid patch that Debian uses it is possible to bypass the password and gain access to the repository in question.
  + Malicous SMB1 server can crash libsmbclient, (bso#14366)
+Manuel Alvarez Tapia discovered that OpenSSL incorrectly handled RSA key
+Manuel Caballero discovered a way to bypass the Content Security Policy.
 mark_dead = script_get_preference( "Mark unrechable Hosts as dead (not scanning)", id:5 );
 Mark Shepard discovered a double free in the TCP listener cleanup which could result in denial of service by an authenticated user if Dropbear is running with the '-a' option.
   masked. All LSAT users are advised to unmerge it.
@@ -716,6 +729,7 @@ Prevent sporious 'salt-api' stuck processes when managing SSH minions.
     print("----- Using an link to Mitre/NVD within the script_xref -----\r\n")
   * Prior to this update, the Directory Server (DS) always checked the ACI
   processing malformed files packed with UPack.
+processing Upack files. A remote attacker could send a crafted file and
   processor_arch_id = 'oval:org.mitre.oval:obj:1576';
   product_os_name_id = 'oval:org.mitre.oval:obj:5590';
  prompted to give a password when acessing root owned files. (bsc#1125084)");
@@ -811,9 +825,11 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_copyright("(c) Tim Brown and Portcullis Computer Security Ltd, 2008");
   script_mandatory_keys("AAS/banner");
   script_mandatory_keys("aas/detected");
+  script_mandatory_keys("Adobe/LiveCycle/Designer");
   script_mandatory_keys("Jasig CAS server/Installed");
   script_mandatory_keys("shttp/detected");
   script_mandatory_keys("telnet/huawei/te/detected");
+  script_name("Adobe LiveCycle Designer Untrusted Search Path Vulnerability (Windows)");
   script_name("Adobe LiveCycle Designer Version Detection (Windows)");
   script_name("AIDA64 <= 6.25.5400 SEH Buffer Overflow Vulnerability");
   script_name("Apache James Server Web Admin Public WAN (Internet) / Public LAN Accessible without Authentication");
@@ -866,6 +882,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("WordPress Annonces Plugin 'abspath' Parameter RFI Vulnerability");
   script_name("WordPress Tawk.To Live Chat Plugin < 0.6.0 Broken Access Control Vulnerability");
 	* scripts/CAs.inc:
+  script_tag(name:"affected", value:"Adobe LiveCycle Designer version ES2 9.0.0.20091029.1.612548
   script_tag(name:"affected", value:"Apple Mac OS X Big Sur versions 11.x before
   script_tag(name:"affected", value:"BA SYSTEMS BAS Web on BAS920 devices with
   script_tag(name:"affected", value:"Cisco Nexus 9000 Series ACI Mode Switches when running software versions prior to 11.0(3h) and 11.1(1j)");
@@ -889,6 +906,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)");
   script_tag(name:"insight", value:"A flaw was found in the vhost library in DPDK. Function vhost_user_set_inflight_fd() does not validate `msg->payload.inflight.num_queues`, possibly causing out-of-bounds memory read/write. Any software using DPDK vhost library may crash as a result of this vulnerability.(CVE-2021-3839)
   script_tag(name:"insight", value:"Alan Rad Pop discovered that libsndfile, a library to read and write sampled audio data, is prone to an integer overflow. This causes a heap-based buffer overflow when processing crafted CAF description chunks possibly leading to arbitrary code execution.
+  script_tag(name:"insight", value:"Alejandro Cabrera Aldaya, Billy Brumley, Cesar Pereida Garcia and Luis Manuel Alvarez Tapia
   script_tag(name:"insight", value:"An external control of filename vulnerability in the SD WAN component of Palo
   script_tag(name:"insight", value:"An input validation issue was addressed with improved memory handling. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to read restricted memory.(CVE-2020-10001)");
   script_tag(name:"insight", value:"An integer underflow was discovered in the CAF demuxer of the VLC media player.
@@ -909,6 +927,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Crafted data - channels per frame value - in CAF files enables remote
   script_tag(name:"insight", value:"Customizable Rust parsers for the WebAssembly Text formats WAT and WAST.");
   script_tag(name:"insight", value:"Erik Sjoelund discovered that a race condition in the stap tool shipped by Systemtap, an instrumentation system for Linux 2.6, allows local privilege escalation for members of the stapusr group.
+  script_tag(name:"insight", value:"Federico Manuel Bento discovered that the Linux kernel did not properly
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
   script_tag(name:"insight", value:"In Apache::Session::Browseable before 1.3.6, validity of the X.509 certificate is not checked by default when connecting to remote LDAP backends, because the default configuration of the Net::LDAPS module for Perl is used.
   script_tag(name:"insight", value:"It was discovered that a specially-crafted packet sent to the racoon ipsec key exchange server could cause a tunnel to crash, resulting in a denial of service.
@@ -923,6 +942,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Juraj Somorovsky, Robert Merget, and Nimrod Aviram discovered that certain
   script_tag(name:"insight", value:"libsoup without ca path added, accepted all SSL certificats as trusted. This has been fixed. CVE-2012-2132 has been assigned to this issue.
   script_tag(name:"insight", value:"LSAT insecurely creates temporary files which can lead to symlink attacks
+  script_tag(name:"insight", value:"Manuel Nickschas discovered that Konversation did not properly perform
   script_tag(name:"insight", value:"Meh Chang discovered that Exim incorrectly
   script_tag(name:"insight", value:"Multiple flaws are due to errors in MS-MMS, RTPS, RTPS2, Mount, AMPQ, ACN,
   script_tag(name:"insight", value:"Multiple flaws are due to errors in RELOAD, MPLS Echo, CSN.1, HART/IP and TCP
@@ -972,6 +992,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"solution", value:"Since LSAT is not actively maintained anymore, this package has been
   script_tag(name:"solution", value:"Upgrade to Apple Mac OS X Big Sur version
   script_tag(name:"solution", value:"Upgrade to Frams&qt Fast File EXchange version 20140526 or later.");
+  script_tag(name:"summary", value:"Adobe LiveCycle Designer is prone to untrusted search path vulnerability.");
   script_tag(name:"summary", value:"A security vulnerability in Avenger's News System (ANS) allows
   script_tag(name:"summary", value:"A vulnerability in the Cisco ACI Multi-Site CloudSec encryption
   script_tag(name:"summary", value:"A vulnerability in the IPv6 neighbor discovery (ND) handling of Cisco IOS XE Software on
@@ -1156,6 +1177,7 @@ support was enhanced and fixed, support for HDA sound on Acer Aspire
   Switches in ACI mode that are running releases 14.0 and later if they are part of a Multi-Site
 Switches in Application-Centric Infrastructure (ACI) Mode could allow an unauthenticated, remote attacker to cause
 syntax. As a consequence, removing an ACI failed with a syntax error.
+  'SYS.2.1.A35|Aktive Verwaltung der Wurzelzertifikate|',
   system_root_id = 'oval:org.mitre.oval:obj:219';
 systems with HDA sound needing MSI support were added to the quirks
 	tags. Also removed references to cve.mitre.org. This
