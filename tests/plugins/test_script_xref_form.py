@@ -58,7 +58,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             'script_xref(nammmme: "foo", value:"bar");: does not conform to'
-            ' script_xref(name:"<name>", value:<value>);',
+            ' script_xref(name:"<name>", value:"<value>");',
             results[0].message,
         )
 
@@ -76,6 +76,30 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_missing_parameters(self):
         content = '  script_xref("foo", "bar");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefForm(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_wrong_missing_name_parameter(self):
+        content = '  script_xref("foo", value:"bar");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefForm(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+
+    def test_wrong_missing_value_parameter(self):
+        content = '  script_xref(name:"foo", "bar");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )

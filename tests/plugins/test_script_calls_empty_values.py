@@ -56,6 +56,7 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
         content = (
             '  script_category("");\n'
             '  script_xref(name: "URL",value:"");\n'
+            '  script_xref(name:"URL", value:"");\n'
             '  script_tag(name:"", value:"");\n'
         )
         fake_context = self.create_file_plugin_context(
@@ -65,5 +66,5 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 3)
         self.assertIsInstance(results[0], LinterError)

@@ -46,7 +46,7 @@ class CheckScriptXrefForm(FileContentPlugin):
                     ):
                         yield LinterError(
                             f"{match.group(0)}: does not conform to"
-                            ' script_xref(name:"<name>", value:<value>);',
+                            ' script_xref(name:"<name>", value:"<value>");',
                             file=nasl_file,
                             plugin=self.name,
                         )
