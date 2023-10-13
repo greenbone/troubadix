@@ -178,12 +178,6 @@ _SPECIAL_TAG_PATTERN = (
     r"(?P=quote99)?\s*\)\s*;"
 )
 
-_XREF_TAG_PATTERN = (
-    r'script_xref\(\s*name\s*:\s*(?P<quote>[\'"])(?P<type>{type})'
-    r'(?P=quote)\s*,\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{'
-    r"value})(?P=quote2)?\s*\)\s*;"
-)
-
 
 class SpecialScriptTag(Enum):
     ADD_PREFERENCE = "add_preference"
