@@ -143,7 +143,7 @@ def get_script_tag_pattern(script_tag: ScriptTag) -> re.Pattern:
 
 _XREF_TAG_PATTERN = (
     r'script_xref\(\s*name\s*:\s*(?P<quote>[\'"])(?P<name>{name})(?P=quote)\s*,'
-    r'\s*value\s*:\s*(?P<quote2>[\'"])?(?P<value>{value})(?P=quote2)?\s*\)\s*;'
+    r'\s*value\s*:\s*(?P<quote2>[\'"])(?P<value>{value})(?P=quote2)\s*\)\s*;'
 )
 
 
