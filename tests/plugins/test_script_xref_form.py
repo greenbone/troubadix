@@ -26,7 +26,11 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
     path = Path("some/file.nasl")
 
     def test_ok(self):
-        content = '  script_xref(name: "foo", value:"bar");\n'
+        content = (
+            '  script_xref(name: "foo", value:"bar");\n'
+            '  script_tag(name: "foo"'
+            ", value:'foobar');\n"
+        )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
         )

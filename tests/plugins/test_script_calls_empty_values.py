@@ -33,6 +33,8 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
             '  script_xref(name: "URL", value:"http://example.com");\n'
             '  script_tag(name:"foo", value:"bar");\n'
             '  script_add_preferences("");\n'
+            '  script_tag(name: "foo"'
+            ", value:'foobar');\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
