@@ -29,6 +29,8 @@ class CheckScriptTagFormTestCase(PluginTestCase):
         content = (
             '  script_tag(name: "foo", value:"bar");\n'
             '  script_tag(name: "foo", value:42);\n'
+            '  script_tag(name: "foo"'
+            ", value:'foobar');\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
