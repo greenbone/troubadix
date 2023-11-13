@@ -62,7 +62,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             'script_xref(nammmme: "foo", value:"bar");: does not conform to'
-            ' script_xref(name:"<name>", value:"<value>");',
+            ' script_xref(name:"<name>", value:<value>);',
             results[0].message,
         )
 
