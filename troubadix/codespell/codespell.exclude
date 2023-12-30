@@ -470,7 +470,7 @@ if( found = egrep( string:dir_recv, pattern:"^(c:\\te?mp|/var/spool/cron|/etc/cr
     if( fpr[0] == "[" ) {
 if(http_vuln_check(port:port, url:'/hag/pages/toolbox.htm',pattern:"<title>Advanced Setup", extra_check:make_list("WAN Configuration","ADSL Status"))) {
 if(http_vuln_check(port:port, url:url, pattern:"Current Configuration", extra_check:make_list("System Description","System Software Version","network parms"))) {
-  if(http_vuln_check(port:port, url:url, pattern:"Password found\. Loging in\.\.\.<script>")) {
+  if (http_vuln_check(port: port, url: url, pattern: "Password found\. Loging in\.\.\.<script>")) {
 if (http_vuln_check(port: port, url: url, pattern: "<title>WAN Setup", check_header: TRUE)) {
   if( "Huawei TE" >< banner ) {
   if( ! iif || ! ip || ! ip6 ) {
@@ -501,7 +501,6 @@ if ((res = ispkgvuln(pkg:"app-admin/lsat", unaffected: make_list(), vulnerable: 
   if ((res = isrpmvuln(pkg:"tre", rpm:"tre~0.8.0~18.20140228gitc2f5d13.fc23", rls:"FC23")) != NULL)
   if ((res = isrpmvuln(pkg:"tre", rpm:"tre~0.8.0~18.20140228gitc2f5d13.fc24", rls:"FC24")) != NULL)
   if ((res = isrpmvuln(pkg:"tre", rpm:"tre~0.8.0~18.20140228gitc2f5d13.fc25", rls:"FC25")) != NULL)
-  if( ! res || res !~ "^HTTP/1\.[01] 200" || ( "/themes/" >!< res && "/datas/" >!< res && "/rss.php" >!< res ) )
 if(res =~ "<span>[Ss]arix&[Tt]rade;</span>" && res =~ "<span>Copyright\s*&copy;\s*[0-9]+-[0-9]+,\s*[Pp][Ee][Ll][Cc][Oo]\s*&middot;"
 if( res && "WAN SETTINGS" >< res && "value='3G Interface" >< res && "menu.html" >< res &&
 if( "Server: Boa" >!< banner || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|POE)-") )
@@ -782,6 +781,7 @@ req = string("POST /UE/ProcessForm HTTP/1.1\r\n",
   requests without a To header, when SER has been enabled to use the SL module,
     res = http_get_cache( item:dir + "/ang/index.php", port:port );
   res = http_get_cache( port:port, item:dir + "/fom.cgi" );
+  res = http_get_cache(port: port, item: dir + "/product.comparision.php");
 - Restrict envrionment variable expansion to `ENV`, `ADD`, `COPY`,
   result = "Diese Vorgabe muss manuell ueberprueft werden.";
                 return -1, "The following script_xref of VT '" + str(file) + "' is pointing to Mitre/NVD which is already covered by the script_cve_id. This is a redundant info and the script_xref needs to be removed:" + nvd_mitre_link_tags
@@ -850,7 +850,6 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers SSL Remote Code Execution and Denial of Service Vulnerability");
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Web Management Vulnerabilities (cisco-sa-rv340-cmdinj-rcedos-pY8J3qfy)");
   script_name("Cisco TelePresence TC and TE Software Multiple Security Vulnerabilities");
-  script_name("Comparison Engine Power 'product.comparision.php' SQL Injection Vulnerability");
   script_name("Debian Security Advisory DSA 412-1 (nd)");
   script_name("DICOM Multiple Web Viewer/Server Public WAN (Internet) / Public LAN Accessible");
   script_name("DICOM Service Public WAN (Internet) / Public LAN Accessible");
@@ -1220,6 +1219,7 @@ The fst_get_iface function in drivers/net/wan/farsync.c in the Linux kernel befo
 The GOST ENGINE in OpenSSL before 1.0.0f does not properly handle
  the guest to leak information. It occured while processing transmit(tx)
  * The HART/IP dissectory could go into an infinite loop. wnpa-sec-2013-11 CVE-2013-2476
+      ( "/themes/" >!< res && "/datas/" >!< res && "/rss.php" >!< res ) )
 The previous update of tcpdump already fixed variuous Buffer overflow/overread vulnerabilities [bsc#1153098, bsc#1153332]
 the router to stop forwarding data traffic across Traffic Engineering (TE) tunnels, resulting in a denial of
 The rust regex crate did not properly prevent crafted regular expressions from
@@ -1318,16 +1318,18 @@ url = dir + "/cds.php?interpret=%22><script>alert(document.cookie)</script>&tite
   url = dir + "/fom.cgi?cmd=<script>foo</script>&file=1&keywords=vt-test";
     url = dir +'/includes/wysiwyg/spaw/editor/plugins/imgpopup/img_popup.php?'+
 url = dir + "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt";
+  url = dir + "/product.comparision.php?cat=null%20union%20all%20select%201,concat_ws(0x3a,0x4f,0x70,0x65,0x6e,0x56,0x41,0x53),3,4,5%20from%20daype_users_tb%20--&name=GSM";
 url = dir + "/profiles/index.php?gud=<script>alert(document.cookie)</script>";
 url = dir + "/te<script>alert(document.cookie);</script>st";
   url = dir + "/wp-content/plugins/annonces/includes/lib/photo/uploadPhoto.php?mainPluginFile=/" + files[file] + "&abspath=../../../../../../";
+      url = "/ews/status/infomation.htm";
 URL=http://www.us-cert.gov/cas/techalerts/TA04-041A.html
   url = "/medias/?context=" + payload_encoded;
   url = "/olt/pages/" + uploadfile;
 url = "/statics/html/index.htm";
 url = "/statics/pageChallenge.html";
+      url = "/status/infomation.htm";
   url = string(dir, "/config.xml.sav");
-  url = string(dir, "/product.comparision.php?cat=null%20union%20all%20select%201,concat_ws(0x3a,0x4f,0x70,0x65,0x6e,0x56,0x41,0x53),3,4,5%20from%20daype_users_tb%20--&name=GSM");
   url = string(openVer[2], "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt");
 url = '/UE/advanced.html';
 url = "/UE/welcome_login.html";
