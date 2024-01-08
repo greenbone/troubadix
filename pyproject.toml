@@ -28,7 +28,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pontos = ">=22.7,<24.0"
+pontos = ">=22.7,<25.0"
 codespell = "^2.0.0"
 python-magic = "^0.4.25"
 chardet = ">=4,<6"
