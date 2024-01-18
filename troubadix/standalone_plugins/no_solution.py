@@ -21,7 +21,7 @@ from argparse import ArgumentParser, Namespace
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, Optional, Tuple
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -137,7 +137,7 @@ def check_skip_script(file_content: str) -> bool:
     return False
 
 
-def extract_tags(content: str) -> Optional[Tuple[datetime, datetime, str]]:
+def extract_tags(content: str) -> Optional[Tuple[str, datetime, datetime]]:
     solution_match = SOLUTION_PATTERN.search(content)
     if not solution_match:
         return None
@@ -164,43 +164,57 @@ def extract_tags(content: str) -> Optional[Tuple[datetime, datetime, str]]:
 
     oid = oid_match.group("value")
 
-    return solution_date, creation_date, oid
+    return oid, creation_date, solution_date
+
+
+def get_no_solution_vts(
+    files: Iterable[Path],
+) -> Iterable[Tuple[Path, str, datetime, datetime]]:
+    file_contents = (
+        (file, file.read_text(encoding=CURRENT_ENCODING)) for file in files
+    )
+    return (
+        (file,) + extract_tags(content)
+        for file, content in file_contents
+        if not check_skip_script(content)
+    )
 
 
 def check_no_solutions(
-    files: Iterable[Path], milestones: List[int], snooze_duration: int
-) -> List[Tuple[int, List[Tuple[Path, str, datetime, datetime]]]]:
+    files: Iterable[Tuple[Path, str, datetime, datetime]],
+    milestones: list[int],
+    snooze_duration: int,
+) -> list[Tuple[int, list[Tuple[Path, str, datetime, datetime]]]]:
+    last_milestone = milestones[-1]
+    snooze_duration = timedelta(days=snooze_duration * MONTH_AS_DAYS)
+
     summary = defaultdict(list)
 
-    for nasl_file in files:
-        content = nasl_file.read_text(encoding=CURRENT_ENCODING)
+    for vt in get_no_solution_vts(files):
+        _, _, creation_date, solution_date = vt
 
-        if check_skip_script(content):
+        milestone = next(
+            (
+                milestone
+                for milestone in milestones
+                if solution_date
+                < creation_date + timedelta(days=milestone * MONTH_AS_DAYS)
+                and milestone * MONTH_AS_DAYS
+                <= (datetime.now() - creation_date).days
+            ),
+            None,
+        )
+
+        if not milestone or (
+            milestone == last_milestone
+            and (datetime.now() - solution_date) < snooze_duration
+        ):
             continue
 
-        extracted_tags = extract_tags(content)
-        if not extracted_tags:
-            raise ValueError(f"Could not extract tags from {nasl_file}")
-
-        solution_date, creation_date, oid = extracted_tags
-
-        solution_diff = datetime.now() - solution_date
-
-        if solution_diff < timedelta(days=snooze_duration * MONTH_AS_DAYS):
-            continue
-
-        creation_diff = datetime.now() - creation_date
-
-        for milestone in milestones:
-            milestone_delta = timedelta(days=milestone * MONTH_AS_DAYS)
-            if creation_diff >= milestone_delta:
-                summary[milestone].append(
-                    (nasl_file, oid, solution_date, creation_date)
-                )
-                break
+        summary[milestone].append(vt)
 
     return sorted(
-        [(milestone, vts) for milestone, vts, in summary.items()],
+        ((milestone, vts) for milestone, vts in summary.items()),
         key=lambda tuple: tuple[0],
         reverse=True,
     )
@@ -208,7 +222,7 @@ def check_no_solutions(
 
 def print_info(
     term: ConsoleTerminal,
-    milestones: List[int],
+    milestones: list[int],
     threshold: int,
     snooze: int,
     root: Path,
@@ -224,7 +238,7 @@ def print_info(
 
 def print_report(
     term: ConsoleTerminal,
-    summary: Iterable[Tuple[int, List[Tuple[Path, str, datetime, datetime]]]],
+    summary: Iterable[Tuple[int, list[Tuple[Path, str, datetime, datetime]]]],
     threshold: int,
     root: Path,
     total: int,
@@ -246,7 +260,7 @@ def print_report(
                 f"more than {milestone} month(s)"
             )
 
-        for vt, oid, solution, creation in vts:
+        for vt, oid, creation, solution in vts:
             term.info(str(vt.relative_to(root)))
 
             with term.indent():
