@@ -46,6 +46,6 @@ class DroppedArchitecture(Marker):
                 continue
 
             package.reasons[Reasons.DROPPED_ARCHITECTURE] = Direction.PASSIVE
-            other_package.reasons[
-                Reasons.DROPPED_ARCHITECTURE
-            ] = Direction.ACTIVE
+            other_package.reasons[Reasons.DROPPED_ARCHITECTURE] = (
+                Direction.ACTIVE
+            )
