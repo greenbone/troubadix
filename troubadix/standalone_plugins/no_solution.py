@@ -174,7 +174,7 @@ def get_no_solution_vts(
         (file, file.read_text(encoding=CURRENT_ENCODING)) for file in files
     )
     return (
-        (file,) + extract_tags(content)
+        (file, *extract_tags(content))
         for file, content in file_contents
         if not check_skip_script(content)
     )
