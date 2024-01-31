@@ -205,6 +205,11 @@ def check_no_solutions(
             None,
         )
 
+        if solution_date > creation_date + timedelta(
+            days=last_milestone * MONTH_AS_DAYS
+        ):
+            milestone = last_milestone
+
         if not milestone or (
             milestone == last_milestone
             and (datetime.now() - solution_date) < snooze_duration
@@ -281,7 +286,7 @@ def main():
 
         files = root.rglob("*.nasl")
 
-        milestones = sorted(arguments.milestones, reverse=True)
+        milestones = sorted(arguments.milestones)
 
         term = ConsoleTerminal()
 
