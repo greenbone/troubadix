@@ -80,9 +80,9 @@ class ParseArgsTestCase(unittest.TestCase):
         )
 
         expected_result = (
-            datetime(2022, 8, 5),
-            datetime(2021, 7, 21),
             "1.3.6.1.4.1.25623.1.0.118132",
+            datetime(2021, 7, 21),
+            datetime(2022, 8, 5),
         )
 
         result = extract_tags(content)
@@ -181,13 +181,13 @@ class ParseArgsTestCase(unittest.TestCase):
                     '  script_tag(name:"solution_type", value:"NoneAvailable");'
                     "\n"
                     '  script_tag(name:"solution", value:"No known solution'
-                    " is available as of 05th August, 2022.Information "
+                    " is available as of 05th July, 2022.Information "
                     "regarding this issue will be "
                     'updated once solution details are available.");\n'
                 )
                 file_stream.write(content)
 
-            result = check_no_solutions([test_file], [12, 6, 1], 1)
+            result = check_no_solutions([test_file], [1, 6, 12], 1)
 
             expected_result = [
                 (
@@ -196,8 +196,46 @@ class ParseArgsTestCase(unittest.TestCase):
                         (
                             test_file,
                             "1.3.6.1.4.1.25623.1.0.118132",
-                            datetime(2022, 8, 5),
                             datetime(2021, 7, 21),
+                            datetime(2022, 7, 5),
+                        )
+                    ],
+                )
+            ]
+
+            self.assertEqual(result, expected_result)
+
+    def test_check_no_solutions_overdue_vt(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            test_file = Path(tmp_dir, "file.txt")
+            test_file.touch()
+
+            with open(test_file, "w", encoding="LATIN-1") as file_stream:
+                content = (
+                    '  script_oid("1.3.6.1.4.1.25623.1.0.118132");\n'
+                    '  script_tag(name:"creation_date", value:"2021-07-21 '
+                    '16:20:50 +0200 (Wed, 21 Jul 2021)");\n'
+                    '  script_tag(name:"cvss_base", value:"6.4");\n'
+                    '  script_tag(name:"solution_type", value:"NoneAvailable");'
+                    "\n"
+                    '  script_tag(name:"solution", value:"No known solution'
+                    " is available as of 05th August, 2022.Information "
+                    "regarding this issue will be "
+                    'updated once solution details are available.");\n'
+                )
+                file_stream.write(content)
+
+            result = check_no_solutions([test_file], [1, 6, 12], 1)
+
+            expected_result = [
+                (
+                    12,
+                    [
+                        (
+                            test_file,
+                            "1.3.6.1.4.1.25623.1.0.118132",
+                            datetime(2021, 7, 21),
+                            datetime(2022, 8, 5),
                         )
                     ],
                 )
