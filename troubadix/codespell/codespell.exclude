@@ -829,8 +829,8 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_mandatory_keys("Jasig CAS server/Installed");
   script_mandatory_keys("shttp/detected");
   script_mandatory_keys("telnet/huawei/te/detected");
+  script_name("Adobe LiveCycle Designer Detection (Windows SMB Login)");
   script_name("Adobe LiveCycle Designer Untrusted Search Path Vulnerability (Windows)");
-  script_name("Adobe LiveCycle Designer Version Detection (Windows)");
   script_name("AIDA64 <= 6.25.5400 SEH Buffer Overflow Vulnerability");
   script_name("Apache James Server Web Admin Public WAN (Internet) / Public LAN Accessible without Authentication");
   script_name("Apache JServ Protocol (AJP) Public WAN (Internet) / Public LAN Accessible");
@@ -862,7 +862,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Gentoo Security Advisory GLSA 200703-20 (lsat)");
   script_name("Huawei TE Device Detection (Telnet)");
   script_name("Huawei TE Devices Multiple Vulnerabilities (huawei-sa-20180630-01-sccp, huawei-sa-20180630-01-cops)");
-  script_name("ICS Generic HART DTM Version Detection (Windows)");
+  script_name("ICS Generic HART DTM Detection (Windows SMB Login)");
   script_name("Kaseya VAS ConntectWise ManagedITSync RCE Vulnerability");
   script_name("Kaseya VAS PowerShell Execution Vulnerability");
   script_name("Kubernetes Dashboard Public WAN (Internet) / Public LAN Accessible");
@@ -875,7 +875,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Sphinx Search Server Public WAN (Internet) / Public LAN Accessible");
   script_name("Swarmpit Web UI Public WAN (Internet) / Public LAN Accessible");
   script_name("WAN Emulator Remote Command Execution Vulnerabilities");
-  script_name("Wiesemann & Theis GmbH W&T OPC Server Version Detection (Windows)");
+  script_name("Wiesemann & Theis GmbH W&T OPC Server Detection (Windows SMB Login)");
   script_name("Wireshark Steam IHS Discovery/CoAP Dissector DoS Vulnerabilities (Mac OS X)");
   script_name("Wireshark Steam IHS Discovery/CoAP Dissector DoS Vulnerabilities (Windows)");
   script_name("WordPress Annonces Plugin 'abspath' Parameter RFI Vulnerability");
@@ -1350,6 +1350,7 @@ using the 'Connection: TE, , Keep-Alive' header.");
             variable_get_set = re.search('[^#](\n[ ]*#+ ?([Vv]ulnerable [Uu][Rr][Ll]|[GgSs]et|[Ss]end[s]?( (the |a )?[Rr]equest)? [Aa]nd [Rr]eceive|[Ff]etch|[Oo]pen ([Tt]he )?(UDP|udp|TCP|tcp)? ?[Ss]ocket|[Cc]los(e|ing) ([Tt]he )?(FTP|Telnet|SSH)? ?[Ss]ocket|[Cc]heck|[Ii]terate|[Tt]ry|[Cc]onfirm|[Cc]onstruct|[Bb]uild|[Gg]rep|[Rr]egister|[Cc]onstant|[Ww]indows|[Ll]inux]|[Tt]raversal_files\(\) [Ff]unction [Rr]eturns [Dd]ictionary|[Ww]ait|[Ss]leep)[s]?(ing)?(ed)?(ation)?[^\r\n]*)', text)
         variable_get_set = re.search('[^#](\n[ ]*#+ ?([Vv]ulnerable [Uu][Rr][Ll]|[GgSs]et|[Ss]end[s]?( (the |a )?[Rr]equest)? [Aa]nd [Rr]eceive|[Ff]etch|[Oo]pen ([Tt]he )?(UDP|udp|TCP|tcp)? ?[Ss]ocket|[Cc]los(e|ing) ([Tt]he )?(FTP|Telnet|SSH)? ?[Ss]ocket|[Cc]heck|[Ii]terate|[Tt]ry|[Cc]onfirm|[Cc]onstruct|[Bb]uild|[Gg]rep|[Rr]egister|[Cc]onstant|[Ww]indows|[Ll]inux]|[Tt]raversal_files\(\) [Ff]unction [Rr]eturns [Dd]ictionary|[Ww]ait|[Ss]leep)[s]?(ing)?(ed)?(ation)?[^\r\n]*)', text)
 Vegard Nossum reported an issue with the UNIX socket garbage collector. Local users can consume all of LOWMEM and decrease system performance by overloading the system with inflight sockets.
+  vers[1] = ereg_replace( pattern:"No UTF-8\. Trying to change locale\.\s*Locale sucessfully changed\.\s*", string:vers[1], replace:"" );
   vers = eregmatch( pattern:"mandr(iva|ake).*inux ?(enterprise server)? release ([0-9.]+)", string:rls, icase:TRUE );
   vers = eregmatch(pattern: ">Rev\. ([0-9.]+)([^<]+Bu(li|il)d\. ([0-9]+))?", string: res);
       version = eregmatch( pattern:"Powered by.*ANG(</a>)? ([0-9.]+)", string:res );
