@@ -700,13 +700,13 @@ test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.4.3)", "pytest-
 
 [[package]]
 name = "pontos"
-version = "24.1.2"
+version = "24.2.1"
 description = "Common utilities and tools maintained by Greenbone Networks"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "pontos-24.1.2-py3-none-any.whl", hash = "sha256:a10465fc112f4941cefc94ccf59ec4586476edbf956262a323a6a6dd91d6f367"},
-    {file = "pontos-24.1.2.tar.gz", hash = "sha256:982d2bb99f152a2f95920d41531dc417057b646e2c868a6ace0e83484c97dc69"},
+    {file = "pontos-24.2.1-py3-none-any.whl", hash = "sha256:386b117ea30651b95018339d112337ff7f69c183b72c6437549718dc63fb1bdf"},
+    {file = "pontos-24.2.1.tar.gz", hash = "sha256:c42c2c3c53ae11491e72952b1a7835203f8e23dff6b14d03245714afd1e1f1b4"},
 ]
 
 [package.dependencies]
@@ -717,6 +717,7 @@ packaging = ">=20.3"
 python-dateutil = ">=2.8.2"
 rich = ">=12.4.4"
 semver = ">=2.13"
+shtab = ">=1.6.5"
 tomlkit = ">=0.5.11"
 
 [[package]]
