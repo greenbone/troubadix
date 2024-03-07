@@ -37,19 +37,18 @@ class CheckTrailingSpacesTabs(FilePlugin):
                     to find special tags
 
         """
-        spaces_tabs_matches = re.finditer(
-            r"[\t ]+$", self.context.file_content, flags=re.MULTILINE
-        )
+        for line_number, line in enumerate(
+            self.context.file_content.splitlines(), start=1
+        ):
+            match = re.search(r"[\t ]+$", line)
 
-        if spaces_tabs_matches:
-            for spaces_tabs_match in spaces_tabs_matches:
-                if (
-                    spaces_tabs_match is not None
-                    and spaces_tabs_match.group(0) is not None
-                ):
-                    yield LinterError(
-                        "The VT has one or more trailing spaces and/or tabs!",
-                        file=self.context.nasl_file,
-                        plugin=self.name,
-                    )
-                    return
+            if not match:
+                continue
+
+            yield LinterError(
+                "The VT has one or more trailing spaces "
+                f"and/or tabs in line {line_number}!",
+                file=self.context.nasl_file,
+                plugin=self.name,
+            )
+            return
