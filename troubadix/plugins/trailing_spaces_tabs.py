@@ -20,6 +20,8 @@ from typing import Iterator
 
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
+PATTERN = re.compile(r"[\t ]+$")
+
 
 class CheckTrailingSpacesTabs(FilePlugin):
     name = "check_trailing_spaces_tabs"
@@ -40,9 +42,7 @@ class CheckTrailingSpacesTabs(FilePlugin):
         for line_number, line in enumerate(
             self.context.file_content.splitlines(), start=1
         ):
-            match = re.search(r"[\t ]+$", line)
-
-            if not match:
+            if not PATTERN.search(line):
                 continue
 
             yield LinterError(
