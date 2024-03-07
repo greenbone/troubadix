@@ -55,9 +55,9 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT has one or more trailing spaces and/or tabs!",
+            "The VT has one or more trailing spaces and/or tabs in line 3!",
             results[0].message,
         )
