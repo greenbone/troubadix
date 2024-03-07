@@ -51,4 +51,3 @@ class CheckTrailingSpacesTabs(FilePlugin):
                 file=self.context.nasl_file,
                 plugin=self.name,
             )
-            return
