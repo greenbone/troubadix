@@ -46,7 +46,8 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             '  script_tag(name:"solution_type", value:"VendorFix"); \t \n'
-            '  script_tag(name:"solution", value:"meh");\n\t '
+            '  script_tag(name:"solution", value:"meh");\n'
+            "  \t "
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -60,4 +61,8 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
         self.assertEqual(
             "The VT has one or more trailing spaces and/or tabs in line 3!",
             results[0].message,
+        )
+        self.assertEqual(
+            "The VT has one or more trailing spaces and/or tabs in line 5!",
+            results[1].message,
         )
