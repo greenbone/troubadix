@@ -163,3 +163,75 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
 
             new_content = nasl_file.read_text(encoding=CURRENT_ENCODING)
             self.assertNotEqual(content, new_content)
+
+    def test_modification_date_wrong_format(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name: "last_modification", value: "2021-07-19 '
+            '12:32:02 +0000 (Mon, 19 Jul 2021x");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(1, len(results))
+        self.assertEqual(
+            "False or incorrectly formatted modification_date.",
+            results[0].message,
+        )
+
+    def test_modification_date_differing_dates(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name: "last_modification", value: "3021-07-19 '
+            '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(1, len(results))
+        self.assertEqual(
+            "The modification_date consists of two different dates.",
+            results[0].message,
+        )
+
+    def test_modification_date_wrong_day(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"summary", value:"Foo Bar.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name: "last_modification", value: "2021-07-19 '
+            '12:32:02 +0000 (Tue, 19 Jul 2021)");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(1, len(results))
+        self.assertEqual(
+            "Wrong day of week. Please change it from 'Tue' to 'Mon'.",
+            results[0].message,
+        )

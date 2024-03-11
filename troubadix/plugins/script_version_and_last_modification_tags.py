@@ -129,6 +129,41 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
                 file=nasl_file,
                 plugin=self.name,
             )
+        else:
+            date_str = match_last_modified.group("value")
+            format_left = "%Y-%m-%d %H:%M:%S %z "
+            format_right = "(%a, %d %b %Y)"
+            try:
+                date_left = datetime.datetime.strptime(
+                    date_str[:26], format_left
+                )
+                date_right = datetime.datetime.strptime(
+                    date_str[26:], format_right
+                )
+                week_day_parsed = date_right.strftime("%a")
+            except ValueError:
+                yield LinterError(
+                    "False or incorrectly formatted modification_date.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                return
+            week_day_str = date_str[27:30]
+            # Wed, 29 Nov 2017
+            if date_left.date() != date_right.date():
+                yield LinterError(
+                    "The modification_date consists of two different dates.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+            # Check correct weekday
+            elif week_day_str != week_day_parsed:
+                yield LinterError(
+                    f"Wrong day of week. Please change it from '{week_day_str}"
+                    f"' to '{week_day_parsed}'.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
     def fix(self) -> Iterator[LinterResult]:
         if not self.fix_last_modification_and_version:
