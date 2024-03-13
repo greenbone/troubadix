@@ -94,6 +94,17 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
                 file=nasl_file,
                 plugin=self.name,
             )
+        else:
+            version_str = version_match.group("value")
+            format_version = "%Y-%m-%dT%H:%M:%S%z"
+            try:
+                datetime.datetime.strptime(version_str, format_version)
+            except ValueError:
+                yield LinterError(
+                    "False or incorrectly formatted version.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
         match_last_modification_any_value = re.search(
             pattern=LAST_MODIFICATION_ANY_VALUE_PATTERN,
