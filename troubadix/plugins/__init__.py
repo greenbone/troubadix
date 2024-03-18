@@ -44,6 +44,7 @@ from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
 from .newlines import CheckNewlines
+from .overlong_description_lines import CheckOverlongDescriptionLines
 from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .qod import CheckQod
@@ -132,6 +133,7 @@ _FILE_PLUGINS = [
     CheckVTFilePermissions,
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
+    CheckOverlongDescriptionLines,
 ]
 
 # plugins checking all files
