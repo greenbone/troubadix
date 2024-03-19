@@ -167,6 +167,7 @@ class CheckHttpLinksInTags(FilePlugin):
             "https:// ",
             "such as 'http://:80'",
             "<http://localhost/moodle/admin/>",
+            "https://username:password@proxy:8080",
         ]
 
         return any(
