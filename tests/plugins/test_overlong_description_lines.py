@@ -18,7 +18,7 @@
 from pathlib import Path
 
 from tests.plugins import PluginTestCase
-from troubadix.plugin import LinterError
+from troubadix.plugin import LinterError, LinterWarning
 from troubadix.plugins.overlong_description_lines import (
     CheckOverlongDescriptionLines,
 )
@@ -68,7 +68,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterError)
+        self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "Line 3 is too long with 102 characters. Max 100",
             results[0].message,
