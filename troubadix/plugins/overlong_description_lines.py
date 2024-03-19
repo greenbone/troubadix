@@ -36,7 +36,12 @@ class CheckOverlongDescriptionLines(LineContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        description_starts = ["if(description)", "if (description)"]
+        description_starts = [
+            "if(description)",
+            "if (description)",
+            "if( description )",
+            "if(description )",
+        ]
         description_end = "exit(0);"
         found_start = False
         found_end = False
@@ -83,5 +88,4 @@ class CheckOverlongDescriptionLines(LineContentPlugin):
                 file=nasl_file,
             )
         if found_start and found_end:
-            for result in results:
-                yield result
+            yield from results
