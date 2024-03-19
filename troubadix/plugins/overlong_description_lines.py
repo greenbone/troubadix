@@ -18,7 +18,12 @@
 from pathlib import Path
 from typing import Iterable, Iterator
 
-from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
+from troubadix.plugin import (
+    LineContentPlugin,
+    LinterError,
+    LinterResult,
+    LinterWarning,
+)
 
 
 class CheckOverlongDescriptionLines(LineContentPlugin):
@@ -66,7 +71,7 @@ class CheckOverlongDescriptionLines(LineContentPlugin):
                         continue
 
                     results.append(
-                        LinterError(
+                        LinterWarning(
                             f"Line {i} is too long"
                             f" with {len(line)} characters. "
                             f"Max 100",
