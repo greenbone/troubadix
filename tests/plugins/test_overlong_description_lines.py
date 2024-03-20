@@ -41,7 +41,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content.splitlines()
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckOverlongDescriptionLines(fake_context)
 
@@ -61,7 +61,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "}\n"
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content.splitlines()
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckOverlongDescriptionLines(fake_context)
 
@@ -85,7 +85,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "}\n"
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content.splitlines()
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckOverlongDescriptionLines(fake_context)
 
@@ -109,7 +109,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "}\n"
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, lines=content.splitlines()
+            nasl_file=nasl_file, file_content=content
         )
         plugin = CheckOverlongDescriptionLines(fake_context)
 
