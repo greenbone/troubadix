@@ -29,10 +29,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("2021-07-19T12:32:02+0000");\n'
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
@@ -58,10 +54,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("2021 07-19T12:32:02+0000");\n'
             '  script_tag(name: "last_modification", value: "2021_07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
@@ -88,10 +80,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_old_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("$Revision: 12345 $");\n'
             '  script_tag(name: "last_modification", value: "$Date: 2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021) $");\n'
@@ -140,10 +128,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_version_wrong_format(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("TTTTT07-19T12:32:02+0000");\n'
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
@@ -190,10 +174,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_modification_date_wrong_format(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("2021-07-19T12:32:02+0000");\n'
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021x");\n'
@@ -214,10 +194,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_modification_date_differing_dates(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("2021-07-19T12:32:02+0000");\n'
             '  script_tag(name: "last_modification", value: "3021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
@@ -238,10 +214,6 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
     def test_modification_date_wrong_day(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_tag(name:"summary", value:"Foo Bar.");\n'
-            '  script_tag(name:"solution_type", value:"VendorFix");\n'
-            '  script_tag(name:"solution", value:"meh");\n'
             '  script_version("2021-07-19T12:32:02+0000");\n'
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Tue, 19 Jul 2021)");\n'
