@@ -41,12 +41,8 @@ class CheckOverlongDescriptionLines(FileContentPlugin):
     def check_content(
         self, nasl_file: Path, file_content: str
     ) -> Iterator[LinterResult]:
-        start_match: re.Match | None = DESCRIPTION_START_PATTERN.search(
-            file_content
-        )
-        end_match: re.Match | None = DESCRIPTION_END_PATTERN.search(
-            file_content
-        )
+        start_match = DESCRIPTION_START_PATTERN.search(file_content)
+        end_match = DESCRIPTION_END_PATTERN.search(file_content)
 
         if not start_match:
             yield LinterError(
