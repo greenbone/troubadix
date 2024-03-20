@@ -15,82 +15,68 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from pathlib import Path
-from typing import Iterable, Iterator
+from typing import Iterator
 
 from troubadix.plugin import (
-    LineContentPlugin,
+    FileContentPlugin,
     LinterError,
     LinterResult,
     LinterWarning,
 )
 
+DESCRIPTION_START_PATTERN = re.compile(r"if\s*\(\s*description\s*\)")
+DESCRIPTION_END_PATTERN = re.compile(r"exit\(0\)")
+IGNORE_TAG = "script_name"
 
-class CheckOverlongDescriptionLines(LineContentPlugin):
+
+class CheckOverlongDescriptionLines(FileContentPlugin):
     """This step checks if a VT contains lines in the description block
     that are longer than 100 characters.
     """
 
     name = "check_overlong_description_lines"
 
-    def check_lines(
-        self,
-        nasl_file: Path,
-        lines: Iterable[str],
+    def check_content(
+        self, nasl_file: Path, file_content: str
     ) -> Iterator[LinterResult]:
-        if nasl_file.suffix == ".inc":
-            return
+        start_match: re.Match | None = DESCRIPTION_START_PATTERN.search(
+            file_content
+        )
+        end_match: re.Match | None = DESCRIPTION_END_PATTERN.search(
+            file_content
+        )
 
-        description_starts = [
-            "if(description)",
-            "if (description)",
-            "if( description )",
-            "if(description )",
-        ]
-        description_end = "exit(0);"
-        found_start = False
-        found_end = False
-        ignore_tags = ["script_name"]
-        results = []
-        for i, line in enumerate(lines, 1):
-
-            if not found_start and any(
-                description_start in line
-                for description_start in description_starts
-            ):
-                found_start = True
-                continue
-
-            if not found_end and description_end in line:
-                found_end = True
-                break
-
-            if found_start:
-                if len(line) > 100:
-                    if any(ignore_tag in line for ignore_tag in ignore_tags):
-                        continue
-
-                    results.append(
-                        LinterWarning(
-                            f"Line {i} is too long"
-                            f" with {len(line)} characters. "
-                            f"Max 100",
-                            plugin=self.name,
-                            file=nasl_file,
-                            line=i,
-                        )
-                    )
-        if not found_start:
+        if not start_match:
             yield LinterError(
                 "Check failed. Unable to find start of description block",
                 plugin=self.name,
                 file=nasl_file,
             )
-        if not found_end:
+        if not end_match:
             yield LinterError(
                 "Check failed. Unable to find end of description block",
                 plugin=self.name,
                 file=nasl_file,
             )
-        if found_start and found_end:
-            yield from results
+
+        if start_match and end_match:
+            line_offset = file_content[: start_match.start()].count("\n")
+            description_block = file_content[
+                start_match.start() : end_match.end()
+            ]
+            lines = description_block.splitlines()
+            for i, line in enumerate(lines, 1 + line_offset):
+                if len(line) > 100:
+                    if IGNORE_TAG in line:
+                        continue
+
+                    yield LinterWarning(
+                        f"Line {i} is too long"
+                        f" with {len(line)} characters. "
+                        f"Max 100",
+                        plugin=self.name,
+                        file=nasl_file,
+                        line=i,
+                    )
