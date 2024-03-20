@@ -36,6 +36,8 @@ from troubadix.plugin import (
     LinterResult,
 )
 
+VERSION_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
 
 class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
     name = "check_script_version_and_last_modification_tags"
@@ -96,9 +98,8 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             )
         else:
             version_str = version_match.group("value")
-            format_version = "%Y-%m-%dT%H:%M:%S%z"
             try:
-                datetime.datetime.strptime(version_str, format_version)
+                datetime.datetime.strptime(version_str, VERSION_FORMAT)
             except ValueError:
                 yield LinterError(
                     "False or incorrectly formatted version.",
@@ -188,7 +189,7 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
 
         # get that version date formatted correctly:
         # "2021-03-24T10:08:26+0000"
-        correctly_formatted_version = f"{now:%Y-%m-%dT%H:%M:%S%z}"
+        correctly_formatted_version = f"{now:{VERSION_FORMAT}}"
 
         file_content = file_content.replace(
             self.old_script_version,
