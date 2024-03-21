@@ -67,5 +67,5 @@ jobs:
       - name: Upload coverage to codecov.io
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ inputs.token }}
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
