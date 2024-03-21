@@ -28,7 +28,10 @@ from troubadix.plugin import (
 
 DESCRIPTION_START_PATTERN = re.compile(r"if\s*\(\s*description\s*\)")
 DESCRIPTION_END_PATTERN = re.compile(r"exit\(0\)")
-IGNORE_TAG = "script_name"
+IGNORE_TAGS = [
+    "script_name",
+    "script_xref",
+]
 
 
 class CheckOverlongDescriptionLines(FileContentPlugin):
@@ -65,7 +68,7 @@ class CheckOverlongDescriptionLines(FileContentPlugin):
         lines = description_block.splitlines()
         for i, line in enumerate(lines, 1 + line_offset):
             if len(line) > 100:
-                if IGNORE_TAG in line:
+                if any(tag in line for tag in IGNORE_TAGS):
                     continue
 
                 yield LinterWarning(

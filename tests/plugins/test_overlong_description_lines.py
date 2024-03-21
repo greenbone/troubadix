@@ -35,6 +35,8 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             '  script_version("2021-09-02T14:01:33+0000");\n'
             '  script_name("name is ignored xxxxxxxxxxxxxxxxxxxxxxxxx'
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
+            '  script_xref(name:"xref as well", value:"xxxxxxxxxxxxxx'
+            'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
             "  exit(0);\n"
             "}\n"
             "ignored line that is not part of description"
