@@ -41,38 +41,38 @@ class CheckOverlongDescriptionLines(FileContentPlugin):
     def check_content(
         self, nasl_file: Path, file_content: str
     ) -> Iterator[LinterResult]:
-        start_match = DESCRIPTION_START_PATTERN.search(file_content)
-        end_match = DESCRIPTION_END_PATTERN.search(file_content)
+        if nasl_file.suffix == ".inc":
+            return
 
-        if not start_match:
+        if not (start_match := DESCRIPTION_START_PATTERN.search(file_content)):
             yield LinterError(
                 "Check failed. Unable to find start of description block",
                 plugin=self.name,
                 file=nasl_file,
             )
-        if not end_match:
+        if not (end_match := DESCRIPTION_END_PATTERN.search(file_content)):
             yield LinterError(
                 "Check failed. Unable to find end of description block",
                 plugin=self.name,
                 file=nasl_file,
             )
 
-        if start_match and end_match:
-            line_offset = file_content[: start_match.start()].count("\n")
-            description_block = file_content[
-                start_match.start() : end_match.end()
-            ]
-            lines = description_block.splitlines()
-            for i, line in enumerate(lines, 1 + line_offset):
-                if len(line) > 100:
-                    if IGNORE_TAG in line:
-                        continue
+        if not start_match or not end_match:
+            return
 
-                    yield LinterWarning(
-                        f"Line {i} is too long"
-                        f" with {len(line)} characters. "
-                        f"Max 100",
-                        plugin=self.name,
-                        file=nasl_file,
-                        line=i,
-                    )
+        line_offset = file_content[: start_match.start()].count("\n")
+        description_block = file_content[start_match.start() : end_match.end()]
+        lines = description_block.splitlines()
+        for i, line in enumerate(lines, 1 + line_offset):
+            if len(line) > 100:
+                if IGNORE_TAG in line:
+                    continue
+
+                yield LinterWarning(
+                    f"Line {i} is too long"
+                    f" with {len(line)} characters. "
+                    f"Max 100",
+                    plugin=self.name,
+                    file=nasl_file,
+                    line=i,
+                )
