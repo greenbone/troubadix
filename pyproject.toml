@@ -84,6 +84,7 @@ troubadix-no-solution = 'troubadix.standalone_plugins.no_solution:main'
 troubadix-changed-packages = 'troubadix.standalone_plugins.changed_packages.changed_packages:main'
 troubadix-changed-cves = 'troubadix.standalone_plugins.changed_cves:main'
 troubadix-allowed-rev-diff = 'troubadix.standalone_plugins.allowed_rev_diff:main'
+troubadix-file-extensions = 'troubadix.standalone_plugins.file_extensions:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
