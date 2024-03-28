@@ -23,13 +23,23 @@ class TestFileExtensions(unittest.TestCase):
 
     def test_fail(self):
         with tempfile.TemporaryDirectory() as tmpdir:
+            # foo.nasl.nasl
             fp1 = Path(tempfile.mkstemp(dir=tmpdir, suffix=".nasl.nasl")[1])
+            # foo.inc.inc
             fp2 = Path(tempfile.mkstemp(dir=tmpdir, suffix=".inc.inc")[1])
+            # foo.nasl.inc
             fp3 = Path(tempfile.mkstemp(dir=tmpdir, suffix=".nasl.inc")[1])
+            # foo.inc.nasl
             fp4 = Path(tempfile.mkstemp(dir=tmpdir, suffix=".inc.nasl")[1])
             child_dir = tempfile.mkdtemp(dir=tmpdir)
+            # foo.bar
             fp5 = Path(tempfile.mkstemp(dir=child_dir, suffix=".bar")[1])
-            expected = {fp1, fp2, fp3, fp4, fp5}
+            # .foo
+            fp6 = Path(tempfile.mkstemp(dir=child_dir, prefix=".")[1])
+            # foo
+            fp7 = Path(tempfile.mkstemp(dir=child_dir)[1])
+
+            expected = {fp1, fp2, fp3, fp4, fp5, fp6, fp7}
             parsed_args = parse_args(["-d", tmpdir])
             actual = check_extensions(parsed_args)
             self.assertTrue(actual)
