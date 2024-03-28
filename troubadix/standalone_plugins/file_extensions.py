@@ -4,28 +4,39 @@
 import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Iterable, List
+from typing import List
+
+exclusions: List[str] = [
+    "/common/bad_rsa_ssh_host_keys.txt",
+    "/common/bad_dsa_ssh_host_keys.txt",
+    "/22.04/bad_rsa_ssh_host_keys.txt",
+    "/22.04/bad_dsa_ssh_host_keys.txt",
+    "/21.04/bad_rsa_ssh_host_keys.txt",
+    "/21.04/bad_dsa_ssh_host_keys.txt",
+    "/22.04/.git-keep",
+    "/21.04/.git-keep",
+    "/README.md",
+]
 
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
-    if directory_path.exists() and not directory_path.is_dir():
+    if not directory_path.is_dir():
         raise ValueError(f"{string} is not a directory.")
     return directory_path
 
 
-def parse_args(args: Iterable[str]) -> Namespace:
+def parse_args() -> Namespace:
     parser = ArgumentParser(
-        description="Check for changed oid",
+        description="Check for files with unwanted file extensions",
     )
     parser.add_argument(
-        "-d",
-        "--dirs",
+        dest="dirs",
         nargs="+",
         type=directory_type,
         help="List of directories that should be linted",
     )
-    return parser.parse_args(args=args)
+    return parser.parse_args()
 
 
 def check_extensions(args: Namespace) -> List[Path]:
@@ -36,6 +47,10 @@ def check_extensions(args: Namespace) -> List[Path]:
     for directory in dirs:
         for item in directory.rglob("*"):
             if item.is_file():
+                if any(
+                    str(item).endswith(exclusion) for exclusion in exclusions
+                ):
+                    continue
                 # foo.inc.inc / foo.nasl.nasl
                 if (
                     item.suffixes.count(".inc") > 1
@@ -58,8 +73,7 @@ def check_extensions(args: Namespace) -> List[Path]:
 
 
 def main() -> int:
-    args = sys.argv[1:]
-    if unwanted_files := check_extensions(parse_args(args)):
+    if unwanted_files := check_extensions(parse_args()):
         print("Files with unwanted file extension were found:")
         for file in unwanted_files:
             print(file)

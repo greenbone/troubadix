@@ -1,12 +1,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
-
+import sys
 import tempfile
 import unittest
+from argparse import Namespace
+from io import StringIO
 from pathlib import Path
+from unittest.mock import patch
 
 from troubadix.standalone_plugins.file_extensions import (
     check_extensions,
+    main,
     parse_args,
 )
 
@@ -18,7 +22,7 @@ class TestFileExtensions(unittest.TestCase):
             tempfile.mkstemp(dir=tmpdir, suffix=".inc")
             child_dir = tempfile.mkdtemp(dir=tmpdir)
             tempfile.mkstemp(dir=child_dir, suffix=".nasl")
-            parsed_args = parse_args(["-d", tmpdir])
+            parsed_args = Namespace(dirs=[Path(tmpdir)])
             self.assertFalse(check_extensions(parsed_args))
 
     def test_fail(self):
@@ -40,10 +44,33 @@ class TestFileExtensions(unittest.TestCase):
             fp7 = Path(tempfile.mkstemp(dir=child_dir)[1])
 
             expected = {fp1, fp2, fp3, fp4, fp5, fp6, fp7}
-            parsed_args = parse_args(["-d", tmpdir])
+            parsed_args = Namespace(dirs=[Path(tmpdir)])
             actual = check_extensions(parsed_args)
             self.assertTrue(actual)
             self.assertEqual(set(actual), expected)
+
+    def test_parse_args_ok(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            test_args = ["prog", tmpdir]
+            with patch.object(sys, "argv", test_args):
+                args = parse_args()
+                self.assertTrue(args)
+                self.assertEqual(args.dirs, [Path(tmpdir)])
+
+    @patch("sys.stderr", new_callable=StringIO)
+    def test_parse_args_fail(self, mock_stderr):
+        test_args = ["prog", "not_real_dir"]
+        with patch.object(sys, "argv", test_args):
+            with self.assertRaises(SystemExit):
+                parse_args()
+            self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
+
+    def test_main(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tempfile.mkstemp(dir=tmpdir, suffix=".nasl")
+            test_args = ["prog", tmpdir]
+            with patch.object(sys, "argv", test_args):
+                self.assertFalse(main())
 
 
 if __name__ == "__main__":
