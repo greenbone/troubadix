@@ -28,7 +28,7 @@ from troubadix.standalone_plugins.common import git
 
 def file_type(string: str) -> Path:
     file_path = Path(string)
-    if not file_path.exists() and not file_path.is_file():
+    if not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
     return file_path
 
