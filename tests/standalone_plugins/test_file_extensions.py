@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
-import io
 import os
 import sys
 import tempfile
@@ -99,7 +98,7 @@ class TestFileExtensions(unittest.TestCase):
                 self.assertFalse(main())
 
     def test_main_fail(self):
-        with io.StringIO() as buffer, redirect_stdout(buffer):
+        with StringIO() as buffer, redirect_stdout(buffer):
             with tempfile.TemporaryDirectory() as tmpdir:
                 tempfile.mkstemp(dir=tmpdir)
                 test_args = ["prog", tmpdir]
