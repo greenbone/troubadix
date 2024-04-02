@@ -9,10 +9,6 @@ from typing import List
 exclusions: List[str] = [
     "/common/bad_rsa_ssh_host_keys.txt",
     "/common/bad_dsa_ssh_host_keys.txt",
-    "/22.04/bad_rsa_ssh_host_keys.txt",
-    "/22.04/bad_dsa_ssh_host_keys.txt",
-    "/21.04/bad_rsa_ssh_host_keys.txt",
-    "/21.04/bad_dsa_ssh_host_keys.txt",
     "/22.04/.git-keep",
     "/21.04/.git-keep",
     "/README.md",
