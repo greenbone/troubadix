@@ -29,7 +29,7 @@ class TestFileExtensions(unittest.TestCase):
             tempfile.mkstemp(dir=child_dir, suffix=".nasl")
             tempfile.mkstemp(dir=child_dir, suffix=".inc")
 
-            parsed_args = Namespace(dir=Path(tmpdir))
+            parsed_args = Namespace(dir=Path(tmpdir), ignore_file=None)
             self.assertFalse(check_extensions(parsed_args))
 
     def test_exclusions(self):
@@ -47,8 +47,25 @@ class TestFileExtensions(unittest.TestCase):
             with open(os.path.join(tmpdir, "README.md"), "w", encoding="utf-8"):
                 pass
 
-            parsed_args = Namespace(dir=Path(tmpdir))
-            self.assertFalse(check_extensions(parsed_args))
+            with open(
+                os.path.join(tmpdir, "file_extension.ignore"),
+                "a",
+                encoding="utf-8",
+            ) as f:
+                exclusions = [
+                    "README.md\n",
+                    "common/bad_rsa_ssh_host_keys.txt\n",
+                    "#ignore comment line",
+                ]
+                f.writelines(exclusions)
+
+            parsed_args = Namespace(
+                dir=Path(tmpdir),
+                ignore_file=Path(tmpdir, "file_extension.ignore"),
+            )
+            actual = check_extensions(parsed_args)
+            self.assertTrue(actual)
+            self.assertEqual(actual, [Path(tmpdir, "file_extension.ignore")])
 
     def test_fail(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -69,26 +86,49 @@ class TestFileExtensions(unittest.TestCase):
             fp7 = Path(tempfile.mkstemp(dir=child_dir)[1])
 
             expected = {fp1, fp2, fp3, fp4, fp5, fp6, fp7}
-            parsed_args = Namespace(dir=Path(tmpdir))
+            parsed_args = Namespace(dir=Path(tmpdir), ignore_file=None)
             actual = check_extensions(parsed_args)
             self.assertTrue(actual)
             self.assertEqual(set(actual), expected)
 
     def test_parse_args_ok(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            test_args = ["prog", tmpdir]
+            with open(
+                os.path.join(tmpdir, "file_extensions.ignore"),
+                "w",
+                encoding="utf-8",
+            ):
+                pass
+            test_args = [
+                "prog",
+                tmpdir,
+                "--ignore-file",
+                f"{tmpdir}/file_extensions.ignore",
+            ]
             with patch.object(sys, "argv", test_args):
                 args = parse_args()
                 self.assertTrue(args)
                 self.assertEqual(args.dir, Path(tmpdir))
+                self.assertEqual(
+                    args.ignore_file, Path(tmpdir, "file_extensions.ignore")
+                )
 
     @patch("sys.stderr", new_callable=StringIO)
-    def test_parse_args_fail(self, mock_stderr):
+    def test_parse_args_no_dir(self, mock_stderr):
         test_args = ["prog", "not_real_dir"]
         with patch.object(sys, "argv", test_args):
             with self.assertRaises(SystemExit):
                 parse_args()
             self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
+
+    @patch("sys.stderr", new_callable=StringIO)
+    def test_parse_args_no_file(self, mock_stderr):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            test_args = ["prog", tmpdir, "--ignore-file", "not_real_file"]
+            with patch.object(sys, "argv", test_args):
+                with self.assertRaises(SystemExit):
+                    parse_args()
+                self.assertRegex(mock_stderr.getvalue(), "invalid file_type")
 
     def test_main_ok(self):
         with tempfile.TemporaryDirectory() as tmpdir:

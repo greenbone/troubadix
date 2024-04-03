@@ -6,19 +6,17 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import List
 
-exclusions: List[Path] = [
-    # relative paths from vulnerability-tests/nasl/
-    Path("common/bad_rsa_ssh_host_keys.txt"),
-    Path("common/bad_dsa_ssh_host_keys.txt"),
-    Path("22.04/.git-keep"),
-    Path("21.04/.git-keep"),
-    Path("README.md"),
-]
-
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
     if not directory_path.is_dir():
+        raise ValueError(f"{string} is not a directory.")
+    return directory_path
+
+
+def file_type(string: str) -> Path:
+    directory_path = Path(string)
+    if not directory_path.is_file():
         raise ValueError(f"{string} is not a directory.")
     return directory_path
 
@@ -32,13 +30,28 @@ def parse_args() -> Namespace:
         type=directory_type,
         help="directory that should be linted",
     )
+    parser.add_argument(
+        "--ignore-file", type=file_type, help="path to ignore file"
+    )
     return parser.parse_args()
+
+
+def create_exclusions(args: Namespace) -> List[Path]:
+    exclusions = []
+    if args.ignore_file is not None:
+        with open(args.ignore_file, "r", encoding="utf-8") as file:
+            for line in file:
+                if line.startswith("#"):
+                    continue
+                exclusions.append(Path(line.strip()))
+    return exclusions
 
 
 def check_extensions(args: Namespace) -> List[Path]:
     """This script checks for any non .nasl or .inc file."""
     unwanted_files: List[Path] = []
     allowed_extensions = [".inc", ".nasl"]
+    exclusions = create_exclusions(args)
     for item in args.dir.rglob("*"):
         if item.is_file():
             relative_path = item.relative_to(args.dir)
