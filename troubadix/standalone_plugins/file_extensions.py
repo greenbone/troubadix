@@ -6,12 +6,13 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import List
 
-exclusions: List[str] = [
-    "/common/bad_rsa_ssh_host_keys.txt",
-    "/common/bad_dsa_ssh_host_keys.txt",
-    "/22.04/.git-keep",
-    "/21.04/.git-keep",
-    "/README.md",
+exclusions: List[Path] = [
+    # relative paths from vulnerability-tests/nasl/
+    Path("common/bad_rsa_ssh_host_keys.txt"),
+    Path("common/bad_dsa_ssh_host_keys.txt"),
+    Path("22.04/.git-keep"),
+    Path("21.04/.git-keep"),
+    Path("README.md"),
 ]
 
 
@@ -40,7 +41,9 @@ def check_extensions(args: Namespace) -> List[Path]:
     allowed_extensions = [".inc", ".nasl"]
     for item in args.dir.rglob("*"):
         if item.is_file():
-            if any(str(item).endswith(exclusion) for exclusion in exclusions):
+            relative_path = item.relative_to(args.dir)
+
+            if relative_path in exclusions:
                 continue
             # foo.inc.inc / foo.nasl.nasl
             if (
