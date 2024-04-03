@@ -29,7 +29,7 @@ class TestFileExtensions(unittest.TestCase):
             tempfile.mkstemp(dir=child_dir, suffix=".nasl")
             tempfile.mkstemp(dir=child_dir, suffix=".inc")
 
-            parsed_args = Namespace(dirs=[Path(tmpdir)])
+            parsed_args = Namespace(dir=Path(tmpdir))
             self.assertFalse(check_extensions(parsed_args))
 
     def test_exclusions(self):
@@ -47,7 +47,7 @@ class TestFileExtensions(unittest.TestCase):
             with open(os.path.join(tmpdir, "README.md"), "w", encoding="utf-8"):
                 pass
 
-            parsed_args = Namespace(dirs=[Path(tmpdir)])
+            parsed_args = Namespace(dir=Path(tmpdir))
             self.assertFalse(check_extensions(parsed_args))
 
     def test_fail(self):
@@ -69,7 +69,7 @@ class TestFileExtensions(unittest.TestCase):
             fp7 = Path(tempfile.mkstemp(dir=child_dir)[1])
 
             expected = {fp1, fp2, fp3, fp4, fp5, fp6, fp7}
-            parsed_args = Namespace(dirs=[Path(tmpdir)])
+            parsed_args = Namespace(dir=Path(tmpdir))
             actual = check_extensions(parsed_args)
             self.assertTrue(actual)
             self.assertEqual(set(actual), expected)
@@ -80,7 +80,7 @@ class TestFileExtensions(unittest.TestCase):
             with patch.object(sys, "argv", test_args):
                 args = parse_args()
                 self.assertTrue(args)
-                self.assertEqual(args.dirs, [Path(tmpdir)])
+                self.assertEqual(args.dir, Path(tmpdir))
 
     @patch("sys.stderr", new_callable=StringIO)
     def test_parse_args_fail(self, mock_stderr):
