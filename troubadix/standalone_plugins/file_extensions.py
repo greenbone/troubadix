@@ -27,43 +27,37 @@ def parse_args() -> Namespace:
         description="Check for files with unwanted file extensions",
     )
     parser.add_argument(
-        dest="dirs",
-        nargs="+",
+        "dir",
         type=directory_type,
-        help="List of directories that should be linted",
+        help="directory that should be linted",
     )
     return parser.parse_args()
 
 
 def check_extensions(args: Namespace) -> List[Path]:
     """This script checks for any non .nasl or .inc file."""
-    dirs = args.dirs
     unwanted_files: List[Path] = []
     allowed_extensions = [".inc", ".nasl"]
-    for directory in dirs:
-        for item in directory.rglob("*"):
-            if item.is_file():
-                if any(
-                    str(item).endswith(exclusion) for exclusion in exclusions
-                ):
-                    continue
-                # foo.inc.inc / foo.nasl.nasl
-                if (
-                    item.suffixes.count(".inc") > 1
-                    or item.suffixes.count(".nasl") > 1
-                ):
-                    unwanted_files.append(item)
+    for item in args.dir.rglob("*"):
+        if item.is_file():
+            if any(str(item).endswith(exclusion) for exclusion in exclusions):
+                continue
+            # foo.inc.inc / foo.nasl.nasl
+            if (
+                item.suffixes.count(".inc") > 1
+                or item.suffixes.count(".nasl") > 1
+            ):
+                unwanted_files.append(item)
 
-                # foo.inc.nasl / foo.nasl.inc
-                if all(
-                    extension in item.suffixes
-                    for extension in allowed_extensions
-                ):
-                    unwanted_files.append(item)
+            # foo.inc.nasl / foo.nasl.inc
+            if all(
+                extension in item.suffixes for extension in allowed_extensions
+            ):
+                unwanted_files.append(item)
 
-                # foo / foo.bar
-                if item.suffix not in allowed_extensions:
-                    unwanted_files.append(item)
+            # foo / foo.bar
+            if item.suffix not in allowed_extensions:
+                unwanted_files.append(item)
 
     return unwanted_files
 
