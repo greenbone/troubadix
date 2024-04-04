@@ -58,17 +58,10 @@ def check_extensions(args: Namespace) -> List[Path]:
 
             if relative_path in exclusions:
                 continue
-            # foo.inc.inc / foo.nasl.nasl
-            if (
-                item.suffixes.count(".inc") > 1
-                or item.suffixes.count(".nasl") > 1
-            ):
-                unwanted_files.append(item)
 
+            # foo.inc.inc / foo.nasl.nasl
             # foo.inc.nasl / foo.nasl.inc
-            if all(
-                extension in item.suffixes for extension in allowed_extensions
-            ):
+            if len(item.suffixes) > 1:
                 unwanted_files.append(item)
 
             # foo / foo.bar
@@ -80,7 +73,10 @@ def check_extensions(args: Namespace) -> List[Path]:
 
 def main() -> int:
     if unwanted_files := check_extensions(parse_args()):
-        print("Files with unwanted file extension were found:")
+        print(
+            f"{len(unwanted_files)} "
+            "Files with unwanted file extension were found:"
+        )
         for file in unwanted_files:
             print(file)
         return 1
