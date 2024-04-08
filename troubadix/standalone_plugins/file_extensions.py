@@ -16,10 +16,10 @@ def directory_type(string: str) -> Path:
 
 
 def file_type(string: str) -> Path:
-    directory_path = Path(string)
-    if not directory_path.is_file():
+    file_path = Path(string)
+    if not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
-    return directory_path
+    return file_path
 
 
 def parse_args() -> Namespace:
