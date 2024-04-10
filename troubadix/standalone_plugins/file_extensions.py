@@ -37,14 +37,14 @@ def parse_args() -> Namespace:
     return parser.parse_args()
 
 
-def create_exclusions(ignore_file: Path) -> List[Path]:
+def create_exclusions(ignore_file: Path) -> set[Path]:
     if ignore_file is None:
-        return []
+        return set()
 
     with open(ignore_file, "r", encoding="utf-8") as file:
-        return [
+        return {
             Path(line.strip()) for line in file if not re.match(r"^\s*#", line)
-        ]
+        }
 
 
 def check_extensions(args: Namespace) -> List[Path]:
