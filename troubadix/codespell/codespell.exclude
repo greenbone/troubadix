@@ -237,6 +237,7 @@ CPE = "cpe:/a:mapp:webtrekk:";
       cpe = "cpe:/a:mitre:ovaldi";
 CPE = "cpe:/a:netsparker:wass";
 CPE = "cpe:/a:tawk:tawk.to_live_chat";
+    cpe =~ "^cpe:/o:hp:laserjet_pro_420[1-3](cdn|dn|dw|dne|dwe)_firmware") {
  CPU' could have occured because a retry loop continually finds the same
 crafted IFF ILBM file. NOTE: some of these details are obtained from
       crapData = string("ALLO ", crap(length: 25000),"\r\n");
@@ -1033,6 +1034,8 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_xref(name:"URL", value:"https://wordpress.org/plugins/annonces/");
   script_xref(name:"URL", value:"https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Reaktion/CERT-Bund/CERT-Bund-Reports/HowTo/Offene-Portmapper-Dienste/Offene-Portmapper-Dienste.html");
   script_xref(name:"URL", value:"https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Cyber-Sicherheitslage/Reaktion/CERT-Bund/CERT-Bund-Reports/HowTo/Offene-Sphinx-Server/Offene-Sphinx-Server_node.html");
+  script_xref(name:"URL", value:"https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2024/2024-223608-1032.pdf");
+  script_xref(name:"URL", value:"https://www.bsi.bund.de/SharedDocs/Cybersicherheitswarnungen/DE/2024/2024-231856-1032");
   script_xref(name:"URL", value:"https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03111/BSI-TR-03111_V-2-0_pdf.pdf");
   script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/GLPI_9.4.0_stored_XSS.pdf");
   script_xref(name:"URL", value:"https://www.synacktiv.com/ressources/advisories/GLPI_9.4.0_unsafe_reset.pdf");
@@ -1214,6 +1217,7 @@ The CVE-2015-8631 issue was discovered by Simo Sorce of Red Hat.");
  the deamon (bsc#1128937).
 the default ACI (Access Control Instructions) could be read by an anonymous
   The default catalina.policy in the JULI logging component did not
+  The default security policy in the JULI logging component did not restrict
   The exec module in Kamailio, Opensips and probably every other SER fork passes the received SIP
 - The ext2 filesystem got reenabled and supported to allow support for
 The fst_get_iface function in drivers/net/wan/farsync.c in the Linux kernel before 3.11.7 does not properly initialize a certain data structure, which allows local users to obtain sensitive information from kernel memory by leveraging the CAP_NET_ADMIN capability for an SIOCWANDEV ioctl call.(CVE-2014-1444)
