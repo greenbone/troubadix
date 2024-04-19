@@ -18,6 +18,7 @@
 from typing import Iterable, List
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
+from troubadix.plugins.spaces_in_filename import CheckSpacesInFilename
 
 from .badwords import CheckBadwords
 from .copyright_text import CheckCopyrightText
@@ -134,6 +135,7 @@ _FILE_PLUGINS = [
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
     CheckOverlongDescriptionLines,
+    CheckSpacesInFilename,
 ]
 
 # plugins checking all files
