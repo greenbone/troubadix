@@ -25,5 +25,5 @@ class TestSpacesInFilename(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             results[0].message,
-            f"The VT {nasl_file} contains spaces in the filename",
+            f"The VT {nasl_file} contains whitespace in the filename",
         )
