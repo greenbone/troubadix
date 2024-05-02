@@ -18,6 +18,7 @@
 from typing import Iterable, List
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
+from troubadix.plugins.multiple_re_parameters import CheckMultipleReParameters
 from troubadix.plugins.spaces_in_filename import CheckSpacesInFilename
 
 from .badwords import CheckBadwords
@@ -136,6 +137,7 @@ _FILE_PLUGINS = [
     CheckWrongSetGetKBCalls,
     CheckOverlongDescriptionLines,
     CheckSpacesInFilename,
+    CheckMultipleReParameters,
 ]
 
 # plugins checking all files
