@@ -16,7 +16,7 @@ class CheckDuplicateReTestCase(PluginTestCase):
             '  script_mandatory_keys("bar/foo");\n'
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
+            nasl_file=nasl_file, lines=content.splitlines()
         )
         plugin = CheckMultipleReParameters(fake_context)
 
@@ -29,9 +29,10 @@ class CheckDuplicateReTestCase(PluginTestCase):
         content = (
             '  script_mandatory_keys("foo/bar", re:"foo=1.2.3");\n'
             '  script_mandatory_keys("bar/foo", re:"bar=3.2.1");\n'
+            '#  script_mandatory_keys("bar/foo", re:"bar=3.2.1");\n'
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
+            nasl_file=nasl_file, lines=content.splitlines()
         )
         plugin = CheckMultipleReParameters(fake_context)
 

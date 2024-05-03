@@ -3,32 +3,47 @@
 
 import re
 from pathlib import Path
-from typing import Iterator
+from typing import Iterable, Iterator
 
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.helper.patterns import (
+    SpecialScriptTag,
+    get_special_script_tag_pattern,
+)
+from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
-pattern = re.compile(r"script_mandatory_keys.*re\s*:")
+RE_PATTERN = re.compile(r"re\s*:")
+
+MANDATORY_KEYS_PATTERN = get_special_script_tag_pattern(
+    SpecialScriptTag.MANDATORY_KEYS
+)
 
 
-class CheckMultipleReParameters(FileContentPlugin):
+class CheckMultipleReParameters(LineContentPlugin):
     """This step checks if a VT
     has multiple mandatory_script_key re parameters
     """
 
     name = "check_multiple_re_parameters"
 
-    def check_content(
-        self, nasl_file: Path, file_content: str
+    def check_lines(
+        self, nasl_file: Path, lines: Iterable[str]
     ) -> Iterator[LinterResult]:
 
         if self.context.nasl_file.suffix == ".inc":
             return
 
-        matches = pattern.findall(file_content)
-        if len(matches) > 1:
+        re_pattern_count = 0
+        for line in lines:
+            if not (match := MANDATORY_KEYS_PATTERN.search(line)):
+                continue
+            if re.match(r"^\s*#", line):
+                continue
+            re_pattern_count += len(RE_PATTERN.findall(match.group("value")))
+
+        if re_pattern_count >= 2:
             yield LinterError(
                 f"The re parameter of script_mandatory_keys can only "
-                f"be defined 1 time, but was found {len(matches)} times",
+                f"be defined 1 time, but was found {re_pattern_count} times",
                 file=nasl_file,
                 plugin=self.name,
             )
