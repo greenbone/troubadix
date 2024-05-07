@@ -31,6 +31,7 @@ DESCRIPTION_END_PATTERN = re.compile(r"exit\(0\)")
 IGNORE_TAGS = [
     "script_name",
     "script_xref",
+    "script_add_preference",
 ]
 
 
