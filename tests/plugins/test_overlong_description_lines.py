@@ -37,6 +37,10 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
             '  script_xref(name:"xref as well", value:"xxxxxxxxxxxxxx'
             'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
+            '  script_add_preference(name:"script_add_preference as well '
+            'xxxxxxxxxxxxxxxxxxxxxxx", type:"checkbox", value:"no", id:1);\n'
+            '  script_add_preference(type:"password", value:"", id:2, name:"'
+            'Another variant of script_add_preference xxxxxxxxxxxxxxxxxxxx");\n'
             "  exit(0);\n"
             "}\n"
             "ignored line that is not part of description"
