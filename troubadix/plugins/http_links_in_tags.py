@@ -168,6 +168,7 @@ class CheckHttpLinksInTags(FilePlugin):
             "such as 'http://:80'",
             "<http://localhost/moodle/admin/>",
             "https://username:password@proxy:8080",
+            "sun.net.www.http.KeepAliveCache",
         ]
 
         return any(
