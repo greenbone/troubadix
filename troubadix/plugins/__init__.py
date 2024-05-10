@@ -20,6 +20,9 @@ from typing import Iterable, List
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
 from troubadix.plugins.multiple_re_parameters import CheckMultipleReParameters
 from troubadix.plugins.spaces_in_filename import CheckSpacesInFilename
+from troubadix.plugins.variable_redefinition_in_foreach import (
+    CheckVariableRedefinitionInForeach,
+)
 
 from .badwords import CheckBadwords
 from .copyright_text import CheckCopyrightText
@@ -138,6 +141,7 @@ _FILE_PLUGINS = [
     CheckOverlongDescriptionLines,
     CheckSpacesInFilename,
     CheckMultipleReParameters,
+    CheckVariableRedefinitionInForeach,
 ]
 
 # plugins checking all files
