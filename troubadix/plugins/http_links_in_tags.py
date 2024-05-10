@@ -169,6 +169,7 @@ class CheckHttpLinksInTags(FilePlugin):
             "<http://localhost/moodle/admin/>",
             "https://username:password@proxy:8080",
             "sun.net.www.http.KeepAliveCache",
+            "www.foo.com",
         ]
 
         return any(
