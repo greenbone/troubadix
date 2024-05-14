@@ -33,9 +33,16 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
             'port = get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
+            '  script_tag(name:"summary", value:"Foo Bar. '
+            'https://www.website.de/demo");\n'
         )
+        fake_plugin_config = {
+            "exclusions": ["Foo Bar. https://www.website.de/demo"]
+        }
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
+            nasl_file=path,
+            file_content=content,
+            plugin_config=fake_plugin_config,
         )
         plugin = CheckHttpLinksInTags(fake_context)
 
@@ -106,66 +113,3 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
             'value:"https://nvd.nist.gov/vuln/detail/CVE-1234");',
             results[0].message,
         )
-
-    def test_http_link_in_tags_ok(self):
-        testcases = [
-            "01. The payloads try to open a connection to www.google.com",
-            "02. The script attempts to connect to www.google.com",
-            "03. to retrieve a web page from www.google.com",
-            "04. Subject: commonName=www.paypal.com",
-            "05. Terms of use at https://www.verisign.com/rpa",
-            "06. example.com",
-            "07. example.org",
-            "08. www.exam",
-            "09. sampling the resolution of a name (www.google.com)",
-            "10. once with 'www.' and once without",
-            "11. wget http://www.javaop.com/~ron/tmp/nc",
-            "12. as www.windowsupdate.com. (BZ#506016)",
-            "13. located at http://sambarserver/session/pagecount.",
-            "14. http://rest.modx.com",
-            "15. ftp:// ",
-            "16. ftp://'",
-            "17. ftp://)",
-            "18. ftp.c",
-            "19. ftp.exe",
-            "20. using special ftp://",
-            "21. running ftp.",
-            "22. ftp. The vulnerability",
-            "23. 'http://' protocol",
-            "24. handle <a href='http://...'> properly",
-            "25. Switch to git+https://",
-            "26. wget https://compromised-domain.com/important-file",
-            "27. the https:// scheme",
-            "28. https://www.phishingtarget.com@evil.com",
-            "29. 'http://'",
-            "30. 'https://'",
-            "31. distributions on ftp.proftpd.org have all been",
-            "32. information from www.mutt.org:",
-            "33. According to www.tcpdump.org:",
-            "34. According to www.kde.org:",
-            "35. From the www.info-zip.org site:",
-            # pylint: disable=line-too-long
-            "36.  (www.isg.rhul.ac.uk) for discovering this flaw and Adam Langley and",
-            "37. Sorry about having to reissue this one -- I pulled it from ftp.gnu.org not",
-            "38. http://internal-host$1 is still insecure",
-            "39. from online sources (ftp://, http:// etc.).",
-            "40. this and https:// and that.",
-            "41. such as 'http://:80'",
-            "42. <http://localhost/moodle/admin/>",
-        ]
-
-        for testcase in testcases:
-            self.assertTrue(CheckHttpLinksInTags.check_to_continue(testcase))
-
-    def test_http_link_in_tags_not_ok(self):
-        testcases = [
-            "The payloads try to open a connection to www.bing.com",
-            "examplephishing.org",
-            "located at http://sambdadancinglessions/session/pagecount.",
-            "fdp:// ",
-            "Switch to svn+https://",
-            "greenbone.net",
-        ]
-
-        for testcase in testcases:
-            self.assertFalse(CheckHttpLinksInTags.check_to_continue(testcase))

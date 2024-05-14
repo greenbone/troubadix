@@ -20,7 +20,6 @@ import signal
 from collections.abc import Iterable
 from multiprocessing import Pool
 from pathlib import Path
-
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,
@@ -53,6 +52,7 @@ class Runner:
         included_plugins: Iterable[str] | None = None,
         fix: bool = False,
         ignore_warnings: bool = False,
+        plugins_config: dict,
     ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
@@ -60,6 +60,7 @@ class Runner:
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
 
+        self.plugins_config = plugins_config
         self._reporter = reporter
         self._n_jobs = n_jobs
         self._root = root
@@ -91,6 +92,8 @@ class Runner:
         )
 
         for plugin_class in self.plugins.file_plugins:
+            plugin_config = self.plugins_config.get(plugin_class.name, {})
+            context.plugin_config = plugin_config
             plugin = plugin_class(context)
 
             self._check(plugin, results)

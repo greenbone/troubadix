@@ -17,7 +17,7 @@
 
 import re
 from itertools import chain
-from typing import AnyStr, Iterator
+from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag, get_common_tag_patterns
 from troubadix.helper.patterns import get_special_script_tag_pattern
@@ -64,7 +64,9 @@ class CheckHttpLinksInTags(FilePlugin):
                 if http_link_matches:
                     for http_link_match in http_link_matches:
                         if http_link_match:
-                            if self.check_to_continue(http_link_match.group(0)):
+                            if self.check_to_continue(
+                                http_link_match.group(0),
+                            ):
                                 continue
 
                             yield LinterError(
@@ -116,61 +118,8 @@ class CheckHttpLinksInTags(FilePlugin):
                         plugin=self.name,
                     )
 
-    @staticmethod
-    def check_to_continue(http_link_match_group: AnyStr) -> bool:
-        # When adding new entries to this list, please also add a testcase to
-        # tests/plugins/test_http_links_in_tags.py -> test_http_link_in_tags_ok
-        exclusions = [
-            "The payloads try to open a connection to www.google.com",
-            "The script attempts to connect to www.google.com",
-            "to retrieve a web page from www.google.com",
-            "Terms of use at https://www.verisign.com/rpa",
-            "Subject: commonName=www.paypal.com",
-            "example.com",
-            "example.org",
-            "www.exam",
-            "sampling the resolution of a name (www.google.com)",
-            "once with 'www.' and once without",
-            "wget http://www.javaop.com/~ron/tmp/nc",
-            "as www.windowsupdate.com. (BZ#506016)",
-            "located at http://sambarserver/session/pagecount.",
-            "http://rest.modx.com",
-            "ftp:// ",
-            "ftp://'",
-            "ftp://)",
-            "ftp.c",
-            "ftp.exe",
-            "using special ftp://",
-            "running ftp.",
-            "ftp. The vulnerability",
-            "'http://' protocol",
-            "handle <a href='http://...'> properly",
-            "Switch to git+https://",
-            "wget https://compromised-domain.com/important-file",
-            "the https:// scheme",
-            "https://www.phishingtarget.com@evil.com",
-            "distributions on ftp.proftpd.org have all been",
-            "information from www.mutt.org:",
-            "According to www.tcpdump.org:",
-            "According to www.kde.org:",
-            "From the www.info-zip.org site:",
-            # pylint: disable=line-too-long
-            " (www.isg.rhul.ac.uk) for discovering this flaw and Adam Langley and",
-            "Sorry about having to reissue this one -- I pulled it from ftp.gnu.org not",
-            # e.g.:
-            # Since gedit supports opening files via 'http://' URLs
-            "'http://'",
-            "'https://'",
-            "http://internal-host$1 is still insecure",
-            "http:// ",
-            "https:// ",
-            "such as 'http://:80'",
-            "<http://localhost/moodle/admin/>",
-            "https://username:password@proxy:8080",
-            "sun.net.www.http.KeepAliveCache",
-            "www.foo.com",
-        ]
-
+    def check_to_continue(self, http_link_match_group: str) -> bool:
+        exclusions = self.context.plugin_config.get("exclusions", [])
         return any(
             exclusion in http_link_match_group for exclusion in exclusions
         )

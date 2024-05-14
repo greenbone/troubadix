@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import tempfile
 import unittest
 from multiprocessing import cpu_count
 from pathlib import Path
@@ -134,9 +135,9 @@ class TestArgparsing(unittest.TestCase):
         self.assertEqual(parsed_args.n_jobs, cpu_count() // 2)
 
     def test_parse_root(self):
-        parsed_args = parse_args(self.terminal, ["--root", "foo"])
-
-        self.assertEqual(parsed_args.root, Path("foo"))
+        with tempfile.TemporaryDirectory() as tmpdir:
+            parsed_args = parse_args(self.terminal, ["--root", tmpdir])
+            self.assertEqual(parsed_args.root, Path(tmpdir))
 
     def test_parse_fix(self):
         parsed_args = parse_args(self.terminal, ["--fix"])
@@ -149,6 +150,9 @@ class TestArgparsing(unittest.TestCase):
         self.assertTrue(parsed_args.ignore_warnings)
 
     def test_parse_log_file_statistic(self):
-        parsed_args = parse_args(self.terminal, ["--log-file-statistic", "foo"])
-
-        self.assertEqual(parsed_args.log_file_statistic, Path("foo"))
+        with tempfile.NamedTemporaryFile() as tmpfile:
+            print(tmpfile.name)
+            parsed_args = parse_args(
+                self.terminal, ["--log-file-statistic", str(tmpfile.name)]
+            )
+            self.assertEqual(parsed_args.log_file_statistic, Path(tmpfile.name))

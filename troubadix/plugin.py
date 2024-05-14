@@ -58,6 +58,7 @@ class FilePluginContext:
 
         self._file_content: str | None = None
         self._lines: list[str] | None = None
+        self.plugin_config = {}
 
     @property
     def file_content(self) -> str:
