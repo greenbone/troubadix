@@ -28,14 +28,14 @@ from pontos.terminal import Terminal
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
-    if directory_path.exists() and not directory_path.is_dir():
+    if not directory_path.is_dir():
         raise ValueError(f"{string} is not a directory.")
     return directory_path
 
 
 def file_type(string: str) -> Path:
     file_path = Path(string)
-    if file_path.exists() and not file_path.is_file():
+    if not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
     return file_path
 
@@ -228,6 +228,16 @@ def parse_args(
         "--no-statistic",
         action="store_true",
         help="Don't print the statistic",
+    )
+
+    parser.add_argument(
+        "--plugins-config-file",
+        type=file_type,
+        help=(
+            "Specify the path to the file that contains additional "
+            "configuration for the plugins, such as file and "
+            "other types of exceptions."
+        ),
     )
 
     if not args:
