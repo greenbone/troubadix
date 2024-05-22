@@ -101,6 +101,8 @@ class Reporter:
                     report = self._report_ok
                 elif isinstance(plugin_result, LinterResult):
                     report = self._report_ok
+                else:
+                    raise TypeError("Invalid type in plugin_result")
 
                 if self._verbose > 0:
                     report(plugin_result.message)
