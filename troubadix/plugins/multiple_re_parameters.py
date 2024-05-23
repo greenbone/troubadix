@@ -40,10 +40,10 @@ class CheckMultipleReParameters(LineContentPlugin):
                 continue
             re_pattern_count += len(RE_PATTERN.findall(match.group("value")))
 
-        if re_pattern_count >= 2:
+        if re_pattern_count > 1:
             yield LinterError(
                 f"The re parameter of script_mandatory_keys can only "
-                f"be defined 1 time, but was found {re_pattern_count} times",
+                f"be defined once, but was found {re_pattern_count} times",
                 file=nasl_file,
                 plugin=self.name,
             )
