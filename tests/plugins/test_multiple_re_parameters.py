@@ -42,6 +42,6 @@ class CheckDuplicateReTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "The re parameter of script_mandatory_keys can only "
-            "be defined 1 time, but was found 2 times",
+            "be defined once, but was found 2 times",
             results[0].message,
         )
