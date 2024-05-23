@@ -7,8 +7,10 @@ from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 
-foreach_pattern = re.compile(r"foreach\s+(\w+)\s*\((.+)\)")
-make_list_pattern = re.compile(r"^(?:make_list|make_list_unique)\((.+)\)$")
+FOREACH_PATTERN = re.compile(r"foreach\s+(?P<ident>\w+)\s*\((?P<iter>.+)\)")
+MAKE_LIST_PATTERN = re.compile(
+    r"^(?:make_list|make_list_unique)\((?P<params>.+)\)$"
+)
 
 
 class CheckVariableRedefinitionInForeach(FileContentPlugin):
@@ -27,15 +29,15 @@ class CheckVariableRedefinitionInForeach(FileContentPlugin):
         foreach foo(make_list_unique(bar,foo)){}
         """
 
-        for foreach_match in foreach_pattern.finditer(file_content):
-            identifier = foreach_match.group(1)
-            iterator = foreach_match.group(2).replace(" ", "")
+        for foreach_match in FOREACH_PATTERN.finditer(file_content):
+            identifier = foreach_match.group("ident")
+            iterator = foreach_match.group("iter").replace(" ", "")
 
-            if make_list_match := make_list_pattern.fullmatch(iterator):
-                make_list_params = make_list_match.group(1).split(",")
+            if make_list_match := MAKE_LIST_PATTERN.fullmatch(iterator):
+                make_list_params = make_list_match.group("params").split(",")
                 if identifier in make_list_params:
                     yield LinterWarning(
-                        f"The variable '{foreach_match.group(1)}' "
+                        f"The variable '{identifier}' "
                         f"is used as identifier and\n"
                         f"as part of the iterator in the"
                         f" same foreach loop\n'{foreach_match.group()}'",
@@ -45,7 +47,7 @@ class CheckVariableRedefinitionInForeach(FileContentPlugin):
             else:
                 if identifier == iterator:
                     yield LinterWarning(
-                        f"The variable '{foreach_match.group(1)}' is redefined "
+                        f"The variable '{identifier}' is redefined "
                         f"by being the identifier\nand the iterator in the"
                         f" same foreach loop '{foreach_match.group()}'",
                         plugin=self.name,
