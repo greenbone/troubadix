@@ -13,7 +13,9 @@ class CheckDuplicateReTestCase(PluginTestCase):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
             '  script_mandatory_keys("foo/bar", re:"foo=1.2.3");\n'
+            '#  script_mandatory_keys("foo/bar", re:"foo=1.2.3");\n'
             '  script_mandatory_keys("bar/foo");\n'
+            "  line with no script_mandatory_keys pattern\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, lines=content.splitlines()
