@@ -520,7 +520,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         path = Path("some/file.nasl")
         content = (
             '  script_oid("1.3.6.1.4.1.25623.1.1.11.2256");\n'
-            '  script_family("RedHat Local Security Checks");\n'
+            '  script_family("Red Hat Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -550,7 +550,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         self.assertEqual(
             (
                 "script_oid() is using an OID that is reserved for "
-                "RedHat '1.3.6.1.4.1.25623.1.1.11.2256'"
+                "Red Hat '1.3.6.1.4.1.25623.1.1.11.2256'"
             ),
             results[0].message,
         )

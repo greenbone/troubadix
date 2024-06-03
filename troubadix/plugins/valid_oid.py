@@ -265,9 +265,9 @@ class CheckValidOID(FileContentPlugin):
                 return
 
             elif vendor_number == "11":
-                if family != f"RedHat {family_template}":
+                if family != f"Red Hat {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} RedHat "
+                        f"script_oid() {is_using_reserved} Red Hat "
                         f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
