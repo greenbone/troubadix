@@ -41,6 +41,9 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             'xxxxxxxxxxxxxxxxxxxxxxx", type:"checkbox", value:"no", id:1);\n'
             '  script_add_preference(type:"password", value:"", id:2, name:"'
             'Another variant of script_add_preference xxxxxxxxxxxxxxxxxxxx");\n'
+            'script_tag(name:"vuldetect", value:'
+            '"Checks if a vulnerable version is present on the target host."'
+            ");\n"
             "  exit(0);\n"
             "}\n"
             "ignored line that is not part of description"
