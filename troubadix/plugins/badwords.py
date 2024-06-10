@@ -39,6 +39,7 @@ DEFAULT_BADWORDS = [
 _IGNORE_FILES = [
     "gb_openvas",
     "gb_gsa_",
+    "gb_greenbone_gsa_",
     "http_func.inc",
     "misc_func.inc",
     "OpenVAS_detect.nasl",
