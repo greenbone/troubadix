@@ -816,6 +816,7 @@ RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remot
  - S8168728, CVE-2016-5548: DSA signing improvments
 SAML/CAS tokens in the session database, an attacker can open an anonymous
   * Sat May 30 2009 Remi Collet  1.02.1-1
+# SAVIN 9040 1.18 / SAVIN Network Printer C model / SAVIN Network Scanner C model
   - SCALANCE M876-4 (NAM) (All versions < V7.1.2)
   script_add_preference(name:"Delete hash test Programm after the test", type:"checkbox", value:"yes", id:3);
   script_add_preference(name:"Install hash test Programm on the Target", type:"checkbox", value:"no", id:2);
