@@ -32,6 +32,7 @@ IGNORE_TAGS = [
     "script_name",
     "script_xref",
     "script_add_preference",
+    'script_tag(name:"vuldetect"',
 ]
 
 
