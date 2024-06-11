@@ -217,6 +217,7 @@ cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip 
 # Comparison Engine Power 'product.comparision.php' SQL Injection Vulnerability
 complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:ind-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:oval-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:win-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows windows-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd">');
 "config.sys", "io.sys", "msdos.sys", "pagefile.sys",
+  Connection, Expect, If-Match, If-None-Match, If-Range, If-Unmodified-Since, Max-Forwards, TE,
   "Connection: TE, close\r\n",
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
   control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
@@ -329,6 +330,7 @@ designVer = get_kb_item("Adobe/LiveCycle/Designer");
         detection_english_match = re.search('"(Run\s+Windows\s+Update\s+and\s+(update|install)\s+the\s+listed\s+hotfixes\s+or\s+download\s+and\s+(update|install\s+the)\s+(mentioned\s+)?hotfixes\s+(in|from)(\s+the)?(\s+referenced)?\s+(advisory|avdisory)\.?(\s*(For\s+(details|updates)\s+refer\s+to(\s+the)?\s+reference\s+links?|Please\s+see\s+the\s+references\s+for\s+more\s+information)\.?)?)"', text, re.IGNORECASE)
 "developement\n",
 # |/dev/hda|ST3160021A|UNK|*||/dev/hdc|???|ERR|*||/dev/hdg|Maxtor 6B200P0|UNK|*||/dev/hdh|Maxtor 6Y160P0|38|C|
+"dialin",
   die aktuellste Ergaenzungslieferung bezieht. Titel und Inhalt koennen sich bei einer
 Die Standard-Anforderung 'A7: Lokale Sicherheitsrichtlinien' beschreibt, dass und welche
                           dir + "/ans/ans.pl?p=../../../../../usr/bin/id|&blah" ) ) {
@@ -507,6 +509,8 @@ if(res =~ "<span>[Ss]arix&[Tt]rade;</span>" && res =~ "<span>Copyright\s*&copy;\
 if( res && "WAN SETTINGS" >< res && "value='3G Interface" >< res && "menu.html" >< res &&
 if( "Server: Boa" >!< banner || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|POE)-") )
   if(strlen(res) && "nonexistant" >< res && "XJ004CSS" >< res) {
+if (sysdesc =~ "^(RICOH|LANIER|SAVIN|NRG)" && (sysdesc =~ "(RICOH|LANIER|SAVIN|NRG) Network Printer" ||
+  if( sysdesc =~ "^(RICOH|LANIER|SAVIN|NRG)" && sysdesc =~ "(RICOH|LANIER|SAVIN|NRG) Network Printer" ) {
 if ("<title>Cisco NFVIS</title>" >< res && 'content="Xenon Boostrap Admin Panel"' >< res) {
 if ("<title>COMfortel</title>" >< res && "/statics/script/pageChallenge.js" >< res) {
         if( "[Xx]-[Aa]dobe-[Cc]ontent" >< pattern )
@@ -620,6 +624,7 @@ Mark Shepard discovered a double free in the TCP listener cleanup which could re
      "Memorise" >< poshRes)
  memory disclosure whne processing of a specially crafted mp4 file with
 # Mesosphere Marathon Web UI Public WAN (Internet) Accessible
+"messasges",
     "Metastasio (Ipermestra)" >< banner || '"\r\nAnonimo' >< banner || banner =~ '^"[^"]+" *Autor desconocido[ \t\r\n]*$' || "/usr/games/fortune: not found" >< banner ||
     "Metastasio (Ipermestra)" >< r || '"\r\nAnonimo' >< r || r =~ '^"[^"]+" *Autor desconocido[ \t\r\n]*$' ) {
  MFSA 2012-27 / CVE-2012-0474: Security researchers Jordi Chancel and Eddy Bordi reported that they could short-circuit page loads to show the address of a different site than what is ... [Please see the references for more information on the vulnerabilities]");
@@ -811,6 +816,7 @@ RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an authenticated, remot
  - S8168728, CVE-2016-5548: DSA signing improvments
 SAML/CAS tokens in the session database, an attacker can open an anonymous
   * Sat May 30 2009 Remi Collet  1.02.1-1
+# SAVIN 9040 1.18 / SAVIN Network Printer C model / SAVIN Network Scanner C model
   - SCALANCE M876-4 (NAM) (All versions < V7.1.2)
   script_add_preference(name:"Delete hash test Programm after the test", type:"checkbox", value:"yes", id:3);
   script_add_preference(name:"Install hash test Programm on the Target", type:"checkbox", value:"no", id:2);
@@ -1044,6 +1050,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cve-2018-18907/");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cyrc-advisory-nagios-xi/");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/cyrc-vulnerability-advisory-cve-2023-2453.html");
+  script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/nodejs-mean-stack-vulnerabilities.html");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/opentsdb/");
   script_xref(name:"URL", value:"https://www.synopsys.com/blogs/software-security/path-traversal-defects-oracles-jsf2-implementation/");
   script_xref(name:"URL", value:"http://tigger.uic.edu/~jlongs2/holes/cups2.txt");
@@ -1358,6 +1365,7 @@ using the 'Connection: TE, , Keep-Alive' header.");
 Vegard Nossum reported an issue with the UNIX socket garbage collector. Local users can consume all of LOWMEM and decrease system performance by overloading the system with inflight sockets.
   vers[1] = ereg_replace( pattern:"No UTF-8\. Trying to change locale\.\s*Locale sucessfully changed\.\s*", string:vers[1], replace:"" );
   vers = eregmatch( pattern:"mandr(iva|ake).*inux ?(enterprise server)? release ([0-9.]+)", string:rls, icase:TRUE );
+  vers = eregmatch(pattern: "(RICOH|LANIER|SAVIN|NRG) ((Aficio |Pro)?([A-Z]+)? ?[^ ]+)( JPN)?( V?([0-9.]+))?", string: sysdesc);
   vers = eregmatch(pattern: ">Rev\. ([0-9.]+)([^<]+Bu(li|il)d\. ([0-9]+))?", string: res);
       version = eregmatch( pattern:"Powered by.*ANG(</a>)? ([0-9.]+)", string:res );
   version = eregmatch(string: banner, pattern: "^[Ss]erver\s*:\s*AAS/([0-9.]+)", icase: FALSE);
@@ -1367,6 +1375,8 @@ version of nd.
     vgx_file_id = 'oval:org.mitre.oval:obj:308';
     vgx_file_variable_id = 'oval:org.mitre.oval:var:209';
 via crafted description chunks in a CAF audio file, leading to a
+"vsapres/js/thirdparty",
+"vsapres/js/thirdparty/material",
   vulnerability by flooding an adjacent IOS XE device with specific ND messages.");
   vulnerability by sending crafted IPv6 Neighbor Discovery (ND) packets to an affected device for
   vulnerability that is described in this advisory. Customers who are using the Cisco ACI Multi-Site
