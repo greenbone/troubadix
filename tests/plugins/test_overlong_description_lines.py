@@ -65,6 +65,9 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "{\n"
             "  too long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
+            '  script_tag(name:"vuldetect", value:'
+            '"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"'
+            ");\n"
             '  script_version("2021-09-02T14:01:33+0000");\n'
             "  exit(0);\n"
             "}\n"
@@ -76,11 +79,15 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterWarning)
         self.assertEqual(
             "Line 3 is too long with 102 characters. Max 100",
             results[0].message,
+        )
+        self.assertEqual(
+            "Line 4 is too long with 102 characters. Max 100",
+            results[1].message,
         )
 
     def test_no_description_start_found(self):
