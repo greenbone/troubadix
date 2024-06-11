@@ -27,12 +27,15 @@ from troubadix.plugin import (
 )
 
 DESCRIPTION_START_PATTERN = re.compile(r"if\s*\(\s*description\s*\)")
-DESCRIPTION_END_PATTERN = re.compile(r"exit\(0\)")
+DESCRIPTION_END_PATTERN = re.compile(r"exit\(0\);")
 IGNORE_TAGS = [
     "script_name",
     "script_xref",
     "script_add_preference",
-    'script_tag(name:"vuldetect"',
+    # nb: Special case we should ignore (at least for now) as it is commonly
+    # used like this and is only two chars "too long".
+    'script_tag(name:"vuldetect", value:"Checks if a vulnerable version is '
+    + 'present on the target host.");',
 ]
 
 
