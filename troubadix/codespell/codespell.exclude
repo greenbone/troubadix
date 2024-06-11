@@ -465,6 +465,7 @@ if( "CONEXANT SYSTEMS, INC." >< r &&
 if( "CONEXANT SYSTEMS, INC" >< r && "ACCESS RUNNER ADSL CONSOLE PORT" >< r && "LOGON PASSWORD" >< r ) {
 if( cpe =~ "^cpe:/o:huawei:te(3|4|5|6)0_firmware" ) {
   if( ">CrawlTrack informations<" >< rcvRes ) {
+  if( data !~ "^(DELETE|PROPFIND|PUT|GET|HEAD|POST|OPTIONS|REPORT|MKCOL|MOVE|PROPPATCH|COPY|PATCH|CONNECT|TRACE|LOCK|UNLOCK|TRACK|M-POST|CHECKOUT|CHECKIN|UNCHECKOUT|VERSION-CONTROL|BASELINE-CONTROL) (/|\.+/|https?:|\*).* HTTP" ) {
 if( ect = egrep( pattern:"^Expect-CT\s*:", string:banner, icase:TRUE ) )
   if( ect_on_http )  report += '\nECT-Header:\n\n' + ect;
 if( egrep( pattern:"RTSP/1\.0 505( Protocol | RTSP | )Version [nN]ot [sS]upported", string:r ) ) {
@@ -483,7 +484,6 @@ if (http_vuln_check(port: port, url: url, pattern: "<title>WAN Setup", check_hea
   if(!isnull(res = isdpkgvuln(pkg:"nd", ver:"0.5.0-1woody1", rls:"DEB3.0"))) {
   if(!isnull(res = isrpmvuln(pkg:"libell", rpm:"libell~0.26~1.fc31", rls:"FC31"))) {
 if( "Login successed" >< recv ) {
-  If-Match, If-None-Match, If-Range, If-Unmodified-Since, Max-Forwards, TE, Host)");
 if( ( model =~ '^RP200' || model =~ '^TE[3456]0' ) && revcomp( a: version, b: "v600r006c00spc500" ) < 0) {
 if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 ) {
   if (mountd =~ 'program 100005 version . ready and waiting' || mountd =~ 'Program 100005 Version . ist bereit und wartet') mountd = "true";
@@ -508,6 +508,7 @@ if ((res = ispkgvuln(pkg:"app-admin/lsat", unaffected: make_list(), vulnerable: 
 if(res =~ "<span>[Ss]arix&[Tt]rade;</span>" && res =~ "<span>Copyright\s*&copy;\s*[0-9]+-[0-9]+,\s*[Pp][Ee][Ll][Cc][Oo]\s*&middot;"
 if( res && "WAN SETTINGS" >< res && "value='3G Interface" >< res && "menu.html" >< res &&
 if( "Server: Boa" >!< banner || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|POE)-") )
+  if( strlen( data ) < 8 || data !~ "^(DELETE|PROPFIND|PUT|GET|HEAD|POST|OPTIONS|REPORT|MKCOL|MOVE|PROPPATCH|COPY|PATCH|CONNECT|TRACE|LOCK|UNLOCK|TRACK|M-POST|CHECKOUT|CHECKIN|UNCHECKOUT|VERSION-CONTROL|BASELINE-CONTROL).*HTTP/(1\.[01]|2)" ) {
   if(strlen(res) && "nonexistant" >< res && "XJ004CSS" >< res) {
 if (sysdesc =~ "^(RICOH|LANIER|SAVIN|NRG)" && (sysdesc =~ "(RICOH|LANIER|SAVIN|NRG) Network Printer" ||
   if( sysdesc =~ "^(RICOH|LANIER|SAVIN|NRG)" && sysdesc =~ "(RICOH|LANIER|SAVIN|NRG) Network Printer" ) {
@@ -728,6 +729,7 @@ p_data_tf_types["00720073"] = "Selector OD Value";
 Poll for artifact blob, addresses goal state procesing issue
   postdata = string(postdata, "Content-Length: ", clen, "\r\n\r\n", boundary2, "\r\n");
 postfix_list = make_list(".pub", ".crl", ".prv", ".ser", "#6101CA.cer", ".p12");
+post_urls[i++] = "%ADd+allow_url_include%3d1+%ADd+disable_functions%3d%22%22+%ADd+open_basedir%3dnone+%ADd+auto_prepend_file%3dphp://input+%ADd+cgi.force_redirect%3d0+%ADd+cgi.redirect_status_env%3d0+%ADn";
 potentially, escalate their privilages to that of libvirtd process. (CVE-2013-0170)
 ## Presently Adobe LiveCycle Designer 64bit application is not available
 Prevent sporious 'salt-api' stuck processes when managing SSH minions
