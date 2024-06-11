@@ -31,6 +31,11 @@ class CheckVariableRedefinitionInForeach(FileContentPlugin):
 
         for foreach_match in FOREACH_PATTERN.finditer(file_content):
             identifier = foreach_match.group("ident")
+
+            # replace instead of strip, because the iterator can contain
+            # whitespace as part of the expression.
+            # Saving from further strip calls
+            # make_list( bar , foo )
             iterator = foreach_match.group("iter").replace(" ", "")
 
             if make_list_match := MAKE_LIST_PATTERN.fullmatch(iterator):
