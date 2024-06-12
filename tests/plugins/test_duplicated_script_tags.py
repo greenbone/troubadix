@@ -108,7 +108,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_excluded_dependencies(self):
-        path = Path("gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl")
+        path = Path("some/file/just/for/unit/tests.nasl")
         content = (
             '  script_dependencies("vt1.nasl", "vt2.nasl");\n'
             '  script_dependencies("vt3.nasl", "vt4.nasl");\n'
@@ -123,7 +123,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_not_excluded_dependencies(self):
-        path = Path("v2.0/PCI-DSS-2.0.nasl")
+        path = Path("unit/tests.nasl")
         content = (
             '  script_dependencies("vt1.nasl", "vt2.nasl");\n'
             '  script_dependencies("vt3.nasl", "vt4.nasl");\n'

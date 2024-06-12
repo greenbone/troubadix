@@ -75,16 +75,16 @@ exceptions = [
         r"(deb_(dla_)?[0-9]+(_[0-9]+)?|gb_ubuntu_.+)\.nasl",
         r"ure\s+==>\s+sure",
     ),
-    # gsf/PCIDSS VTs are currently using some german text parts
+    # gsf/attic/PCIDSS*/ VTs are currently using some german text parts
     # nb: codespell seems to have some issues with
     # german umlauts in the codespell.exclude so a few of these
     # were also excluded here instead of directly
     # via codespell.exclude.
     PatternInFilesCheck(
         [
-            "PCIDSS/",
+            "attic/PCIDSS/",
             "GSHB/",
-            "attic/PCIDSS_",
+            "attic/PCIDSS-2.0/",
             "ITG_Kompendium/",
             "Policy/ITG/",
         ],
@@ -95,12 +95,12 @@ exceptions = [
         r"modell|klick|generell|vor)\s+==>\s+",
         re.IGNORECASE,
     ),
-    # False positives in the gsf/PCIDSS and GSHB/ VTs:
+    # False positives in the gsf/attic/PCIDSS*/ and GSHB/ VTs:
     # string('\nIn the file sent\nin milliseconds
     # There are too many hits to maintain
     # them in codespell.exclude so exclude them for now here.
     PatternInFilesCheck(
-        ["PCIDSS/", "GSHB/", "attic/PCIDSS_", "Policy/ITG/"],
+        ["attic/PCIDSS/", "GSHB/", "attic/PCIDSS-2.0/", "Policy/ITG/"],
         r"n[iI]n\s+==>\s+inn",
     ),
     # False positive in this VT in German example responses.
