@@ -44,7 +44,6 @@ IGNORE_FILES = [
     "GSHB/GSHB_WMI_CD-FD-User-only-access.nasl",
     "gb_dicom_service_ae_title_brute_force.nasl",
     "Policy/policy_controls_fail.nasl",
-    "PCIDSS/PCI-DSS.nasl",
     "2016/gb_ssl_tls_weak_hash_algo.nasl",
     "2018/gb_unquoted_path_vulnerabilities_win.nasl",
     "2009/remote-net-hub-3com.nasl",

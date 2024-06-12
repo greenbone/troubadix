@@ -79,11 +79,7 @@ class CheckSecurityMessages(FileContentPlugin):
             file_content (str): The content of the VT
         """
         # Policy VTs might use both, security_message and log_message
-        if (
-            "Policy/" in str(nasl_file)
-            or "PCIDSS/" in str(nasl_file)
-            or "GSHB/" in str(nasl_file)
-        ):
+        if "Policy/" in str(nasl_file) or "GSHB/" in str(nasl_file):
             return
 
         if _file_contains_security_message(file_content):

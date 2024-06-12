@@ -24,9 +24,7 @@ from troubadix.helper.patterns import (
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 allowed_dup_dependencies = [
-    "GSHB/EL15/GSHB.nasl",
-    "gsf/PCIDSS/PCI-DSS.nasl",
-    "gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl",
+    "some/file/just/for/unit/tests.nasl",
 ]
 
 

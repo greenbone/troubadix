@@ -71,14 +71,6 @@ class CheckDependencies(FilePlugin):
                     dependencies += [dep for dep in _dependencies if dep != ""]
 
                 for dep in dependencies:
-                    # TODO: gsf/PCIDSS/PCI-DSS.nasl,
-                    # gsf/PCIDSS/v2.0/PCI-DSS-2.0.nasl
-                    # and GSHB/EL15/GSHB.nasl
-                    # are using a variable which we currently
-                    # can't handle.
-                    if "+d+.nasl" in dep:
-                        continue
-
                     if not any(
                         (root / vers / dep).exists() for vers in FEED_VERSIONS
                     ):
@@ -103,7 +95,7 @@ class CheckDependencies(FilePlugin):
                         continue
 
                     parent_folder = parts[0]
-                    if parent_folder in ["PCIDSS", "Policy", "GSHB"]:
+                    if parent_folder in ["Policy", "GSHB"]:
                         yield LinterWarning(
                             f"The script dependency {dep} is in a "
                             "subdirectory, which might be misplaced.",
