@@ -164,11 +164,15 @@ def main(args=None):
         first_file = files[0].resolve()
         root = get_root(first_file)
 
-    if parsed_args.plugins_config_file:
+    # Get the plugins configurations from the external toml file
+    try:
         with open(parsed_args.plugins_config_file, "rb") as file:
             plugins_config = tomli.load(file)
-    else:
-        plugins_config = {}
+    except FileNotFoundError:
+        term.warning(
+            f"Config file '{parsed_args.plugins_config_file}' does not exist"
+        )
+        sys.exit(1)
 
     reporter = Reporter(
         term=term,

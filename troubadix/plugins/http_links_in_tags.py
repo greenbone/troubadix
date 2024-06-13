@@ -21,11 +21,37 @@ from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag, get_common_tag_patterns
 from troubadix.helper.patterns import get_special_script_tag_pattern
-from troubadix.plugin import FilePlugin, LinterError, LinterResult
+from troubadix.plugin import (
+    ConfigurationError,
+    FilePlugin,
+    LinterError,
+    LinterResult,
+)
 
 
 class CheckHttpLinksInTags(FilePlugin):
     name = "check_http_links_in_tags"
+    mandatory_config_keys = ["exclusions"]
+    require_external_config = True
+
+    def validate_and_extract_plugin_config(self, config: dict) -> dict:
+        # check for this plugin in the whole config
+        if self.name not in config:
+            raise ConfigurationError(
+                f"Configuration for plugin '{self.name}' is missing."
+            )
+
+        plugin_config = config[self.name]
+
+        # Check the plugin-specific configuration
+        # for keys required by this plugin
+        if "exclusions" not in plugin_config:
+            raise ConfigurationError(
+                f"Configuration for plugin '{self.name}' is missing "
+                "required key: 'exclusions'"
+            )
+
+        return plugin_config
 
     def run(self) -> Iterator[LinterResult]:
         if self.context.nasl_file.suffix == ".inc":
@@ -49,6 +75,11 @@ class CheckHttpLinksInTags(FilePlugin):
                 nasl_file: The VT that is going to be checked
                 file_content: The content of the file that is going to be
                             checked
+                config: The plugin configuration provided
+                        by the plugin_configuration.toml file.
+        config must include keys:
+                exclusions: A list of Strings that should be ignored
+                due to containing a valid use of a url in a tag
         """
 
         file_content = self.context.file_content
@@ -119,7 +150,7 @@ class CheckHttpLinksInTags(FilePlugin):
                     )
 
     def check_to_continue(self, http_link_match_group: str) -> bool:
-        exclusions = self.context.plugin_config.get("exclusions", [])
+        exclusions = self.config["exclusions"]
         return any(
             exclusion in http_link_match_group for exclusion in exclusions
         )

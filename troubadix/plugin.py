@@ -57,7 +57,6 @@ class FilePluginContext:
 
         self._file_content = None
         self._lines = None
-        self.plugin_config = {}
 
     @property
     def file_content(self) -> str:
@@ -80,11 +79,47 @@ class FilesPluginContext:
         self.nasl_files = nasl_files
 
 
+class ConfigurationError(Exception):
+    """Custom exception for plugin_configurion errors."""
+
+
 class Plugin(ABC):
     """A linter plugin"""
 
     name: str = None
     description: str = None
+
+    # Value to indicate that a plugin depends on an external configuration
+    require_external_config = False
+
+    def __init__(self, config: dict) -> None:
+        if self.require_external_config:
+            self.config = self.validate_and_extract_plugin_config(config)
+
+    def validate_and_extract_plugin_config(self, config: dict) -> dict:
+        """
+        Validates and extracts the configuration for a specific plugin
+        from the entire configuration.
+
+        Not @abstract due to only being necessary
+        if require_external_config is true
+
+        Args:
+            config (dict): The entire configuration dictionary.
+
+        Returns:
+            dict: The configuration dictionary for the specific plugin.
+
+        Raises:
+            ConfigurationError: If the plugin configuration is not present
+                                or missing required keys.
+        """
+        raise RuntimeError(
+            f"{self.__class__.__name__} has not implemented method"
+            " 'validate_and_extract_plugin_config'."
+            " This method should be overridden in subclasses,"
+            " if they require external config"
+        )
 
     @abstractmethod
     def run(self) -> Iterator[LinterResult]:
@@ -97,14 +132,19 @@ class Plugin(ABC):
 class FilesPlugin(Plugin):
     """A plugin that does checks over all files"""
 
-    def __init__(self, context: FilesPluginContext) -> None:
+    def __init__(self, context: FilesPluginContext, **kwargs) -> None:
+        if "config" in kwargs:
+            super().__init__(kwargs["config"])
         self.context = context
 
 
 class FilePlugin(Plugin):
     """A plugin that does checks on single files"""
 
-    def __init__(self, context: FilePluginContext) -> None:
+    def __init__(self, context: FilePluginContext, **kwargs) -> None:
+        if "config" in kwargs:
+            super().__init__(kwargs["config"])
+
         self.context = context
 
 
