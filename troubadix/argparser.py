@@ -237,6 +237,7 @@ def parse_args(
     parser.add_argument(
         "--plugins-config-file",
         type=file_type,
+        default="troubadix_config.toml",
         help=(
             "Specify the path to the file that contains additional "
             "configuration for the plugins, such as file and "
@@ -270,13 +271,6 @@ def parse_args(
         terminal.warning(
             "'Argument '--non-recursive' is only usable with "
             "'-f'/'--full' or '-d'/'--dirs'"
-        )
-        sys.exit(1)
-
-    if not parsed_args.plugins_config_file:
-        terminal.warning(
-            "A plugin_config file needs to be specified with "
-            " '--plugins_config_file'"
         )
         sys.exit(1)
 

@@ -37,8 +37,6 @@ class TestArgparsing(unittest.TestCase):
                 "--files",
                 "tests/plugins/test.nasl",
                 "tests/plugins/fail2.nasl",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
             ],
         )
 
@@ -54,8 +52,6 @@ class TestArgparsing(unittest.TestCase):
             [
                 "--include-tests",
                 "CheckBadwords",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
             ],
         )
         self.assertEqual(parsed_args.included_plugins, ["CheckBadwords"])
@@ -67,8 +63,6 @@ class TestArgparsing(unittest.TestCase):
             [
                 "--exclude-tests",
                 "CheckBadwords",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
             ],
         )
         self.assertEqual(parsed_args.excluded_plugins, ["CheckBadwords"])
@@ -76,14 +70,7 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_include_patterns(self):
         parsed_args = parse_args(
-            self.terminal,
-            [
-                "-f",
-                "--include-patterns",
-                "troubadix/*",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
-            ],
+            self.terminal, ["-f", "--include-patterns", "troubadix/*"]
         )
 
         self.assertTrue(parsed_args.full)
@@ -102,21 +89,12 @@ class TestArgparsing(unittest.TestCase):
                     "tests/plugins/test.nasl",
                     "tests/plugins/fail2.nasl",
                     "--non-recursive",
-                    "--plugins-config-file",
-                    "some/fake/path/config.toml",
                 ],
             )
 
     def test_parse_exclude_patterns(self):
         parsed_args = parse_args(
-            self.terminal,
-            [
-                "-f",
-                "--exclude-patterns",
-                "troubadix/*",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
-            ],
+            self.terminal, ["-f", "--exclude-patterns", "troubadix/*"]
         )
 
         self.assertTrue(parsed_args.full)
@@ -131,8 +109,6 @@ class TestArgparsing(unittest.TestCase):
                 "troubadix/*",
                 "-j",
                 "1337",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
             ],
         )
 
@@ -150,8 +126,6 @@ class TestArgparsing(unittest.TestCase):
                 "troubadix/*",
                 "-j",
                 "-1337",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
             ],
         )
 
@@ -162,38 +136,16 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_root(self):
         with tempfile.TemporaryDirectory() as tmpdir:
-            parsed_args = parse_args(
-                self.terminal,
-                [
-                    "--root",
-                    tmpdir,
-                    "--plugins-config-file",
-                    "some/fake/path/config.toml",
-                ],
-            )
+            parsed_args = parse_args(self.terminal, ["--root", tmpdir])
             self.assertEqual(parsed_args.root, Path(tmpdir))
 
     def test_parse_fix(self):
-        parsed_args = parse_args(
-            self.terminal,
-            [
-                "--fix",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
-            ],
-        )
+        parsed_args = parse_args(self.terminal, ["--fix"])
 
         self.assertTrue(parsed_args.fix)
 
     def test_parse_ignore_warnings(self):
-        parsed_args = parse_args(
-            self.terminal,
-            [
-                "--ignore-warnings",
-                "--plugins-config-file",
-                "some/fake/path/config.toml",
-            ],
-        )
+        parsed_args = parse_args(self.terminal, ["--ignore-warnings"])
 
         self.assertTrue(parsed_args.ignore_warnings)
 
@@ -201,16 +153,6 @@ class TestArgparsing(unittest.TestCase):
         with tempfile.NamedTemporaryFile() as tmpfile:
             print(tmpfile.name)
             parsed_args = parse_args(
-                self.terminal,
-                [
-                    "--log-file-statistic",
-                    str(tmpfile.name),
-                    "--plugins-config-file",
-                    "some/fake/path/config.toml",
-                ],
+                self.terminal, ["--log-file-statistic", str(tmpfile.name)]
             )
             self.assertEqual(parsed_args.log_file_statistic, Path(tmpfile.name))
-
-    def test_parse_config_missing(self):
-        with self.assertRaises(SystemExit):
-            parse_args(self.terminal, [])
