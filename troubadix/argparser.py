@@ -273,4 +273,11 @@ def parse_args(
         )
         sys.exit(1)
 
+    if not parsed_args.plugins_config_file:
+        terminal.warning(
+            "A plugin_config file needs to be specified with "
+            " '--plugins_config_file'"
+        )
+        sys.exit(1)
+
     return parsed_args

@@ -92,10 +92,10 @@ class Runner:
         )
 
         for plugin_class in self.plugins.file_plugins:
-            plugin_config = self.plugins_config.get(plugin_class.name, {})
-            context.plugin_config = plugin_config
-            plugin = plugin_class(context)
-
+            if plugin_class.require_external_config:
+                plugin = plugin_class(context, config=self.plugins_config)
+            else:
+                plugin = plugin_class(context)
             self._check(plugin, results)
 
         return results
@@ -108,7 +108,13 @@ class Runner:
                 # run files plugins
                 context = FilesPluginContext(root=self._root, nasl_files=files)
                 files_plugins = [
-                    plugin_class(context)
+                    (
+                        plugin_class(
+                            context, self.plugins_config[plugin_class.name]
+                        )
+                        if plugin_class.require_external_config
+                        else plugin_class(context)
+                    )
                     for plugin_class in self.plugins.files_plugins
                 ]
 
@@ -137,6 +143,8 @@ class Runner:
         the Plugins over all files"""
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
+
+        # self._check_plugins_config_keys()
 
         # print plugins that will be executed
         self._reporter.report_plugin_overview(
