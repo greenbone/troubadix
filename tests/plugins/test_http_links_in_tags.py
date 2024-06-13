@@ -18,13 +18,50 @@
 
 from pathlib import Path
 
-from troubadix.plugin import LinterError
+from troubadix.plugin import ConfigurationError, LinterError
 from troubadix.plugins.http_links_in_tags import CheckHttpLinksInTags
 
 from . import PluginTestCase
 
+BASE_CONFIG = {CheckHttpLinksInTags.name: {"exclusions": []}}
+
 
 class CheckHttpLinksInTagsTestCase(PluginTestCase):
+
+    def test_validate_config(self):
+        fake_context = self.create_file_plugin_context()
+
+        valid_plugin_config = {
+            "exclusions": ["Foo Bar. https://www.website.de/demo"]
+        }
+        valid_config = {"check_http_links_in_tags": valid_plugin_config}
+
+        # validate_and_extract_config is called by the init method
+        # when key config is given.
+        plugin = CheckHttpLinksInTags(fake_context, config=valid_config)
+
+        self.assertEqual(plugin.config, valid_plugin_config)
+
+        invalid_config_missing_plugin_key = {}
+        with self.assertRaises(ConfigurationError) as context:
+            plugin.validate_and_extract_plugin_config(
+                invalid_config_missing_plugin_key
+            )
+        self.assertEqual(
+            str(context.exception),
+            "Configuration for plugin 'check_http_links_in_tags' is missing.",
+        )
+        invalid_config_missing_required_key = {"check_http_links_in_tags": {}}
+        with self.assertRaises(ConfigurationError) as context:
+            plugin.validate_and_extract_plugin_config(
+                invalid_config_missing_required_key
+            )
+        self.assertEqual(
+            str(context.exception),
+            "Configuration for plugin 'check_http_links_in_tags' "
+            "is missing required key: 'exclusions'",
+        )
+
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -42,9 +79,9 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=path,
             file_content=content,
-            plugin_config=fake_plugin_config,
         )
-        plugin = CheckHttpLinksInTags(fake_context)
+        plugin = CheckHttpLinksInTags(fake_context, config=BASE_CONFIG)
+        plugin.config = fake_plugin_config
 
         results = list(plugin.run())
 
@@ -53,7 +90,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
     def test_exclude_inc_file(self):
         path = Path("some/file.inc")
         fake_context = self.create_file_plugin_context(nasl_file=path)
-        plugin = CheckHttpLinksInTags(fake_context)
+        plugin = CheckHttpLinksInTags(fake_context, config=BASE_CONFIG)
 
         results = list(plugin.run())
 
@@ -71,7 +108,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
-        plugin = CheckHttpLinksInTags(fake_context)
+        plugin = CheckHttpLinksInTags(fake_context, config=BASE_CONFIG)
 
         results = list(plugin.run())
 
@@ -99,7 +136,7 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
         )
-        plugin = CheckHttpLinksInTags(fake_context)
+        plugin = CheckHttpLinksInTags(fake_context, config=BASE_CONFIG)
 
         results = list(plugin.run())
 
