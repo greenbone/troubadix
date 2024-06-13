@@ -19,7 +19,7 @@ import datetime
 import signal
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Dict, Iterable
+from typing import Iterable
 
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
@@ -53,7 +53,7 @@ class Runner:
         included_plugins: Iterable[str] = None,
         fix: bool = False,
         ignore_warnings: bool = False,
-        plugins_config: Dict,
+        plugins_config: dict,
     ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
