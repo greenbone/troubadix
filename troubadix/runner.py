@@ -145,8 +145,6 @@ class Runner:
         if not len(self.plugins):
             raise TroubadixException("No Plugin found.")
 
-        # self._check_plugins_config_keys()
-
         # print plugins that will be executed
         self._reporter.report_plugin_overview(
             plugins=self.plugins,
