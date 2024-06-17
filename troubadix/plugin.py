@@ -80,7 +80,7 @@ class FilesPluginContext:
 
 
 class ConfigurationError(Exception):
-    """Custom exception for plugin_configurion errors."""
+    """Custom exception for plugin_configuration errors."""
 
 
 class Plugin(ABC):
