@@ -151,7 +151,6 @@ class TestArgparsing(unittest.TestCase):
 
     def test_parse_log_file_statistic(self):
         with tempfile.NamedTemporaryFile() as tmpfile:
-            print(tmpfile.name)
             parsed_args = parse_args(
                 self.terminal, ["--log-file-statistic", str(tmpfile.name)]
             )

@@ -91,14 +91,23 @@ class Runner:
             root=self._root, nasl_file=file_path.resolve()
         )
 
-        for plugin_class in self.plugins.file_plugins:
-            if plugin_class.require_external_config:
-                plugin = plugin_class(context, config=self.plugins_config)
-            else:
-                plugin = plugin_class(context)
+        file_plugins = self._initialize_plugins(
+            context, self.plugins.file_plugins
+        )
+        for plugin in file_plugins:
             self._check(plugin, results)
 
         return results
+
+    def _initialize_plugins(self, context, plugin_classes):
+        return [
+            (
+                plugin_class(context, config=self.plugins_config)
+                if plugin_class.require_external_config
+                else plugin_class(context)
+            )
+            for plugin_class in plugin_classes
+        ]
 
     def _run_pooled(self, files: Iterable[Path]):
         """Run all plugins that check single files"""
@@ -107,16 +116,9 @@ class Runner:
             try:
                 # run files plugins
                 context = FilesPluginContext(root=self._root, nasl_files=files)
-                files_plugins = [
-                    (
-                        plugin_class(
-                            context, self.plugins_config[plugin_class.name]
-                        )
-                        if plugin_class.require_external_config
-                        else plugin_class(context)
-                    )
-                    for plugin_class in self.plugins.files_plugins
-                ]
+                files_plugins = self._initialize_plugins(
+                    context, self.plugins.files_plugins
+                )
 
                 for results in pool.imap_unordered(
                     self._check_files, files_plugins, chunksize=CHUNKSIZE

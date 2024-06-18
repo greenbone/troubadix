@@ -94,15 +94,12 @@ class Plugin(ABC):
 
     def __init__(self, config: dict) -> None:
         if self.require_external_config:
-            self.config = self.validate_and_extract_plugin_config(config)
+            self.config = self.extract_plugin_config(config)
 
-    def validate_and_extract_plugin_config(self, config: dict) -> dict:
+    def extract_plugin_config(self, config: dict) -> dict:
         """
-        Validates and extracts the configuration for a specific plugin
+        extracts the configuration for a specific plugin
         from the entire configuration.
-
-        Not @abstract due to only being necessary
-        if require_external_config is true
 
         Args:
             config (dict): The entire configuration dictionary.
@@ -111,8 +108,28 @@ class Plugin(ABC):
             dict: The configuration dictionary for the specific plugin.
 
         Raises:
-            ConfigurationError: If the plugin configuration is not present
-                                or missing required keys.
+            ConfigurationError: If no configuration exists or validation fails.
+        """
+        if self.name not in config:
+            raise ConfigurationError(
+                f"Configuration for plugin '{self.name}' is missing."
+            )
+        plugin_config = config[self.name]
+        self.validate_plugin_config(plugin_config)
+        return plugin_config
+
+    def validate_plugin_config(self, config: dict) -> None:
+        """
+        Validates the configuration for a specific plugin
+
+        Not @abstract due to only being necessary
+        if require_external_config is true
+
+        Args:
+            config (dict): The configuration dictionary for the specific plugin.
+
+        Raises:
+            ConfigurationError: If the plugins required keys are missing.
         """
         raise RuntimeError(
             f"{self.__class__.__name__} has not implemented method"
