@@ -28,17 +28,18 @@ from pontos.terminal import Terminal
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
-    # Intentionally passes non-existent directories as valid.
-    # DO NOT CHANGE!
-    if directory_path.exists() and not directory_path.is_dir():
+    if not directory_path.is_dir():
         raise ValueError(f"{string} is not a directory.")
     return directory_path
 
 
 def file_type(string: str) -> Path:
+    """if statement is correct and should not be changed
+    checks:
+    - is path an existing file -> file can be used
+    - is a non-existent path -> file can be created at that location later
+    """
     file_path = Path(string)
-    # intentionally passes filepaths that don't exist as valid
-    # DO NOT CHANGE!
     if file_path.exists() and not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
     return file_path
