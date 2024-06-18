@@ -36,25 +36,23 @@ class CheckHttpLinksInTagsTestCase(PluginTestCase):
         }
         valid_config = {"check_http_links_in_tags": valid_plugin_config}
 
-        # validate_and_extract_config is called by the init method
-        # when key config is given.
+        # config extraction and validation is done when the init method
+        # is called with the optional key config.
         plugin = CheckHttpLinksInTags(fake_context, config=valid_config)
 
         self.assertEqual(plugin.config, valid_plugin_config)
 
         invalid_config_missing_plugin_key = {}
         with self.assertRaises(ConfigurationError) as context:
-            plugin.validate_and_extract_plugin_config(
-                invalid_config_missing_plugin_key
-            )
+            plugin.extract_plugin_config(invalid_config_missing_plugin_key)
         self.assertEqual(
             str(context.exception),
             "Configuration for plugin 'check_http_links_in_tags' is missing.",
         )
-        invalid_config_missing_required_key = {"check_http_links_in_tags": {}}
+        invalid_plugin_config_missing_required_key = {}
         with self.assertRaises(ConfigurationError) as context:
-            plugin.validate_and_extract_plugin_config(
-                invalid_config_missing_required_key
+            plugin.validate_plugin_config(
+                invalid_plugin_config_missing_required_key
             )
         self.assertEqual(
             str(context.exception),
