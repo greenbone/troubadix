@@ -18,11 +18,6 @@
 from typing import Iterable, List
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
-from troubadix.plugins.multiple_re_parameters import CheckMultipleReParameters
-from troubadix.plugins.spaces_in_filename import CheckSpacesInFilename
-from troubadix.plugins.variable_redefinition_in_foreach import (
-    CheckVariableRedefinitionInForeach,
-)
 
 from .badwords import CheckBadwords
 from .copyright_text import CheckCopyrightText
@@ -48,6 +43,7 @@ from .malformed_dependencies import CheckMalformedDependencies
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
 from .missing_desc_exit import CheckMissingDescExit
 from .missing_tag_solution import CheckMissingTagSolution
+from .multiple_re_parameters import CheckMultipleReParameters
 from .newlines import CheckNewlines
 from .overlong_description_lines import CheckOverlongDescriptionLines
 from .overlong_script_tags import CheckOverlongScriptTags
@@ -72,6 +68,7 @@ from .security_messages import CheckSecurityMessages
 from .set_get_kb_calls import CheckWrongSetGetKBCalls
 from .solution_text import CheckSolutionText
 from .solution_type import CheckSolutionType
+from .spaces_in_filename import CheckSpacesInFilename
 from .spelling import CheckSpelling
 from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
@@ -80,6 +77,7 @@ from .using_display import CheckUsingDisplay
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .variable_assigned_in_if import CheckVariableAssignedInIf
+from .variable_redefinition_in_foreach import CheckVariableRedefinitionInForeach
 from .vt_file_permissions import CheckVTFilePermissions
 from .vt_placement import CheckVTPlacement
 
@@ -108,7 +106,9 @@ _FILE_PLUGINS = [
     CheckMisplacedCompareInIf,
     CheckMissingDescExit,
     CheckMissingTagSolution,
+    CheckMultipleReParameters,
     CheckNewlines,
+    CheckOverlongDescriptionLines,
     CheckOverlongScriptTags,
     CheckProdSvcDetectInVulnvt,
     CheckQod,
@@ -128,6 +128,7 @@ _FILE_PLUGINS = [
     CheckSecurityMessages,
     CheckSolutionText,
     CheckSolutionType,
+    CheckSpacesInFilename,
     CheckTabs,
     CheckTodoTbd,
     CheckTrailingSpacesTabs,
@@ -135,13 +136,10 @@ _FILE_PLUGINS = [
     CheckValidOID,
     CheckValidScriptTagNames,
     CheckVariableAssignedInIf,
+    CheckVariableRedefinitionInForeach,
     CheckVTFilePermissions,
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
-    CheckOverlongDescriptionLines,
-    CheckSpacesInFilename,
-    CheckMultipleReParameters,
-    CheckVariableRedefinitionInForeach,
 ]
 
 # plugins checking all files
