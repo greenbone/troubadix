@@ -132,7 +132,6 @@ class CheckHttpLinksInTags(FilePlugin):
             "sampling the resolution of a name (www.google.com)",
             "once with 'www.' and once without",
             "wget http://www.javaop.com/~ron/tmp/nc",
-            "Ncat: Version 5.30BETA1 (http://nmap.org/ncat)",
             "as www.windowsupdate.com. (BZ#506016)",
             "located at http://sambarserver/session/pagecount.",
             "http://rest.modx.com",
