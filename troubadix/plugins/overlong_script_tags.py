@@ -27,7 +27,6 @@ from ..plugin import FileContentPlugin, LinterError, LinterResult
 VALUE_LIMIT = 3000
 
 IGNORE_FILES = [
-    "gb_nmap6_",
     "monstra_cms_mult_vuln",
     "gb_huawei-sa-",
     "lsc_options.nasl",
