@@ -165,6 +165,14 @@ def get_grammer_pattern() -> re.Pattern:
         # "Sends multiple HTTP request and checks the responses."
         # "Sends multiple HTTP GET request and checks the responses."
         r"multiple\s+([^ ]+\s+)?([^ ]+\s+)?request\s+|"
+        # nb: These are added here because codespell can only handle single
+        # words currently. Basically:
+        # cross-side scripting -> cross-site scripting
+        # cross-side request forgery -> cross-site request forgery
+        # server-site request forgery -> server-side request forgery
+        # server-site template injection -> server-side template injection
+        r"cross[\s-]+side[\s-]+(request[\s-]+forgery|scripting)|"
+        r"server[\s-]+site[\s-]+(request[\s-]+forgery|template)[\s-]+injection|"
         # e.g. "is prone to a security bypass vulnerabilities"
         r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities" r").*",
         re.IGNORECASE,
