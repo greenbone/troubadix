@@ -24,13 +24,7 @@ from troubadix.helper.patterns import (
 )
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
-IGNORE_FILES = [
-    # nb: VTD-1173 is a tracking ticket to update this so we don't need to
-    # report it on each run. Especially as:
-    # - this VT is a quite aged one and currently not problematic
-    # - the plugin should only prevent to introduce new VTs using this approach
-    "mssql_version.nasl",
-]
+IGNORE_FILES = []
 
 
 class CheckProdSvcDetectInVulnvt(FilePlugin):
