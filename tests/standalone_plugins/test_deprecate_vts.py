@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 # pylint: disable=line-too-long
+# pylint: disable=protected-access
 import unittest
 from pathlib import Path
 from tests.plugins import TemporaryDirectory
@@ -9,10 +10,11 @@ from troubadix.standalone_plugins.deprecate_vts import (
     deprecate,
     parse_args,
     DeprecatedFile,
-    get_summary,
-    finalize_content,
+    _get_summary,
+    _finalize_content,
     update_summary,
-    get_files,
+    get_files_from_path,
+    filter_files,
 )
 
 
@@ -20,27 +22,43 @@ class ParseArgsTestCase(unittest.TestCase):
     def test_parse_args(self):
         testfile = "testfile.nasl"
         output_path = "attic/"
-        input_path = "nasl/common"
         reason = "notus"
 
         args = parse_args(
             [
-                "--file",
-                str(testfile),
+                "--files",
+                testfile,
                 "--output-path",
                 output_path,
-                "--input-path",
-                input_path,
                 "--deprecation-reason",
                 reason,
             ]
         )
-        self.assertEqual(args.file, Path(testfile))
-        self.assertEqual(args.output_path, output_path)
+        self.assertEqual(args.files, [Path(testfile)])
+        self.assertEqual(args.output_path, Path(output_path))
         self.assertEqual(args.deprecation_reason, reason)
-        self.assertEqual(args.input_path, input_path)
 
-    def test_parse_args_invali_reason(self):
+    def test_parse_args_invalid_reason(self):
+        testfile = "testfile.nasl"
+        output_path = "attic/"
+        input_path = "nasl/common"
+        reason = "notus"
+
+        with self.assertRaises(SystemExit):
+            parse_args(
+                [
+                    "--files",
+                    testfile,
+                    "--output-path",
+                    output_path,
+                    "--input-path",
+                    input_path,
+                    "--deprecation-reason",
+                    reason,
+                ]
+            )
+
+    def test_mandatory_arg_group_both(self):
         output_path = "attic/"
         input_path = "nasl/common"
         reason = "foo"
@@ -51,6 +69,19 @@ class ParseArgsTestCase(unittest.TestCase):
                     output_path,
                     "--input-path",
                     input_path,
+                    "--deprecation-reason",
+                    reason,
+                ]
+            )
+
+    def test_mandatory_arg_group_neither(self):
+        output_path = "attic/"
+        reason = "notus"
+        with self.assertRaises(SystemExit):
+            parse_args(
+                [
+                    "--output-path",
+                    output_path,
                     "--deprecation-reason",
                     reason,
                 ]
@@ -123,7 +154,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
             )
 
     def test_get_summary(self):
-        result = get_summary(NASL_CONTENT)
+        result = _get_summary(NASL_CONTENT)
         expected = (
             "The remote host is missing an update for the 'gd'\n  package(s) "
             "announced "
@@ -132,7 +163,8 @@ class DeprecateVTsTestCase(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_finalize_content(self):
-        result = finalize_content(NASL_CONTENT)
+
+        result = _finalize_content(NASL_CONTENT)
         expected = (
             '...if(description)\n{\n  script_oid("1.3.6.1.4.1.25623.1.0.910673");\n  '
             'script_version("2024-03-12T14:15:13+0000");\n  script_name("RedHat: Security Advisory for gd (RHSA-2020:5443-01)");\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");\n\n  script_xref(name:"RHSA", value:"2020:5443-01");\n  script_xref(name:"URL", value:"https://www.redhat.com/archives/rhsa-announce/2020-December/msg00044.html");\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");\n\n  script_tag(name:"deprecated", value:TRUE);\n\nexit(0);\n}\n\nexit(66);\n'
@@ -148,30 +180,26 @@ class DeprecateVTsTestCase(unittest.TestCase):
         result = update_summary(file, "notus")
         self.assertIn("This VT has been deprecated", result)
 
-    def test_get_files_dir(self):
+    def test_get_files_from_path(self):
         with TemporaryDirectory() as in_dir:
             testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
             testfile1.write_text(NASL_CONTENT, encoding="utf8")
 
-            result = get_files(dir_path=in_dir)
-            expected = [
-                DeprecatedFile(
-                    name="gb_rhsa_2021_8383_8383.nasl",
-                    full_path=in_dir / "gb_rhsa_2021_8383_8383.nasl",
-                    content=NASL_CONTENT,
-                )
-            ]
+            result = get_files_from_path(dir_path=in_dir)
+            expected = [testfile1]
 
             self.assertEqual(result, expected)
 
-    def test_get_files_dir_filtered_in(self):
+    def test_filter_files(self):
         with TemporaryDirectory() as in_dir:
             testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
             testfile1.write_text(NASL_CONTENT, encoding="utf8")
             testfile2 = in_dir / "gb_rhsa_2020_8383_8383.nasl"
             testfile2.write_text(NASL_CONTENT, encoding="utf8")
 
-            result = get_files(dir_path=in_dir, filename_prefix="gb_rhsa_2021")
+            result = filter_files(
+                files=[testfile1, testfile2], filename_prefix="gb_rhsa_2021"
+            )
             expected = [
                 DeprecatedFile(
                     name="gb_rhsa_2021_8383_8383.nasl",
@@ -182,47 +210,14 @@ class DeprecateVTsTestCase(unittest.TestCase):
 
             self.assertEqual(result, expected)
 
-    def test_get_files_dir_filtered_out(self):
+    def test_filter_files_out(self):
         with TemporaryDirectory() as in_dir:
             testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
             testfile1.write_text(NASL_CONTENT, encoding="utf8")
 
-            result = get_files(dir_path=in_dir, filename_prefix="gb_rhsa_2020")
+            result = filter_files(
+                files=[testfile1], filename_prefix="gb_rhsa_2020"
+            )
             expected = []
-
-            self.assertEqual(result, expected)
-
-    def test_get_files_single(self):
-        with TemporaryDirectory() as in_dir:
-            testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
-            testfile1.write_text(NASL_CONTENT, encoding="utf8")
-
-            result = get_files(file=testfile1)
-            expected = [
-                DeprecatedFile(
-                    name="gb_rhsa_2021_8383_8383.nasl",
-                    full_path=in_dir / "gb_rhsa_2021_8383_8383.nasl",
-                    content=NASL_CONTENT,
-                )
-            ]
-
-            self.assertEqual(result, expected)
-
-    def test_get_files_single_filtered_in(self):
-        with TemporaryDirectory() as in_dir:
-            testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
-            testfile2 = in_dir / "gb_rhsa_2022_8484.nasl"
-
-            testfile1.write_text(NASL_CONTENT, encoding="utf8")
-            testfile2.write_text(NASL_CONTENT, encoding="utf8")
-
-            result = get_files(file=testfile1, filename_prefix="gb_rhsa_2021")
-            expected = [
-                DeprecatedFile(
-                    name="gb_rhsa_2021_8383_8383.nasl",
-                    full_path=in_dir / "gb_rhsa_2021_8383_8383.nasl",
-                    content=NASL_CONTENT,
-                )
-            ]
 
             self.assertEqual(result, expected)
