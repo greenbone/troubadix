@@ -31,7 +31,6 @@ from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 # within the nasl/common folder. But all three files are just examples and don't
 # need to be checked at all.
 IGNORE_FILES = [
-    "mssql_version.nasl",
     "pre2008/domino_default_db.nasl",
     "pre2008/oracle_tnslsnr_security.nasl",
     "pre2008/smtp_AV_42zip_DoS.nasl",
