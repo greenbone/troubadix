@@ -21,6 +21,7 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Tuple
 
+import tomli
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -163,6 +164,16 @@ def main(args=None):
         first_file = files[0].resolve()
         root = get_root(first_file)
 
+    # Get the plugins configurations from the external toml file
+    try:
+        with open(parsed_args.plugins_config_file, "rb") as file:
+            plugins_config = tomli.load(file)
+    except FileNotFoundError:
+        term.warning(
+            f"Config file '{parsed_args.plugins_config_file}' does not exist"
+        )
+        sys.exit(1)
+
     reporter = Reporter(
         term=term,
         fix=parsed_args.fix,
@@ -182,6 +193,7 @@ def main(args=None):
         fix=parsed_args.fix,
         ignore_warnings=parsed_args.ignore_warnings,
         root=root,
+        plugins_config=plugins_config,
     )
 
     term.info(f"Start linting {len(files)} files ... ")
