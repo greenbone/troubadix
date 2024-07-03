@@ -21,7 +21,6 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Tuple
 
-import tomli
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -30,6 +29,11 @@ from troubadix.argparser import parse_args
 from troubadix.helper import get_root
 from troubadix.reporter import Reporter
 from troubadix.runner import Runner
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 
 
 def generate_file_list(
@@ -167,7 +171,7 @@ def main(args=None):
     # Get the plugins configurations from the external toml file
     try:
         with open(parsed_args.plugins_config_file, "rb") as file:
-            plugins_config = tomli.load(file)
+            plugins_config = tomllib.load(file)
     except FileNotFoundError:
         term.warning(
             f"Config file '{parsed_args.plugins_config_file}' does not exist"
