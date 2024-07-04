@@ -4,6 +4,7 @@
 import re
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 from typing import Iterable, Optional
 
@@ -15,12 +16,12 @@ from troubadix.helper.patterns import (
     SpecialScriptTag,
 )
 
-DEPRECATIONS = {
-    "notus": "and replaced by a Notus scanner based one.",
-    "merged": "because it has been merged into a different VT.",
-    "defunct": "and is therefore no longer functional.",
-    "duplicate": "as a duplicate.",
-}
+
+class Deprecations(Enum):
+    NOTUS = "and replaced by a Notus scanner based one."
+    MERGED = "because it has been merged into a different VT."
+    DEFUNCT = "and is therefore no longer functional."
+    DUPLICATE = "as a duplicate."
 
 
 @dataclass
@@ -52,7 +53,8 @@ def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
         return file.content
 
     deprecate_text = (
-        f"Note: This VT has been deprecated {DEPRECATIONS[deprecation_reason]}"
+        f"Note: This VT has been deprecated "
+        f"{Deprecations[deprecation_reason].value}"
     )
 
     new_summary = old_summary + "\n" + deprecate_text
@@ -205,7 +207,7 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         "-r",
         "--deprecation-reason",
         metavar="<deprecation_reason>",
-        choices=DEPRECATIONS.keys(),
+        choices=[reason.name for reason in Deprecations],
         type=str,
         help="The reason the VT is being deprecated. Options are 'notus':"
         "The VT has been replaced by a new Notus VT. 'Merged': the VT has"

@@ -22,7 +22,7 @@ class ParseArgsTestCase(unittest.TestCase):
     def test_parse_args(self):
         testfile = "testfile.nasl"
         output_path = "attic/"
-        reason = "notus"
+        reason = "NOTUS"
 
         args = parse_args(
             [
@@ -38,11 +38,11 @@ class ParseArgsTestCase(unittest.TestCase):
         self.assertEqual(args.output_path, Path(output_path))
         self.assertEqual(args.deprecation_reason, reason)
 
-    def test_parse_args_invalid_reason(self):
+    def test_mandatory_arg_group_both(self):
         testfile = "testfile.nasl"
         output_path = "attic/"
         input_path = "nasl/common"
-        reason = "notus"
+        reason = "NOTUS"
 
         with self.assertRaises(SystemExit):
             parse_args(
@@ -58,7 +58,7 @@ class ParseArgsTestCase(unittest.TestCase):
                 ]
             )
 
-    def test_mandatory_arg_group_both(self):
+    def test_invalid_reason(self):
         output_path = "attic/"
         input_path = "nasl/common"
         reason = "foo"
@@ -76,7 +76,7 @@ class ParseArgsTestCase(unittest.TestCase):
 
     def test_mandatory_arg_group_neither(self):
         output_path = "attic/"
-        reason = "notus"
+        reason = "NOTUS"
         with self.assertRaises(SystemExit):
             parse_args(
                 [
@@ -124,7 +124,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
                     content=NASL_CONTENT,
                 )
             ]
-            deprecate(out_dir, to_deprecate, "notus")
+            deprecate(out_dir, to_deprecate, "NOTUS")
 
             result = testfile2.read_text(encoding="utf8")
             self.assertNotIn(result, "script_mandatory_keys")
@@ -147,7 +147,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
                     content=NASL_CONTENT_KB,
                 )
             ]
-            deprecate(out_dir, to_deprecate, "notus")
+            deprecate(out_dir, to_deprecate, "NOTUS")
             self.assertLogs(
                 "Unable to deprecate testfile1.nasl. There are still KB keys "
                 "remaining."
@@ -177,7 +177,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
             full_path=Path("dir/testfile.nasl"),
             content=NASL_CONTENT,
         )
-        result = update_summary(file, "notus")
+        result = update_summary(file, "NOTUS")
         self.assertIn("This VT has been deprecated", result)
 
     def test_get_files_from_path(self):
