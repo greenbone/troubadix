@@ -30,7 +30,7 @@ class DeprecatedFile:
     content: str
 
 
-KB_ITEMS = re.compile(r"set_kb_item\(.+\);")
+KB_ITEMS_PATTERN = re.compile(r"set_kb_item\(.+\);")
 
 
 def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
@@ -51,8 +51,8 @@ def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
         print(f"No summary in: {file.name}")
         return file.content
 
-    deprecate_text = "Note: This VT has been deprecated " + DEPRECATIONS.get(
-        deprecation_reason
+    deprecate_text = (
+        f"Note: This VT has been deprecated {DEPRECATIONS[deprecation_reason]}"
     )
 
     new_summary = old_summary + "\n" + deprecate_text
@@ -88,6 +88,7 @@ def filter_files(
     DeprecatedFile objects
 
     Args:
+        files: a list of files to deprecate, should be .nasl VTs
         filename_prefix: an optional prefix to filter only specific files
 
     Returns:
@@ -139,7 +140,7 @@ def deprecate(
     """
     output_path.mkdir(parents=True, exist_ok=True)
     for file in to_deprecate:
-        if re.findall(KB_ITEMS, file.content):
+        if re.findall(KB_ITEMS_PATTERN, file.content):
             print(
                 f"Unable to deprecate {file.name}. There are still KB keys "
                 f"remaining."
@@ -204,7 +205,7 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         "-r",
         "--deprecation-reason",
         metavar="<deprecation_reason>",
-        choices=["notus", "merged", "duplicate", "defunct"],
+        choices=DEPRECATIONS.keys(),
         type=str,
         help="The reason the VT is being deprecated. Options are 'notus':"
         "The VT has been replaced by a new Notus VT. 'Merged': the VT has"
@@ -217,7 +218,7 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         "-f",
         "--files",
         metavar="<files>",
-        nargs="*",
+        nargs="+",
         default=None,
         type=file_type,
         help="Files to deprecate",
@@ -235,14 +236,13 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
 
 def main():
     args = parse_args()
-    output_path = Path(args.output_path)
-    input_path = Path(args.input_path) if args.input_path else None
+    input_path = args.input_path if args.input_path else None
     filename_prefix = args.filename_prefix
 
     files = args.files or get_files_from_path(input_path)
     filtered_files = filter_files(files, filename_prefix)
 
-    deprecate(output_path, filtered_files, args.deprecation_reason)
+    deprecate(args.output_path, filtered_files, args.deprecation_reason)
 
 
 if __name__ == "__main__":
