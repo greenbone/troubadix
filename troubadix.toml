@@ -1,9 +1,12 @@
 # Use Taplo / VS Code Even Better TOML for formatting
 
-title = "Troubadix Plugin Config File"
+# File Structure:
+# [plugin_name]
+# config_a = value_a
+# config_b = value_b
 
 [check_http_links_in_tags]
-description = "Strings that should be ignored because they contain a valid URL type in a tag"
+# Strings that should be ignored because they contain a valid URL type in a tag
 exclusions = [
     "The payloads try to open a connection to www.google.com",
     "The script attempts to connect to www.google.com",
