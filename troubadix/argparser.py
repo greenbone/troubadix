@@ -236,13 +236,13 @@ def parse_args(
     )
 
     parser.add_argument(
-        "--plugins-config-file",
+        "-c",
+        "--config",
         type=file_type,
-        default="troubadix_config.toml",
+        default="troubadix.toml",
         help=(
             "Specify the path to the file that contains additional "
-            "configuration for the plugins, such as file and "
-            "other types of exceptions."
+            "configuration for the plugins"
         ),
     )
 
