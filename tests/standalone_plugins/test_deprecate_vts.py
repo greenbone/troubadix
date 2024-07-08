@@ -21,71 +21,73 @@ from troubadix.standalone_plugins.deprecate_vts import (
 class ParseArgsTestCase(unittest.TestCase):
     def test_parse_args(self):
         testfile = "testfile.nasl"
-        output_path = "attic/"
         reason = "NOTUS"
 
-        args = parse_args(
-            [
-                "--files",
-                testfile,
-                "--output-path",
-                output_path,
-                "--deprecation-reason",
-                reason,
-            ]
-        )
-        self.assertEqual(args.files, [Path(testfile)])
-        self.assertEqual(args.output_path, Path(output_path))
-        self.assertEqual(args.deprecation_reason, reason)
-
-    def test_mandatory_arg_group_both(self):
-        testfile = "testfile.nasl"
-        output_path = "attic/"
-        input_path = "nasl/common"
-        reason = "NOTUS"
-
-        with self.assertRaises(SystemExit):
-            parse_args(
+        with TemporaryDirectory() as out_dir:
+            args = parse_args(
                 [
                     "--files",
                     testfile,
                     "--output-path",
-                    output_path,
-                    "--input-path",
-                    input_path,
+                    str(out_dir),
                     "--deprecation-reason",
                     reason,
                 ]
             )
+            self.assertEqual(args.files, [Path(testfile)])
+            self.assertEqual(args.output_path, out_dir)
+            self.assertEqual(args.deprecation_reason, reason)
+
+    def test_mandatory_arg_group_both(self):
+        testfile = "testfile.nasl"
+        reason = "NOTUS"
+
+        with (
+            TemporaryDirectory() as out_dir,
+            TemporaryDirectory() as in_dir,
+        ):
+            with self.assertRaises(SystemExit):
+                parse_args(
+                    [
+                        "--files",
+                        testfile,
+                        "--input-path",
+                        str(in_dir),
+                        "--deprecation-reason",
+                        reason,
+                        "--output-path",
+                        str(out_dir),
+                    ]
+                )
 
     def test_invalid_reason(self):
-        output_path = "attic/"
-        input_path = "nasl/common"
         reason = "foo"
-        with self.assertRaises(SystemExit):
-            parse_args(
-                [
-                    "--output-path",
-                    output_path,
-                    "--input-path",
-                    input_path,
-                    "--deprecation-reason",
-                    reason,
-                ]
-            )
+
+        with TemporaryDirectory() as out_dir, TemporaryDirectory() as in_dir:
+            with self.assertRaises(SystemExit):
+                parse_args(
+                    [
+                        "--output-path",
+                        str(out_dir),
+                        "--input-path",
+                        str(in_dir),
+                        "--deprecation-reason",
+                        reason,
+                    ]
+                )
 
     def test_mandatory_arg_group_neither(self):
-        output_path = "attic/"
         reason = "NOTUS"
-        with self.assertRaises(SystemExit):
-            parse_args(
-                [
-                    "--output-path",
-                    output_path,
-                    "--deprecation-reason",
-                    reason,
-                ]
-            )
+        with TemporaryDirectory() as out_dir:
+            with self.assertRaises(SystemExit):
+                parse_args(
+                    [
+                        "--output-path",
+                        str(out_dir),
+                        "--deprecation-reason",
+                        reason,
+                    ]
+                )
 
 
 NASL_CONTENT = (
