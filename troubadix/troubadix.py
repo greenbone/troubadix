@@ -170,12 +170,10 @@ def main(args=None):
 
     # Get the plugins configurations from the external toml file
     try:
-        with open(parsed_args.plugins_config_file, "rb") as file:
+        with open(parsed_args.config, "rb") as file:
             plugins_config = tomllib.load(file)
     except FileNotFoundError:
-        term.warning(
-            f"Config file '{parsed_args.plugins_config_file}' does not exist"
-        )
+        term.warning(f"Config file '{parsed_args.config}' does not exist")
         sys.exit(1)
 
     reporter = Reporter(
