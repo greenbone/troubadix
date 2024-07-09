@@ -20,6 +20,7 @@ import signal
 from collections.abc import Iterable
 from multiprocessing import Pool
 from pathlib import Path
+import sys
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,
@@ -28,6 +29,11 @@ from troubadix.plugin import FilePluginContext, FilesPluginContext, Plugin
 from troubadix.plugins import StandardPlugins
 from troubadix.reporter import Reporter
 from troubadix.results import FileResults, Results
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 
 CHUNKSIZE = 1  # default 1
 
@@ -52,7 +58,7 @@ class Runner:
         included_plugins: Iterable[str] | None = None,
         fix: bool = False,
         ignore_warnings: bool = False,
-        plugins_config: dict,
+        plugins_config_path: Path | None,
     ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
@@ -60,7 +66,25 @@ class Runner:
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
 
-        self.plugins_config = plugins_config
+        self.requires_config = self._check_requires_config()
+        if self.requires_config:
+            if plugins_config_path is None:
+                print(
+                    "Plugins are being run that require a external config file"
+                )
+                sys.exit(1)
+
+            # Get the plugins configurations from the external toml file
+            try:
+                with open(plugins_config_path, "rb") as file:
+                    self.plugins_config = tomllib.load(file)
+            except FileNotFoundError:
+                print(f"Config file '{plugins_config_path}' does not exist")
+                sys.exit(1)
+            except tomllib.TOMLDecodeError as e:
+                print(f"Error decoding TOML file '{plugins_config_path}': {e}")
+                sys.exit(1)
+
         self._reporter = reporter
         self._n_jobs = n_jobs
         self._root = root
@@ -108,6 +132,12 @@ class Runner:
             )
             for plugin_class in plugin_classes
         ]
+
+    def _check_requires_config(self):
+        return any(
+            plugin.require_external_config
+            for plugin in self.plugins.files_plugins + self.plugins.file_plugins
+        )
 
     def _run_pooled(self, files: Iterable[Path]):
         """Run all plugins that check single files"""
