@@ -30,11 +30,6 @@ from troubadix.helper import get_root
 from troubadix.reporter import Reporter
 from troubadix.runner import Runner
 
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib
-
 
 def generate_file_list(
     dirs: Iterable[Path],
@@ -168,13 +163,10 @@ def main(args=None):
         first_file = files[0].resolve()
         root = get_root(first_file)
 
-    # Get the plugins configurations from the external toml file
-    try:
-        with open(parsed_args.config, "rb") as file:
-            plugins_config = tomllib.load(file)
-    except FileNotFoundError:
-        term.warning(f"Config file '{parsed_args.config}' does not exist")
-        sys.exit(1)
+    if parsed_args.no_config:
+        config_path = None
+    else:
+        config_path = parsed_args.config
 
     reporter = Reporter(
         term=term,
@@ -195,7 +187,7 @@ def main(args=None):
         fix=parsed_args.fix,
         ignore_warnings=parsed_args.ignore_warnings,
         root=root,
-        plugins_config=plugins_config,
+        plugins_config_path=config_path,
     )
 
     term.info(f"Start linting {len(files)} files ... ")
