@@ -235,18 +235,15 @@ def parse_args(
         help="Don't print the statistic",
     )
 
-    config_group = parser.add_mutually_exclusive_group()
-    config_group.add_argument(
+    parser.add_argument(
         "-c",
         "--config",
         type=Path,
         default="troubadix.toml",
-        help=("Path to the configuration file (default: config.toml)"),
-    )
-    config_group.add_argument(
-        "--no-config",
-        action="store_true",
-        help="Run without a configuration file",
+        help=(
+            "Specify the path to the file that contains additional "
+            "configuration for the plugins"
+        ),
     )
 
     if not args:

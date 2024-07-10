@@ -58,7 +58,7 @@ class Runner:
         included_plugins: Iterable[str] | None = None,
         fix: bool = False,
         ignore_warnings: bool = False,
-        plugins_config_path: Path | None,
+        plugins_config_path: Path,
     ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
@@ -68,11 +68,6 @@ class Runner:
 
         self.requires_config = self._check_requires_config()
         if self.requires_config:
-            if plugins_config_path is None:
-                print(
-                    "Plugins are being run that require a external config file"
-                )
-                sys.exit(1)
 
             # Get the plugins configurations from the external toml file
             try:

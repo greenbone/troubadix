@@ -163,11 +163,6 @@ def main(args=None):
         first_file = files[0].resolve()
         root = get_root(first_file)
 
-    if parsed_args.no_config:
-        config_path = None
-    else:
-        config_path = parsed_args.config
-
     reporter = Reporter(
         term=term,
         fix=parsed_args.fix,
@@ -187,7 +182,7 @@ def main(args=None):
         fix=parsed_args.fix,
         ignore_warnings=parsed_args.ignore_warnings,
         root=root,
-        plugins_config_path=config_path,
+        plugins_config_path=parsed_args.config,
     )
 
     term.info(f"Start linting {len(files)} files ... ")
