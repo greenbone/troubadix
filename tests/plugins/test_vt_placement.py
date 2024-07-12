@@ -78,7 +78,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
                     '  script_tag(name:"cvss_base", value:"4.0");\n'
                     '  script_tag(name:"summary", value:"Foo Bar.");\n'
                     f'  script_family("{_type} detection");\n'
-                    '  script_tag(name:"deprecated", value=TRUE);\n'
+                    '  script_tag(name:"deprecated", value:TRUE);\n'
                 )
 
                 fake_context = self.create_file_plugin_context(
