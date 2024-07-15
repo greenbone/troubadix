@@ -32,9 +32,11 @@ IGNORE_TAGS = [
     "script_name",
     "script_xref",
     "script_add_preference",
-    # nb: Special case we should ignore (at least for now) as it is commonly
-    # used like this and is only two chars "too long".
+    # nb: Special cases we should ignore (at least for now) as these are
+    # commonly used like this and is only two chars "too long".
     'script_tag(name:"vuldetect", value:"Checks if a vulnerable version is '
+    + 'present on the target host.");',
+    'script_tag(name:"vuldetect", value:"Checks if a vulnerable OS build is '
     + 'present on the target host.");',
 ]
 

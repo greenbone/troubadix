@@ -44,6 +44,9 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             'script_tag(name:"vuldetect", value:'
             '"Checks if a vulnerable version is present on the target host."'
             ");\n"
+            'script_tag(name:"vuldetect", value:'
+            '"Checks if a vulnerable OS build is present on the target host."'
+            ");\n"
             "  exit(0);\n"
             "}\n"
             "ignored line that is not part of description"
