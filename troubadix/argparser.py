@@ -18,12 +18,16 @@
 """ Argument parser for troubadix """
 
 import sys
-from argparse import ArgumentParser, Namespace
+import warnings
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Iterable
 
 from pontos.terminal import Terminal
+
+MAX_JOB_COUNT = cpu_count()
+DEFAULT_JOB_COUNT = max(1, MAX_JOB_COUNT // 2)
 
 
 def directory_type(string: str) -> Path:
@@ -40,17 +44,35 @@ def file_type(string: str) -> Path:
     return file_path
 
 
-def check_cpu_count(number: str) -> int:
-    """Make sure this value is valid
-    Default: use half of the available cores to not block the machine"""
-    max_count = cpu_count()
-    if not number:
-        return max_count // 2
-    number = int(number)
-    if number > max_count:
-        return max_count
+def check_cpu_count(number_str: str) -> int:
+    """
+    Ensures the given value is a valid CPU core count.
+
+    Args:
+        number_str (str): The number of CPU cores as a string.
+
+    Returns:
+        int: A valid CPU core count.
+    """
+    try:
+        number = int(number_str)
+    except ValueError as e:
+        raise ArgumentTypeError(
+            f"Invalid number of jobs: '{number_str}' is not an integer."
+        ) from e
+    if number > MAX_JOB_COUNT:
+        warnings.warn(
+            f"Requested number of jobs ({number}) "
+            "exceeds available CPU cores ({MAX_JOB_COUNT}). "
+            f"Using maximum available: {MAX_JOB_COUNT}.",
+        )
+        return MAX_JOB_COUNT
     if number < 1:
-        return max_count // 2
+        warnings.warn(
+            f"Requested number of jobs ({number}) is less than 1. "
+            f"Using default: {DEFAULT_JOB_COUNT}.",
+        )
+        return DEFAULT_JOB_COUNT
     return number
 
 
@@ -216,11 +238,11 @@ def parse_args(
         "-j",
         "--n-jobs",
         dest="n_jobs",
-        default=max(1, cpu_count() // 2),
+        default=str(DEFAULT_JOB_COUNT),
         type=check_cpu_count,
         help=(
             "Define number of jobs, that should run simultaneously. "
-            "Default: %(default)s"
+            f"Default: {DEFAULT_JOB_COUNT} (half of the available CPU cores)"
         ),
     )
 
