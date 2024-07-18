@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Iterator, Optional
+from typing import Optional
 
 from troubadix.helper import CURRENT_ENCODING
 
@@ -50,7 +51,7 @@ class FilePluginContext:
         self,
         *,
         root: Path,
-        nasl_file: Path = None,
+        nasl_file: Path,
     ) -> None:
         self.root = root
         self.nasl_file = nasl_file
@@ -67,7 +68,7 @@ class FilePluginContext:
         return self._file_content
 
     @property
-    def lines(self) -> Iterable[str]:
+    def lines(self) -> list[str]:
         if not self._lines:
             self._lines = self.file_content.splitlines()
         return self._lines
@@ -82,15 +83,14 @@ class FilesPluginContext:
 class Plugin(ABC):
     """A linter plugin"""
 
-    name: str = None
-    description: str = None
+    name: str
 
     @abstractmethod
     def run(self) -> Iterator[LinterResult]:
         pass
 
     def fix(self) -> Iterator[LinterResult]:
-        return []
+        return iter([])
 
 
 class FilesPlugin(Plugin):
