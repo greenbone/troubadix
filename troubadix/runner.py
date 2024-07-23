@@ -19,7 +19,7 @@ import datetime
 import signal
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Iterable
+from typing import Optional
 
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
@@ -49,11 +49,11 @@ class Runner:
         reporter: Reporter,
         *,
         root: Path,
-        excluded_plugins: Iterable[str] = None,
-        included_plugins: Iterable[str] = None,
+        excluded_plugins: Optional[list[str]] = None,
+        included_plugins: Optional[list[str]] = None,
         fix: bool = False,
         ignore_warnings: bool = False,
-    ) -> bool:
+    ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
 
@@ -97,7 +97,7 @@ class Runner:
 
         return results
 
-    def _run_pooled(self, files: Iterable[Path]):
+    def _run_pooled(self, files: list[Path]) -> None:
         """Run all plugins that check single files"""
         self._reporter.set_files_count(len(files))
         with Pool(processes=self._n_jobs, initializer=initializer) as pool:
@@ -129,7 +129,7 @@ class Runner:
                 pool.terminate()
                 pool.join()
 
-    def run(self, files: Iterable[Path]) -> bool:
+    def run(self, files: list[Path]) -> bool:
         """The function that should be executed to run
         the Plugins over all files"""
         if not len(self.plugins):

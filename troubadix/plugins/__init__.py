@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Iterable, List
+from collections.abc import Iterator
+from typing import Iterable, List, Optional, Tuple, TypeVar
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
 
@@ -82,7 +83,7 @@ from .vt_file_permissions import CheckVTFilePermissions
 from .vt_placement import CheckVTPlacement
 
 # plugins checking single files
-_FILE_PLUGINS = [
+_FILE_PLUGINS: list[type[FilePlugin]] = [
     CheckBadwords,
     CheckCopyrightText,
     CheckCopyrightYear,
@@ -143,33 +144,32 @@ _FILE_PLUGINS = [
 ]
 
 # plugins checking all files
-_FILES_PLUGINS = [
+_FILES_PLUGINS: list[type[FilesPlugin]] = [
     CheckDuplicateOID,
     CheckSpelling,
 ]
 
+# Define a type variable bound to Plugin (matches all subtypes of Plugin)
+T = TypeVar("T", bound=Plugin)
+
 
 class Plugins:
-    def __init__(
-        self,
-        file_plugins: Iterable[FilePlugin] = None,
-        files_plugins: Iterable[FilesPlugin] = None,
-    ):
-        self.file_plugins = tuple(file_plugins) or tuple()
-        self.files_plugins = tuple(files_plugins) or tuple()
+    def __init__(self, file_plugins, files_plugins):
+        self.file_plugins = tuple(file_plugins)
+        self.files_plugins = tuple(files_plugins)
 
     def __len__(self) -> int:
         return len(self.files_plugins + self.file_plugins)
 
-    def __iter__(self) -> Iterable[Plugin]:
+    def __iter__(self) -> Iterator[Plugin]:
         return iter(self.files_plugins + self.file_plugins)
 
 
 class StandardPlugins(Plugins):
     def __init__(
         self,
-        excluded_plugins: List[str] = None,
-        included_plugins: List[str] = None,
+        excluded_plugins: Optional[list[str]],
+        included_plugins: Optional[list[str]],
     ) -> None:
         file_plugins = _FILE_PLUGINS
         files_plugins = _FILES_PLUGINS
@@ -189,8 +189,8 @@ class StandardPlugins(Plugins):
 
     @staticmethod
     def _exclude_plugins(
-        excluded: Iterable[str], plugins: Iterable[Plugin]
-    ) -> List[Plugin]:
+        excluded: list[str], plugins: list[type[T]]
+    ) -> list[type[T]]:
         return [
             plugin
             for plugin in plugins
@@ -199,8 +199,8 @@ class StandardPlugins(Plugins):
 
     @staticmethod
     def _include_plugins(
-        included: Iterable[str], plugins: Iterable[Plugin]
-    ) -> List[Plugin]:
+        included: list[str], plugins: list[type[T]]
+    ) -> list[type[T]]:
         return [
             plugin
             for plugin in plugins

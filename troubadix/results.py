@@ -16,34 +16,34 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections import defaultdict
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Dict, Iterable, Iterator
 
 from troubadix.plugin import LinterResult, LinterWarning
 
 
 class Results:
     def __init__(self, ignore_warnings: bool = False) -> None:
-        self.plugin_results: Dict[str, Iterable[LinterResult]] = defaultdict(
+        self.plugin_results: defaultdict[str, list[LinterResult]] = defaultdict(
             list
         )
-        self.has_plugin_results = False
+        self.has_plugin_results: bool = False
         self._ignore_warnings = ignore_warnings
 
     def add_plugin_results(
         self, plugin_name: str, results: Iterator[LinterResult]
     ) -> "Results":
         if self._ignore_warnings:
-            results = [
+            results_list = [
                 result
                 for result in results
                 if not isinstance(result, LinterWarning)
             ]
         else:
-            results = list(results)
+            results_list = list(results)
 
-        self.has_plugin_results = self.has_plugin_results or bool(results)
-        self.plugin_results[plugin_name] += results
+        self.has_plugin_results = self.has_plugin_results or bool(results_list)
+        self.plugin_results[plugin_name] += results_list
         return self
 
     def __bool__(self):
@@ -53,7 +53,7 @@ class Results:
 class FileResults(Results):
     """Class to store results from different plugins for a file"""
 
-    def __init__(self, file_path: Path, ignore_warnings: bool = False):
+    def __init__(self, file_path: Path, ignore_warnings: bool = False) -> None:
         self.file_path = file_path
         super().__init__(ignore_warnings)
 
@@ -65,20 +65,22 @@ def resultsdict():
 class ResultCounts:
     """Class that counts different types of results of different plugins"""
 
-    def __init__(self):
-        self.result_counts = defaultdict(resultsdict)
-        self.error_count = 0
-        self.warning_count = 0
-        self.fix_count = 0
+    def __init__(self) -> None:
+        self.result_counts: defaultdict[str, defaultdict[str, int]] = (
+            defaultdict(resultsdict)
+        )
+        self.error_count: int = 0
+        self.warning_count: int = 0
+        self.fix_count: int = 0
 
-    def add_error(self, plugin: str):
+    def add_error(self, plugin: str) -> None:
         self.error_count += 1
         self.result_counts[plugin]["error"] += 1
 
-    def add_warning(self, plugin: str):
+    def add_warning(self, plugin: str) -> None:
         self.warning_count += 1
         self.result_counts[plugin]["warning"] += 1
 
-    def add_fix(self, plugin: str):
+    def add_fix(self, plugin: str) -> None:
         self.fix_count += 1
         self.result_counts[plugin]["fix"] += 1

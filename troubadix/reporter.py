@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from typing import Iterable, List
+from typing import Optional
 
 from pontos.terminal import Terminal
 
@@ -33,8 +33,8 @@ class Reporter:
         root: Path,
         *,
         fix: bool = False,
-        log_file: Path = None,
-        log_file_statistic: Path = None,
+        log_file: Optional[Path] = None,
+        log_file_statistic: Optional[Path] = None,
         statistic: bool = True,
         verbose: int = 0,
         ignore_warnings: bool = False,
@@ -45,7 +45,7 @@ class Reporter:
         self._statistic = statistic
         self._verbose = verbose
         self._fix = fix
-        self._files_count = 0
+        self._files_count: int = 0
         self._root = root
         self._ignore_warnings = ignore_warnings
         self._result_counts = ResultCounts()
@@ -78,7 +78,7 @@ class Reporter:
         self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _process_plugin_results(
-        self, plugin_name: str, plugin_results: List[LinterResult]
+        self, plugin_name: str, plugin_results: list[LinterResult]
     ):
         """Process the results of a plugin: Print/Log results if
         verbosity/logging fits and count the results"""
@@ -152,8 +152,8 @@ class Reporter:
     def report_plugin_overview(
         self,
         plugins: Plugins,
-        excluded: Iterable[str],
-        included: Iterable[str],
+        excluded: Optional[list[str]],
+        included: Optional[list[str]],
     ) -> None:
         """Print/log an overview, which plugins are in-/excluded and which one
         will be executed"""

@@ -18,8 +18,8 @@
 """ Main module for troubadix """
 
 import sys
-from collections.abc import Iterable
 from pathlib import Path
+from typing import Optional
 
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
@@ -32,9 +32,9 @@ from troubadix.runner import Runner
 
 
 def generate_file_list(
-    dirs: Iterable[Path],
-    exclude_patterns: Iterable[str],
-    include_patterns: Iterable[str],
+    dirs: list[Path],
+    exclude_patterns: list[str],
+    include_patterns: list[str],
 ) -> list[Path]:
     """Generates a files list under respect of several given arguments
 
@@ -64,8 +64,8 @@ def generate_file_list(
 
 def generate_patterns(
     terminal: ConsoleTerminal,
-    include_patterns: list[str],
-    exclude_patterns: list[str],
+    include_patterns: Optional[list[str]],
+    exclude_patterns: Optional[list[str]],
     non_recursive: bool,
 ) -> tuple[list[str], list[str]]:
     """Generates the include and exclude patterns
@@ -91,6 +91,10 @@ def generate_patterns(
             exclude_patterns = [f"**/{pattern}" for pattern in exclude_patterns]
     else:
         terminal.warning("Running in non-recursive mode!")
+
+    # Initialize exclude_patterns to an empty list if it's None
+    if exclude_patterns is None:
+        exclude_patterns = []
 
     return include_patterns, exclude_patterns
 

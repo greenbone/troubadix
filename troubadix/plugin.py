@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -56,8 +56,8 @@ class FilePluginContext:
         self.root = root
         self.nasl_file = nasl_file
 
-        self._file_content = None
-        self._lines = None
+        self._file_content: Optional[str] = None
+        self._lines: Optional[list[str]] = None
 
     @property
     def file_content(self) -> str:
@@ -75,7 +75,7 @@ class FilePluginContext:
 
 
 class FilesPluginContext:
-    def __init__(self, *, root: Path, nasl_files: Iterable[Path]) -> None:
+    def __init__(self, *, root: Path, nasl_files: list[Path]) -> None:
         self.root = root
         self.nasl_files = nasl_files
 
@@ -132,6 +132,6 @@ class LineContentPlugin(FilePlugin):
     def check_lines(
         self,
         nasl_file: Path,
-        lines: Iterable[str],
+        lines: list[str],
     ) -> Iterator[LinterResult]:
         pass
