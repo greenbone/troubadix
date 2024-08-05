@@ -18,7 +18,6 @@ import re
 from typing import Iterator
 
 from troubadix.helper import is_ignore_file
-
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 # nb: Those are files which have this misplaced compare since their very first

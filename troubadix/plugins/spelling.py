@@ -173,7 +173,7 @@ class CheckSpelling(FilesPlugin):
     name = "check_spelling"
 
     def _parse_codespell_line(self, line: str) -> Tuple[str, str]:
-        if not "==>" in line:
+        if "==>" not in line:
             raise ValueError("Invalid codespell line")
 
         file, _, correction = line.split(":")

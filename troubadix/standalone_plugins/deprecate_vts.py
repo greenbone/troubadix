@@ -8,12 +8,12 @@ from enum import Enum
 from pathlib import Path
 from typing import Iterable, Optional
 
-from troubadix.argparser import file_type, directory_type
+from troubadix.argparser import directory_type, file_type
 from troubadix.helper.patterns import (
-    get_special_script_tag_pattern,
-    get_script_tag_pattern,
     ScriptTag,
     SpecialScriptTag,
+    get_script_tag_pattern,
+    get_special_script_tag_pattern,
 )
 
 

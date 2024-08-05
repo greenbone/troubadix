@@ -42,7 +42,7 @@ class CheckDeprecatedDependency(FilePlugin):
         file_content = self.context.file_content
 
         if (
-            not "script_dependencies(" in file_content
+            "script_dependencies(" not in file_content
             or "# troubadix: disable=template_nd_test_files_fps" in file_content
         ):
             return

@@ -21,7 +21,6 @@ from typing import Iterator
 
 from troubadix.helper import is_ignore_file
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
-
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
 # nb: Those are files which are correctly using a log_message() to do e.g. some
