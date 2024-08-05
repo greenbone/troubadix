@@ -16,12 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import unittest
 import tempfile
+import unittest
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Generator
 from subprocess import SubprocessError
+from typing import Generator
+
 from troubadix.standalone_plugins.changed_oid import check_oid, git, parse_args
 
 

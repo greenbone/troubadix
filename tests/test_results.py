@@ -19,8 +19,8 @@
 import unittest
 from pathlib import Path
 
+from troubadix.plugin import LinterError, LinterWarning
 from troubadix.results import FileResults
-from troubadix.plugin import LinterWarning, LinterError
 
 
 class TestResults(unittest.TestCase):

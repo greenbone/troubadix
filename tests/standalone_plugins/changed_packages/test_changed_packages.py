@@ -30,6 +30,7 @@ from troubadix.standalone_plugins.changed_packages.package import (
 
 class ChangedPackagesTestCase(TestCase):
     def test_get_package(self):
+        # ruff: noqa: E501
         content = """
         ...some NASL...
         if(!isnull(res = isdpkgvuln(pkg:"libwpewebkit-1.0-3", ver:"2.38.3-1~deb11u1", rls:"DEB11"))) {

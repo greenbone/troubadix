@@ -27,9 +27,9 @@ from unittest.mock import MagicMock, patch
 from troubadix.standalone_plugins.version_updated import (
     check_version_updated,
     git,
+    parse_args,
 )
 from troubadix.standalone_plugins.version_updated import main as plugin_main
-from troubadix.standalone_plugins.version_updated import parse_args
 
 
 @contextmanager

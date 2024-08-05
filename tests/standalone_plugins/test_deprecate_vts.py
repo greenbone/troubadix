@@ -4,17 +4,17 @@
 # pylint: disable=protected-access
 import unittest
 from pathlib import Path
-from tests.plugins import TemporaryDirectory
 
+from tests.plugins import TemporaryDirectory
 from troubadix.standalone_plugins.deprecate_vts import (
-    deprecate,
-    parse_args,
     DeprecatedFile,
-    _get_summary,
     _finalize_content,
-    update_summary,
-    get_files_from_path,
+    _get_summary,
+    deprecate,
     filter_files,
+    get_files_from_path,
+    parse_args,
+    update_summary,
 )
 
 
@@ -92,19 +92,19 @@ NASL_CONTENT = (
     '...if(description)\n{\n  script_oid("1.3.6.1.4.1.25623.1.0.910673");'
     '\n  script_version("2024-03-12T14:15:13+0000");'
     '\n  script_name("RedHat: Security Advisory for gd (RHSA-2020:5443-01)");'
-    '\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");'
+    '\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");'  # noqa: E501
     '\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");'
     '\n\n  script_xref(name:"RHSA", value:"2020:5443-01");\n  script_xref(name:"URL", value:"https://www.redhat.com/archives/rhsa-announce/2020-December/msg00044.html");'
-    '\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");'
-    '\n\n  exit(0);\n}\n\ninclude("revisions-lib.inc");\ninclude("pkg-lib-rpm.inc");\n\nrelease = rpm_get_ssh_release();\nif(!release)\n  exit(0);\n\nres = "";\nreport = "";\n\nif(release == "RHENT_7") {\n\n  if(!isnull(res = isrpmvuln(pkg:"gd", rpm:"gd~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(!isnull(res = isrpmvuln(pkg:"gd-debuginfo", rpm:"gd-debuginfo~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(report != "") {\n    security_message(data:report);\n  } else if(__pkg_match) {\n    exit(99);\n  }\n  exit(0);\n}\n\nexit(0);'
+    '\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");'  # noqa: E501
+    '\n\n  exit(0);\n}\n\ninclude("revisions-lib.inc");\ninclude("pkg-lib-rpm.inc");\n\nrelease = rpm_get_ssh_release();\nif(!release)\n  exit(0);\n\nres = "";\nreport = "";\n\nif(release == "RHENT_7") {\n\n  if(!isnull(res = isrpmvuln(pkg:"gd", rpm:"gd~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(!isnull(res = isrpmvuln(pkg:"gd-debuginfo", rpm:"gd-debuginfo~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(report != "") {\n    security_message(data:report);\n  } else if(__pkg_match) {\n    exit(99);\n  }\n  exit(0);\n}\n\nexit(0);'  # noqa: E501
 )
 
 NASL_CONTENT_KB = (
     '...if(description)\n{\n  script_oid("1.3.6.1.4.1.25623.1.0.910673");'
     '\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");'
     '\n\n  set_kb_item(name:"shttp/" + port + "/detected", value:TRUE);"'
-    '\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");'
-    '\n\n  exit(0);\n}\n\ninclude("revisions-lib.inc");\ninclude("pkg-lib-rpm.inc");\n\nrelease = rpm_get_ssh_release();\nif(!release)\n  exit(0);\n\nres = "";\nreport = "";\n\nif(release == "RHENT_7") {\n\n  if(!isnull(res = isrpmvuln(pkg:"gd", rpm:"gd~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(!isnull(res = isrpmvuln(pkg:"gd-debuginfo", rpm:"gd-debuginfo~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(report != "") {\n    security_message(data:report);\n  } else if(__pkg_match) {\n    exit(99);\n  }\n  exit(0);\n}\n\nexit(0);'
+    '\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");'  # noqa: E501
+    '\n\n  exit(0);\n}\n\ninclude("revisions-lib.inc");\ninclude("pkg-lib-rpm.inc");\n\nrelease = rpm_get_ssh_release();\nif(!release)\n  exit(0);\n\nres = "";\nreport = "";\n\nif(release == "RHENT_7") {\n\n  if(!isnull(res = isrpmvuln(pkg:"gd", rpm:"gd~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(!isnull(res = isrpmvuln(pkg:"gd-debuginfo", rpm:"gd-debuginfo~2.0.35~27.el7_9", rls:"RHENT_7"))) {\n    report += res;\n  }\n\n  if(report != "") {\n    security_message(data:report);\n  } else if(__pkg_match) {\n    exit(99);\n  }\n  exit(0);\n}\n\nexit(0);'  # noqa: E501
 )
 
 
@@ -167,7 +167,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
         result = _finalize_content(NASL_CONTENT)
         expected = (
             '...if(description)\n{\n  script_oid("1.3.6.1.4.1.25623.1.0.910673");\n  '
-            'script_version("2024-03-12T14:15:13+0000");\n  script_name("RedHat: Security Advisory for gd (RHSA-2020:5443-01)");\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");\n\n  script_xref(name:"RHSA", value:"2020:5443-01");\n  script_xref(name:"URL", value:"https://www.redhat.com/archives/rhsa-announce/2020-December/msg00044.html");\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");\n\n  script_tag(name:"deprecated", value:TRUE);\n\nexit(0);\n}\n\nexit(66);\n'
+            'script_version("2024-03-12T14:15:13+0000");\n  script_name("RedHat: Security Advisory for gd (RHSA-2020:5443-01)");\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");\n\n  script_xref(name:"RHSA", value:"2020:5443-01");\n  script_xref(name:"URL", value:"https://www.redhat.com/archives/rhsa-announce/2020-December/msg00044.html");\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");\n\n  script_tag(name:"deprecated", value:TRUE);\n\nexit(0);\n}\n\nexit(66);\n'  # noqa: E501
         )
         self.assertEqual(result, expected)
 
