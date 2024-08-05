@@ -20,3 +20,11 @@ from .added_release import AddedRelease
 from .added_udeb import AddedUdeb
 from .changed_update import ChangedUpdate
 from .dropped_architecture import DroppedArchitecture
+
+__all__ = [
+    "AddedEpoch",
+    "AddedRelease",
+    "AddedUdeb",
+    "ChangedUpdate",
+    "DroppedArchitecture",
+]

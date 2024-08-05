@@ -30,7 +30,7 @@ class DroppedArchitecture(Marker):
     @classmethod
     def mark(cls, missing_packages: List[Package], new_packages: List[Package]):
         for package in missing_packages:
-            if not ":" in package.name:
+            if ":" not in package.name:
                 continue
 
             other_package = cls._find_package(

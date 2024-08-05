@@ -39,7 +39,7 @@ class CheckCreationDate(FileContentPlugin):
         ):
             return
 
-        if not "creation_date" in file_content:
+        if "creation_date" not in file_content:
             yield LinterError(
                 "No creation date has been found.",
                 file=nasl_file,

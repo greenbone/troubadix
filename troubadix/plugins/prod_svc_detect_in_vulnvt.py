@@ -17,7 +17,7 @@
 import re
 from typing import Iterator
 
-from troubadix.helper import is_ignore_file, ScriptTag, SpecialScriptTag
+from troubadix.helper import ScriptTag, SpecialScriptTag, is_ignore_file
 from troubadix.helper.patterns import (
     _get_special_script_tag_pattern,
     get_script_tag_pattern,

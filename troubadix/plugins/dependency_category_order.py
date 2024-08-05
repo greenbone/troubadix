@@ -93,7 +93,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         """
         if (
             nasl_file.suffix == ".inc"
-            or not "script_dependencies(" in file_content
+            or "script_dependencies(" not in file_content
             or "# troubadix: disable=template_nd_test_files_fps" in file_content
         ):
             return

@@ -26,3 +26,15 @@ from .patterns import (
 
 # js: can we get this to utf-8 in future @scanner @feed?
 CURRENT_ENCODING = "latin1"  # currently default
+
+__all__ = [
+    "get_path_from_root",
+    "get_root",
+    "is_ignore_file",
+    "subprocess_cmd",
+    "ScriptTag",
+    "SpecialScriptTag",
+    "get_common_tag_patterns",
+    "get_script_tag_pattern",
+    "get_special_script_tag_pattern",
+]
