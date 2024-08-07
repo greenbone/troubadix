@@ -15,16 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .added_epoch import AddedEpoch
-from .added_release import AddedRelease
-from .added_udeb import AddedUdeb
-from .changed_update import ChangedUpdate
-from .dropped_architecture import DroppedArchitecture
-
-__all__ = [
-    "AddedEpoch",
-    "AddedRelease",
-    "AddedUdeb",
-    "ChangedUpdate",
-    "DroppedArchitecture",
-]
+from .added_epoch import AddedEpoch  # noqa: F401
+from .added_release import AddedRelease  # noqa: F401
+from .added_udeb import AddedUdeb  # noqa: F401
+from .changed_update import ChangedUpdate  # noqa: F401
+from .dropped_architecture import DroppedArchitecture  # noqa: F401
