@@ -1,21 +1,19 @@
+---
 name: Build and test Python package
-
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
 jobs:
   linting:
     name: Linting
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
     strategy:
-        matrix:
-          python-version:
-            - 3.9
-            - "3.10"
-            - "3.11"
+      matrix:
+        python-version:
+          - '3.10'
+          - '3.11'
     steps:
       - uses: actions/checkout@v4
       - name: Install and check with black, pylint and pontos.version
@@ -23,16 +21,14 @@ jobs:
         with:
           packages: troubadix tests
           python-version: ${{ matrix.python-version }}
-
   test:
     name: Run all tests
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
     strategy:
-        matrix:
-          python-version:
-            - 3.9
-            - "3.10"
-            - "3.11"
+      matrix:
+        python-version:
+          - '3.10'
+          - '3.11'
     steps:
       - uses: actions/checkout@v4
       - name: Install python, poetry and dependencies
@@ -43,27 +39,26 @@ jobs:
         run: |
           poetry run python -m unittest -v
         env:
-          NASLINTER_DOCKER_RUN: "true"
-
+          NASLINTER_DOCKER_RUN: 'true'
   codecov:
     name: Upload coverage to codecov.io
     needs: test
-    runs-on: 'ubuntu-latest'
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install python, poetry and dependencies
         uses: greenbone/actions/poetry@v3
         with:
-          python-version: 3.9
+          python-version: 3.10
       - name: Install codecov-python
         run: poetry run python -m pip install codecov
       - name: Run unit tests
         run: |
           poetry run coverage run -m unittest -v
         env:
-          NASLINTER_DOCKER_RUN: "true"
+          NASLINTER_DOCKER_RUN: 'true'
       - name: Create coverage XML report
-        run:  poetry run coverage xml
+        run: poetry run coverage xml
       - name: Upload coverage to codecov.io
         uses: codecov/codecov-action@v4
         with:
