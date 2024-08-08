@@ -18,8 +18,8 @@
 """ Main module for troubadix """
 
 import sys
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, List, Tuple
 
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
@@ -35,7 +35,7 @@ def generate_file_list(
     dirs: Iterable[Path],
     exclude_patterns: Iterable[str],
     include_patterns: Iterable[str],
-) -> List[Path]:
+) -> list[Path]:
     """Generates a files list under respect of several given arguments
 
     Arguments:
@@ -48,7 +48,7 @@ def generate_file_list(
 
     Returns
     List of Path objects"""
-    files: List[Path] = []
+    files: list[Path] = []
     for directory in dirs:
         for pattern in include_patterns:
             files.extend(directory.glob(pattern))
@@ -64,10 +64,10 @@ def generate_file_list(
 
 def generate_patterns(
     terminal: ConsoleTerminal,
-    include_patterns: List[str],
-    exclude_patterns: List[str],
+    include_patterns: list[str],
+    exclude_patterns: list[str],
     non_recursive: bool,
-) -> Tuple[List[str], List[str]]:
+) -> tuple[list[str], list[str]]:
     """Generates the include and exclude patterns
 
     Arguments:
