@@ -19,9 +19,9 @@
 
 import sys
 from argparse import ArgumentParser, Namespace
+from collections.abc import Sequence
 from multiprocessing import cpu_count
 from pathlib import Path
-from typing import Iterable
 
 from pontos.terminal import Terminal
 
@@ -56,7 +56,7 @@ def check_cpu_count(number: str) -> int:
 
 def parse_args(
     terminal: Terminal,
-    args: Iterable[str] = None,
+    args: Sequence[str],
 ) -> Namespace:
     """Parsing args for troubadix
 
