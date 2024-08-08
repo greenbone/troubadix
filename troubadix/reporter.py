@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, List
 
 from pontos.terminal import Terminal
 
@@ -33,8 +33,8 @@ class Reporter:
         root: Path,
         *,
         fix: bool = False,
-        log_file: Path = None,
-        log_file_statistic: Path = None,
+        log_file: Path | None = None,
+        log_file_statistic: Path | None = None,
         statistic: bool = True,
         verbose: int = 0,
         ignore_warnings: bool = False,
@@ -78,7 +78,7 @@ class Reporter:
         self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
     def _process_plugin_results(
-        self, plugin_name: str, plugin_results: List[LinterResult]
+        self, plugin_name: str, plugin_results: Iterable[LinterResult]
     ):
         """Process the results of a plugin: Print/Log results if
         verbosity/logging fits and count the results"""

@@ -17,9 +17,9 @@
 
 import datetime
 import signal
+from collections.abc import Iterable
 from multiprocessing import Pool
 from pathlib import Path
-from typing import Iterable
 
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
@@ -49,11 +49,11 @@ class Runner:
         reporter: Reporter,
         *,
         root: Path,
-        excluded_plugins: Iterable[str] = None,
-        included_plugins: Iterable[str] = None,
+        excluded_plugins: Iterable[str] | None = None,
+        included_plugins: Iterable[str] | None = None,
         fix: bool = False,
         ignore_warnings: bool = False,
-    ) -> bool:
+    ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
 
