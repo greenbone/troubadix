@@ -17,10 +17,11 @@
 
 import datetime
 import signal
+import sys
 from collections.abc import Iterable
 from multiprocessing import Pool
 from pathlib import Path
-import sys
+
 from troubadix.helper.patterns import (
     init_script_tag_patterns,
     init_special_script_tag_patterns,

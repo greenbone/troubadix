@@ -39,7 +39,7 @@ from troubadix.runner import Runner, TroubadixException
 
 _here = Path(__file__).parent
 
-DEFAULT_CONFIG = {}
+DEFAULT_CONFIG = Path("troubadix.toml")
 
 
 class TestRunner(unittest.TestCase):
@@ -53,7 +53,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             reporter=self._reporter,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         plugins = _FILE_PLUGINS + _FILES_PLUGINS
@@ -76,7 +76,7 @@ class TestRunner(unittest.TestCase):
             reporter=self._reporter,
             excluded_plugins=excluded_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         for plugin in runner.plugins:
@@ -92,7 +92,7 @@ class TestRunner(unittest.TestCase):
             reporter=self._reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         self.assertEqual(len(runner.plugins), 2)
@@ -118,7 +118,7 @@ class TestRunner(unittest.TestCase):
             reporter=self._reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
         with redirect_stdout(io.StringIO()) as _:
             sys_exit = runner.run([nasl_file])
@@ -162,7 +162,7 @@ class TestRunner(unittest.TestCase):
             reporter=self._reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as _:
@@ -211,7 +211,7 @@ class TestRunner(unittest.TestCase):
             reporter=reporter,
             included_plugins=[CheckScriptVersionAndLastModificationTags.name],
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -258,7 +258,7 @@ class TestRunner(unittest.TestCase):
             reporter=reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -295,7 +295,7 @@ class TestRunner(unittest.TestCase):
             reporter=reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -335,7 +335,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -359,7 +359,7 @@ class TestRunner(unittest.TestCase):
             reporter=self._reporter,
             included_plugins=["foo"],
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         nasl_file = _here / "plugins" / "test.nasl"
@@ -392,7 +392,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
         with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
@@ -440,7 +440,7 @@ class TestRunner(unittest.TestCase):
             reporter=reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
         with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
@@ -478,7 +478,7 @@ class TestRunner(unittest.TestCase):
             included_plugins=included_plugins,
             root=self.root,
             ignore_warnings=True,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -504,7 +504,7 @@ class TestRunner(unittest.TestCase):
             reporter=reporter,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
 
         with redirect_stdout(io.StringIO()) as f:
@@ -545,7 +545,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
         with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
@@ -592,7 +592,7 @@ class TestRunner(unittest.TestCase):
             n_jobs=1,
             included_plugins=included_plugins,
             root=self.root,
-            plugins_config=DEFAULT_CONFIG,
+            plugins_config_path=DEFAULT_CONFIG,
         )
         with redirect_stdout(io.StringIO()):
             runner.run([nasl_file])
