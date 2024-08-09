@@ -16,17 +16,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections import defaultdict
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Dict, Iterable, Iterator
 
 from troubadix.plugin import LinterResult, LinterWarning
 
 
 class Results:
     def __init__(self, ignore_warnings: bool = False) -> None:
-        self.plugin_results: Dict[str, Iterable[LinterResult]] = defaultdict(
-            list
-        )
+        self.plugin_results: dict[str, list[LinterResult]] = defaultdict(list)
         self.has_plugin_results = False
         self._ignore_warnings = ignore_warnings
 
