@@ -238,7 +238,7 @@ def parse_args(
     parser.add_argument(
         "-c",
         "--config",
-        type=file_type,
+        type=Path,
         default="troubadix.toml",
         help=(
             "Specify the path to the file that contains additional "
