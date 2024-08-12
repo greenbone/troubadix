@@ -51,7 +51,7 @@ jobs:
       - name: Install python, poetry and dependencies
         uses: greenbone/actions/poetry@v3
         with:
-          python-version: 3.10
+          python-version: '3.10'
       - name: Install codecov-python
         run: poetry run python -m pip install codecov
       - name: Run unit tests
