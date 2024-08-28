@@ -26,13 +26,15 @@ class CheckCopyrightYearTestCase(PluginTestCase):
     def test_ok_new_header(self):
         path = Path("some/file.nasl")
         content = (
-            "# SPDX-FileCopyrightText: 2022 Greenbone AG",
+            "# SPDX-FileCopyrightText: 2022 Greenbone AG\n"
+            "# SPDX-FileCopyrightText: 2022 some other person\n"
             '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2022)");',
-            '  script_copyright("Copyright (C) 2022 Greenbone AG");',
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
+
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
+            nasl_file=path, file_content=content
         )
         plugin = CheckCopyrightYear(fake_context)
 
@@ -42,13 +44,50 @@ class CheckCopyrightYearTestCase(PluginTestCase):
     def test_ok_old_header(self):
         path = Path("some/file.nasl")
         content = (
-            "# Copyright (C) 2022 Greenbone AG",
+            "# Copyright (C) 2022 Greenbone AG\n"
+            "# Copyright (C) 2022 some other Person\n"
             '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2022)");',
-            '  script_copyright("Copyright (C) 2022 Greenbone AG");',
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckCopyrightYear(fake_context)
+
+        results = list(plugin.run())
+        self.assertEqual(len(results), 0)
+
+    def test_pre2008_ok_new_header(self):
+        # tests that special cases pass:
+        # copyright < creation year for pre2008
+        # additional copyright that is newer but ok
+        path = Path("some/pre2008/file.nasl")
+        content = (
+            "# SPDX-FileCopyrightText: 2010 Greenbone AG\n"
+            "# SPDX-FileCopyrightText: New code since 2022 Greenbone AG\n"
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) 2020 Greenbone AG");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckCopyrightYear(fake_context)
+
+        results = list(plugin.run())
+        self.assertEqual(len(results), 0)
+
+    def test_pre2008_ok_old_header(self):
+        path = Path("some/pre2008/file.nasl")
+        content = (
+            "# Copyright (C) 2020 Greenbone AG\n"
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) 2020 Greenbone AG");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
         )
         plugin = CheckCopyrightYear(fake_context)
 
@@ -64,66 +103,15 @@ class CheckCopyrightYearTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_pre_ok_new_header(self):
-        path = Path("some/pre2008/file.nasl")
-        content = (
-            "# SPDX-FileCopyrightText: 2020 Greenbone AG",
-            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2022)");',
-            '  script_copyright("Copyright (C) 2020 Greenbone AG");',
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
-        )
-        plugin = CheckCopyrightYear(fake_context)
-
-        results = list(plugin.run())
-        self.assertEqual(len(results), 0)
-
-    def test_pre_ok_old_header(self):
-        path = Path("some/pre2008/file.nasl")
-        content = (
-            "# Copyright (C) 2020 Greenbone AG",
-            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2022)");',
-            '  script_copyright("Copyright (C) 2020 Greenbone AG");',
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
-        )
-        plugin = CheckCopyrightYear(fake_context)
-
-        results = list(plugin.run())
-        self.assertEqual(len(results), 0)
-
-    def test_pre_fail(self):
-        path = Path("some/pre2008/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2020-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2020)");',
-            '  script_copyright("Copyright (C) 2021 Greenbone AG");',
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
-        )
-        plugin = CheckCopyrightYear(fake_context)
-
-        results = list(plugin.run())
-        self.assertEqual(len(results), 1)
-        self.assertEqual(
-            "VT contains a Copyright year not matching "
-            "the creation year 2020 at line 2",
-            results[0].message,
-        )
-
     def test_missing_creation_date(self):
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"qod_type", value:"remote_banner");',
-            '  script_family("Product detection");',
+            "# SPDX-FileCopyrightText: 2022 Greenbone AG\n"
+            '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
+
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
+            nasl_file=path, file_content=content
         )
         plugin = CheckCopyrightYear(fake_context)
 
@@ -133,62 +121,111 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             "Missing creation_date statement in VT", results[0].message
         )
 
-    def test_creation_date_not_script_copyright_year(self):
+    def test_missing_copyright_tag(self):
         path = Path("some/file.nasl")
         content = (
+            "# SPDX-FileCopyrightText: 2022 Greenbone AG\n"
             '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013)");',
-            '  script_copyright("Copyright (C) 2020 Greenbone AG");',
+            '+0200 (Tue, 14 May 2022)");\n'
         )
+
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckCopyrightYear(fake_context)
+
+        results = list(plugin.run())
+        self.assertEqual(len(results), 1)
+        self.assertEqual("Missing copyright tag in VT", results[0].message)
+
+    def test_regex_fail_copyright_tag(self):
+        path = Path("some/file.nasl")
+        content = (
+            "# SPDX-FileCopyrightText: 2022 Greenbone AG\n"
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) Greenbone AG");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
         )
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
         self.assertEqual(len(results), 1)
         self.assertEqual(
-            "VT contains a Copyright year not matching "
-            "the creation year 2022 at line 2",
+            "Unable to extract year from script_copyright tag in VT",
             results[0].message,
         )
 
-    def test_creation_date_not_old_header_year(self):
+    def test_missing_header_copyright(self):
         path = Path("some/file.nasl")
         content = (
-            "# Copyright (C) 2020 Greenbone AG",
             '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013)");',
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
+
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
+            nasl_file=path, file_content=content
         )
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
         self.assertEqual(len(results), 1)
         self.assertEqual(
-            "VT contains a Copyright year not matching "
-            "the creation year 2022 at line 1",
+            "VT header is missing a copyright text",
             results[0].message,
         )
+        return
 
-    def test_creation_date_not_new_header_year(self):
-        path = Path("some/file.nasl")
+    def test_pre2008_fail(self):
+        path = Path("some/pre2008/file.nasl")
         content = (
-            "# SPDX-FileCopyrightText: 2020 Greenbone AG",
-            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013)");',
+            "# Copyright (C) 2021 Greenbone AG\n"
+            '  script_tag(name:"creation_date", value:"2020-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2020)");\n'
+            '  script_copyright("Copyright (C) 2021 Greenbone AG");\n'
         )
         fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content
+            nasl_file=path, file_content=content
         )
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
-        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results), 2)
         self.assertEqual(
-            "VT contains a Copyright year not matching "
-            "the creation year 2022 at line 1",
+            "a pre2008 vt has a copyright tag year newer than the creation_year",
             results[0].message,
+        )
+        self.assertEqual(
+            "a pre2008 vt has a copyright value in the fileheader"
+            " newer than the creation_year",
+            results[1].message,
+        )
+
+    def test_fail(self):
+        path = Path("some/file.nasl")
+        content = (
+            "# SPDX-FileCopyrightText: 3000 Greenbone AG\n"
+            '  script_tag(name:"creation_date", value:"2022-05-14 11:24:55 '
+            '+0200 (Tue, 14 May 2022)");\n'
+            '  script_copyright("Copyright (C) 1000 Greenbone AG");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckCopyrightYear(fake_context)
+
+        results = list(plugin.run())
+        self.assertEqual(len(results), 2)
+        self.assertEqual(
+            "script_copyright tag does not match the creation year",
+            results[0].message,
+        )
+        self.assertEqual(
+            "a copyright in the fileheader does not match the creation year",
+            results[1].message,
         )
