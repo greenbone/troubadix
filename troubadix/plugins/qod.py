@@ -15,23 +15,24 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
 from typing import Iterator
 
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
 VALID_QOD_NUM_VALUES = [
-    1,
-    30,
-    50,
-    70,
-    75,
-    80,
-    95,
-    97,
-    98,
-    99,
-    100,
+    "1",
+    "30",
+    "50",
+    "70",
+    "75",
+    "80",
+    "95",
+    "97",
+    "98",
+    "99",
+    "100",
 ]
 
 VALID_QOD_TYPES = [
@@ -51,6 +52,12 @@ VALID_QOD_TYPES = [
     "package_unreliable",
 ]
 
+# needed due to script_tag_pattern value not including the quotes
+QOD_WITH_QUOTES_PATTERN = re.compile(
+    r'script_tag\(\s*name\s*:\s*(?P<quote>[\'"])qod(?P=quote)\s*,'
+    r'\s*value\s*:\s*(?P<value_with_quotes>[\'"]?(?P<value>.+?)[\'"]?)\s*\)\s*;'
+)
+
 
 class CheckQod(FilePlugin):
     name = "check_qod"
@@ -68,10 +75,9 @@ class CheckQod(FilePlugin):
         if "# troubadix: disable=template_nd_test_files_fps" in file_content:
             return
 
-        qod_pattern = get_script_tag_pattern(ScriptTag.QOD)
         qod_type_pattern = get_script_tag_pattern(ScriptTag.QOD_TYPE)
 
-        match_qod = list(qod_pattern.finditer(file_content))
+        match_qod = list(QOD_WITH_QUOTES_PATTERN.finditer(file_content))
         match_qod_type = list(qod_type_pattern.finditer(file_content))
 
         num_matches = len(match_qod) + len(match_qod_type)
@@ -89,21 +95,25 @@ class CheckQod(FilePlugin):
             )
 
         for match in match_qod:
-            try:
-                qod = int(match.group("value"))
-                if qod not in VALID_QOD_NUM_VALUES:
+            full_match = match.group(0)
+            full_value = match.group("value_with_quotes")
+            value = match.group("value")
+
+            # Check if the value is enclosed in double quotes
+            if full_value.startswith('"') and full_value.endswith('"'):
+
+                # Compare against valid values
+                if value not in VALID_QOD_NUM_VALUES:
                     yield LinterError(
-                        f"{match.group(0)}: '{qod}' is an invalid QoD number"
-                        " value. Allowed are"
-                        f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}",
+                        f"Invalid QOD value '{value}' in {full_match}."
+                        " Allowed are"
+                        f" {', '.join(x for x in VALID_QOD_NUM_VALUES)}",
                         file=self.context.nasl_file,
                         plugin=self.name,
                     )
-            except ValueError:
+            else:
                 yield LinterError(
-                    f"{match.group(0)}: '{match.group('value')}' is an invalid"
-                    " QoD number value. Allowed are"
-                    f" {', '.join(str(x) for x in VALID_QOD_NUM_VALUES)}",
+                    f"QOD value not properly enclosed in double quotes in {full_match}",
                     file=self.context.nasl_file,
                     plugin=self.name,
                 )
