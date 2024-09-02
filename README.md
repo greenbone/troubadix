@@ -52,9 +52,7 @@ For installation via pipenv please take a look at their [documentation][pipenv].
 **troubadix** uses [poetry] for its own dependency management and build
 process.
 
-First install poetry via pip
-
-    python3 -m pip install --user poetry
+First install poetry (see [documentation](https://python-poetry.org/docs/#installation)).
 
 Afterwards run
 
