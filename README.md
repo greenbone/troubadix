@@ -15,9 +15,19 @@ A linting and QA check tool for NASL files
 
 Python 3.9 and later is supported.
 
+### Install using pipx
+
+You can install the latest stable release of **troubadix** from the Python
+Package Index (pypi) using [pipx]
+
+    python3 -m pipx install troubadix
+
 ### Install using pip
 
-pip 19.0 or later is required.
+> [!NOTE]
+> The `pip install` command does no longer work out-of-the-box in newer
+> distributions like Ubuntu 23.04 because of [PEP 668](https://peps.python.org/pep-0668).
+> Please use the [installation via pipx](#install-using-pipx) instead.
 
 You can install the latest stable release of **troubadix** from the Python
 Package Index (pypi) using [pip]
@@ -42,9 +52,7 @@ For installation via pipenv please take a look at their [documentation][pipenv].
 **troubadix** uses [poetry] for its own dependency management and build
 process.
 
-First install poetry via pip
-
-    python3 -m pip install --user poetry
+First install poetry (see [documentation](https://python-poetry.org/docs/#installation)).
 
 Afterwards run
 
@@ -84,5 +92,6 @@ Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 [Greenbone]: https://www.greenbone.net/
 [poetry]: https://python-poetry.org/
 [pip]: https://pip.pypa.io/
+[pipx]: https://pypa.github.io/pipx/
 [pipenv]: https://pipenv.pypa.io/
 [autohooks]: https://github.com/greenbone/autohooks
