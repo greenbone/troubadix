@@ -34,6 +34,11 @@ def parse_args() -> Namespace:
     parser.add_argument(
         "--ignore-file", type=file_type, help="path to ignore file"
     )
+    parser.add_argument(
+        "--gen-ignore-entries",
+        action="store_true",
+        help="output only newline seperated entries, no header",
+    )
     return parser.parse_args()
 
 
@@ -74,14 +79,20 @@ def check_extensions(args: Namespace) -> List[Path]:
 
 
 def main() -> int:
-    if unwanted_files := check_extensions(parse_args()):
-        print(
-            f"{len(unwanted_files)} "
-            "Files with unwanted file extension were found:"
-        )
-        for file in unwanted_files:
-            print(file)
-        return 1
+    args = parse_args()
+    if unwanted_files := check_extensions(args):
+        if args.gen_ignore_entries:
+            for file in unwanted_files:
+                print(file.relative_to(args.dir))
+            return 0
+        else:
+            print(
+                f"{len(unwanted_files)} "
+                "Files with unwanted file extension were found:"
+            )
+            for file in unwanted_files:
+                print(file)
+            return 1
 
     return 0
 
