@@ -18,6 +18,7 @@
 from typing import Iterable, List
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
+from troubadix.plugins.spaces_before_dots import CheckSpacesBeforeDots
 
 from .badwords import CheckBadwords
 from .copyright_text import CheckCopyrightText
@@ -140,6 +141,7 @@ _FILE_PLUGINS = [
     CheckVTFilePermissions,
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
+    CheckSpacesBeforeDots,
 ]
 
 # plugins checking all files
