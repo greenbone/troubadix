@@ -67,11 +67,10 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
 
     def test_dependencies_multiline(self):
         content = (
+            # tests group1
             '  script_dependencies("123",\n"456");\n'
-            "  script_require_ports();\n"
-            "  script_require_udp_ports();\n"
-            "  script_require_keys();\n"
-            "  script_mandatory_keys();\n"
+            # tests group2
+            '  script_mandatory_keys("foo",\n"bar");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content

@@ -73,7 +73,9 @@ class CheckScriptCallsRecommended(FileContentPlugin):
         ]
 
         if not _get_special_script_tag_pattern(
-            name=rf"({'|'.join(recommended_many_call)})", value=".*"
+            name=rf"({'|'.join(recommended_many_call)})",
+            value=".*?",
+            flags=re.DOTALL,
         ).search(file_content):
             yield LinterWarning(
                 "VT contains none of the following recommended calls: "
