@@ -80,21 +80,22 @@ def check_extensions(args: Namespace) -> List[Path]:
 
 def main() -> int:
     args = parse_args()
-    if unwanted_files := check_extensions(args):
-        if args.gen_ignore_entries:
-            for file in unwanted_files:
-                print(file.relative_to(args.dir))
-            return 0
-        else:
-            print(
-                f"{len(unwanted_files)} "
-                "Files with unwanted file extension were found:"
-            )
-            for file in unwanted_files:
-                print(file)
-            return 1
+    unwanted_files = check_extensions(args)
+    if not unwanted_files:
+        return 0
 
-    return 0
+    if args.gen_ignore_entries:
+        for file in unwanted_files:
+            print(file.relative_to(args.dir))
+        return 0
+
+    print(
+        f"{len(unwanted_files)} "
+        "Files with unwanted file extension were found:"
+    )
+    for file in unwanted_files:
+        print(file)
+    return 1
 
 
 if __name__ == "__main__":
