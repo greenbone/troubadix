@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
+import re
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -18,6 +19,11 @@ TAGS = [
     ScriptTag.SOLUTION,
 ]
 
+# Regex pattern to match:
+# 1. A dot preceded and/or followed by any whitespace character (floating between words)
+# 2. A dot preceded by any whitespace character at the end of the string
+PATTERN = re.compile(r"\s\.\s|\s\.$")
+
 
 class CheckSpacesBeforeDots(FileContentPlugin):
     name = "check_spaces_before_dots"
@@ -26,7 +32,7 @@ class CheckSpacesBeforeDots(FileContentPlugin):
         self, nasl_file: Path, file_content: str
     ) -> Iterator[LinterResult]:
         """
-        This plugin checks for excess space before the dot
+        This plugin checks for excess whitespace before a dot
         in script_tags that have full sentence values
         """
         if nasl_file.suffix == ".inc":
@@ -35,13 +41,13 @@ class CheckSpacesBeforeDots(FileContentPlugin):
             pattern = get_script_tag_pattern(tag)
             match = pattern.search(file_content)
             if match:
-                s = match.group("value")
-                # check if last char is a dot and second last a space
-                if len(s) >= 2 and s[-1] == "." and s[-2] == " ":
+                value = match.group("value")
+                if PATTERN.search(value):
                     fullmatch = match.group()
                     yield LinterWarning(
-                        f"value of script_tag {match.group('name')} has"
-                        f" a excess space before the dot:\n '{fullmatch}'",
+                        f"value of script_tag {match.group('name')} has alteast"
+                        " one occurence of excess whitespace before a dot:"
+                        f"\n '{fullmatch}'",
                         file=nasl_file,
                         plugin=self.name,
                     )

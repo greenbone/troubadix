@@ -13,7 +13,8 @@ class TestSpacesBeforeDots(PluginTestCase):
         nasl_file = Path("/some/fake/directory/test.nasl")
         content = """
               script_tag(name:"summary", value:"Foo Bar.");
-              script_tag(name:"solution", value:"meh.");
+              script_tag(name:"solution", value:"Foo .NET.");
+              script_tag(name:"insight", value:"Foo Bar ...");
             """
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
@@ -24,14 +25,16 @@ class TestSpacesBeforeDots(PluginTestCase):
 
     def test_fail(self):
         nasl_file = Path("/some/fake/directory/test.nasl")
-        content = """
+        content = (
+            """
               script_tag(name:"summary", value:"Foo Bar .");
               script_tag(name:"vuldetect", value:"Foo Bar .");
               script_tag(name:"insight", value:"Foo Bar .");
-              script_tag(name:"impact", value:"Foo Bar .");
-              script_tag(name:"affected", value:"Foo Bar .");
-              script_tag(name:"solution", value:"meh .");
+              script_tag(name:"impact", value:"Foo . Bar");
             """
+            'script_tag(name:"affected", value:"Foo\n.\nBar.");'
+            'script_tag(name:"solution", value:"Foo Bar\n.");'
+        )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
         )
@@ -40,7 +43,8 @@ class TestSpacesBeforeDots(PluginTestCase):
         self.assertEqual(len(results), 6)
         self.assertEqual(
             results[0].message,
-            "value of script_tag summary has a excess space before the dot:\n"
+            "value of script_tag summary has alteast one occurence of excess"
+            " whitespace before a dot:\n"
             " 'script_tag(name:"
             '"summary", value:"Foo Bar .");'
             "'",
