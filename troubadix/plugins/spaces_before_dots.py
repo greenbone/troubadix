@@ -22,7 +22,7 @@ TAGS = [
 # Regex pattern to match:
 # 1. A dot preceded and/or followed by any whitespace character (floating between words)
 # 2. A dot preceded by any whitespace character at the end of the string
-PATTERN = re.compile(r"\s\.\s|\s\.$")
+PATTERN = re.compile(r"\s\.(\s|$)")
 
 
 class CheckSpacesBeforeDots(FileContentPlugin):
