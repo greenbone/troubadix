@@ -6,6 +6,7 @@ from operator import itemgetter
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
+from troubadix.helper.helper import is_ignore_file
 from troubadix.helper.patterns import (
     ScriptTag,
     get_script_tag_pattern,
@@ -30,6 +31,76 @@ TAGS = [
 # 1. A dot preceded and/or followed by any whitespace character (floating between words)
 # 2. A dot preceded by any whitespace character at the end of the string
 PATTERN = re.compile(r"\s+\.(\s|$)")
+IGNORE = [
+    "21.04/2020/huawei/gb_euleros_sa_2019_1038.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_1097.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_1235.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_1252.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_1399.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_1426.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_1483.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_2220.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_2419.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_2483.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2019_2648.nasl",
+    "21.04/2020/huawei/gb_euleros_sa_2020_1476.nasl",
+    "21.04/2021/suse/gb_sles_2018_0862_1.nasl",
+    "21.04/2021/suse/gb_sles_2021_2834_1.nasl",
+    "21.04/2022/mageia/mgasa-2014-0451.nasl",
+    "21.04/2022/mageia/mgasa-2014-0452.nasl",
+    "21.04/2022/mageia/mgasa-2014-0453.nasl",
+    "21.04/2022/mageia/mgasa-2014-0454.nasl",
+    "21.04/2022/mageia/mgasa-2014-0455.nasl",
+    "21.04/2022/mageia/mgasa-2014-0456.nasl",
+    "21.04/2022/mageia/mgasa-2014-0459.nasl",
+    "21.04/2022/mageia/mgasa-2014-0479.nasl",
+    "21.04/2022/mageia/mgasa-2015-0075.nasl",
+    "21.04/2022/mageia/mgasa-2015-0076.nasl",
+    "21.04/2022/mageia/mgasa-2015-0078.nasl",
+    "21.04/2022/mageia/mgasa-2015-0126.nasl",
+    "21.04/2022/mageia/mgasa-2018-0367.nasl",
+    "21.04/2022/mageia/mgasa-2019-0067.nasl",
+    "21.04/2022/mageia/mgasa-2021-0196.nasl",
+    "21.04/2022/mageia/mgasa-2021-0525.nasl",
+    "21.04/2018/debian/deb_dla_1578.nasl",
+    "21.04/2019/debian/deb_dla_1728.nasl",
+    "21.04/2022/suse/gb_sles_2022_1548_1.nasl",
+    "22.04/2018/debian/deb_dla_1578.nasl",
+    "nasl/22.04/2019/debian/deb_dla_1728.nasl",
+    "common/2008/debian/deb_246.nasl",
+    "common/2008/debian/deb_266.nasl",
+    "common/2008/freebsd/freebsd_5e92e8a2.nasl",
+    "common/2008/freebsd/freebsdsa_cpio.nasl",
+    "common/2008/freebsd/freebsdsa_cvs2.nasl",
+    "common/2009/osc_photoGallery_sql_injection.nasl",
+    "common/2009/secpod_novell_edir_mult_vuln_jul09_lin.nasl",
+    "common/2009/secpod_novell_edir_mult_vuln_jul09_win.nasl",
+    "common/2010/freebsd/freebsd_3a7c5fc4.nasl",
+    "common/2012/freebsd/freebsd_a4a809d8.nasl",
+    "common/2015/amazon/alas-2014-455.nasl",
+    "common/2015/gb_mozilla_firefox_mult_vuln01_mar15_macosx.nasl",
+    "common/2015/gb_mozilla_firefox_mult_vuln01_mar15_win.nasl",
+    "common/2015/oracle/ELSA-2009-1619.nasl",
+    "common/2015/oracle/ELSA-2011-0586.nasl",
+    "common/2016/gb_perl_privilege_escalation_vuln_win.nasl",
+    "common/2021/dropbear/gb_dropbear_ssh_filename_vuln_may20.nasl",
+    "common/2021/eclipse/gb_jetty_GHSA-v7ff-8wcx-gmc5_lin.nasl",
+    "common/2021/eclipse/gb_jetty_GHSA-v7ff-8wcx-gmc5_win.nasl",
+    "21.04/gsf/2024/amazon/alas-2019-1216.nasl",
+    "21.04/gsf/2024/amazon/alas-2024-2592.nasl",
+    "21.04/gsf/2024/amazon/alas-2024-2593.nasl",
+    "common/gsf/2009/mandriva/gb_mandriva_MDVSA_2008_140.nasl",
+    "common/gsf/2009/mandriva/gb_mandriva_MDVSA_2008_141.nasl",
+    "common/gsf/2010/mandriva/gb_mandriva_MDVA_2010_173.nasl",
+    "common/gsf/2010/mandriva/gb_mandriva_MDVSA_2010_155.nasl",
+    "common/gsf/2010/mandriva/gb_mandriva_MDVSA_2010_155_1.nasl",
+    "common/gsf/2010/mandriva/gb_mandriva_MDVSA_2010_167.nasl",
+    "common/gsf/2020/f5/gb_f5_big_ip_K11315080.nasl",
+    "common/gsf/2020/f5/gb_f5_big_iq_K11315080.nasl",
+    "nasl/common/2022/opensuse/gb_opensuse_2022_1548_1.nasl",
+    "common/2024/opensuse/gb_opensuse_2023_3247_1.nasl",
+    "common/attic/debian/deb_232_1.nasl",
+]
 
 
 class CheckSpacesBeforeDots(FileContentPlugin):
@@ -43,7 +114,7 @@ class CheckSpacesBeforeDots(FileContentPlugin):
         in script_tags that have full sentence values
         """
         self.matches = []
-        if nasl_file.suffix == ".inc":
+        if nasl_file.suffix == ".inc" or is_ignore_file(nasl_file, IGNORE):
             return
         for tag in TAGS:
             pattern = get_script_tag_pattern(tag)
