@@ -46,7 +46,7 @@ IGNORE_FILES = [
     "2018/gb_unquoted_path_vulnerabilities_win.nasl",
     "2009/remote-net-hub-3com.nasl",
     "2015/gb_vnc_brute_force.nasl",
-    "2012/gb_secpod_ssl_ciphers_weak_report.nasl",
+    "2012/gb_ssl_tls_ciphers_weak_report.nasl",
     "GSHB/GSHB_Kompendium.nasl",
     "/policy_control_template.nasl",
     "/template.nasl",
