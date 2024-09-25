@@ -26,3 +26,8 @@ racoon
 # As e.g. the spelling correction in Mozilla Firefox is accepting both we're excluding this for now
 re-use
 re-usable
+# Bootup is commonly used in e.g. example output and seems to be also generally valid like seen on:
+# https://en.wiktionary.org/wiki/bootup
+# so it is ignored (at least for now)
+bootup
+Bootup
