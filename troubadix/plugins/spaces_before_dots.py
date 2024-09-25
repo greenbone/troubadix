@@ -32,9 +32,10 @@ TAGS = [
 # 2. A dot preceded by any whitespace character at the end of the string
 PATTERN = re.compile(r"\s+\.(\s|$)")
 IGNORE = [
+    # 21.04 and 22.04 are generated and should not be touched manually
     "21.04",
-    "22.04/2018/debian/deb_dla_1578.nasl",
-    "22.04/2019/debian/deb_dla_1728.nasl",
+    "22.04",
+    # uses dots for beginning of entry in enumeration
     "common/2008/debian/deb_246.nasl",
     "common/2008/debian/deb_266.nasl",
     "common/2008/freebsd/freebsd_5e92e8a2.nasl",
