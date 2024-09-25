@@ -45,7 +45,7 @@ class TestSpacesBeforeDots(PluginTestCase):
         self.assertEqual(len(results), 7)
         self.assertEqual(
             results[0].message,
-            "value of script_tag summary has alteast one occurence of excess"
+            "value of script_tag summary has at least one occurence of excess"
             " whitespace before a dot:\n"
             " 'script_tag(name:"
             '"summary", value:"Foo Bar .");'
@@ -68,7 +68,7 @@ class TestSpacesBeforeDots(PluginTestCase):
                 """
                   script_tag(name:"summary", value:"Foo Bar .");
                   script_tag(name:"vuldetect", value:"Foo Bar .");
-                  script_tag(name:"insight", value:"Foo Bar .");
+                  script_tag(name:"insight", value:"Foo .Net Bar .");
                   script_tag(name:"impact", value:"Foo . Bar . Foo");
                 """
                 'script_tag(name:"affected", value:"Foo\n.\nBar.");'
@@ -78,7 +78,7 @@ class TestSpacesBeforeDots(PluginTestCase):
                 """
                   script_tag(name:"summary", value:"Foo Bar.");
                   script_tag(name:"vuldetect", value:"Foo Bar.");
-                  script_tag(name:"insight", value:"Foo Bar.");
+                  script_tag(name:"insight", value:"Foo .Net Bar.");
                   script_tag(name:"impact", value:"Foo. Bar. Foo");
                 """
                 'script_tag(name:"affected", value:"Foo.\nBar.");'

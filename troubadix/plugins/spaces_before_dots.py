@@ -93,7 +93,7 @@ class CheckSpacesBeforeDots(FileContentPlugin):
                     self.matches.append((whitespace_pos, excess_match.group()))
                     fullmatch = match.group()
                     yield LinterWarning(
-                        f"value of script_tag {match.group('name')} has alteast"
+                        f"value of script_tag {match.group('name')} has at least"
                         " one occurence of excess whitespace before a dot:"
                         f"\n '{fullmatch}'",
                         file=nasl_file,
