@@ -42,6 +42,7 @@ _IGNORE_FILES = [
     "policy_control_template.nasl",
     "test_version_func_inc.nasl",
     "test_ipv6_packet_forgery.nasl",
+    "test_http_extract_location_from_redirect.nasl",
 ]
 
 
