@@ -91,7 +91,7 @@ Add more important informations
  * Add suppor... [Please see the references for more information on the vulnerabilities]");
   a denial of service. (CVE-2016-4429) Tim Ruehsen discovered that the
   - A division by zero in the CAF demuxer
-"admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp:all,ftp",
+"admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp,ibm,intel,ivanti:all,http,ssh,ftp",
   Admin endpoints to a public WAN (Internet) / public LAN without authentication.
 "Administrator:admin:cisco,conexant,corecess,gvc:all",
   # admin:<redacted>:0:0:Adminstrator:/:/bin/sh
@@ -355,8 +355,11 @@ drbd: Avoid Clang warning about pointless switch statment (bsc#1051510).
  eliptic curve parameters were not sufficiently validated during
   } else if( banner =~ "^220 (RICOH|LANIER|SAVIN|Gestetner|NRG) (Aficio |Pro)?([A-Z]+)? [^ ]+ (\([^)]+\) )?FTP server" ) {
   } else if("diese Vorgabe muss manuell ueberprueft werden" >< tolower(status)) {
+else if (prod =~ "^BMX\s*NOE\s*0100$" || prod =~ "^BMX\s*NOE\s*0100H$") {
+else if (prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$") {
   else if( svc == "agobot.fo" )
 Enable log information of starting/stoping services. (bsc#1144923,
+  Engineering (TE) database and then a subsequent operation attempts to process these, rpd will
 Engineering (TE) tunnel's physical source interface is not propagated to hardware after the adjacency is lost.
   eSpace IAD, eSpace U1981 and eSpace USM.");
   establishment of the Cisco Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch
@@ -508,8 +511,14 @@ if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 )
 if (prod =~ "^BMX\s*NOC\s*0401$" || prod =~ "^BMX\s*NOE\s*0100$" || prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$" ||
 if (prod =~ "^BMX\s*NOE\s*0100$") {
 if (prod =~ "^BMX\s*NOE\s*0100$" || prod =~ "^BMX\s*NOE\s*0100H$") {
+if (prod =~ "^BMX\s*NOE\s*0100" && version_is_less(version: version, test_version: "3.3")) {
+if (prod =~ "^BMX\s*NOE\s*0100" && version_is_less(version: version, test_version: "3.50")) {
 if (prod =~ "^BMX\s*NOE\s*0110$") {
 if (prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$") {
+if (prod =~ "^BMX\s*NOE\s*0110" && version_is_less(version: version, test_version: "6.5")) {
+if (prod =~ "^BMX\s*NOE\s*0110" && version_is_less(version: version, test_version: "6.70")) {
+if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOE\s*01[01]0"))
+if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOR\s*0200H" && prod !~ "^BMX\s*NOE\s*0100" &&
 if( r =~ " (A\. A\. Milne|Albert Einstein|Anonimo|Antico proverbio cinese|Autor desconocido|Charles Dickens|Francisco de Quevedo y Villegas|George Bernard Shaw|Jaime Balmes|Johann Wolfgang von Goethe|Jil Sander|Juana de Asbaje|Konfucius|Lord Philip Chesterfield|Montaigne|Petrarca|Ralph Waldo Emerson|Seneca|Syrus|Werner von Siemens)" ||
   if(rcvRes && '>iAm[i]nE<' >< rcvRes)
     if( res =~ "^HTTP/1\.[01] 200" && "Powered by" >< res && "ANG" >< res ) {
@@ -759,6 +768,8 @@ Prevent sporious 'salt-api' stuck processes when managing SSH minions.
   processing malformed files packed with UPack.
 processing Upack files. A remote attacker could send a crafted file and
   processor_arch_id = 'oval:org.mitre.oval:obj:1576';
+    prod !~ "^BMX\s*NOC\s*0401" && prod !~ "^BMX\s*NOE\s*01" && prod !~ "^BMX\s*NOR\s*0200H" &&
+    prod !~ "^BMX\s*NOE\s*0110" && prod !~ "^BMX\s*NOC\s*\s*0401" && prod !~ "^140CPU65" &&
   product_os_name_id = 'oval:org.mitre.oval:obj:5590';
  prompted to give a password when acessing root owned files. (bsc#1125084)");
 Provide the 32bit samba winbind PAM module and its dependend 32bit
@@ -781,7 +792,7 @@ Readded what missing in last update: BDX-ML B0/M0/R0 6-4f-1/ef 0b00002e->0000003
   Red Hat would like to thank Tim Bunce for responsibly reporting the
   Red Hat would like to thank Timo Warns of PRESENSE Technologies GmbH for
 reenable php7-dba support of Berkeley DB (bsc#1108554)");
-             "Referer: http://",host,":",port,"/UE/welcome_login.html\r\n",
+             "Referer: http://", host, "/UE/welcome_login.html\r\n",
 # Ref : http://www.hsc.fr/ressources/articles/win_net_srv/index.html.en by Jean-Baptiste Marchand
         register_and_report_cpe( app:"Netsparker - Web Application Security Scanner", ver:netVer, base:"cpe:/a:netsparker:wass:", expr:"^([0-9.]+)", insloc:netPath );
     register_and_report_cpe(app:"Wiesemann & Theis GmbH " + appName, ver:version, concluded:concluded,
@@ -1339,6 +1350,7 @@ triggerD = raw_string(0x06,0x00,0x07,0x00,0x20,0x00,0x00,0x00,0x0e,0x00,0x32,
 Tuomas Haanpaa and Matti Kamunen from Synopsys Ltd discovered that the NFSv2 and NFSv3 server implementations are vulnerable to an out-of-bounds memory access issue while processing arbitrarily long arguments sent by NFSv2/NFSv3 PRC clients, leading to a denial of service.
 two intermediate CAs which could be used to generate rogue end-entity
 udev: Downgrade message when settting inotify watch up fails.
+"UE",
  unconstrained interal data buffering (bsc#1145575).
  unconstrained interal data buffering (bsc#1146097).
   - Undefined behavior in bounded channel of crossbeam rust crate.
@@ -1372,7 +1384,7 @@ url = "/statics/pageChallenge.html";
       url = "/status/infomation.htm";
   url = string(dir, "/config.xml.sav");
   url = string(openVer[2], "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt");
-url = '/UE/advanced.html';
+url = "/UE/advanced.html";
 url = "/UE/welcome_login.html";
  * usb/net: rndis: remove ambigous status codes. only net/hyperv part
  use-after-free due to the AB/BA lock with buffer_mutex and mmap_lock
