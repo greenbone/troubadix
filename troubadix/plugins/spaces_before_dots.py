@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 import re
 from collections.abc import Iterator
-from operator import itemgetter
 from pathlib import Path
 
 from troubadix.helper import CURRENT_ENCODING
@@ -33,8 +32,8 @@ TAGS = [
 PATTERN = re.compile(r"\s+\.(\s|$)")
 IGNORE = [
     # 21.04 and 22.04 are generated and should not be touched manually
-    "21.04",
-    "22.04",
+    "21.04/",
+    "22.04/",
     # uses dots for beginning of entry in enumeration
     "common/2008/debian/deb_246.nasl",
     "common/2008/debian/deb_266.nasl",
@@ -85,21 +84,23 @@ class CheckSpacesBeforeDots(FileContentPlugin):
         for tag in TAGS:
             pattern = get_script_tag_pattern(tag)
             match = pattern.search(file_content)
-            if match:
-                value = match.group("value")
-                value_start = match.start("value")
+            if not match:
+                continue
 
-                for excess_match in PATTERN.finditer(value):
-                    whitespace_pos = excess_match.start() + value_start
-                    self.matches.append((whitespace_pos, excess_match.group()))
-                    fullmatch = match.group()
-                    yield LinterWarning(
-                        f"value of script_tag {match.group('name')} has at least"
-                        " one occurence of excess whitespace before a dot:"
-                        f"\n '{fullmatch}'",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
+            value = match.group("value")
+            value_start = match.start("value")
+
+            for excess_match in PATTERN.finditer(value):
+                whitespace_pos = excess_match.start() + value_start
+                self.matches.append((whitespace_pos, excess_match.group()))
+                fullmatch = match.group()
+                yield LinterWarning(
+                    f"value of script_tag {match.group('name')} has at least"
+                    " one occurence of excess whitespace before a dot:"
+                    f"\n '{fullmatch}'",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
     def fix(self) -> Iterator[LinterResult]:
 
@@ -107,7 +108,7 @@ class CheckSpacesBeforeDots(FileContentPlugin):
             return
 
         # Sort matches by position, descending order to avoid messing up indices during replacement
-        self.matches.sort(reverse=True, key=itemgetter(0))
+        self.matches.sort(reverse=True)
 
         file_content = self.context.file_content
         for pos, match_str in self.matches:
