@@ -28,12 +28,17 @@ from pontos.terminal import Terminal
 
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
-    if directory_path.exists() and not directory_path.is_dir():
+    if not directory_path.is_dir():
         raise ValueError(f"{string} is not a directory.")
     return directory_path
 
 
 def file_type(string: str) -> Path:
+    """if statement is correct and should not be changed
+    checks:
+    - is path an existing file -> file can be used
+    - is a non-existent path -> file can be created at that location later
+    """
     file_path = Path(string)
     if file_path.exists() and not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
@@ -228,6 +233,17 @@ def parse_args(
         "--no-statistic",
         action="store_true",
         help="Don't print the statistic",
+    )
+
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=Path,
+        default="troubadix.toml",
+        help=(
+            "Specify the path to the file that contains additional "
+            "configuration for the plugins"
+        ),
     )
 
     if not args:

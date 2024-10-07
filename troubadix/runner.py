@@ -17,6 +17,7 @@
 
 import datetime
 import signal
+import sys
 from collections.abc import Iterable
 from multiprocessing import Pool
 from pathlib import Path
@@ -29,6 +30,11 @@ from troubadix.plugin import FilePluginContext, FilesPluginContext, Plugin
 from troubadix.plugins import StandardPlugins
 from troubadix.reporter import Reporter
 from troubadix.results import FileResults, Results
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 
 CHUNKSIZE = 1  # default 1
 
@@ -53,12 +59,27 @@ class Runner:
         included_plugins: Iterable[str] | None = None,
         fix: bool = False,
         ignore_warnings: bool = False,
+        plugins_config_path: Path,
     ) -> None:
         # plugins initialization
         self.plugins = StandardPlugins(excluded_plugins, included_plugins)
 
         self._excluded_plugins = excluded_plugins
         self._included_plugins = included_plugins
+
+        self.requires_config = self._check_requires_config()
+        if self.requires_config:
+
+            # Get the plugins configurations from the external toml file
+            try:
+                with open(plugins_config_path, "rb") as file:
+                    self.plugins_config = tomllib.load(file)
+            except FileNotFoundError:
+                print(f"Config file '{plugins_config_path}' does not exist")
+                sys.exit(1)
+            except tomllib.TOMLDecodeError as e:
+                print(f"Error decoding TOML file '{plugins_config_path}': {e}")
+                sys.exit(1)
 
         self._reporter = reporter
         self._n_jobs = n_jobs
@@ -90,12 +111,29 @@ class Runner:
             root=self._root, nasl_file=file_path.resolve()
         )
 
-        for plugin_class in self.plugins.file_plugins:
-            plugin = plugin_class(context)
-
+        file_plugins = self._initialize_plugins(
+            context, self.plugins.file_plugins
+        )
+        for plugin in file_plugins:
             self._check(plugin, results)
 
         return results
+
+    def _initialize_plugins(self, context, plugin_classes):
+        return [
+            (
+                plugin_class(context, config=self.plugins_config)
+                if plugin_class.require_external_config
+                else plugin_class(context)
+            )
+            for plugin_class in plugin_classes
+        ]
+
+    def _check_requires_config(self):
+        return any(
+            plugin.require_external_config
+            for plugin in self.plugins.files_plugins + self.plugins.file_plugins
+        )
 
     def _run_pooled(self, files: Iterable[Path]):
         """Run all plugins that check single files"""
@@ -104,10 +142,9 @@ class Runner:
             try:
                 # run files plugins
                 context = FilesPluginContext(root=self._root, nasl_files=files)
-                files_plugins = [
-                    plugin_class(context)
-                    for plugin_class in self.plugins.files_plugins
-                ]
+                files_plugins = self._initialize_plugins(
+                    context, self.plugins.files_plugins
+                )
 
                 for results in pool.imap_unordered(
                     self._check_files, files_plugins, chunksize=CHUNKSIZE
