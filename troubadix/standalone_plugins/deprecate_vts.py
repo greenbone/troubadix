@@ -2,11 +2,13 @@
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 
 import re
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Iterable, Optional
+
+from pontos.terminal.terminal import ConsoleTerminal
 
 from troubadix.argparser import directory_type, file_type
 from troubadix.helper.patterns import (
@@ -15,6 +17,7 @@ from troubadix.helper.patterns import (
     get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
+from troubadix.troubadix import from_file
 
 
 class Deprecations(Enum):
@@ -32,6 +35,15 @@ class DeprecatedFile:
 
 
 KB_ITEMS_PATTERN = re.compile(r"set_kb_item\(.+\);")
+
+
+def existing_file_type(string: str) -> Path:
+    file_path = Path(string)
+    if not file_path.exists():
+        raise ArgumentTypeError(f'File "{string}" does not exist.')
+    if not file_path.is_file():
+        raise ArgumentTypeError(f'"{string}" is not a file.')
+    return file_path
 
 
 def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
@@ -83,26 +95,18 @@ def get_files_from_path(dir_path: Path = None) -> list:
     return [file for file in dir_path.glob("**/*")]
 
 
-def filter_files(
-    files: list, filename_prefix: str = None
-) -> list[DeprecatedFile]:
-    """Filter the files based on a provided prefix and convert them into
+def parse_files(files: list) -> list[DeprecatedFile]:
+    """Convert filepaths into
     DeprecatedFile objects
 
     Args:
         files: a list of files to deprecate, should be .nasl VTs
-        filename_prefix: an optional prefix to filter only specific files
 
     Returns:
         List of DeprecatedFile objects
 
     """
     to_deprecate = []
-    if filename_prefix:
-        filename_filter = re.compile(rf"{filename_prefix}")
-        files[:] = [
-            file for file in files if re.match(filename_filter, file.name)
-        ]
 
     for file in files:
         with file.open("r", encoding="latin-1") as fh:
@@ -194,16 +198,6 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         help="Path where the deprecated files should be written to.",
     )
     parser.add_argument(
-        "-p",
-        "--filename-prefix",
-        metavar="<filename_prefix>",
-        nargs="?",
-        default=None,
-        type=str,
-        help="The prefix of the files you would like to deprecate,"
-        "for example 'gb_rhsa_2021' to filter on the year",
-    )
-    parser.add_argument(
         "-r",
         "--deprecation-reason",
         metavar="<deprecation_reason>",
@@ -214,16 +208,17 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         "been merged with another still active VT, 'duplicate': The VT has"
         "a still active duplicate, 'defunct': The VT is no longer "
         "functional.",
+        required=True,
     )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "-f",
-        "--files",
-        metavar="<files>",
+        "--file",
+        metavar="<file>",
         nargs="+",
         default=None,
         type=file_type,
-        help="Files to deprecate",
+        help="File to deprecate",
     )
     group.add_argument(
         "-i",
@@ -231,20 +226,36 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         metavar="<input_path>",
         default=None,
         type=directory_type,
-        help="Path to the existing nasl script directory",
+        help="Path to a directory where all files should be deprecated.",
+    )
+    group.add_argument(
+        "--from-file",
+        metavar="<from_file>",
+        default=None,
+        type=existing_file_type,
+        help=(
+            "Path to a single file that contains a list of files "
+            "to be deprecated, separated by new lines."
+        ),
     )
     return parser.parse_args(args)
 
 
 def main():
     args = parse_args()
+    terminal = ConsoleTerminal()
     input_path = args.input_path if args.input_path else None
-    filename_prefix = args.filename_prefix
+    files = []
 
-    files = args.files or get_files_from_path(input_path)
-    filtered_files = filter_files(files, filename_prefix)
+    if input_path:
+        files = get_files_from_path(input_path)
+    elif args.from_file:
+        files = from_file(include_file=args.from_file, term=terminal)
+    elif args.file:
+        files = args.file
 
-    deprecate(args.output_path, filtered_files, args.deprecation_reason)
+    to_be_deprecated = parse_files(files)
+    deprecate(args.output_path, to_be_deprecated, args.deprecation_reason)
 
 
 if __name__ == "__main__":
