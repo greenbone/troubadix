@@ -11,9 +11,9 @@ from troubadix.standalone_plugins.deprecate_vts import (
     _finalize_content,
     _get_summary,
     deprecate,
-    filter_files,
     get_files_from_path,
     parse_args,
+    parse_files,
     update_summary,
 )
 
@@ -26,7 +26,7 @@ class ParseArgsTestCase(unittest.TestCase):
 
         args = parse_args(
             [
-                "--files",
+                "--file",
                 testfile,
                 "--output-path",
                 output_path,
@@ -34,7 +34,7 @@ class ParseArgsTestCase(unittest.TestCase):
                 reason,
             ]
         )
-        self.assertEqual(args.files, [Path(testfile)])
+        self.assertEqual(args.file, [Path(testfile)])
         self.assertEqual(args.output_path, Path(output_path))
         self.assertEqual(args.deprecation_reason, reason)
 
@@ -47,7 +47,7 @@ class ParseArgsTestCase(unittest.TestCase):
         with self.assertRaises(SystemExit):
             parse_args(
                 [
-                    "--files",
+                    "--file",
                     testfile,
                     "--output-path",
                     output_path,
@@ -86,6 +86,28 @@ class ParseArgsTestCase(unittest.TestCase):
                     reason,
                 ]
             )
+
+    def test_parse_from_file(self):
+        output_path = "attic/"
+        with TemporaryDirectory() as tempdir:
+            from_file = tempdir / "from_file.txt"
+            testfile1 = tempdir / "testfile1.nasl"
+            testfile2 = tempdir / "testfile2.nasl"
+
+            from_file.write_text(f"{testfile1}\n{testfile2}\n", encoding="utf8")
+
+            args = parse_args(
+                [
+                    "--from-file",
+                    str(from_file),
+                    "--output-path",
+                    output_path,
+                    "-r",
+                    "NOTUS",
+                ]
+            )
+
+            self.assertEqual(args.from_file, from_file)
 
 
 NASL_CONTENT = (
@@ -190,16 +212,12 @@ class DeprecateVTsTestCase(unittest.TestCase):
 
             self.assertEqual(result, expected)
 
-    def test_filter_files(self):
+    def test_parse_files(self):
         with TemporaryDirectory() as in_dir:
             testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
             testfile1.write_text(NASL_CONTENT, encoding="utf8")
-            testfile2 = in_dir / "gb_rhsa_2020_8383_8383.nasl"
-            testfile2.write_text(NASL_CONTENT, encoding="utf8")
 
-            result = filter_files(
-                files=[testfile1, testfile2], filename_prefix="gb_rhsa_2021"
-            )
+            result = parse_files(files=[testfile1])
             expected = [
                 DeprecatedFile(
                     name="gb_rhsa_2021_8383_8383.nasl",
@@ -207,17 +225,5 @@ class DeprecateVTsTestCase(unittest.TestCase):
                     content=NASL_CONTENT,
                 )
             ]
-
-            self.assertEqual(result, expected)
-
-    def test_filter_files_out(self):
-        with TemporaryDirectory() as in_dir:
-            testfile1 = in_dir / "gb_rhsa_2021_8383_8383.nasl"
-            testfile1.write_text(NASL_CONTENT, encoding="utf8")
-
-            result = filter_files(
-                files=[testfile1], filename_prefix="gb_rhsa_2020"
-            )
-            expected = []
 
             self.assertEqual(result, expected)
