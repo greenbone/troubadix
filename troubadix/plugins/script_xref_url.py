@@ -64,7 +64,7 @@ class CheckScriptXrefUrl(FileContentPlugin):
         for match in matches:
             if match:
                 if match.group("value") not in ALLOWED_URLS and not url(
-                    match.group("value")
+                    match.group("value"), strict_query=False
                 ):
                     yield LinterError(
                         f"{match.group(0)}: Invalid URL value",
