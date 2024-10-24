@@ -49,6 +49,15 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
             '  script_xref(name:"URL", value:"http://speedtouch.sourceforge.io/index.php?/news.en.html");\n'
             '  script_xref(name:"URL", value:"https://support.k7computing.com/index.php?/Knowledgebase/Article/View/173/41/advisory-issued-on-6th-november-2017");\n'
             '  script_xref(name:"URL", value:"http://support.novell.com/cgi-bin/search/searchtid.cgi?/10077872.htm");\n'
+            '  script_xref(name:"URL", value:"https://blog.fuzzing-project.org/54-Update-on-MatrixSSL-miscalculation-CVE-2016-8671,-incomplete-fix-for-CVE-2016-6887.html");\n'
+            '  script_xref(name:"URL", value:"http://www.scaprepo.com/view.jsp?id=oval:org.secpod.oval:def:701638");\n'
+            '  script_xref(name:"URL", value:"https://blog.fuzzing-project.org/46-Various-invalid-memory-reads-in-ImageMagick-WPG,-DDS,-DCM.html");\n'
+            '  script_xref(name:"URL", value:"http://forum.wampserver.com/read.php?2,153491");\n'
+            '  script_xref(name:"URL", value:"https://secure1.securityspace.com/smysecure/catid.html?in=FreeBSD-SA-10:04.jail.asc");\n'
+            '  script_xref(name:"URL", value:"http://www.corelan.be:8800/index.php/forum/security-advisories/corelan-10-004-turboftp-server-1-00-712-dos/");\n'
+            '  script_xref(name:"URL", value:"http://core.yehg.net/lab/pr0js/advisories/dll_hijacking/[flash_player]_10.1.x_insecure_dll_hijacking_(dwmapi.dll)");\n'
+            '  script_xref(name:"URL", value:"http://mail-archives.apache.org/mod_mbox/perl-advocacy/200904.mbox/<ad28918e0904011458h273a71d4x408f1ed286c9dfbc@mail.gmail.com>");\n'
+            '  script_xref(name:"URL", value:"https://confluence.atlassian.com/security/security-bulletin-may-21-2024-1387867145.html");\n'
             # pylint: enable=line-too-long
         )
         fake_context = self.create_file_plugin_context(
@@ -69,7 +78,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_invalid_url(self):
+    def test_generic_invalid_url(self):
         content = '  script_xref(name:"URL", value:"www.example.com");\n'
         fake_context = self.create_file_plugin_context(
             nasl_file=self.path, file_content=content
@@ -83,5 +92,115 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
         self.assertEqual(
             'script_xref(name:"URL", value:"www.example.com");: Invalid URL'
             " value",
+            results[0].message,
+        )
+
+    def test_invalid_url_trailing_angle_bracket(self):
+        content = '  script_xref(name:"URL", value:"https://docs.docker.com/engine/release-notes/24.0/#2407>");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"URL", value:"https://docs.docker.com/engine/'
+            'release-notes/24.0/#2407>");: Invalid URL'
+            " value (trailing '>')",
+            results[0].message,
+        )
+
+    def test_invalid_url_trailing_comma(self):
+        content = '  script_xref(name:"URL", value:"https://dev.mysql.com/doc/refman/5.7/en/mysql-stmt-fetch.html,");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"URL", value:"https://dev.mysql.com/doc/refman/5.7/en/'
+            'mysql-stmt-fetch.html,");: Invalid URL'
+            " value (trailing ',')",
+            results[0].message,
+        )
+
+    def test_invalid_url_trailing_punctuation_mark(self):
+        content = '  script_xref(name:"URL", value:"http://isec.pl/vulnerabilities/isec-0017-binfmt_elf.txt:");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"URL", value:"http://isec.pl/vulnerabilities/'
+            'isec-0017-binfmt_elf.txt:");: Invalid URL'
+            " value (trailing ':')",
+            results[0].message,
+        )
+
+    def test_invalid_url_trailing_square_bracket(self):
+        content = (
+            '  script_xref(name:"URL", value:"https://example.com/foo/bar]");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"URL", value:"https://example.com/foo/bar]");: Invalid URL'
+            " value (trailing ']')",
+            results[0].message,
+        )
+
+    def test_invalid_url_trailing_round_bracket(self):
+        content = (
+            '  script_xref(name:"URL", value:"https://example.com/foo/bar)");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"URL", value:"https://example.com/foo/bar)");: Invalid URL'
+            " value (trailing ')')",
+            results[0].message,
+        )
+
+    def test_invalid_url_wrong_ending(self):
+        content = '  script_xref(name:"URL", value:"https://confluence.atlassian.com/security/security-bulletin-may-21-2024-1387867145.htmll");\n'
+        fake_context = self.create_file_plugin_context(
+            nasl_file=self.path, file_content=content
+        )
+        plugin = CheckScriptXrefUrl(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            'script_xref(name:"URL", value:"https://confluence.atlassian.com/security/'
+            'security-bulletin-may-21-2024-1387867145.htmll");: Invalid URL'
+            " value (wrong file extension)",
             results[0].message,
         )
