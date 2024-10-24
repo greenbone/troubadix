@@ -64,6 +64,7 @@ from .script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
 from .script_xref_form import CheckScriptXrefForm
+from .script_xref_url_dead import CheckScriptXrefUrlDead
 from .script_xref_url import CheckScriptXrefUrl
 from .security_messages import CheckSecurityMessages
 from .set_get_kb_calls import CheckWrongSetGetKBCalls
@@ -145,10 +146,7 @@ _FILE_PLUGINS = [
 ]
 
 # plugins checking all files
-_FILES_PLUGINS = [
-    CheckDuplicateOID,
-    CheckSpelling,
-]
+_FILES_PLUGINS = [CheckDuplicateOID, CheckSpelling, CheckScriptXrefUrlDead]
 
 
 class Plugins:
