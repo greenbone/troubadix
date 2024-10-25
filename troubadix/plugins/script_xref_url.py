@@ -41,6 +41,10 @@ ALLOWED_URLS = [
     "http://mail-archives.apache.org/mod_mbox/perl-advocacy/2"
     "00904.mbox/<ad28918e0904011458h273a71d4x408f1ed286c9dfbc@mail.gmail.com>",
     "http://yehg.net/lab/pr0js/advisories/[mybb1.6]_cross_site_scripting",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.04]",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.06]",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.09]",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.13]",
 ]
 
 
