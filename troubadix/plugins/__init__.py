@@ -143,10 +143,11 @@ _FILE_PLUGINS = [
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
     CheckSpacesBeforeDots,
+    CheckScriptXrefUrlDead,
 ]
 
 # plugins checking all files
-_FILES_PLUGINS = [CheckDuplicateOID, CheckSpelling, CheckScriptXrefUrlDead]
+_FILES_PLUGINS = [CheckDuplicateOID, CheckSpelling]
 
 
 class Plugins:
