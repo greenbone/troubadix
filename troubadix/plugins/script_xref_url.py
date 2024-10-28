@@ -41,6 +41,10 @@ ALLOWED_URLS = [
     "http://mail-archives.apache.org/mod_mbox/perl-advocacy/2"
     "00904.mbox/<ad28918e0904011458h273a71d4x408f1ed286c9dfbc@mail.gmail.com>",
     "http://yehg.net/lab/pr0js/advisories/[mybb1.6]_cross_site_scripting",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.04]",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.06]",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.09]",
+    "http://www.live555.com/liveMedia/public/changelog.txt#[2021.08.13]",
 ]
 
 
@@ -63,11 +67,67 @@ class CheckScriptXrefUrl(FileContentPlugin):
         )
         for match in matches:
             if match:
-                if match.group("value") not in ALLOWED_URLS and not url(
-                    match.group("value"), strict_query=False
-                ):
+                url_value = match.group("value")
+                if url_value in ALLOWED_URLS:
+                    continue
+
+                full_xref = match.group(0)
+
+                # First a few possible malformed URLs introduced by e.g. some automatic
+                # extraction or by copy'n'paste
+                if url_value.endswith(">") and "<" not in url_value:
                     yield LinterError(
-                        f"{match.group(0)}: Invalid URL value",
+                        f"{full_xref}: Invalid URL value (trailing '>')",
                         file=nasl_file,
                         plugin=self.name,
                     )
+                    continue
+
+                if url_value.endswith(","):
+                    yield LinterError(
+                        f"{full_xref}: Invalid URL value (trailing ',')",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    continue
+
+                if url_value.endswith(":"):
+                    yield LinterError(
+                        f"{full_xref}: Invalid URL value (trailing ':')",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    continue
+
+                if url_value.endswith("]") and "[" not in url_value:
+                    yield LinterError(
+                        f"{full_xref}: Invalid URL value (trailing ']')",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    continue
+
+                if url_value.endswith(")") and "(" not in url_value:
+                    yield LinterError(
+                        f"{full_xref}: Invalid URL value (trailing ')')",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    continue
+
+                if url_value.endswith(".htmll"):
+                    yield LinterError(
+                        f"{full_xref}: Invalid URL value (wrong file extension)",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    continue
+
+                # Additional standard check via the validators package
+                if not url(url_value, strict_query=False):
+                    yield LinterError(
+                        f"{full_xref}: Invalid URL value",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    continue
