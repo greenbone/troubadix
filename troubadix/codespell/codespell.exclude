@@ -19,18 +19,32 @@
 # 0x01D0:  45 20 63 6F 6D 6D 61 6E 64 20 72 65 63 65 69 76    E command receiv
                    0x02,			# ByteOrder (little endian)
 # 0x06B0:  0B A5 3D 1F FF AC 6A C7 1E 4A 4A 84 6E 44 FF 6A    ..=...j..JJ.nD.j
+0x06F0:  6E 73 3D 22 68 74 74 70 3A 2F 2F 73 63 68 65 6D    ns="http://schem
+0x10:  6F 6E 74 72 6F 6C 73 00                            ontrols.
 # 0x10:  70 65 63 69 66 69 65 64 20 75 73 65 72 2E 0D 0A    pecified user...
+0x20:  31 32 36 33 36 37 37 30 14 00 00 05 61 64 6D 69    12636770....admi
+0x20:  36 34 35 31 39 34 39 32 14 00 00 05 41 44 4D 49    64519492....ADMI
+0x20:  38 35 35 33 32 38 37 39 14 00 00 0D 41 64 6D 69    85532879....Admi
+0x20:  3B DD CF 0F 0C 9D EA 56 14 00 00 0D 41 64 6D 69    ;......V....Admi
+0x20:  3F 45 52 41 79 D2 51 73 14 00 00 05 41 64 6D 69    ?ERAy.Qs....Admi
 # 0x20:  64 79 0D 0A 45 52 52 4F 52 20 43 6F 6D 6D 61 6E    dy..ERROR Comman
 # 0x20:  6D 65 73 73 61 67 65 2E 48 61 6E 64 73 68 61 6B    message.Handshak
+0x20:  70 65 63 69 66 69 63 61 74 69 6F 6E 3A 20 53 41    pecification: SA
 # 0x20:  70 70 6C 69 63 61 74 69 6F 6E 2F 62 65 65 70 2B    pplication/beep+
+0x20:  C8 E6 AB 65 3B A9 5A 0E 14 00 00 05 41 44 4D 49    ...e;.Z.....ADMI
+0x20:  D5 A6 22 5D 33 E4 C6 0E 14 00 00 05 61 64 6D 69    .."]3.......admi
+0x40:  61 6C 64 6F 6D 61 69 6E 00 07 64 65 66 61 75 6C    aldomain..defaul
 # 0x50:  72 6F 2E 70 72 6F 64 75 63 74 2E 64 65 76 69 63    ro.product.devic
 # 0x50:  74 72 69 6E 67 20 6D 69 73 73 69 6E 67 20 6F 72    tring missing or
 # 0x50:  75 65 73 74 3A 20 47 45 54 20 2F 20                uest: GET / # nb: Trailing space
 # 0x50:  A1 37 43 6F 6E 6E 65 63 74 69 6F 6E 20 66 72 6F    .7Connection fro
+0x60:  73 65 72 2C 73 65 72 76 69 63 65 3A 6C 69 67 68    ser,service:ligh
 #0x60:  AC 13 28 D3 B3 A5 BA F0 FD D6 FA 22 BF 4D F2 4D    ..(........".M.M
   10001 from WAN (if port-forwarding is enabled to allow remote configuration, then it is a good
+                     1011, "ITT",
                      1047, "WIT",
                      1153, "Alga Automacao e controle LTDA",
+                     1167, "ITT Water & Wastewater AB",
                      1212, "HSA Systems",
                      1289, "HMS/BU Ewon",
                      1638, "Hach",
@@ -58,6 +72,7 @@
                      249, "Varian Vacuum Products",
                      303, "Binar Elektronik AB",
                           38, "CompoNet Repeater",
+3  TE!@ @q.¿¿¿¿¿ ¿y  }'ac
                      419, "GERBI & FASE S.p.A.(Fase Saldatura)",
   # 50: 4d 4c 20 5b 0a 20 20 20 3c 21 45 4c 45 4d 45 4e    ML [.   <!ELEMEN
 # 50: 4d 4c 20 5b 0a 20 20 20 3c 21 45 4c 45 4d 45 4e    ML [.   <!ELEMEN
@@ -94,16 +109,20 @@ Add more important informations
 "admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp,ibm,intel,ivanti:all,http,ssh,ftp",
   Admin endpoints to a public WAN (Internet) / public LAN without authentication.
 "Administrator:admin:cisco,conexant,corecess,gvc:all",
+  admin:[Password]:0:0:Adminstrator:/:/bin/sh
   # admin:<redacted>:0:0:Adminstrator:/:/bin/sh
+admin:<redacted>:0:0:Adminstrator:/:/bin/sh
 "Admin|shs",
 "Adminstrator|",
 "adminstrator|changeme",
 "ADMN|admn",
 # ADSL Router, VxWorks SNMPv1/v2c Agent, Conexant System, Inc.
+   * Afer the new cloudfront changes, the new urls are of the format api.staging.symphony-dev.com/ni
 A flaw was found in Nettle in versions before 3.7.2, where several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic Curve Cryptography point (ECC) multiply function being called with out-of-range scalers, possibly resulting in incorrect results. This flaw allows an attacker to force an invalid signature, causing an assertion failure or possible validation. The highest threat to this vulnerability is to confidentiality, integrity, as well as system availability.(CVE-2021-20305)");
 Aftandilian, and Jordi Chancel as the original reporters.");
 Aftandilian, Paul Theriault, Julian Hector, Petr Cerny, Jordi Chancel, and
   - Agobot.FO
+                <a href="#" class="active help" onclick="BUI.openHelp('/help/popup/status');return false;">
 "aktivate",
 "aktivate/cgi-bin",
 Alejandro Cabrera Aldaya, Billy Brumley, Cesar Pereida Garcia and Luis Manuel Alvarez Tapia discovered that the OpenSSL RSA Key generation algorithm has been shown to be vulnerable to a cache timing side
@@ -146,12 +165,14 @@ Ari Kauppi from Synopsys Ltd discovered that the NFSv2 and NFSv3 server implemen
 Attackers can cause a denial of service (crash) via a crafted EXE file that crashes the UPack unpacker.
   Autoloader '%{pear_phpdir}/CAS/Autoload.php'<semicolon>");
 "bakup\n",
+/bar/node_modules/soket.io/        | soket.io
                           base:"cpe:/a:cas:commserver_ua:", expr:"^([0-9.]+)", insloc:location, regService:"smb-login", regPort:0);
 #  Based on the work of Tim Brown <timb@nth-dimension.org.uk> as published
 batman-adv: bla: use netif_rx_ni whe... [Please see the references for more information on the vulnerabilities]");
 because of an initialization bug in the framework. This issue has been addressed in Mozilla products by explicitly turning off the framework's logging of input events. On vulnerable systems, this issue can result in private data such as usernames, passwords, and other inputed data being saved to a log file on the local system.
 Betriebssystems aktualisiert wurde. Ist dies nicht moeglich, MUSS alternativ Live-Patching des
   big = crap(clen - len);
+bin:x:2:2:bin:/bin:/bin/fals
 bit32_lines = make_list('-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access',
 bit64_lines = make_list('-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access',
   BMX NOE 0100 (H) prior to version 3.3, BMX NOE 0110 (H) prior to version 6.5 and BMX NOC 0401 prior to
@@ -220,6 +241,8 @@ cmd = 'nft list ruleset | awk \'/hook input/,/}/\' | grep \'[iif "lo" accept,ip 
   common_files_dir_id = 'oval:org.mitre.oval:obj:281';
   Communications Manager and Cisco Unified Communications Manager Session Management Edition (SME)
 # Comparison Engine Power 'product.comparision.php' SQL Injection Vulnerability
+compiletime=2023-12-15-01-15-04
+compiletime=2023-12-20-02-00-25
 complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:ind-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent" xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5" xmlns:oval-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5" xmlns:win-sc="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://oval.mitre.org/XMLSchema/oval-system-characteristics-5 oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 oval-common-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#windows windows-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-system-characteristics-5#independent independent-system-characteristics-schema.xsd">');
 "config.sys", "io.sys", "msdos.sys", "pagefile.sys",
   Connection, Expect, If-Match, If-None-Match, If-Range, If-Unmodified-Since, Max-Forwards, TE,
@@ -243,6 +266,7 @@ CPE = "cpe:/a:mapp:webtrekk:";
       cpe = "cpe:/a:mitre:ovaldi";
 CPE = "cpe:/a:netsparker:wass";
 CPE = "cpe:/a:tawk:tawk.to_live_chat";
+CPE:           cpe:/a:tawk:tawk.to_live_chat:0.8.0
     cpe =~ "^cpe:/o:hp:laserjet_pro_420[1-3](cdn|dn|dw|dne|dwe)_firmware") {
  CPU' could have occured because a retry loop continually finds the same
 crafted IFF ILBM file. NOTE: some of these details are obtained from
@@ -252,6 +276,8 @@ Create all system-defined macros defore processing command-line given
   csd_version_id = 'oval:org.mitre.oval:obj:717';
     csrsrv_file_id = 'oval:org.mitre.oval:obj:2045';
     csrsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
+			<!-- CSS Tabs alle Reiter fuer die Topnavi-->
+<!-- CSS Tabs alle Reiter fuer die Topnavi-->
   - Ctdb: open the ro tracking db with perms 0600 instead of 0000
 - Ctdb: open the ro tracking db with perms 0600 instead of 0000,
   CVE-2008-4210: When creating a file, open()/creat() allowed the setgid
@@ -330,9 +356,12 @@ default_cgis = make_list( "/v2/api/product/manger/getInfo", "/v2/api/product/man
 delete  = script_get_preference( "Delete hash test Programm after the test", id:3 );
  demuxer that could result in excessive amount of ressource allocation
  * Dependency needed for the MozillaThunderbird udpate");
+                         desc: "Acronis Cyber Infrastructure (ACI) Detection (HTTP)");
   desc = "Diese Vorgabe muss manuell ueberprueft werden.";
   desc = "Host ist kein Microsoft Windows 10 System.";
 designVer = get_kb_item("Adobe/LiveCycle/Designer");
+Detected Acronis Cyber Infrastructure (ACI)
+Detected Tawk.To Live Chat
         detection_english_match = re.search('"(Run\s+Windows\s+Update\s+and\s+(update|install)\s+the\s+listed\s+hotfixes\s+or\s+download\s+and\s+(update|install\s+the)\s+(mentioned\s+)?hotfixes\s+(in|from)(\s+the)?(\s+referenced)?\s+(advisory|avdisory)\.?(\s*(For\s+(details|updates)\s+refer\s+to(\s+the)?\s+reference\s+links?|Please\s+see\s+the\s+references\s+for\s+more\s+information)\.?)?)"', text, re.IGNORECASE)
 "developement\n",
 # |/dev/hda|ST3160021A|UNK|*||/dev/hdc|???|ERR|*||/dev/hdg|Maxtor 6B200P0|UNK|*||/dev/hdh|Maxtor 6Y160P0|38|C|
@@ -344,10 +373,15 @@ Die Standard-Anforderung 'A7: Lokale Sicherheitsrichtlinien' beschreibt, dass un
 disable, or enable CAs causing various denial of service problems with
   display debugging information to the requestor. It is recommended that such debug information be
 distrust all of DigiNotar's CAs. In this update, this is done in the
+    <div class="pannel">
+    <div class="pannel last">
+				<div class="text-muted">Select this option if you have a working phpipam installation and this screen occured. Generally it means
  (divide-by-zero error and QEMU process crash) via a larg... [Please see the references for more information on the vulnerabilities]");
+<div id="table-list"><table id="table-content"><thead class="t-header"><tr><th class="colname" aria-sort="ascending"><a class="name" href="?ND"  onclick="return false"">Name</a></th><th class="colname" data-sort-method="number"><a href="?MA"  onclick="return false"">Last Modified</a></th><th class="colname" data-sort-method="number"><a href="?SA"  onclick="return false"">Size</a></th></tr></thead>
   # <div style="float: right; margin-top: 5px; margin-right: 5px;">Rev. 1.04.06&nbsp;&nbsp;&nbsp;&nbsp;Bulid. 20150226142928 </div>
   # <div style="float: right; margin-top: 5px; margin-right: 5px;">Rev. 1.04.07&nbsp;&nbsp;&nbsp;&nbsp;Bulid. 20150925151332 </div>
  Docker compatability (#3340)
+    // do not appear to be used anywhere other than the CustomEventManager, but leaving these for backwards compatability
 - Don't discard stap probe note sections on aarch64 (#1225091)
 drbd: Avoid Clang warning about pointless switch statment (bsc#1051510).
 - drm/i915: Add Reenable Timer to turn Hotplug Detection back on (v4)
@@ -359,8 +393,12 @@ else if (prod =~ "^BMX\s*NOE\s*0100$" || prod =~ "^BMX\s*NOE\s*0100H$") {
 else if (prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$") {
   else if( svc == "agobot.fo" )
 Enable log information of starting/stoping services. (bsc#1144923,
+		<!-- Ende Footer-->
+<!-- Ende Footer-->
+<!-- Ende Message Box -->
   Engineering (TE) database and then a subsequent operation attempts to process these, rpd will
 Engineering (TE) tunnel's physical source interface is not propagated to hardware after the adjacency is lost.
+- ERRO[0000] Error creating docker key file: CreateKeyFile write root.key file failed. open /root/.docker/root.key: permission denied 
   eSpace IAD, eSpace U1981 and eSpace USM.");
   establishment of the Cisco Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch
   exact-width integer types int{N}_t and uint{N}_t.
@@ -407,6 +445,7 @@ fixtext = 'Add rules to audit the system calls "creat", "open/openat" and "trunc
 	Fix typo in preference name: "password" misspelled as "pasword".
 "fo",
 #<FONT SIZE="+3">S</FONT>EARCH
+/foo/node_modules/soket.io/        | soket.io
  - For backwards compatability, setting --log-driver=json-file in podman
 foreach dir( make_list_unique( "/ag", "/ang", "/guestbook", "/anguestbook", http_cgi_dirs( port:port ) ) ) {
 foreach dir(make_list_unique("/", "/annonce", http_cgi_dirs(port:port))) {
@@ -422,6 +461,7 @@ For the stable distribution (sarge) these problems have been fixed in version 0.
 For the stable distribution (sarge) this problem has been fixed in version 178-1sarge3. Due to technical problems with the security buildd infrastructure this update lacks a build for the Sun Sparc architecture. It will be released as soon as the problems are resolved.
 For the stable distribution (sarge) this problem has been fixed in version 4.0.2-4.1sarge1. Due to technical problems with the security buildd infrastructure this update lacks a build for the Sun Sparc architecture. It will be released as soon as the problems are resolved.
 "foto",
+Found by VT:  1.3.6.1.4.1.25623.1.0.153333 (Acronis Cyber Infrastructure (ACI) Detection (HTTP))
  found/known outside kde4 enviroment/session
     fpr = tmpfpr[0];
   * Fri Nov 27 2009 Remi Collet  1.1.14-5
@@ -429,7 +469,9 @@ For the stable distribution (sarge) this problem has been fixed in version 4.0.2
   from both LAN and WAN.");
 ftpcmd["EPRT"]=1; ftpcmd["EPSV"]=1; ftpcmd["ALLO"]=1; ftpcmd["RNFR"]=1;
 fuer Betriebssystem und Daten genutzt werden. Alternativ SOLLTEN auch Mechanismen des verwendeten
+  # FUJI XEROX DocuColor 1450 GA ;ESS1.102.18,IOT 72.51.0,HCF 3.33.0,FIN C18.29.0,IIT 7.10.0,ADF 21.3.0,SJFI3.0.17,SSMI1.15.2
  function may have writen data beyond the target buffer, leading to a
+function pressEnter(e)
 Furthemore, the following bugs were fixed:
 Furthermore, a severe flaw had been discovered by Tim Duesterhus in
   Furthermore Microsoft Exchange CAS and OWA as well as other webservers or load balancers might be also affected.");
@@ -446,6 +488,8 @@ Gigabit WAN VPN Router and the RV325 Dual Gigabit WAN VPN Router could allow an 
   * groupd no longer allows the default fence d ...
   Grundschutz. Die detaillierte Beschreibung zu dieser Massnahme findet sich unter
     guess += '\n- Huawei TE Device';
+	<h2>Autentication<a href "./main.html</a></h2>
+                  <h3 lang="it">Ore di lavoro</h3>
 "hanlder\n",
  have resul... [Please see the references for more information on the vulnerabilities]");
  * Heap-based buffer overflow when scanning crypted PE files
@@ -454,10 +498,14 @@ Helin, Andre Bargull, Massimiliano Tomassoli, laf.intel, Massimiliano
 "H", "HSI",
   - HP Helion Eucalyptus does not correctly check IAM user's permissions for accessing versioned objects and ACLs.
     hp_printer['login_success'] = '<?hp te.includeSubPage';
+</HSI>
+<HSI>
 # <HTML>Acess not granted.</HTML>
 # <HTML>Acess to resource EDITION not granted.</HTML>
 # http://nto.github.io/AirPlay.html#video-httprequests
+    http://<redacted>/ews/status/infomation.htm
         - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-
+https://<redacted>/wp-content/plugins/mailin/readme.txt
 # Huawei TE Device Detection
 # Huawei TE Devices Multiple Vulnerabilities
  hypervisor crash leading to a Denial of Servce. (XSA-203, bsc#1014300,
@@ -543,6 +591,11 @@ If you disable this policy setting, transcripting of PowerShell-based applicatio
 If you enable this policy setting, Windows PowerShell will enable transcripting for Windows
 	Ignore root CAs.
   iif = ssh_cmd( socket:sock, cmd:'nft list ruleset | awk \'/hook input/,/}/\' | grep \'iif "lo" accept\'', nosh:TRUE, return_errors:FALSE );
+ii  libapt-pkg4.12  0.8.16~exp12ubuntu10.29  package managment runtime library
+ii  libapt-pkg4.12:amd64  0.9.7.5ubuntu5.6  amd64  package managment runtime library
+ii  libapt-pkg4.12:amd64  0.9.7.7ubuntu6  amd64  package managment runtime library
+ii  libapt-pkg4.12:amd64  0.9.7.9+deb7u7  amd64  package managment runtime library
+ii  libapt-pkg4.12:amd64  0.9.9.1~ubuntu3.3  amd64  package managment runtime library
  image. This occured because of a lack of proper validation that cached
   Imaging and Communications in Medicine (DICOM) service accessible from a public WAN (Internet) /
   Imaging and Communications in Medicine (DICOM) web viewer accessible from a public WAN (Internet)
@@ -552,6 +605,8 @@ If you enable this policy setting, Windows PowerShell will enable transcripting 
  Inbuilt protection in ps maped a guard page at the end of the overflowed
 include("CAs.inc");
 inheritence not possible in abstract classes) [bnc#783239]
+                <input type="password" name="password" id="password" onkeydown="return pressEnter(event)">
+                <input type="text" name="username" id="username" onkeydown="return pressEnter(event)">
 install = script_get_preference( "Install hash test Programm on the Target", id:2 );
   interface accessible from a public WAN (Internet) / public LAN and with auto-logon enabled.
   interface for Cisco Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could allow an unauthenticated,
@@ -585,6 +640,7 @@ It was found that if a Non-Maskable Interrupt (NMI) occurred immediately after a
  James Troup discovered that snap did not properly manage the permissions for
   James web admin endpoints to a public WAN (Internet) / public LAN without authentication.");
 Jan-Ivar Bruaroey, Jesse Ruderman, Markus Stange, Olli Pettay, Ehsan
+    <java.util.logging.manager>org.apache.juli.ClassLoaderLogManager</java.util.logging.manager>
  javax/security/auth/Subject/doAs/NestedActions.java fails if extra
 "jave",
 Jesse Hertz and Tim Newsham discovered that the Linux netfilter
@@ -621,14 +677,20 @@ keyserv		100029	keyserver
 kJtP0F6mv/Afe/5s7yd3ZJ/72yT73NjLg0vWbmLkop6eOR+CKw4nxorWxpocAj0p
 # Kubernetes Dashboard Public WAN (Internet) Accessible
 L3: conring size for XEN HV's with huge memory to small. Inital Xen logs
+LAST_PATCH_UPDATE UpToDate
  leaks because of a missing check when transfering pages via
 library: Increment to 7:0:1 No changes, no removals New fuctions:
 [link moved to references] has more informations.
+<link rel="stylesheet" href="/bui/base.css?v=GWAY-8.3.1-0086" />
+<link rel="stylesheet" href="/bui/cui.css?v=GWAY-8.3.1-0086" />
+<link rel="stylesheet" href="/bui/reset-cui.css?v=GWAY-8.3.1-0086" />
 list to be autodetected, STAC92HD71Bx and STAC92HD75Bx based HDA
   - LiveCycle 9.0, 8.2.1, and 8.0.1
   - LiveCycle Data Services 3.0, 2.6.1, and 2.5.1
   local_var _ciphers, _cipher, clen, time, _random, hello_data, ec_type, default_extension, tls_kb_vers, hde, hde_len, hdlen, data, hello_len, hello;
   local_var version, type, _ciphers, _cipher, clen, sessionid_len, challenge, challenge_len, hello_data, hd_len, hello;
+Location:      /wp-content/plugins/mailin
+  log_message(data: build_detection_report(app: "Acronis Cyber Infrastructure (ACI)", version: version,
         log_message(data: build_detection_report(app:"Adobe LiveCycle Designer",
       log_message(data: build_detection_report(app: "OpenMairie Open Presse", version: version,
       log_message(data: build_detection_report(app: "OpenMairie Open Registre CIL", version: version,
@@ -636,6 +698,7 @@ list to be autodetected, STAC92HD71Bx and STAC92HD75Bx based HDA
   log_message( port:port, data:"A Conexant configuration interface is running on this port" );
   log_message( port:port, data:"An Agobot.fo backdoor is running on this port" );
   log_message( port:port, data:"Interface of a Conexant ADSL router is running on this port" );
+<!--Logo absolut positioniert-->
 M*)6UG-,[V6-;N*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'6['*(;8>~A:>
 Mac OS X SMB2 implmenetation sees Input/output error or Resource
   "mailin/readme.txt", "Newsletter, SMTP, Email marketing and Subscribe forms by Sendinblue#---#=== (Newsletter, SMTP, Email marketing and Subscribe forms by Sendinblue|Sendinblue Subscribe Form And WP SMTP) ===#---#= Changelog(.*)#---#cpe:/a:sendinblue:newsletter%2c_smtp%2c_email_marketing_and_subscribe#---#= ([0-9.]+)",
@@ -746,6 +809,7 @@ or potentially have unspecified futher impact.
                        '//oval.mitre.org/XMLSchema/oval-system-characteristi' +
                'oval-system-characteristics-schema.xsd http://oval.mitre.org/XMLSchema/oval-common-5 ',
  overflow might have occured that allowed a malicious or buggy PV guest
+    <p>Access to this device is restriced and your IP address is not in the list of allowed host, hence access to this unit denied.</p>
  package. They're not used anymore becuse of systemd (bsc#1178396).
   packets are received on a specific port from outside the ACI fabric and destined to an endpoint
            "pass=&Servers-0-verbose_check=on&Servers-0-bookmarktable=&Ser",
@@ -754,6 +818,8 @@ paths = ssh_find_bin(prog_name:"stap", sock:sock);
                     pattern:'<title>DNP LAN/WAN Status</title>','Electro Industries/GaugeTech',
 Paulo Bonzini discovered that the KVM implemen ...
 p_data_tf_types["00720073"] = "Selector OD Value";
+					phpipam was unable to connnect to the database. This will check for connection errors.</div>
+Plugin Page: https://wordpress.org/plugins/mailin/
   pointers can be exploited to bypass CAS (Code Access Security) restrictions and disclose information.
 Poll for artifact blob, addresses goal state procesing issue
   postdata = string(postdata, "Content-Length: ", clen, "\r\n\r\n", boundary2, "\r\n");
@@ -765,6 +831,7 @@ Prevent sporious 'salt-api' stuck processes when managing SSH minions
 Prevent sporious 'salt-api' stuck processes when managing SSH minions.
     print("----- Using an link to Mitre/NVD within the script_xref -----\r\n")
   * Prior to this update, the Directory Server (DS) always checked the ACI
+Proces
   processing malformed files packed with UPack.
 processing Upack files. A remote attacker could send a crafted file and
   processor_arch_id = 'oval:org.mitre.oval:obj:1576';
@@ -867,11 +934,14 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_copyright("(c) Tim Brown and Portcullis Computer Security Ltd, 2008");
   script_mandatory_keys("AAS/banner");
   script_mandatory_keys("aas/detected");
+  script_mandatory_keys("acronis/aci/detected");
   script_mandatory_keys("Adobe/LiveCycle/Designer");
   script_mandatory_keys("Jasig CAS server/Installed");
   script_mandatory_keys("shttp/detected");
   script_mandatory_keys("telnet/huawei/te/detected");
   script_mandatory_keys("wordpress/plugin/mailin/detected");
+  script_name("Acronis Cyber Infrastructure (ACI) Detection (HTTP)");
+  script_name("Acronis Cyber Infrastructure (ACI) RCE Vulnerability (SEC-6452)");
   script_name("Adobe LiveCycle Designer Detection (Windows SMB Login)");
   script_name("Adobe LiveCycle Designer Untrusted Search Path Vulnerability - Windows");
   script_name("AIDA64 <= 6.25.5400 SEH Buffer Overflow Vulnerability");
@@ -923,6 +993,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("WordPress Annonces Plugin 'abspath' Parameter RFI Vulnerability");
   script_name("WordPress Tawk.To Live Chat Plugin < 0.6.0 Broken Access Control Vulnerability");
 	* scripts/CAs.inc:
+  script_tag(name:"affected", value:"Acronis Cyber Infrastructure (ACI) prior to version 5.0.1-61,
   script_tag(name:"affected", value:"Adobe LiveCycle Designer version ES2 9.0.0.20091029.1.612548
   script_tag(name:"affected", value:"Apple Mac OS X Big Sur versions 11.x before
   script_tag(name:"affected", value:"BA SYSTEMS BAS Web on BAS920 devices with
@@ -1034,6 +1105,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"solution", value:"Since LSAT is not actively maintained anymore, this package has been
   script_tag(name:"solution", value:"Upgrade to Apple Mac OS X Big Sur version
   script_tag(name:"solution", value:"Upgrade to Frams&qt Fast File EXchange version 20140526 or later.");
+  script_tag(name:"summary", value:"Acronis Cyber Infrastructure (ACI) is prone to a remote code
   script_tag(name:"summary", value:"Adobe LiveCycle Designer is prone to untrusted search path vulnerability.");
   script_tag(name:"summary", value:"A security vulnerability in Avenger's News System (ANS) allows
   script_tag(name:"summary", value:"A vulnerability in the Cisco ACI Multi-Site CloudSec encryption
@@ -1044,6 +1116,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"summary", value:"Die Funktion, dass eingebettete Aktive Inhalte automatisch ausgefuehrt werden,
   script_tag(name:"summary", value:"Festplatten oder die darauf abgespeicherten Dateien SOLLTEN
   script_tag(name:"summary", value:"Frams&qt Fast File EXchange is prone to multiple vulnerabilities.");
+  script_tag(name:"summary", value:"HTTP based detection of Acronis Cyber Infrastructure (ACI).");
   script_tag(name:"summary", value:"Juraj Somorovsky, Robert Merget and Nimrod Aviram discovered a padding
   script_tag(name:"summary", value:"Listet alle erfuellten Tests der 'AKIF Orientierungshilfe Windows 10 Ueberpruefung' auf.");
   script_tag(name:"summary", value:"Listet alle Fehler der 'AKIF Orientierungshilfe Windows 10 Uberpruefung' auf.");
@@ -1065,6 +1138,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"summary", value:"Wen Bin discovered that bchunk, an application that converts a CD
   script_tag(name:"summary", value:"Ziel des Bausteins SYS.2.2.3 ist der Schutz von Informationen,
   script_tag(name:"vuldetect", value:"Checks if the Swarmpit UI is accessible from a public WAN
+<script type="text/javascript" src="/bui/bui.js?v=GWAY-8.3.1-0086"></script>
   script_xref(name:"URL", value:"http://cpe.mitre.org/");
   script_xref(name:"URL", value:"https://cwe.mitre.org/data/definitions/319.html");
   script_xref(name:"URL", value:"https://github.com/soheilsamanabadi/vulnerabilitys/pull/1");
@@ -1158,6 +1232,8 @@ send(socket: soc, data: triggerD);
  SessionTicket extention and ECDHE-ECDSA (bsc#1015499).
   set_kb_item(name: "aas/detected", value: TRUE);
   set_kb_item(name: "aas/http/detected", value: TRUE);
+  set_kb_item(name: "acronis/aci/detected", value: TRUE);
+  set_kb_item(name: "acronis/aci/http/detected", value: TRUE);
         set_kb_item(name:"Adobe/LiveCycle/Designer", value:designVer);
     set_kb_item(name:"cas/commserver_ua/win/detected", value:TRUE);
     set_kb_item( name:"Jasig CAS server/Installed", value:TRUE );
@@ -1170,6 +1246,12 @@ set_kb_item(name:"WMI/Antivir/UptoDate", value:AntiVir_UpDate);
 set_mandatory_key( key:"AAS", regex:"^Server\s*:\s*AAS", banner:banner );
   several Nettle signature verification functions (GOST DSA, EDDSA & ECDSA) result in the Elliptic
 Several other fixes for pg_dump, which includ... [Please see the references for more information on the vulnerabilities]");
+SF:equest\x20that\x20this\x20server\x20could\x20not\x20understand\.</h2>\n
+SF:ot\x20found\.\",\"status\":\"404\"}\]}\n")%r(HTTPOptions,113,"HTTP/1\.0
+SF:ot\x20understand")%r(TerminalServerCookie,E1,"HTTP/1\.1\x20400\x20Bad\x
+SF:UBLIC\x20\"-//IETF//DTD\x20HTML\x202\.0//EN\">\n<html><head>\n<title>50
+SF:uest\r\nDate:\x20Tue,\x2004\x20Jul\x202023\x2008:37:10\x20GMT\r\nServer
+SF:uest\x20that\x20this\x20server\x20could\x20not\x20understand\.</td></tr
  + Short curcuit the conditional for identifying the sysconfig renderer.
   SICWEB web interface accessible from a public WAN (Internet) / public LAN and with auto-logon
 # Siemens, SIMATIC NET, RUGGEDCOM RM1224 NAM, 6GK6 108-4AM00-2DA2, HW: Version 1, FW: Version V04.01.02, SVPH8159590
@@ -1182,6 +1264,7 @@ Simo Sorce of Red Hat discovered that the Samba client code always requests a fo
   smaller than the needed space to include EDE records.");
 - smbd: Fix file name buflen and padding in notify repsonse, (bso#10634).
 - Smbd: fix file name buflen and padding in notify repsonse, (bso#10634).
+smelastsys:x:2999:2999:sme last system user marker:/tmp:/bin/false
 sndReq = http_get(item:"/olt/Login.do", port:oatPort);
   sndReq = http_get(item:string(dir , "/doc/catalogue.html"), port:openPort);
   sndReq = http_get(item:string(dir, "/LiveTime/WebObjects/LiveTime.woa"), port:novPort);
@@ -1196,6 +1279,7 @@ solution = "mount -o remount,ro PARTITION";
 Soyeon Park and Wen Xu discovered a type error in the v8 javascript
 Soyeon Park and Wen Xu discovered memory corruption issues that
 Soyeon Park and Wen Xu discovered the use of a wrong type in the v8
+                            <span lang="it">Ore di lavoro
 # SPDX-FileCopyrightText: 2005 Charles Thier
 # SPDX-FileCopyrightText: 2005 Holm Diening / SLITE IT-Security
 specially crafted IPv6 Neighbor Discovery (ND) packet destined to an EX Series Ethernet Switches to cause a slow
@@ -1243,6 +1327,8 @@ TCP 5637 PC Crasher
 TCP 5638 PC Crasher
 TCP 80 711 trojan (Seven Eleven), AckCmd, Back End, Back Orifice 2000 Plug-Ins, Cafeini, CGI Backdoor, Executor, God Message, God Message 4 Creator, Hooker, IISworm, MTX, NCX, Noob, Ramen, Reverse WWW Tunnel Backdoor, RingZero, RTB 666, Seeker, WAN Remote, Web Server CT, WebDownloader, Mydoom, Xeory, Zombam, W32.Yaha, Ketch, Mydoom, W32.Welchia,W32.HLLW.Doomjuice, W32.HLLW.Heycheck, W32.Gaobot, W32.HLLW.Polybot, W32.Beagle, W32.Spybot, Mindos, Hexem, Eaghouse, Tabela, W32.Ifbo, W32.Pinkton, W32.Tdiserv, W32.Bobax, W32.Theals, Banito, W32.Lile, Darkmoon, Bifrose, Lodear, Civcat, Muquest, W32.Feebs, Bebshell, Hesive
 TCP 9871 Theef.B
+			<td id="accountName"><div>Cliente Web IceWarp Básico</div></td>
+              <td>Protimrazov� ochrana na zp�te�ce - p�edehrev</td>
   TE30, TE40, TE50, TE60, USG9500, VP9660, ViewPoint 8660, ViewPoint 9030 and eSpace U1981.");
 ## TE and CE affected but pattern coming like this only
 ##TE and CE affected but pattern coming like this only
@@ -1347,6 +1433,7 @@ to the buildd network are needed (to provide the new Rust-based toolchain
   transit between sites on current ACI Spine Switches hardware.");
 - Transport of TE related metrics over OSPF, IS-IS.
 triggerD = raw_string(0x06,0x00,0x07,0x00,0x20,0x00,0x00,0x00,0x0e,0x00,0x32,
+<tr><td width=15% class='defaultText'>java.util.logging.manager</td><td width=85% class='defaultText'> org.apache.juli.ClassLoaderLogManager</td></tr>
 Tuomas Haanpaa and Matti Kamunen from Synopsys Ltd discovered that the NFSv2 and NFSv3 server implementations are vulnerable to an out-of-bounds memory access issue while processing arbitrarily long arguments sent by NFSv2/NFSv3 PRC clients, leading to a denial of service.
 two intermediate CAs which could be used to generate rogue end-entity
 udev: Downgrade message when settting inotify watch up fails.
@@ -1355,6 +1442,7 @@ udev: Downgrade message when settting inotify watch up fails.
  unconstrained interal data buffering (bsc#1146097).
   - Undefined behavior in bounded channel of crossbeam rust crate.
   Unified CM and Cisco Unified CM SME could allow an authenticated, remote attacker with
+unknown operater:id;
   unspecified errors in GSS-API, DCERPC SPOOLSS, LDSS, DOF, SRVLOC
   upack packer files.");
 - Update anonymous access ACI to protect secret attributes (#902481)
@@ -1404,6 +1492,7 @@ using the 'Connection: TE, , Keep-Alive' header.");
         variable_get_set = re.search('[^#](\n[ ]*#+ ?([Vv]ulnerable [Uu][Rr][Ll]|[GgSs]et|[Ss]end[s]?( (the |a )?[Rr]equest)? [Aa]nd [Rr]eceive|[Ff]etch|[Oo]pen ([Tt]he )?(UDP|udp|TCP|tcp)? ?[Ss]ocket|[Cc]los(e|ing) ([Tt]he )?(FTP|Telnet|SSH)? ?[Ss]ocket|[Cc]heck|[Ii]terate|[Tt]ry|[Cc]onfirm|[Cc]onstruct|[Bb]uild|[Gg]rep|[Rr]egister|[Cc]onstant|[Ww]indows|[Ll]inux]|[Tt]raversal_files\(\) [Ff]unction [Rr]eturns [Dd]ictionary|[Ww]ait|[Ss]leep)[s]?(ing)?(ed)?(ation)?[^\r\n]*)', text)
 Vegard Nossum reported an issue with the UNIX socket garbage collector. Local users can consume all of LOWMEM and decrease system performance by overloading the system with inflight sockets.
   vers[1] = ereg_replace( pattern:"No UTF-8\. Trying to change locale\.\s*Locale sucessfully changed\.\s*", string:vers[1], replace:"" );
+vers = eregmatch(pattern: "IBM WebSphere Application Server( Network Deployment|\s*\-\s*ND)?\s*([0-9.]+[^ ]+)",
   vers = eregmatch( pattern:"mandr(iva|ake).*inux ?(enterprise server)? release ([0-9.]+)", string:rls, icase:TRUE );
   vers = eregmatch(pattern: ">Rev\. ([0-9.]+)([^<]+Bu(li|il)d\. ([0-9]+))?", string: res);
   vers = eregmatch(pattern: "(RICOH|LANIER|SAVIN|NRG) ((Aficio |Pro)?([A-Z]+)? ?[^, ]+)( JPN)?( V?([0-9.]+))?", string: sysdesc);
@@ -1418,6 +1507,7 @@ version of nd.
 via crafted description chunks in a CAF audio file, leading to a
 "vsapres/js/thirdparty",
 "vsapres/js/thirdparty/material",
+# V-SOL GPON OLT
   vulnerability by flooding an adjacent IOS XE device with specific ND messages.");
   vulnerability by sending crafted IPv6 Neighbor Discovery (ND) packets to an affected device for
   vulnerability that is described in this advisory. Customers who are using the Cisco ACI Multi-Site
@@ -1457,6 +1547,7 @@ We recommend that you upgrade your racoon package.");
 will execute user defined network requests to both WAN and LAN clients. A remote unauthenticated attacker can use
     win32k_file_id = 'oval:org.mitre.oval:obj:570';
     win32k_file_variable_id = 'oval:org.mitre.oval:var:200';
+                window.snWebaConfig.webaScriptPath = "/scripts/piwik-3.1.1/thirdparty/piwik.min.js";
     winsrv_file_id = 'oval:org.mitre.oval:obj:1382';
     winsrv_file_variable_id = 'oval:org.mitre.oval:var:200';
   with an on-path position between the ACI sites could exploit this vulnerability by intercepting
