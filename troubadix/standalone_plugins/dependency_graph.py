@@ -15,7 +15,6 @@ from troubadix.helper.helper import is_enterprise_folder
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 
 EXTENSIONS = (".nasl",)
-DEPENDENCY_REGEX = r"script_dependencies\((.*?)\);"
 DEPENDENCY_PATTERN = _get_special_script_tag_pattern(
     "dependencies", flags=re.DOTALL | re.MULTILINE
 )
@@ -75,6 +74,9 @@ def get_feed(root, feed) -> list[Script]:
             )
         case _:
             return []
+    # should be unreachable
+    # only here for codeql
+    return []
 
 
 def get_scripts(directory) -> list[Script]:
