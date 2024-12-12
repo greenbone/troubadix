@@ -136,3 +136,4 @@ link.sh
 
 # vts/nasl folder used for testing
 nasl
+!tests/standalone_plugins/nasl/
