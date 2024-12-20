@@ -672,6 +672,123 @@ class CheckValidOIDTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_openeuler_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.16.2022.123");\n'
+            '  script_family("openEuler Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_openeuler_not_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.16.2022.123");\n'
+            '  script_family("HCE Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for "
+                "openEuler '1.3.6.1.4.1.25623.1.1.16.2022.123'"
+            ),
+            results[0].message,
+        )
+
+    def test_hce_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.17.2022.123");\n'
+            '  script_family("HCE Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_hce_not_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.17.2022.123");\n'
+            '  script_family("openEuler Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for "
+                "HCE '1.3.6.1.4.1.25623.1.1.17.2022.123'"
+            ),
+            results[0].message,
+        )
+
+    def test_opensuse_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.18.2022.123");\n'
+            '  script_family("openSUSE Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_opensuse_not_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.18.2022.123");\n'
+            '  script_family("HCE Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for "
+                "openSUSE '1.3.6.1.4.1.25623.1.1.18.2022.123'"
+            ),
+            results[0].message,
+        )
+
     def test_unknown(self):
         path = Path("some/file.nasl")
         content = (
@@ -754,6 +871,44 @@ class CheckValidOIDTestCase(PluginTestCase):
             (
                 "script_oid() is using an OID that is reserved for 'Firefox' "
                 "(1.3.6.1.4.1.25623.1.2.1.2020.255)"
+            ),
+            results[0].message,
+        )
+
+    def test_script_family__product_microsoft_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348");'
+            "\n"
+            '  script_family("Windows : Microsoft Bulletins");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_script_family__product_microsoft_not_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348");'
+            "\n"
+            '  script_family("Windows : Microsoft");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for 'Windows' "
+                "(1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348)"
             ),
             results[0].message,
         )
