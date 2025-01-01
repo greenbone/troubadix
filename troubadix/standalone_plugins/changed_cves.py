@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2025 Greenbone AG
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import re
 from argparse import ArgumentParser, Namespace
 from subprocess import CalledProcessError
