@@ -58,6 +58,7 @@ class CheckValidOID(FileContentPlugin):
 
         security_template = "Security Advisory"
         family_template = "Local Security Checks"
+        windows_family_template = "Windows : Microsoft Bulletins"
         is_using_reserved = "is using an OID that is reserved for"
         invalid_oid = "is using an invalid OID"
 
@@ -81,12 +82,11 @@ class CheckValidOID(FileContentPlugin):
             )
             return
 
+        family_pattern = get_special_script_tag_pattern(SpecialScriptTag.FAMILY)
+        family_match = family_pattern.search(file_content)
+
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1." in oid:
-            family_pattern = get_special_script_tag_pattern(
-                SpecialScriptTag.FAMILY
-            )
-            family_match = family_pattern.search(file_content)
             if family_match is None or family_match.group("value") is None:
                 yield LinterError(
                     "VT is missing a script family!",
@@ -324,6 +324,33 @@ class CheckValidOID(FileContentPlugin):
                         plugin=self.name,
                     )
                     return
+            elif vendor_number == "16":
+                if family != f"openEuler {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} openEuler "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+            elif vendor_number == "17":
+                if family != f"HCE {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} HCE "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+            elif vendor_number == "18":
+                if family != f"openSUSE {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} openSUSE "
+                        f"'{str(oid)}'",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
 
             else:
                 yield LinterError(
@@ -377,6 +404,41 @@ class CheckValidOID(FileContentPlugin):
                     return
 
                 return
+
+        # Fixed OID-scheme for Windows OIDs
+        if "1.3.6.1.4.1.25623.1.3." in oid:
+            family = family_match.group("value")
+            if not family_match or not family:
+                yield LinterError(
+                    "VT is missing a script family!",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                return
+
+            if family != windows_family_template:
+                yield LinterError(
+                    f"script_oid() {is_using_reserved} 'Windows' ("
+                    f"{str(oid)})",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                return
+
+            windows_oid_match = re.search(
+                r"^1\.3\.6\.1\.4\.1\.25623\.1\.3\.[0-9]{5}\.[0-9]\.[0-9]{7}\.[0-9]{30}",
+                oid,
+            )
+            if not windows_oid_match:
+                yield LinterError(
+                    f"script_oid() {invalid_oid} '{str(oid)}' "
+                    "(Windows pattern: 1.3.6.1.4.1.25623.1.3."
+                    "[product_id].[platform_id].[kb_article_id].[fixed_build_number])",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                return
+            return
 
         oid_digit_match = re.search(
             r"^1\.3\.6\.1\.4\.1\.25623\.1\.0\.([0-9]+)", oid
