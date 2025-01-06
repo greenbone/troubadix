@@ -95,7 +95,7 @@ def get_scripts(directory) -> list[Script]:
                 path = root_path / file  # absolute path for file access
                 relative_path = path.relative_to(
                     directory
-                )  # relative path to \nasl will be used a identifier
+                )  # relative path to \nasl will be used as identifier
                 name = str(relative_path)
                 feed = determine_feed(relative_path)
                 ungated_dependencies, gated_dependencies = extract_dependencies(
@@ -228,42 +228,32 @@ def check_cycles(graph) -> int:
     return 1
 
 
-def cross_feed_dependencies(graph):
+def cross_feed_dependencies(graph, gated_status: bool):
     """
-    creates a list of script and dep for scripts
+    creates a list of script and dependency for scripts
     in community feed that depend on scripts in enterprise folders
-    """
-    return [
-        (u, v)
-        for u, v in graph.edges
-        if graph.nodes[u]["feed"] == "community"
-        and graph.nodes[v].get("feed", "unknown") == "enterprise"
-    ]
-
-
-def ungated_cross_feed_dependencies(graph):
-    """
-    Checks if scripts in the community feed have dependencies to enterprise scripts,
-    but are not contained within a gate.
     """
     cross_feed_dependencies = [
         (u, v)
         for u, v, is_gated in graph.edges.data("is_gated")
         if graph.nodes[u]["feed"] == "community"
         and graph.nodes[v].get("feed", "unknown") == "enterprise"
-        and not is_gated
-    ]
-
+        and is_gated == gated_status
+    ]  # unknown as standard value due to non existend nodes not having a feed value
     return cross_feed_dependencies
 
 
 def check_cross_feed_dependecies(graph):
-    cfd = cross_feed_dependencies(graph)
-    logging.info(f" {len(cfd)} cross-feed-dependencies were found:")
-    for u, v in cfd:
-        logging.warning(f"ungated cross-feed-dependency: {u} depends on {v}")
+    """
+    Checks if scripts in the community feed have dependencies to enterprise scripts,
+    and if they are contained within a gate.
+    """
+    gated_cfd = cross_feed_dependencies(graph, gated_status=True)
+    logging.info(f" {len(gated_cfd)} gated cross-feed-dependencies were found:")
+    for u, v in gated_cfd:
+        logging.info(f"gated cross-feed-dependency: {u} depends on {v}")
 
-    ungated_cfd = ungated_cross_feed_dependencies(graph)
+    ungated_cfd = cross_feed_dependencies(graph, gated_status=False)
     logging.info(
         f" {len(ungated_cfd)} ungated cross-feed-dependencies were found:"
     )

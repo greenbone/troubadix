@@ -51,8 +51,8 @@ class TestDependencyGraph(unittest.TestCase):
 
     def test_create_graph(self):
         scripts = [
-            Script("foo.nasl", None, "community", ["bar.nasl"]),
-            Script("bar.nasl", None, "enterprise", []),
+            Script("foo.nasl", None, "community", ["bar.nasl"], []),
+            Script("bar.nasl", None, "enterprise", [], []),
         ]
         graph = create_graph(scripts)
         self.assertEqual(len(list(graph.nodes)), 2)
