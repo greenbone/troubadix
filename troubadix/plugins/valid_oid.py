@@ -324,24 +324,6 @@ class CheckValidOID(FileContentPlugin):
                         plugin=self.name,
                     )
                     return
-            elif vendor_number == "16":
-                if family != f"openEuler {family_template}":
-                    yield LinterError(
-                        f"script_oid() {is_using_reserved} openEuler "
-                        f"'{str(oid)}'",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-                    return
-            elif vendor_number == "17":
-                if family != f"HCE {family_template}":
-                    yield LinterError(
-                        f"script_oid() {is_using_reserved} HCE "
-                        f"'{str(oid)}'",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-                    return
             elif vendor_number == "18":
                 if family != f"openSUSE {family_template}":
                     yield LinterError(
