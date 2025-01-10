@@ -347,8 +347,8 @@ class CheckValidOID(FileContentPlugin):
 
         # product-specific OIDs
         if "1.3.6.1.4.1.25623.1.2." in oid:
-            name_patter = get_special_script_tag_pattern(SpecialScriptTag.NAME)
-            name_match = name_patter.search(file_content)
+            name_pattern = get_special_script_tag_pattern(SpecialScriptTag.NAME)
+            name_match = name_pattern.search(file_content)
             if not name_match or not name_match.group("value"):
                 yield LinterError(
                     "VT is missing a script name!",
@@ -389,8 +389,7 @@ class CheckValidOID(FileContentPlugin):
 
         # Fixed OID-scheme for Windows OIDs
         if "1.3.6.1.4.1.25623.1.3." in oid:
-            family = family_match.group("value")
-            if not family_match or not family:
+            if not family_match or not family_match.group("value"):
                 yield LinterError(
                     "VT is missing a script family!",
                     file=nasl_file,
@@ -398,7 +397,7 @@ class CheckValidOID(FileContentPlugin):
                 )
                 return
 
-            if family != windows_family_template:
+            if family_match.group("value") != windows_family_template:
                 yield LinterError(
                     f"script_oid() {is_using_reserved} 'Windows' ("
                     f"{str(oid)})",
