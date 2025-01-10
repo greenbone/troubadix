@@ -25,7 +25,7 @@ from troubadix.plugins.overlong_description_lines import (
 
 
 class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
-    def test_ok(self):
+    def test_ok_generic(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
             "ignored line that is not part of description"
@@ -51,6 +51,30 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "}\n"
             "ignored line that is not part of description"
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckOverlongDescriptionLines(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_ok_urls_in_comments(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            "if (description)\n"
+            "{\n"
+            '  script_version("2021-09-02T14:01:33+0000");\n'
+            "  # https://overlongurlisokxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
+            "  # > https://anothervariantwhichisokxxxxxxxxxxxxxxxxxxx"
+            'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
+            "  # - https://anothervariantwhichisalsookxxxxxxxxxxxxxxx"
+            'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");\n'
+            "  exit(0);\n"
+            "}\n"
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=nasl_file, file_content=content
