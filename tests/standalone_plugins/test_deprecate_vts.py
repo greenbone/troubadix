@@ -189,7 +189,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
         result = _finalize_content(NASL_CONTENT)
         expected = (
             '...if(description)\n{\n  script_oid("1.3.6.1.4.1.25623.1.0.910673");\n  '
-            'script_version("2024-03-12T14:15:13+0000");\n  script_name("RedHat: Security Advisory for gd (RHSA-2020:5443-01)");\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");\n\n  script_xref(name:"RHSA", value:"2020:5443-01");\n  script_xref(name:"URL", value:"https://www.redhat.com/archives/rhsa-announce/2020-December/msg00044.html");\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");\n\n  script_tag(name:"deprecated", value:TRUE);\n\nexit(0);\n}\n\nexit(66);\n'  # noqa: E501
+            'script_version("2024-03-12T14:15:13+0000");\n  script_name("RedHat: Security Advisory for gd (RHSA-2020:5443-01)");\n  script_family("Red Hat Local Security Checks");\n  script_dependencies("gather-package-list.nasl");\n  script_mandatory_keys("ssh/login/rhel", "ssh/login/rpms", re:"ssh/login/release=RHENT_7");\n\n  script_xref(name:"RHSA", value:"2020:5443-01");\n  script_xref(name:"URL", value:"https://www.redhat.com/archives/rhsa-announce/2020-December/msg00044.html");\n\n  script_tag(name:"summary", value:"The remote host is missing an update for the \'gd\'\n  package(s) announced via the RHSA-2020:5443-01 advisory.");\n\n  script_tag(name:"deprecated", value:TRUE);\n\n  exit(0);\n}\n\nexit(66);\n'  # noqa: E501
         )
         self.assertEqual(result, expected)
 
