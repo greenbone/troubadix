@@ -834,3 +834,43 @@ class CheckValidOIDTestCase(PluginTestCase):
             ),
             results[0].message,
         )
+
+    def test_oid_microsoft_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348");'
+            "\n"
+            '  script_family("Windows : Microsoft Bulletins");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_oid_microsoft_not_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.494846484649555554514651545348");'
+            "\n"
+            '  script_family("Windows : Microsoft Bulletins");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+        results = list(plugin.run())
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an invalid OID "
+                "'1.3.6.1.4.1.25623.1.3.11571.0.494846484649555554514651545348' "
+                "(Windows pattern: 1.3.6.1.4.1.25623.1.3.[product_id].[platform_id]."
+                "[kb_article_id].[fixed_build_number])"
+            ),
+            results[0].message,
+        )
