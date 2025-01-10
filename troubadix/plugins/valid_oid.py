@@ -408,7 +408,7 @@ class CheckValidOID(FileContentPlugin):
                 return
 
             windows_oid_match = re.search(
-                r"^1\.3\.6\.1\.4\.1\.25623\.1\.3\.[0-9]{5}\.[0-9]\.[0-9]{7}\.[0-9]{30}",
+                r"^1\.3\.6\.1\.4\.1\.25623\.1\.3\.\d+\.\d+\.\d+\.\d+",
                 oid,
             )
             if not windows_oid_match:
