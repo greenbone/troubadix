@@ -85,18 +85,17 @@ class CheckValidOID(FileContentPlugin):
         family_pattern = get_special_script_tag_pattern(SpecialScriptTag.FAMILY)
         family_match = family_pattern.search(file_content)
 
+        if family_match is None or family_match.group("value") is None:
+            yield LinterError(
+                "VT is missing a script family!",
+                file=nasl_file,
+                plugin=self.name,
+            )
+            return
+
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1." in oid:
-            if family_match is None or family_match.group("value") is None:
-                yield LinterError(
-                    "VT is missing a script family!",
-                    file=nasl_file,
-                    plugin=self.name,
-                )
-                return
-
             family = family_match.group("value")
-
             vendor_number_match = re.search(
                 r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid
             )
@@ -389,14 +388,6 @@ class CheckValidOID(FileContentPlugin):
 
         # Fixed OID-scheme for Windows OIDs
         if "1.3.6.1.4.1.25623.1.3." in oid:
-            if not family_match or not family_match.group("value"):
-                yield LinterError(
-                    "VT is missing a script family!",
-                    file=nasl_file,
-                    plugin=self.name,
-                )
-                return
-
             if family_match.group("value") != windows_family_template:
                 yield LinterError(
                     f"script_oid() {is_using_reserved} 'Windows' ("
