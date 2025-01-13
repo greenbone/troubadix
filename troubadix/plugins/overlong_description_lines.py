@@ -32,6 +32,14 @@ IGNORE_TAGS = [
     "script_name",
     "script_xref",
     "script_add_preference",
+    # nb: Various variants of URLs in comments which we can't / shouldn't
+    # trim down
+    "  # http://",
+    "  # https://",
+    "  # - http://",
+    "  # - https://",
+    "  # > http://",
+    "  # > https://",
     # nb: Special cases we should ignore (at least for now) as these are
     # commonly used like this and is only two chars "too long".
     'script_tag(name:"vuldetect", value:"Checks if a vulnerable version is '
