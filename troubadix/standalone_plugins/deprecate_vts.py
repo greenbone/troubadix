@@ -81,7 +81,7 @@ def _finalize_content(content: str) -> str:
     content_to_keep = content.split("exit(0);")[0]
     return content_to_keep + (
         'script_tag(name:"deprecated", value:TRUE);'
-        "\n\nexit(0);\n}\n\nexit(66);\n"
+        "\n\n  exit(0);\n}\n\nexit(66);\n"
     )
 
 
