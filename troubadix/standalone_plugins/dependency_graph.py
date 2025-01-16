@@ -12,12 +12,23 @@ import networkx as nx
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import is_enterprise_folder
-from troubadix.helper.patterns import _get_special_script_tag_pattern
+from troubadix.helper.patterns import (
+    ScriptTag,
+    SpecialScriptTag,
+    _get_special_script_tag_pattern,
+    get_script_tag_pattern,
+    get_special_script_tag_pattern,
+)
+from troubadix.plugins.dependency_category_order import (
+    VTCategory,
+)
 
 EXTENSIONS = (".nasl",)  # not sure if inc files can also have dependencies
 DEPENDENCY_PATTERN = _get_special_script_tag_pattern(
     "dependencies", flags=re.DOTALL | re.MULTILINE
 )
+CATEGORY_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.CATEGORY)
+DEPRECATED_PATTERN = get_script_tag_pattern(ScriptTag.DEPRECATED)
 IF_BLOCK_PATTERN = re.compile(
     r'if\s*\(FEED_NAME\s*==\s*"GSF"\s*\|\|\s*FEED_NAME\s*==\s*"GEF"\s*\|\|\s*FEED_NAME\s*==\s*"SCM"\)\s*'
     r"(?:\{[^}]*\}\s*|[^\{;]*;)"
@@ -27,14 +38,10 @@ IF_BLOCK_PATTERN = re.compile(
 @dataclass
 class Script:
     name: str
-    path: Path
     feed: str
-    ungated_dependencies: list[str]  # not in a enterprise gate
-    gated_dependencies: list[str]  # inside a enterprise gate
-
-    @property
-    def dependencies(self) -> list[str]:
-        return self.ungated_dependencies + self.gated_dependencies
+    dependencies: list[tuple[str, bool]]  # (dependency_name, is_gated)
+    category: int
+    deprecated: bool
 
 
 def directory_type(string: str) -> Path:
@@ -46,7 +53,7 @@ def directory_type(string: str) -> Path:
 
 def parse_args() -> Namespace:
     parser = ArgumentParser(
-        description="Check for files with unwanted file extensions",
+        description="Tool for analysing the dependencies in the NASL repository.",
     )
     parser.add_argument(
         "root",
@@ -88,28 +95,34 @@ def get_feed(root, feed) -> list[Script]:
 
 def get_scripts(directory) -> list[Script]:
     scripts = []
-    for root, _, files in os.walk(directory):
-        root_path = Path(root)
-        for file in files:
-            if file.endswith(EXTENSIONS):
-                path = root_path / file  # absolute path for file access
-                relative_path = path.relative_to(
-                    directory
-                )  # relative path to \nasl will be used as identifier
-                name = str(relative_path)
-                feed = determine_feed(relative_path)
-                ungated_dependencies, gated_dependencies = extract_dependencies(
-                    path
-                )
-                scripts.append(
-                    Script(
-                        name,
-                        path,
-                        feed,
-                        ungated_dependencies,
-                        gated_dependencies,
-                    )
-                )
+    # use path glob?
+    file_generator = (
+        (Path(root) / file_str)
+        for root, _, files in os.walk(directory)
+        for file_str in files
+        if file_str.endswith(EXTENSIONS)
+    )
+
+    for path in file_generator:
+        try:
+            content = path.read_text(encoding=CURRENT_ENCODING)
+        except Exception as e:
+            logging.error(f"Error reading file {path}: {e}")
+            continue
+
+        try:
+            relative_path = path.relative_to(directory)  # used as identifier
+            name = str(relative_path)
+            feed = determine_feed(relative_path)
+            dependencies = extract_dependencies(content)
+            category = extract_category(content)
+            deprecated = extract_deprecated_status(content)
+            scripts.append(
+                Script(name, feed, dependencies, category, deprecated)
+            )
+        except Exception as e:
+            logging.error(f"Error processing {path}: {e}")
+
     return scripts
 
 
@@ -119,6 +132,10 @@ def determine_feed(script_relative_path: Path) -> str:
         return "enterprise"
     else:
         return "community"
+
+
+def extract_deprecated_status(content) -> bool:
+    return bool(DEPRECATED_PATTERN.search(content))
 
 
 def split_dependencies(value: str) -> list[str]:
@@ -136,31 +153,30 @@ def split_dependencies(value: str) -> list[str]:
     ]
 
 
-def extract_dependencies(file_path: Path) -> tuple[list[str], list[str]]:
-    ungated_deps = []
-    gated_deps = []
+def extract_dependencies(content: str) -> list[tuple[str, bool]]:
+    dependencies = []
 
-    try:
-        with file_path.open("r", encoding=CURRENT_ENCODING) as file:
-            content = file.read()
+    if_blocks = [
+        (match.start(), match.end())
+        for match in IF_BLOCK_PATTERN.finditer(content)
+    ]
 
-        if_blocks = [
-            (m.start(), m.end()) for m in IF_BLOCK_PATTERN.finditer(content)
-        ]
+    for match in DEPENDENCY_PATTERN.finditer(content):
+        start, end = match.span()
+        is_gated = any(
+            start >= block_start and end <= block_end
+            for block_start, block_end in if_blocks
+        )
+        dep_list = split_dependencies(match.group("value"))
+        dependencies.extend((dep, is_gated) for dep in dep_list)
 
-        for match in DEPENDENCY_PATTERN.finditer(content):
-            start, end = match.span()
-            is_gated = any(
-                start >= block_start and end <= block_end
-                for block_start, block_end in if_blocks
-            )
-            dependencies = split_dependencies(match.group("value"))
-            (gated_deps if is_gated else ungated_deps).extend(dependencies)
+    return dependencies
 
-    except Exception as e:
-        logging.error(f"Error processing {file_path}: {e}")
 
-    return (ungated_deps, gated_deps)
+def extract_category(content) -> int:
+    match = CATEGORY_PATTERN.search(content)
+    category_value = match.group("value")
+    return VTCategory[category_value]
 
 
 def create_graph(scripts: list[Script]):
@@ -169,11 +185,14 @@ def create_graph(scripts: list[Script]):
     # Add nodes and edges based on dependencies
     for script in scripts:
         # explicit add incase the script has no dependencies
-        graph.add_node(script.name, feed=script.feed)
-        for dep in script.ungated_dependencies:
-            graph.add_edge(script.name, dep, is_gated=False)
-        for dep in script.gated_dependencies:
-            graph.add_edge(script.name, dep, is_gated=True)
+        graph.add_node(
+            script.name,
+            feed=script.feed,
+            category=script.category,
+            deprecated=script.deprecated,
+        )
+        for dep, is_gated in script.dependencies:
+            graph.add_edge(script.name, dep, is_gated=is_gated)
     return graph
 
 
@@ -182,10 +201,9 @@ def check_duplicates(scripts: list[Script]):
     checks for a script depending on a script multiple times
     """
     for script in scripts:
+        dependencies = [dep for dep, _ in script.dependencies]
         duplicates = {
-            dep
-            for dep in script.dependencies
-            if script.dependencies.count(dep) > 1
+            dep for dep in dependencies if dependencies.count(dep) > 1
         }
         if duplicates:
             logging.warning(
@@ -199,7 +217,7 @@ def check_missing_dependencies(scripts: list[Script], graph: nx.DiGraph) -> int:
     the list of scripts created from the local file system,
     logs the scripts dependending on the missing script
     """
-    dependencies = {dep for script in scripts for dep in script.dependencies}
+    dependencies = {dep for script in scripts for dep, _ in script.dependencies}
     script_names = {script.name for script in scripts}
     missing_dependencies = dependencies - script_names
     if not missing_dependencies:
@@ -249,21 +267,53 @@ def check_cross_feed_dependecies(graph):
     and if they are contained within a gate.
     """
     gated_cfd = cross_feed_dependencies(graph, gated_status=True)
-    logging.info(f" {len(gated_cfd)} gated cross-feed-dependencies were found:")
-    for u, v in gated_cfd:
-        logging.info(f"gated cross-feed-dependency: {u} depends on {v}")
+    for dependent, dependency in gated_cfd:
+        logging.info(
+            f"gated cross-feed-dependency: {dependent} depends on {dependency}"
+        )
 
     ungated_cfd = cross_feed_dependencies(graph, gated_status=False)
-    logging.info(
-        f" {len(ungated_cfd)} ungated cross-feed-dependencies were found:"
-    )
-    for u, v in ungated_cfd:
-        logging.error(f"ungated cross-feed-dependency: {u} depends on {v}")
-
-    if ungated_cfd:
-        return 1
-    else:
+    if not ungated_cfd:
         return 0
+    for dependent, dependency in ungated_cfd:
+        logging.error(
+            f"ungated cross-feed-dependency: {dependent} depends on {dependency}"
+        )
+
+    return 1
+
+
+def check_category_order(graph):
+    problematic_edges = [
+        (dependent, dependency)
+        for dependent, dependency in graph.edges()
+        if graph.nodes[dependent]["category"]
+        < graph.nodes[dependency].get("category", -1)
+    ]
+
+    if not problematic_edges:
+        return 0
+    for dependent, dependency in problematic_edges:
+        logging.error(
+            "Not allowed category order."
+            f" {dependent} is higher in the execution order than {dependency}"
+        )
+    return 1
+
+
+def check_deprecated_dependencies(graph) -> int:
+    deprecated_edges = [
+        (dependent, dependency)
+        for dependent, dependency in graph.edges()
+        if graph.nodes[dependency].get("deprecated", False)
+    ]
+    if not deprecated_edges:
+        return 0
+    for dependent, dependency in deprecated_edges:
+        logging.error(
+            f"Deprecated dependency: {dependent} depends on {dependency}"
+        )
+    return 1
 
 
 def main():
@@ -285,6 +335,8 @@ def main():
     failed += check_missing_dependencies(scripts, graph)
     failed += check_cycles(graph)
     failed += check_cross_feed_dependecies(graph)
+    failed += check_category_order(graph)
+    failed += check_deprecated_dependencies(graph)
 
     return failed
 
