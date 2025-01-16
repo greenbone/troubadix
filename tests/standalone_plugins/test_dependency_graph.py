@@ -51,8 +51,8 @@ class TestDependencyGraph(unittest.TestCase):
 
     def test_create_graph(self):
         scripts = [
-            Script("foo.nasl", None, "community", ["bar.nasl"], []),
-            Script("bar.nasl", None, "enterprise", [], []),
+            Script("foo.nasl", "community", [("bar.nasl", False)], 0, False),
+            Script("bar.nasl", "enterprise", [], 0, False),
         ]
         graph = create_graph(scripts)
         self.assertEqual(len(list(graph.nodes)), 2)
@@ -68,4 +68,4 @@ class TestDependencyGraph(unittest.TestCase):
             patch.object(sys, "argv", test_args),
         ):
             return_code = main()
-            self.assertEqual(return_code, 2)
+            self.assertEqual(return_code, 4)
