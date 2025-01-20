@@ -5,7 +5,7 @@ import os
 import re
 import sys
 from argparse import ArgumentParser, Namespace
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import networkx as nx
@@ -44,6 +44,51 @@ class Script:
     deprecated: bool
 
 
+@dataclass
+class Result:
+    name: str
+    warnings: list[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+
+    def has_errors(self) -> bool:
+        return bool(self.errors)
+
+    def has_warnings(self) -> bool:
+        return bool(self.warnings)
+
+
+class Reporter:
+    def __init__(self, verbosity) -> None:
+        self.verbosity = verbosity
+
+    def report(self, results: list[Result]):
+        for result in results:
+            if self.verbosity >= 2:
+                self.print_statistic(result)
+                self.print_divider("-")
+            if self.verbosity >= 1:
+                self.print_warnings(result)
+            self.print_errors(result)
+            if self.verbosity >= 2:
+                self.print_divider("=")
+
+    def print_divider(self, char="-", length=40):
+        print(char * length)
+
+    def print_statistic(self, result: Result):
+        print(
+            f"{result.name} - warnings: {len(result.warnings)}, errors: {len(result.errors)}"
+        )
+
+    def print_warnings(self, result: Result):
+        for warning in result.warnings:
+            print(f"warning: {warning}")
+
+    def print_errors(self, result: Result):
+        for error in result.errors:
+            print(f"error: {error}")
+
+
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
     if not directory_path.is_dir():
@@ -71,6 +116,7 @@ def parse_args() -> Namespace:
         default="WARNING",
         help="Set the logging level (INFO, WARNING, ERROR)",
     )
+    parser.add_argument("-v", "--verbose", action="count", default=0)
     return parser.parse_args()
 
 
@@ -196,57 +242,60 @@ def create_graph(scripts: list[Script]):
     return graph
 
 
-def check_duplicates(scripts: list[Script]):
+def check_duplicates(scripts: list[Script]) -> Result:
     """
     checks for a script depending on a script multiple times
     """
+    warnings = []
     for script in scripts:
         dependencies = [dep for dep, _ in script.dependencies]
         duplicates = {
             dep for dep in dependencies if dependencies.count(dep) > 1
         }
         if duplicates:
-            logging.warning(
-                f"Duplicate dependencies in {script.name}: {', '.join(duplicates)}"
-            )
+            msg = f"Duplicate dependencies in {script.name}: {', '.join(duplicates)}"
+            warnings.append(msg)
+
+    return Result(name="check_duplicates", warnings=warnings)
 
 
-def check_missing_dependencies(scripts: list[Script], graph: nx.DiGraph) -> int:
+def check_missing_dependencies(
+    scripts: list[Script], graph: nx.DiGraph
+) -> Result:
     """
     Checks if any scripts that are depended on are missing from
     the list of scripts created from the local file system,
     logs the scripts dependending on the missing script
     """
+    errors = []
     dependencies = {dep for script in scripts for dep, _ in script.dependencies}
     script_names = {script.name for script in scripts}
     missing_dependencies = dependencies - script_names
-    if not missing_dependencies:
-        return 0
 
     for missing in missing_dependencies:
         depending_scripts = graph.predecessors(missing)
-        logging.error(f"missing dependency file: {missing}:")
+        msg = f"missing dependency file: {missing}:"
         for script in depending_scripts:
-            logging.info(f"  - used by: {script}")
+            msg += f"\n  - used by: {script}"
+        errors.append(msg)
 
-    return 1
+    return Result(name="missing_dependencies", errors=errors)
 
 
-def check_cycles(graph) -> int:
+def check_cycles(graph) -> Result:
     """
     checks for cyclic dependencies
     """
     if nx.is_directed_acyclic_graph(graph):
-        return 0
+        return Result(name="check_cycles")
 
-    cyles = nx.simple_cycles(graph)
-    for cycle in cyles:
-        logging.error(f"cyclic dependency: {cycle}")
+    cycles = nx.simple_cycles(graph)
 
-    return 1
+    errors = [f"cyclic dependency: {cycle}" for cycle in cycles]
+    return Result(name="check_cycles", errors=errors)
 
 
-def cross_feed_dependencies(graph, gated_status: bool):
+def cross_feed_dependencies(graph, gated_status: bool) -> list[tuple[str, str]]:
     """
     creates a list of script and dependency for scripts
     in community feed that depend on scripts in enterprise folders
@@ -261,29 +310,29 @@ def cross_feed_dependencies(graph, gated_status: bool):
     return cross_feed_dependencies
 
 
-def check_cross_feed_dependecies(graph):
+def check_cross_feed_dependecies(graph) -> Result:
     """
     Checks if scripts in the community feed have dependencies to enterprise scripts,
     and if they are contained within a gate.
     """
     gated_cfd = cross_feed_dependencies(graph, gated_status=True)
-    for dependent, dependency in gated_cfd:
-        logging.info(
-            f"gated cross-feed-dependency: {dependent} depends on {dependency}"
-        )
+    warnings = [
+        f"gated cross-feed-dependency: {dependent} depends on {dependency}"
+        for dependent, dependency in gated_cfd
+    ]
 
     ungated_cfd = cross_feed_dependencies(graph, gated_status=False)
-    if not ungated_cfd:
-        return 0
-    for dependent, dependency in ungated_cfd:
-        logging.error(
-            f"ungated cross-feed-dependency: {dependent} depends on {dependency}"
-        )
+    errors = [
+        f"ungated cross-feed-dependency: {dependent} depends on {dependency}"
+        for dependent, dependency in ungated_cfd
+    ]
 
-    return 1
+    return Result(
+        name="check_cross_feed_dependencies", warnings=warnings, errors=errors
+    )
 
 
-def check_category_order(graph):
+def check_category_order(graph) -> Result:
     problematic_edges = [
         (dependent, dependency)
         for dependent, dependency in graph.edges()
@@ -291,29 +340,20 @@ def check_category_order(graph):
         < graph.nodes[dependency].get("category", -1)
     ]
 
-    if not problematic_edges:
-        return 0
-    for dependent, dependency in problematic_edges:
-        logging.error(
-            "Not allowed category order."
-            f" {dependent} is higher in the execution order than {dependency}"
-        )
-    return 1
+    errors = [
+        f"{dependent} depends on {dependency} which has a lower category order"
+        for dependent, dependency in problematic_edges
+    ]
+    return Result(name="check_category_order", errors=errors)
 
 
-def check_deprecated_dependencies(graph) -> int:
-    deprecated_edges = [
-        (dependent, dependency)
+def check_deprecated_dependencies(graph) -> Result:
+    errors = [
+        f"{dependent} depends on deprectated script {dependency}"
         for dependent, dependency in graph.edges()
         if graph.nodes[dependency].get("deprecated", False)
     ]
-    if not deprecated_edges:
-        return 0
-    for dependent, dependency in deprecated_edges:
-        logging.error(
-            f"Deprecated dependency: {dependent} depends on {dependency}"
-        )
-    return 1
+    return Result(name="check_deprecated_dependencies", errors=errors)
 
 
 def main():
@@ -329,16 +369,26 @@ def main():
     logging.info(f"nodes (scripts) in graph: {graph.number_of_nodes()}")
     logging.info(f"edges (dependencies) in graph: {graph.number_of_edges()}")
 
-    failed = 0
+    results = [
+        check_duplicates(scripts),
+        check_missing_dependencies(scripts, graph),
+        check_cycles(graph),
+        check_cross_feed_dependecies(graph),
+        check_category_order(graph),
+        check_deprecated_dependencies(graph),
+    ]
+    reporter = Reporter(args.verbose)
+    reporter.report(results)
 
-    check_duplicates(scripts)
-    failed += check_missing_dependencies(scripts, graph)
-    failed += check_cycles(graph)
-    failed += check_cross_feed_dependecies(graph)
-    failed += check_category_order(graph)
-    failed += check_deprecated_dependencies(graph)
+    has_errors = any(result.has_errors() for result in results)
+    has_warnings = any(result.has_warnings() for result in results)
 
-    return failed
+    if has_errors:
+        return 1
+    elif has_warnings:
+        return 2
+    else:
+        return 0
 
 
 if __name__ == "__main__":
