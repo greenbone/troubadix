@@ -68,4 +68,4 @@ class TestDependencyGraph(unittest.TestCase):
             patch.object(sys, "argv", test_args),
         ):
             return_code = main()
-            self.assertEqual(return_code, 4)
+            self.assertEqual(return_code, 1)
