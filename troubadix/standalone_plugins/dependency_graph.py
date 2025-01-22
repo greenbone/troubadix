@@ -4,8 +4,10 @@ import logging
 import os
 import re
 import sys
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from dataclasses import dataclass, field
+from enum import Flag, auto
+from functools import reduce
 from pathlib import Path
 
 import networkx as nx
@@ -33,6 +35,24 @@ IF_BLOCK_PATTERN = re.compile(
     r'if\s*\(FEED_NAME\s*==\s*"GSF"\s*\|\|\s*FEED_NAME\s*==\s*"GEF"\s*\|\|\s*FEED_NAME\s*==\s*"SCM"\)\s*'
     r"(?:\{[^}]*\}\s*|[^\{;]*;)"
 )  # Matches specific if blocks used to gate code to run only for enterprise feeds
+
+
+class Feed(Flag):
+    COMMON = auto()
+    FEED_21_04 = auto()
+    FEED_22_04 = auto()
+    FULL = COMMON | FEED_21_04 | FEED_22_04
+
+    def __str__(self):
+        # Make enum values user-friendly for argparse help
+        return self.name.lower()
+
+
+def feed_type(value: str) -> Feed:
+    try:
+        return Feed[value.upper()]
+    except KeyError:
+        raise ArgumentTypeError(f"Invalid Feed value: '{value}'")
 
 
 @dataclass
@@ -65,7 +85,7 @@ class Reporter:
         for result in results:
             if self.verbosity >= 2:
                 self.print_statistic(result)
-                self.print_divider("-")
+                self.print_divider()
             if self.verbosity >= 1:
                 self.print_warnings(result)
             self.print_errors(result)
@@ -103,12 +123,16 @@ def parse_args() -> Namespace:
     parser.add_argument(
         "root",
         type=directory_type,
+        nargs="?",
         help="directory that should be linted",
     )
     parser.add_argument(
+        "-f",
         "--feed",
-        choices=["21.04", "22.04", "common", "full"],
-        default="full",
+        type=feed_type,
+        choices=Feed,
+        nargs="+",
+        default=[Feed.FULL],
         help="feed",
     )
     parser.add_argument(
@@ -117,39 +141,32 @@ def parse_args() -> Namespace:
         help="Set the logging level (INFO, WARNING, ERROR)",
     )
     parser.add_argument("-v", "--verbose", action="count", default=0)
+
     return parser.parse_args()
 
 
 # Usefull? Or is full only ever used and can therfore be removed?
-def get_feed(root, feed) -> list[Script]:
-    match feed:
-        case "21.04":
-            return get_scripts(root / "common") + get_scripts(root / "21.04")
-        case "22.04":
-            return get_scripts(root / "common") + get_scripts(root / "22.04")
-        case "common":
-            return get_scripts(root / "common")
-        case "full":
-            return (
-                get_scripts(root / "common")
-                + get_scripts(root / "21.04")
-                + get_scripts(root / "22.04")
-            )
-        case _:
-            return []
+def get_feed(root, feeds: list[Feed]) -> list[Script]:
 
+    def combine(x, y):
+        return x | y
 
-def get_scripts(directory) -> list[Script]:
+    feed = reduce(combine, feeds)
     scripts = []
-    # use path glob?
-    file_generator = (
-        (Path(root) / file_str)
-        for root, _, files in os.walk(directory)
-        for file_str in files
-        if file_str.endswith(EXTENSIONS)
-    )
+    if feed & Feed.COMMON:
+        scripts.extend(get_scripts(root / "common"))
+    if feed & Feed.FEED_21_04:
+        scripts.extend(get_scripts(root / "21.04"))
+    if feed & Feed.FEED_22_04:
+        scripts.extend(get_scripts(root / "22.04"))
 
-    for path in file_generator:
+    return scripts
+
+
+def get_scripts(directory: Path) -> list[Script]:
+    scripts = []
+
+    for path in directory.rglob("*.nasl"):
         try:
             content = path.read_text(encoding=CURRENT_ENCODING)
         except Exception as e:
@@ -358,9 +375,19 @@ def check_deprecated_dependencies(graph) -> Result:
 
 def main():
     args = parse_args()
+
     logging.basicConfig(
         level=args.log.upper(), format="%(levelname)s: %(message)s"
     )
+    if args.root is None:
+        vtdir = os.environ.get("VTDIR")
+        if not vtdir:
+            raise RuntimeError(
+                "The environment variable 'VTDIR' is not set, and no path was provided."
+            )
+        args.root = Path(vtdir)
+        logging.info(f"using root {vtdir} from 'VTDIR'")
+
     logging.info("starting troubadix dependency analysis")
 
     scripts = get_feed(args.root, args.feed)
@@ -380,12 +407,9 @@ def main():
     reporter = Reporter(args.verbose)
     reporter.report(results)
 
-    has_errors = any(result.has_errors() for result in results)
-    has_warnings = any(result.has_warnings() for result in results)
-
-    if has_errors:
+    if any(result.has_errors() for result in results):
         return 1
-    elif has_warnings:
+    elif any(result.has_warnings() for result in results):
         return 2
     else:
         return 0
