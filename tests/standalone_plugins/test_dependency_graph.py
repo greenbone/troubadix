@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from troubadix.standalone_plugins.dependency_graph import (
+    Feed,
     Script,
     create_graph,
     get_feed,
@@ -25,7 +26,7 @@ class TestDependencyGraph(unittest.TestCase):
             "prog",
             NASL_DIR,
             "--feed",
-            "22.04",
+            "feed_22_04",
             "--log",
             "info",
         ]
@@ -33,7 +34,7 @@ class TestDependencyGraph(unittest.TestCase):
             args = parse_args()
             self.assertTrue(args)
             self.assertEqual(args.root, Path(NASL_DIR))
-            self.assertEqual(args.feed, "22.04")
+            self.assertEqual(args.feed, [Feed.FEED_22_04])
             self.assertEqual(args.log, "info")
 
     @patch("sys.stderr", new_callable=StringIO)
@@ -45,7 +46,7 @@ class TestDependencyGraph(unittest.TestCase):
             self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
 
     def test_get_feed(self):
-        feed = "full"
+        feed = [Feed.FULL]
         scripts = get_feed(Path(NASL_DIR), feed)
         self.assertEqual(len(scripts), 6)
 
