@@ -807,7 +807,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         content = (
             '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348");'
             "\n"
-            '  script_family("Windows : Microsoft Bulletins");\n'
+            '  script_family("Windows Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -823,7 +823,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         content = (
             '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348");'
             "\n"
-            '  script_family("Windows : Microsoft");\n'
+            '  script_family("Windows : Microsoft Bulletin ");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -845,7 +845,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         content = (
             '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.5019966.494846484649555554514651545348");'
             "\n"
-            '  script_family("Windows : Microsoft Bulletins");\n'
+            '  script_family("Windows Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -861,7 +861,7 @@ class CheckValidOIDTestCase(PluginTestCase):
         content = (
             '  script_oid("1.3.6.1.4.1.25623.1.3.11571.0.494846484649555554514651545348");'
             "\n"
-            '  script_family("Windows : Microsoft Bulletins");\n'
+            '  script_family("Windows Local Security Checks");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content

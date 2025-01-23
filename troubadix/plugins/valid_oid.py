@@ -58,7 +58,6 @@ class CheckValidOID(FileContentPlugin):
 
         security_template = "Security Advisory"
         family_template = "Local Security Checks"
-        windows_family_template = "Windows : Microsoft Bulletins"
         is_using_reserved = "is using an OID that is reserved for"
         invalid_oid = "is using an invalid OID"
 
@@ -388,7 +387,7 @@ class CheckValidOID(FileContentPlugin):
 
         # Fixed OID-scheme for Windows OIDs
         if "1.3.6.1.4.1.25623.1.3." in oid:
-            if family_match.group("value") != windows_family_template:
+            if family_match.group("value") != f"Windows {family_template}":
                 yield LinterError(
                     f"script_oid() {is_using_reserved} 'Windows' ("
                     f"{str(oid)})",
