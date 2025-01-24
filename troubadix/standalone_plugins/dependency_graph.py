@@ -25,7 +25,6 @@ from troubadix.plugins.dependency_category_order import (
     VTCategory,
 )
 
-EXTENSIONS = (".nasl",)  # not sure if inc files can also have dependencies
 DEPENDENCY_PATTERN = _get_special_script_tag_pattern(
     "dependencies", flags=re.DOTALL | re.MULTILINE
 )
@@ -145,13 +144,8 @@ def parse_args() -> Namespace:
     return parser.parse_args()
 
 
-# Usefull? Or is full only ever used and can therfore be removed?
 def get_feed(root, feeds: list[Feed]) -> list[Script]:
-
-    def combine(x, y):
-        return x | y
-
-    feed = reduce(combine, feeds)
+    feed = reduce((lambda x, y: x | y), feeds)
     scripts = []
     if feed & Feed.COMMON:
         scripts.extend(get_scripts(root / "common"))
@@ -179,7 +173,7 @@ def get_scripts(directory: Path) -> list[Script]:
             feed = determine_feed(relative_path)
             dependencies = extract_dependencies(content)
             category = extract_category(content)
-            deprecated = extract_deprecated_status(content)
+            deprecated = bool(DEPRECATED_PATTERN.search(content))
             scripts.append(
                 Script(name, feed, dependencies, category, deprecated)
             )
@@ -195,10 +189,6 @@ def determine_feed(script_relative_path: Path) -> str:
         return "enterprise"
     else:
         return "community"
-
-
-def extract_deprecated_status(content) -> bool:
-    return bool(DEPRECATED_PATTERN.search(content))
 
 
 def split_dependencies(value: str) -> list[str]:
