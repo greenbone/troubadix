@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from enum import Flag, auto
 from functools import reduce
 from pathlib import Path
+from typing import NamedTuple
 
 import networkx as nx
 
@@ -30,7 +31,7 @@ DEPENDENCY_PATTERN = _get_special_script_tag_pattern(
 )
 CATEGORY_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.CATEGORY)
 DEPRECATED_PATTERN = get_script_tag_pattern(ScriptTag.DEPRECATED)
-IF_BLOCK_PATTERN = re.compile(
+ENTERPRISE_FEED_CHECK_PATTERN = re.compile(
     r'if\s*\(FEED_NAME\s*==\s*"GSF"\s*\|\|\s*FEED_NAME\s*==\s*"GEF"\s*\|\|\s*FEED_NAME\s*==\s*"SCM"\)\s*'
     r"(?:\{[^}]*\}\s*|[^\{;]*;)"
 )  # Matches specific if blocks used to gate code to run only for enterprise feeds
@@ -54,11 +55,18 @@ def feed_type(value: str) -> Feed:
         raise ArgumentTypeError(f"Invalid Feed value: '{value}'")
 
 
+class Dependency(NamedTuple):
+    name: str
+    # Indicates whether the dependency will only run if an enterprise feed is used.
+    # Controlled by a specific if check. Does not indicate the script's feed.
+    is_enterprise_feed: bool
+
+
 @dataclass
 class Script:
     name: str
     feed: str
-    dependencies: list[tuple[str, bool]]  # (dependency_name, is_gated)
+    dependencies: list[Dependency]
     category: int
     deprecated: bool
 
@@ -206,22 +214,24 @@ def split_dependencies(value: str) -> list[str]:
     ]
 
 
-def extract_dependencies(content: str) -> list[tuple[str, bool]]:
+def extract_dependencies(content: str) -> list[Dependency]:
     dependencies = []
 
     if_blocks = [
         (match.start(), match.end())
-        for match in IF_BLOCK_PATTERN.finditer(content)
+        for match in ENTERPRISE_FEED_CHECK_PATTERN.finditer(content)
     ]
 
     for match in DEPENDENCY_PATTERN.finditer(content):
         start, end = match.span()
-        is_gated = any(
+        is_enterprise_feed = any(
             start >= block_start and end <= block_end
             for block_start, block_end in if_blocks
         )
         dep_list = split_dependencies(match.group("value"))
-        dependencies.extend((dep, is_gated) for dep in dep_list)
+        dependencies.extend(
+            Dependency(dep, is_enterprise_feed) for dep in dep_list
+        )
 
     return dependencies
 
@@ -244,8 +254,12 @@ def create_graph(scripts: list[Script]):
             category=script.category,
             deprecated=script.deprecated,
         )
-        for dep, is_gated in script.dependencies:
-            graph.add_edge(script.name, dep, is_gated=is_gated)
+        for dependency in script.dependencies:
+            graph.add_edge(
+                script.name,
+                dependency.name,
+                is_enterprise_feed=dependency.is_enterprise_feed,
+            )
     return graph
 
 
@@ -275,7 +289,9 @@ def check_missing_dependencies(
     logs the scripts dependending on the missing script
     """
     errors = []
-    dependencies = {dep for script in scripts for dep, _ in script.dependencies}
+    dependencies = {
+        dep.name for script in scripts for dep in script.dependencies
+    }
     script_names = {script.name for script in scripts}
     missing_dependencies = dependencies - script_names
 
@@ -302,17 +318,19 @@ def check_cycles(graph) -> Result:
     return Result(name="check_cycles", errors=errors)
 
 
-def cross_feed_dependencies(graph, gated_status: bool) -> list[tuple[str, str]]:
+def cross_feed_dependencies(
+    graph, is_enterprise_checked: bool
+) -> list[tuple[str, str]]:
     """
     creates a list of script and dependency for scripts
     in community feed that depend on scripts in enterprise folders
     """
     cross_feed_dependencies = [
         (u, v)
-        for u, v, is_gated in graph.edges.data("is_gated")
+        for u, v, is_enterprise_feed in graph.edges.data("is_enterprise_feed")
         if graph.nodes[u]["feed"] == "community"
         and graph.nodes[v].get("feed", "unknown") == "enterprise"
-        and is_gated == gated_status
+        and is_enterprise_feed == is_enterprise_checked
     ]  # unknown as standard value due to non existend nodes not having a feed value
     return cross_feed_dependencies
 
@@ -320,17 +338,19 @@ def cross_feed_dependencies(graph, gated_status: bool) -> list[tuple[str, str]]:
 def check_cross_feed_dependecies(graph) -> Result:
     """
     Checks if scripts in the community feed have dependencies to enterprise scripts,
-    and if they are contained within a gate.
+    and if they are correctly contained within a is_enterprise_feed check.
     """
-    gated_cfd = cross_feed_dependencies(graph, gated_status=True)
+    gated_cfd = cross_feed_dependencies(graph, is_enterprise_checked=True)
     warnings = [
-        f"gated cross-feed-dependency: {dependent} depends on {dependency}"
+        f"cross-feed-dependency: {dependent}(community feed) "
+        f"depends on {dependency}(enterprise feed)"
         for dependent, dependency in gated_cfd
     ]
 
-    ungated_cfd = cross_feed_dependencies(graph, gated_status=False)
+    ungated_cfd = cross_feed_dependencies(graph, is_enterprise_checked=False)
     errors = [
-        f"ungated cross-feed-dependency: {dependent} depends on {dependency}"
+        f"unchecked cross-feed-dependency: {dependent}(community feed) "
+        f"depends on {dependency}(enterprise feed), but the current feed is not properly checked"
         for dependent, dependency in ungated_cfd
     ]
 
