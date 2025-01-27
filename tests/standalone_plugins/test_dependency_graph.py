@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from troubadix.standalone_plugins.dependency_graph import (
+    Dependency,
     Feed,
     Script,
     create_graph,
@@ -51,8 +52,9 @@ class TestDependencyGraph(unittest.TestCase):
         self.assertEqual(len(scripts), 6)
 
     def test_create_graph(self):
+        dependency1 = Dependency("bar.nasl", False)
         scripts = [
-            Script("foo.nasl", "community", [("bar.nasl", False)], 0, False),
+            Script("foo.nasl", "community", [dependency1], 0, False),
             Script("bar.nasl", "enterprise", [], 0, False),
         ]
         graph = create_graph(scripts)
