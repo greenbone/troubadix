@@ -13,6 +13,7 @@ from typing import NamedTuple
 
 import networkx as nx
 
+from troubadix.argparser import directory_type_existing
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import is_enterprise_folder
 from troubadix.helper.patterns import (
@@ -116,20 +117,13 @@ class Reporter:
             print(f"error: {error}")
 
 
-def directory_type(string: str) -> Path:
-    directory_path = Path(string)
-    if not directory_path.is_dir():
-        raise ValueError(f"{string} is not a directory.")
-    return directory_path
-
-
 def parse_args() -> Namespace:
     parser = ArgumentParser(
         description="Tool for analysing the dependencies in the NASL repository.",
     )
     parser.add_argument(
         "root",
-        type=directory_type,
+        type=directory_type_existing,
         nargs="?",
         help="directory that should be linted",
     )

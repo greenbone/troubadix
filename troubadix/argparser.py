@@ -26,6 +26,7 @@ from pathlib import Path
 from pontos.terminal import Terminal
 
 
+# allows non existent paths and directory paths
 def directory_type(string: str) -> Path:
     directory_path = Path(string)
     if directory_path.exists() and not directory_path.is_dir():
@@ -33,9 +34,26 @@ def directory_type(string: str) -> Path:
     return directory_path
 
 
+# allows only existing directory paths
+def directory_type_existing(string: str) -> Path:
+    directory_path = Path(string)
+    if not directory_path.is_dir():
+        raise ValueError(f"{string} is not a directory.")
+    return directory_path
+
+
+# allows non existent paths and file paths
 def file_type(string: str) -> Path:
     file_path = Path(string)
     if file_path.exists() and not file_path.is_file():
+        raise ValueError(f"{string} is not a file.")
+    return file_path
+
+
+# allows only existing file paths
+def file_type_existing(string: str) -> Path:
+    file_path = Path(string)
+    if not file_path.is_file():
         raise ValueError(f"{string} is not a file.")
     return file_path
 
