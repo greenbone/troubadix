@@ -23,6 +23,7 @@ from troubadix.helper.patterns import (
     get_script_tag_pattern,
     get_special_script_tag_pattern,
 )
+from troubadix.plugins.dependencies import split_dependencies
 from troubadix.plugins.dependency_category_order import (
     VTCategory,
 )
@@ -191,21 +192,6 @@ def determine_feed(script_relative_path: Path) -> str:
         return "enterprise"
     else:
         return "community"
-
-
-def split_dependencies(value: str) -> list[str]:
-    """
-    removes blank lines, strips comments, cleans dependencies,
-    splits them by commas, and excludes empty strings.
-    """
-    return [
-        dep
-        for line in value.splitlines()
-        if line.strip()  # Ignore blank or whitespace-only lines
-        # ignore comment, clean line of unwanted chars, split by ','
-        for dep in re.sub(r'[\'"\s]', "", line.split("#", 1)[0]).split(",")
-        if dep  # Include only non-empty
-    ]
 
 
 def extract_dependencies(content: str) -> list[Dependency]:
