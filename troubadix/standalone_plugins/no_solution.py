@@ -25,6 +25,7 @@ from typing import Iterable, Optional, Tuple
 
 from pontos.terminal.terminal import ConsoleTerminal
 
+from troubadix.argparser import directory_type_existing
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import (
     ScriptTag,
@@ -47,13 +48,6 @@ SOLUTION_DATE_FORMATS = ["%d %B, %Y", "%d %b, %Y", "%Y/%m/%d"]
 CREATION_DATE_FORMAT = "%Y-%m-%d"
 
 MONTH_AS_DAYS = 365 / 12
-
-
-def directory_type(string: str) -> Path:
-    file_path = Path(string)
-    if not file_path.is_dir():
-        raise ValueError(f"{string} is not a directory.")
-    return file_path
 
 
 def parse_solution_date(date_string: str) -> datetime:
@@ -83,7 +77,7 @@ def parse_args() -> Namespace:
         "-d",
         "--directory",
         dest="directory",
-        type=directory_type,
+        type=directory_type_existing,
         help="Specify the directory to scan for nasl scripts",
     )
 
