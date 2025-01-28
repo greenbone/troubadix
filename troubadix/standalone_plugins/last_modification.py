@@ -20,28 +20,20 @@
 import datetime
 import re
 import sys
-from argparse import ArgumentParser, ArgumentTypeError, Namespace
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterable, Sequence
 
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
 
+from troubadix.argparser import file_type_existing
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import (
     LAST_MODIFICATION_ANY_VALUE_PATTERN,
     SCRIPT_VERSION_ANY_VALUE_PATTERN,
 )
 from troubadix.troubadix import from_file
-
-
-def existing_file_type(string: str) -> Path:
-    file_path = Path(string)
-    if not file_path.exists():
-        raise ArgumentTypeError(f'File "{string}" does not exist.')
-    if not file_path.is_file():
-        raise ArgumentTypeError(f'"{string}" is not a file.')
-    return file_path
 
 
 def update(nasl_file: Path, terminal: Terminal):
@@ -105,12 +97,12 @@ def parse_args(args: Sequence[str] = None) -> Namespace:
     what_group.add_argument(
         "--files",
         nargs="+",
-        type=existing_file_type,
+        type=file_type_existing,
         help="List of files that should be updated",
     )
     what_group.add_argument(
         "--from-file",
-        type=existing_file_type,
+        type=file_type_existing,
         help=(
             "Pass a file that contains a List of files "
             "containing paths to files, that should be "
