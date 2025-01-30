@@ -7,14 +7,16 @@ from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
 
-from troubadix.standalone_plugins.dependency_graph import (
-    Dependency,
-    Feed,
-    Script,
+from troubadix.standalone_plugins.dependency_graph.cli import parse_args
+from troubadix.standalone_plugins.dependency_graph.dependency_graph import (
     create_graph,
     get_feed,
     main,
-    parse_args,
+)
+from troubadix.standalone_plugins.dependency_graph.models import (
+    Dependency,
+    Feed,
+    Script,
 )
 
 NASL_DIR = "tests/standalone_plugins/nasl"
