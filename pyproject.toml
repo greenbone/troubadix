@@ -26,7 +26,7 @@ packages = [{ include = "troubadix" }, { include = "tests", format = "sdist" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 pontos = ">=22.7,<26.0"
-codespell = "2.3.0"
+codespell = "2.4.1"
 python-magic = "^0.4.25"
 chardet = ">=4,<6"
 validators = "^0.34.0"
