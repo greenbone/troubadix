@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" Argument parser for troubadix """
+"""Argument parser for troubadix"""
 
 import sys
 from argparse import ArgumentParser, Namespace
@@ -81,8 +81,7 @@ def parse_args(
         "--full",
         action="store_true",
         help=(
-            "Checking the complete VT directory and "
-            "not only the added/changed scripts"
+            "Checking the complete VT directory and not only the added/changed scripts"
         ),
     )
 
@@ -96,8 +95,7 @@ def parse_args(
         "-r",
         "--root",
         type=directory_type,
-        help="Root directory for the nasl files. Will be derived from the "
-        "content if not set.",
+        help="Root directory for the nasl files. Will be derived from the content if not set.",
     )
 
     what_group = parser.add_mutually_exclusive_group(required=False)
@@ -152,8 +150,7 @@ def parse_args(
         "--non-recursive",
         action="store_true",
         help=(
-            "Don't run the script recursive. "
-            'Only usable with "-f"/"--full" or "-d"/"--dirs"'
+            'Don\'t run the script recursive. Only usable with "-f"/"--full" or "-d"/"--dirs"'
         ),
     )
 
@@ -219,8 +216,7 @@ def parse_args(
         default=max(1, cpu_count() // 2),
         type=check_cpu_count,
         help=(
-            "Define number of jobs, that should run simultaneously. "
-            "Default: %(default)s"
+            "Define number of jobs, that should run simultaneously. Default: %(default)s"
         ),
     )
 
@@ -254,8 +250,7 @@ def parse_args(
         and parsed_args.non_recursive
     ):
         terminal.warning(
-            "'Argument '--non-recursive' is only usable with "
-            "'-f'/'--full' or '-d'/'--dirs'"
+            "'Argument '--non-recursive' is only usable with '-f'/'--full' or '-d'/'--dirs'"
         )
         sys.exit(1)
 

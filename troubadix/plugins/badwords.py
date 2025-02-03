@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" checking badwords in NASL scripts with the NASLinter """
+"""checking badwords in NASL scripts with the NASLinter"""
 
 from pathlib import Path
 from typing import Iterable, Iterator

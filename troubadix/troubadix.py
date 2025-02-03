@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" Main module for troubadix """
+"""Main module for troubadix"""
 
 import sys
 from collections.abc import Iterable

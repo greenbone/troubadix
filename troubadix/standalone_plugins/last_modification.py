@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-""" updating the modification time in VTs that have been touched/edited """
+"""updating the modification time in VTs that have been touched/edited"""
 
 import datetime
 import re
@@ -57,8 +57,7 @@ def update(nasl_file: Path, terminal: Terminal):
 
     if not match_last_modification_any_value:
         terminal.warning(
-            f'Ignoring "{nasl_file}" because it is missing a '
-            "last_modification tag."
+            f'Ignoring "{nasl_file}" because it is missing a last_modification tag.'
         )
         return
 
@@ -81,7 +80,7 @@ def update(nasl_file: Path, terminal: Terminal):
     )
     if not match_script_version:
         terminal.warning(
-            f'Ignoring "{nasl_file}" because it is missing a ' "script_version."
+            f'Ignoring "{nasl_file}" because it is missing a script_version.'
         )
         return
 
