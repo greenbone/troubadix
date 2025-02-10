@@ -38,9 +38,3 @@ class Result:
     name: str
     warnings: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
-
-    def has_errors(self) -> bool:
-        return bool(self.errors)
-
-    def has_warnings(self) -> bool:
-        return bool(self.warnings)
