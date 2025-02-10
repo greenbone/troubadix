@@ -2,9 +2,8 @@
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
 
-import logging
 import os
-from argparse import ArgumentError, ArgumentParser, ArgumentTypeError, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from pathlib import Path
 
 from troubadix.argparser import directory_type_existing
@@ -24,10 +23,10 @@ def parse_args() -> Namespace:
         description="Tool for analysing the dependencies in the NASL repository.",
     )
     parser.add_argument(
-        "root",
+        "-r",
+        "--root",
         type=directory_type_existing,
-        default=os.environ.get("VTDIR"),
-        help="directory that should be linted",
+        help="root for nasl directory that should be linted, uses $VTDIR if no path is given",
     )
     parser.add_argument(
         "-f",
@@ -50,10 +49,10 @@ def parse_args() -> Namespace:
     if not args.root:
         vtdir = os.environ.get("VTDIR")
         if not vtdir:
-            raise ArgumentError(
-                "The environment variable 'VTDIR' is not set, and no path was provided."
+            raise ValueError(
+                "The environment variable 'VTDIR' is not set,"
+                " and no root path with '--root' was provided."
             )
         args.root = Path(vtdir)
-        logging.info(f"using root {vtdir} from 'VTDIR'")
 
     return args
