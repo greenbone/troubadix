@@ -2,6 +2,8 @@
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
 
+from collections import Counter
+
 import networkx as nx
 
 from .models import Result, Script
@@ -13,10 +15,9 @@ def check_duplicates(scripts: list[Script]) -> Result:
     """
     warnings = []
     for script in scripts:
-        dependencies = [dep.name for dep in script.dependencies]
-        duplicates = {
-            dep for dep in dependencies if dependencies.count(dep) > 1
-        }
+        counter = Counter(dep.name for dep in script.dependencies)
+        duplicates = [dep for dep, count in counter.items() if count > 1]
+
         if duplicates:
             msg = f"Duplicate dependencies in {script.name}: {', '.join(duplicates)}"
             warnings.append(msg)

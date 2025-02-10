@@ -200,9 +200,9 @@ def main():
     reporter = Reporter(args.verbose)
     reporter.report(results)
 
-    if any(result.has_errors() for result in results):
+    if any(result.errors for result in results):
         return 1
-    elif any(result.has_warnings() for result in results):
+    elif any(result.warnings for result in results):
         return 2
     else:
         return 0
