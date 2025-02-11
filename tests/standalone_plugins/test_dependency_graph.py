@@ -119,11 +119,6 @@ if(description)
         """
 
     def test_get_feed(self):
-        # includes:
-        # - get_scripts
-        # - determine_feed
-        # - extract_dependencies
-        # - extract_categories
         feed = [Feed.FULL]
         scripts = get_feed(Path(self.local_root), feed)
         self.assertEqual(len(scripts), 6)
@@ -133,7 +128,6 @@ if(description)
         mock_read_text.return_value = self.script_content
         scripts = get_scripts(Path(self.local_root) / "common")
         self.assertEqual(len(scripts), 4)
-        self.assertEqual(scripts[0].name, "foo.nasl")
         self.assertEqual(scripts[0].feed, "community")
         self.assertEqual(len(scripts[0].dependencies), 3)
         self.assertEqual(scripts[0].category, VTCategory.ACT_GATHER_INFO)
@@ -149,6 +143,12 @@ if(description)
     def test_extract_dependencies(self):
         dependencies = extract_dependencies(self.script_content)
         self.assertEqual(len(dependencies), 3)
+        self.assertEqual(dependencies[0].name, "foo.nasl")
+        self.assertEqual(dependencies[1].name, "foo.nasl")
+        self.assertEqual(dependencies[2].name, "gsf/enterprise_script.nasl")
+        self.assertEqual(dependencies[0].is_enterprise_feed, False)
+        self.assertEqual(dependencies[1].is_enterprise_feed, False)
+        self.assertEqual(dependencies[2].is_enterprise_feed, True)
 
     def test_extract_category(self):
         category = extract_category(self.script_content)
