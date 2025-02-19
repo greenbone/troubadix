@@ -1578,3 +1578,4 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   "^[Xx]-[Aa]dobe-[Cc]ontent\s*:\s*AEM" );
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
+    * CVE-2021-47311: net: qcom/emac: fix UAF in emac_remove (bsc#1225010).
