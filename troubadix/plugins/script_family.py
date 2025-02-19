@@ -60,6 +60,7 @@ VALID_FAMILIES = [
     "Mandrake Local Security Checks",
     "Nmap NSE",
     "Nmap NSE net",
+    "openSUSE Local Security Checks",
     "Oracle Linux Local Security Checks",
     "PCI-DSS",
     "PCI-DSS 2.0",
