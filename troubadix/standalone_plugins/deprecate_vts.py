@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 
 import re
-from argparse import ArgumentParser, ArgumentTypeError, Namespace
+from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -10,7 +10,7 @@ from typing import Iterable, Optional
 
 from pontos.terminal.terminal import ConsoleTerminal
 
-from troubadix.argparser import directory_type, file_type
+from troubadix.argparser import directory_type, file_type, file_type_existing
 from troubadix.helper.patterns import (
     ScriptTag,
     SpecialScriptTag,
@@ -35,15 +35,6 @@ class DeprecatedFile:
 
 
 KB_ITEMS_PATTERN = re.compile(r"set_kb_item\(.+\);")
-
-
-def existing_file_type(string: str) -> Path:
-    file_path = Path(string)
-    if not file_path.exists():
-        raise ArgumentTypeError(f'File "{string}" does not exist.')
-    if not file_path.is_file():
-        raise ArgumentTypeError(f'"{string}" is not a file.')
-    return file_path
 
 
 def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
@@ -232,7 +223,7 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
         "--from-file",
         metavar="<from_file>",
         default=None,
-        type=existing_file_type,
+        type=file_type_existing,
         help=(
             "Path to a single file that contains a list of files "
             "to be deprecated, separated by new lines."

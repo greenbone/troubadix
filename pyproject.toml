@@ -32,6 +32,7 @@ chardet = ">=4,<6"
 validators = "^0.34.0"
 gitpython = "^3.1.31"
 charset-normalizer = "^3.2.0"
+networkx = "^3.4.2"
 
 [tool.poetry.group.dev.dependencies]
 autohooks = ">=21.7.0"
@@ -81,6 +82,7 @@ troubadix-changed-cves = 'troubadix.standalone_plugins.changed_cves:main'
 troubadix-allowed-rev-diff = 'troubadix.standalone_plugins.allowed_rev_diff:main'
 troubadix-file-extensions = 'troubadix.standalone_plugins.file_extensions:main'
 troubadix-deprecate-vts = 'troubadix.standalone_plugins.deprecate_vts:main'
+troubadix-dependency-graph = 'troubadix.standalone_plugins.dependency_graph.dependency_graph:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -7,19 +7,7 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import List
 
-
-def directory_type(string: str) -> Path:
-    directory_path = Path(string)
-    if not directory_path.is_dir():
-        raise ValueError(f"{string} is not a directory.")
-    return directory_path
-
-
-def file_type(string: str) -> Path:
-    file_path = Path(string)
-    if not file_path.is_file():
-        raise ValueError(f"{string} is not a file.")
-    return file_path
+from troubadix.argparser import directory_type_existing, file_type_existing
 
 
 def parse_args() -> Namespace:
@@ -28,11 +16,11 @@ def parse_args() -> Namespace:
     )
     parser.add_argument(
         "dir",
-        type=directory_type,
+        type=directory_type_existing,
         help="directory that should be linted",
     )
     parser.add_argument(
-        "--ignore-file", type=file_type, help="path to ignore file"
+        "--ignore-file", type=file_type_existing, help="path to ignore file"
     )
     parser.add_argument(
         "--gen-ignore-entries",
