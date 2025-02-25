@@ -94,6 +94,7 @@ EXCEPTIONS = [
     "Technocrackers",  # Author name of a wordpress plugin
     "firecracker",  # Valid package name on e.g. Fedora
     "Firecracker",  # Valid package name on e.g. Fedora
+    "pcp-pmda-nutcracker",  # Valid package name on e.g. openSUSE or Arch Linux
 ]
 
 STARTS_WITH_EXCEPTIONS = [
