@@ -78,6 +78,7 @@ EXCEPTIONS = [
     "OpenVAS Administrator",
     "OpenVAS / Greenbone Vulnerability Manager",
     "openvas_1808149858",
+    "OSPD-OpenVAS",
     "evil.zip -> openvas.jsp",
     'url = "/openvas.jsp";',
     'if( "OpenVAS RCE Test" >< buf )',
