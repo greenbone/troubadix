@@ -70,11 +70,11 @@ class CheckEncodingTestCase(PluginTestCase):
                 results[0].message,
             )
             self.assertEqual(
-                "Found invalid character",
+                "Found invalid character in line: 1",
                 results[1].message,
             )
             self.assertEqual(
-                "Found invalid character",
+                "Found invalid character in line: 2",
                 results[2].message,
             )
 
