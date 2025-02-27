@@ -26,7 +26,7 @@ from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 # Only the ASCII and extended ASCII for now... # https://www.ascii-code.com/
 # CHAR_SET = r"[^\x00-\xFF]"
 # Temporary only check for chars in between 7f-9f, like in the old Feed-QA...
-CHAR_SET = r"[\x7F-\x9F]"
+INVALID_CHAR_PATTERN = re.compile(r"[\x7F-\x9F]")
 
 ALLOWED_ENCODINGS = ["ascii", "latin_1"]
 
@@ -52,10 +52,10 @@ class CheckEncoding(LineContentPlugin):
             )
 
         for index, line in enumerate(lines, 1):
-            encoding = re.search(CHAR_SET, line)
-            if encoding is not None:
+            encoding = INVALID_CHAR_PATTERN.search(line)
+            if encoding:
                 yield LinterError(
-                    "Found invalid character",
+                    f"Found invalid character in line: {index}",
                     file=nasl_file,
                     plugin=self.name,
                     line=index,
