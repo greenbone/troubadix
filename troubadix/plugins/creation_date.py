@@ -94,3 +94,17 @@ class CheckCreationDate(FileContentPlugin):
                 file=nasl_file,
                 plugin=self.name,
             )
+
+        last_modification_pattern = get_script_tag_pattern(
+            ScriptTag.LAST_MODIFICATION
+        )
+        if match := last_modification_pattern.search(file_content):
+            last_modification = datetime.strptime(
+                match.group("value")[:25], "%Y-%m-%d %H:%M:%S %z"
+            )
+            if date_left > last_modification:
+                yield LinterError(
+                    "The creation_date must not be greater than the last modification date.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
