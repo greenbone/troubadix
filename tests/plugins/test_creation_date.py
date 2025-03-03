@@ -153,3 +153,43 @@ class CheckCreationDateTestCase(PluginTestCase):
             "False or incorrectly formatted creation_date.",
             results[0].message,
         )
+
+    def test_creation_date_greater_than_last_modification(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"creation_date", value:"2025-01-01 00:00:01 '
+            '+0200 (Wed, 01 Jan 2025)");\n'
+            '  script_tag(name:"last_modification", value:"2025-01-01 00:00:00 '
+            '+0200 (Wed, 01 Jan 2025)");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckCreationDate(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "The creation_date must not be greater than the last modification date.",
+            results[0].message,
+        )
+
+    def test_creation_date_equal_last_modification(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"creation_date", value:"2025-01-01 00:00:00 '
+            '+0200 (Wed, 01 Jan 2025)");\n'
+            '  script_tag(name:"last_modification", value:"2025-01-01 00:00:00 '
+            '+0200 (Wed, 01 Jan 2025)");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckCreationDate(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
