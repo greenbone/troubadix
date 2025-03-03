@@ -26,7 +26,7 @@ from troubadix.plugins.dependency_category_order import (
 
 from .checks import (
     check_category_order,
-    check_cross_feed_dependecies,
+    check_cross_feed_dependencies,
     check_cycles,
     check_deprecated_dependencies,
     check_duplicates,
@@ -193,7 +193,7 @@ def main():
         check_duplicates(scripts),
         check_missing_dependencies(scripts, graph),
         check_cycles(graph),
-        check_cross_feed_dependecies(graph),
+        check_cross_feed_dependencies(graph),
         check_category_order(graph),
         check_deprecated_dependencies(graph),
     ]

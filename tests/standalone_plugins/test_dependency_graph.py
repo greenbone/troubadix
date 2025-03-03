@@ -188,7 +188,7 @@ if(description)
             output,
         )
         self.assertIn(
-            "error: foo.nasl depends on deprectated script foobar.nasl", output
+            "error: foo.nasl depends on deprecated script foobar.nasl", output
         )
         self.assertIn(
             "warning: Duplicate dependencies in bar.nasl: foo.nasl", output

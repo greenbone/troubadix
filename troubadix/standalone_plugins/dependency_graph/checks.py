@@ -76,11 +76,11 @@ def cross_feed_dependencies(
         if graph.nodes[u]["feed"] == "community"
         and graph.nodes[v].get("feed", "unknown") == "enterprise"
         and is_enterprise_feed == is_enterprise_checked
-    ]  # unknown as standard value due to non existend nodes not having a feed value
+    ]  # unknown as standard value due to non existent nodes not having a feed value
     return cross_feed_dependencies
 
 
-def check_cross_feed_dependecies(graph) -> Result:
+def check_cross_feed_dependencies(graph) -> Result:
     """
     Checks if scripts in the community feed have dependencies to enterprise scripts,
     and if they are correctly contained within a is_enterprise_feed check.
@@ -121,7 +121,7 @@ def check_category_order(graph) -> Result:
 
 def check_deprecated_dependencies(graph) -> Result:
     errors = [
-        f"{dependent} depends on deprectated script {dependency}"
+        f"{dependent} depends on deprecated script {dependency}"
         for dependent, dependency in graph.edges()
         if graph.nodes[dependency].get("deprecated", False)
     ]
