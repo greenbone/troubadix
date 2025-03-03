@@ -23,14 +23,8 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Iterable
 
+from troubadix.argparser import file_type_existing
 from troubadix.standalone_plugins.common import git
-
-
-def file_type(string: str) -> Path:
-    file_path = Path(string)
-    if not file_path.is_file():
-        raise ValueError(f"{string} is not a file.")
-    return file_path
 
 
 def parse_args(args: Iterable[str]) -> Namespace:
@@ -52,7 +46,7 @@ def parse_args(args: Iterable[str]) -> Namespace:
         "-f",
         "--files",
         nargs="+",
-        type=file_type,
+        type=file_type_existing,
         default=[],
         help=(
             "List of files to diff. "

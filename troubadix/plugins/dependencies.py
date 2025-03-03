@@ -31,6 +31,20 @@ from troubadix.plugin import (
 )
 
 
+def split_dependencies(value: str) -> list[str]:
+    """
+    Remove single and/or double quotes, spaces
+    and create a list by using the comma as a separator
+    additionally, check and filter for inline comments
+    """
+    dependencies = []
+    for line in value.splitlines():
+        subject = line[: line.index("#")] if "#" in line else line
+        _dependencies = re.sub(r'[\'"\s]', "", subject).split(",")
+        dependencies += [dep for dep in _dependencies if dep != ""]
+    return dependencies
+
+
 class CheckDependencies(FilePlugin):
     name = "check_dependencies"
 
@@ -60,17 +74,7 @@ class CheckDependencies(FilePlugin):
 
         for match in matches:
             if match:
-                # Remove single and/or double quotes, spaces
-                # and create a list by using the comma as a separator
-                # additionally, check and filter for inline comments
-                dependencies = []
-
-                for line in match.group("value").splitlines():
-                    subject = line[: line.index("#")] if "#" in line else line
-                    _dependencies = re.sub(r'[\'"\s]', "", subject).split(",")
-                    dependencies += [dep for dep in _dependencies if dep != ""]
-
-                for dep in dependencies:
+                for dep in split_dependencies(match.group("value")):
                     if not any(
                         (root / vers / dep).exists() for vers in FEED_VERSIONS
                     ):

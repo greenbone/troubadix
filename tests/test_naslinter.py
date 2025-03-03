@@ -44,6 +44,7 @@ class TestNASLinter(unittest.TestCase):
                 "**/templates/*/*.nasl",
                 "**/test_files/*",
                 "**/test_files/**/*.nasl",
+                "**/tests/standalone_plugins/**/*.nasl",
             ],
             include_patterns=["**/*.nasl", "**/*.inc"],
         )
