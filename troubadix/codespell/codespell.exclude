@@ -34,6 +34,7 @@
 0x20:  C8 E6 AB 65 3B A9 5A 0E 14 00 00 05 41 44 4D 49    ...e;.Z.....ADMI
 0x20:  D5 A6 22 5D 33 E4 C6 0E 14 00 00 05 61 64 6D 69    .."]3.......admi
 0x40:  61 6C 64 6F 6D 61 69 6E 00 07 64 65 66 61 75 6C    aldomain..defaul
+0x40:  66 6C 61 74 65 3D 67 7A 69 70 0D 0A 66 69 6C 65    flate=gzip..file
 # 0x50:  72 6F 2E 70 72 6F 64 75 63 74 2E 64 65 76 69 63    ro.product.devic
 # 0x50:  74 72 69 6E 67 20 6D 69 73 73 69 6E 67 20 6F 72    tring missing or
 # 0x50:  75 65 73 74 3A 20 47 45 54 20 2F 20                uest: GET / # nb: Trailing space
@@ -231,6 +232,7 @@ Claus Wahlers reported that random images from GPU memory
                clen +
   clen = "567";
   clen = data_len( data:_ciphers );
+  - Cleo Streem
 "cliente",
 cmd = 'for usr in $(cut -d: -f1 /etc/shadow); do [[ $(chage --list $usr | grep \'^Last password change\' | cut -d: -f2) > $(date) ]] && echo "$usr :$(chage --list $usr | grep \'^Last password change\' | cut -d: -f2)"; done';
 cmd = "mount | grep -w ro";
@@ -262,6 +264,9 @@ Corrected a badly constracted file which could have allowed treating of
  could lead to shared memory segments of other users beeing freed
   cpe = build_cpe(value:appVer, exp:"^([0-9]\.[0-9]+\.[0-9]+)", base:"cpe:/a:shemes:grabit:");
     cpe = build_cpe(value:ver, exp:"^([0-9.]+)", base:"cpe:/a:mitre:ovaldi:");
+    cpe = build_cpe(value: vers, exp: "^([0-9.]+)", base: "cpe:/a:aprox:aproxengine:");
+      cpe = "cpe:/a:aprox:aproxengine";
+CPE = "cpe:/a:aprox:aproxengine";
 CPE = "cpe:/a:mapp:webtrekk:";
       cpe = "cpe:/a:mitre:ovaldi";
 CPE = "cpe:/a:netsparker:wass";
@@ -270,6 +275,7 @@ CPE:           cpe:/a:tawk:tawk.to_live_chat:0.8.0
     cpe =~ "^cpe:/o:hp:laserjet_pro_420[1-3](cdn|dn|dw|dne|dwe)_firmware") {
  CPU' could have occured because a retry loop continually finds the same
 crafted IFF ILBM file. NOTE: some of these details are obtained from
+crafted wLongsPerEntry or nEntriesInUse value in the indx chunk, which
       crapData = string("ALLO ", crap(length: 25000),"\r\n");
 crash) via a malformed file with UPack encoding (CVE-2009-1371).
 Create all system-defined macros defore processing command-line given
@@ -340,6 +346,7 @@ CVE-2020-36158: Fixed an issue wich might have allowed a remote
 CVE-2020-5208: Fixed multiple remote code executtion vulnerabilities
 CVE-2020-8492: Fixed a regular expression in urrlib that was prone to
 CVE-2021-30004: Fixed an issue where forging attacks might have occured
+  * CVE-2021-47311: net: qcom/emac: fix UAF in emac_remove (bsc#1225010).
 dass eine geeignete Windows 8.1 Version, vorzugsweise eine 64-Bit Variante, eingesetzt werden muss.");
 "DataArchivingService/webcontent/aas",
   "/DataArchivingService/webcontent/aas/aas_store.jsp");
@@ -398,7 +405,7 @@ Enable log information of starting/stoping services. (bsc#1144923,
 <!-- Ende Message Box -->
   Engineering (TE) database and then a subsequent operation attempts to process these, rpd will
 Engineering (TE) tunnel's physical source interface is not propagated to hardware after the adjacency is lost.
-- ERRO[0000] Error creating docker key file: CreateKeyFile write root.key file failed. open /root/.docker/root.key: permission denied 
+- ERRO[0000] Error creating docker key file: CreateKeyFile write root.key file failed. open /root/.docker/root.key: permission denied
   eSpace IAD, eSpace U1981 and eSpace USM.");
   establishment of the Cisco Nexus 9000 Series Application Centric Infrastructure (ACI) Mode Switch
   exact-width integer types int{N}_t and uint{N}_t.
@@ -410,10 +417,13 @@ EXP=expext.dll
   expressions that are not properly handled by a stap script that
  * extended EAP-SIM/AKA fast re-authentication to allow use with FILS
 extended EAP-SIM/AKA fast re-authentication to allow use with FILS
+  - Extended HTTP methods: ACL, BASELINE-CONTROL, BIND, CHECKIN, CHECKOUT, COPY, LABEL, LINK, LOCK,
+extended_methods = make_list("ACL", "BASELINE-CONTROL", "BIND", "CHECKIN", "CHECKOUT", "COPY",
  external emulators, which may have cuased Xen to crash, resulting in a
 'facsimiletelephonenumber' to the Access Control Instruction (ACI) for user
   family_id = 'oval:org.mitre.oval:obj:99';
   family_xml = '\t\t<family_item xmlns="http://oval.mitre.org/XMLSchema/oval-sys' +
+      "Faroe Islands" : [ "FO", "English", "PAL", "(UTC+00:00) Dublin", 0 ],
 (FATE#312793, bnc#782369). The userland utilities were published seperately to support this feature.
 (FATE#313309) The ipset userland utility will be published seperately to support this feature.
 (FATE#314441). A seperate hyper-v package will be published to support this feature.
@@ -546,6 +556,7 @@ if (http_vuln_check(port: port, url: url, pattern: "<title>WAN Setup", check_hea
   if(!isnull(res = isdpkgvuln(pkg:"nd", ver:"0.5.0-1woody1", rls:"DEB3.0"))) {
   if(!isnull(res = isrpmvuln(pkg:"libell", rpm:"libell~0.26~1.fc31", rls:"FC31"))) {
 if( "Login successed" >< recv ) {
+  if (methods = egrep(pattern: "^([Aa]llow|[Pp]ublic)\s*:", string: res, icase: FALSE)) {
   if( model =~ "^(RICOH|LANIER|SAVIN|NRG)" && "Network Printer" >< model ) {
 if( ( model =~ '^RP200' || model =~ '^TE[3456]0' ) && revcomp( a: version, b: "v600r006c00spc500" ) < 0) {
 if( model =~ '^TE[3456]0' && revcomp( a: version, b: "v600r006c00spc500" ) < 0 ) {
@@ -565,7 +576,9 @@ if (prod =~ "^BMX\s*NOE\s*0110$") {
 if (prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$") {
 if (prod =~ "^BMX\s*NOE\s*0110" && version_is_less(version: version, test_version: "6.5")) {
 if (prod =~ "^BMX\s*NOE\s*0110" && version_is_less(version: version, test_version: "6.70")) {
+if (prod =~ "^BMX\s*NOE\s*0200") {
 if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOE\s*01[01]0"))
+if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOE\s*0(1[01]|20)0"))
 if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOR\s*0200H" && prod !~ "^BMX\s*NOE\s*0100" &&
 if( r =~ " (A\. A\. Milne|Albert Einstein|Anonimo|Antico proverbio cinese|Autor desconocido|Charles Dickens|Francisco de Quevedo y Villegas|George Bernard Shaw|Jaime Balmes|Johann Wolfgang von Goethe|Jil Sander|Juana de Asbaje|Konfucius|Lord Philip Chesterfield|Montaigne|Petrarca|Ralph Waldo Emerson|Seneca|Syrus|Werner von Siemens)" ||
   if(rcvRes && '>iAm[i]nE<' >< rcvRes)
@@ -585,6 +598,7 @@ if( "Server: Boa" >!< banner || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|P
 if (sysdesc =~ "^(RICOH|LANIER|SAVIN|NRG)" && (sysdesc =~ "(RICOH|LANIER|SAVIN|NRG) Network Printer" ||
 if ("<title>Cisco NFVIS</title>" >< res && 'content="Xenon Boostrap Admin Panel"' >< res) {
 if ("<title>COMfortel</title>" >< res && "/statics/script/pageChallenge.js" >< res) {
+  if( "<title>Login to Axis2:: Administartion page</title>" >< buf8 ||
         if( "[Xx]-[Aa]dobe-[Cc]ontent" >< pattern )
       if( "[Xx]-[Aa]dobe-[Cc]ontent" >< pattern )
 If you disable this policy setting, transcripting of PowerShell-based applications is disabled by
@@ -678,7 +692,9 @@ kJtP0F6mv/Afe/5s7yd3ZJ/72yT73NjLg0vWbmLkop6eOR+CKw4nxorWxpocAj0p
 # Kubernetes Dashboard Public WAN (Internet) Accessible
 L3: conring size for XEN HV's with huge memory to small. Inital Xen logs
 LAST_PATCH_UPDATE UpToDate
+  "leadin/readme.txt", "HubSpot#---#=== HubSpot -#---#Stable tag: ([0-9.]+)#---#cpe:/a:hubspot:hubspot",
  leaks because of a missing check when transfering pages via
+<li><a href="Status_Router.asp"><strong><script type="text/javascript">Capture(bmenu.statu)</script></strong></a></li>
 library: Increment to 7:0:1 No changes, no removals New fuctions:
 [link moved to references] has more informations.
 <link rel="stylesheet" href="/bui/base.css?v=GWAY-8.3.1-0086" />
@@ -718,6 +734,7 @@ Mark Shepard discovered a double free in the TCP listener cleanup which could re
 "messasges",
     "Metastasio (Ipermestra)" >< banner || '"\r\nAnonimo' >< banner || banner =~ '^"[^"]+" *Autor desconocido[ \t\r\n]*$' || "/usr/games/fortune: not found" >< banner ||
     "Metastasio (Ipermestra)" >< r || '"\r\nAnonimo' >< r || r =~ '^"[^"]+" *Autor desconocido[ \t\r\n]*$' ) {
+    methods = eregmatch(pattern: "^([Aa]llow|[Pp]ublic)\s*:\s*([A-Z,]+\s*([A-Z ,]+)?)", string: methods,
  MFSA 2012-27 / CVE-2012-0474: Security researchers Jordi Chancel and Eddy Bordi reported that they could short-circuit page loads to show the address of a different site than what is ... [Please see the references for more information on the vulnerabilities]");
  MFSA 2012-75 / CVE-2012-3984: Security researcher David Bloom of Cue discovered that 'select' elements are always-on-top chromeless windows and that navigation away from a page with an active 'select' menu does not remove this window.When another menu is opened programmatically on a new page, the original 'select' menu can be retained and arbitrary HTML content within it rendered, allowing an attacker to cover arbitrary portions of the new page through absolute positioning/scrolling, leading to spoofing attacks. Security researcher Jordi Chancel found a variation that would allow for click-jacking attacks was well.
  MFSA 2013-23 / CVE-2013-0765: Mozilla developer Boris Zbarsky reported that in some circumstances a wrapped WebIDL object can be wrapped multiple times, overwriting the existing wrapp... [Please see the references for more information on the vulnerabilities]");
@@ -863,6 +880,7 @@ reenable php7-dba support of Berkeley DB (bsc#1108554)");
 # Ref : http://www.hsc.fr/ressources/articles/win_net_srv/index.html.en by Jean-Baptiste Marchand
         register_and_report_cpe( app:"Netsparker - Web Application Security Scanner", ver:netVer, base:"cpe:/a:netsparker:wass:", expr:"^([0-9.]+)", insloc:netPath );
     register_and_report_cpe(app:"Wiesemann & Theis GmbH " + appName, ver:version, concluded:concluded,
+  * [REGRESSION] 'call into AER handling regardless of severity' triggers
     reg_xml = '\t\t<registry_item' + status + ' xmlns="http://oval.mitre.org/' +
 Reject invalid eliptic curve point coordinates (bsc#1131291)");
  rejection for EXTRAVERSION = -xfs, but likely little else will be
@@ -891,6 +909,7 @@ req = string("POST /UE/ProcessForm HTTP/1.1\r\n",
   res = http_get_cache(port: port, item: dir + "/product.comparision.php");
 - Restrict envrionment variable expansion to `ENV`, `ADD`, `COPY`,
   result = "Diese Vorgabe muss manuell ueberprueft werden.";
+  "resutls": {
                 return -1, "The following script_xref of VT '" + str(file) + "' is pointing to Mitre/NVD which is already covered by the script_cve_id. This is a redundant info and the script_xref needs to be removed:" + nvd_mitre_link_tags
   return("Diese Vorgabe muss manuell ueberprueft werden.");
         return make_list( "error", text_response + 'Ueberpruefung fehlgeschlagen. Die Verwendung der benoetigten win_cmd_exec Funktion wurde in "Options for Local Security Checks (OID: 1.3.6.1.4.1.25623.1.0.100509)" manuell deaktiviert.\n' );
@@ -939,6 +958,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_mandatory_keys("Jasig CAS server/Installed");
   script_mandatory_keys("shttp/detected");
   script_mandatory_keys("telnet/huawei/te/detected");
+  script_mandatory_keys("wordpress/plugin/leadin/detected");
   script_mandatory_keys("wordpress/plugin/mailin/detected");
   script_name("Acronis Cyber Infrastructure (ACI) Detection (HTTP)");
   script_name("Acronis Cyber Infrastructure (ACI) RCE Vulnerability (SEC-6452)");
@@ -1002,6 +1022,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"affected", value:"Petite Annonce version 1.0 is known to be affected. Other
   script_tag(name:"affected", value:"RV320 Dual Gigabit WAN VPN Router and RV325 Dual Gigabit WAN
   script_tag(name:"affected", value:"RV320 Dual Gigabit WAN VPN Router and RV325 Dual Gigabit WAN VPN Router.");
+  script_tag(name:"affected", value:"Symantec Encryption Management Server (SEMS)
   script_tag(name:"affected", value:"tre on Fedora 23");
   script_tag(name:"affected", value:"tre on Fedora 24");
   script_tag(name:"affected", value:"tre on Fedora 25");
@@ -1042,6 +1063,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Federico Manuel Bento discovered that the Linux kernel did not properly
   script_tag(name:"insight", value:"FreeS/WAN, Openswan, strongSwan and Super-FreeS/WAN contain two bugs when
   script_tag(name:"insight", value:"In Apache::Session::Browseable before 1.3.6, validity of the X.509 certificate is not checked by default when connecting to remote LDAP backends, because the default configuration of the Net::LDAPS module for Perl is used.
+  script_tag(name:"insight", value:"It was discovered that a race condition existed in the ARC EMAC ethernet
   script_tag(name:"insight", value:"It was discovered that a specially-crafted packet sent to the racoon ipsec key exchange server could cause a tunnel to crash, resulting in a denial of service.
   script_tag(name:"insight", value:"It was discovered that the VLC CAF demuxer incorrectly handled certain
   script_tag(name:"insight", value:"James Troup discovered that MAAS stored RabbitMQ
@@ -1053,6 +1075,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"insight", value:"Juraj Somorovsky, Robert Merget and Nimrod Aviram discovered a padding oracle attack in OpenSSL.
   script_tag(name:"insight", value:"Juraj Somorovsky, Robert Merget, and Nimrod Aviram discovered that certain
   script_tag(name:"insight", value:"libsoup without ca path added, accepted all SSL certificats as trusted. This has been fixed. CVE-2012-2132 has been assigned to this issue.
+  script_tag(name:"insight", value:"Local ABL Client bypass of the required PASOE security checks
   script_tag(name:"insight", value:"LSAT insecurely creates temporary files which can lead to symlink attacks
   script_tag(name:"insight", value:"Manuel Nickschas discovered that Konversation did not properly perform
   script_tag(name:"insight", value:"Meh Chang discovered that Exim incorrectly
@@ -1126,6 +1149,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_tag(name:"summary", value:"Palo Alto PAN-OS is prone to a vulnerability in Panorama SD WAN.");
   script_tag(name:"summary", value:"Petite Annonce is prone to a cross-site scripting (XSS)
   script_tag(name:"summary", value:"Telnet based detection of Huawei TE (Telepresence and
+  script_tag(name:"summary", value:"The management console for Symantec Encryption Management Server (SEMS) is susceptible to potential OS command execution,
   script_tag(name:"summary", value:"The remote host is a SIP Express Router (SER).
   script_tag(name:"summary", value:"The remote host is missing an update for the 'Recommended udpate for SUSE Manager Client Tools' package(s) announced via the SUSE-SU-2016:1366-1 advisory.");
   script_tag(name:"summary", value:"The remote host is missing an update for the 'tre'
@@ -1471,6 +1495,7 @@ url = "/statics/html/index.htm";
 url = "/statics/pageChallenge.html";
       url = "/status/infomation.htm";
   url = string(dir, "/config.xml.sav");
+  url = string( dir, "/index.php?file=Liens&op=", raw_string( 0x22 ), "><script>window.alert('test');</script>" );
   url = string(openVer[2], "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt");
 url = "/UE/advanced.html";
 url = "/UE/welcome_login.html";
@@ -1578,4 +1603,3 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   "^[Xx]-[Aa]dobe-[Cc]ontent\s*:\s*AEM" );
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
-    * CVE-2021-47311: net: qcom/emac: fix UAF in emac_remove (bsc#1225010).
