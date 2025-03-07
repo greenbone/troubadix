@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import difflib
 from typing import Iterable, List
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
@@ -181,10 +182,18 @@ class StandardPlugins(Plugins):
                 excluded_plugins, files_plugins
             )
 
+            self._check_unknown_plugins(
+                file_plugins + files_plugins, excluded_plugins
+            )
+
         if included_plugins:
             file_plugins = self._include_plugins(included_plugins, file_plugins)
             files_plugins = self._include_plugins(
                 included_plugins, files_plugins
+            )
+
+            self._check_unknown_plugins(
+                file_plugins + files_plugins, included_plugins
             )
 
         super().__init__(file_plugins=file_plugins, files_plugins=files_plugins)
@@ -208,3 +217,26 @@ class StandardPlugins(Plugins):
             for plugin in plugins
             if plugin.__name__ in included or plugin.name in included
         ]
+
+    @staticmethod
+    def _check_unknown_plugins(found_plugins, selected_plugins):
+        all_plugin_names = {
+            file_plugin.name for file_plugin in _FILE_PLUGINS + _FILES_PLUGINS
+        }
+        found_plugin_names = {file_plugin.name for file_plugin in found_plugins}
+
+        unknown_plugins = set(selected_plugins).difference(found_plugin_names)
+
+        if not unknown_plugins:
+            return
+
+        messages = []
+        for plugin in sorted(unknown_plugins):
+            message = f"'{plugin}'"
+            match = difflib.get_close_matches(plugin, all_plugin_names, n=1)
+            if match:
+                message += f" (Did you mean '{match[0]}'?)"
+
+            messages.append(message)
+
+        raise ValueError(f"Unknown plugins: {", ".join(messages)}")
