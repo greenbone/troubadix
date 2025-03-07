@@ -224,9 +224,15 @@ class StandardPlugins(Plugins):
             return
 
         all_plugin_names = {
-            file_plugin.name for file_plugin in _FILE_PLUGINS + _FILES_PLUGINS
+            name
+            for plugin in _FILE_PLUGINS + _FILES_PLUGINS
+            for name in (plugin.name, plugin.__name__)
         }
-        found_plugin_names = {file_plugin.name for file_plugin in found_plugins}
+        found_plugin_names = {
+            name
+            for plugin in found_plugins
+            for name in (plugin.name, plugin.__name__)
+        }
 
         unknown_plugins = set(selected_plugins).difference(found_plugin_names)
 
