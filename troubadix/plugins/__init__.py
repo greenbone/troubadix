@@ -220,6 +220,9 @@ class StandardPlugins(Plugins):
 
     @staticmethod
     def _check_unknown_plugins(found_plugins, selected_plugins):
+        if len(found_plugins) == len(selected_plugins):
+            return
+
         all_plugin_names = {
             file_plugin.name for file_plugin in _FILE_PLUGINS + _FILES_PLUGINS
         }
