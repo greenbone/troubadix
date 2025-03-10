@@ -34,6 +34,7 @@ exceptions = [
     TextCheck("Multiple '/' Vulnerability"),
     TextCheck("an attackers choise"),
     TextCheck("multiple error handling vulnerabilities"),
+    TextCheck("multiple error messages"),
     # Like seen in 2022/debian/deb_dla_2981.nasl
     TextCheck("a multiple concurrency"),
     # From 2008/debian/deb_1017_1.nasl
