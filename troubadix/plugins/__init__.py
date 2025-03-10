@@ -176,24 +176,25 @@ class StandardPlugins(Plugins):
     ) -> None:
         file_plugins = _FILE_PLUGINS
         files_plugins = _FILES_PLUGINS
+
         if excluded_plugins:
+            self._check_unknown_plugins(
+                _FILE_PLUGINS + _FILES_PLUGINS, excluded_plugins
+            )
+
             file_plugins = self._exclude_plugins(excluded_plugins, file_plugins)
             files_plugins = self._exclude_plugins(
                 excluded_plugins, files_plugins
             )
 
+        if included_plugins:
             self._check_unknown_plugins(
-                file_plugins + files_plugins, excluded_plugins
+                _FILE_PLUGINS + _FILES_PLUGINS, included_plugins
             )
 
-        if included_plugins:
             file_plugins = self._include_plugins(included_plugins, file_plugins)
             files_plugins = self._include_plugins(
                 included_plugins, files_plugins
-            )
-
-            self._check_unknown_plugins(
-                file_plugins + files_plugins, included_plugins
             )
 
         super().__init__(file_plugins=file_plugins, files_plugins=files_plugins)
