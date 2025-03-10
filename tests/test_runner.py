@@ -343,7 +343,7 @@ class TestRunner(unittest.TestCase):
         nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
     def test_unknown_plugins(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "Unknown plugins: 'foo'"):
             Runner(
                 n_jobs=1,
                 reporter=self._reporter,
