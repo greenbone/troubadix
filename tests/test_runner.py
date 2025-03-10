@@ -35,7 +35,7 @@ from troubadix.plugins.script_version_and_last_modification_tags import (
     CheckScriptVersionAndLastModificationTags,
 )
 from troubadix.reporter import Reporter
-from troubadix.runner import Runner, TroubadixException
+from troubadix.runner import Runner
 
 _here = Path(__file__).parent
 
@@ -61,7 +61,7 @@ class TestRunner(unittest.TestCase):
     def test_runner_with_excluded_plugins(self):
         excluded_plugins = [
             "CheckBadwords",
-            "CheckCopyRightYearPlugin",
+            "CheckCopyrightYear",
         ]
         included_plugins = [
             plugin.__name__
@@ -342,18 +342,14 @@ class TestRunner(unittest.TestCase):
         # revert changes for the next time
         nasl_file.write_text(content, encoding=CURRENT_ENCODING)
 
-    def test_no_plugins(self):
-        runner = Runner(
-            n_jobs=1,
-            reporter=self._reporter,
-            included_plugins=["foo"],
-            root=self.root,
-        )
-
-        nasl_file = _here / "plugins" / "test.nasl"
-
-        with self.assertRaises(TroubadixException):
-            runner.run([nasl_file])
+    def test_unknown_plugins(self):
+        with self.assertRaises(ValueError):
+            Runner(
+                n_jobs=1,
+                reporter=self._reporter,
+                included_plugins=["foo"],
+                root=self.root,
+            )
 
     def test_runner_log_file(self):
         included_plugins = [
