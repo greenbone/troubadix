@@ -178,9 +178,7 @@ class StandardPlugins(Plugins):
         files_plugins = _FILES_PLUGINS
 
         if excluded_plugins:
-            self._check_unknown_plugins(
-                _FILE_PLUGINS + _FILES_PLUGINS, excluded_plugins
-            )
+            self._check_unknown_plugins(excluded_plugins)
 
             file_plugins = self._exclude_plugins(excluded_plugins, file_plugins)
             files_plugins = self._exclude_plugins(
@@ -188,9 +186,7 @@ class StandardPlugins(Plugins):
             )
 
         if included_plugins:
-            self._check_unknown_plugins(
-                _FILE_PLUGINS + _FILES_PLUGINS, included_plugins
-            )
+            self._check_unknown_plugins(included_plugins)
 
             file_plugins = self._include_plugins(included_plugins, file_plugins)
             files_plugins = self._include_plugins(
@@ -220,33 +216,25 @@ class StandardPlugins(Plugins):
         ]
 
     @staticmethod
-    def _check_unknown_plugins(found_plugins, selected_plugins):
-        if len(found_plugins) == len(selected_plugins):
-            return
-
+    def _check_unknown_plugins(selected_plugins: list[str]):
         all_plugin_names = {
             name
             for plugin in _FILE_PLUGINS + _FILES_PLUGINS
             for name in (plugin.name, plugin.__name__)
         }
-        found_plugin_names = {
-            name
-            for plugin in found_plugins
-            for name in (plugin.name, plugin.__name__)
-        }
 
-        unknown_plugins = set(selected_plugins).difference(found_plugin_names)
+        unknown_plugins = set(selected_plugins).difference(all_plugin_names)
 
         if not unknown_plugins:
             return
 
-        messages = []
-        for plugin in sorted(unknown_plugins):
-            message = f"'{plugin}'"
+        def build_message(plugin: str):
             match = difflib.get_close_matches(plugin, all_plugin_names, n=1)
-            if match:
-                message += f" (Did you mean '{match[0]}'?)"
+            return (
+                f"'{plugin}' (Did you mean '{match[0]}'?)"
+                if match
+                else f"'{plugin}'"
+            )
 
-            messages.append(message)
-
+        messages = [build_message(plugin) for plugin in sorted(unknown_plugins)]
         raise ValueError(f"Unknown plugins: {', '.join(messages)}")
