@@ -351,6 +351,18 @@ class TestRunner(unittest.TestCase):
                 root=self.root,
             )
 
+    def test_unknown_plugins_with_suggestion(self):
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Unknown plugins: 'check_badwards' \(Did you mean 'check_badwords'\?\)",
+        ):
+            Runner(
+                n_jobs=1,
+                reporter=self._reporter,
+                included_plugins=["check_badwards"],
+                root=self.root,
+            )
+
     def test_runner_log_file(self):
         included_plugins = [
             CheckDuplicateOID.name,
