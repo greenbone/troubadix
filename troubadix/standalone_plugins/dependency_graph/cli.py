@@ -42,7 +42,13 @@ def parse_args() -> Namespace:
         default="WARNING",
         help="Set the logging level (INFO, WARNING, ERROR)",
     )
-    parser.add_argument("-v", "--verbose", action="count", default=0)
+
+    parser.add_argument(
+        "--output",
+        type=str.upper,
+        choices=["ERROR", "WARNING", "INFO"],
+        default="ERROR",
+    )
 
     args = parser.parse_args()
 

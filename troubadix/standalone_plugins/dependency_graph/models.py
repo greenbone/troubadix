@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
 from dataclasses import dataclass, field
-from enum import Flag, auto
+from enum import Enum, Flag, auto
 
 
 class Feed(Flag):
@@ -14,6 +14,12 @@ class Feed(Flag):
     def __str__(self):
         # Make enum values user-friendly for argparse help
         return self.name.lower()
+
+
+class OutputLevel(Enum):
+    ERROR = 1
+    WARNING = 2
+    INFO = 3
 
 
 @dataclass
@@ -35,6 +41,11 @@ class Script:
 
 @dataclass
 class Result:
+    """Holds the results of a single check.
+    A check can report a combination of errors, warnings and infos
+    """
+
     name: str
     warnings: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    infos: list[str] = field(default_factory=list)

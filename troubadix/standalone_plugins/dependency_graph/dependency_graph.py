@@ -33,7 +33,7 @@ from .checks import (
     check_missing_dependencies,
 )
 from .cli import Feed, parse_args
-from .models import Dependency, Result, Script
+from .models import Dependency, OutputLevel, Result, Script
 
 DEPENDENCY_PATTERN = _get_special_script_tag_pattern(
     "dependencies", flags=re.DOTALL | re.MULTILINE
@@ -47,35 +47,19 @@ ENTERPRISE_FEED_CHECK_PATTERN = re.compile(
 
 
 class Reporter:
-    def __init__(self, verbosity) -> None:
-        self.verbosity = verbosity
+    def __init__(self, output_level: OutputLevel) -> None:
+        self.output_level = output_level
 
     def report(self, results: list[Result]):
         for result in results:
-            if self.verbosity >= 2:
-                self.print_statistic(result)
-                self.print_divider()
-            if self.verbosity >= 1:
-                self.print_warnings(result)
-            self.print_errors(result)
-            if self.verbosity >= 2:
-                self.print_divider("=")
-
-    def print_divider(self, char="-", length=40):
-        print(char * length)
-
-    def print_statistic(self, result: Result):
-        print(
-            f"{result.name} - warnings: {len(result.warnings)}, errors: {len(result.errors)}"
-        )
-
-    def print_warnings(self, result: Result):
-        for warning in result.warnings:
-            print(f"warning: {warning}")
-
-    def print_errors(self, result: Result):
-        for error in result.errors:
-            print(f"error: {error}")
+            for error in result.errors:
+                print(f"error: {error}")
+            if self.output_level.value >= OutputLevel.WARNING.value:
+                for warning in result.warnings:
+                    print(f"warning: {warning}")
+            if self.output_level.value >= OutputLevel.INFO.value:
+                for info in result.infos:
+                    print(f"info: {info}")
 
 
 def get_feed(root, feeds: list[Feed]) -> list[Script]:
@@ -197,7 +181,7 @@ def main():
         check_category_order(graph),
         check_deprecated_dependencies(graph),
     ]
-    reporter = Reporter(args.verbose)
+    reporter = Reporter(OutputLevel[args.output])
     reporter.report(results)
 
     if any(result.errors for result in results):

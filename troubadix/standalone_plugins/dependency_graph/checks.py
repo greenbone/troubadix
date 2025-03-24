@@ -86,7 +86,7 @@ def check_cross_feed_dependencies(graph) -> Result:
     and if they are correctly contained within a is_enterprise_feed check.
     """
     gated_cfd = cross_feed_dependencies(graph, is_enterprise_checked=True)
-    warnings = [
+    infos = [
         f"cross-feed-dependency: {dependent}(community feed) "
         f"depends on {dependency}(enterprise feed)"
         for dependent, dependency in gated_cfd
@@ -100,7 +100,7 @@ def check_cross_feed_dependencies(graph) -> Result:
     ]
 
     return Result(
-        name="check_cross_feed_dependencies", warnings=warnings, errors=errors
+        name="check_cross_feed_dependencies", infos=infos, errors=errors
     )
 
 

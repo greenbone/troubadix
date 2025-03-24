@@ -21,6 +21,7 @@ from troubadix.standalone_plugins.dependency_graph.dependency_graph import (
 from troubadix.standalone_plugins.dependency_graph.models import (
     Dependency,
     Feed,
+    OutputLevel,
     Result,
     Script,
 )
@@ -30,18 +31,19 @@ class TestReporter(unittest.TestCase):
     def setUp(self):
         self.result = Result(
             name="TestScript",
+            infos=["cross-feed"],
             warnings=["duplicate dependencies"],
             errors=["missing dependencies"],
         )
 
     @patch("sys.stdout", new_callable=StringIO)
-    def test_report_verbosity_2(self, mock_stdout):
-        reporter = Reporter(verbosity=2)
+    def test_report_output_level(self, mock_stdout):
+        reporter = Reporter(OutputLevel.INFO)
         reporter.report([self.result])
 
         output = mock_stdout.getvalue()
 
-        self.assertIn("TestScript - warnings: 1, errors: 1", output)
+        self.assertIn("info: cross-feed", output)
         self.assertIn("warning: duplicate dependencies", output)
         self.assertIn("error: missing dependencies", output)
 
@@ -57,6 +59,8 @@ class TestCLIArgs(unittest.TestCase):
             "feed_22_04",
             "--log",
             "info",
+            "--output",
+            "warning",
         ],
     )
     def test_parse_args_ok(self):
@@ -64,6 +68,7 @@ class TestCLIArgs(unittest.TestCase):
         self.assertEqual(args.root, Path("tests/standalone_plugins/nasl"))
         self.assertEqual(args.feed, [Feed.FEED_22_04])
         self.assertEqual(args.log, "info")
+        self.assertEqual(args.output, "WARNING")
 
     @patch("sys.stderr", new_callable=StringIO)
     @patch("sys.argv", ["prog", "--root", "not_real_dir"])
@@ -166,7 +171,8 @@ if(description)
     @patch("sys.stdout", new_callable=StringIO)  # mock_stdout (second argument)
     @patch("sys.stderr", new_callable=StringIO)  # mock_stderr (first argument)
     @patch(
-        "sys.argv", ["prog", "--root", "tests/standalone_plugins/nasl", "-v"]
+        "sys.argv",
+        ["prog", "--root", "tests/standalone_plugins/nasl", "--output", "info"],
     )  # no argument
     def test_full_run(self, mock_stderr, mock_stdout):
         return_code = main()
@@ -194,7 +200,7 @@ if(description)
             "warning: Duplicate dependencies in bar.nasl: foo.nasl", output
         )
         self.assertIn(
-            "warning: cross-feed-dependency: bar.nasl(community feed)"
+            "info: cross-feed-dependency: bar.nasl(community feed)"
             " depends on gsf/enterprise_script.nasl(enterprise feed)",
             output,
         )
