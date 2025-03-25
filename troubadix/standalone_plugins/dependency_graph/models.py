@@ -2,18 +2,13 @@
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
 from dataclasses import dataclass, field
-from enum import Enum, Flag, auto
+from enum import Enum
 
 
-class Feed(Flag):
-    COMMON = auto()
-    FEED_21_04 = auto()
-    FEED_22_04 = auto()
-    FULL = COMMON | FEED_21_04 | FEED_22_04
-
-    def __str__(self):
-        # Make enum values user-friendly for argparse help
-        return self.name.lower()
+class Feed(str, Enum):
+    COMMON = "common"
+    FEED_21_04 = "21.04"
+    FEED_22_04 = "22.04"
 
 
 class OutputLevel(Enum):

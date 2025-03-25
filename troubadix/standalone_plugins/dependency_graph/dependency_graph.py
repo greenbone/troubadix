@@ -5,7 +5,6 @@
 import logging
 import re
 import sys
-from functools import reduce
 from pathlib import Path
 
 import networkx as nx
@@ -60,15 +59,12 @@ class Reporter:
                 self.logger.info(f"{result.name}: {info}")
 
 
-def get_feed(root, feeds: list[Feed]) -> list[Script]:
-    feed = reduce((lambda x, y: x | y), feeds)
+def get_feed(root: Path, feed: Feed) -> list[Script]:
     scripts = []
-    if feed & Feed.COMMON:
-        scripts.extend(get_scripts(root / "common"))
-    if feed & Feed.FEED_21_04:
-        scripts.extend(get_scripts(root / "21.04"))
-    if feed & Feed.FEED_22_04:
-        scripts.extend(get_scripts(root / "22.04"))
+    scripts.extend(get_scripts(root / "common"))  # Always include common
+
+    if feed != Feed.COMMON:  # Add version-specific scripts if not just common
+        scripts.extend(get_scripts(root / feed.value))
 
     return scripts
 

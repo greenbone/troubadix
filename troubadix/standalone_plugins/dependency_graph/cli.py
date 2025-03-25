@@ -3,19 +3,12 @@
 
 
 import os
-from argparse import ArgumentParser, ArgumentTypeError, Namespace
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
 from troubadix.argparser import directory_type_existing
 
 from .models import Feed
-
-
-def feed_type(value: str) -> Feed:
-    try:
-        return Feed[value.upper()]
-    except KeyError:
-        raise ArgumentTypeError(f"Invalid Feed value: '{value}'")
 
 
 def parse_args() -> Namespace:
@@ -31,11 +24,10 @@ def parse_args() -> Namespace:
     parser.add_argument(
         "-f",
         "--feed",
-        type=feed_type,
+        type=Feed,
         choices=Feed,
-        nargs="+",
-        default=[Feed.FULL],
-        help="feed",
+        default=Feed.COMMON,
+        help="Feed selection",
     )
     parser.add_argument(
         "--log",

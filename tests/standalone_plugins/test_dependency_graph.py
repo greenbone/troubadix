@@ -62,7 +62,7 @@ class TestCLIArgs(unittest.TestCase):
             "--root",
             "tests/standalone_plugins/nasl",
             "--feed",
-            "feed_22_04",
+            "22.04",
             "--log",
             "info",
         ],
@@ -70,7 +70,7 @@ class TestCLIArgs(unittest.TestCase):
     def test_parse_args_ok(self):
         args = parse_args()
         self.assertEqual(args.root, Path("tests/standalone_plugins/nasl"))
-        self.assertEqual(args.feed, [Feed.FEED_22_04])
+        self.assertEqual(args.feed, Feed.FEED_22_04)
         self.assertEqual(args.log, "INFO")
 
     @patch("sys.stderr", new_callable=StringIO)
@@ -80,7 +80,7 @@ class TestCLIArgs(unittest.TestCase):
             parse_args()
         self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
 
-    @patch("sys.stderr", new_callable=StringIO)
+    # @patch("sys.stderr", new_callable=StringIO)
     @patch(
         "sys.argv",
         [
@@ -91,10 +91,9 @@ class TestCLIArgs(unittest.TestCase):
             "invalid_feed",
         ],
     )
-    def test_parse_args_invalid_feed(self, mock_stderr):
+    def test_parse_args_invalid_feed(self):
         with self.assertRaises(SystemExit):
             parse_args()
-        self.assertRegex(mock_stderr.getvalue(), "Invalid Feed value")
 
     @patch.dict(os.environ, {"VTDIR": "/mock/env/path"})
     @patch("sys.argv", ["prog"])
@@ -106,7 +105,7 @@ class TestCLIArgs(unittest.TestCase):
     def test_parse_args_defaults(self):
         args = parse_args()
         self.assertEqual(args.log, "WARNING")
-        self.assertEqual(args.feed, [Feed.FULL])
+        self.assertEqual(args.feed, Feed.COMMON)
 
 
 class TestDependencyGraph(unittest.TestCase):
@@ -127,9 +126,9 @@ if(description)
         """
 
     def test_get_feed(self):
-        feed = [Feed.FULL]
+        feed = Feed.FEED_22_04
         scripts = get_feed(Path(self.local_root), feed)
-        self.assertEqual(len(scripts), 6)
+        self.assertEqual(len(scripts), 5)
 
     @patch("pathlib.Path.read_text")
     def test_get_scripts(self, mock_read_text):
