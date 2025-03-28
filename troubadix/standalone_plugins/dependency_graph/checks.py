@@ -17,10 +17,8 @@ def check_duplicates(scripts: list[Script]) -> Result:
     for script in scripts:
         counter = Counter(dep.name for dep in script.dependencies)
         duplicates = [dep for dep, count in counter.items() if count > 1]
-
         if duplicates:
-            msg = f"in {script.name}: {', '.join(duplicates)}"
-            warnings.append(msg)
+            warnings.append(f"in {script.name}: {', '.join(duplicates)}")
 
     return Result(name="duplicate dependency", warnings=warnings)
 
@@ -34,18 +32,20 @@ def check_missing_dependencies(
     logs the scripts dependending on the missing script
     """
     errors = []
-    dependencies = {
+    dependency_names = {
         dep.name for script in scripts for dep in script.dependencies
     }
     script_names = {script.name for script in scripts}
-    missing_dependencies = dependencies - script_names
+    missing_dependencies = dependency_names - script_names
 
     for missing in missing_dependencies:
         depending_scripts = graph.predecessors(missing)
-        msg = f"{missing}:"
-        for script in depending_scripts:
-            msg += f"\n  - used by: {script}"
-        errors.append(msg)
+        errors.append(
+            f"{missing}:"
+            + "".join(
+                f"\n  - used by: {script}" for script in depending_scripts
+            )
+        )
 
     return Result(name="missing dependency", errors=errors)
 
@@ -59,7 +59,7 @@ def check_cycles(graph) -> Result:
 
     cycles = nx.simple_cycles(graph)
 
-    errors = [f"{cycle}" for cycle in cycles]
+    errors = [str(cycle) for cycle in cycles]
     return Result(name="cyclic dependency", errors=errors)
 
 

@@ -60,9 +60,7 @@ class Reporter:
 
 
 def get_feed(root: Path, feed: Feed) -> list[Script]:
-    scripts = []
-    scripts.extend(get_scripts(root / "common"))  # Always include common
-
+    scripts = get_scripts(root / "common")  # Always include common
     if feed != Feed.COMMON:  # Add version-specific scripts if not just common
         scripts.extend(get_scripts(root / feed.value))
 
