@@ -17,12 +17,10 @@ def check_duplicates(scripts: list[Script]) -> Result:
     for script in scripts:
         counter = Counter(dep.name for dep in script.dependencies)
         duplicates = [dep for dep, count in counter.items() if count > 1]
-
         if duplicates:
-            msg = f"Duplicate dependencies in {script.name}: {', '.join(duplicates)}"
-            warnings.append(msg)
+            warnings.append(f"in {script.name}: {', '.join(duplicates)}")
 
-    return Result(name="check_duplicates", warnings=warnings)
+    return Result(name="duplicate dependency", warnings=warnings)
 
 
 def check_missing_dependencies(
@@ -34,20 +32,22 @@ def check_missing_dependencies(
     logs the scripts dependending on the missing script
     """
     errors = []
-    dependencies = {
+    dependency_names = {
         dep.name for script in scripts for dep in script.dependencies
     }
     script_names = {script.name for script in scripts}
-    missing_dependencies = dependencies - script_names
+    missing_dependencies = dependency_names - script_names
 
     for missing in missing_dependencies:
         depending_scripts = graph.predecessors(missing)
-        msg = f"missing dependency file: {missing}:"
-        for script in depending_scripts:
-            msg += f"\n  - used by: {script}"
-        errors.append(msg)
+        errors.append(
+            f"{missing}:"
+            + "".join(
+                f"\n  - used by: {script}" for script in depending_scripts
+            )
+        )
 
-    return Result(name="missing_dependencies", errors=errors)
+    return Result(name="missing dependency", errors=errors)
 
 
 def check_cycles(graph) -> Result:
@@ -59,8 +59,8 @@ def check_cycles(graph) -> Result:
 
     cycles = nx.simple_cycles(graph)
 
-    errors = [f"cyclic dependency: {cycle}" for cycle in cycles]
-    return Result(name="check_cycles", errors=errors)
+    errors = [str(cycle) for cycle in cycles]
+    return Result(name="cyclic dependency", errors=errors)
 
 
 def cross_feed_dependencies(
@@ -86,22 +86,19 @@ def check_cross_feed_dependencies(graph) -> Result:
     and if they are correctly contained within a is_enterprise_feed check.
     """
     gated_cfd = cross_feed_dependencies(graph, is_enterprise_checked=True)
-    warnings = [
-        f"cross-feed-dependency: {dependent}(community feed) "
-        f"depends on {dependency}(enterprise feed)"
+    infos = [
+        f"{dependent}(community feed) depends on {dependency}(enterprise feed)"
         for dependent, dependency in gated_cfd
     ]
 
     ungated_cfd = cross_feed_dependencies(graph, is_enterprise_checked=False)
     errors = [
-        f"unchecked cross-feed-dependency: {dependent}(community feed) "
-        f"depends on {dependency}(enterprise feed), but the current feed is not properly checked"
+        f"incorrect feed check in {dependent}(community feed) "
+        f"which depends on {dependency}(enterprise feed)"
         for dependent, dependency in ungated_cfd
     ]
 
-    return Result(
-        name="check_cross_feed_dependencies", warnings=warnings, errors=errors
-    )
+    return Result(name="cross-feed dependency", infos=infos, errors=errors)
 
 
 def check_category_order(graph) -> Result:
@@ -116,7 +113,7 @@ def check_category_order(graph) -> Result:
         f"{dependent} depends on {dependency} which has a lower category order"
         for dependent, dependency in problematic_edges
     ]
-    return Result(name="check_category_order", errors=errors)
+    return Result(name="category order", errors=errors)
 
 
 def check_deprecated_dependencies(graph) -> Result:
@@ -125,4 +122,4 @@ def check_deprecated_dependencies(graph) -> Result:
         for dependent, dependency in graph.edges()
         if graph.nodes[dependency].get("deprecated", False)
     ]
-    return Result(name="check_deprecated_dependencies", errors=errors)
+    return Result(name="deprecated dependency", errors=errors)

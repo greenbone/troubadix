@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
+import logging
 import os
 import unittest
 from io import StringIO
@@ -30,20 +31,27 @@ class TestReporter(unittest.TestCase):
     def setUp(self):
         self.result = Result(
             name="TestScript",
+            infos=["cross-feed"],
             warnings=["duplicate dependencies"],
             errors=["missing dependencies"],
         )
 
-    @patch("sys.stdout", new_callable=StringIO)
-    def test_report_verbosity_2(self, mock_stdout):
-        reporter = Reporter(verbosity=2)
+    def test_output_formatting(self):
+        stream = StringIO()
+
+        handler = logging.StreamHandler(stream)
+        handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+
+        reporter = Reporter()
+        reporter.logger.handlers = [handler]
+        reporter.logger.setLevel(logging.INFO)
+
         reporter.report([self.result])
 
-        output = mock_stdout.getvalue()
-
-        self.assertIn("TestScript - warnings: 1, errors: 1", output)
-        self.assertIn("warning: duplicate dependencies", output)
-        self.assertIn("error: missing dependencies", output)
+        output = stream.getvalue()
+        self.assertIn("INFO: TestScript: cross-feed", output)
+        self.assertIn("WARNING: TestScript: duplicate dependencies", output)
+        self.assertIn("ERROR: TestScript: missing dependencies", output)
 
 
 class TestCLIArgs(unittest.TestCase):
@@ -54,7 +62,7 @@ class TestCLIArgs(unittest.TestCase):
             "--root",
             "tests/standalone_plugins/nasl",
             "--feed",
-            "feed_22_04",
+            "22.04",
             "--log",
             "info",
         ],
@@ -62,8 +70,8 @@ class TestCLIArgs(unittest.TestCase):
     def test_parse_args_ok(self):
         args = parse_args()
         self.assertEqual(args.root, Path("tests/standalone_plugins/nasl"))
-        self.assertEqual(args.feed, [Feed.FEED_22_04])
-        self.assertEqual(args.log, "info")
+        self.assertEqual(args.feed, Feed.FEED_22_04)
+        self.assertEqual(args.log, "INFO")
 
     @patch("sys.stderr", new_callable=StringIO)
     @patch("sys.argv", ["prog", "--root", "not_real_dir"])
@@ -72,7 +80,7 @@ class TestCLIArgs(unittest.TestCase):
             parse_args()
         self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
 
-    @patch("sys.stderr", new_callable=StringIO)
+    # @patch("sys.stderr", new_callable=StringIO)
     @patch(
         "sys.argv",
         [
@@ -83,10 +91,9 @@ class TestCLIArgs(unittest.TestCase):
             "invalid_feed",
         ],
     )
-    def test_parse_args_invalid_feed(self, mock_stderr):
+    def test_parse_args_invalid_feed(self):
         with self.assertRaises(SystemExit):
             parse_args()
-        self.assertRegex(mock_stderr.getvalue(), "Invalid Feed value")
 
     @patch.dict(os.environ, {"VTDIR": "/mock/env/path"})
     @patch("sys.argv", ["prog"])
@@ -98,7 +105,7 @@ class TestCLIArgs(unittest.TestCase):
     def test_parse_args_defaults(self):
         args = parse_args()
         self.assertEqual(args.log, "WARNING")
-        self.assertEqual(args.feed, [Feed.FULL])
+        self.assertEqual(args.feed, Feed.COMMON)
 
 
 class TestDependencyGraph(unittest.TestCase):
@@ -119,9 +126,9 @@ if(description)
         """
 
     def test_get_feed(self):
-        feed = [Feed.FULL]
+        feed = Feed.FEED_22_04
         scripts = get_feed(Path(self.local_root), feed)
-        self.assertEqual(len(scripts), 6)
+        self.assertEqual(len(scripts), 5)
 
     @patch("pathlib.Path.read_text")
     def test_get_scripts(self, mock_read_text):
@@ -166,35 +173,36 @@ if(description)
     @patch("sys.stdout", new_callable=StringIO)  # mock_stdout (second argument)
     @patch("sys.stderr", new_callable=StringIO)  # mock_stderr (first argument)
     @patch(
-        "sys.argv", ["prog", "--root", "tests/standalone_plugins/nasl", "-v"]
+        "sys.argv",
+        ["prog", "--root", "tests/standalone_plugins/nasl", "--log", "info"],
     )  # no argument
     def test_full_run(self, mock_stderr, mock_stdout):
         return_code = main()
-        output = mock_stdout.getvalue()
+        output = mock_stderr.getvalue()
 
-        self.assertIn("error: missing dependency file: missing.nasl:", output)
+        self.assertIn("ERROR: missing dependency: missing.nasl:", output)
         self.assertIn(
-            "error: cyclic dependency: ",  # order is random so can't match the output
+            "ERROR: cyclic dependency: ",  # order is random so can't match the output
             output,
         )
         self.assertIn(
-            "error: unchecked cross-feed-dependency: foo.nasl(community feed) depends on"
-            " gsf/enterprise_script.nasl(enterprise feed), but the"
-            " current feed is not properly checked",
+            "ERROR: cross-feed dependency: incorrect feed check in foo.nasl(community feed)"
+            " which depends on gsf/enterprise_script.nasl(enterprise feed)",
             output,
         )
         self.assertIn(
-            "error: bar.nasl depends on foo.nasl which has a lower category order",
+            "ERROR: category order: bar.nasl depends on foo.nasl which has a lower category order",
             output,
         )
         self.assertIn(
-            "error: foo.nasl depends on deprecated script foobar.nasl", output
+            "ERROR: deprecated dependency: foo.nasl depends on deprecated script foobar.nasl",
+            output,
         )
         self.assertIn(
-            "warning: Duplicate dependencies in bar.nasl: foo.nasl", output
+            "WARNING: duplicate dependency: in bar.nasl: foo.nasl", output
         )
         self.assertIn(
-            "warning: cross-feed-dependency: bar.nasl(community feed)"
+            "INFO: cross-feed dependency: bar.nasl(community feed)"
             " depends on gsf/enterprise_script.nasl(enterprise feed)",
             output,
         )

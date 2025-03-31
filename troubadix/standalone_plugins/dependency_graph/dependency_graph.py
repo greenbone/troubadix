@@ -5,7 +5,6 @@
 import logging
 import re
 import sys
-from functools import reduce
 from pathlib import Path
 
 import networkx as nx
@@ -47,46 +46,23 @@ ENTERPRISE_FEED_CHECK_PATTERN = re.compile(
 
 
 class Reporter:
-    def __init__(self, verbosity) -> None:
-        self.verbosity = verbosity
+    def __init__(self) -> None:
+        self.logger = logging.getLogger(__name__)
 
     def report(self, results: list[Result]):
         for result in results:
-            if self.verbosity >= 2:
-                self.print_statistic(result)
-                self.print_divider()
-            if self.verbosity >= 1:
-                self.print_warnings(result)
-            self.print_errors(result)
-            if self.verbosity >= 2:
-                self.print_divider("=")
-
-    def print_divider(self, char="-", length=40):
-        print(char * length)
-
-    def print_statistic(self, result: Result):
-        print(
-            f"{result.name} - warnings: {len(result.warnings)}, errors: {len(result.errors)}"
-        )
-
-    def print_warnings(self, result: Result):
-        for warning in result.warnings:
-            print(f"warning: {warning}")
-
-    def print_errors(self, result: Result):
-        for error in result.errors:
-            print(f"error: {error}")
+            for error in result.errors:
+                self.logger.error(f"{result.name}: {error}")
+            for warning in result.warnings:
+                self.logger.warning(f"{result.name}: {warning}")
+            for info in result.infos:
+                self.logger.info(f"{result.name}: {info}")
 
 
-def get_feed(root, feeds: list[Feed]) -> list[Script]:
-    feed = reduce((lambda x, y: x | y), feeds)
-    scripts = []
-    if feed & Feed.COMMON:
-        scripts.extend(get_scripts(root / "common"))
-    if feed & Feed.FEED_21_04:
-        scripts.extend(get_scripts(root / "21.04"))
-    if feed & Feed.FEED_22_04:
-        scripts.extend(get_scripts(root / "22.04"))
+def get_feed(root: Path, feed: Feed) -> list[Script]:
+    scripts = get_scripts(root / "common")  # Always include common
+    if feed != Feed.COMMON:  # Add version-specific scripts if not just common
+        scripts.extend(get_scripts(root / feed.value))
 
     return scripts
 
@@ -197,7 +173,7 @@ def main():
         check_category_order(graph),
         check_deprecated_dependencies(graph),
     ]
-    reporter = Reporter(args.verbose)
+    reporter = Reporter()
     reporter.report(results)
 
     if any(result.errors for result in results):
