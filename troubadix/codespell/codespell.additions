@@ -22,3 +22,5 @@ entreprise->enterprise
 entreprises->enterprises
 iit->it
 itt->it
+CSFR->CSRF
+XXS->XSS

@@ -815,6 +815,8 @@ ofproto/bond: fix interal flow leak of tcp-balance bond
   of user-supplied input processed by Steam In-Home Streaming (IHS) Discovery
   of Wiesemann & Theis GmbH W&T OPC Server for Windows.");
 Ohter bug fixes:
+"olt",
+"olt/pages",
       # on e.g. newer releases of the NAM appliance we're even getting an 403/forbidden
 opc_req_header = raw_string("HEL",   # Message Type (Hello)
 opening a specially crafted CAF audio file, an attacker could execute
