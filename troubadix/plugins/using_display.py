@@ -78,7 +78,7 @@ class CheckUsingDisplay(FileContentPlugin):
                     continue
 
                 if (
-                    "os_eol.inc" in file_name
+                    "eol_os.inc" in file_name
                     and 'display( "DEBUG: Base CPE' in dis_match
                 ):
                     continue
