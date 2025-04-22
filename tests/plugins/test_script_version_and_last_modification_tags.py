@@ -230,3 +230,63 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             "Wrong day of week. Please change it from 'Tue' to 'Mon'.",
             results[0].message,
         )
+
+    def test_modification_date_malformed_hour(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name:"last_modification", value:"2021-07-19 '
+            '112:32:02 +0000 (Mon, 19 Jul 2021");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(1, len(results))
+        self.assertEqual(
+            "False or incorrectly formatted modification_date.",
+            results[0].message,
+        )
+
+    def test_modification_date_malformed_second(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name:"last_modification", value:"2021-07-19 '
+            '12:32:02s +0000 (Mon, 19 Jul 2021");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(1, len(results))
+        self.assertEqual(
+            "False or incorrectly formatted modification_date.",
+            results[0].message,
+        )
+
+    def test_modification_date_malformed_day(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_version("2021-07-19T12:32:02+0000");\n'
+            '  script_tag(name:"last_modification", value:"2021-07-19D '
+            '12:32:02 +0000 (Mon, 19 Jul 2021");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckScriptVersionAndLastModificationTags(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(1, len(results))
+        self.assertEqual(
+            "False or incorrectly formatted modification_date.",
+            results[0].message,
+        )
