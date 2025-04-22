@@ -193,3 +193,66 @@ class CheckCreationDateTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
+
+    def test_malformed_hour(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"creation_date", value:"2013-05-14 111:24:55 '
+            '+0200 (Tue, 14 May 2013)");\n'
+        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "False or incorrectly formatted creation_date.",
+            results[0].message,
+        )
+
+    def test_malformed_second(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55s '
+            '+0200 (Tue, 14 May 2013)");\n'
+        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "False or incorrectly formatted creation_date.",
+            results[0].message,
+        )
+
+    def test_malformed_day(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"creation_date", value:"2013-05-14D 11:24:55 '
+            '+0200 (Tue, 14 May 2013)");\n'
+        )
+        fake_context = MagicMock()
+        fake_context.nasl_file = path
+        fake_context.file_content = content
+        plugin = CheckCreationDate(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "False or incorrectly formatted creation_date.",
+            results[0].message,
+        )
