@@ -174,11 +174,15 @@ def get_grammer_pattern() -> re.Pattern:
         # server-site template injection -> server-side template injection
         r"cross[\s-]+side[\s-]+(request[\s-]+forgery|scripting)|"
         r"server[\s-]+site[\s-]+(request[\s-]+forgery|template)[\s-]+injection|"
-        # nb: Next two could happen when copy'n'paste some text parts around
+        # nb: Next few could happen when copy'n'paste some text parts around
         # like e.g.:
         # is prone to a to a remote denial-of-service vulnerability
         # CVE-2022-31702: Command injection in the in the vRNI REST API
-        r"in the in the|to an? to a|"
+        # MariaDB versions prior to prior to 10.3.32, 10.4.x prior to
+        # Update to update to version 1.2.3
+        # Update to version to version 1.2.3
+        r"in the in the|to an? to a|prior to prior to|to version to version|"
+        r"update to update to|"
         # e.g. "is prone to a security bypass vulnerabilities"
         r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities" r").*",
         re.IGNORECASE,
