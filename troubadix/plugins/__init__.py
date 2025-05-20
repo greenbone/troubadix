@@ -68,6 +68,9 @@ from .script_xref_form import CheckScriptXrefForm
 from .script_xref_url import CheckScriptXrefUrl
 from .security_messages import CheckSecurityMessages
 from .set_get_kb_calls import CheckWrongSetGetKBCalls
+from .severity_date import CheckSeverityDate
+from .severity_format import CheckSeverityFormat
+from .severity_origin import CheckSeverityOrigin
 from .solution_text import CheckSolutionText
 from .solution_type import CheckSolutionType
 from .spaces_in_filename import CheckSpacesInFilename
@@ -128,6 +131,9 @@ _FILE_PLUGINS = [
     CheckScriptXrefForm,
     CheckScriptXrefUrl,
     CheckSecurityMessages,
+    CheckSeverityDate,
+    CheckSeverityFormat,
+    CheckSeverityOrigin,
     CheckSolutionText,
     CheckSolutionType,
     CheckSpacesInFilename,
