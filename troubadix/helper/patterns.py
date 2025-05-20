@@ -87,12 +87,29 @@ class ScriptTag(Enum):
 __script_tag_pattern = None
 
 __DATE_VALUE = r"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"
+__CVSS_V2_BASE_VECTOR = (
+    r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:" r"[NPC]/A:[NPC]"
+)
+__CVSS_V3_BASE_VECTOR = (
+    r"CVSS:3.[01]/AV:[NALP]/AC:[LH]/PR:[NLH]/UI:[NR]/S:[UC]"
+    r"/C:[HLN]/I:[HLN]/A:[HLN]"
+)
+__CVSS_V4_BASE_VECTOR = (
+    r"CVSS:4.0/AV:[NALP]/AC:[LH]/AT:[NP]/PR:[NLH]/UI:[NPA]"
+    r"/VC:[HLN]/VI:[HLN]/VA:[HLN]/SC:[HLN]/SI:[HLN]/SA:[HLN]"
+)
 
 __script_tag_values = {
     ScriptTag.DEPRECATED: r"TRUE",
-    ScriptTag.CVSS_BASE_VECTOR: r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:"
-    r"[NPC]/A:[NPC]",
     ScriptTag.CVSS_BASE: r"(10\.0|[0-9]\.[0-9])",
+    ScriptTag.CVSS_BASE_VECTOR: __CVSS_V2_BASE_VECTOR,
+    ScriptTag.SEVERITY_VECTOR: (
+        rf"({__CVSS_V2_BASE_VECTOR})|"
+        rf"({__CVSS_V3_BASE_VECTOR})|"
+        rf"({__CVSS_V4_BASE_VECTOR})"
+    ),
+    ScriptTag.SEVERITY_ORIGIN: r"(NVD|Vendor|Third Party|Greenbone)",
+    ScriptTag.SEVERITY_DATE: __DATE_VALUE,
     ScriptTag.CREATION_DATE: __DATE_VALUE,
     ScriptTag.LAST_MODIFICATION: __DATE_VALUE,
 }
