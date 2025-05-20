@@ -22,8 +22,6 @@ from typing import Iterator
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
-LENGTH = 44
-
 
 class CheckCreationDate(FileContentPlugin):
     name = "creation_date"
