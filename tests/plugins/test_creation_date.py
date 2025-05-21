@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.creation_date import CheckCreationDate
@@ -25,6 +24,7 @@ from . import PluginTestCase
 
 
 class CheckCreationDateTestCase(PluginTestCase):
+
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
@@ -48,7 +48,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_missing(self):
+    def test_missing_creation_date(self):
         path = Path("some/file.nasl")
         content = (
             '  script_tag(name:"cvss_base", value:"7.5");\n'
@@ -70,11 +70,14 @@ class CheckCreationDateTestCase(PluginTestCase):
             results[0].message,
         )
 
-    def test_wrong_weekday(self):
+    def test_missing_last_modification_date(self):
         path = Path("some/file.nasl")
         content = (
             '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '+0200 (Mon, 14 May 2013)");\n'
+            '+0200 (Tue, 14 May 2013)");\n'
+            '  script_tag(name:"cvss_base", value:"7.5");\n'
+            '  script_tag(name:"cvss_base_vector", '
+            'value:"AV:N/AC:L/Au:N/C:P/I:P/A:P");\n'
         )
         fake_context = self.create_file_plugin_context(
             nasl_file=path, file_content=content
@@ -83,76 +86,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "Wrong day of week. Please change it from 'Mon' to 'Tue'.",
-            results[0].message,
-        )
-
-    def test_no_timezone(self):
-        path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '(Tue, 14 May 2013)");\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
-        plugin = CheckCreationDate(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "False or incorrectly formatted creation_date.",
-            results[0].message,
-        )
-
-    def test_different_dates(self):
-        path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '+0200 (Tue, 15 May 2013)");\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
-        plugin = CheckCreationDate(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "The creation_date consists of two different dates.",
-            results[0].message,
-        )
-
-    def test_wrong_length(self):
-        path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55 '
-            '+0200 (Tue, 14 May 2013 )");\n'
-        )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        plugin = CheckCreationDate(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "False or incorrectly formatted creation_date.",
-            results[0].message,
-        )
+        self.assertEqual(results, [])
 
     def test_creation_date_greater_than_last_modification(self):
         path = Path("some/file.nasl")
@@ -173,7 +107,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The creation_date must not be greater than the last modification date.",
+            "The creation date must not be greater than the last modification date.",
             results[0].message,
         )
 
@@ -193,66 +127,3 @@ class CheckCreationDateTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
-
-    def test_malformed_hour(self):
-        path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2013-05-14 111:24:55 '
-            '+0200 (Tue, 14 May 2013)");\n'
-        )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        plugin = CheckCreationDate(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "False or incorrectly formatted creation_date.",
-            results[0].message,
-        )
-
-    def test_malformed_second(self):
-        path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2013-05-14 11:24:55s '
-            '+0200 (Tue, 14 May 2013)");\n'
-        )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        plugin = CheckCreationDate(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "False or incorrectly formatted creation_date.",
-            results[0].message,
-        )
-
-    def test_malformed_day(self):
-        path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"creation_date", value:"2013-05-14D 11:24:55 '
-            '+0200 (Tue, 14 May 2013)");\n'
-        )
-        fake_context = MagicMock()
-        fake_context.nasl_file = path
-        fake_context.file_content = content
-        plugin = CheckCreationDate(fake_context)
-
-        results = list(plugin.run())
-
-        self.assertEqual(len(results), 1)
-
-        self.assertIsInstance(results[0], LinterError)
-        self.assertEqual(
-            "False or incorrectly formatted creation_date.",
-            results[0].message,
-        )

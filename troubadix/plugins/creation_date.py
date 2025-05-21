@@ -19,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Iterator
 
+from troubadix.helper.date_format import check_date
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -37,7 +38,20 @@ class CheckCreationDate(FileContentPlugin):
         ):
             return
 
-        if "creation_date" not in file_content:
+        creation_date_pattern = get_script_tag_pattern(ScriptTag.CREATION_DATE)
+        last_modification_pattern = get_script_tag_pattern(
+            ScriptTag.LAST_MODIFICATION
+        )
+
+        # Check creation date
+        if match_creation_date := creation_date_pattern.search(file_content):
+            yield from check_date(
+                match_creation_date.group("value"),
+                "creation_date",
+                nasl_file,
+                self.name,
+            )
+        else:
             yield LinterError(
                 "No creation date has been found.",
                 file=nasl_file,
@@ -45,64 +59,33 @@ class CheckCreationDate(FileContentPlugin):
             )
             return
 
-        tag_pattern = get_script_tag_pattern(ScriptTag.CREATION_DATE)
+        # Check last modification date if available
+        if match_last_mod_date := last_modification_pattern.search(
+            file_content
+        ):
 
-        # Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
-        match = tag_pattern.search(file_content)
-
-        if not match:
-            yield LinterError(
-                "False or incorrectly formatted creation_date.",
-                file=nasl_file,
-                plugin=self.name,
-            )
-            return
-
-        try:
-            date_left = datetime.strptime(
-                match.group("value")[:25], "%Y-%m-%d %H:%M:%S %z"
-            )
-            # 2017-11-29 13:56:41 +0100 (error if no timezone)
-            date_right = datetime.strptime(
-                match.group("value")[27:43], "%a, %d %b %Y"
-            )
-            week_day_parsed = date_right.strftime("%a")
-        except ValueError:
-            yield LinterError(
-                "False or incorrectly formatted creation_date.",
-                file=nasl_file,
-                plugin=self.name,
-            )
-            return
-
-        week_day_str = match.group("value")[27:30]
-        # Wed, 29 Nov 2017
-        if date_left.date() != date_right.date():
-            yield LinterError(
-                "The creation_date consists of two different dates.",
-                file=nasl_file,
-                plugin=self.name,
-            )
-        # Check correct weekday
-        elif week_day_str != week_day_parsed:
-            formatted_date = week_day_parsed
-            yield LinterError(
-                f"Wrong day of week. Please change it from '{week_day_str}"
-                f"' to '{formatted_date}'.",
-                file=nasl_file,
-                plugin=self.name,
+            yield from check_date(
+                match_last_mod_date.group("value"),
+                "last_modification",
+                nasl_file,
+                self.name,
             )
 
-        last_modification_pattern = get_script_tag_pattern(
-            ScriptTag.LAST_MODIFICATION
-        )
-        if match := last_modification_pattern.search(file_content):
-            last_modification = datetime.strptime(
-                match.group("value")[:25], "%Y-%m-%d %H:%M:%S %z"
-            )
-            if date_left > last_modification:
-                yield LinterError(
-                    "The creation_date must not be greater than the last modification date.",
-                    file=nasl_file,
-                    plugin=self.name,
+            try:
+                creation_date = datetime.strptime(
+                    match_creation_date.group("value")[:25],
+                    "%Y-%m-%d %H:%M:%S %z",
                 )
+                last_modification_date = datetime.strptime(
+                    match_last_mod_date.group("value")[:25],
+                    "%Y-%m-%d %H:%M:%S %z",
+                )
+                if creation_date > last_modification_date:
+                    yield LinterError(
+                        "The creation date must not be greater than the "
+                        "last modification date.",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+            except Exception:
+                pass
