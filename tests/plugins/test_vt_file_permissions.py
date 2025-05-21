@@ -57,3 +57,5 @@ class CheckVTFilePermissionsTestCase(PluginTestCase):
             "Typical file permissions are '644' (-rw-r--r-) "
             "and `664` (-rw-rw-r-)",
         )
+        # Local file permissions on Ubuntu machines do not match with local
+        # file permissions on GitHub runners!
