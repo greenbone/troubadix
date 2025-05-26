@@ -66,7 +66,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT has an invalid cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
 
@@ -86,7 +86,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT has an invalid cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
 
@@ -145,6 +145,6 @@ class CheckCVSSFormatTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
 
         self.assertEqual(
-            "VT has a missing cvss_base value.",
+            "VT has a missing or invalid cvss_base value.",
             results[0].message,
         )
