@@ -3,7 +3,7 @@ def remove_comments(file_content: str) -> str:
     Remove all commented portions from file content while preserving string literals.
 
     This function:
-    1. Removes content from lines that start with '#' (after whitespace)
+    1. Removes content from lines that start with '#' (also after whitespace)
     2. For lines with inline comments, keeps only the content before the '#'
     3. Preserves '#' characters within string literals
     4. Maintains original line numbers by keeping empty lines
@@ -20,6 +20,7 @@ def remove_comments(file_content: str) -> str:
 
     in_single_quote = False
     in_double_quote = False
+    escape_next = False
 
     for line in lines:
         # Skip lines that are entirely comments (after whitespace) if not in a string
@@ -33,14 +34,19 @@ def remove_comments(file_content: str) -> str:
         processed_line = ""
 
         for char in line:
+            # Handle escaped character
+            if escape_next:
+                escape_next = False
+            # Set escape flag if backslash is encountered in a single quote string
+            elif char == "\\" and in_single_quote:
+                escape_next = True
             # Toggle string state when encountering quotes
-            if char == "'" and not in_double_quote:
+            elif char == "'" and not in_double_quote:
                 in_single_quote = not in_single_quote
             elif char == '"' and not in_single_quote:
                 in_double_quote = not in_double_quote
-
             # Check for comment outside of strings
-            if char == "#" and not in_single_quote and not in_double_quote:
+            elif char == "#" and not in_single_quote and not in_double_quote:
                 break
 
             processed_line += char
