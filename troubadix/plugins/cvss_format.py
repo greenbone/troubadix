@@ -41,16 +41,14 @@ class CheckCVSSFormat(FileContentPlugin):
             ScriptTag.CVSS_BASE_VECTOR
         )
 
-        cvss_base_match = cvss_base_pattern.search(file_content)
-        if not cvss_base_match:
+        if not cvss_base_pattern.search(file_content):
             yield LinterError(
                 "VT has a missing or invalid cvss_base value.",
                 file=nasl_file,
                 plugin=self.name,
             )
 
-        cvss_base_vector_match = cvss_base_vector_pattern.search(file_content)
-        if not cvss_base_vector_match:
+        if not cvss_base_vector_pattern.search(file_content):
             yield LinterError(
                 "VT has a missing or invalid cvss_base_vector value.",
                 file=nasl_file,

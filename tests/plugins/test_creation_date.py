@@ -66,7 +66,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "No creation date has been found.",
+            "No creation_date has been found.",
             results[0].message,
         )
 
@@ -107,7 +107,7 @@ class CheckCreationDateTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The creation date must not be greater than the last modification date.",
+            "The creation_date must not be greater than last_modification date.",
             results[0].message,
         )
 

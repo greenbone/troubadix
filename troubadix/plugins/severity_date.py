@@ -1,13 +1,15 @@
 # Copyright (C) 2025 Greenbone AG
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from datetime import datetime
 from pathlib import Path
 from typing import Iterator
 
 from troubadix.helper import ScriptTag, get_script_tag_pattern
-from troubadix.helper.date_format import check_date
-from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
+from troubadix.helper.date_format import (
+    check_date,
+    compare_date_with_last_modification_date,
+)
+from troubadix.plugin import FileContentPlugin, LinterResult
 
 
 class CheckSeverityDate(FileContentPlugin):
@@ -29,44 +31,25 @@ class CheckSeverityDate(FileContentPlugin):
             ScriptTag.LAST_MODIFICATION
         )
 
-        # Check severity date if available
-        if match_severity_date := severity_date_pattern.search(file_content):
-            yield from check_date(
-                match_severity_date.group("value"),
-                "severity_date",
-                nasl_file,
-                self.name,
-            )
-        else:
+        if not (
+            match_severity_date := severity_date_pattern.search(file_content)
+        ):
             return
 
-        # Check last modification date if available
+        yield from check_date(
+            match_severity_date.group("value"),
+            "severity_date",
+            nasl_file,
+            self.name,
+        )
+
         if match_last_mod_date := last_modification_pattern.search(
             file_content
         ):
-
-            yield from check_date(
+            yield from compare_date_with_last_modification_date(
+                match_severity_date.group("value"),
+                "severity_date",
                 match_last_mod_date.group("value"),
-                "last_modification",
                 nasl_file,
                 self.name,
             )
-
-            try:
-                severity_date = datetime.strptime(
-                    match_severity_date.group("value")[:25],
-                    "%Y-%m-%d %H:%M:%S %z",
-                )
-                last_modification_date = datetime.strptime(
-                    match_last_mod_date.group("value")[:25],
-                    "%Y-%m-%d %H:%M:%S %z",
-                )
-                if severity_date > last_modification_date:
-                    yield LinterError(
-                        "The severity date must not be greater than the "
-                        "last modification date.",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-            except Exception:
-                pass
