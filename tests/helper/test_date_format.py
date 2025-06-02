@@ -30,7 +30,7 @@ class CheckCreationDateTestCase(TestCase):
         )
         self.assertEqual(len(results), 1)
         self.assertEqual(
-            "No creation date has been found.",
+            "No test_date has been found.",
             results[0].message,
         )
 
