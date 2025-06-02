@@ -176,7 +176,27 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         error_msg = str(cm.exception)
-        self.assertIn("position 15", error_msg)
+        self.assertIn("in line 2 at position 1", error_msg)
+
+    def test_condition_and_statement_positions_block(self):
+        content = 'if(TRUE) {\n  display("block");\n}'
+        result = find_if_statements(content)
+
+        self.assertEqual(len(result), 1)
+        # Check condition position (inside parentheses)
+        self.assertEqual(result[0].condition_position, (3, 7))
+        # Check statement position (inside braces)
+        self.assertEqual(result[0].statement_position, (10, 31))
+
+    def test_condition_and_statement_positions_single(self):
+        content = 'if(num > 5) display("inline");'
+        result = find_if_statements(content)
+
+        self.assertEqual(len(result), 1)
+        # Check condition position (inside parentheses)
+        self.assertEqual(result[0].condition_position, (3, 10))
+        # Check statement position (after parenthesis to semicolon)
+        self.assertEqual(result[0].statement_position, (12, 29))
 
 
 if __name__ == "__main__":
