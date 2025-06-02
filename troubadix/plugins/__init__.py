@@ -79,6 +79,7 @@ from .tabs import CheckTabs
 from .todo_tbd import CheckTodoTbd
 from .trailing_spaces_tabs import CheckTrailingSpacesTabs
 from .using_display import CheckUsingDisplay
+from .using_display_new import CheckUsingDisplayNew
 from .valid_oid import CheckValidOID
 from .valid_script_tag_names import CheckValidScriptTagNames
 from .variable_assigned_in_if import CheckVariableAssignedInIf
@@ -149,6 +150,7 @@ _FILE_PLUGINS = [
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
     CheckSpacesBeforeDots,
+    CheckUsingDisplayNew,
 ]
 
 # plugins checking all files
