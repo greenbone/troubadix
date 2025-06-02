@@ -15,11 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.date_format import check_date
+from troubadix.helper.date_format import (
+    check_date,
+    compare_date_with_last_modification_date,
+)
 from troubadix.helper.patterns import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -43,49 +45,30 @@ class CheckCreationDate(FileContentPlugin):
             ScriptTag.LAST_MODIFICATION
         )
 
-        # Check creation date
-        if match_creation_date := creation_date_pattern.search(file_content):
-            yield from check_date(
-                match_creation_date.group("value"),
-                "creation_date",
-                nasl_file,
-                self.name,
-            )
-        else:
+        if not (
+            match_creation_date := creation_date_pattern.search(file_content)
+        ):
             yield LinterError(
-                "No creation date has been found.",
+                "No creation_date has been found.",
                 file=nasl_file,
                 plugin=self.name,
             )
             return
 
-        # Check last modification date if available
+        yield from check_date(
+            match_creation_date.group("value"),
+            "creation_date",
+            nasl_file,
+            self.name,
+        )
+
         if match_last_mod_date := last_modification_pattern.search(
             file_content
         ):
-
-            yield from check_date(
+            yield from compare_date_with_last_modification_date(
+                match_creation_date.group("value"),
+                "creation_date",
                 match_last_mod_date.group("value"),
-                "last_modification",
                 nasl_file,
                 self.name,
             )
-
-            try:
-                creation_date = datetime.strptime(
-                    match_creation_date.group("value")[:25],
-                    "%Y-%m-%d %H:%M:%S %z",
-                )
-                last_modification_date = datetime.strptime(
-                    match_last_mod_date.group("value")[:25],
-                    "%Y-%m-%d %H:%M:%S %z",
-                )
-                if creation_date > last_modification_date:
-                    yield LinterError(
-                        "The creation date must not be greater than the "
-                        "last modification date.",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-            except Exception:
-                pass

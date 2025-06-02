@@ -65,7 +65,7 @@ class CheckSeverityDateTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The severity date must not be greater than the last modification date.",
+            "The severity_date must not be greater than last_modification date.",
             results[0].message,
         )
 
