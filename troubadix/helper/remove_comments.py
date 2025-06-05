@@ -1,3 +1,6 @@
+from troubadix.helper.text_utils import handle_string_context
+
+
 def remove_comments(file_content: str) -> str:
     """
     Remove all commented portions from file content while preserving string literals.
@@ -34,19 +37,13 @@ def remove_comments(file_content: str) -> str:
         processed_line = ""
 
         for char in line:
-            # Handle escaped character
-            if escape_next:
-                escape_next = False
-            # Set escape flag if backslash is encountered in a single quote string
-            elif char == "\\" and in_single_quote:
-                escape_next = True
-            # Toggle string state when encountering quotes
-            elif char == "'" and not in_double_quote:
-                in_single_quote = not in_single_quote
-            elif char == '"' and not in_single_quote:
-                in_double_quote = not in_double_quote
+            escape_next, in_double_quote, in_single_quote = (
+                handle_string_context(
+                    char, escape_next, in_double_quote, in_single_quote
+                )
+            )
             # Check for comment outside of strings
-            elif char == "#" and not in_single_quote and not in_double_quote:
+            if char == "#" and not in_single_quote and not in_double_quote:
                 break
 
             processed_line += char
