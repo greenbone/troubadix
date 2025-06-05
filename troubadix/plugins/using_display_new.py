@@ -7,6 +7,7 @@ from typing import Iterator
 
 from troubadix.helper.if_block_parser import find_if_statements
 from troubadix.helper.remove_comments import remove_comments
+from troubadix.helper.text_utils import is_position_in_string
 from troubadix.plugin import (
     FileContentPlugin,
     LinterError,
@@ -15,37 +16,13 @@ from troubadix.plugin import (
 )
 
 DISPLAY_PATTERN = re.compile(r"display\s*\(.*;")
-DEBUG_PATTERN = re.compile(r"\bdebug\b", re.IGNORECASE)
+# matches any condition that contains "debug" such as ssh_debug, DEBUG, etc.
+DEBUG_PATTERN = re.compile(r"debug", re.IGNORECASE)
 EXLUDED_FILES = {
     "global_settings.inc",
     "bin.inc",
     "dump.inc",
 }
-
-
-def is_inside_string(text: str, position: int) -> bool:
-    """Check if the given position is inside a string literal."""
-    in_double_quote = False
-    in_single_quote = False
-    escape_next = False
-
-    for i in range(position):
-        char = text[i]
-
-        if escape_next:
-            escape_next = False
-            continue
-
-        if char == "\\":
-            escape_next = True
-            continue
-
-        if char == '"' and not in_single_quote:
-            in_double_quote = not in_double_quote
-        elif char == "'" and not in_double_quote:
-            in_single_quote = not in_single_quote
-
-    return in_double_quote or in_single_quote
 
 
 class CheckUsingDisplayNew(FileContentPlugin):
@@ -79,7 +56,7 @@ class CheckUsingDisplayNew(FileContentPlugin):
             display_pos = display_match.start()
 
             # Skip if this match is inside a string literal
-            if is_inside_string(comment_free_content, display_pos):
+            if is_position_in_string(comment_free_content, display_pos):
                 continue
 
             # Check if this display is inside any if statement
@@ -111,7 +88,7 @@ class CheckUsingDisplayNew(FileContentPlugin):
                 )
                 continue
 
-            # Case 2: Check if it's inside a debug if
+            # Case 2: Check if it's inside a debug if - OKAY
             in_debug_if = False
             for debug_if in if_statements:
                 if (
