@@ -72,6 +72,11 @@ class RemoveCommentsTestCase(unittest.TestCase):
         expected_output = "function func() {\n\n    return 0;\n}"
         self.assertEqual(remove_comments(input_content), expected_output)
 
+    def test_backslash_double_quotes(self):
+        input_content = r'display("\"); # This is a comment'
+        expected_output = r'display("\"); '
+        self.assertEqual(remove_comments(input_content), expected_output)
+
 
 if __name__ == "__main__":
     unittest.main()
