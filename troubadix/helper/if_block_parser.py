@@ -10,15 +10,13 @@ from troubadix.helper.text_utils import (
 
 @dataclass
 class IfStatement:
-    position: tuple[int, int]  # Position in the file (start, end)
-    condition_position: tuple[
-        int, int
-    ]  # Position of the condition (start, end)
-    statement_position: tuple[
-        int, int
-    ]  # Position of the statement (start, end)
-    condition: str  # The text of the if condition (inside parentheses)
-    # The statement or block of code that follows the if condition
+    if_start: int
+    if_end: int
+    condition_start: int
+    condition_end: int
+    statement_start: int
+    statement_end: int
+    condition: str
     statement: str
 
 
@@ -116,7 +114,6 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
 
         # Extract the condition
         condition = file_content[opening_brace + 1 : condition_end].strip()
-        condition_position = (opening_brace + 1, condition_end)
 
         # Skip whitespace after the closing parenthesis
         pos = condition_end + 1
@@ -155,12 +152,14 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
                 )
                 raise ValueError(err_msg)
 
-            statement_position = (pos + 1, block_end)
             results.append(
                 IfStatement(
-                    position=(if_start, block_end),
-                    condition_position=condition_position,
-                    statement_position=statement_position,
+                    if_start=if_start,
+                    if_end=block_end,
+                    condition_start=opening_brace + 1,
+                    condition_end=condition_end,
+                    statement_start=pos + 1,
+                    statement_end=block_end,
                     condition=condition,
                     statement=file_content[pos + 1 : block_end].strip(),
                 )
@@ -196,13 +195,15 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
                 )
                 raise ValueError(err_msg)
 
-            statement_position = (expression_start, expression_end)
             expression = file_content[expression_start:expression_end].strip()
             results.append(
                 IfStatement(
-                    position=(if_start, expression_end),
-                    condition_position=condition_position,
-                    statement_position=statement_position,
+                    if_start=if_start,
+                    if_end=expression_end,
+                    condition_start=opening_brace + 1,
+                    condition_end=condition_end,
+                    statement_start=expression_start,
+                    statement_end=expression_end,
                     condition=condition,
                     statement=expression,
                 )
