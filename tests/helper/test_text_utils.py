@@ -1,4 +1,5 @@
-"""Unit tests for parsing utility functions."""
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2025 Greenbone AG
 
 import unittest
 

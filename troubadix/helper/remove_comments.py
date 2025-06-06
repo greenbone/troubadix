@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2025 Greenbone AG
+
 from troubadix.helper.text_utils import handle_string_context
 
 
