@@ -38,7 +38,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 0)
+        self.assertEqual(0, len(results))
 
     def test_using_display(self):
         path = Path("some/file.nasl")
@@ -55,10 +55,10 @@ class CheckUsingDisplayTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(1, len(results))
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'VT/Include is using a display() function at:   display("FOO");',
+            'VT is using a display() without any if statement: display("FOO");',
             results[0].message,
         )
 
@@ -77,14 +77,13 @@ class CheckUsingDisplayTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
+        self.assertEqual(1, len(results))
         self.assertIsInstance(results[0], LinterWarning)
-        self.assertEqual(
-            "VT is using a display() function which is "
-            "protected by a comment or an if statement at: "
-            'if (0) display("FOO");.',
+        self.assertIn(
+            "VT is using a display() inside an if statement but without debug check",
             results[0].message,
         )
+        self.assertIn('if (0) display("FOO");', results[0].message)
 
     def test_using_comment_display(self):
         path = Path("some/file.nasl")
@@ -101,11 +100,22 @@ class CheckUsingDisplayTestCase(PluginTestCase):
 
         results = list(plugin.run())
 
-        self.assertEqual(len(results), 1)
-        self.assertIsInstance(results[0], LinterWarning)
-        self.assertEqual(
-            "VT is using a display() function which is "
-            "protected by a comment or an if statement at: "
-            '# display("FOO");.',
-            results[0].message,
+        # Comments are removed, so display() won't be found
+        self.assertEqual(0, len(results))
+
+    def test_using_debug_if_display(self):
+        """Test that display() inside a debug if statement is allowed"""
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            'if (debug) display("FOO");\n'
         )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckUsingDisplay(fake_context)
+
+        results = list(plugin.run())
+
+        # Should be OK because it's in a debug if
+        self.assertEqual(0, len(results))

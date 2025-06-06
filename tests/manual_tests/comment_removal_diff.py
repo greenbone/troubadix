@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2025 Greenbone AG
+
 import sys
 
 from troubadix.helper import CURRENT_ENCODING

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2025 Greenbone AG
+
 import unittest
 
 from troubadix.helper.if_block_parser import find_if_statements
@@ -17,7 +20,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual('display("inline")', result[0].statement)
         # Check that position is correct (start at 'if', end at semicolon)
         self.assertEqual(0, result[0].if_start)
-        self.assertEqual(len(content) - 1, result[0].if_end)
+        self.assertEqual(len(content), result[0].if_end)
 
     def test_single_line_with_newline(self):
         content = 'if(TRUE)\n  display("single line");'
@@ -36,7 +39,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual('display("block");', result[0].statement)
         # Check position spans from 'if' to the closing brace
         self.assertEqual(0, result[0].if_start)
-        self.assertEqual(len(content) - 1, result[0].if_end)
+        self.assertEqual(len(content), result[0].if_end)
 
     def test_block_brace_on_newline(self):
         content = 'if(TRUE)\n{\n  display("block");\n}'
