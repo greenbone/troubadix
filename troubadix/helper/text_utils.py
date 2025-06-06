@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2025 Greenbone AG
+
 """Utilities for text processing and string manipulation in NASL files."""
 
 import bisect
