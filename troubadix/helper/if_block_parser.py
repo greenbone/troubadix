@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2025 Greenbone AG
+
 """Helper for parsing if blocks and single-expression if statements in NASL files."""
 
 from dataclasses import dataclass
@@ -155,7 +158,7 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
             results.append(
                 IfStatement(
                     if_start=if_start,
-                    if_end=block_end,
+                    if_end=block_end + 1,
                     condition_start=opening_brace + 1,
                     condition_end=condition_end,
                     statement_start=pos + 1,
@@ -199,7 +202,7 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
             results.append(
                 IfStatement(
                     if_start=if_start,
-                    if_end=expression_end,
+                    if_end=expression_end + 1,
                     condition_start=opening_brace + 1,
                     condition_end=condition_end,
                     statement_start=expression_start,
