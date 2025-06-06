@@ -15,6 +15,7 @@ from troubadix.plugin import (
     LinterWarning,
 )
 
+# minimal regex to match display() calls, content inside parentheses does not matter
 DISPLAY_PATTERN = re.compile(r"display\s*\(.*;")
 # matches any condition that contains "debug" such as ssh_debug, DEBUG, etc.
 DEBUG_PATTERN = re.compile(r"debug", re.IGNORECASE)
@@ -62,14 +63,10 @@ class CheckUsingDisplayNew(FileContentPlugin):
             # Check if this display is inside any if statement
             containing_if = None
             for if_statement in if_statements:
-                if (
-                    if_statement.position[0]
-                    < display_pos
-                    < if_statement.position[1]
-                ):
+                if if_statement.if_start < display_pos < if_statement.if_end:
                     # inner most if statement containing the display,
-                    # adding break after finding the first match results in the outermost if
                     containing_if = if_statement
+                    # break  # Uncomment this line to get the outermost if statement
 
             # Case 1: Not in any if statement - ERROR
             if not containing_if:
@@ -93,9 +90,7 @@ class CheckUsingDisplayNew(FileContentPlugin):
             for debug_if in if_statements:
                 if (
                     DEBUG_PATTERN.search(debug_if.condition)
-                    and debug_if.position[0]
-                    < display_pos
-                    < debug_if.position[1]
+                    and debug_if.if_start < display_pos < debug_if.if_end
                 ):
                     in_debug_if = True
                     break
@@ -105,7 +100,7 @@ class CheckUsingDisplayNew(FileContentPlugin):
                 yield LinterWarning(
                     "VT is using a display() inside an if statement but without debug check\n"
                     + comment_free_content[
-                        containing_if.position[0] : containing_if.position[1]
+                        containing_if.if_start : containing_if.if_end
                     ],
                     file=nasl_file,
                     plugin=self.name,
