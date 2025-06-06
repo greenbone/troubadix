@@ -1,30 +1,29 @@
-# Copyright (C) 2022 Greenbone AG
-#
 # SPDX-License-Identifier: GPL-3.0-or-later
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# SPDX-FileCopyrightText: 2025 Greenbone AG
 
 import re
 from pathlib import Path
 from typing import Iterator
 
+from troubadix.helper.if_block_parser import find_if_statements
+from troubadix.helper.remove_comments import remove_comments
+from troubadix.helper.text_utils import is_position_in_string
 from troubadix.plugin import (
     FileContentPlugin,
     LinterError,
     LinterResult,
     LinterWarning,
 )
+
+# minimal regex to match display() calls, content inside parentheses does not matter
+DISPLAY_PATTERN = re.compile(r"display\s*\(.*;")
+# matches any condition that contains "debug" such as ssh_debug, DEBUG, etc.
+DEBUG_PATTERN = re.compile(r"debug", re.IGNORECASE)
+EXLUDED_FILES = {
+    "global_settings.inc",
+    "bin.inc",
+    "dump.inc",
+}
 
 
 class CheckUsingDisplay(FileContentPlugin):
@@ -35,87 +34,74 @@ class CheckUsingDisplay(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        if "# troubadix: disable=template_nd_test_files_fps" in file_content:
+        if nasl_file.name in EXLUDED_FILES:
             return
 
-        display_matches = re.finditer(
-            r".*(display\s*\([^)]+\)\s*;)", file_content
+        comment_free_content = remove_comments(file_content)
+        try:
+            if_statements = find_if_statements(comment_free_content)
+        except ValueError as e:
+            yield LinterError(
+                str(e),
+                file=nasl_file,
+                plugin=self.name,
+            )
+            return
+
+        # Find all display() calls in the entire file
+        all_display_matches = list(
+            DISPLAY_PATTERN.finditer(comment_free_content)
         )
-        if display_matches is None:
-            return
 
-        for display_match in display_matches:
-            if display_match is not None and display_match.group(0):
-                dis_match = display_match.group(0)
-                file_name = str(nasl_file)
+        for display_match in all_display_matches:
+            display_pos = display_match.start()
 
-                # Known false positives because the if_match check above can't
-                # detect something like e.g.:
-                # if( debug )
-                #   display("foo");
-                if (
-                    "ssh_func.inc" in file_name
-                    and "display( debug_str )" in dis_match
-                ):
-                    continue
+            # Skip if this match is inside a string literal
+            if is_position_in_string(comment_free_content, display_pos):
+                continue
 
-                if (
-                    "gb_treck_ip_stack_detect.nasl" in file_name
-                    and 'display("---[' in dis_match
-                ):
-                    continue
+            # Check if this display is inside any if statement
+            containing_if = None
+            for if_statement in if_statements:
+                if if_statement.if_start < display_pos < if_statement.if_end:
+                    # inner most if statement containing the display,
+                    containing_if = if_statement
+                    # break  # Uncomment this line to get the outermost if statement
 
-                if (
-                    "ike_isakmp_func.inc" in file_name
-                    and 'display( "---[' in dis_match
-                ):
-                    continue
-
-                if (
-                    "pcap_func.inc" in file_name
-                    and 'display( "---[' in dis_match
-                ):
-                    continue
-
-                if (
-                    "eol_os.inc" in file_name
-                    and 'display( "DEBUG: Base CPE' in dis_match
-                ):
-                    continue
-
-                if (
-                    "gsf/dicom.inc" in file_name
-                    or "enterprise/dicom.inc" in file_name
-                    or "global_settings.inc" in file_name
-                    or "rdp.inc" in file_name
-                    or "bin.inc" in file_name
-                ):
-                    continue
-
-                if (
-                    "DDI_Directory_Scanner.nasl" in file_name
-                    and ":: Got a" in dis_match
-                ):
-                    continue
-
-                if_comment_match = re.search(
-                    r"(if[\s]*\(|#).*display\s*\(", dis_match
+            # Case 1: Not in any if statement - ERROR
+            if not containing_if:
+                line_start = (
+                    comment_free_content.rfind("\n", 0, display_pos) + 1
                 )
+                line_end = comment_free_content.find("\n", display_pos)
+                if line_end == -1:
+                    line_end = len(comment_free_content)
+
+                context = comment_free_content[line_start:line_end].strip()
+                yield LinterError(
+                    f"VT is using a display() without any if statement: {context}",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                continue
+
+            # Case 2: Check if it's inside a debug if - OKAY
+            in_debug_if = False
+            for debug_if in if_statements:
                 if (
-                    if_comment_match is not None
-                    and if_comment_match.group(0) is not None
+                    DEBUG_PATTERN.search(debug_if.condition)
+                    and debug_if.if_start < display_pos < debug_if.if_end
                 ):
-                    yield LinterWarning(
-                        f"VT is using a display() function which "
-                        f"is protected by a comment or an if statement at: "
-                        f"{dis_match}.",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
-                else:
-                    yield LinterError(
-                        f"VT/Include is using a display() "
-                        f"function at: {dis_match}",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
+                    in_debug_if = True
+                    break
+
+            # Case 3: In an if but not in a debug if - WARNING
+            if not in_debug_if:
+                yield LinterWarning(
+                    "VT is using a display() inside an if statement but without debug check\n"
+                    + comment_free_content[
+                        containing_if.if_start : containing_if.if_end
+                    ],
+                    file=nasl_file,
+                    plugin=self.name,
+                )
