@@ -4,7 +4,6 @@
 import unittest
 
 from troubadix.helper.text_utils import (
-    build_line_starts,
     handle_string_context,
     index_to_linecol,
     is_position_in_string,
@@ -111,24 +110,6 @@ class TestHandleStringContext(unittest.TestCase):
         )
 
 
-class TestBuildLineStarts(unittest.TestCase):
-    def test_empty_string(self):
-        starts = build_line_starts("")
-        self.assertEqual(starts, [0])
-
-    def test_multiple_lines(self):
-        starts = build_line_starts("line1\nline2\nline3\n")
-        self.assertEqual(starts, [0, 6, 12, 18])
-
-    def test_empty_lines(self):
-        starts = build_line_starts("\n\n\n")
-        self.assertEqual(starts, [0, 1, 2, 3])
-
-    def test_trailing_newline(self):
-        starts = build_line_starts("hello\n")
-        self.assertEqual(starts, [0, 6])
-
-
 class TestIndexToLinecol(unittest.TestCase):
     def test_start_of_file(self):
         line, col = index_to_linecol("hello\nworld", 0)
@@ -153,12 +134,6 @@ class TestIndexToLinecol(unittest.TestCase):
     def test_multiline_file(self):
         text = "line1\nline2\nline3"
         line, col = index_to_linecol(text, 10)
-        self.assertEqual((line, col), (2, 5))
-
-    def test_with_precomputed_line_starts(self):
-        text = "line1\nline2\nline3"
-        line_starts = build_line_starts(text)
-        line, col = index_to_linecol(text, 10, line_starts)
         self.assertEqual((line, col), (2, 5))
 
     def test_empty_file(self):
