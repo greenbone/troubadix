@@ -3,8 +3,6 @@
 
 """Utilities for text processing and string manipulation in NASL files."""
 
-import bisect
-
 
 def handle_string_context(
     char: str, escape_next: bool, in_double_quote: bool, in_single_quote: bool
@@ -37,39 +35,32 @@ def handle_string_context(
     return escape_next, in_double_quote, in_single_quote
 
 
-def build_line_starts(text: str) -> list[int]:
-    """
-    Precomputes starting indices for all lines in the text
-    Returns: List of starting indices (first line starts at 0)
-    """
-    starts = [0]
-    for i, char in enumerate(text):
-        if char == "\n":
-            starts.append(i + 1)  # Next line starts after newline
-    return starts
-
-
-def index_to_linecol(
-    text: str, index: int, line_starts: list[int] = None
-) -> tuple[int, int]:
+def index_to_linecol(text: str, index: int) -> tuple[int, int]:
     """
     Converts character index to (line_number, column_number) (1-indexed)
 
     Args:
         text: Input string
         index: Character position to locate
-        line_starts: Precomputed line starts (optional)
     Returns:
         (line, column) tuple (both start at 1)
     """
-    if line_starts is None:
-        line_starts = build_line_starts(text)
+    if index < 0 or index > len(text):
+        raise ValueError(
+            f"Index {index} out of bounds for text of length {len(text)}"
+        )
 
-    # Find last line start <= index
-    line_num = bisect.bisect_right(line_starts, index)
-    line_start = line_starts[line_num - 1]
-    column = index - line_start + 1
-    return (line_num, column)
+    line = 1
+    column = 1
+
+    for i in range(index):
+        if text[i] == "\n":
+            line += 1
+            column = 1
+        else:
+            column += 1
+
+    return (line, column)
 
 
 def is_position_in_string(text: str, position: int) -> bool:
