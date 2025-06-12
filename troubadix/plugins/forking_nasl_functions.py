@@ -92,7 +92,10 @@ class CheckForkingNaslFunctions(FileContentPlugin):
             return
 
         # This one is using if/else calls similar to the examples above.
-        if "2013/gb_sap_netweaver_portal_rce_04_13.nasl" in str(nasl_file):
+        if (
+            "2011/zohocorp/gb_manageengine_adselfservice_plus_xss_vuln.nasl"
+            in str(nasl_file)
+        ):
             return
 
         # Another example using if/else calls
