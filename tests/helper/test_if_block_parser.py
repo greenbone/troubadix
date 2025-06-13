@@ -121,7 +121,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual('display("complex");', result[0].statement)
 
     def test_if_with_problematic_stuff(self):
-        # escape single quote and backslash, function call incondition
+        # escape single quote and backslash, function call in condition
         content = r"if(some_func('\'\\')) display('\'test\\');"
         result = find_if_statements(content)
 
@@ -133,53 +133,65 @@ class FindIfStatementsTestCase(unittest.TestCase):
         content = "if(unclosed condition\ndisplay();"
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
-        self.assertIn("Unclosed ( in if statement", str(cm.exception))
+        self.assertEqual(
+            "Unclosed parenthesis in if statement at line 1, position 1",
+            str(cm.exception),
+        )
 
     def test_no_statement_after_condition(self):
         content = "if(condition)"
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
-        self.assertIn(
-            "No statement found after if condition", str(cm.exception)
+        self.assertEqual(
+            "Missing statement after if condition at line 1, position 1",
+            str(cm.exception),
         )
 
     def test_useless_semicolon(self):
         content = "if(condition);"
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
-        self.assertIn(
-            "Useless if statement with immediate semicolon", str(cm.exception)
+        self.assertEqual(
+            (
+                "Semicolon after if condition causes following block"
+                " to always execute at line 1, position 1"
+            ),
+            str(cm.exception),
         )
 
     def test_unclosed_block_brace(self):
         content = "if(condition) {\ndisplay();\n# Missing closing brace"
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
-        self.assertIn(
-            "Error finding block end for if statement", str(cm.exception)
+        self.assertEqual(
+            "Unclosed brace in if statement at line 1, position 1",
+            str(cm.exception),
         )
-        self.assertIn("Unclosed { in if statement", str(cm.exception))
 
     def test_no_semicolon_in_single_expression(self):
         content = "if(condition) display()"  # Missing semicolon
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
-        self.assertIn(
-            "No valid expression found after if condition", str(cm.exception)
+        self.assertEqual(
+            "Missing expression after if condition at line 1, position 1",
+            str(cm.exception),
         )
 
     def test_complex_condition_with_unmatched_brace(self):
         content = "if(func(1, 2) || check(a) { display(); }"  # Missing closing ) in condition
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
-        self.assertIn("Error in if statement", str(cm.exception))
+        self.assertEqual(
+            "Unclosed parenthesis in if statement at line 1, position 1",
+            str(cm.exception),
+        )
 
     def test_position_info_in_error_message(self):
         content = "# Some comment\nif(bad) something"  # No semicolon
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         error_msg = str(cm.exception)
-        self.assertIn("in line 2 at position 1", error_msg)
+        self.assertIn("at line 2, position 1", error_msg)
 
     def test_condition_and_statement_positions_block(self):
         content = 'if(TRUE) {\n  display("block");\n}'
