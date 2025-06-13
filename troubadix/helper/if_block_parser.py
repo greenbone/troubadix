@@ -45,7 +45,8 @@ def find_closing_brace(
                     return i
 
     # If we couldn't find a matching parenthesis
-    raise ValueError(f"Unclosed {opening_brace} in if statement")
+    line, col = index_to_linecol(file_content, start_pos)
+    raise ValueError(f"Unclosed {opening_brace} in if statement in line {line}")
 
 
 def find_condition_starts(file_content: str) -> list[tuple[int, int]]:
@@ -105,15 +106,17 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
         return results
 
     for if_start, opening_brace in starts:
+        line, position = index_to_linecol(file_content, if_start)
+
         # Find the matching closing parenthesis
         try:
             condition_end = find_closing_brace(
                 file_content, opening_brace, "(", ")"
             )
-        except ValueError as e:
-            line, position = index_to_linecol(file_content, if_start)
-            err_msg = f"Error in if statement in line {line} at position {position}: {e}"
-            raise ValueError(err_msg)
+        except ValueError:
+            raise ValueError(
+                f"Unclosed parenthesis in if statement at line {line}, position {position}"
+            )
 
         # Extract the condition
         condition = file_content[opening_brace + 1 : condition_end].strip()
@@ -124,36 +127,26 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
             pos += 1
 
         if pos >= len(file_content):
-            line, position = index_to_linecol(file_content, if_start)
-            err_msg = (
-                f"No statement found after if condition in line {line} at position {position}. "
-                f"Condition: {condition}"
+            raise ValueError(
+                f"Missing statement after if condition at line {line}, position {position}"
             )
-            raise ValueError(err_msg)
 
         # Check for useless semicolon termination
         if file_content[pos] == ";":
-            line, position = index_to_linecol(file_content, if_start)
-            err_msg = (
-                f"Useless if statement with immediate semicolon"
-                f" in line {line} at position {position}. "
-                f"Condition: {condition}"
+            raise ValueError(
+                "Semicolon after if condition causes following"
+                f" block to always execute at line {line}, position {position}"
             )
-            raise ValueError(err_msg)
 
         # Check if there's a block
         if file_content[pos] == "{":
             try:
                 # This is a block-style if
                 block_end = find_closing_brace(file_content, pos, "{", "}")
-            except ValueError as e:
-                line, position = index_to_linecol(file_content, if_start)
-                err_msg = (
-                    f"Error finding block end for if statement"
-                    f" in line {line} at position {position}: "
-                    f"{e}. Condition: {condition}"
+            except ValueError:
+                raise ValueError(
+                    f"Unclosed brace in if statement at line {line}, position {position}"
                 )
-                raise ValueError(err_msg)
 
             results.append(
                 IfStatement(
@@ -190,13 +183,9 @@ def find_if_statements(file_content: str) -> list[IfStatement]:
                     break
 
             if expression_end <= expression_start:
-                line, position = index_to_linecol(file_content, if_start)
-                err_msg = (
-                    f"No valid expression found after if condition"
-                    f" in line {line} at position {position}. "
-                    f"Condition: {condition}"
+                raise ValueError(
+                    f"Missing expression after if condition at line {line}, position {position}"
                 )
-                raise ValueError(err_msg)
 
             expression = file_content[expression_start:expression_end].strip()
             results.append(
