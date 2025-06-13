@@ -134,7 +134,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         self.assertEqual(
-            "Unclosed parenthesis in if statement at line 1, position 1",
+            "Unclosed parenthesis in if statement at line 1",
             str(cm.exception),
         )
 
@@ -143,7 +143,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         self.assertEqual(
-            "Missing statement after if condition at line 1, position 1",
+            "Missing statement after if condition at line 1",
             str(cm.exception),
         )
 
@@ -152,10 +152,8 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         self.assertEqual(
-            (
-                "Semicolon after if condition causes following block"
-                " to always execute at line 1, position 1"
-            ),
+            "Semicolon after if condition at line 1 makes following block always execute."
+            " Remove semicolon to fix.",
             str(cm.exception),
         )
 
@@ -164,7 +162,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         self.assertEqual(
-            "Unclosed brace in if statement at line 1, position 1",
+            "Unclosed brace in if statement at line 1",
             str(cm.exception),
         )
 
@@ -173,7 +171,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         self.assertEqual(
-            "Missing expression after if condition at line 1, position 1",
+            "Missing expression after if condition at line 1",
             str(cm.exception),
         )
 
@@ -182,7 +180,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         self.assertEqual(
-            "Unclosed parenthesis in if statement at line 1, position 1",
+            "Unclosed parenthesis in if statement at line 1",
             str(cm.exception),
         )
 
@@ -191,7 +189,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         with self.assertRaises(ValueError) as cm:
             find_if_statements(content)
         error_msg = str(cm.exception)
-        self.assertIn("at line 2, position 1", error_msg)
+        self.assertIn("at line 2", error_msg)
 
     def test_condition_and_statement_positions_block(self):
         content = 'if(TRUE) {\n  display("block");\n}'
