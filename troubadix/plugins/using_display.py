@@ -19,7 +19,7 @@ from troubadix.plugin import (
 DISPLAY_PATTERN = re.compile(r"display\s*\(.*;")
 # matches any condition that contains "debug" such as ssh_debug, DEBUG, etc.
 DEBUG_PATTERN = re.compile(r"debug", re.IGNORECASE)
-EXLUDED_FILES = {
+EXCLUDED_FILES = {
     "global_settings.inc",
     "bin.inc",
     "dump.inc",
@@ -34,7 +34,7 @@ class CheckUsingDisplay(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        if nasl_file.name in EXLUDED_FILES:
+        if nasl_file.name in EXCLUDED_FILES:
             return
 
         comment_free_content = remove_comments(file_content)
