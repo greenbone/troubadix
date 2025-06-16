@@ -4,110 +4,91 @@
 import unittest
 
 from troubadix.helper.text_utils import (
-    handle_string_context,
+    StringState,
     index_to_linecol,
     is_position_in_string,
 )
 
 
-class TestHandleStringContext(unittest.TestCase):
-    def test_not_in_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            "a", False, False, False
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, False)
-        )
+class TestStringState(unittest.TestCase):
+    def test_process_normal_char_outside_strings(self):
+        state = StringState()
+        state.process_next_char("a")
+        self.assertFalse(state.escape_next)
+        self.assertFalse(state.in_string)
 
     def test_enter_double_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            '"', False, False, False
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, True, False)
-        )
+        state = StringState()
+        state.process_next_char('"')
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_double_quote)
+        self.assertTrue(state.in_string)
 
     def test_exit_double_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            '"', False, True, False
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, False)
-        )
+        state = StringState(in_double_quote=True)
+        state.process_next_char('"')
+        self.assertFalse(state.escape_next)
+        self.assertFalse(state.in_string)
 
     def test_enter_single_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            "'", False, False, False
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, True)
-        )
+        state = StringState()
+        state.process_next_char("'")
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_single_quote)
+        self.assertTrue(state.in_string)
 
     def test_exit_single_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            "'", False, False, True
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, False)
-        )
+        state = StringState(in_single_quote=True)
+        state.process_next_char("'")
+        self.assertFalse(state.escape_next)
+        self.assertFalse(state.in_string)
 
     def test_escape_in_single_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            "\\", False, False, True
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (True, False, True)
-        )
+        state = StringState(in_single_quote=True)
+        state.process_next_char("\\")
+        self.assertTrue(state.escape_next)
+        self.assertTrue(state.in_single_quote)
+        self.assertTrue(state.in_string)
 
     def test_escaped_single_quote_in_single_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            "'", True, False, True
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, True)
-        )
+        state = StringState(escape_next=True, in_single_quote=True)
+        state.process_next_char("'")
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_single_quote)
+        self.assertTrue(state.in_string)
 
     def test_ignore_single_quotes_in_double_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            "'", False, True, False
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, True, False)
-        )
+        state = StringState(in_double_quote=True)
+        state.process_next_char("'")
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_double_quote)
+        self.assertTrue(state.in_string)
 
     def test_ignore_double_quotes_in_single_quotes(self):
-        escape_next, in_double, in_single = handle_string_context(
-            '"', False, False, True
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, True)
-        )
+        state = StringState(in_single_quote=True)
+        state.process_next_char('"')
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_single_quote)
+        self.assertTrue(state.in_string)
 
     def test_nasl_backslash_string_sequence(self):
         # Test the sequence "\" in NASL - a valid string where escaping is ignored
-        # The char \ inside a double quote should not escape the next char because
-        # in double quotes, the backslash either is a parse error if not the last char
-        # or treated as literal character.
-        # For keeping string context only escaped single quotes are problematic.
-        escape_next, in_double, in_single = False, False, False
-        escape_next, in_double, in_single = handle_string_context(
-            '"', escape_next, in_double, in_single
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, True, False)
-        )
-        escape_next, in_double, in_single = handle_string_context(
-            "\\", escape_next, in_double, in_single
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, True, False)
-        )
-        escape_next, in_double, in_single = handle_string_context(
-            '"', escape_next, in_double, in_single
-        )
-        self.assertEqual(
-            (escape_next, in_double, in_single), (False, False, False)
-        )
+        state = StringState()
+
+        # Enter double quote
+        state.process_next_char('"')
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_double_quote)
+
+        # Process backslash in double quotes (should not set escape flag)
+        state.process_next_char("\\")
+        self.assertFalse(state.escape_next)
+        self.assertTrue(state.in_double_quote)
+
+        # Exit double quote
+        state.process_next_char('"')
+        self.assertFalse(state.escape_next)
+        self.assertFalse(state.in_string)
 
 
 class TestIndexToLinecol(unittest.TestCase):
