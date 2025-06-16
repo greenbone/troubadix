@@ -119,3 +119,30 @@ class CheckUsingDisplayTestCase(PluginTestCase):
 
         # Should be OK because it's in a debug if
         self.assertEqual(0, len(results))
+
+    def test_display_in_string_ignored(self):
+        path = Path("some/file.nasl")
+        content = "str = 'display(\"FOO\")';\n"
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckUsingDisplay(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(0, len(results))
+
+    def test_propagate_if_parser_error(self):
+        path = Path("some/file.nasl")
+        content = "if (Foo);\ndisplay('Foo');"
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckUsingDisplay(fake_context)
+
+        results = list(plugin.run())
+
+        # only one result for if parser error,
+        # display call not part of result due to early exit of entire run.
+        self.assertEqual(1, len(results))
+        self.assertIn("Semicolon after if condition", results[0].message)
