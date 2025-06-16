@@ -6,7 +6,7 @@
 from dataclasses import dataclass
 
 from troubadix.helper.text_utils import (
-    handle_string_context,
+    StringState,
     index_to_linecol,
 )
 
@@ -83,17 +83,13 @@ def _find_closing_brace(
 ) -> int:
     """Find the matching closing brace, with proper error reporting."""
     open_count = 1
-    in_double_quote = False
-    in_single_quote = False
-    escape_next = False
+    string_state = StringState()
 
     for i in range(start_pos + 1, len(file_content)):
         char = file_content[i]
-        escape_next, in_double_quote, in_single_quote = handle_string_context(
-            char, escape_next, in_double_quote, in_single_quote
-        )
+        string_state.process_next_char(char)
         # Only count braces when not in a string
-        if not in_double_quote and not in_single_quote:
+        if not string_state.in_string:
             if char == opening_brace:
                 open_count += 1
             elif char == closing_brace:
@@ -122,18 +118,13 @@ def _find_condition_starts(file_content: str) -> list[tuple[int, int]]:
         and the position of the opening parenthesis.
     """
     starts = []
-    in_double_quote = False
-    in_single_quote = False
-
-    escape_next = False
+    string_state = StringState()
 
     for i, char in enumerate(file_content):
-        escape_next, in_double_quote, in_single_quote = handle_string_context(
-            char, escape_next, in_double_quote, in_single_quote
-        )
+        string_state.process_next_char(char)
 
         # check only outside of strings
-        if not in_double_quote and not in_single_quote:
+        if not string_state.in_string:
             # check for if with word boundary, valid: ["if", " if"], not valid: "xif"
             if (
                 i == 0 or not file_content[i - 1].isalnum()
@@ -173,16 +164,12 @@ def _find_expression_end(
     file_content: str, expression_start: int, line: int
 ) -> int:
     """Find the end of a single expression (semicolon outside of strings)."""
-    in_double_quote = False
-    in_single_quote = False
-    escape_next = False
+    string_state = StringState()
 
     for i in range(expression_start, len(file_content)):
         char = file_content[i]
-        escape_next, in_double_quote, in_single_quote = handle_string_context(
-            char, escape_next, in_double_quote, in_single_quote
-        )
-        if not in_double_quote and not in_single_quote and char == ";":
+        string_state.process_next_char(char)
+        if not string_state.in_string and char == ";":
             return i
 
     raise ValueError(f"Missing expression after if condition at line {line}")
