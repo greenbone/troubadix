@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
-from troubadix.helper.text_utils import handle_string_context
+from troubadix.helper.text_utils import StringState
 
 
 def remove_comments(file_content: str) -> str:
@@ -24,15 +24,11 @@ def remove_comments(file_content: str) -> str:
     lines = file_content.splitlines()
     clean_lines = []
 
-    in_single_quote = False
-    in_double_quote = False
-    escape_next = False
+    string_state = StringState()
 
     for line in lines:
         # Skip lines that are entirely comments (after whitespace) if not in a string
-        if not (
-            in_single_quote or in_double_quote
-        ) and line.lstrip().startswith("#"):
+        if not string_state.in_string and line.lstrip().startswith("#"):
             clean_lines.append("")  # Keep empty line to maintain line numbers
             continue
 
@@ -40,13 +36,9 @@ def remove_comments(file_content: str) -> str:
         processed_line = ""
 
         for char in line:
-            escape_next, in_double_quote, in_single_quote = (
-                handle_string_context(
-                    char, escape_next, in_double_quote, in_single_quote
-                )
-            )
+            string_state.process_next_char(char)
             # Check for comment outside of strings
-            if char == "#" and not in_single_quote and not in_double_quote:
+            if char == "#" and not string_state.in_string:
                 break
 
             processed_line += char
