@@ -16,13 +16,8 @@ class CheckSeverityOrigin(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-        if (
-            nasl_file.suffix == ".inc"
-            or "# troubadix: disable=template_nd_test_files_fps" in file_content
-        ):
-            return
 
-        if "severity_origin" not in file_content:
+        if nasl_file.suffix == ".inc" or "severity_origin" not in file_content:
             return
 
         severity_origin_pattern = get_script_tag_pattern(
