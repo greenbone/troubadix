@@ -7,7 +7,7 @@ from typing import Iterator
 
 from troubadix.helper.if_block_parser import find_if_statements
 from troubadix.helper.remove_comments import remove_comments
-from troubadix.helper.text_utils import is_position_in_string
+from troubadix.helper.text_utils import index_to_linecol, is_position_in_string
 from troubadix.plugin import (
     FileContentPlugin,
     LinterError,
@@ -78,8 +78,9 @@ class CheckUsingDisplay(FileContentPlugin):
                     line_end = len(comment_free_content)
 
                 context = comment_free_content[line_start:line_end].strip()
+                line, _ = index_to_linecol(comment_free_content, display_pos)
                 yield LinterError(
-                    f"VT is using a display() without any if statement: {context}",
+                    f"VT is using a display() without any if statement at line {line}: {context}",
                     file=nasl_file,
                     plugin=self.name,
                 )
@@ -97,8 +98,10 @@ class CheckUsingDisplay(FileContentPlugin):
 
             # Case 3: In an if but not in a debug if - WARNING
             if not in_debug_if:
+                line, _ = index_to_linecol(comment_free_content, display_pos)
                 yield LinterWarning(
-                    "VT is using a display() inside an if statement but without debug check\n"
+                    "VT is using a display() inside an if statement"
+                    f" but without debug check at line {line}\n"
                     + comment_free_content[
                         containing_if.if_start : containing_if.if_end
                     ],

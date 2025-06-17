@@ -58,7 +58,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
         self.assertEqual(1, len(results))
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'VT is using a display() without any if statement: display("FOO");',
+            'VT is using a display() without any if statement at line 3: display("FOO");',
             results[0].message,
         )
 
