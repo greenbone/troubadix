@@ -87,9 +87,7 @@ class ScriptTag(Enum):
 __script_tag_pattern = None
 
 __DATE_VALUE = r"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"
-__CVSS_V2_BASE_VECTOR = (
-    r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:" r"[NPC]/A:[NPC]"
-)
+__CVSS_V2_BASE_VECTOR = r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:[NPC]/A:[NPC]"
 __CVSS_V3_BASE_VECTOR = (
     r"CVSS:3.[01]/AV:[NALP]/AC:[LH]/PR:[NLH]/UI:[NR]/S:[UC]"
     r"/C:[HLN]/I:[HLN]/A:[HLN]"
