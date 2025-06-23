@@ -1,56 +1,54 @@
-# Copyright (C) 2022 Greenbone AG
-#
 # SPDX-License-Identifier: GPL-3.0-or-later
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# SPDX-FileCopyrightText: 2025 Greenbone AG
 
 import unittest
 from pathlib import Path
 from subprocess import SubprocessError
 
-from troubadix.standalone_plugins.changed_oid import check_oid, git, parse_args
+from troubadix.standalone_plugins.changed_creation_date import (
+    check_creation_date,
+    git,
+    parse_args,
+)
 from troubadix.standalone_plugins.util import temporary_git_directory
 
 
 def testgit(tmpdir: Path, ok: bool = False) -> None:
     test_file = tmpdir / "test.nasl"
-    test_file.write_text('script_oid("1.3.6.1.4.1.25623.1.0.100313");')
+    test_file.write_text(
+        'script_tag(name:"creation_date", '
+        'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+    )
     git("add", str(test_file))
     git("commit", "-m", "test")
     git("checkout", "-b", "test")
     if ok:
         test_file.write_text(
-            'script_oid("1.3.6.1.4.1.25623.1.0.100313");\ntest'
+            'script_tag(name:"creation_date", '
+            'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\ntest'
         )
     else:
-        test_file.write_text('script_oid("2.3.6.1.4.1.25623.1.0.100313");')
+        test_file.write_text(
+            'script_tag(name:"creation_date", '
+            'value:"2020-03-04 10:00:00 +0200 (Wed, 04 Mar 2020)");'
+        )
     git("add", "-u")
     git("commit", "-m", "test2")
 
 
-class TestChangedOid(unittest.TestCase):
-    def test_check_oid_ok(self):
+class TestChangedCreationDate(unittest.TestCase):
+
+    def test_check_creation_date_ok(self):
         with temporary_git_directory() as tmpdir:
             testgit(tmpdir, True)
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertFalse(check_oid(parsed_args))
+            self.assertFalse(check_creation_date(parsed_args))
 
-    def test_check_oid_fail(self):
+    def test_check_creation_date_fail(self):
         with temporary_git_directory() as tmpdir:
             testgit(tmpdir)
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertTrue(check_oid(parsed_args))
+            self.assertTrue(check_creation_date(parsed_args))
 
     def test_git_fail(self):
         with self.assertRaises(SubprocessError):
