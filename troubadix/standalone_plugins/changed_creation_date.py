@@ -100,9 +100,9 @@ def check_creation_date(args: Namespace) -> bool:
                 f"The creation date of {nasl_file} was changed, "
                 f"which is not allowed."
                 f"\nNew creation date: "
-                f"{creation_date_added.group("creation_date")}"
+                f'{creation_date_added.group("creation_date")}'
                 f"\nOld creation date: "
-                f"{creation_date_removed.group("creation_date")}",
+                f'{creation_date_removed.group("creation_date")}',
                 file=sys.stderr,
             )
             rcode = True
