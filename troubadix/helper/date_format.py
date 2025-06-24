@@ -44,6 +44,7 @@ def check_date(
         )
         return
 
+    # Position of the 3 char day of the week abbreviation: Mon, Tue, Wed...
     week_day_str = date[27:30]
 
     if date_left.date() != date_right.date():
