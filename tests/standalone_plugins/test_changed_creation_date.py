@@ -13,42 +13,114 @@ from troubadix.standalone_plugins.changed_creation_date import (
 from troubadix.standalone_plugins.util import temporary_git_directory
 
 
-def testgit(tmpdir: Path, ok: bool = False) -> None:
-    test_file = tmpdir / "test.nasl"
-    test_file.write_text(
-        'script_tag(name:"creation_date", '
-        'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
-    )
-    git("add", str(test_file))
-    git("commit", "-m", "test")
-    git("checkout", "-b", "test")
-    if ok:
-        test_file.write_text(
-            'script_tag(name:"creation_date", '
-            'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\ntest'
-        )
-    else:
-        test_file.write_text(
-            'script_tag(name:"creation_date", '
-            'value:"2020-03-04 10:00:00 +0200 (Wed, 04 Mar 2020)");'
-        )
-    git("add", "-u")
-    git("commit", "-m", "test2")
-
-
 class TestChangedCreationDate(unittest.TestCase):
 
     def test_check_creation_date_ok(self):
         with temporary_git_directory() as tmpdir:
-            testgit(tmpdir, True)
+
+            test_file = tmpdir / "test.nasl"
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+            )
+            git("add", str(test_file))
+            git("commit", "-m", "test")
+            git("checkout", "-b", "test")
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\ntest'
+            )
+            git("add", "-u")
+            git("commit", "-m", "test2")
+
             parsed_args = parse_args(["-c", "main..test"])
             self.assertFalse(check_creation_date(parsed_args))
 
     def test_check_creation_date_fail(self):
         with temporary_git_directory() as tmpdir:
-            testgit(tmpdir)
+
+            test_file = tmpdir / "test.nasl"
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+            )
+            git("add", str(test_file))
+            git("commit", "-m", "test")
+            git("checkout", "-b", "test")
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2020-03-04 10:00:00 +0200 (Wed, 04 Mar 2020)");'
+            )
+            git("add", "-u")
+            git("commit", "-m", "test2")
+
             parsed_args = parse_args(["-c", "main..test"])
             self.assertTrue(check_creation_date(parsed_args))
+
+    def test_not_nasl_file(self):
+        with temporary_git_directory() as tmpdir:
+
+            test_file = tmpdir / "test.txt"
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+            )
+            git("add", str(test_file))
+            git("commit", "-m", "test")
+            git("checkout", "-b", "test")
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\ntest'
+            )
+            git("add", "-u")
+            git("commit", "-m", "test2")
+
+            parsed_args = parse_args(["-c", "main..test"])
+            self.assertFalse(check_creation_date(parsed_args))
+
+    def test_not_modified_lines_added(self):
+        with temporary_git_directory() as tmpdir:
+
+            test_file = tmpdir / "test.nasl"
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+            )
+            git("add", str(test_file))
+            git("commit", "-m", "test")
+            git("checkout", "-b", "test")
+            test_file.write_text(
+                "test\n"
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+            )
+            git("add", "-u")
+            git("commit", "-m", "test2")
+
+            parsed_args = parse_args(["-c", "main..test"])
+            self.assertFalse(check_creation_date(parsed_args))
+
+    def test_not_modified_lines_removed(self):
+        with temporary_git_directory() as tmpdir:
+
+            test_file = tmpdir / "test.nasl"
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\n'
+                "test"
+            )
+            git("add", str(test_file))
+            git("commit", "-m", "test")
+            git("checkout", "-b", "test")
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\n'
+            )
+            git("add", "-u")
+            git("commit", "-m", "test2")
+
+            parsed_args = parse_args(["-c", "main..test"])
+            self.assertFalse(check_creation_date(parsed_args))
 
     def test_git_fail(self):
         with self.assertRaises(SubprocessError):
@@ -59,7 +131,22 @@ class TestChangedCreationDate(unittest.TestCase):
 
     def test_args_ok(self):
         with temporary_git_directory() as tmpdir:
-            testgit(tmpdir)
+
+            test_file = tmpdir / "test.nasl"
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");'
+            )
+            git("add", str(test_file))
+            git("commit", "-m", "test")
+            git("checkout", "-b", "test")
+            test_file.write_text(
+                'script_tag(name:"creation_date", '
+                'value:"2020-03-04 10:00:00 +0200 (Wed, 04 Mar 2020)");'
+            )
+            git("add", "-u")
+            git("commit", "-m", "test2")
+
             self.assertEqual(
                 parse_args(["-c", "main..test"]).commit_range, "main..test"
             )
