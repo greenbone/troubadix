@@ -6,7 +6,6 @@ from os import chdir
 from pathlib import Path
 from subprocess import SubprocessError
 from tempfile import TemporaryDirectory
-from unittest import mock
 
 from troubadix.standalone_plugins.changed_creation_date import (
     check_creation_date,
@@ -183,7 +182,7 @@ class TestChangedCreationDate(unittest.TestCase):
         with TemporaryDirectory() as tempdir:
             try:
                 chdir(tempdir)
-                with mock.patch(
+                with unittest.mock.patch(
                     "sys.argv",
                     ["troubadix-changed-creation-date", "-c", "main..test"],
                 ):
@@ -209,7 +208,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("add", "-u")
             git("commit", "-m", "test2")
 
-            with mock.patch(
+            with unittest.mock.patch(
                 "sys.argv",
                 ["troubadix-changed-creation-date", "-c", "main..test"],
             ):
@@ -233,7 +232,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("add", "-u")
             git("commit", "-m", "test2")
 
-            with mock.patch(
+            with unittest.mock.patch(
                 "sys.argv",
                 ["troubadix-changed-creation-date", "-c", "main..test"],
             ):
