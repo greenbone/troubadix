@@ -111,7 +111,6 @@ def check_creation_date(args: Namespace) -> bool:
 
 
 def main() -> int:
-    args = sys.argv[1:]
 
     try:
         git_base = git("rev-parse", "--show-toplevel")
@@ -122,7 +121,7 @@ def main() -> int:
         )
         return 1
 
-    if check_creation_date(parse_args(args)):
+    if check_creation_date(parse_args(sys.argv[1:])):
         return 2
 
     return 0
