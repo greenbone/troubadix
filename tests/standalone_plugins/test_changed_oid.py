@@ -15,29 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import tempfile
 import unittest
-from contextlib import contextmanager
 from pathlib import Path
 from subprocess import SubprocessError
-from typing import Generator
 
 from troubadix.standalone_plugins.changed_oid import check_oid, git, parse_args
-
-
-@contextmanager
-def tempgitdir() -> Generator[Path, None, None]:
-    cwd = Path.cwd()
-    tempdir = tempfile.TemporaryDirectory()
-    temppath = Path(tempdir.name)
-    os.chdir(str(temppath))
-    git("init", "-b", "main")
-    git("config", "--local", "user.email", "max.mustermann@example.com")
-    git("config", "--local", "user.name", "Max Mustermann")
-    yield temppath
-    tempdir.cleanup()
-    os.chdir(str(cwd))
+from troubadix.standalone_plugins.util import temporary_git_directory
 
 
 def testgit(tmpdir: Path, ok: bool = False) -> None:
@@ -58,13 +41,13 @@ def testgit(tmpdir: Path, ok: bool = False) -> None:
 
 class TestChangedOid(unittest.TestCase):
     def test_check_oid_ok(self):
-        with tempgitdir() as tmpdir:
+        with temporary_git_directory() as tmpdir:
             testgit(tmpdir, True)
             parsed_args = parse_args(["-c", "main..test"])
             self.assertFalse(check_oid(parsed_args))
 
     def test_check_oid_fail(self):
-        with tempgitdir() as tmpdir:
+        with temporary_git_directory() as tmpdir:
             testgit(tmpdir)
             parsed_args = parse_args(["-c", "main..test"])
             self.assertTrue(check_oid(parsed_args))
@@ -77,7 +60,7 @@ class TestChangedOid(unittest.TestCase):
         git("--version")
 
     def test_args_ok(self):
-        with tempgitdir() as tmpdir:
+        with temporary_git_directory() as tmpdir:
             testgit(tmpdir)
             self.assertEqual(
                 parse_args(["-c", "main..test"]).commit_range, "main..test"
