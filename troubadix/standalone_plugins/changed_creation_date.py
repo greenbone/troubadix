@@ -42,7 +42,7 @@ def parse_args(args: Iterable[str]) -> Namespace:
     return parser.parse_args(args=args)
 
 
-def check_creation_date(args: Namespace) -> bool:
+def check_changed_creation_date(args: Namespace) -> bool:
     """
     This script checks (via git diff) if the creation date of
     a passed VT has changed, which is not allowed.
@@ -56,7 +56,8 @@ def check_creation_date(args: Namespace) -> bool:
             ).splitlines()
         ]
 
-    rcode = False
+    creation_date_changed = False
+
     for nasl_file in args.files:
         if nasl_file.suffix != ".nasl" or not nasl_file.exists():
             continue
@@ -77,8 +78,8 @@ def check_creation_date(args: Namespace) -> bool:
             text,
             re.MULTILINE,
         )
-        if not creation_date_added or not creation_date_added.group(
-            "creation_date"
+        if not creation_date_added or not (
+            added := creation_date_added.group("creation_date")
         ):
             continue
 
@@ -88,26 +89,24 @@ def check_creation_date(args: Namespace) -> bool:
             text,
             re.MULTILINE,
         )
-        if not creation_date_removed or not creation_date_removed.group(
-            "creation_date"
+        if not creation_date_removed or not (
+            removed := creation_date_removed.group("creation_date")
         ):
             continue
 
-        if creation_date_added.group(
-            "creation_date"
-        ) != creation_date_removed.group("creation_date"):
+        if added != removed:
             print(
                 f"The creation date of {nasl_file} was changed, "
                 f"which is not allowed."
                 f"\nNew creation date: "
-                f'{creation_date_added.group("creation_date")}'
+                f"{added}"
                 f"\nOld creation date: "
-                f'{creation_date_removed.group("creation_date")}',
+                f"{removed}",
                 file=sys.stderr,
             )
-            rcode = True
+            creation_date_changed = True
 
-    return rcode
+    return creation_date_changed
 
 
 def main() -> int:
@@ -121,7 +120,7 @@ def main() -> int:
         )
         return 1
 
-    if check_creation_date(parse_args(sys.argv[1:])):
+    if check_changed_creation_date(parse_args(sys.argv[1:])):
         return 2
 
     return 0

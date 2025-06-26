@@ -8,7 +8,7 @@ from subprocess import SubprocessError
 from tempfile import TemporaryDirectory
 
 from troubadix.standalone_plugins.changed_creation_date import (
-    check_creation_date,
+    check_changed_creation_date,
     git,
     main,
     parse_args,
@@ -37,7 +37,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("commit", "-m", "test2")
 
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertFalse(check_creation_date(parsed_args))
+            self.assertFalse(check_changed_creation_date(parsed_args))
 
     def test_check_creation_date_fail(self):
         with temporary_git_directory() as tmpdir:
@@ -58,7 +58,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("commit", "-m", "test2")
 
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertTrue(check_creation_date(parsed_args))
+            self.assertTrue(check_changed_creation_date(parsed_args))
 
     def test_not_nasl_file(self):
         with temporary_git_directory() as tmpdir:
@@ -79,7 +79,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("commit", "-m", "test2")
 
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertFalse(check_creation_date(parsed_args))
+            self.assertFalse(check_changed_creation_date(parsed_args))
 
     def test_creation_date_not_modified_lines_added(self):
         with temporary_git_directory() as tmpdir:
@@ -101,7 +101,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("commit", "-m", "test2")
 
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertFalse(check_creation_date(parsed_args))
+            self.assertFalse(check_changed_creation_date(parsed_args))
 
     def test_creation_date_not_modified_lines_removed(self):
         with temporary_git_directory() as tmpdir:
@@ -123,7 +123,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("commit", "-m", "test2")
 
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertFalse(check_creation_date(parsed_args))
+            self.assertFalse(check_changed_creation_date(parsed_args))
 
     def test_creation_date_added_not_removed(self):
         with temporary_git_directory() as tmpdir:
@@ -142,7 +142,7 @@ class TestChangedCreationDate(unittest.TestCase):
             git("commit", "-m", "test2")
 
             parsed_args = parse_args(["-c", "main..test"])
-            self.assertFalse(check_creation_date(parsed_args))
+            self.assertFalse(check_changed_creation_date(parsed_args))
 
     def test_git_fail(self):
         with self.assertRaises(SubprocessError):
