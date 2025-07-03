@@ -16,7 +16,8 @@ from troubadix.standalone_plugins.changed_creation_date import (
     parse_arguments,
 )
 
-TEST_ARGS = Namespace(commit_range="main..test", files=[Path("test.nasl")])
+TEST_COMMIT_RANGE = "main..test"
+TEST_FILES = [Path("test.nasl")]
 
 
 class TestChangedCreationDate(unittest.TestCase):
@@ -34,7 +35,9 @@ class TestChangedCreationDate(unittest.TestCase):
         )
         mock_exists.return_value = True
 
-        self.assertFalse(check_changed_creation_date(TEST_ARGS))
+        self.assertFalse(
+            check_changed_creation_date(TEST_COMMIT_RANGE, TEST_FILES)
+        )
 
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
@@ -48,7 +51,9 @@ class TestChangedCreationDate(unittest.TestCase):
         )
         mock_exists.return_value = True
 
-        self.assertTrue(check_changed_creation_date(TEST_ARGS))
+        self.assertTrue(
+            check_changed_creation_date(TEST_COMMIT_RANGE, TEST_FILES)
+        )
 
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
@@ -65,7 +70,9 @@ class TestChangedCreationDate(unittest.TestCase):
         )
         mock_exists.return_value = True
 
-        self.assertFalse(check_changed_creation_date(TEST_ARGS))
+        self.assertFalse(
+            check_changed_creation_date(TEST_COMMIT_RANGE, TEST_FILES)
+        )
 
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
@@ -78,7 +85,9 @@ class TestChangedCreationDate(unittest.TestCase):
         )
         mock_exists.return_value = True
 
-        self.assertFalse(check_changed_creation_date(TEST_ARGS))
+        self.assertFalse(
+            check_changed_creation_date(TEST_COMMIT_RANGE, TEST_FILES)
+        )
 
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
@@ -91,7 +100,9 @@ class TestChangedCreationDate(unittest.TestCase):
         )
         mock_exists.return_value = True
 
-        self.assertFalse(check_changed_creation_date(TEST_ARGS))
+        self.assertFalse(
+            check_changed_creation_date(TEST_COMMIT_RANGE, TEST_FILES)
+        )
 
     def test_git_fail(self):
         with self.assertRaises(SubprocessError):
