@@ -5,13 +5,12 @@ from contextlib import contextmanager
 from os import chdir
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Generator
 
 from troubadix.standalone_plugins.changed_creation_date import git
 
 
 @contextmanager
-def temporary_git_directory() -> Generator[Path, None, None]:
+def temporary_git_directory():
 
     cwd = Path.cwd()
 
