@@ -44,19 +44,19 @@ ENTERPRISE_FEED_CHECK_PATTERN = re.compile(
     r"(?:\{[^}]*\}\s*|[^\{;]*;)"
 )  # Matches specific if blocks used to gate code to run only for enterprise feeds
 
+logging.basicConfig(format="%(levelname)s: %(message)s")
+logger = logging.getLogger(__name__)
+
 
 class Reporter:
-    def __init__(self) -> None:
-        self.logger = logging.getLogger(__name__)
-
     def report(self, results: list[Result]):
         for result in results:
             for error in result.errors:
-                self.logger.error(f"{result.name}: {error}")
+                logger.error(f"{result.name}: {error}")
             for warning in result.warnings:
-                self.logger.warning(f"{result.name}: {warning}")
+                logger.warning(f"{result.name}: {warning}")
             for info in result.infos:
-                self.logger.info(f"{result.name}: {info}")
+                logger.info(f"{result.name}: {info}")
 
 
 def get_feed(root: Path, feed: Feed) -> list[Script]:
@@ -74,7 +74,7 @@ def get_scripts(directory: Path) -> list[Script]:
         try:
             content = path.read_text(encoding=CURRENT_ENCODING)
         except Exception as e:
-            logging.error(f"Error reading file {path}: {e}")
+            logger.error(f"Error reading file {path}: {e}")
             continue
 
         try:
@@ -88,7 +88,7 @@ def get_scripts(directory: Path) -> list[Script]:
                 Script(name, feed, dependencies, category, deprecated)
             )
         except Exception as e:
-            logging.error(f"Error processing {path}: {e}")
+            logger.error(f"Error processing {path}: {e}")
 
     return scripts
 
@@ -153,17 +153,15 @@ def create_graph(scripts: list[Script]):
 def main():
     args = parse_args()
 
-    logging.basicConfig(
-        level=args.log.upper(), format="%(levelname)s: %(message)s"
-    )
+    logger.setLevel(args.log)
 
-    logging.info("starting troubadix dependency analysis")
+    logger.info("starting troubadix dependency analysis")
 
     scripts = get_feed(args.root, args.feed)
     graph = create_graph(scripts)
 
-    logging.info(f"nodes (scripts) in graph: {graph.number_of_nodes()}")
-    logging.info(f"edges (dependencies) in graph: {graph.number_of_edges()}")
+    logger.info(f"nodes (scripts) in graph: {graph.number_of_nodes()}")
+    logger.info(f"edges (dependencies) in graph: {graph.number_of_edges()}")
 
     results = [
         check_duplicates(scripts),
