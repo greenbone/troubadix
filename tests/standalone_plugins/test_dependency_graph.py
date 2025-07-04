@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
+import io
 import os
 import unittest
-from io import StringIO
+from contextlib import redirect_stderr
 from pathlib import Path
 from unittest.mock import patch
 
@@ -76,14 +77,13 @@ class TestCLIArgs(unittest.TestCase):
         self.assertEqual(args.feed, Feed.FEED_22_04)
         self.assertEqual(args.log, "INFO")
 
-    @patch("sys.stderr", new_callable=StringIO)
     @patch("sys.argv", ["prog", "--root", "not_real_dir"])
-    def test_parse_args_no_dir(self, mock_stderr):
-        with self.assertRaises(SystemExit):
-            parse_args()
-        self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
+    def test_parse_args_no_dir(self):
+        with redirect_stderr(io.StringIO()) as f:
+            with self.assertRaises(SystemExit):
+                parse_args()
+        self.assertRegex(f.getvalue(), "invalid directory_type")
 
-    # @patch("sys.stderr", new_callable=StringIO)
     @patch(
         "sys.argv",
         [
