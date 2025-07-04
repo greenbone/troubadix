@@ -73,6 +73,7 @@ version-module-file = "troubadix/__version__.py"
 
 [tool.poetry.scripts]
 troubadix = 'troubadix.troubadix:main'
+troubadix-changed-creation-date = 'troubadix.standalone_plugins.changed_creation_date:main'
 troubadix-changed-oid = 'troubadix.standalone_plugins.changed_oid:main'
 troubadix-last-modification = 'troubadix.standalone_plugins.last_modification:main'
 troubadix-version-updated = 'troubadix.standalone_plugins.version_updated:main'
