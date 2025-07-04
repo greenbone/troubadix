@@ -46,7 +46,7 @@ class StringState:
 
 def index_to_linecol(text: str, index: int) -> tuple[int, int]:
     """
-    Converts character index to (line_number, column_number) (1-indexed)
+    Converts character index to (line_number, column_number) (1-based index)
 
     Args:
         text: Input string
@@ -54,22 +54,17 @@ def index_to_linecol(text: str, index: int) -> tuple[int, int]:
     Returns:
         (line, column) tuple (both start at 1)
     """
-    if index < 0 or index > len(text):
+    if index < 0 or index >= len(text):
         raise ValueError(
             f"Index {index} out of bounds for text of length {len(text)}"
         )
 
-    line = 1
-    column = 1
+    lines = text.splitlines(keepends=True)
 
-    for i in range(index):
-        if text[i] == "\n":
-            line += 1
-            column = 1
-        else:
-            column += 1
-
-    return (line, column)
+    for line_num, line in enumerate(lines, 1):
+        if index < len(line):
+            return (line_num, index + 1)
+        index -= len(line)
 
 
 def is_position_in_string(text: str, position: int) -> bool:
@@ -78,8 +73,7 @@ def is_position_in_string(text: str, position: int) -> bool:
 
     # Process characters up to (but not including) the position
     # to determine the string state at that position
-    for i in range(position):
-        char = text[i]
+    for char in text[:position]:
         string_state.process_next_char(char)
 
     return string_state.in_string
