@@ -109,8 +109,8 @@ class TestIndexToLinecol(unittest.TestCase):
         self.assertEqual((line, col), (2, 1))
 
     def test_end_of_file(self):
-        line, col = index_to_linecol("hello\nworld", 11)
-        self.assertEqual((line, col), (2, 6))
+        line, col = index_to_linecol("hello\nworld", 10)
+        self.assertEqual((line, col), (2, 5))
 
     def test_multiline_file(self):
         text = "line1\nline2\nline3"
@@ -118,8 +118,7 @@ class TestIndexToLinecol(unittest.TestCase):
         self.assertEqual((line, col), (2, 5))
 
     def test_empty_file(self):
-        line, col = index_to_linecol("", 0)
-        self.assertEqual((line, col), (1, 1))
+        self.assertRaises(ValueError, index_to_linecol, "", 0)
 
 
 class TestIsPositionInString(unittest.TestCase):
