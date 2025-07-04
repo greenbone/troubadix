@@ -26,7 +26,12 @@ from troubadix.helper.patterns import (
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
-MANDATORY_TAGS = [ScriptTag.SUMMARY]
+MANDATORY_TAGS = [
+    ScriptTag.SUMMARY,
+    ScriptTag.CVSS_BASE,
+    ScriptTag.CVSS_BASE_VECTOR,
+]
+
 MANDATORY_SPECIAL_TAGS = [
     SpecialScriptTag.NAME,
     SpecialScriptTag.VERSION,
