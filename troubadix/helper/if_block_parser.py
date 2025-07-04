@@ -10,6 +10,10 @@ from troubadix.helper.text_utils import (
     index_to_linecol,
 )
 
+# Brace pairings
+CONDITION_BRACES = ("(", ")")
+BLOCK_BRACES = ("{", "}")
+
 
 @dataclass
 class IfStatement:
@@ -40,7 +44,7 @@ class IfParser:
             line, _ = index_to_linecol(self.file_content, if_start)
 
             condition_end = self._find_closing_brace(
-                opening_brace, "(", ")", line
+                opening_brace, CONDITION_BRACES, line
             )
             condition = self.file_content[
                 opening_brace + 1 : condition_end
@@ -50,7 +54,7 @@ class IfParser:
             if self.file_content[statement_pos] == "{":
                 # Block statement
                 block_end = self._find_closing_brace(
-                    statement_pos, "{", "}", line
+                    statement_pos, BLOCK_BRACES, line
                 )
                 if_end = block_end + 1
                 statement_start = statement_pos + 1
@@ -86,25 +90,28 @@ class IfParser:
     def _find_closing_brace(
         self,
         start_pos: int,
-        opening_brace: str,
-        closing_brace: str,
+        brace_pair: tuple[str, str],
         line: int,
     ) -> int:
         """Find the matching closing brace, with proper error reporting."""
+        opening_brace, closing_brace = brace_pair
         open_count = 1
         string_state = StringState()
 
         for i in range(start_pos + 1, len(self.file_content)):
             char = self.file_content[i]
             string_state.process_next_char(char)
-            # Only count braces when not in a string
-            if not string_state.in_string:
-                if char == opening_brace:
-                    open_count += 1
-                elif char == closing_brace:
-                    open_count -= 1
-                    if open_count == 0:
-                        return i
+
+            # Skip characters inside strings
+            if string_state.in_string:
+                continue
+
+            if char == opening_brace:
+                open_count += 1
+            elif char == closing_brace:
+                open_count -= 1
+                if open_count == 0:
+                    return i
 
         # Generate appropriate error message based on brace type
         if opening_brace == "(":
@@ -131,25 +138,24 @@ class IfParser:
         for i, char in enumerate(self.file_content):
             string_state.process_next_char(char)
 
-            # check only outside of strings
-            if not string_state.in_string:
-                # check for if with word boundary, valid: ["if", " if"], not valid: "xif"
-                if (
-                    i == 0 or not self.file_content[i - 1].isalnum()
-                ) and self.file_content.startswith("if", i):
-                    # skip whitespace
-                    j = i + 2
-                    while (
-                        j < len(self.file_content)
-                        and self.file_content[j].isspace()
-                    ):
-                        j += 1
-                    # check for condition start
-                    if (
-                        j < len(self.file_content)
-                        and self.file_content[j] == "("
-                    ):
-                        starts.append((i, j))
+            # Skip characters inside strings
+            if string_state.in_string:
+                continue
+
+            # check for if with word boundary, valid: ["if", " if"], not valid: "xif"
+            if (
+                i == 0 or not self.file_content[i - 1].isalnum()
+            ) and self.file_content.startswith("if", i):
+                # skip whitespace
+                j = i + 2
+                while (
+                    j < len(self.file_content)
+                    and self.file_content[j].isspace()
+                ):
+                    j += 1
+                # check for condition start
+                if j < len(self.file_content) and self.file_content[j] == "(":
+                    starts.append((i, j))
 
         return starts
 
