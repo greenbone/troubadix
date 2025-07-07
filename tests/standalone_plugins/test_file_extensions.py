@@ -1,11 +1,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
+import io
 import os
 import sys
 import tempfile
 import unittest
 from argparse import Namespace
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
@@ -113,22 +114,22 @@ class TestFileExtensions(unittest.TestCase):
                     args.ignore_file, Path(tmpdir, "file_extensions.ignore")
                 )
 
-    @patch("sys.stderr", new_callable=StringIO)
-    def test_parse_args_no_dir(self, mock_stderr):
+    def test_parse_args_no_dir(self):
         test_args = ["prog", "not_real_dir"]
-        with patch.object(sys, "argv", test_args):
-            with self.assertRaises(SystemExit):
-                parse_args()
-            self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
-
-    @patch("sys.stderr", new_callable=StringIO)
-    def test_parse_args_no_file(self, mock_stderr):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            test_args = ["prog", tmpdir, "--ignore-file", "not_real_file"]
+        with redirect_stderr(io.StringIO()) as f:
             with patch.object(sys, "argv", test_args):
                 with self.assertRaises(SystemExit):
                     parse_args()
-                self.assertRegex(mock_stderr.getvalue(), "invalid file_type")
+                self.assertRegex(f.getvalue(), "invalid directory_type")
+
+    def test_parse_args_no_file(self):
+        with redirect_stderr(io.StringIO()) as f:
+            with tempfile.TemporaryDirectory() as tmpdir:
+                test_args = ["prog", tmpdir, "--ignore-file", "not_real_file"]
+                with patch.object(sys, "argv", test_args):
+                    with self.assertRaises(SystemExit):
+                        parse_args()
+                    self.assertRegex(f.getvalue(), "invalid file_type")
 
     def test_main_ok(self):
         with tempfile.TemporaryDirectory() as tmpdir:

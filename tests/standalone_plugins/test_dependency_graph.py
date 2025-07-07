@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
-import logging
+import io
 import os
 import unittest
-from io import StringIO
+from contextlib import redirect_stderr
 from pathlib import Path
 from unittest.mock import patch
 
@@ -37,21 +37,25 @@ class TestReporter(unittest.TestCase):
         )
 
     def test_output_formatting(self):
-        stream = StringIO()
+        with self.assertLogs("troubadix", level="INFO") as log:
+            reporter = Reporter()
+            reporter.report([self.result])
 
-        handler = logging.StreamHandler(stream)
-        handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
-
-        reporter = Reporter()
-        reporter.logger.handlers = [handler]
-        reporter.logger.setLevel(logging.INFO)
-
-        reporter.report([self.result])
-
-        output = stream.getvalue()
-        self.assertIn("INFO: TestScript: cross-feed", output)
-        self.assertIn("WARNING: TestScript: duplicate dependencies", output)
-        self.assertIn("ERROR: TestScript: missing dependencies", output)
+            self.assertEqual("INFO", log.records[2].levelname)
+            self.assertEqual(
+                "TestScript: cross-feed",
+                log.records[2].message,
+            )
+            self.assertEqual("WARNING", log.records[1].levelname)
+            self.assertEqual(
+                "TestScript: duplicate dependencies",
+                log.records[1].message,
+            )
+            self.assertEqual("ERROR", log.records[0].levelname)
+            self.assertEqual(
+                "TestScript: missing dependencies",
+                log.records[0].message,
+            )
 
 
 class TestCLIArgs(unittest.TestCase):
@@ -73,14 +77,13 @@ class TestCLIArgs(unittest.TestCase):
         self.assertEqual(args.feed, Feed.FEED_22_04)
         self.assertEqual(args.log, "INFO")
 
-    @patch("sys.stderr", new_callable=StringIO)
     @patch("sys.argv", ["prog", "--root", "not_real_dir"])
-    def test_parse_args_no_dir(self, mock_stderr):
-        with self.assertRaises(SystemExit):
-            parse_args()
-        self.assertRegex(mock_stderr.getvalue(), "invalid directory_type")
+    def test_parse_args_no_dir(self):
+        with redirect_stderr(io.StringIO()) as f:
+            with self.assertRaises(SystemExit):
+                parse_args()
+        self.assertRegex(f.getvalue(), "invalid directory_type")
 
-    # @patch("sys.stderr", new_callable=StringIO)
     @patch(
         "sys.argv",
         [
@@ -170,40 +173,57 @@ if(description)
         graph = create_graph(scripts)
         self.assertEqual(len(list(graph.nodes)), 2)
 
-    @patch("sys.stdout", new_callable=StringIO)  # mock_stdout (second argument)
-    @patch("sys.stderr", new_callable=StringIO)  # mock_stderr (first argument)
     @patch(
         "sys.argv",
         ["prog", "--root", "tests/standalone_plugins/nasl", "--log", "info"],
-    )  # no argument
-    def test_full_run(self, mock_stderr, mock_stdout):
-        return_code = main()
-        output = mock_stderr.getvalue()
+    )
+    def test_full_run(self):
+        with self.assertLogs("troubadix", level="INFO") as log:
+            return_code = main()
 
-        self.assertIn("ERROR: missing dependency: missing.nasl:", output)
-        self.assertIn(
-            "ERROR: cyclic dependency: ",  # order is random so can't match the output
-            output,
-        )
-        self.assertIn(
-            "ERROR: cross-feed dependency: incorrect feed check in foo.nasl(community feed)"
-            " which depends on gsf/enterprise_script.nasl(enterprise feed)",
-            output,
-        )
-        self.assertIn(
-            "ERROR: category order: bar.nasl depends on foo.nasl which has a lower category order",
-            output,
-        )
-        self.assertIn(
-            "ERROR: deprecated dependency: foo.nasl depends on deprecated script foobar.nasl",
-            output,
-        )
-        self.assertIn(
-            "WARNING: duplicate dependency: in bar.nasl: foo.nasl", output
-        )
-        self.assertIn(
-            "INFO: cross-feed dependency: bar.nasl(community feed)"
-            " depends on gsf/enterprise_script.nasl(enterprise feed)",
-            output,
-        )
-        self.assertEqual(return_code, 1)
+            self.assertEqual("ERROR", log.records[4].levelname)
+            self.assertEqual(
+                "missing dependency: missing.nasl:\n  - used by: foo.nasl",
+                log.records[4].message,
+            )
+
+            self.assertEqual("ERROR", log.records[5].levelname)
+            self.assertRegex(
+                log.records[5].message,
+                "cyclic dependency: "
+                r"\['(foo|bar|foobar).nasl', '(foo|bar|foobar).nasl', '(foo|bar|foobar).nasl'\]",
+            )
+
+            self.assertEqual("ERROR", log.records[6].levelname)
+            self.assertEqual(
+                "cross-feed dependency: incorrect feed check in foo.nasl(community feed) "
+                "which depends on gsf/enterprise_script.nasl(enterprise feed)",
+                log.records[6].message,
+            )
+
+            self.assertEqual("ERROR", log.records[8].levelname)
+            self.assertEqual(
+                "category order: bar.nasl depends on foo.nasl which has a lower category order",
+                log.records[8].message,
+            )
+
+            self.assertEqual("ERROR", log.records[9].levelname)
+            self.assertEqual(
+                "deprecated dependency: foo.nasl depends on deprecated script foobar.nasl",
+                log.records[9].message,
+            )
+
+            self.assertEqual("WARNING", log.records[3].levelname)
+            self.assertEqual(
+                "duplicate dependency: in bar.nasl: foo.nasl",
+                log.records[3].message,
+            )
+
+            self.assertEqual("INFO", log.records[7].levelname)
+            self.assertEqual(
+                "cross-feed dependency: bar.nasl(community feed) depends "
+                "on gsf/enterprise_script.nasl(enterprise feed)",
+                log.records[7].message,
+            )
+
+            self.assertEqual(return_code, 1)
