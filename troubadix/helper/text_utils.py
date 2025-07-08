@@ -60,11 +60,12 @@ def index_to_linecol(text: str, index: int) -> tuple[int, int]:
         )
 
     lines = text.splitlines(keepends=True)
-
+    line_num = 0
     for line_num, line in enumerate(lines, 1):
         if index < len(line):
-            return (line_num, index + 1)
+            break
         index -= len(line)
+    return (line_num, index + 1)
 
 
 def is_position_in_string(text: str, position: int) -> bool:
