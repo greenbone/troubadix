@@ -166,7 +166,3 @@ class TestIsPositionInString(unittest.TestCase):
         text = 'x = "hello";'
         self.assertFalse(is_position_in_string(text, 4))  # at opening quote
         self.assertTrue(is_position_in_string(text, 10))  # at closing quote
-
-
-if __name__ == "__main__":
-    unittest.main()

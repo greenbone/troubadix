@@ -214,7 +214,3 @@ class FindIfStatementsTestCase(unittest.TestCase):
         # Check statement position (after parenthesis to semicolon)
         self.assertEqual(12, result[0].statement_start)
         self.assertEqual(29, result[0].statement_end)
-
-
-if __name__ == "__main__":
-    unittest.main()
