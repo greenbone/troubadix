@@ -38,6 +38,14 @@ class CheckUsingDisplay(FileContentPlugin):
             return
 
         comment_free_content = remove_comments(file_content)
+
+        all_display_matches = list(
+            DISPLAY_PATTERN.finditer(comment_free_content)
+        )
+
+        if not all_display_matches:
+            return
+
         try:
             if_statements = find_if_statements(comment_free_content)
         except ValueError as e:
@@ -47,11 +55,6 @@ class CheckUsingDisplay(FileContentPlugin):
                 plugin=self.name,
             )
             return
-
-        # Find all display() calls in the entire file
-        all_display_matches = list(
-            DISPLAY_PATTERN.finditer(comment_free_content)
-        )
 
         for display_match in all_display_matches:
             display_pos = display_match.start()
