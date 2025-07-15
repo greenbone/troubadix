@@ -72,18 +72,18 @@ class IfParser:
                     statement_pos:expression_end
                 ].strip()
 
-            if_stmt = IfStatement(
-                if_start=if_start,
-                if_end=if_end,
-                condition_start=opening_brace + 1,
-                condition_end=condition_end,
-                statement_start=statement_start,
-                statement_end=statement_end,
-                condition=condition,
-                statement=statement,
+            results.append(
+                IfStatement(
+                    if_start=if_start,
+                    if_end=if_end,
+                    condition_start=opening_brace + 1,
+                    condition_end=condition_end,
+                    statement_start=statement_start,
+                    statement_end=statement_end,
+                    condition=condition,
+                    statement=statement,
+                )
             )
-
-            results.append(if_stmt)
 
         return results
 
