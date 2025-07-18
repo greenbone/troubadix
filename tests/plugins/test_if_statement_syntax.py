@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
-import unittest
 from pathlib import Path
 
 from troubadix.plugins.if_statement_syntax import CheckIfStatementSyntax
@@ -165,7 +164,3 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertIn("Unclosed parenthesis", results[0].message)
-
-
-if __name__ == "__main__":
-    unittest.main()
