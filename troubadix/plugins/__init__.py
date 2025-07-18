@@ -39,6 +39,7 @@ from .forking_nasl_functions import CheckForkingNaslFunctions
 from .get_kb_on_services import CheckGetKBOnServices
 from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
+from .if_statement_syntax import CheckIfStatementSyntax
 from .illegal_characters import CheckIllegalCharacters
 from .log_messages import CheckLogMessages
 from .malformed_dependencies import CheckMalformedDependencies
@@ -149,6 +150,7 @@ _FILE_PLUGINS = [
     CheckVTPlacement,
     CheckWrongSetGetKBCalls,
     CheckSpacesBeforeDots,
+    CheckIfStatementSyntax,
 ]
 
 # plugins checking all files
