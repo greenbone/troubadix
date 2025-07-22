@@ -39,24 +39,14 @@ class CheckUsingDisplay(FileContentPlugin):
 
         comment_free_content = remove_comments(file_content)
 
-        all_display_matches = list(
-            DISPLAY_PATTERN.finditer(comment_free_content)
-        )
+        display_matches = list(DISPLAY_PATTERN.finditer(comment_free_content))
 
-        if not all_display_matches:
+        if not display_matches:
             return
 
-        try:
-            if_statements = find_if_statements(comment_free_content)
-        except ValueError as e:
-            yield LinterError(
-                str(e),
-                file=nasl_file,
-                plugin=self.name,
-            )
-            return
+        if_statements = find_if_statements(comment_free_content).statements
 
-        for display_match in all_display_matches:
+        for display_match in display_matches:
             display_pos = display_match.start()
 
             # Skip if this match is inside a string literal
