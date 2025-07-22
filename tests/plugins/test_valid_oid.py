@@ -300,6 +300,21 @@ class CheckValidOIDTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_amazon_with_optional_identifier(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.1.5.1.2012.2256");\n'
+            '  script_family("Amazon Linux Local Security Checks");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_amazon(self):
         path = Path("some/file.nasl")
         content = (

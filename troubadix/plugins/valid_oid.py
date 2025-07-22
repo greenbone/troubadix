@@ -184,13 +184,13 @@ class CheckValidOID(FileContentPlugin):
                     return
 
                 amazon_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.5\.20[0-4][0-9]\.[0-9]+$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.5\.([1-3.]{2})?20[0-4][0-9]\.[0-9]+$",
                     oid,
                 )
                 if amazon_sa_match is None:
                     yield LinterError(
                         f"script_oid() {invalid_oid} '{str(oid)}' (Amazon "
-                        "pattern: 1.3.6.1.4.1.25623.1.1.5.[ADVISORY_YEAR]"
+                        "pattern: 1.3.6.1.4.1.25623.1.1.5.[OPTIONAL PRODUCT PREFIX.][ADVISORY_YEAR]"
                         ".[ADVISORY_ID])",
                         file=nasl_file,
                         plugin=self.name,
