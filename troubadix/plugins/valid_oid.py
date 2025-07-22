@@ -184,7 +184,7 @@ class CheckValidOID(FileContentPlugin):
                     return
 
                 amazon_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.5\.([1-3.]{2})?20[0-4][0-9]\.[0-9]+$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.5\.([1-3]\.)?20[0-4][0-9]\.[0-9]+$",
                     oid,
                 )
                 if amazon_sa_match is None:
