@@ -4,6 +4,7 @@
 """Helper for parsing if blocks and single-expression if statements in NASL files."""
 
 from dataclasses import dataclass
+from enum import Enum
 
 from troubadix.helper.text_utils import (
     StringState,
@@ -27,49 +28,104 @@ class IfStatement:
     statement: str
 
 
+class IfErrorType(Enum):
+    UNCLOSED_IF_CONDITION = "unclosed_if_condition"
+    UNCLOSED_IF_BODY = "unclosed_if_body"
+    MISSING_IF_BODY = "missing_if_body"
+    IF_TERMINATED_AFTER_CONDITION = "if_terminated_after_condition"
+    MISSING_IF_EXPRESSION = "missing_if_expression"
+
+
+@dataclass
+class IfParseError:
+    line: int
+    error_type: IfErrorType
+
+
+@dataclass
+class IfParseResult:
+    statements: list[IfStatement]
+    errors: list[IfParseError]
+
+
 class IfParser:
     """Parser for if statements in NASL files."""
 
     def __init__(self, file_content: str):
         self.file_content = file_content
 
-    def find_if_statements(self) -> list[IfStatement]:
-        """Parse the file to find all if statements (blocks and single expressions)."""
+    def find_if_statements(self) -> IfParseResult:
+        """
+        Parse the file to find all if statements (blocks and single expressions), collecting errors.
+
+        Example NASL if statements:
+            if (x > 0) {
+                foo();
+            }
+            if (y < 5)
+              bar();
+        """
         results: list[IfStatement] = []
+        errors: list[IfParseError] = []
+        # Step 1: Find all 'if' condition starts
         starts = self._find_condition_starts()
         if not starts:
-            return results
+            return IfParseResult(results, errors)
 
         for if_start, opening_brace in starts:
             line, _ = index_to_linecol(self.file_content, if_start)
 
-            condition_end = self._find_closing_brace(
-                opening_brace, CONDITION_BRACES, line
+            # Step 2: Find the end of the condition (the closing parenthesis)
+            condition_end, cond_error = self._find_closing_brace(
+                opening_brace, CONDITION_BRACES
             )
+            if cond_error:
+                errors.append(IfParseError(line=line, error_type=cond_error))
+                continue
             condition = self.file_content[
                 opening_brace + 1 : condition_end
             ].strip()
-            statement_pos = self._find_statement_start(condition_end, line)
 
+            # Step 3: Find the start of the statement (first non-whitespace after condition)
+            statement_pos, stmt_error = self._find_statement_start(
+                condition_end
+            )
+            if stmt_error:
+                errors.append(IfParseError(line=line, error_type=stmt_error))
+                continue
+
+            # Step 4: Determine if this is a block or single-expression statement
             if self.file_content[statement_pos] == "{":
-                # Block statement
-                block_end = self._find_closing_brace(
-                    statement_pos, BLOCK_BRACES, line
+                # Block statement: find closing brace for block
+                block_end, block_error = self._find_closing_brace(
+                    statement_pos, BLOCK_BRACES
                 )
+                if block_error:
+                    errors.append(
+                        IfParseError(line=line, error_type=block_error)
+                    )
+                    continue
                 if_end = block_end + 1
                 statement_start = statement_pos + 1
                 statement_end = block_end
                 statement = self.file_content[
-                    statement_pos + 1 : block_end
+                    statement_start:statement_end
                 ].strip()
             else:
-                # Single expression
-                expression_end = self._find_expression_end(statement_pos, line)
+                # Single expression: find end of expression (semicolon)
+                expression_end, expr_error = self._find_expression_end(
+                    statement_pos
+                )
+                if expr_error:
+                    errors.append(
+                        IfParseError(line=line, error_type=expr_error)
+                    )
+                    continue
                 if_end = expression_end + 1
                 statement_start = statement_pos
                 statement_end = expression_end
                 statement = self.file_content[
-                    statement_pos:expression_end
+                    statement_start:statement_end
                 ].strip()
 
             results.append(
@@ -85,14 +141,13 @@ class IfParser:
                 )
             )
 
-        return results
+        return IfParseResult(results, errors)
 
     def _find_closing_brace(
         self,
         start_pos: int,
         brace_pair: tuple[str, str],
-        line: int,
-    ) -> int:
+    ) -> tuple[int | None, IfErrorType | None]:
         """Find the matching closing brace, with proper error reporting."""
         opening_brace, closing_brace = brace_pair
         open_count = 1
@@ -111,19 +166,13 @@ class IfParser:
             elif char == closing_brace:
                 open_count -= 1
                 if open_count == 0:
-                    return i
+                    return i, None
 
-        # Generate appropriate error message based on brace type
+        # Error: unclosed brace
         if opening_brace == "(":
-            raise ValueError(
-                f"Unclosed parenthesis in if statement at line {line}"
-            )
-        elif opening_brace == "{":
-            raise ValueError(f"Unclosed brace in if statement at line {line}")
+            return None, IfErrorType.UNCLOSED_IF_CONDITION
         else:
-            raise ValueError(
-                f"Unclosed {opening_brace} in if statement at line {line}"
-            )
+            return None, IfErrorType.UNCLOSED_IF_BODY
 
     def _find_condition_starts(self) -> list[tuple[int, int]]:
         """
@@ -159,26 +208,25 @@ class IfParser:
 
         return starts
 
-    def _find_statement_start(self, condition_end: int, line: int) -> int:
+    def _find_statement_start(
+        self, condition_end: int
+    ) -> tuple[int | None, IfErrorType | None]:
         """Find the start of the statement after the condition (next non-whitespace character)."""
         pos = condition_end + 1
         while pos < len(self.file_content) and self.file_content[pos].isspace():
             pos += 1
 
         if pos >= len(self.file_content):
-            raise ValueError(
-                f"Missing statement after if condition at line {line}"
-            )
+            return None, IfErrorType.MISSING_IF_BODY
 
         if self.file_content[pos] == ";":
-            raise ValueError(
-                f"Semicolon after if condition at line {line} makes following block "
-                f"always execute. Remove semicolon to fix."
-            )
+            return None, IfErrorType.IF_TERMINATED_AFTER_CONDITION
 
-        return pos
+        return pos, None
 
-    def _find_expression_end(self, expression_start: int, line: int) -> int:
+    def _find_expression_end(
+        self, expression_start: int
+    ) -> tuple[int | None, IfErrorType | None]:
         """Find the end of a single expression (semicolon outside of strings)."""
         string_state = StringState()
 
@@ -186,15 +234,13 @@ class IfParser:
             char = self.file_content[i]
             string_state.process_next_char(char)
             if not string_state.in_string and char == ";":
-                return i
+                return i, None
 
-        raise ValueError(
-            f"Missing expression after if condition at line {line}"
-        )
+        return None, IfErrorType.MISSING_IF_EXPRESSION
 
 
 # Wrapper function to maintain backward compatibility
-def find_if_statements(file_content: str) -> list[IfStatement]:
+def find_if_statements(file_content: str) -> IfParseResult:
     """Parse a file to find all if statements (blocks and single expressions)."""
     parser = IfParser(file_content)
     return parser.find_if_statements()
