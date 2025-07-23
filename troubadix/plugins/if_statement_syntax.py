@@ -5,7 +5,7 @@
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.if_block_parser import IfErrorType, find_if_statements
+from troubadix.helper.if_block_parser import find_if_statements
 from troubadix.helper.remove_comments import remove_comments
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
@@ -34,29 +34,9 @@ class CheckIfStatementSyntax(FileContentPlugin):
 
         result = find_if_statements(comment_free_content)
         for error in result.errors:
+            message = error.error_type.value.format(line=error.line)
             yield LinterError(
-                self._format_error_message(error),
+                message,
                 file=nasl_file,
                 plugin=self.name,
             )
-
-    def _format_error_message(self, error):
-        match error.error_type:
-            case IfErrorType.UNCLOSED_IF_CONDITION:
-                return (
-                    f"Unclosed parenthesis in if condition at line {error.line}"
-                )
-            case IfErrorType.UNCLOSED_IF_BODY:
-                return f"Unclosed brace in if body at line {error.line}"
-            case IfErrorType.MISSING_IF_BODY:
-                return f"Missing statement or body after if condition at line {error.line}"
-            case IfErrorType.IF_TERMINATED_AFTER_CONDITION:
-                return (
-                    f"Semicolon after if condition at line {error.line}"
-                    " causes if to terminate early."
-                    " Following block will always execute."
-                )
-            case IfErrorType.MISSING_IF_EXPRESSION:
-                return f"Missing expression after if condition at line {error.line}"
-            case _:
-                return f"Unknown if statement syntax error at line {error.line}"
