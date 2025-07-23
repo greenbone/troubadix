@@ -29,11 +29,20 @@ class IfStatement:
 
 
 class IfErrorType(Enum):
-    UNCLOSED_IF_CONDITION = "unclosed_if_condition"
-    UNCLOSED_IF_BODY = "unclosed_if_body"
-    MISSING_IF_BODY = "missing_if_body"
-    IF_TERMINATED_AFTER_CONDITION = "if_terminated_after_condition"
-    MISSING_IF_EXPRESSION = "missing_if_expression"
+    UNCLOSED_IF_CONDITION = (
+        "Unclosed parenthesis in if condition at line {line}"
+    )
+    UNCLOSED_IF_BODY = "Unclosed brace in if body at line {line}"
+    MISSING_IF_BODY = (
+        "Missing statement or body after if condition at line {line}"
+    )
+    IF_TERMINATED_AFTER_CONDITION = (
+        "Semicolon after if condition at line {line} causes if to terminate early. "
+        "Following block will always execute."
+    )
+    MISSING_IF_EXPRESSION = (
+        "Missing expression after if condition at line {line}"
+    )
 
 
 @dataclass
