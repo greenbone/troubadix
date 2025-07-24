@@ -18,7 +18,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
 
         self.assertEqual(1, len(result.statements))
         self.assertEqual("TRUE", result.statements[0].condition)
-        self.assertEqual('display("inline")', result.statements[0].statement)
+        self.assertEqual('display("inline")', result.statements[0].consequent)
         # Check that position is correct (start at 'if', end at semicolon)
         self.assertEqual(0, result.statements[0].if_start)
         self.assertEqual(len(content), result.statements[0].if_end)
@@ -30,7 +30,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual(1, len(result.statements))
         self.assertEqual("TRUE", result.statements[0].condition)
         self.assertEqual(
-            'display("single line")', result.statements[0].statement
+            'display("single line")', result.statements[0].consequent
         )
 
     def test_standard_block(self):
@@ -39,7 +39,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
 
         self.assertEqual(1, len(result.statements))
         self.assertEqual("TRUE", result.statements[0].condition)
-        self.assertEqual('display("block");', result.statements[0].statement)
+        self.assertEqual('display("block");', result.statements[0].consequent)
         # Check position spans from 'if' to the closing brace
         self.assertEqual(0, result.statements[0].if_start)
         self.assertEqual(len(content), result.statements[0].if_end)
@@ -50,7 +50,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
 
         self.assertEqual(1, len(result.statements))
         self.assertEqual("TRUE", result.statements[0].condition)
-        self.assertEqual('display("block");', result.statements[0].statement)
+        self.assertEqual('display("block");', result.statements[0].consequent)
 
     def test_empty_block(self):
         content = "if(TRUE)\n{\n}"
@@ -58,7 +58,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
 
         self.assertEqual(1, len(result.statements))
         self.assertEqual("TRUE", result.statements[0].condition)
-        self.assertEqual("", result.statements[0].statement.strip())
+        self.assertEqual("", result.statements[0].consequent)
 
     def test_compact_block(self):
         content = "if(TRUE){}"
@@ -66,7 +66,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
 
         self.assertEqual(1, len(result.statements))
         self.assertEqual("TRUE", result.statements[0].condition)
-        self.assertEqual("", result.statements[0].statement)
+        self.assertEqual("", result.statements[0].consequent)
 
     def test_multiple_if_statements(self):
         content = """
@@ -81,13 +81,13 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual(3, len(result.statements))
 
         self.assertEqual("cond1", result.statements[0].condition)
-        self.assertEqual('display("one")', result.statements[0].statement)
+        self.assertEqual('display("one")', result.statements[0].consequent)
 
         self.assertEqual("cond2", result.statements[1].condition)
-        self.assertEqual('display("two");', result.statements[1].statement)
+        self.assertEqual('display("two");', result.statements[1].consequent)
 
         self.assertEqual("cond3", result.statements[2].condition)
-        self.assertEqual('display("three")', result.statements[2].statement)
+        self.assertEqual('display("three")', result.statements[2].consequent)
 
     def test_nested_if_statements(self):
         content = """
@@ -102,15 +102,17 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual(3, len(result.statements))
 
         self.assertEqual("outer", result.statements[0].condition)
-        self.assertIn("if(inner1)", result.statements[0].statement)
-        self.assertIn("if(inner2)", result.statements[0].statement)
+        self.assertIn("if(inner1)", result.statements[0].consequent)
+        self.assertIn("if(inner2)", result.statements[0].consequent)
 
         self.assertEqual("inner1", result.statements[1].condition)
-        self.assertIn('display("nested block")', result.statements[1].statement)
+        self.assertIn(
+            'display("nested block")', result.statements[1].consequent
+        )
 
         self.assertEqual("inner2", result.statements[2].condition)
         self.assertEqual(
-            'display("nested inline")', result.statements[2].statement
+            'display("nested inline")', result.statements[2].consequent
         )
 
     def test_complex_condition(self):
@@ -123,7 +125,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual(
             'a == 1 && b > 2 || c != "string"', result.statements[0].condition
         )
-        self.assertEqual('display("complex");', result.statements[0].statement)
+        self.assertEqual('display("complex");', result.statements[0].consequent)
 
     def test_if_with_problematic_stuff(self):
         # escape single quote and backslash, function call in condition
@@ -132,23 +134,23 @@ class FindIfStatementsTestCase(unittest.TestCase):
 
         self.assertEqual(1, len(result.statements))
         self.assertEqual(r"some_func('\'\\')", result.statements[0].condition)
-        self.assertEqual(r"display('\'test\\')", result.statements[0].statement)
+        self.assertEqual(
+            r"display('\'test\\')", result.statements[0].consequent
+        )
 
     def test_unclosed_parenthesis(self):
         content = "if(unclosed condition\ndisplay();"
         result = find_if_statements(content)
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
-        self.assertEqual(
-            result.errors[0].error_type.name, "UNCLOSED_IF_CONDITION"
-        )
+        self.assertEqual(result.errors[0].error_type.name, "UNCLOSED_CONDITION")
 
     def test_no_statement_after_condition(self):
         content = "if(condition)"
         result = find_if_statements(content)
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
-        self.assertEqual(result.errors[0].error_type.name, "MISSING_IF_BODY")
+        self.assertEqual(result.errors[0].error_type.name, "MISSING_CONSEQUENT")
 
     def test_useless_semicolon(self):
         content = "if(condition);"
@@ -156,7 +158,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
         self.assertEqual(
-            result.errors[0].error_type.name, "IF_TERMINATED_AFTER_CONDITION"
+            result.errors[0].error_type.name, "TERMINATED_AFTER_CONDITION"
         )
 
     def test_unclosed_block_brace(self):
@@ -164,25 +166,21 @@ class FindIfStatementsTestCase(unittest.TestCase):
         result = find_if_statements(content)
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
-        self.assertEqual(result.errors[0].error_type.name, "UNCLOSED_IF_BODY")
+        self.assertEqual(result.errors[0].error_type.name, "UNCLOSED_BODY")
 
     def test_no_semicolon_in_single_expression(self):
         content = "if(condition) display()"  # Missing semicolon
         result = find_if_statements(content)
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
-        self.assertEqual(
-            result.errors[0].error_type.name, "MISSING_IF_EXPRESSION"
-        )
+        self.assertEqual(result.errors[0].error_type.name, "MISSING_STATEMENT")
 
     def test_complex_condition_with_unmatched_brace(self):
         content = "if(func(1, 2) || check(a) { display(); }"  # Missing closing ) in condition
         result = find_if_statements(content)
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
-        self.assertEqual(
-            result.errors[0].error_type.name, "UNCLOSED_IF_CONDITION"
-        )
+        self.assertEqual(result.errors[0].error_type.name, "UNCLOSED_CONDITION")
 
     def test_position_info_in_error_message(self):
         content = "# Some comment\nif(bad) something"  # No semicolon
@@ -199,9 +197,9 @@ class FindIfStatementsTestCase(unittest.TestCase):
         # Check condition position (inside parentheses)
         self.assertEqual(3, result.statements[0].condition_start)
         self.assertEqual(7, result.statements[0].condition_end)
-        # Check statement position (inside braces)
-        self.assertEqual(10, result.statements[0].statement_start)
-        self.assertEqual(31, result.statements[0].statement_end)
+        # Check consequent position (inside braces)
+        self.assertEqual(10, result.statements[0].consequent_start)
+        self.assertEqual(31, result.statements[0].consequent_end)
 
     def test_condition_and_statement_positions_single(self):
         content = 'if(num > 5) display("inline");'
@@ -211,9 +209,9 @@ class FindIfStatementsTestCase(unittest.TestCase):
         # Check condition position (inside parentheses)
         self.assertEqual(3, result.statements[0].condition_start)
         self.assertEqual(10, result.statements[0].condition_end)
-        # Check statement position (after parenthesis to semicolon)
-        self.assertEqual(12, result.statements[0].statement_start)
-        self.assertEqual(29, result.statements[0].statement_end)
+        # Check consequent position (after parenthesis to semicolon)
+        self.assertEqual(12, result.statements[0].consequent_start)
+        self.assertEqual(29, result.statements[0].consequent_end)
 
     def test_mixed_valid_and_invalid_if_statements(self):
         content = """
@@ -231,11 +229,11 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertEqual(2, len(result.errors))
         self.assertEqual("a > 0", result.statements[0].condition)
         self.assertEqual(
-            IfErrorType.IF_TERMINATED_AFTER_CONDITION,
+            IfErrorType.TERMINATED_AFTER_CONDITION,
             result.errors[0].error_type,
         )
         self.assertEqual(
-            IfErrorType.UNCLOSED_IF_CONDITION, result.errors[1].error_type
+            IfErrorType.UNCLOSED_CONDITION, result.errors[1].error_type
         )
 
     def test_multiple_nested_inline_if_statements(self):
@@ -252,8 +250,8 @@ if(a > 0)
         # Should parse 3 nested if statements
         self.assertEqual(3, len(result.statements))
         self.assertEqual("a > 0", result.statements[0].condition)
-        self.assertIn("if(b > 0)", result.statements[0].statement)
+        self.assertIn("if(b > 0)", result.statements[0].consequent)
         self.assertEqual("b > 0", result.statements[1].condition)
-        self.assertIn("if(c > 0)", result.statements[1].statement)
+        self.assertIn("if(c > 0)", result.statements[1].consequent)
         self.assertEqual("c > 0", result.statements[2].condition)
-        self.assertEqual('display("deep")', result.statements[2].statement)
+        self.assertEqual('display("deep")', result.statements[2].consequent)
