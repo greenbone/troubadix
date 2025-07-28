@@ -34,9 +34,8 @@ class CheckIfStatementSyntax(FileContentPlugin):
 
         result = find_if_statements(comment_free_content)
         for error in result.errors:
-            message = error.error_type.value.format(line=error.line)
             yield LinterError(
-                message,
+                error.error_type.value.format(line=error.line),
                 file=nasl_file,
                 plugin=self.name,
             )
