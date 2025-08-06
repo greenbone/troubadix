@@ -169,6 +169,9 @@ class CheckHttpLinksInTags(FilePlugin):
             "https://username:password@proxy:8080",
             "sun.net.www.http.KeepAliveCache",
             "www.foo.com",
+            # e.g.:
+            # sun.net.www.protocol.jar.JarURLConnection
+            "sun.net.www.",
         ]
 
         return any(
