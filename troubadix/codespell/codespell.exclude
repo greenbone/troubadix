@@ -250,6 +250,7 @@ complete_xml = string (complete_xml, '<oval_system_characteristics xmlns="http:/
   Connection, Expect, If-Match, If-None-Match, If-Range, If-Unmodified-Since, Max-Forwards, TE,
   "Connection: TE, close\r\n",
                   "Connection: TE,,Keep-Alive\r\n\r\n" );
+    ('content="Xenon Boostrap Admin Panel"' >< res || '<body class="cui">' >< res)) {
   control of Cisco Nexus 9000 Series Fabric Switches in Application Centric Infrastructure (ACI)
 # Copyright (c) 2008 Tim Brown
 # Copyright (C) 2008 Tim Brown
@@ -347,6 +348,7 @@ CVE-2020-5208: Fixed multiple remote code executtion vulnerabilities
 CVE-2020-8492: Fixed a regular expression in urrlib that was prone to
 CVE-2021-30004: Fixed an issue where forging attacks might have occured
   * CVE-2021-47311: net: qcom/emac: fix UAF in emac_remove (bsc#1225010).
+  - CVE-2025-3200: Multiple products from Wiesemann & Theis");
 dass eine geeignete Windows 8.1 Version, vorzugsweise eine 64-Bit Variante, eingesetzt werden muss.");
 "DataArchivingService/webcontent/aas",
   "/DataArchivingService/webcontent/aas/aas_store.jsp");
@@ -437,6 +439,7 @@ Federico Manuel Bento discovered that the Linux kernel did not properly
 # Fedora Update for tre FEDORA-2016-cd09eab674
 Festplatten- und Dateiverschluesselung eingesetzt werden. Alternativ SOLLTE 'dm-crypt' in
 files. If a user were tricked into opening a specially-crafted CAF file, a
+  files packed with UPack.
   files to potentially execute code and it is tracked by the Mitre CVE
   file_xml = '\t\t<file_item' + status + ' xmlns="http://oval.mitre.org/XMLSchema/' +
 Fixed a bug where Podman could not run containers usin... [Please see the references for more information on the vulnerabilities]");
@@ -507,7 +510,8 @@ Helin, Andre Bargull, Massimiliano Tomassoli, laf.intel, Massimiliano
   hello_data += clen + _ciphers;
 "H", "HSI",
   - HP Helion Eucalyptus does not correctly check IAM user's permissions for accessing versioned objects and ACLs.
-    hp_printer['login_success'] = '<?hp te.includeSubPage';
+    hp_printer["login_success"] = "<?hp te\.includeSubPage";
+    # <?hp te.includeSubPage("/webApps/Wired/ip4.htf") ?>
 </HSI>
 <HSI>
 # <HTML>Acess not granted.</HTML>
@@ -532,6 +536,7 @@ if (!banner || banner !~ "^(RICOH|LANIER|SAVIN|Gestetner|NRG) ")
 if(!banner = get_kb_item("shttp/" + port + "/banner"))
 if (banner =~ "Huawei TE[0-9]0") {
 if( banner =~ "(MD|BU)-" ) {
+if( banner !~ "Server\s*:\s*Boa" || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|POE)-") )
   if( ( buf =~ "<title>GLPI - Authentification" || buf =~ "<title>GLPI - Authentication" ) && ( buf =~ "Powered By Indepnet" ||
 if( "CONEXANT SYSTEMS, INC." >< r &&
 if( "CONEXANT SYSTEMS, INC" >< r && "ACCESS RUNNER ADSL CONSOLE PORT" >< r && "LOGON PASSWORD" >< r ) {
@@ -591,7 +596,6 @@ if ((res = ispkgvuln(pkg:"app-admin/lsat", unaffected: make_list(), vulnerable: 
 if(res =~ "<span>[Ss]arix&[Tt]rade;</span>" && res =~ "<span>Copyright\s*&copy;\s*[0-9]+-[0-9]+,\s*[Pp][Ee][Ll][Cc][Oo]\s*&middot;"
 if (res =~ "[Ss]creen[Cc]onnect" &&
 if( res && "WAN SETTINGS" >< res && "value='3G Interface" >< res && "menu.html" >< res &&
-if( "Server: Boa" >!< banner || ( "AirLive" >!< banner && banner !~ "(WL|MD|BU|POE)-") )
   if( strlen( data ) < 8 || data !~ "^(DELETE|PROPFIND|PUT|GET|HEAD|POST|OPTIONS|REPORT|MKCOL|MOVE|PROPPATCH|COPY|PATCH|CONNECT|TRACE|LOCK|UNLOCK|TRACK|M-POST|CHECKOUT|CHECKIN|UNCHECKOUT|VERSION-CONTROL|BASELINE-CONTROL).*HTTP/(1\.[01]|2)" ) {
   if(strlen(res) && "nonexistant" >< res && "XJ004CSS" >< res) {
   if( sysdesc =~ "^(RICOH|LANIER|SAVIN|NRG)" && sysdesc =~ "(RICOH|LANIER|SAVIN|NRG) Network Printer" ) {
@@ -610,6 +614,7 @@ ii  libapt-pkg4.12:amd64  0.9.7.5ubuntu5.6  amd64  package managment runtime lib
 ii  libapt-pkg4.12:amd64  0.9.7.7ubuntu6  amd64  package managment runtime library
 ii  libapt-pkg4.12:amd64  0.9.7.9+deb7u7  amd64  package managment runtime library
 ii  libapt-pkg4.12:amd64  0.9.9.1~ubuntu3.3  amd64  package managment runtime library
+ii  unminimize  0.2.1  amd64  Un-minimize your minimial images or setup
  image. This occured because of a lack of proper validation that cached
   Imaging and Communications in Medicine (DICOM) service accessible from a public WAN (Internet) /
   Imaging and Communications in Medicine (DICOM) web viewer accessible from a public WAN (Internet)
@@ -728,6 +733,8 @@ mark_dead = script_get_preference( "Mark unrechable Hosts as dead (not scanning)
 Mark Shepard discovered a double free in the TCP listener cleanup which could result in denial of service by an authenticated user if Dropbear is running with the '-a' option.
   masked. All LSAT users are advised to unmerge it.
   "Max-Forwards", "TE" ) ) {
+                      "/mdm/checkin",
+  /mdm/checkin and /lshw endpoints.");
      "Memorise" >< poshRes)
  memory disclosure whne processing of a specially crafted mp4 file with
 # Mesosphere Marathon Web UI Public WAN (Internet) Accessible
@@ -886,6 +893,7 @@ reenable php7-dba support of Berkeley DB (bsc#1108554)");
     reg_xml = '\t\t<registry_item' + status + ' xmlns="http://oval.mitre.org/' +
 Reject invalid eliptic curve point coordinates (bsc#1131291)");
  rejection for EXTRAVERSION = -xfs, but likely little else will be
+  remote attackers to execute arbitrary code via a crafted Upack PE file.
   - Remote Command Execution via WAN and LAN
   - Remote Unauthenticated Information Disclosure via WAN and LAN
 	Remove all mitre.org links from the script descriptions as
@@ -1546,6 +1554,7 @@ Wan-Teh Chang as the original reporters of CVE-2013-5607.
   web-based interface for Cisco Small Business RV320 and RV325 Dual Gigabit WAN VPN Routers could
   webcontent/aas/aas_store.jsp.");
   * Webdienst Assoziation
+"webdynpro/resources/sap.com/caf~eu~gp~mail~cf~ui",
 Wen Guanxing discovered that PCRE incorrectly handled certain regular
 Wen Xu and Po-Ning Tseng discovered that btrfs file system implementation
 Wen Xu and Po-Ning Tseng discovered that the btrfs filesystem
