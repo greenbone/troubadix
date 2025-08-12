@@ -36,7 +36,7 @@ class CheckEncoding(FilePlugin):
 
         if detected_encoding not in ALLOWED_ENCODINGS:
             yield LinterError(
-                f"Detected encoding '{detected_encoding.upper()}' is not Latin1-compatible.",
+                f"Detected encoding '{detected_encoding.upper()}' is not Latin-1 compatible.",
                 file=self.context.nasl_file,
                 plugin=self.name,
             )

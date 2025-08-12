@@ -98,7 +98,7 @@ class CheckEncodingTestCase(PluginTestCase):
             self.assertEqual(len(results), 2)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "Detected encoding 'UTF-8' is not Latin1-compatible.",
+                "Detected encoding 'UTF-8' is not Latin-1 compatible.",
                 results[0].message,
             )
             self.assertIsInstance(results[1], LinterError)
@@ -128,7 +128,7 @@ class CheckEncodingTestCase(PluginTestCase):
 
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "Detected encoding 'UTF-8' is not Latin1-compatible.",
+                "Detected encoding 'UTF-8' is not Latin-1 compatible.",
                 results[0].message,
             )
             self.assertIsInstance(results[1], LinterError)
@@ -157,7 +157,7 @@ class CheckEncodingTestCase(PluginTestCase):
             self.assertEqual(len(results), 2)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "Detected encoding 'UTF-8' is not Latin1-compatible.",
+                "Detected encoding 'UTF-8' is not Latin-1 compatible.",
                 results[0].message,
             )
             self.assertIsInstance(results[1], LinterError)
