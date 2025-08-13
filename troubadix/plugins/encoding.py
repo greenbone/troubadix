@@ -1,54 +1,62 @@
 # Copyright (C) 2022 Greenbone AG
+#
 # SPDX-License-Identifier: GPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Iterator
+import re
+from pathlib import Path
+from typing import Iterable, Iterator
 
-import magic
+import charset_normalizer
 
-from troubadix.plugin import (
-    FilePlugin,
-    LinterError,
-    LinterResult,
-)
+from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
-ALLOWED_ENCODINGS = ["iso-8859-1", "us-ascii"]
+# Only the ASCII and extended ASCII for now... # https://www.ascii-code.com/
+# CHAR_SET = r"[^\x00-\xFF]"
+# Temporary only check for chars in between 7f-9f, like in the old Feed-QA...
+INVALID_CHAR_PATTERN = re.compile(r"[\x7F-\x9F]")
+
+ALLOWED_ENCODINGS = ["ascii", "latin_1"]
 
 
-class CheckEncoding(FilePlugin):
+class CheckEncoding(LineContentPlugin):
     name = "check_encoding"
 
-    def run(self) -> Iterator[LinterResult]:
-        with open(self.context.nasl_file, "rb") as f:
-            raw = f.read()
+    def check_lines(
+        self,
+        nasl_file: Path,
+        lines: Iterable[str],
+    ) -> Iterator[LinterResult]:
+        match = charset_normalizer.from_path(
+            nasl_file, threshold=0.4, cp_isolation=ALLOWED_ENCODINGS
+        ).best()
 
-        # Use magic to detect encoding
-        m = magic.Magic(mime_encoding=True)
-        detected_encoding = m.from_buffer(raw)
-
-        if detected_encoding not in ALLOWED_ENCODINGS:
+        if not match:
             yield LinterError(
-                f"File encoding detected as '{detected_encoding}' (not Latin1-compatible).",
-                file=self.context.nasl_file,
+                f"VT uses a wrong encoding. "
+                f"Allowed encodings are {', '.join(ALLOWED_ENCODINGS)}.",
+                file=nasl_file,
                 plugin=self.name,
             )
 
-        # Function to detect UTF-8 multibyte sequences
-        def has_utf8_multibyte(data: bytes) -> bool:
-            i = 0
-            while i < len(data) - 1:
-                first = data[i]
-                second = data[i + 1]
-                if 0xC2 <= first <= 0xF4 and 0x80 <= second <= 0xBF:
-                    return True
-                i += 1
-            return False
-
-        lines = raw.split(b"\n")
-        for i, line_bytes in enumerate(lines, start=1):
-            if has_utf8_multibyte(line_bytes):
+        for index, line in enumerate(lines, 1):
+            encoding = INVALID_CHAR_PATTERN.search(line)
+            if encoding:
                 yield LinterError(
-                    f"Likely UTF-8 multibyte sequence found in line {i}",
-                    file=self.context.nasl_file,
+                    f"Found invalid character in line: {index}",
+                    file=nasl_file,
                     plugin=self.name,
-                    line=i,
+                    line=index,
                 )
