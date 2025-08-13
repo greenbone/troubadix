@@ -32,7 +32,8 @@ class CheckEncoding(FilePlugin):
             raw = f.read()
 
         # Use magic to detect encoding
-        detected_encoding = magic.Magic(mime_encoding=True).from_buffer(raw)
+        m = magic.Magic(mime_encoding=True)
+        detected_encoding = m.from_buffer(raw)
 
         if detected_encoding not in ALLOWED_ENCODINGS:
             yield LinterError(
