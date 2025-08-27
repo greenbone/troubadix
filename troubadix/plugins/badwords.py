@@ -96,6 +96,10 @@ EXCEPTIONS = [
     "firecracker",  # Valid package name on e.g. Fedora
     "Firecracker",  # Valid package name on e.g. Fedora
     "pcp-pmda-nutcracker",  # Valid package name on e.g. openSUSE or Arch Linux
+    # We should generally exclude http:// and https:// URLs as these are
+    # immutable and shouldn't be changed / require separate exclusions for each
+    "https://",
+    "http://",
 ]
 
 STARTS_WITH_EXCEPTIONS = [
