@@ -28,13 +28,13 @@ from . import PluginTestCase
 
 WRONG_TEXTS = [
     "# Text descriptions are largely excerpted from the referenced\n"
-    "# advisory, and are Copyright (C) the respective author(s)\n",
+    + "# advisory, and are Copyright (C) the respective author(s)\n",
     "# Text descriptions are largely excerpted from the referenced\n"
-    "# advisory, and are Copyright (C) the respective author(s)\n",
+    + "# advisory, and are Copyright (C) the respective author(s)\n",
     "# Text descriptions are largely excerpted from the referenced\n"
-    "# advisory, and are Copyright (C) the respective author(s)\n",
+    + "# advisory, and are Copyright (C) the respective author(s)\n",
     "# Some text descriptions might be excerpted from the referenced\n"
-    "# advisories, and are Copyright (C) by the respective right holder(s)\n",
+    + "# advisories, and are Copyright (C) by the respective right holder(s)\n",
 ]
 
 
