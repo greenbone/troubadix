@@ -67,7 +67,10 @@ class TestBadwords(PluginTestCase):
 
     def test_exception_ok(self):
         path = Path("some/include.inc")
-        content = '# HostDetails/NVT                 => "1.2.3.4"'
+        content = (
+            '# HostDetails/NVT                 => "1.2.3.4"\n'
+            "https://www.invt.com/software-download\n"
+        )
 
         fake_context = self.create_file_plugin_context(
             nasl_file=path, lines=content.splitlines()
