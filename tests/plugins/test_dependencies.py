@@ -93,16 +93,16 @@ class CheckDependenciesTestCase(PluginTestCase):
             results[0].message,
         )
 
-    def test_enterprise_dependency(self):
+    def test_gsf_dependency(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "enterprise" / "example.inc"
+            example = tmpdir / "common" / "gsf" / "example.inc"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("enterprise/example.inc");\n'
+                '  script_dependencies("gsf/example.inc");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
