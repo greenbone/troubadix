@@ -31,6 +31,10 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             '  script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
             'requests and checks the responses.");\n'
+            '  script_tag(name:"insight", value:"Determine which file systems '
+            "do not need to be supported based on the actual scenario and "
+            "disable mounting for these file systems through "
+            'configuration.");\n'
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
