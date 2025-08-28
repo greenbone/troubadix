@@ -53,13 +53,13 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_dependency_existing(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "example.inc"
+            example = tmpdir / "common" / "example.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("example.inc");\n'
+                '  script_dependencies("example.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -71,7 +71,7 @@ class CheckDependenciesTestCase(PluginTestCase):
             self.assertEqual(len(results), 0)
 
     def test_dependency_missing(self):
-        dependency = "example2.inc"
+        dependency = "example2.nasl"
         path = here / "file.nasl"
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
@@ -96,13 +96,13 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_gsf_dependency(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "gsf" / "example.inc"
+            example = tmpdir / "common" / "gsf" / "example.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("gsf/example.inc");\n'
+                '  script_dependencies("gsf/example.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -116,13 +116,13 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_policy_warning(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "Policy" / "example.inc"
+            example = tmpdir / "common" / "Policy" / "example.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("Policy/example.inc");\n'
+                '  script_dependencies("Policy/example.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -135,7 +135,7 @@ class CheckDependenciesTestCase(PluginTestCase):
 
             self.assertIsInstance(results[0], LinterWarning)
             self.assertEqual(
-                "The script dependency Policy/example.inc is in a "
+                "The script dependency Policy/example.nasl is in a "
                 "subdirectory, which might be misplaced.",
                 results[0].message,
             )
@@ -143,13 +143,13 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_error(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "foo" / "example.inc"
+            example = tmpdir / "common" / "foo" / "example.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("foo/example.inc");\n'
+                '  script_dependencies("foo/example.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -162,7 +162,7 @@ class CheckDependenciesTestCase(PluginTestCase):
 
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "The script dependency foo/example.inc is within a "
+                "The script dependency foo/example.nasl is within a "
                 "subdirectory, which is not allowed.",
                 results[0].message,
             )
@@ -170,13 +170,13 @@ class CheckDependenciesTestCase(PluginTestCase):
     def test_dependency_missing_newline(self):
         with self.create_directory() as tmpdir:
             path = tmpdir / "file.nasl"
-            example = tmpdir / "common" / "example.inc"
+            example = tmpdir / "common" / "example.nasl"
             example.parent.mkdir(parents=True)
             example.touch()
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("example.inc", \n"example2.inc");\n'
+                '  script_dependencies("example.nasl", \n"example2.nasl");\n'
             )
             fake_context = self.create_file_plugin_context(
                 nasl_file=path, file_content=content, root=tmpdir
@@ -188,7 +188,7 @@ class CheckDependenciesTestCase(PluginTestCase):
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "The script dependency example2.inc could "
+                "The script dependency example2.nasl could "
                 "not be found within the VTs.",
                 results[0].message,
             )

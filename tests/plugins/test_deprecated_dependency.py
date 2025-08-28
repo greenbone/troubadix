@@ -29,7 +29,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.tempdir = TemporaryDirectory()
         self.dir = Path(self.tempdir) / "foo"
         self.dir.mkdir(parents=True)
-        self.dep = self.dir / "example.inc"
+        self.dep = self.dir / "example.nasl"
         self.dep.write_text(
             "  script_category(ACT_ATTACK);\n  exit(66);",
             encoding=CURRENT_ENCODING,
@@ -116,12 +116,12 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_dependency_missing(self):
-        dependency = "example2.inc"
+        dependency = "example2.nasl"
         path = self.dir / "file.nasl"
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar...");\n'
-            '  script_dependencies("example2.inc");\n'
+            '  script_dependencies("example2.nasl");\n'
             "  script_category(ACT_SCANNER);\n"
         )
 
@@ -145,7 +145,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar...");\n'
-            '  script_dependencies("example.inc");\n'
+            '  script_dependencies("example.nasl");\n'
             "  script_category(ACT_SCANNER);\n"
         )
 
@@ -159,6 +159,6 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT depends on example.inc, which is marked as deprecated.",
+            "VT depends on example.nasl, which is marked as deprecated.",
             results[0].message,
         )
