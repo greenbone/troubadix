@@ -31,7 +31,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.tempdir = TemporaryDirectory()
         self.dir = Path(self.tempdir) / "foo"
         self.dir.mkdir(parents=True)
-        self.dep = self.dir / "example.inc"
+        self.dep = self.dir / "example.nasl"
         self.dep.write_text(
             "  script_category(ACT_ATTACK);", encoding=CURRENT_ENCODING
         )
@@ -74,12 +74,12 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_dependency_missing(self):
-        dependency = "example2.inc"
+        dependency = "example2.nasl"
         path = self.dir / "file.nasl"
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar...");\n'
-            '  script_dependencies("example2.inc");\n'
+            '  script_dependencies("example2.nasl");\n'
             "  script_category(ACT_SCANNER);\n"
         )
         fake_context = self.create_file_plugin_context(
@@ -102,7 +102,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar...");\n'
-            '  script_dependencies("example.inc");\n'
+            '  script_dependencies("example.nasl");\n'
             "  script_category(ACT_SCANNER);\n"
         )
         fake_context = self.create_file_plugin_context(
@@ -116,12 +116,12 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "Script category ACT_SCANNER(1) is lower than the category "
-            "ACT_ATTACK(4) of the dependency example.inc.",
+            "ACT_ATTACK(4) of the dependency example.nasl.",
             results[0].message,
         )
 
     def test_category_missing(self):
-        dependency = "example.inc"
+        dependency = "example.nasl"
         path = self.dir / "file.nasl"
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
@@ -147,7 +147,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar...");\n'
-            '  script_dependencies("example.inc");\n'
+            '  script_dependencies("example.nasl");\n'
             "  script_category(ACT_FOO);\n"
         )
         fake_context = self.create_file_plugin_context(

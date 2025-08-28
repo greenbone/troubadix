@@ -96,7 +96,7 @@ class CheckVTPlacementTestCase(PluginTestCase):
             content = (
                 '  script_tag(name:"cvss_base", value:"4.0");\n'
                 '  script_tag(name:"summary", value:"Foo Bar...");\n'
-                '  script_dependencies("example.inc");\n'
+                '  script_dependencies("example.nasl");\n'
             )
 
             fake_context = self.create_file_plugin_context(
