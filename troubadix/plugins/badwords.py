@@ -86,7 +86,7 @@ EXCEPTIONS = [
     "/var/lib/openvas/plugins/",
     "INVT ",  # INVT Electric VT Designer
     "invt_",  # cpe:/a:invt_electric
-    "cpe:/a:invt:", # cpe:/a:invt:vt-designer
+    "cpe:/a:invt:",  # cpe:/a:invt:vt-designer
     "HostDetails/NVT",  # Can't be changed right now...
     ", nvt:",  # Can't be changed right now...
     "Hu1nvt5qm",  # Part of a bigger blob
