@@ -37,7 +37,36 @@ class DeprecatedFile:
 KB_ITEMS_PATTERN = re.compile(r"set_kb_item\(.+\);")
 
 
-def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
+def load_oid_mapping(mapping_file: Path) -> dict[str, str]:
+    """Load file -> replacement OID mapping from a file.
+
+    Args:
+        mapping_file: Path to the mapping file with format "file_path:replacement_oid" per line
+
+    Returns:
+        Dictionary mapping file paths to replacement OIDs
+    """
+    mapping = {}
+    try:
+        with mapping_file.open("r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and ":" in line:
+                    file_path, oid = line.split(":", 1)
+                    mapping[file_path.strip()] = oid.strip()
+    except FileNotFoundError:
+        print(f"Warning: Mapping file {mapping_file} not found.")
+    except Exception as e:
+        print(f"Warning: Error reading mapping file {mapping_file}: {e}")
+
+    return mapping
+
+
+def update_summary(
+    file: DeprecatedFile,
+    deprecation_reason: str,
+    replacement_oid: Optional[str] = None,
+) -> str:
     """Update the summary of the nasl script by adding the information
     that the script has been deprecated, and if possible, the oid of
     the new notus script replacing it.
@@ -46,6 +75,7 @@ def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
         file: DeprecatedFile object containing the content of the VT
         deprecation_reason: The reason this VT is being deprecated,
             from a list of options.
+        replacement_oid: The OID of the script that replaces this deprecated one.
 
     Returns:
         The updated content of the file
@@ -55,10 +85,10 @@ def update_summary(file: DeprecatedFile, deprecation_reason: str) -> str:
         print(f"No summary in: {file.name}")
         return file.content
 
-    deprecate_text = (
-        f"Note: This VT has been deprecated "
-        f"{Deprecations[deprecation_reason].value}"
-    )
+    deprecate_text = f"Note: This VT has been deprecated {Deprecations[deprecation_reason].value}"
+
+    if replacement_oid:
+        deprecate_text += f" The replacement VT has OID {replacement_oid}."
 
     new_summary = old_summary + "\n" + deprecate_text
     file.content = file.content.replace(old_summary, new_summary)
@@ -71,8 +101,7 @@ def _finalize_content(content: str) -> str:
     deprecated tag and removing the extra content."""
     content_to_keep = content.split("exit(0);")[0]
     return content_to_keep + (
-        'script_tag(name:"deprecated", value:TRUE);'
-        "\n\n  exit(0);\n}\n\nexit(66);\n"
+        'script_tag(name:"deprecated", value:TRUE);\n\n  exit(0);\n}\n\nexit(66);\n'
     )
 
 
@@ -124,6 +153,7 @@ def deprecate(
     output_path: Path,
     to_deprecate: list[DeprecatedFile],
     deprecation_reason: str,
+    oid_mapping: Optional[dict[str, str]] = None,
 ) -> None:
     """Deprecate the selected VTs by removing unnecessary keys, updating the
     summary, and adding the deprecated tag.
@@ -134,16 +164,23 @@ def deprecate(
         to_deprecate: the list of files to be deprecated
         deprecation_reason: The reason this VT is being deprecated,
         from a list of options.
+        oid_mapping: Optional mapping of file paths to replacement OIDs
     """
     output_path.mkdir(parents=True, exist_ok=True)
     for file in to_deprecate:
         if re.findall(KB_ITEMS_PATTERN, file.content):
             print(
-                f"Unable to deprecate {file.name}. There are still KB keys "
-                f"remaining."
+                f"Unable to deprecate {file.name}. There are still KB keys remaining."
             )
             continue
-        file.content = update_summary(file, deprecation_reason)
+
+        # Get replacement OID if available
+        replacement_oid = None
+        if oid_mapping:
+            file_path_str = str(file.full_path)
+            replacement_oid = oid_mapping.get(file_path_str)
+
+        file.content = update_summary(file, deprecation_reason, replacement_oid)
         file.content = _finalize_content(file.content)
 
         # Drop any unnecessary script tags like script_dependencies(),
@@ -229,6 +266,16 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
             "to be deprecated, separated by new lines."
         ),
     )
+    parser.add_argument(
+        "--mapping-file",
+        metavar="<mapping_file>",
+        default=None,
+        type=file_type_existing,
+        help=(
+            "Path to a file containing file -> replacement OID mappings, "
+            "one per line in format: file_path:replacement_oid"
+        ),
+    )
     return parser.parse_args(args)
 
 
@@ -245,8 +292,15 @@ def main():
     elif args.file:
         files = args.file
 
+    # Load OID mapping if provided
+    oid_mapping = None
+    if args.mapping_file:
+        oid_mapping = load_oid_mapping(Path(args.mapping_file))
+
     to_be_deprecated = parse_files(files)
-    deprecate(args.output_path, to_be_deprecated, args.deprecation_reason)
+    deprecate(
+        args.output_path, to_be_deprecated, args.deprecation_reason, oid_mapping
+    )
 
 
 if __name__ == "__main__":
