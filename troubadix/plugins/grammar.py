@@ -110,6 +110,8 @@ exceptions = [
     # The default has been changed to prompt the user each time a website
     # requests a client certificate.
     TextCheck("a website requests a client certificate"),
+    # This is actually a given name
+    TextCheck("and Or Cohen"),
 ]
 
 
