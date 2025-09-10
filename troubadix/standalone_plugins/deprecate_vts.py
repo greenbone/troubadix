@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 
+import importlib
 import re
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass
@@ -37,29 +38,14 @@ class DeprecatedFile:
 KB_ITEMS_PATTERN = re.compile(r"set_kb_item\(.+\);")
 
 
-def load_oid_mapping(mapping_file: Path) -> dict[str, str]:
-    """Load file -> replacement OID mapping from a file.
+def load_transition_oid_mapping(transition_file: Path) -> dict[str, str]:
+    spec = importlib.util.spec_from_file_location(
+        "transition_layer", transition_file
+    )
+    transition_layer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(transition_layer)
 
-    Args:
-        mapping_file: Path to the mapping file with format "file_path:replacement_oid" per line
-
-    Returns:
-        Dictionary mapping file paths to replacement OIDs
-    """
-    mapping = {}
-    try:
-        with mapping_file.open("r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and ":" in line:
-                    file_path, oid = line.split(":", 1)
-                    mapping[file_path.strip()] = oid.strip()
-    except FileNotFoundError:
-        print(f"Warning: Mapping file {mapping_file} not found.")
-    except Exception as e:
-        print(f"Warning: Error reading mapping file {mapping_file}: {e}")
-
-    return mapping
+    return transition_layer.mapping
 
 
 def update_summary(
@@ -177,8 +163,20 @@ def deprecate(
         # Get replacement OID if available
         replacement_oid = None
         if oid_mapping:
-            file_path_str = str(file.full_path)
-            replacement_oid = oid_mapping.get(file_path_str)
+            oid_match = re.search(
+                get_special_script_tag_pattern(SpecialScriptTag.OID),
+                file.content,
+            )
+            if not oid_match:
+                raise ValueError(
+                    f"No OID found in {file.name}. Cannot map to replacement OID."
+                )
+            oid = oid_match.group("value")
+            replacement_oid = oid_mapping.get(oid)
+            if not replacement_oid:
+                raise ValueError(
+                    f"No replacement OID found for {oid} in {file.name}."
+                )
 
         file.content = update_summary(file, deprecation_reason, replacement_oid)
         file.content = _finalize_content(file.content)
@@ -266,14 +264,15 @@ def parse_args(args: Iterable[str] = None) -> Namespace:
             "to be deprecated, separated by new lines."
         ),
     )
+
     parser.add_argument(
-        "--mapping-file",
-        metavar="<mapping_file>",
+        "--transition-file",
+        metavar="<transition_file>",
         default=None,
         type=file_type_existing,
         help=(
-            "Path to a file containing file -> replacement OID mappings, "
-            "one per line in format: file_path:replacement_oid"
+            "Path to a file containing a list of oid mappings."
+            "Found in notus/generator/nasl/transition_layer."
         ),
     )
     return parser.parse_args(args)
@@ -294,8 +293,8 @@ def main():
 
     # Load OID mapping if provided
     oid_mapping = None
-    if args.mapping_file:
-        oid_mapping = load_oid_mapping(Path(args.mapping_file))
+    if args.transition_file:
+        oid_mapping = load_transition_oid_mapping(args.transition_file)
 
     to_be_deprecated = parse_files(files)
     deprecate(
