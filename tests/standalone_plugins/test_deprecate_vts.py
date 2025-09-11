@@ -12,6 +12,7 @@ from troubadix.standalone_plugins.deprecate_vts import (
     _get_summary,
     deprecate,
     get_files_from_path,
+    load_transition_oid_mapping,
     parse_args,
     parse_files,
     update_summary,
@@ -156,6 +157,56 @@ class DeprecateVTsTestCase(unittest.TestCase):
                 "Note: This VT has been deprecated and replaced by "
                 "a Notus scanner based one."
             ) in result
+
+    def test_deprecate_with_oid_mapping(self):
+        with TemporaryDirectory() as out_dir, TemporaryDirectory() as in_dir:
+            # Create a temporary transition file with OID mapping
+            transition_file = in_dir / "transition.py"
+            transition_file.write_text(
+                'mapping = {"1.3.6.1.4.1.25623.1.0.910673": "1.3.6.1.4.1.25623.1.0.999999"}',
+                encoding="utf8",
+            )
+
+            # Load the OID mapping
+            oid_mapping = load_transition_oid_mapping(transition_file)
+
+            testfile1 = in_dir / "testfile1.nasl"
+            testfile1.write_text(NASL_CONTENT, encoding="utf8")
+
+            testfile2 = out_dir / "testfile1.nasl"
+            testfile2.touch()
+
+            to_deprecate = [
+                DeprecatedFile(
+                    name="testfile1.nasl",
+                    full_path=testfile1,
+                    content=NASL_CONTENT,
+                )
+            ]
+            deprecate(out_dir, to_deprecate, "NOTUS", oid_mapping)
+
+            result = testfile2.read_text(encoding="utf8")
+            # Check that the replacement OID is included in the summary
+            self.assertIn(
+                "The replacement VT has OID 1.3.6.1.4.1.25623.1.0.999999.",
+                result,
+            )
+
+    def test_load_transition_oid_mapping(self):
+        with TemporaryDirectory() as tempdir:
+            transition_file = tempdir / "transition.py"
+            transition_file.write_text(
+                'mapping = {"1.3.6.1.4.1.25623.1.0.910673": "1.3.6.1.4.1.25623.1.0.999999",'
+                '"another_oid": "replacement_oid"}',
+                encoding="utf8",
+            )
+
+            result = load_transition_oid_mapping(transition_file)
+            expected = {
+                "1.3.6.1.4.1.25623.1.0.910673": "1.3.6.1.4.1.25623.1.0.999999",
+                "another_oid": "replacement_oid",
+            }
+            self.assertEqual(result, expected)
 
     def test_deprecate_kb_item(self):
         with TemporaryDirectory() as out_dir, TemporaryDirectory() as in_dir:
