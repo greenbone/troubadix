@@ -210,14 +210,23 @@ class CheckGrammar(FilePlugin):
 
         for match in pattern.finditer(self.context.file_content):
             if match:
+
+                # nb: No strip() here for so that the exclusions can be handled
+                # more strict with e.g. leading or trailing newlines.
+                full_line = match.group(0)
+
                 if handle_linguistic_checks(
-                    str(self.context.nasl_file), match.group(0), exceptions
+                    str(self.context.nasl_file), full_line, exceptions
                 ):
                     continue
 
+                stripped_line = full_line.strip()
+                stripped_hit = match.group(1).strip()
+
                 yield LinterError(
                     "VT/Include has the following grammar problem:"
-                    f" {match.group(0)}",
+                    f"\n- Hit: {stripped_hit}"
+                    f"\n- Full line: {stripped_line}",
                     file=self.context.nasl_file,
                     plugin=self.name,
                 )
