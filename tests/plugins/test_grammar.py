@@ -67,8 +67,9 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
-            "# is prone to a security bypass vulnerabilities",
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: is prone to a security bypass vulnerabilities\n"
+            "- Full line: # is prone to a security bypass vulnerabilities",
             results[0].message,
         )
 
@@ -93,15 +94,17 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 2)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
-            "# is prone to a security bypass vulnerabilities",
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: is prone to a security bypass vulnerabilities\n"
+            "- Full line: # is prone to a security bypass vulnerabilities",
             results[0].message,
         )
 
         self.assertIsInstance(results[1], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem: "
-            "# refer the Reference",
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: refer the Reference\n"
+            "- Full line: # refer the Reference",
             results[1].message,
         )
 
@@ -126,9 +129,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"summary", value:"Adobe Digital Edition is prone '
-            'a to denial of service (DoS) vulnerability.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: is prone a\n"
+            '- Full line: script_tag(name:"summary", value:"Adobe Digital '
+            'Edition is prone a to denial of service (DoS) vulnerability.");',
             results[0].message,
         )
 
@@ -153,9 +157,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"summary", value:"Splunk Enterprise is prone an '
-            'open redirect vulnerability.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: is prone an\n"
+            '- Full line: script_tag(name:"summary", value:"Splunk Enterprise '
+            'is prone an open redirect vulnerability.");',
             results[0].message,
         )
 
@@ -180,9 +185,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"vuldetect", value:"Sends multiple HTTP GET '
-            'request and checks the responses.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: multiple HTTP GET request\n"
+            '- Full line: script_tag(name:"vuldetect", value:"Sends multiple '
+            'HTTP GET request and checks the responses.");',
             results[0].message,
         )
 
@@ -206,9 +212,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"summary", value:"Foo Bar is prone to multiple '
-            'unknown vulnerability.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: multiple unknown vulnerability.\n"
+            '- Full line: script_tag(name:"summary", value:"Foo Bar is prone '
+            'to multiple unknown vulnerability.");',
             results[0].message,
         )
 
@@ -232,9 +239,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"summary", value:"Foo Bar is prone to a to a '
-            'remote denial-of-service vulnerability.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: to a to a\n"
+            '- Full line: script_tag(name:"summary", value:"Foo Bar is prone '
+            'to a to a remote denial-of-service vulnerability.");',
             results[0].message,
         )
 
@@ -258,9 +266,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"insight", value:"- CVE-2022-31702: Command '
-            'injection in the in the vRNI REST API.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: in the in the\n"
+            '- Full line: script_tag(name:"insight", value:"- CVE-2022-31702: '
+            'Command injection in the in the vRNI REST API.");',
             results[0].message,
         )
 
@@ -269,7 +278,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         content = (
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"solution", value:"Update to version to version '
-            ' 1.2.3 or later.");\n'
+            '1.2.3 or later.");\n'
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
@@ -284,9 +293,10 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT/Include has the following grammar problem:   "
-            'script_tag(name:"solution", value:"Update to version to version '
-            ' 1.2.3 or later.");',
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: to version to version\n"
+            '- Full line: script_tag(name:"solution", value:"Update to version '
+            'to version 1.2.3 or later.");',
             results[0].message,
         )
 
