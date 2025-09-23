@@ -76,7 +76,7 @@ def update_summary(
     if replacement_oid:
         deprecate_text += f" The replacement VT has OID {replacement_oid}."
 
-    new_summary = old_summary + "\n" + deprecate_text
+    new_summary = old_summary + "\n\n" + deprecate_text
     file.content = file.content.replace(old_summary, new_summary)
 
     return file.content
