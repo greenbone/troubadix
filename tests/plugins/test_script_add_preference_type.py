@@ -121,3 +121,25 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             f"Allowed are: {[t.value for t in ValidType]}",
             results[0].message,
         )
+
+    def test_missing_type(self):
+        add_pref = 'script_add_preference(name:"File or Directory Name", value:"/home", id:1);'
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_name("Foo Bar");\n'
+            f"{add_pref}\n"
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckScriptAddPreferenceType(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"script_add_preference call is missing a 'type' parameter in '{add_pref}'",
+            results[0].message,
+        )

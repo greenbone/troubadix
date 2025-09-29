@@ -28,6 +28,10 @@ from troubadix.helper.patterns import (
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+TYPE_PATTERN = re.compile(
+    r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)(?P=quote)'
+)
+
 
 class ValidType(Enum):
     CHECKBOX = "checkbox"
@@ -72,18 +76,14 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
         ).finditer(file_content)
 
         # Secondary regex to extract type from the captured value (parameter list)
-        type_pattern = re.compile(
-            r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)(?P=quote)'
-        )
-
         for preferences_match in preferences_matches:
             params_content = preferences_match.group("value")
-            type_match = type_pattern.search(params_content)
+            type_match = TYPE_PATTERN.search(params_content)
 
             if not type_match:
                 yield LinterError(
                     "script_add_preference call is missing a 'type' "
-                    "parameter in '{preferences_match.group(0)}'",
+                    f"parameter in '{preferences_match.group(0)}'",
                     file=nasl_file,
                     plugin=self.name,
                 )
