@@ -89,9 +89,35 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is using an invalid or misspelled string (invalid)"
-            " passed to the type parameter of "
-            "script_add_preference in "
-            f"'{add_pref}'",
+            "VT is using an invalid or misspelled type "
+            f"(invalid) in {add_pref} \n"
+            f"Allowed are: {[t.value for t in ValidType]}",
+            results[0].message,
+        )
+
+    def test_invalid_with_parameters_order(self):
+        add_pref = (
+            'script_add_preference(name:"File or Directory Name", '
+            'type:"string", value:"/home", id:1);'
+        )
+        path = Path("some/file.nasl")
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_name("Foo Bar");\n'
+            f"{add_pref}\n"
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=path, file_content=content
+        )
+        plugin = CheckScriptAddPreferenceType(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT is using an invalid or misspelled type "
+            f"(string) in {add_pref} \n"
+            f"Allowed are: {[t.value for t in ValidType]}",
             results[0].message,
         )

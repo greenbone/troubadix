@@ -17,6 +17,7 @@
 
 # pylint: disable=fixme
 
+import re
 from enum import Enum
 from pathlib import Path
 from typing import Iterator
@@ -65,30 +66,45 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
         if "script_add_preference" not in file_content:
             return
 
+        # Primary regex to capture all script_add_preference calls
         preferences_matches = _get_special_script_tag_pattern(
             name=SpecialScriptTag.ADD_PREFERENCE.value,
-            value=r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)'
-            r"(?P=quote)\s*[^)]*",
         ).finditer(file_content)
 
-        for preferences_match in preferences_matches:
-            if preferences_match:
-                pref_type = preferences_match.group("type")
-                if pref_type not in [t.value for t in ValidType]:
-                    # nb: This exists since years and it is currently
-                    # unclear if we can change it so
-                    # we're excluding it here for now.
-                    if (
-                        "ssh_authorization_init.nasl" in nasl_file.name
-                        and pref_type == "sshlogin"
-                    ):
-                        continue
+        # Secondary regex to extract type from the captured value (parameter list)
+        type_pattern = re.compile(
+            r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)(?P=quote)'
+        )
 
-                    yield LinterError(
-                        "VT is using an invalid or misspelled string "
-                        f"({pref_type}) passed to the type parameter of "
-                        "script_add_preference in "
-                        f"'{preferences_match.group(0)}'",
-                        file=nasl_file,
-                        plugin=self.name,
-                    )
+        for preferences_match in preferences_matches:
+            params_content = preferences_match.group("value")
+            type_match = type_pattern.search(params_content)
+
+            if not type_match:
+                yield LinterError(
+                    "script_add_preference call is missing a 'type' "
+                    "parameter in '{preferences_match.group(0)}'",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
+                continue
+
+            pref_type = type_match.group("type")
+            if pref_type not in [t.value for t in ValidType]:
+                # nb: This exists since years and it is currently
+                # unclear if we can change it so
+                # we're excluding it here for now.
+                if (
+                    "ssh_authorization_init.nasl" in nasl_file.name
+                    and pref_type == "sshlogin"
+                ):
+                    continue
+
+                yield LinterError(
+                    "VT is using an invalid or misspelled type "
+                    f"({pref_type}) in "
+                    f"{preferences_match.group(0)} \n"
+                    f"Allowed are: {[t.value for t in ValidType]}",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
