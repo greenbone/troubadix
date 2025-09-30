@@ -41,6 +41,9 @@ class ValidType(Enum):
     ENTRY = "entry"
 
 
+VALID_TYPES = {t.value for t in ValidType}
+
+
 class CheckScriptAddPreferenceType(FileContentPlugin):
     name = "check_script_add_preference_type"
 
@@ -90,21 +93,23 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
                 continue
 
             pref_type = type_match.group("type")
-            if pref_type not in [t.value for t in ValidType]:
-                # nb: This exists since years and it is currently
-                # unclear if we can change it so
-                # we're excluding it here for now.
-                if (
-                    "ssh_authorization_init.nasl" in nasl_file.name
-                    and pref_type == "sshlogin"
-                ):
-                    continue
+            if pref_type in VALID_TYPES:
+                continue
 
-                yield LinterError(
-                    "VT is using an invalid or misspelled type "
-                    f"({pref_type}) in "
-                    f"{preferences_match.group(0)} \n"
-                    f"Allowed are: {[t.value for t in ValidType]}",
-                    file=nasl_file,
-                    plugin=self.name,
-                )
+            # nb: This exists since years and it is currently
+            # unclear if we can change it so
+            # we're excluding it here for now.
+            if (
+                "ssh_authorization_init.nasl" in nasl_file.name
+                and pref_type == "sshlogin"
+            ):
+                continue
+
+            yield LinterError(
+                "VT is using an invalid or misspelled type "
+                f"({pref_type}) in "
+                f"{preferences_match.group(0)} \n"
+                f"Allowed are: {sorted(VALID_TYPES)}",
+                file=nasl_file,
+                plugin=self.name,
+            )
