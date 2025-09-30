@@ -19,6 +19,7 @@ from pathlib import Path
 
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_add_preference_type import (
+    VALID_TYPES,
     CheckScriptAddPreferenceType,
     ValidType,
 )
@@ -91,7 +92,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         self.assertEqual(
             "VT is using an invalid or misspelled type "
             f"(invalid) in {add_pref} \n"
-            f"Allowed are: {[t.value for t in ValidType]}",
+            f"Allowed are: {sorted(VALID_TYPES)}",
             results[0].message,
         )
 
@@ -118,7 +119,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         self.assertEqual(
             "VT is using an invalid or misspelled type "
             f"(string) in {add_pref} \n"
-            f"Allowed are: {[t.value for t in ValidType]}",
+            f"Allowed are: {sorted(VALID_TYPES)}",
             results[0].message,
         )
 
