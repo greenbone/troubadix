@@ -14,4 +14,4 @@ jobs:
       url: https://pypi.org/project/troubadix/
     steps:
       - name: Build and publish to PyPI
-        uses: greenbone/actions/pypi-upload@v3
+        uses: greenbone/actions/pypi-upload@b62e28e18119848473605d01002ea45cf7c3d60e # v3.35.0
