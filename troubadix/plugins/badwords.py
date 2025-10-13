@@ -43,6 +43,7 @@ _IGNORE_FILES = [
     "http_func.inc",
     "misc_func.inc",
     "OpenVAS_detect.nasl",
+    "gb_greenbone_os_consolidation.nasl",
 ]
 
 EXCEPTIONS = [
@@ -79,6 +80,8 @@ EXCEPTIONS = [
     "OpenVAS / Greenbone Vulnerability Manager",
     "openvas_1808149858",
     "OSPD-OpenVAS",
+    "OPENVAS SCAN",
+    "openvas_scan",
     "evil.zip -> openvas.jsp",
     'url = "/openvas.jsp";',
     'if( "OpenVAS RCE Test" >< buf )',
