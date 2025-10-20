@@ -56,7 +56,7 @@ exceptions = [
         r"these\s+error\s+(messages|reports|conditions)", re.IGNORECASE
     ),
     PatternCheck(
-        r"these\s+file\s+(permissions|overwrites|names|includes|systems)",
+        r"these\s+file\s+(permissions|overwrites|names|includes|systems|formats)",
         re.IGNORECASE,
     ),
     # nb: Valid sentence
