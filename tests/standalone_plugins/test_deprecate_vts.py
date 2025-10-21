@@ -154,7 +154,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
             self.assertNotIn(result, "script_dependencies")
             self.assertNotIn(result, 'include("revisions-lib.inc");')
             assert (
-                "\n\nNote: This VT has been deprecated and replaced by "
+                "\n\n  Note: This VT has been deprecated and replaced by "
                 "a Notus scanner based one."
             ) in result
 

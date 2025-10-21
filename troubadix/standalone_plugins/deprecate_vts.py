@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 
-import importlib
+import importlib.util
+import logging
 import re
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass
@@ -19,6 +20,8 @@ from troubadix.helper.patterns import (
     get_special_script_tag_pattern,
 )
 from troubadix.troubadix import from_file
+
+logger = logging.getLogger(__name__)
 
 
 class Deprecations(Enum):
@@ -68,7 +71,7 @@ def update_summary(
     """
     old_summary = _get_summary(file.content)
     if not old_summary:
-        print(f"No summary in: {file.name}")
+        logger.warning(f"No summary in: {file.name}")
         return file.content
 
     deprecate_text = f"Note: This VT has been deprecated {Deprecations[deprecation_reason].value}"
@@ -76,7 +79,7 @@ def update_summary(
     if replacement_oid:
         deprecate_text += f" The replacement VT has OID {replacement_oid}."
 
-    new_summary = old_summary + "\n\n" + deprecate_text
+    new_summary = old_summary + "\n\n  " + deprecate_text
     file.content = file.content.replace(old_summary, new_summary)
 
     return file.content
@@ -135,6 +138,29 @@ def _get_summary(content: str) -> Optional[str]:
     return None
 
 
+def find_replacement_oid(
+    file: DeprecatedFile,
+    oid_mapping: Optional[dict[str, str]] = None,
+) -> Optional[str]:
+    # Get replacement OID if available
+    if not oid_mapping:
+        return None
+
+    oid_match = re.search(
+        get_special_script_tag_pattern(SpecialScriptTag.OID),
+        file.content,
+    )
+    if not oid_match:
+        raise ValueError(
+            f"No OID found in {file.name}. Cannot map to replacement OID."
+        )
+    oid = oid_match.group("value")
+    replacement_oid = oid_mapping.get(oid)
+    if not replacement_oid:
+        raise ValueError(f"No replacement OID found for {oid} in {file.name}.")
+    return replacement_oid
+
+
 def deprecate(
     output_path: Path,
     to_deprecate: list[DeprecatedFile],
@@ -155,28 +181,12 @@ def deprecate(
     output_path.mkdir(parents=True, exist_ok=True)
     for file in to_deprecate:
         if re.findall(KB_ITEMS_PATTERN, file.content):
-            print(
+            logger.warning(
                 f"Unable to deprecate {file.name}. There are still KB keys remaining."
             )
             continue
 
-        # Get replacement OID if available
-        replacement_oid = None
-        if oid_mapping:
-            oid_match = re.search(
-                get_special_script_tag_pattern(SpecialScriptTag.OID),
-                file.content,
-            )
-            if not oid_match:
-                raise ValueError(
-                    f"No OID found in {file.name}. Cannot map to replacement OID."
-                )
-            oid = oid_match.group("value")
-            replacement_oid = oid_mapping.get(oid)
-            if not replacement_oid:
-                raise ValueError(
-                    f"No replacement OID found for {oid} in {file.name}."
-                )
+        replacement_oid = find_replacement_oid(file, oid_mapping)
 
         file.content = update_summary(file, deprecation_reason, replacement_oid)
         file.content = _finalize_content(file.content)
@@ -296,9 +306,11 @@ def main():
     if args.transition_file:
         oid_mapping = load_transition_oid_mapping(args.transition_file)
 
-    to_be_deprecated = parse_files(files)
     deprecate(
-        args.output_path, to_be_deprecated, args.deprecation_reason, oid_mapping
+        args.output_path,
+        parse_files(files),
+        args.deprecation_reason,
+        oid_mapping,
     )
 
 
