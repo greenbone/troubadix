@@ -8,7 +8,7 @@ from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -54,7 +54,7 @@ def load_transition_oid_mapping(transition_file: Path) -> dict[str, str]:
 def update_summary(
     file: DeprecatedFile,
     deprecation_reason: str,
-    replacement_oid: Optional[str] = None,
+    replacement_oid: str | None = None,
 ) -> str:
     """Update the summary of the nasl script by adding the information
     that the script has been deprecated, and if possible, the oid of
@@ -129,7 +129,7 @@ def parse_files(files: list) -> list[DeprecatedFile]:
     return to_deprecate
 
 
-def _get_summary(content: str) -> Optional[str]:
+def _get_summary(content: str) -> str | None:
     """Extract the summary from the nasl script"""
     pattern = get_script_tag_pattern(ScriptTag.SUMMARY)
     if match_summary := re.search(pattern, content):
@@ -140,8 +140,8 @@ def _get_summary(content: str) -> Optional[str]:
 
 def find_replacement_oid(
     file: DeprecatedFile,
-    oid_mapping: Optional[dict[str, str]] = None,
-) -> Optional[str]:
+    oid_mapping: dict[str, str] | None = None,
+) -> str | None:
     # Get replacement OID if available
     if not oid_mapping:
         return None
@@ -165,7 +165,7 @@ def deprecate(
     output_path: Path,
     to_deprecate: list[DeprecatedFile],
     deprecation_reason: str,
-    oid_mapping: Optional[dict[str, str]] = None,
+    oid_mapping: dict[str, str] | None = None,
 ) -> None:
     """Deprecate the selected VTs by removing unnecessary keys, updating the
     summary, and adding the deprecated tag.
