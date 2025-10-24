@@ -53,6 +53,7 @@ from .overlong_script_tags import CheckOverlongScriptTags
 from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
 from .qod import CheckQod
 from .reporting_consistency import CheckReportingConsistency
+from .script_add_preference_id import CheckScriptAddPreferenceId
 from .script_add_preference_type import CheckScriptAddPreferenceType
 from .script_calls_empty_values import CheckScriptCallsEmptyValues
 from .script_calls_recommended import CheckScriptCallsRecommended
@@ -151,6 +152,7 @@ _FILE_PLUGINS = [
     CheckWrongSetGetKBCalls,
     CheckSpacesBeforeDots,
     CheckIfStatementSyntax,
+    CheckScriptAddPreferenceId,
 ]
 
 # plugins checking all files
