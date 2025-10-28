@@ -273,6 +273,7 @@ CPE = "cpe:/a:mapp:webtrekk:";
 CPE = "cpe:/a:netsparker:wass";
 CPE = "cpe:/a:tawk:tawk.to_live_chat";
 CPE:           cpe:/a:tawk:tawk.to_live_chat:0.8.0
+    cpe =~ "^cpe:/o:fujifilm:apeos_2150_(n|nd|nda)_firmware") {
     cpe =~ "^cpe:/o:hp:laserjet_pro_420[1-3](cdn|dn|dw|dne|dwe)_firmware") {
  CPU' could have occured because a retry loop continually finds the same
 crafted IFF ILBM file. NOTE: some of these details are obtained from
@@ -398,7 +399,9 @@ drbd: Avoid Clang warning about pointless switch statment (bsc#1051510).
  eliptic curve parameters were not sufficiently validated during
   } else if( banner =~ "^220 (RICOH|LANIER|SAVIN|Gestetner|NRG) (Aficio |Pro)?([A-Z]+)? [^ ]+ (\([^)]+\) )?FTP server" ) {
   } else if("diese Vorgabe muss manuell ueberprueft werden" >< tolower(status)) {
+} else if (prod =~ "^BMX\s*NOE\s*0100$") {
 else if (prod =~ "^BMX\s*NOE\s*0100$" || prod =~ "^BMX\s*NOE\s*0100H$") {
+} else if (prod =~ "^BMX\s*NOE\s*0110$") {
 else if (prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$") {
   else if( svc == "agobot.fo" )
 Enable log information of starting/stoping services. (bsc#1144923,
@@ -415,6 +418,7 @@ examined with fuzzing by Tim Blazytko, Cornelius Aschermann, Sergej
 execute arbitrary code via a crafted Upack PE file.
  executuon (bsc#966437).
 EXP=CustomIE.dll
+expected_value = '1. The output should contain "iif "lo" accept" and contain "iif != "lo" ip saddr 127.0.0.0/8 drop" and contain "iif != "lo" ip6 saddr ::1 drop"
 EXP=expext.dll
   expressions that are not properly handled by a stap script that
  * extended EAP-SIM/AKA fast re-authentication to allow use with FILS
@@ -442,6 +446,7 @@ files. If a user were tricked into opening a specially-crafted CAF file, a
   files packed with UPack.
   files to potentially execute code and it is tracked by the Mitre CVE
   file_xml = '\t\t<file_item' + status + ' xmlns="http://oval.mitre.org/XMLSchema/' +
+firebird:x:109:117:Firebird Database Administator,,,:/var/lib/firebird:/usr/sbin/nologin
 Fixed a bug where Podman could not run containers usin... [Please see the references for more information on the vulnerabilities]");
 Fixed an issue with version missmatch (bsc#1162224).
 Fixed a regression in regards to the 'edge' comand line flag
@@ -582,6 +587,7 @@ if (prod =~ "^BMX\s*NOE\s*0110$" || prod =~ "^BMX\s*NOE\s*0110H$") {
 if (prod =~ "^BMX\s*NOE\s*0110" && version_is_less(version: version, test_version: "6.5")) {
 if (prod =~ "^BMX\s*NOE\s*0110" && version_is_less(version: version, test_version: "6.70")) {
 if (prod =~ "^BMX\s*NOE\s*0200") {
+if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*(NOC\s*0401|NGD\s*0100|NOR\s*0200H|NOE\s*01[01]0)"))
 if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOE\s*01[01]0"))
 if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOE\s*0(1[01]|20)0"))
 if (!prod || (prod !~ "^BMX\s*P34" && prod !~ "^BMX\s*NOR\s*0200H" && prod !~ "^BMX\s*NOE\s*0100" &&
@@ -752,6 +758,7 @@ ML^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'
 MM]7>[YM~GC^@?_WK0@W/F>UDL^Q8<TQ^+LTL*)6UG-,[V6-;N*W*79^&[ND/
 MN*W*79^&[ND/.DM''*U8D?Q:.'+%RB;S$!.'6['*(;8>~A:>&GO>&&M7/36X
   model = "TE Unknown Model";
+  mod = eregmatch(pattern: "([-A-Za-z0-9]+) -?\s*.*([Cc]ard|[Cc]ontroller) \[v", string: recv);
   mod = eregmatch(pattern: "Huawei (TE[0-9]0)", string: banner);
   mod = eregmatch(pattern: "(RICOH|LANIER|SAVIN|Gestetner|NRG) ((Aficio |Pro)?([A-Z]+)? [^ ]+)", string: banner);
 mod = eregmatch(pattern: "^(RICOH|LANIER|SAVIN|Gestetner|NRG) ((Aficio )?[^ ]+ [^ :]*)(:[^:]+:Ver.([.0-9]+))?", string: banner);
