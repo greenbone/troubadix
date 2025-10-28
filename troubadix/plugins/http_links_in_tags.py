@@ -172,6 +172,10 @@ class CheckHttpLinksInTags(FilePlugin):
             # e.g.:
             # sun.net.www.protocol.jar.JarURLConnection
             "sun.net.www.",
+            # e.g.:
+            # For example: 'http://[::1]/'.
+            "http://[::1]/",
+            "https://[::1]/",
         ]
 
         return any(
