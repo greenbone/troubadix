@@ -40,13 +40,13 @@ class CheckScriptAddPreferenceId(FileContentPlugin):
         for index, pref_match in enumerate(preferences_matches, 1):
             id_match = ID_PATTERN.search(pref_match.group("value"))
             # If no ID is provided, the preference ID defaults to the entry's position at runtime
-            pref_id = index if id_match is None else int(id_match.group("id"))
+            pref_id = int(id_match.group("id")) if id_match else index
 
             if pref_id in seen_ids:
-
                 yield LinterError(
                     f"script_add_preference id {pref_id} is used multiple times",
                     file=nasl_file,
                     plugin=self.name,
                 )
+
             seen_ids.add(pref_id)
