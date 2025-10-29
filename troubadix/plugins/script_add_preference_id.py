@@ -5,12 +5,24 @@ import re
 from collections.abc import Iterator
 from pathlib import Path
 
-from troubadix.helper.patterns import (
-    SpecialScriptTag,
-    get_special_script_tag_pattern,
-)
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
+r"""
+Matches full script_add_preference calls.
+Consumes the literal name and optional whitespace before '('.
+Captures the payload in group "value" as repeated non-quote text
+(`[^"()]*`) or quoted strings.
+The quoted branch (`"[^"\\]*(?:\\.[^"\\]*)*"`) starts with `"`, reads
+non-quote or escaped characters, and ends on an unescaped `"`.
+These fragments repeat so inner parentheses and `);` stay inside the
+capture until the real closing `)` appears.
+The suffix `\)\s*;` enforces the closing parenthesis and semicolon, and
+DOTALL lets the match span newlines.
+"""
+ADD_PREFERENCE_PATTERN = re.compile(
+    r"script_add_preference\s*\((?P<value>(?:[^\"()]*|\"[^\"\\]*(?:\\.[^\"\\]*)*\")*)\)\s*;",
+    re.DOTALL,
+)
 ID_PATTERN = re.compile(r"id\s*:\s*(?P<id>\d+)")
 
 
@@ -30,9 +42,7 @@ class CheckScriptAddPreferenceId(FileContentPlugin):
             return
 
         # Primary regex to capture all script_add_preference calls
-        preferences_matches = get_special_script_tag_pattern(
-            SpecialScriptTag.ADD_PREFERENCE
-        ).finditer(file_content)
+        preferences_matches = ADD_PREFERENCE_PATTERN.finditer(file_content)
 
         seen_ids: set[int] = set()
 
