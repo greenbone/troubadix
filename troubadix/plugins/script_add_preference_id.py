@@ -5,25 +5,22 @@ import re
 from collections.abc import Iterator
 from pathlib import Path
 
+from troubadix.helper.text_utils import find_matching_brace
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
-r"""
-Matches full script_add_preference calls.
-Consumes the literal name and optional whitespace before '('.
-Captures the payload in group "value" as repeated non-quote text
-(`[^"()]*`) or quoted strings.
-The quoted branch (`"[^"\\]*(?:\\.[^"\\]*)*"`) starts with `"`, reads
-non-quote or escaped characters, and ends on an unescaped `"`.
-These fragments repeat so inner parentheses and `);` stay inside the
-capture until the real closing `)` appears.
-The suffix `\)\s*;` enforces the closing parenthesis and semicolon, and
-DOTALL lets the match span newlines.
-"""
-ADD_PREFERENCE_PATTERN = re.compile(
-    r"script_add_preference\s*\((?P<value>(?:[^\"()]*|\"[^\"\\]*(?:\\.[^\"\\]*)*\")*)\)\s*;",
-    re.DOTALL,
-)
+SCRIPT_CALL_PATTERN = re.compile(r"script_add_preference\s*\(")
 ID_PATTERN = re.compile(r"id\s*:\s*(?P<id>\d+)")
+
+
+def iter_script_add_preference_values(
+    source: str,
+) -> Iterator[str]:
+    for match in SCRIPT_CALL_PATTERN.finditer(source):
+        opening_paren = match.end() - 1
+        closing_paren = find_matching_brace(source, opening_paren, ("(", ")"))
+        if closing_paren is None:
+            continue
+        yield source[opening_paren + 1 : closing_paren]
 
 
 class CheckScriptAddPreferenceId(FileContentPlugin):
@@ -32,24 +29,18 @@ class CheckScriptAddPreferenceId(FileContentPlugin):
     def check_content(
         self, nasl_file: Path, file_content: str
     ) -> Iterator[LinterResult]:
-        """
-        Checks for duplicate IDs in script_add_preference calls.
-        """
         if (
             nasl_file.suffix == ".inc"
             or "script_add_preference" not in file_content
         ):
             return
 
-        # Primary regex to capture all script_add_preference calls
-        preferences_matches = ADD_PREFERENCE_PATTERN.finditer(file_content)
-
         seen_ids: set[int] = set()
 
-        # Secondary id regex
-        for index, pref_match in enumerate(preferences_matches, 1):
-            id_match = ID_PATTERN.search(pref_match.group("value"))
-            # If no ID is provided, the preference ID defaults to the entry's position at runtime
+        for index, value in enumerate(
+            iter_script_add_preference_values(file_content), 1
+        ):
+            id_match = ID_PATTERN.search(value)
             pref_id = int(id_match.group("id")) if id_match else index
 
             if pref_id in seen_ids:

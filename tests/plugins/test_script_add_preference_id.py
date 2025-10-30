@@ -5,6 +5,7 @@ from pathlib import Path
 from troubadix.plugin import LinterError
 from troubadix.plugins.script_add_preference_id import (
     CheckScriptAddPreferenceId,
+    iter_script_add_preference_values,
 )
 
 from . import PluginTestCase
@@ -144,3 +145,21 @@ script_add_preference(name:"Foo", type:"radio", value:"bar", id:8);
                 f"script_add_preference id {id} is used multiple times",
                 results[index].message,
             )
+
+    def test_iter_script_add_preference_values_handles_semicolon_in_value(self):
+        content = (
+            "script_add_preference("
+            'name:"Network type", type:"radio", '
+            'value:"Mixed (use RFC 1918);Private LAN;Public WAN (Internet);Public LAN", '
+            "id:8);"
+        )
+
+        values = list(iter_script_add_preference_values(content))
+
+        self.assertEqual(len(values), 1)
+        self.assertEqual(
+            values[0],
+            'name:"Network type", type:"radio", '
+            'value:"Mixed (use RFC 1918);Private LAN;Public WAN (Internet);Public LAN", '
+            "id:8",
+        )
