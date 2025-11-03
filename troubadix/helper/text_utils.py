@@ -78,3 +78,29 @@ def is_position_in_string(text: str, position: int) -> bool:
         string_state.process_next_char(char)
 
     return string_state.in_string
+
+
+def find_matching_brace(
+    text: str, opening_pos: int, braces: tuple[str, str] = ("(", ")")
+) -> int | None:
+    """
+    Return the index of the matching closing brace for the brace at opening_pos.
+    """
+    opening, closing = braces
+    depth = 1
+    string_state = StringState()
+
+    for pos in range(opening_pos + 1, len(text)):
+        char = text[pos]
+        string_state.process_next_char(char)
+
+        if string_state.in_string:
+            continue
+
+        if char == opening:
+            depth += 1
+        elif char == closing:
+            depth -= 1
+            if depth == 0:
+                return pos
+    return None
