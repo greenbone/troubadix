@@ -176,6 +176,8 @@ class CheckHttpLinksInTags(FilePlugin):
             # For example: 'http://[::1]/'.
             "http://[::1]/",
             "https://[::1]/",
+            "https://target",
+            "http://target",
         ]
 
         return any(
