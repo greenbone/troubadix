@@ -300,6 +300,34 @@ class CheckNewlinesTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_grammar10(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"impact", value:"Successful exploitation may '
+            "allows an attacker to run arbitrary code on the affected IP "
+            'cameras.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: may allows an\n"
+            '- Full line: script_tag(name:"impact", value:"Successful '
+            "exploitation may allows an attacker to run arbitrary code on the "
+            'affected IP cameras.");',
+            results[0].message,
+        )
+
     def test_grammar_fp(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
