@@ -321,7 +321,7 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
             "VT/Include has the following grammar problem:\n"
-            "- Hit: may allows an\n"
+            "- Hit: may allows\n"
             '- Full line: script_tag(name:"impact", value:"Successful '
             "exploitation may allows an attacker to run arbitrary code on the "
             'affected IP cameras.");',
