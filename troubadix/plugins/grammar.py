@@ -179,8 +179,10 @@ def get_grammer_pattern() -> re.Pattern:
         # server-site template injection -> server-side template injection
         r"cross[\s-]+side[\s-]+(request[\s-]+forgery|scripting)|"
         r"server[\s-]+site[\s-]+(request[\s-]+forgery|template)[\s-]+injection|"
-        # e.g. "Successful exploitation may allows an attacker to run arbitrary"
-        r"(could|may|will)\s+allows\s+an?\s+|"
+        # e.g.:
+        # Successful exploitation may allows an attacker to run arbitrary
+        # An error in INSTALL_JAR procedure might allows remote authenticated
+        r"(could|may|will|might|should|can)\s+allows\s+|"
         # nb: Next few could happen when copy'n'paste some text parts around
         # like e.g.:
         # is prone to a to a remote denial-of-service vulnerability
