@@ -43,8 +43,13 @@ exceptions = [
     # From several Ubuntu LSCs like e.g.:
     # 2021/ubuntu/gb_ubuntu_USN_4711_1.nasl
     TextCheck("An attacker with access to at least one LUN in a multiple"),
-    # nb: The regex to catch "this files" might catch this wrongly...
-    PatternCheck(r"th(is|ese)\s+filesystem", re.IGNORECASE),
+    # nb:
+    # - The regex to catch e.g. "this files" or "This allow an attacker" might
+    #   catch this wrongly...
+    # - Cases like "this filesystem" vs. "these filesystems" are also handled /
+    #   excluded here
+    PatternCheck(r'this\s+(filesystem|allow\s+list)[\s.",]+', re.IGNORECASE),
+    PatternCheck(r'these\s+(filesystem|allow\s+list)s[\s.",]+', re.IGNORECASE),
     # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
     PatternCheck(r'(\s+|")[Aa]\s+multiple\s+of'),
     # WITH can be used like e.g. the following which is valid:
@@ -183,6 +188,12 @@ def get_grammer_pattern() -> re.Pattern:
         # Successful exploitation may allows an attacker to run arbitrary
         # An error in INSTALL_JAR procedure might allows remote authenticated
         r"(could|may|will|might|should|can)\s+allows\s+|"
+        # e.g.:
+        # - Inadequate checks in com_contact could allowed mail submission
+        r"(could|may|will|might|should|can)\s+allowed\s+|"
+        # e.g.:
+        # This allow an attacker to gain administrative access to the
+        r"This\s+allow\s+|"
         # nb: Next few could happen when copy'n'paste some text parts around
         # like e.g.:
         # is prone to a to a remote denial-of-service vulnerability

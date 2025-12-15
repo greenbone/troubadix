@@ -328,6 +328,58 @@ class CheckNewlinesTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_grammar11(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"impact", value:"Inadequate checks in '
+            "com_contact could allowed mail submission\n"
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: could allowed\n"
+            '- Full line: script_tag(name:"impact", value:"Inadequate checks '
+            "in com_contact could allowed mail submission",
+            results[0].message,
+        )
+
+    def test_grammar12(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"impact", value:"This allow an attacker to gain '
+            "administrative access to the\n"
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: This allow\n"
+            '- Full line: script_tag(name:"impact", value:"This allow an '
+            "attacker to gain administrative access to the",
+            results[0].message,
+        )
+
     def test_grammar_fp(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -372,6 +424,24 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"insight", value:"Nadav Markus and Or Cohen of '
             "Palo Alto Networks discovered\n"
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+        )
+        fake_context = self.create_file_plugin_context(
+            nasl_file=nasl_file, file_content=content
+        )
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_grammar_fp3(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"insight", value:"*snip* connection string to '
+            'provide\nproperties that are not on this allow list.");\n'
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
