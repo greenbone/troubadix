@@ -35,9 +35,7 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
             "  script_require_keys();\n"
             "  script_mandatory_keys();\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptCallsRecommended(fake_context)
 
         results = list(plugin.run())
@@ -55,9 +53,7 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
 
     def test_missing_calls(self):
         content = '  script_xref(name: "URL", value:"");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptCallsRecommended(fake_context)
 
         results = list(plugin.run())
@@ -72,9 +68,7 @@ class CheckScriptCallsRecommendedTestCase(PluginTestCase):
             # tests group2
             '  script_mandatory_keys("foo",\n"bar");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptCallsRecommended(fake_context)
 
         results = list(plugin.run())

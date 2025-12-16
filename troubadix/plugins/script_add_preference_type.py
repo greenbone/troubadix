@@ -28,9 +28,7 @@ from troubadix.helper.patterns import (
 )
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
 
-TYPE_PATTERN = re.compile(
-    r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)(?P=quote)'
-)
+TYPE_PATTERN = re.compile(r'type\s*:\s*(?P<quote>[\'"])(?P<type>[^\'"]+)(?P=quote)')
 
 
 class ValidType(Enum):
@@ -99,10 +97,7 @@ class CheckScriptAddPreferenceType(FileContentPlugin):
             # nb: This exists since years and it is currently
             # unclear if we can change it so
             # we're excluding it here for now.
-            if (
-                "ssh_authorization_init.nasl" in nasl_file.name
-                and pref_type == "sshlogin"
-            ):
+            if "ssh_authorization_init.nasl" in nasl_file.name and pref_type == "sshlogin":
                 continue
 
             yield LinterError(

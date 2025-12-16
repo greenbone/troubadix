@@ -97,13 +97,7 @@ class TestRunner(unittest.TestCase):
 
     def test_runner_run_ok(self):
         nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test_valid_oid.nasl"
+            _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test_valid_oid.nasl"
         )
         included_plugins = [
             CheckMissingDescExit.name,
@@ -122,34 +116,20 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(self._reporter._result_counts.warning_count, 0)
         self.assertEqual(self._reporter._result_counts.fix_count, 0)
         self.assertEqual(
-            self._reporter._result_counts.result_counts[
-                CheckMissingDescExit.name
-            ]["error"],
+            self._reporter._result_counts.result_counts[CheckMissingDescExit.name]["error"],
             0,
         )
         self.assertEqual(
-            self._reporter._result_counts.result_counts[
-                CheckMissingDescExit.name
-            ]["warning"],
+            self._reporter._result_counts.result_counts[CheckMissingDescExit.name]["warning"],
             0,
         )
         self.assertEqual(
-            self._reporter._result_counts.result_counts[
-                CheckMissingDescExit.name
-            ]["fix"],
+            self._reporter._result_counts.result_counts[CheckMissingDescExit.name]["fix"],
             0,
         )
 
     def test_runner_run_error(self):
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "fail.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "fail.nasl"
         included_plugins = [CheckCVSSFormat.name, CheckCopyrightText.name]
         runner = Runner(
             n_jobs=1,
@@ -167,34 +147,20 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(self._reporter._result_counts.warning_count, 0)
         self.assertEqual(self._reporter._result_counts.fix_count, 0)
         self.assertEqual(
-            self._reporter._result_counts.result_counts[CheckCVSSFormat.name][
-                "error"
-            ],
+            self._reporter._result_counts.result_counts[CheckCVSSFormat.name]["error"],
             2,
         )
         self.assertEqual(
-            self._reporter._result_counts.result_counts[CheckCVSSFormat.name][
-                "warning"
-            ],
+            self._reporter._result_counts.result_counts[CheckCVSSFormat.name]["warning"],
             0,
         )
         self.assertEqual(
-            self._reporter._result_counts.result_counts[CheckCVSSFormat.name][
-                "fix"
-            ],
+            self._reporter._result_counts.result_counts[CheckCVSSFormat.name]["fix"],
             0,
         )
 
     def test_runner_run_fail_with_verbose_level_2(self):
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "fail.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "fail.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         reporter = Reporter(term=self._term, root=self.root, verbose=2)
@@ -218,8 +184,7 @@ class TestRunner(unittest.TestCase):
             output,
         )
         self.assertIn(
-            "Results for plugin "
-            "check_script_version_and_last_modification_tags",
+            "Results for plugin " "check_script_version_and_last_modification_tags",
             output,
         )
         # CI terminal formats for 80 chars per line
@@ -232,15 +197,7 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         reporter = Reporter(term=self._term, root=self.root, verbose=3)
@@ -259,24 +216,14 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertIn(
-            f"Checking {get_path_from_root(nasl_file, self.root)}", output
-        )
+        self.assertIn(f"Checking {get_path_from_root(nasl_file, self.root)}", output)
         self.assertIn("No results for plugin check_missing_desc_exit", output)
 
     def test_runner_run_ok_with_verbose_level_2(self):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         reporter = Reporter(term=self._term, root=self.root, verbose=2)
@@ -299,23 +246,13 @@ class TestRunner(unittest.TestCase):
             "Checking " f"{get_path_from_root(nasl_file, self.root)}",
             output,
         )
-        self.assertNotIn(
-            "No results for plugin check_missing_desc_exit", output
-        )
+        self.assertNotIn("No results for plugin check_missing_desc_exit", output)
 
     def test_runner_run_ok_with_verbose_level_1(self):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
 
         reporter = Reporter(term=self._term, root=self.root, verbose=1)
@@ -334,9 +271,7 @@ class TestRunner(unittest.TestCase):
             self.assertEqual(content, new_content)
 
         output = f.getvalue()
-        self.assertNotIn(
-            "No results for plugin check_missing_desc_exit", output
-        )
+        self.assertNotIn("No results for plugin check_missing_desc_exit", output)
         self.assertNotIn("Results for plugin check_missing_desc_exit", output)
 
         # revert changes for the next time
@@ -368,20 +303,10 @@ class TestRunner(unittest.TestCase):
             CheckDuplicateOID.name,
             CheckMissingDescExit.name,
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         gen_log_file = _here / "gen_log.txt"
 
-        reporter = Reporter(
-            term=self._term, root=self.root, verbose=3, log_file=gen_log_file
-        )
+        reporter = Reporter(term=self._term, root=self.root, verbose=3, log_file=gen_log_file)
 
         runner = Runner(
             reporter=reporter,
@@ -415,20 +340,10 @@ class TestRunner(unittest.TestCase):
         included_plugins = [
             "CheckMissingDescExit",
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         gen_log_file = _here / "gen_log.txt"
 
-        reporter = Reporter(
-            term=self._term, root=self.root, log_file=gen_log_file
-        )
+        reporter = Reporter(term=self._term, root=self.root, log_file=gen_log_file)
 
         runner = Runner(
             n_jobs=1,
@@ -513,15 +428,7 @@ class TestRunner(unittest.TestCase):
             CheckDuplicateOID.name,
             CheckMissingDescExit.name,
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         gen_log_file = _here / "gen_log.txt"
 
         reporter = Reporter(
@@ -558,15 +465,7 @@ class TestRunner(unittest.TestCase):
             CheckDuplicateOID.name,
             CheckMissingDescExit.name,
         ]
-        nasl_file = (
-            _here
-            / "plugins"
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "runner"
-            / "test.nasl"
-        )
+        nasl_file = _here / "plugins" / "test_files" / "nasl" / "21.04" / "runner" / "test.nasl"
         gen_log_file = _here / "gen_log.txt"
 
         reporter = Reporter(

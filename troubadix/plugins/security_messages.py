@@ -36,8 +36,7 @@ def _file_contains_security_message(file_content: str) -> bool:
         file_content (str): The content of the VT
     """
     return any(
-        security_message in file_content
-        for security_message in SECURITY_MESSAGE_IMPLEMENTATIONS
+        security_message in file_content for security_message in SECURITY_MESSAGE_IMPLEMENTATIONS
     )
 
 
@@ -54,9 +53,7 @@ class CheckSecurityMessages(FileContentPlugin):
             nasl_file (Path): The VTs path
             file_content (str): The content of the VT
         """
-        deprecated_pattern = get_script_tag_pattern(
-            script_tag=ScriptTag.DEPRECATED
-        )
+        deprecated_pattern = get_script_tag_pattern(script_tag=ScriptTag.DEPRECATED)
         if deprecated_pattern.search(file_content):
             return
 
@@ -90,9 +87,7 @@ class CheckSecurityMessages(FileContentPlugin):
                 plugin=self.name,
             )
 
-    def _determinate_security_message_by_severity(
-        self, file_content: str
-    ) -> bool:
+    def _determinate_security_message_by_severity(self, file_content: str) -> bool:
         """Determinates wether a VT requires a
         security_message or implementing function
         call
@@ -122,15 +117,9 @@ class CheckSecurityMessages(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        security_message_required = (
-            self._determinate_security_message_by_severity(file_content)
-        )
+        security_message_required = self._determinate_security_message_by_severity(file_content)
 
         if security_message_required:
-            yield from self._check_security_message_present(
-                nasl_file, file_content
-            )
+            yield from self._check_security_message_present(nasl_file, file_content)
         else:
-            yield from self._check_security_message_absent(
-                nasl_file, file_content
-            )
+            yield from self._check_security_message_absent(nasl_file, file_content)

@@ -34,9 +34,7 @@ class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckProdSvcDetectInVulnvt(fake_context)
 
         results = list(plugin.run())
@@ -61,9 +59,7 @@ class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  script_family("Product detection");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckProdSvcDetectInVulnvt(fake_context)
 
         results = list(plugin.run())
@@ -87,9 +83,7 @@ class CheckProdSVCDetectInVulnvtTestCase(PluginTestCase):
             '  script_family("Product detection");\n'
             "  register_product(cpe:cpe);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckProdSvcDetectInVulnvt(fake_context)
 
         results = list(plugin.run())

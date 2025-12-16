@@ -27,9 +27,7 @@ class CheckTabsTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("tests/file.nasl")
         content = "What ever."
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content.splitlines()
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, lines=content.splitlines())
         plugin = CheckTabs(fake_context)
 
         results = list(plugin.run())
@@ -41,9 +39,7 @@ class CheckTabsTestCase(PluginTestCase):
 
         content = "\t\t\t\t\t\t\n1234456789"
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content.splitlines()
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, lines=content.splitlines())
         plugin = CheckTabs(fake_context)
 
         results = list(plugin.run())

@@ -107,20 +107,14 @@ class FindIfStatementsTestCase(unittest.TestCase):
         self.assertIn('display("nested block")', result.statements[1].outcome)
 
         self.assertEqual("inner2", result.statements[2].condition)
-        self.assertEqual(
-            'display("nested inline")', result.statements[2].outcome
-        )
+        self.assertEqual('display("nested inline")', result.statements[2].outcome)
 
     def test_complex_condition(self):
-        content = (
-            'if (a == 1 && b > 2 || c != "string") { display("complex"); }'
-        )
+        content = 'if (a == 1 && b > 2 || c != "string") { display("complex"); }'
         result = find_if_statements(content)
 
         self.assertEqual(1, len(result.statements))
-        self.assertEqual(
-            'a == 1 && b > 2 || c != "string"', result.statements[0].condition
-        )
+        self.assertEqual('a == 1 && b > 2 || c != "string"', result.statements[0].condition)
         self.assertEqual('display("complex");', result.statements[0].outcome)
 
     def test_if_with_problematic_stuff(self):
@@ -151,9 +145,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
         result = find_if_statements(content)
         self.assertEqual(len(result.statements), 0)
         self.assertEqual(len(result.errors), 1)
-        self.assertEqual(
-            result.errors[0].error_type.name, "TERMINATED_AFTER_CONDITION"
-        )
+        self.assertEqual(result.errors[0].error_type.name, "TERMINATED_AFTER_CONDITION")
 
     def test_unclosed_block_brace(self):
         content = "if(condition) {\ndisplay();\n# Missing closing brace"
@@ -226,9 +218,7 @@ class FindIfStatementsTestCase(unittest.TestCase):
             IfErrorType.TERMINATED_AFTER_CONDITION,
             result.errors[0].error_type,
         )
-        self.assertEqual(
-            IfErrorType.UNCLOSED_CONDITION, result.errors[1].error_type
-        )
+        self.assertEqual(IfErrorType.UNCLOSED_CONDITION, result.errors[1].error_type)
 
     def test_multiple_nested_inline_if_statements(self):
         content = """

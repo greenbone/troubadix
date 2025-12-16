@@ -28,15 +28,9 @@ class Results:
         self.has_plugin_results = False
         self._ignore_warnings = ignore_warnings
 
-    def add_plugin_results(
-        self, plugin_name: str, results: Iterator[LinterResult]
-    ) -> "Results":
+    def add_plugin_results(self, plugin_name: str, results: Iterator[LinterResult]) -> "Results":
         if self._ignore_warnings:
-            results = [
-                result
-                for result in results
-                if not isinstance(result, LinterWarning)
-            ]
+            results = [result for result in results if not isinstance(result, LinterWarning)]
         else:
             results = list(results)
 

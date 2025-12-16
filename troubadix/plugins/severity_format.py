@@ -20,9 +20,7 @@ class CheckSeverityFormat(FileContentPlugin):
         if nasl_file.suffix == ".inc" or "severity_vector" not in file_content:
             return
 
-        severity_vector_pattern = get_script_tag_pattern(
-            ScriptTag.SEVERITY_VECTOR
-        )
+        severity_vector_pattern = get_script_tag_pattern(ScriptTag.SEVERITY_VECTOR)
 
         severity_vector_match = severity_vector_pattern.search(file_content)
         if not severity_vector_match:

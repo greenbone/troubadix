@@ -36,9 +36,7 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
             '  script_tag(name: "foo"'
             ", value:'foobar');\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptCallsEmptyValues(fake_context)
 
         results = list(plugin.run())
@@ -61,9 +59,7 @@ class CheckScriptCallsEmptyValuesTestCase(PluginTestCase):
             '  script_xref(name:"URL", value:"");\n'
             '  script_tag(name:"", value:"");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptCallsEmptyValues(fake_context)
 
         results = list(plugin.run())

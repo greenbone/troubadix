@@ -32,9 +32,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.dir = Path(self.tempdir) / "foo"
         self.dir.mkdir(parents=True)
         self.dep = self.dir / "example.nasl"
-        self.dep.write_text(
-            "  script_category(ACT_ATTACK);", encoding=CURRENT_ENCODING
-        )
+        self.dep.write_text("  script_category(ACT_ATTACK);", encoding=CURRENT_ENCODING)
 
         return super().setUp()
 
@@ -48,9 +46,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             "  script_category(ACT_ATTACK);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDependencyCategoryOrder(fake_context)
 
         results = list(plugin.run())
@@ -64,9 +60,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             "  script_category(ACT_ATTACK);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDependencyCategoryOrder(fake_context)
 
         results = list(plugin.run())
@@ -92,8 +86,7 @@ class CheckDependencyCategoryOrderTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The script dependency {dependency} could "
-            "not be found within the VTs.",
+            f"The script dependency {dependency} could " "not be found within the VTs.",
             results[0].message,
         )
 

@@ -73,24 +73,16 @@ class GetRootTestCase(unittest.TestCase):
 
 class GetPathFromRootTestCase(unittest.TestCase):
     def test_get_path_from_root_relative(self):
-        self.assertEqual(
-            get_path_from_root(Path("nasl/foo"), Path("nasl/foo")), Path(".")
-        )
-        self.assertEqual(
-            get_path_from_root(Path("nasl/foo"), Path("nasl")), Path("foo")
-        )
+        self.assertEqual(get_path_from_root(Path("nasl/foo"), Path("nasl/foo")), Path("."))
+        self.assertEqual(get_path_from_root(Path("nasl/foo"), Path("nasl")), Path("foo"))
         self.assertEqual(
             get_path_from_root(Path("nasl/foo/bar"), Path("nasl")),
             Path("foo/bar"),
         )
 
     def test_get_path_from_root_absolute(self):
-        self.assertEqual(
-            get_path_from_root(Path("/nasl/foo"), Path("/nasl/foo")), Path(".")
-        )
-        self.assertEqual(
-            get_path_from_root(Path("/nasl/foo"), Path("/nasl")), Path("foo")
-        )
+        self.assertEqual(get_path_from_root(Path("/nasl/foo"), Path("/nasl/foo")), Path("."))
+        self.assertEqual(get_path_from_root(Path("/nasl/foo"), Path("/nasl")), Path("foo"))
         self.assertEqual(
             get_path_from_root(Path("/nasl/foo/bar"), Path("/nasl")),
             Path("foo/bar"),

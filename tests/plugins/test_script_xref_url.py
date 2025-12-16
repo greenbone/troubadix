@@ -60,9 +60,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
             '  script_xref(name:"URL", value:"https://confluence.atlassian.com/security/security-bulletin-may-21-2024-1387867145.html");\n'
             # pylint: enable=line-too-long
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -80,9 +78,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
     def test_generic_invalid_url(self):
         content = '  script_xref(name:"URL", value:"www.example.com");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -90,16 +86,13 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'script_xref(name:"URL", value:"www.example.com");: Invalid URL'
-            " value",
+            'script_xref(name:"URL", value:"www.example.com");: Invalid URL' " value",
             results[0].message,
         )
 
     def test_invalid_url_trailing_angle_bracket(self):
         content = '  script_xref(name:"URL", value:"https://docs.docker.com/engine/release-notes/24.0/#2407>");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -115,9 +108,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
     def test_invalid_url_trailing_comma(self):
         content = '  script_xref(name:"URL", value:"https://dev.mysql.com/doc/refman/5.7/en/mysql-stmt-fetch.html,");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -133,9 +124,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
     def test_invalid_url_trailing_punctuation_mark(self):
         content = '  script_xref(name:"URL", value:"http://isec.pl/vulnerabilities/isec-0017-binfmt_elf.txt:");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -150,12 +139,8 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
         )
 
     def test_invalid_url_trailing_square_bracket(self):
-        content = (
-            '  script_xref(name:"URL", value:"https://example.com/foo/bar]");\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        content = '  script_xref(name:"URL", value:"https://example.com/foo/bar]");\n'
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -169,12 +154,8 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
         )
 
     def test_invalid_url_trailing_round_bracket(self):
-        content = (
-            '  script_xref(name:"URL", value:"https://example.com/foo/bar)");\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        content = '  script_xref(name:"URL", value:"https://example.com/foo/bar)");\n'
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())
@@ -189,9 +170,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
 
     def test_invalid_url_wrong_ending(self):
         content = '  script_xref(name:"URL", value:"https://confluence.atlassian.com/security/security-bulletin-may-21-2024-1387867145.htmll");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefUrl(fake_context)
 
         results = list(plugin.run())

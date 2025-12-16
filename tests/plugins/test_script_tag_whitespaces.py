@@ -37,9 +37,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
             '  script_xref(name:"foo3", value:"- foo\n  - bar");\n'
             '  script_xref(name:"foo4", value:"foo\n  bar");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -57,9 +55,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_tag_leading_whitespace(self):
         content = '  script_tag(name:"insight", value:" bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -74,9 +70,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_name_leading_whitespace(self):
         content = '  script_name(" MyProduct Multiple Vulnerabilities");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -91,9 +85,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_xref_leading_whitespace(self):
         content = '  script_xref(name:"foo", value:" bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -108,9 +100,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_tag_trailing_whitespace(self):
         content = '  script_tag(name:"insight", value:"bar ");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -120,9 +110,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_name_trailing_whitespace(self):
         content = '  script_name("MyProduct Multiple Vulnerabilities ");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -132,9 +120,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_xref_trailing_whitespace(self):
         content = '  script_xref(name:"foo", value:"bar ");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -151,9 +137,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
     # dedicated plugin) so no specific test cases have been added here.
     def test_script_tag_trailing_newline(self):
         content = '  script_tag(name:"insight", value:"bar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -163,9 +147,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_tag_trailing_newline_with_space(self):
         content = '  script_tag(name:"insight", value:"foo bar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -175,9 +157,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_tag_trailing_newline_with_newline(self):
         content = '  script_tag(name:"insight", value:"foo\nbar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -187,9 +167,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_tag_trailing_newline_with_newline_and_spaces(self):
         content = '  script_tag(name:"insight", value:"foo\n  bar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -202,9 +180,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
     # newlines and similar for that specific case
     def test_script_xref_trailing_newline(self):
         content = '  script_xref(name:"foo", value:"bar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -214,9 +190,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_xref_trailing_newline_with_space(self):
         content = '  script_xref(name:"foo", value:"foo bar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -226,9 +200,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_xref_trailing_newline_with_newline(self):
         content = '  script_xref(name:"foo", value:"foo\nbar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())
@@ -238,9 +210,7 @@ class CheckScriptTagWhitespacesTestCase(PluginTestCase):
 
     def test_script_xref_trailing_newline_with_newline_and_spaces(self):
         content = '  script_xref(name:"foo", value:"foo\n  bar\n");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagWhitespaces(fake_context)
 
         results = list(plugin.run())

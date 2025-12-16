@@ -20,9 +20,7 @@ class CheckSeverityOrigin(FileContentPlugin):
         if nasl_file.suffix == ".inc" or "severity_origin" not in file_content:
             return
 
-        severity_origin_pattern = get_script_tag_pattern(
-            ScriptTag.SEVERITY_ORIGIN
-        )
+        severity_origin_pattern = get_script_tag_pattern(ScriptTag.SEVERITY_ORIGIN)
 
         severity_origin_match = severity_origin_pattern.search(file_content)
         if not severity_origin_match:

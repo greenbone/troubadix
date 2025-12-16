@@ -62,9 +62,7 @@ class FilePluginContext:
     @property
     def file_content(self) -> str:
         if not self._file_content:
-            self._file_content = self.nasl_file.read_text(
-                encoding=CURRENT_ENCODING
-            )
+            self._file_content = self.nasl_file.read_text(encoding=CURRENT_ENCODING)
         return self._file_content
 
     @property
@@ -111,14 +109,10 @@ class FileContentPlugin(FilePlugin):
     """A plugin that does checks on the whole file content"""
 
     def run(self) -> Iterator[LinterResult]:
-        return self.check_content(
-            self.context.nasl_file, self.context.file_content
-        )
+        return self.check_content(self.context.nasl_file, self.context.file_content)
 
     @abstractmethod
-    def check_content(
-        self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    def check_content(self, nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
         pass
 
 

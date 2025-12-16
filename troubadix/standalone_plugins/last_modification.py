@@ -48,9 +48,7 @@ def update(nasl_file: Path, terminal: Terminal):
     )
 
     if not match_last_modification_any_value:
-        terminal.warning(
-            f'Ignoring "{nasl_file}" because it is missing a last_modification tag.'
-        )
+        terminal.warning(f'Ignoring "{nasl_file}" because it is missing a last_modification tag.')
         return
 
     now = datetime.datetime.now(datetime.timezone.utc)
@@ -71,9 +69,7 @@ def update(nasl_file: Path, terminal: Terminal):
         string=file_content,
     )
     if not match_script_version:
-        terminal.warning(
-            f'Ignoring "{nasl_file}" because it is missing a script_version.'
-        )
+        terminal.warning(f'Ignoring "{nasl_file}" because it is missing a script_version.')
         return
 
     # get that date formatted correctly:
@@ -89,9 +85,7 @@ def update(nasl_file: Path, terminal: Terminal):
 
 
 def parse_args(args: Sequence[str] = None) -> Namespace:
-    parser = ArgumentParser(
-        description="Update script_version and last_modification tags"
-    )
+    parser = ArgumentParser(description="Update script_version and last_modification tags")
     what_group = parser.add_mutually_exclusive_group(required=True)
     what_group.add_argument(
         "--files",

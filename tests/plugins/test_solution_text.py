@@ -53,9 +53,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
             "regarding this issue will be updated once solution details "
             'are available.");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())
@@ -70,9 +68,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
             'value:"No solution was made available by the vendor.\n\n  Note: '
             '<add a specific note for the reason here>.");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())
@@ -87,9 +83,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
             'value:"No solution was made available by the vendor.\n\n  Vendor '
             'statement: <add specific vendor statement here>.");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())
@@ -99,9 +93,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = '  script_tag(name:"solution_type", value:"NoneAvailable");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())
@@ -121,9 +113,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
     def test_nok2(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = '  script_tag(name:"solution_type", value:"WillNotFix");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())
@@ -143,9 +133,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
             'value:"No solution was made available by the vendor.\n\n  Notice: '
             '<add a specific note for the reason here>.");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())
@@ -165,9 +153,7 @@ class CheckSolutionTextTestCase(PluginTestCase):
             'value:"No solution was made available by the vendor.\n\n  Vendor '
             'statment: <add specific vendor statement here>.");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSolutionText(fake_context)
 
         results = list(plugin.run())

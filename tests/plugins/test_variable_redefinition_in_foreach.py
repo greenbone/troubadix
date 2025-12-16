@@ -19,9 +19,7 @@ class CheckVariableRedefinitionInForeachTestCase(PluginTestCase):
             'url1 = "foo";\n'
             'foreach url(make_list(url1, "bar")) {\n  display(url);\n}'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckVariableRedefinitionInForeach(fake_context)
         results = list(plugin.run())
 
@@ -34,9 +32,7 @@ class CheckVariableRedefinitionInForeachTestCase(PluginTestCase):
             "foreach url(url) {\n  display(url);\n}\n"
             "foreach url(make_list(url1, url)) {\n  display(url);\n}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckVariableRedefinitionInForeach(fake_context)
         results = list(plugin.run())
         self.assertEqual(len(results), 2)

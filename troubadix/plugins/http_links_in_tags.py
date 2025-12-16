@@ -180,6 +180,4 @@ class CheckHttpLinksInTags(FilePlugin):
             "http://target",
         ]
 
-        return any(
-            exclusion in http_link_match_group for exclusion in exclusions
-        )
+        return any(exclusion in http_link_match_group for exclusion in exclusions)

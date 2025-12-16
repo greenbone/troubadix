@@ -75,8 +75,7 @@ class CheckLogMessages(FileContentPlugin):
         # log_match = re.search(r'.*(log_message[\s]*\([^)]+\)[\s]*;)',
         #                       file_content, re.MULTILINE)
         log_match = re.search(
-            r"log_message\s*\([\w:#\.&\-!,<>\[\]("
-            r")\s\"+\'/\\\n]+\)\s*(;|;\s*(\n|#))",
+            r"log_message\s*\([\w:#\.&\-!,<>\[\](" r")\s\"+\'/\\\n]+\)\s*(;|;\s*(\n|#))",
             file_content,
             re.MULTILINE,
         )

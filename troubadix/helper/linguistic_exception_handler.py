@@ -90,16 +90,12 @@ class PatternsCheck(LinguisticCheck):
         # but that throws an exception because Tuple[...]
         # is only valid for type hinting :/
         if isinstance(patterns[0], Tuple):
-            self.patterns = [
-                re.compile(pattern, flags=flags) for pattern, flags in patterns
-            ]
+            self.patterns = [re.compile(pattern, flags=flags) for pattern, flags in patterns]
         else:
             self.patterns = [re.compile(pattern) for pattern in patterns]
 
     def execute(self, file_path: str, correction: str):
-        return any(
-            bool(pattern.search(correction)) for pattern in self.patterns
-        )
+        return any(bool(pattern.search(correction)) for pattern in self.patterns)
 
 
 class CompositeCheck(LinguisticCheck):
@@ -112,9 +108,7 @@ class CompositeCheck(LinguisticCheck):
         self.checks = checks
 
     def execute(self, file_path: str, correction: str):
-        return all(
-            check.execute(file_path, correction) for check in self.checks
-        )
+        return all(check.execute(file_path, correction) for check in self.checks)
 
 
 class TextInFileCheck(CompositeCheck):
@@ -131,9 +125,7 @@ class PatternInFileCheck(CompositeCheck):
     and the file contains the specified file path
     """
 
-    def __init__(
-        self, file: str, pattern: str, flags: re.RegexFlag = 0
-    ) -> None:
+    def __init__(self, file: str, pattern: str, flags: re.RegexFlag = 0) -> None:
         super().__init__(FileCheck(file), PatternCheck(pattern, flags))
 
 
@@ -155,9 +147,7 @@ class PatternInFilesCheck(CompositeCheck):
     and the file matches any of the specified file paths
     """
 
-    def __init__(
-        self, files: List[str], pattern: str, flags: re.RegexFlag = 0
-    ) -> None:
+    def __init__(self, files: List[str], pattern: str, flags: re.RegexFlag = 0) -> None:
         super().__init__(FilesCheck(files), PatternCheck(pattern, flags))
 
 
@@ -196,9 +186,7 @@ class PatternsInFilePatternCheck(CompositeCheck):
         )
 
 
-def handle_linguistic_checks(
-    file: str, correction: str, checks: Iterable[LinguisticCheck]
-) -> bool:
+def handle_linguistic_checks(file: str, correction: str, checks: Iterable[LinguisticCheck]) -> bool:
     """Determinates if any of the provided checks pass
     for the provided file and correction
 

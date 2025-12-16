@@ -31,9 +31,7 @@ class IfStatement:
 class IfErrorType(Enum):
     UNCLOSED_CONDITION = "Unclosed parenthesis in if condition at line {line}"
     UNCLOSED_BODY = "Unclosed brace in if body at line {line}"
-    MISSING_OUTCOME = (
-        "Missing statement or body after if condition at line {line}"
-    )
+    MISSING_OUTCOME = "Missing statement or body after if condition at line {line}"
     TERMINATED_AFTER_CONDITION = (
         "Semicolon after if condition at line {line} causes if to terminate early. "
         "Following block will always execute."
@@ -85,18 +83,12 @@ class IfParser:
                 opening_brace, CONDITION_BRACES
             )
             if condition_error:
-                errors.append(
-                    IfParseError(line=line, error_type=condition_error)
-                )
+                errors.append(IfParseError(line=line, error_type=condition_error))
                 continue
-            condition = self.file_content[
-                opening_brace + 1 : condition_end
-            ].strip()
+            condition = self.file_content[opening_brace + 1 : condition_end].strip()
 
             # Step 3: Find the start of the outcome (first non-whitespace after condition)
-            outcome_start, outcome_error = self._find_outcome_start(
-                condition_end
-            )
+            outcome_start, outcome_error = self._find_outcome_start(condition_end)
             if outcome_error:
                 errors.append(IfParseError(line=line, error_type=outcome_error))
                 continue
@@ -104,26 +96,18 @@ class IfParser:
             # Step 4: Determine if this is a body or single-expression statement
             if self.file_content[outcome_start] == "{":
                 # Body: find closing brace for body '}'
-                body_end, body_error = self._find_closing_brace(
-                    outcome_start, BODY_BRACES
-                )
+                body_end, body_error = self._find_closing_brace(outcome_start, BODY_BRACES)
                 if body_error:
-                    errors.append(
-                        IfParseError(line=line, error_type=body_error)
-                    )
+                    errors.append(IfParseError(line=line, error_type=body_error))
                     continue
                 if_end = body_end + 1
                 outcome_start = outcome_start + 1  # exclude opening brace
                 outcome_end = body_end
             else:
                 # Single statement: find end of statement ';'
-                statement_end, statement_error = self._find_statement_end(
-                    outcome_start
-                )
+                statement_end, statement_error = self._find_statement_end(outcome_start)
                 if statement_error:
-                    errors.append(
-                        IfParseError(line=line, error_type=statement_error)
-                    )
+                    errors.append(IfParseError(line=line, error_type=statement_error))
                     continue
                 if_end = statement_end + 1
                 outcome_end = statement_end
@@ -194,15 +178,12 @@ class IfParser:
                 continue
 
             # check for if with word boundary, valid: ["if", " if"], not valid: "xif"
-            if (
-                i == 0 or not self.file_content[i - 1].isalnum()
-            ) and self.file_content.startswith("if", i):
+            if (i == 0 or not self.file_content[i - 1].isalnum()) and self.file_content.startswith(
+                "if", i
+            ):
                 # skip whitespace
                 j = i + 2
-                while (
-                    j < len(self.file_content)
-                    and self.file_content[j].isspace()
-                ):
+                while j < len(self.file_content) and self.file_content[j].isspace():
                     j += 1
                 # check for condition start
                 if j < len(self.file_content) and self.file_content[j] == "(":
@@ -210,9 +191,7 @@ class IfParser:
 
         return starts
 
-    def _find_outcome_start(
-        self, condition_end: int
-    ) -> tuple[int | None, IfErrorType | None]:
+    def _find_outcome_start(self, condition_end: int) -> tuple[int | None, IfErrorType | None]:
         """
         Find the start of the outcome/then part after the condition (next non-whitespace character).
         """
@@ -228,9 +207,7 @@ class IfParser:
 
         return pos, None
 
-    def _find_statement_end(
-        self, statement_start: int
-    ) -> tuple[int | None, IfErrorType | None]:
+    def _find_statement_end(self, statement_start: int) -> tuple[int | None, IfErrorType | None]:
         """Find the end of a single statement (semicolon outside of strings)."""
         string_state = StringState()
 

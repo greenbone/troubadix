@@ -18,9 +18,7 @@ class TestSpacesBeforeDots(PluginTestCase):
               script_tag(name:"solution", value:"Foo .NET.");
               script_tag(name:"insight", value:"Foo Bar ...");
             """
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSpacesBeforeDots(fake_context)
         results = list(plugin.run())
         self.assertEqual(len(results), 0)
@@ -37,9 +35,7 @@ class TestSpacesBeforeDots(PluginTestCase):
             'script_tag(name:"affected", value:"Foo\n.\nBar.");'
             'script_tag(name:"solution", value:"Foo Bar\n.");'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSpacesBeforeDots(fake_context)
         results = list(plugin.run())
         self.assertEqual(len(results), 7)
@@ -86,9 +82,7 @@ class TestSpacesBeforeDots(PluginTestCase):
             )
             path.write_text(content, encoding=CURRENT_ENCODING)
 
-            fake_context = self.create_file_plugin_context(
-                nasl_file=path, file_content=content
-            )
+            fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
 
             plugin = CheckSpacesBeforeDots(fake_context)
 

@@ -71,9 +71,7 @@ IGNORE = [
 class CheckSpacesBeforeDots(FileContentPlugin):
     name = "check_spaces_before_dots"
 
-    def check_content(
-        self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    def check_content(self, nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
         """
         This plugin checks for excess whitespace before a dot
         in script_tags that have full sentence values
@@ -114,11 +112,7 @@ class CheckSpacesBeforeDots(FileContentPlugin):
         for pos, match_str in self.matches:
             # Replace the match by removing the excess whitespace before the dot
             fixed_str = re.sub(r"\s+\.", ".", match_str)
-            file_content = (
-                file_content[:pos]
-                + fixed_str
-                + file_content[pos + len(match_str) :]
-            )
+            file_content = file_content[:pos] + fixed_str + file_content[pos + len(match_str) :]
 
         with open(self.context.nasl_file, "w", encoding=CURRENT_ENCODING) as f:
             f.write(file_content)

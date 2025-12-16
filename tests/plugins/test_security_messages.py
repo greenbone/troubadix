@@ -31,9 +31,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSecurityMessages(fake_context)
 
         results = list(plugin.run())
@@ -60,9 +58,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSecurityMessages(fake_context)
 
         results = list(plugin.run())
@@ -80,9 +76,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSecurityMessages(fake_context)
 
         results = list(plugin.run())
@@ -90,8 +84,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is using a security_message or implementing"
-            " function in a VT without severity",
+            "VT is using a security_message or implementing" " function in a VT without severity",
             results[0].message,
         )
 
@@ -105,9 +98,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSecurityMessages(fake_context)
 
         results = list(plugin.run())
@@ -115,8 +106,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is using a security_message or implementing "
-            "function in a VT without severity",
+            "VT is using a security_message or implementing " "function in a VT without severity",
             results[0].message,
         )
 
@@ -131,9 +121,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             "csrf token `' + token[1] + '` via a jsonp request to: ' + "
             "  http_report_vuln_url( port:port, url:url, url_only:TRUE ) );\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSecurityMessages(fake_context)
 
         results = list(plugin.run())
@@ -141,8 +129,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "VT is using a security_message or implementing"
-            " function in a VT without severity",
+            "VT is using a security_message or implementing" " function in a VT without severity",
             results[0].message,
         )
 
@@ -155,9 +142,7 @@ class CheckSecurityMessagesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  script_tag(name:"deprecated", value:TRUE);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckSecurityMessages(fake_context)
 
         results = list(plugin.run())

@@ -30,9 +30,7 @@ class CheckGetKBOnServicesTestCase(PluginTestCase):
             '  script_oid("1.2.3.4.5.6.78909.8.7.000000");\n'
             '  script_tag(name:"cvss_base", value:"4.0");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckGetKBOnServices(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +54,7 @@ class CheckGetKBOnServicesTestCase(PluginTestCase):
             'port = get_kb_list("Services/udp/upnp");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckGetKBOnServices(fake_context)
 
         results = list(plugin.run())

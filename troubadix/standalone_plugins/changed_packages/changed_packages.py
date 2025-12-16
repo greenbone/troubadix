@@ -64,8 +64,7 @@ def filter_reasons(packages: List[Package], reasons: Iterable[Reasons]):
     return [
         package
         for package in packages
-        if not package.reasons
-        or any([reason not in reasons for reason in package.reasons])
+        if not package.reasons or any([reason not in reasons for reason in package.reasons])
     ]
 
 
@@ -154,9 +153,7 @@ def main():
     hide_reasons = set(args.hide_reasons)
     terminal = ConsoleTerminal()
 
-    terminal.info(
-        f"Checking {len(args.files)} file(s) from {args.start_commit} to HEAD"
-    )
+    terminal.info(f"Checking {len(args.files)} file(s) from {args.start_commit} to HEAD")
 
     for file in args.files:
         try:
@@ -164,9 +161,7 @@ def main():
             content = git("show", f"HEAD:{file}")
             missing_packages, new_packages = compare(old_content, content)
         except CalledProcessError:
-            terminal.error(
-                f"Could not find {file} at {args.start_commit} or HEAD"
-            )
+            terminal.error(f"Could not find {file} at {args.start_commit} or HEAD")
             continue
         except ValueError as e:
             terminal.error(f"Error while handling {file}: {e}")

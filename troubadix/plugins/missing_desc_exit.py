@@ -61,9 +61,7 @@ class CheckMissingDescExit(FileContentPlugin):
             re.MULTILINE | re.DOTALL,
         )
         if match and match.group(1):
-            submatch = re.search(
-                r"^\s*exit\s*\(\s*0\s*\)\s*;", match.group(1), re.MULTILINE
-            )
+            submatch = re.search(r"^\s*exit\s*\(\s*0\s*\)\s*;", match.group(1), re.MULTILINE)
             if not submatch:
                 yield LinterError(
                     "No mandatory exit(0); found in the description block.",

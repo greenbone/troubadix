@@ -27,9 +27,7 @@ class CheckScriptCategoryTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = "  script_category(ACT_GATHER_INFO);\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCategory(fake_context)
 
         results = list(plugin.run())
@@ -48,9 +46,7 @@ class CheckScriptCategoryTestCase(PluginTestCase):
     def test_missing_category(self):
         path = Path("some/file.nasl")
         content = ""
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCategory(fake_context)
 
         results = list(plugin.run())
@@ -65,9 +61,7 @@ class CheckScriptCategoryTestCase(PluginTestCase):
     def test_invalid_category(self):
         path = Path("some/file.nasl")
         content = "  script_category(ACT_FOO);\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCategory(fake_context)
 
         results = list(plugin.run())

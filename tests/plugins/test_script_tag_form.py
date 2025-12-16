@@ -32,9 +32,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
             '  script_tag(name: "foo"'
             ", value:'foobar');\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())
@@ -52,9 +50,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_name(self):
         content = '  script_tag(nammmme: "foo", value:"bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())
@@ -69,9 +65,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_value(self):
         content = '  script_tag(name: "foo", valueeeee:"bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())
@@ -81,9 +75,7 @@ class CheckScriptTagFormTestCase(PluginTestCase):
 
     def test_wrong_missing_parameters(self):
         content = '  script_tag("foo", "bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagForm(fake_context)
 
         results = list(plugin.run())

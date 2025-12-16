@@ -37,9 +37,7 @@ class CheckCVSSFormat(FileContentPlugin):
             return
 
         cvss_base_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE)
-        cvss_base_vector_pattern = get_script_tag_pattern(
-            ScriptTag.CVSS_BASE_VECTOR
-        )
+        cvss_base_vector_pattern = get_script_tag_pattern(ScriptTag.CVSS_BASE_VECTOR)
 
         if not cvss_base_pattern.search(file_content):
             yield LinterError(

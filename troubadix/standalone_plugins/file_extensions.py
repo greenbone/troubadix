@@ -19,9 +19,7 @@ def parse_args() -> Namespace:
         type=directory_type_existing,
         help="directory that should be linted",
     )
-    parser.add_argument(
-        "--ignore-file", type=file_type_existing, help="path to ignore file"
-    )
+    parser.add_argument("--ignore-file", type=file_type_existing, help="path to ignore file")
     parser.add_argument(
         "--gen-ignore-entries",
         action="store_true",
@@ -35,9 +33,7 @@ def create_exclusions(ignore_file: Path) -> set[Path]:
         return set()
 
     with open(ignore_file, "r", encoding="utf-8") as file:
-        return {
-            Path(line.strip()) for line in file if not re.match(r"^\s*#", line)
-        }
+        return {Path(line.strip()) for line in file if not re.match(r"^\s*#", line)}
 
 
 def check_extensions(args: Namespace) -> List[Path]:
@@ -77,10 +73,7 @@ def main() -> int:
             print(file.relative_to(args.dir))
         return 0
 
-    print(
-        f"{len(unwanted_files)} "
-        "Files with unwanted file extension were found:"
-    )
+    print(f"{len(unwanted_files)} " "Files with unwanted file extension were found:")
     for file in unwanted_files:
         print(file)
     return 1

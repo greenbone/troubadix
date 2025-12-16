@@ -27,9 +27,7 @@ class CheckScriptCopyrightTestCase(PluginTestCase):
     def test_copyright_ok(self):
         path = Path("some/file.nasl")
         content = '  script_copyright("Copyright (C) 2020 Foo Bar")\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCopyright(fake_context)
 
         results = list(plugin.run())
@@ -48,9 +46,7 @@ class CheckScriptCopyrightTestCase(PluginTestCase):
     def test_copyright_error(self):
         path = Path("some/file.nasl")
         content = '  script_copyright("Copyright 2020 Foo Bar")\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCopyright(fake_context)
 
         results = list(plugin.run())
@@ -58,19 +54,14 @@ class CheckScriptCopyrightTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertIn(
-            "The VT is using an incorrect syntax for its "
-            "copyright statement.",
+            "The VT is using an incorrect syntax for its " "copyright statement.",
             results[0].message,
         )
 
     def test_copyright_error2(self):
         path = Path("some/file.nasl")
-        content = (
-            '  script_copyright("This script is Copyright (C) 2020 Foo Bar")\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        content = '  script_copyright("This script is Copyright (C) 2020 Foo Bar")\n'
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCopyright(fake_context)
 
         results = list(plugin.run())
@@ -78,17 +69,14 @@ class CheckScriptCopyrightTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertIn(
-            "The VT is using an incorrect syntax for its "
-            "copyright statement.",
+            "The VT is using an incorrect syntax for its " "copyright statement.",
             results[0].message,
         )
 
     def test_copyright_error3(self):
         path = Path("some/file.nasl")
         content = '  script_copyright("Copyright (c) 2020 Foo Bar")\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptCopyright(fake_context)
 
         results = list(plugin.run())
@@ -96,7 +84,6 @@ class CheckScriptCopyrightTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertIn(
-            "The VT is using an incorrect syntax for its "
-            "copyright statement.",
+            "The VT is using an incorrect syntax for its " "copyright statement.",
             results[0].message,
         )

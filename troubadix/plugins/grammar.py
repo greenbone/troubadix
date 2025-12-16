@@ -48,12 +48,8 @@ exceptions = [
     #   catch this wrongly...
     # - Cases like "this filesystem" vs. "these filesystems" are also handled /
     #   excluded here
-    PatternCheck(
-        r'this\s+(filesystem|allow\s+list)([\s.",]+|$)', re.IGNORECASE
-    ),
-    PatternCheck(
-        r'these\s+(filesystem|allow\s+list)s([\s.",]+|$)', re.IGNORECASE
-    ),
+    PatternCheck(r'this\s+(filesystem|allow\s+list)([\s.",]+|$)', re.IGNORECASE),
+    PatternCheck(r'these\s+(filesystem|allow\s+list)s([\s.",]+|$)', re.IGNORECASE),
     # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
     PatternCheck(r'(\s+|")[Aa]\s+multiple\s+of'),
     # WITH can be used like e.g. the following which is valid:
@@ -61,9 +57,7 @@ exceptions = [
     # see e.g. gb_sles_2021_3215_1.nasl or gb_sles_2021_2320_1.nasl
     PatternCheck(r"with\s+WITH"),
     # Valid sentences
-    PatternCheck(
-        r"these\s+error\s+(messages|reports|conditions)", re.IGNORECASE
-    ),
+    PatternCheck(r"these\s+error\s+(messages|reports|conditions)", re.IGNORECASE),
     PatternCheck(
         r"these\s+file\s+(permissions|overwrites|names|includes|systems|formats)",
         re.IGNORECASE,
@@ -71,8 +65,7 @@ exceptions = [
     # nb: Valid sentence
     TextInFileCheck(
         "2012/gb_VMSA-2010-0007.nasl",
-        "e. VMware VMnc Codec heap overflow vulnerabilities\n\n"
-        "  Vulnerabilities in the",
+        "e. VMware VMnc Codec heap overflow vulnerabilities\n\n" "  Vulnerabilities in the",
     ),
     TextInFileCheck("gb_opensuse_2018_1900_1.nasl", "(Note that"),
     # e.g.:
@@ -142,8 +135,7 @@ def get_grammer_pattern() -> re.Pattern:
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
         # e.g. "this flaws"
-        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file|"
-        r"request)s)|"
+        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file|" r"request)s)|"
         # e.g. "these flaw "
         r"these\s+(vulnerability|(flaw|error|problem|issue|feature|file|"
         r"request)\s+)|"
@@ -234,9 +226,7 @@ class CheckGrammar(FilePlugin):
                 # more strict with e.g. leading or trailing newlines.
                 full_line = match.group(0)
 
-                if handle_linguistic_checks(
-                    str(self.context.nasl_file), full_line, exceptions
-                ):
+                if handle_linguistic_checks(str(self.context.nasl_file), full_line, exceptions):
                     continue
 
                 stripped_line = full_line.strip()

@@ -31,9 +31,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDuplicatedScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +54,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             '  script_name("Foo Bar");\n'
             '  script_name("Foo Bar");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDuplicatedScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -66,8 +62,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT is using the script tag "
-            "'script_name' multiple number of times.",
+            "The VT is using the script tag " "'script_name' multiple number of times.",
             results[0].message,
         )
 
@@ -77,9 +72,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"cvss_base", value:"5.0");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDuplicatedScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -87,8 +80,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT is using the script tag "
-            "'cvss_base' multiple number of times.",
+            "The VT is using the script tag " "'cvss_base' multiple number of times.",
             results[0].message,
         )
 
@@ -98,9 +90,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             '  script_add_preference(name:"Test", type:"checkbox");\n'
             '  script_add_preference(name:"Test2", type:"checkbox");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDuplicatedScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -113,9 +103,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             '  script_dependencies("vt1.nasl", "vt2.nasl");\n'
             '  script_dependencies("vt3.nasl", "vt4.nasl");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDuplicatedScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -128,9 +116,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
             '  script_dependencies("vt1.nasl", "vt2.nasl");\n'
             '  script_dependencies("vt3.nasl", "vt4.nasl");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDuplicatedScriptTags(fake_context)
 
         results = list(plugin.run())

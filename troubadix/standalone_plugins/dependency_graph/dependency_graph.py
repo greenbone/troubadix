@@ -34,9 +34,7 @@ from .checks import (
 from .cli import Feed, parse_args
 from .models import Dependency, Result, Script
 
-DEPENDENCY_PATTERN = _get_special_script_tag_pattern(
-    "dependencies", flags=re.DOTALL | re.MULTILINE
-)
+DEPENDENCY_PATTERN = _get_special_script_tag_pattern("dependencies", flags=re.DOTALL | re.MULTILINE)
 CATEGORY_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.CATEGORY)
 DEPRECATED_PATTERN = get_script_tag_pattern(ScriptTag.DEPRECATED)
 ENTERPRISE_FEED_CHECK_PATTERN = re.compile(
@@ -84,9 +82,7 @@ def get_scripts(directory: Path) -> list[Script]:
             dependencies = extract_dependencies(content)
             category = extract_category(content)
             deprecated = bool(DEPRECATED_PATTERN.search(content))
-            scripts.append(
-                Script(name, feed, dependencies, category, deprecated)
-            )
+            scripts.append(Script(name, feed, dependencies, category, deprecated))
         except Exception as e:
             logger.error(f"Error processing {path}: {e}")
 
@@ -105,20 +101,16 @@ def extract_dependencies(content: str) -> list[Dependency]:
     dependencies = []
 
     if_blocks = [
-        (match.start(), match.end())
-        for match in ENTERPRISE_FEED_CHECK_PATTERN.finditer(content)
+        (match.start(), match.end()) for match in ENTERPRISE_FEED_CHECK_PATTERN.finditer(content)
     ]
 
     for match in DEPENDENCY_PATTERN.finditer(content):
         start, end = match.span()
         is_enterprise_feed = any(
-            start >= block_start and end <= block_end
-            for block_start, block_end in if_blocks
+            start >= block_start and end <= block_end for block_start, block_end in if_blocks
         )
         dep_list = split_dependencies(match.group("value"))
-        dependencies.extend(
-            Dependency(dep, is_enterprise_feed) for dep in dep_list
-        )
+        dependencies.extend(Dependency(dep, is_enterprise_feed) for dep in dep_list)
 
     return dependencies
 

@@ -88,16 +88,13 @@ class CheckValidScriptTagNames(FileContentPlugin):
             "solution_method",
         ]
 
-        matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(
-            file_content
-        )
+        matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(file_content)
 
         if matches:
             for match in matches:
                 if match.group("name") not in allowed_script_tag_names:
                     yield LinterError(
-                        f"The script_tag name '{match.group('name')}' "
-                        "is not allowed.",
+                        f"The script_tag name '{match.group('name')}' " "is not allowed.",
                         file=nasl_file,
                         plugin=self.name,
                     )

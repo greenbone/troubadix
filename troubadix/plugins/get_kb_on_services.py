@@ -54,8 +54,7 @@ class CheckGetKBOnServices(FileContentPlugin):
             return
 
         kb_matches = re.finditer(
-            r'(get_kb_(?P<type>item|list)\s*\(\s*(?P<quote>[\'"])(?P<value>'
-            r"Services/[^)]+)\))",
+            r'(get_kb_(?P<type>item|list)\s*\(\s*(?P<quote>[\'"])(?P<value>' r"Services/[^)]+)\))",
             file_content,
         )
         if kb_matches:
@@ -71,8 +70,7 @@ class CheckGetKBOnServices(FileContentPlugin):
                     # access "Services/unknown" directly.
                     # The same is valid for unknown_services.nasl as well.
                     if "unknown_services.nasl" in str(nasl_file) or re.search(
-                        r"find_service([0-9]+|_("
-                        r"3digits|spontaneous|nmap|nmap_wrapped))?\.nasl",
+                        r"find_service([0-9]+|_(" r"3digits|spontaneous|nmap|nmap_wrapped))?\.nasl",
                         str(nasl_file),
                     ):
                         continue

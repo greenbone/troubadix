@@ -8,17 +8,13 @@ from typing import Iterator
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 
 FOREACH_PATTERN = re.compile(r"foreach\s+(?P<ident>\w+)\s*\((?P<iter>.+)\)")
-MAKE_LIST_PATTERN = re.compile(
-    r"^(?:make_list|make_list_unique)\((?P<params>.+)\)$"
-)
+MAKE_LIST_PATTERN = re.compile(r"^(?:make_list|make_list_unique)\((?P<params>.+)\)$")
 
 
 class CheckVariableRedefinitionInForeach(FileContentPlugin):
     name = "check_variable_redefinition_in_foreach"
 
-    def check_content(
-        self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    def check_content(self, nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
         """This plugin checks for a redefinition of the variable
         that is passed to the foreach loop.
         This can be caused by using same variable name

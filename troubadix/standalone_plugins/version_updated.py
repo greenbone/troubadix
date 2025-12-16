@@ -31,9 +31,7 @@ from troubadix.helper.patterns import (
 )
 from troubadix.standalone_plugins.common import git
 
-SCRIPT_VERSION_PATTERN = re.compile(
-    r"^\+\s*" + SCRIPT_VERSION_ANY_VALUE_PATTERN, re.MULTILINE
-)
+SCRIPT_VERSION_PATTERN = re.compile(r"^\+\s*" + SCRIPT_VERSION_ANY_VALUE_PATTERN, re.MULTILINE)
 SCRIPT_LAST_MODIFICATION_PATTERN = re.compile(
     r"^\+\s*" + LAST_MODIFICATION_ANY_VALUE_PATTERN, re.MULTILINE
 )
@@ -88,9 +86,7 @@ def check_version_updated(files: List[Path], commit_range: str) -> bool:
     if not files:
         files = [
             Path(f)
-            for f in git(
-                "diff", "--name-only", "--diff-filter=d", commit_range
-            ).splitlines()
+            for f in git("diff", "--name-only", "--diff-filter=d", commit_range).splitlines()
         ]
 
     rcode = True
@@ -113,9 +109,7 @@ def check_version_updated(files: List[Path], commit_range: str) -> bool:
         )
 
         if not SCRIPT_VERSION_PATTERN.search(text):
-            print(
-                f"{nasl_file}: Missing updated script_version", file=sys.stderr
-            )
+            print(f"{nasl_file}: Missing updated script_version", file=sys.stderr)
             rcode = False
 
         if not SCRIPT_LAST_MODIFICATION_PATTERN.search(text):
@@ -135,9 +129,7 @@ def main() -> int:
         git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.rstrip("\n"))
     except subprocess.SubprocessError:
-        print(
-            "Your current working directory doesn't belong to a git repository"
-        )
+        print("Your current working directory doesn't belong to a git repository")
         return 1
 
     parsed_args = parse_args(args)

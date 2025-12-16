@@ -31,9 +31,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -49,9 +47,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( "text" >< variable ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -67,9 +63,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( "text" >< variable )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -85,9 +79,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( "text" >!< variable ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -103,9 +95,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( "text" >!< variable )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -121,9 +111,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( "text" >< variable ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -139,9 +127,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( "text" >< variable )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -157,9 +143,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( "text" >!< variable ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -175,9 +159,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( "text" >!< variable )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -193,9 +175,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( "text" >< variable ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -211,9 +191,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( "text" >< variable )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -229,9 +207,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( "text" >!< variable ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -247,9 +223,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( "text" >!< variable )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -265,9 +239,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( variable >< "text" ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -290,9 +262,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( variable >< "text" )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -315,9 +285,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( variable >!< "text" ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -340,9 +308,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'if( variable >!< "text" )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -365,9 +331,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( variable >< "text" ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -390,9 +354,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( variable >< "text" )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -415,9 +377,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( variable >!< "text" ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -440,9 +400,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'else if( variable >!< "text" )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -465,9 +423,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( variable >< "text" ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -490,9 +446,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( variable >< "text" )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -515,9 +469,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( variable >!< "text" ) {}\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())
@@ -540,9 +492,7 @@ class CheckMisplacedCompareInIfTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '} else if( variable >!< "text" )\nexit(1);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMisplacedCompareInIf(fake_context)
 
         results = list(plugin.run())

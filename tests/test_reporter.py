@@ -59,9 +59,7 @@ class TestReporter(unittest.TestCase):
         self.assertIn(f"{'sum':48} {0:8} {0:8}", output)
 
     def test_report_statistic_with_fix_and_ignore_warnings(self):
-        reporter = Reporter(
-            root=self.root, term=self._term, fix=True, ignore_warnings=True
-        )
+        reporter = Reporter(root=self.root, term=self._term, fix=True, ignore_warnings=True)
 
         with redirect_stdout(io.StringIO()) as f:
             reporter.report_statistic()
@@ -87,9 +85,7 @@ class TestReporter(unittest.TestCase):
         self.assertIn(f"{'sum':48} {0:8} {0:8} {0:8}", output)
 
     def test_report_statistic_with_ignore_warnings(self):
-        reporter = Reporter(
-            root=self.root, term=self._term, ignore_warnings=True
-        )
+        reporter = Reporter(root=self.root, term=self._term, ignore_warnings=True)
 
         with redirect_stdout(io.StringIO()) as f:
             reporter.report_statistic()

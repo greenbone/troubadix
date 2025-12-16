@@ -75,12 +75,9 @@ class CheckDependencies(FilePlugin):
         for match in matches:
             if match:
                 for dep in split_dependencies(match.group("value")):
-                    if not any(
-                        (root / vers / dep).exists() for vers in FEED_VERSIONS
-                    ):
+                    if not any((root / vers / dep).exists() for vers in FEED_VERSIONS):
                         yield LinterError(
-                            f"The script dependency {dep} could not "
-                            "be found within the VTs.",
+                            f"The script dependency {dep} could not " "be found within the VTs.",
                             file=self.context.nasl_file,
                             plugin=self.name,
                         )

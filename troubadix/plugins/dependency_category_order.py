@@ -61,17 +61,13 @@ def check_category(
     match = pattern.search(content)
 
     if not match:
-        raise CategoryError(
-            f"{script}: Script category is missing or unsupported."
-        )
+        raise CategoryError(f"{script}: Script category is missing or unsupported.")
 
     category_value = match.group("value")
     try:
         return VTCategory[category_value]
     except ValueError:
-        raise CategoryError(
-            f"{script}: Script category {category_value} is unsupported."
-        ) from None
+        raise CategoryError(f"{script}: Script category {category_value} is unsupported.") from None
 
 
 class CheckDependencyCategoryOrder(FileContentPlugin):
@@ -98,9 +94,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
         ):
             return
 
-        category_pattern = get_special_script_tag_pattern(
-            SpecialScriptTag.CATEGORY
-        )
+        category_pattern = get_special_script_tag_pattern(SpecialScriptTag.CATEGORY)
 
         try:
             category = check_category(
@@ -116,9 +110,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
             )
             return
 
-        dependencies_pattern = get_special_script_tag_pattern(
-            SpecialScriptTag.DEPENDENCIES
-        )
+        dependencies_pattern = get_special_script_tag_pattern(SpecialScriptTag.DEPENDENCIES)
         matches = dependencies_pattern.finditer(file_content)
 
         if not matches:
@@ -130,9 +122,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
             if match:
                 # Remove single and/or double quotes, spaces
                 # and create a list by using the comma as a separator
-                dependencies = re.sub(
-                    r'[\'"\s]', "", match.group("value")
-                ).split(",")
+                dependencies = re.sub(r'[\'"\s]', "", match.group("value")).split(",")
 
                 for dep in dependencies:
                     dependency_path = None
@@ -142,15 +132,12 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
 
                     if not dependency_path:
                         yield LinterError(
-                            f"The script dependency {dep} could not "
-                            "be found within the VTs.",
+                            f"The script dependency {dep} could not " "be found within the VTs.",
                             file=nasl_file,
                             plugin=self.name,
                         )
                     else:
-                        dependency_content = dependency_path.read_text(
-                            encoding=CURRENT_ENCODING
-                        )
+                        dependency_content = dependency_path.read_text(encoding=CURRENT_ENCODING)
 
                         try:
                             dependency_category = check_category(

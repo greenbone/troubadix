@@ -50,9 +50,7 @@ class CheckDuplicateOID(FilesPlugin):
 
             oid = None
 
-            match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(
-                content
-            )
+            match = get_special_script_tag_pattern(SpecialScriptTag.OID).search(content)
 
             if match:
                 oid = match.group("oid")

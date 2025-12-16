@@ -49,11 +49,7 @@ class SpecialScriptTagPatternsTestCase(unittest.TestCase):
         self.assertIs(patterns1, patterns2)
 
     def test_same_pattern_instance(self):
-        pattern1 = get_special_script_tag_pattern(
-            SpecialScriptTag.ADD_PREFERENCE
-        )
-        pattern2 = get_special_script_tag_pattern(
-            SpecialScriptTag.ADD_PREFERENCE
-        )
+        pattern1 = get_special_script_tag_pattern(SpecialScriptTag.ADD_PREFERENCE)
+        pattern2 = get_special_script_tag_pattern(SpecialScriptTag.ADD_PREFERENCE)
 
         self.assertIs(pattern1, pattern2)

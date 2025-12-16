@@ -32,9 +32,7 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckIllegalCharacters(fake_context)
 
         results = list(plugin.run())
@@ -68,9 +66,7 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
                 '  script_tag(name:"solution", value:"meh");\n'
             )
 
-            fake_context = self.create_file_plugin_context(
-                nasl_file=path, file_content=content
-            )
+            fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
             plugin = CheckIllegalCharacters(fake_context)
 
             results = list(plugin.run())
@@ -106,9 +102,7 @@ class CheckIllegalCharactersTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckIllegalCharacters(fake_context)
 
         results = list(plugin.run())

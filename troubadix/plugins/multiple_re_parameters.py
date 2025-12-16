@@ -13,9 +13,7 @@ from troubadix.plugin import LineContentPlugin, LinterError, LinterResult
 
 RE_PATTERN = re.compile(r"re\s*:")
 
-MANDATORY_KEYS_PATTERN = get_special_script_tag_pattern(
-    SpecialScriptTag.MANDATORY_KEYS
-)
+MANDATORY_KEYS_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.MANDATORY_KEYS)
 
 
 class CheckMultipleReParameters(LineContentPlugin):
@@ -25,9 +23,7 @@ class CheckMultipleReParameters(LineContentPlugin):
 
     name = "check_multiple_re_parameters"
 
-    def check_lines(
-        self, nasl_file: Path, lines: Iterable[str]
-    ) -> Iterator[LinterResult]:
+    def check_lines(self, nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
 
         if self.context.nasl_file.suffix == ".inc":
             return

@@ -79,9 +79,7 @@ class ChangedPackagesTestCase(TestCase):
 
     def test_filter_reasons(self):
         packages = [
-            Package(
-                "foo", "1.2.3", "DEB11", {Reasons.ADDED_EPOCH: Direction.ACTIVE}
-            ),
+            Package("foo", "1.2.3", "DEB11", {Reasons.ADDED_EPOCH: Direction.ACTIVE}),
             Package(
                 "bar",
                 "1.2.3",
@@ -91,9 +89,7 @@ class ChangedPackagesTestCase(TestCase):
                     Reasons.ADDED_RELEASE: Direction.PASSIVE,
                 },
             ),
-            Package(
-                "baz", "1.2.3", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}
-            ),
+            Package("baz", "1.2.3", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}),
         ]
 
         expected_packages = [
@@ -106,9 +102,7 @@ class ChangedPackagesTestCase(TestCase):
                     Reasons.ADDED_RELEASE: Direction.PASSIVE,
                 },
             ),
-            Package(
-                "baz", "1.2.3", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}
-            ),
+            Package("baz", "1.2.3", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}),
         ]
 
         result = filter_reasons(packages, [Reasons.ADDED_EPOCH])

@@ -31,9 +31,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             "  script_category(ACT_ATTACK);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedFunctions(fake_context)
 
         results = list(plugin.run())
@@ -48,9 +46,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "  script_category(ACT_ATTACK);\n"
             "# nb: script_summary() is deprecated\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedFunctions(fake_context)
 
         results = list(plugin.run())
@@ -62,8 +58,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             'script_summary();, use script_tag(name:"'
             'summary", value:""); instead': "  script_"
             'summary("deprecated");',
-            "script_id();, use script_oid(); with "
-            "the full OID instead": "  script_id(123345);",
+            "script_id();, use script_oid(); with " "the full OID instead": "  script_id(123345);",
             "security_note();": '  security_note("deprecated");',
             "security_warning();": '  security_warning("deprecated");',
             "security_hole();": '  security_hole("deprecated");',
@@ -79,9 +74,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
                 '  script_tag(name:"summary", value:"Foo Bar.");\n'
                 f"  script_category(ACT_ATTACK);\n{cont}\n"
             )
-            fake_context = self.create_file_plugin_context(
-                nasl_file=path, file_content=content
-            )
+            fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
             plugin = CheckDeprecatedFunctions(fake_context)
 
             results = list(plugin.run())
@@ -101,9 +94,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "  script_category(ACT_ATTACK);\n"
             '  script_summary("With\nnewline");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedFunctions(fake_context)
 
         results = list(plugin.run())

@@ -28,12 +28,9 @@ class CheckCVEFormatTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"cvss_base", value:"7.5");\n'
-            '  script_cve_id("CVE-2022-23807");\n'
+            '  script_tag(name:"cvss_base", value:"7.5");\n' '  script_cve_id("CVE-2022-23807");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -52,9 +49,7 @@ class CheckCVEFormatTestCase(PluginTestCase):
     def test_detection_script(self):
         path = Path("some/file.nasl")
         content = '  script_tag(name:"cvss_base", value:"0.0");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -64,9 +59,7 @@ class CheckCVEFormatTestCase(PluginTestCase):
     def test_no_cve_reference(self):
         path = Path("some/file.nasl")
         content = '  script_tag(name:"cvss_base", value:"7.5");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -81,12 +74,9 @@ class CheckCVEFormatTestCase(PluginTestCase):
     def test_invalid_cve_format(self):
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"cvss_base", value:"10.0");\n'
-            '  script_cve_id("CVE-a123-23807");\n'
+            '  script_tag(name:"cvss_base", value:"10.0");\n' '  script_cve_id("CVE-a123-23807");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -101,13 +91,10 @@ class CheckCVEFormatTestCase(PluginTestCase):
     def test_more_then_four_digits(self):
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"cvss_base", value:"7.5");\n'
-            '  script_cve_id("CVE-2021-03807");\n'
+            '  script_tag(name:"cvss_base", value:"7.5");\n' '  script_cve_id("CVE-2021-03807");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -122,12 +109,9 @@ class CheckCVEFormatTestCase(PluginTestCase):
     def test_invalid_year(self):
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"cvss_base", value:"7.5");\n'
-            '  script_cve_id("CVE-1971-3807");\n'
+            '  script_tag(name:"cvss_base", value:"7.5");\n' '  script_cve_id("CVE-1971-3807");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -144,9 +128,7 @@ class CheckCVEFormatTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"7.5");\n'
             f'  script_cve_id("CVE-{current_year + 1}-3807");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())
@@ -164,9 +146,7 @@ class CheckCVEFormatTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"7.5");\n'
             '  script_cve_id("CVE-2021-3807","CVE-2021-3807");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVEFormat(fake_context)
 
         results = list(plugin.run())

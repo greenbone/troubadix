@@ -110,9 +110,7 @@ class TestFileExtensions(unittest.TestCase):
                 args = parse_args()
                 self.assertTrue(args)
                 self.assertEqual(args.dir, Path(tmpdir))
-                self.assertEqual(
-                    args.ignore_file, Path(tmpdir, "file_extensions.ignore")
-                )
+                self.assertEqual(args.ignore_file, Path(tmpdir, "file_extensions.ignore"))
 
     def test_parse_args_no_dir(self):
         test_args = ["prog", "not_real_dir"]

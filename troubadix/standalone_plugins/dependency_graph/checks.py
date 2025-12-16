@@ -23,28 +23,21 @@ def check_duplicates(scripts: list[Script]) -> Result:
     return Result(name="duplicate dependency", warnings=warnings)
 
 
-def check_missing_dependencies(
-    scripts: list[Script], graph: nx.DiGraph
-) -> Result:
+def check_missing_dependencies(scripts: list[Script], graph: nx.DiGraph) -> Result:
     """
     Checks if any scripts that are depended on are missing from
     the list of scripts created from the local file system,
     logs the scripts dependending on the missing script
     """
     errors = []
-    dependency_names = {
-        dep.name for script in scripts for dep in script.dependencies
-    }
+    dependency_names = {dep.name for script in scripts for dep in script.dependencies}
     script_names = {script.name for script in scripts}
     missing_dependencies = dependency_names - script_names
 
     for missing in missing_dependencies:
         depending_scripts = graph.predecessors(missing)
         errors.append(
-            f"{missing}:"
-            + "".join(
-                f"\n  - used by: {script}" for script in depending_scripts
-            )
+            f"{missing}:" + "".join(f"\n  - used by: {script}" for script in depending_scripts)
         )
 
     return Result(name="missing dependency", errors=errors)
@@ -63,9 +56,7 @@ def check_cycles(graph) -> Result:
     return Result(name="cyclic dependency", errors=errors)
 
 
-def cross_feed_dependencies(
-    graph, is_enterprise_checked: bool
-) -> list[tuple[str, str]]:
+def cross_feed_dependencies(graph, is_enterprise_checked: bool) -> list[tuple[str, str]]:
     """
     creates a list of script and dependency for scripts
     in community feed that depend on scripts in enterprise folders
@@ -105,8 +96,7 @@ def check_category_order(graph) -> Result:
     problematic_edges = [
         (dependent, dependency)
         for dependent, dependency in graph.edges()
-        if graph.nodes[dependent]["category"]
-        < graph.nodes[dependency].get("category", -1)
+        if graph.nodes[dependent]["category"] < graph.nodes[dependency].get("category", -1)
     ]
 
     errors = [

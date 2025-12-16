@@ -30,9 +30,7 @@ def testgit(tmpdir: Path, ok: bool = False) -> None:
     git("commit", "-m", "test")
     git("checkout", "-b", "test")
     if ok:
-        test_file.write_text(
-            'script_oid("1.3.6.1.4.1.25623.1.0.100313");\ntest'
-        )
+        test_file.write_text('script_oid("1.3.6.1.4.1.25623.1.0.100313");\ntest')
     else:
         test_file.write_text('script_oid("2.3.6.1.4.1.25623.1.0.100313");')
     git("add", "-u")
@@ -62,9 +60,7 @@ class TestChangedOid(unittest.TestCase):
     def test_args_ok(self):
         with temporary_git_directory() as tmpdir:
             testgit(tmpdir)
-            self.assertEqual(
-                parse_args(["-c", "main..test"]).commit_range, "main..test"
-            )
+            self.assertEqual(parse_args(["-c", "main..test"]).commit_range, "main..test")
             self.assertEqual(
                 parse_args(["-c", "main..test", "-f", "test.nasl"]).files,
                 [Path("test.nasl")],

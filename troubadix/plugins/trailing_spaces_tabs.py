@@ -39,15 +39,12 @@ class CheckTrailingSpacesTabs(FilePlugin):
                     to find special tags
 
         """
-        for line_number, line in enumerate(
-            self.context.file_content.splitlines(), start=1
-        ):
+        for line_number, line in enumerate(self.context.file_content.splitlines(), start=1):
             if not PATTERN.search(line):
                 continue
 
             yield LinterError(
-                "The VT has one or more trailing spaces "
-                f"and/or tabs in line {line_number}!",
+                "The VT has one or more trailing spaces " f"and/or tabs in line {line_number}!",
                 file=self.context.nasl_file,
                 plugin=self.name,
             )

@@ -61,9 +61,7 @@ def parse_arguments() -> Namespace:
     return args
 
 
-def check_changed_creation_date(
-    commit_range: str, nasl_files: list[Path]
-) -> bool:
+def check_changed_creation_date(commit_range: str, nasl_files: list[Path]) -> bool:
     """
     This script checks (via git diff) if the creation date of
     passed VTs has changed, which is not allowed.
@@ -90,9 +88,7 @@ def check_changed_creation_date(
             text,
             re.MULTILINE,
         )
-        if not creation_date_added or not (
-            added := creation_date_added.group("creation_date")
-        ):
+        if not creation_date_added or not (added := creation_date_added.group("creation_date")):
             continue
 
         creation_date_removed = re.search(
@@ -125,9 +121,7 @@ def main() -> int:
         git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.rstrip("\n"))
     except subprocess.SubprocessError:
-        logger.error(
-            "Your current working directory doesn't belong to a git repository"
-        )
+        logger.error("Your current working directory doesn't belong to a git repository")
         return 1
 
     args = parse_arguments()

@@ -40,9 +40,7 @@ class CheckScriptTagForm(FileContentPlugin):
         matches = re.finditer(r"script_tag\(.*\);", file_content)
         for match in matches:
             if match:
-                if not _get_tag_pattern(name=r".*", value=r".*").match(
-                    match.group(0)
-                ):
+                if not _get_tag_pattern(name=r".*", value=r".*").match(match.group(0)):
                     yield LinterError(
                         f"{match.group(0)}: does not conform to"
                         ' script_tag(name:"<name>", value:<value>);',

@@ -55,9 +55,7 @@ def check_forbidden(match: re.match) -> List[str]:
     return [char for char in FORBIDDEN_CHARS if char in match.group("value")]
 
 
-def fix_forbidden(
-    match: re.Match, found_forbidden_characters: List[str]
-) -> str:
+def fix_forbidden(match: re.Match, found_forbidden_characters: List[str]) -> str:
     """Returns the fixed version of the tag with
        the forbidden characters replaced
 
@@ -100,13 +98,9 @@ class CheckIllegalCharacters(FilePlugin):
                 if match and match.group(0) is not None:
                     found_forbidden_characters = check_forbidden(match)
                     if found_forbidden_characters:
-                        self.new_file_content = (
-                            self.context.file_content.replace(
-                                match.group(0),
-                                fix_forbidden(
-                                    match, found_forbidden_characters
-                                ),
-                            )
+                        self.new_file_content = self.context.file_content.replace(
+                            match.group(0),
+                            fix_forbidden(match, found_forbidden_characters),
                         )
 
                         for forbidden_char in found_forbidden_characters:
@@ -122,9 +116,7 @@ class CheckIllegalCharacters(FilePlugin):
         if not self.new_file_content:
             return
 
-        self.context.nasl_file.write_text(
-            self.new_file_content, encoding=CURRENT_ENCODING
-        )
+        self.context.nasl_file.write_text(self.new_file_content, encoding=CURRENT_ENCODING)
 
         yield LinterFix(
             "Replaced Illegal Characters.",
