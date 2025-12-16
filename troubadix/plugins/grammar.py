@@ -48,8 +48,12 @@ exceptions = [
     #   catch this wrongly...
     # - Cases like "this filesystem" vs. "these filesystems" are also handled /
     #   excluded here
-    PatternCheck(r'this\s+(filesystem|allow\s+list)[\s.",]+', re.IGNORECASE),
-    PatternCheck(r'these\s+(filesystem|allow\s+list)s[\s.",]+', re.IGNORECASE),
+    PatternCheck(
+        r'this\s+(filesystem|allow\s+list)([\s.",]+|$)', re.IGNORECASE
+    ),
+    PatternCheck(
+        r'these\s+(filesystem|allow\s+list)s([\s.",]+|$)', re.IGNORECASE
+    ),
     # Like seen in e.g. 2008/freebsd/freebsd_mod_php4-twig.nasl
     PatternCheck(r'(\s+|")[Aa]\s+multiple\s+of'),
     # WITH can be used like e.g. the following which is valid:
