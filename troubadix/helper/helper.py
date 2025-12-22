@@ -35,9 +35,7 @@ SCRIPT_CATEGORIES = {
 }
 
 
-def is_ignore_file(
-    file_name: Union[Path, str], ignore_files: Union[List[Path], List[str]]
-) -> bool:
+def is_ignore_file(file_name: Union[Path, str], ignore_files: Union[List[Path], List[str]]) -> bool:
     for ignore_file in ignore_files:
         if str(ignore_file) in str(file_name):
             return True

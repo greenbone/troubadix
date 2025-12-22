@@ -149,9 +149,7 @@ class TestIsPositionInString(unittest.TestCase):
     def test_escaped_quote_in_single_quotes(self):
         text = "x = 'don\\'t';"
         self.assertTrue(is_position_in_string(text, 8))  # inside the string
-        self.assertTrue(
-            is_position_in_string(text, 10)
-        )  # after the escaped quote
+        self.assertTrue(is_position_in_string(text, 10))  # after the escaped quote
 
     def test_mixed_quotes(self):
         text = 'a = "it\'s ok"; b = \'say "hi"\';'

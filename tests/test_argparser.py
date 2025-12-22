@@ -68,9 +68,7 @@ class TestArgparsing(unittest.TestCase):
         self.assertIsNone(parsed_args.included_plugins)
 
     def test_parse_include_patterns(self):
-        parsed_args = parse_args(
-            self.terminal, ["-f", "--include-patterns", "troubadix/*"]
-        )
+        parsed_args = parse_args(self.terminal, ["-f", "--include-patterns", "troubadix/*"])
 
         self.assertTrue(parsed_args.full)
         self.assertEqual(parsed_args.include_patterns, ["troubadix/*"])
@@ -92,9 +90,7 @@ class TestArgparsing(unittest.TestCase):
             )
 
     def test_parse_exclude_patterns(self):
-        parsed_args = parse_args(
-            self.terminal, ["-f", "--exclude-patterns", "troubadix/*"]
-        )
+        parsed_args = parse_args(self.terminal, ["-f", "--exclude-patterns", "troubadix/*"])
 
         self.assertTrue(parsed_args.full)
         self.assertEqual(parsed_args.exclude_patterns, ["troubadix/*"])

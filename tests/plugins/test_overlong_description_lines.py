@@ -52,9 +52,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "ignored line that is not part of description"
             "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckOverlongDescriptionLines(fake_context)
 
         results = list(plugin.run())
@@ -76,9 +74,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "  exit(0);\n"
             "}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckOverlongDescriptionLines(fake_context)
 
         results = list(plugin.run())
@@ -99,9 +95,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "  exit(0);\n"
             "}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckOverlongDescriptionLines(fake_context)
 
         results = list(plugin.run())
@@ -127,9 +121,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             "  exit(0);\n"
             "}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckOverlongDescriptionLines(fake_context)
 
         results = list(plugin.run())
@@ -151,9 +143,7 @@ class CheckOverlongDescriptionLinesTestCase(PluginTestCase):
             '  script_version("2021-09-02T14:01:33+0000");\n'
             "}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckOverlongDescriptionLines(fake_context)
 
         results = list(plugin.run())

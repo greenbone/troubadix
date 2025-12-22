@@ -33,9 +33,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -50,9 +48,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '+0200 (Tue, 14 May 2022)");\n'
             '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -70,9 +66,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '+0200 (Tue, 14 May 2022)");\n'
             '  script_copyright("Copyright (C) 2020 Greenbone AG");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -86,9 +80,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '+0200 (Tue, 14 May 2022)");\n'
             '  script_copyright("Copyright (C) 2020 Greenbone AG");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -110,16 +102,12 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
         self.assertEqual(len(results), 1)
-        self.assertEqual(
-            "Missing creation_date statement in VT", results[0].message
-        )
+        self.assertEqual("Missing creation_date statement in VT", results[0].message)
 
     def test_missing_copyright_tag(self):
         path = Path("some/file.nasl")
@@ -129,9 +117,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '+0200 (Tue, 14 May 2022)");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -147,9 +133,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '  script_copyright("Copyright (C) Greenbone AG");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -167,9 +151,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '  script_copyright("Copyright (C) 2022 Greenbone AG");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -188,9 +170,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '+0200 (Tue, 14 May 2020)");\n'
             '  script_copyright("Copyright (C) 2021 Greenbone AG");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())
@@ -200,8 +180,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "a pre2008 vt has a copyright value in the fileheader"
-            " newer than the creation_year",
+            "a pre2008 vt has a copyright value in the fileheader" " newer than the creation_year",
             results[1].message,
         )
 
@@ -214,9 +193,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             '  script_copyright("Copyright (C) 1000 Greenbone AG");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCopyrightYear(fake_context)
 
         results = list(plugin.run())

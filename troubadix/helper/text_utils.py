@@ -55,9 +55,7 @@ def index_to_linecol(text: str, index: int) -> tuple[int, int]:
         (line, column) tuple (both start at 1)
     """
     if index < 0 or index >= len(text):
-        raise ValueError(
-            f"Index {index} out of bounds for text of length {len(text)}"
-        )
+        raise ValueError(f"Index {index} out of bounds for text of length {len(text)}")
 
     lines = text.splitlines(keepends=True)
     line_num = 0

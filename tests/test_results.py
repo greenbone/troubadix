@@ -34,45 +34,29 @@ class TestResults(unittest.TestCase):
         fresults = FileResults(file_path=Path("some/file.nasl"))
         fresults.add_plugin_results(
             plugin_name="test",
-            results=[
-                LinterError("test", file=Path("some/file.nasl"), plugin="test")
-            ],
+            results=[LinterError("test", file=Path("some/file.nasl"), plugin="test")],
         )
 
         self.assertTrue(fresults)
 
     def test_has_results_ok_no_warning(self):
-        fresults = FileResults(
-            file_path=Path("some/file.nasl"), ignore_warnings=True
-        )
+        fresults = FileResults(file_path=Path("some/file.nasl"), ignore_warnings=True)
         fresults.add_plugin_results(
             plugin_name="test",
-            results=[
-                LinterWarning(
-                    "test", file=Path("some/file.nasl"), plugin="test"
-                )
-            ],
+            results=[LinterWarning("test", file=Path("some/file.nasl"), plugin="test")],
         )
 
         self.assertFalse(fresults)
 
     def test_has_results_no_warning(self):
-        fresults = FileResults(
-            file_path=Path("some/file.nasl"), ignore_warnings=True
+        fresults = FileResults(file_path=Path("some/file.nasl"), ignore_warnings=True)
+        fresults.add_plugin_results(
+            plugin_name="test",
+            results=[LinterWarning("test", file=Path("some/file.nasl"), plugin="test")],
         )
         fresults.add_plugin_results(
             plugin_name="test",
-            results=[
-                LinterWarning(
-                    "test", file=Path("some/file.nasl"), plugin="test"
-                )
-            ],
-        )
-        fresults.add_plugin_results(
-            plugin_name="test",
-            results=[
-                LinterError("test", file=Path("some/file.nasl"), plugin="test")
-            ],
+            results=[LinterError("test", file=Path("some/file.nasl"), plugin="test")],
         )
 
         self.assertTrue(fresults)

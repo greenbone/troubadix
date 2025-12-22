@@ -48,9 +48,7 @@ exceptions = [
     # Same for a few other files:
     PatternInFileCheck("smtp_AV_42zip_DoS.nasl", r"BA\s+==>\s+BY, BE"),
     PatternInFileCheck("bad_ssh_host_keys.inc", r"ba\s+==>\s+by, be"),
-    PatternsInFileCheck(
-        "wmi_misc.inc", [r"BA\s+==>\s+BY, BE", r"OD\s+==>\s+OF"]
-    ),
+    PatternsInFileCheck("wmi_misc.inc", [r"BA\s+==>\s+BY, BE", r"OD\s+==>\s+OF"]),
     PatternInFilesCheck(
         ["ssl_funcs.inc", "gb_ssl_tls_cert_details.nasl"],
         r"fpr\s+==>\s+for, far, fps",
@@ -104,9 +102,7 @@ exceptions = [
         r"n[iI]n\s+==>\s+inn",
     ),
     # False positive in this VT in German example responses.
-    PatternInFileCheck(
-        "gb_exchange_server_CVE-2021-26855_active.nasl", r"ist\s+==>\s+is"
-    ),
+    PatternInFileCheck("gb_exchange_server_CVE-2021-26855_active.nasl", r"ist\s+==>\s+is"),
     # Mostly a false positive in LSCs because of things like
     # "ALSA: hda" or a codec called "Conexant". There are too
     # many hits to maintain them in codespell.exclude so exclude
@@ -152,9 +148,7 @@ exceptions = [
         r"nam\s+==>\s+name",
         text_pattern_flags=re.IGNORECASE,
     ),
-    PatternInFileCheck(
-        "/netop_infopublic.nasl", r"nam\s+==>\s+name", flags=re.IGNORECASE
-    ),
+    PatternInFileCheck("/netop_infopublic.nasl", r"nam\s+==>\s+name", flags=re.IGNORECASE),
     # Product names used in a few VTs (no re.IGNORECASE is expected)
     PatternsCheck([r"renderD\s+==>\s+rendered", r"VertX\s+==>\s+vertex"]),
     PatternInFileCheck("_vertx_", r"vertx\s+==>\s+vertex"),
@@ -206,8 +200,7 @@ class CheckSpelling(FilesPlugin):
         batch_size = 10_000
         for i in range(0, len(self.context.nasl_files), batch_size):
             files_parameters = [
-                str(nasl_file)
-                for nasl_file in self.context.nasl_files[i : i + batch_size]
+                str(nasl_file) for nasl_file in self.context.nasl_files[i : i + batch_size]
             ]
             codespell_arguments = [
                 "--hard-encoding-detection",
@@ -235,9 +228,7 @@ class CheckSpelling(FilesPlugin):
             codespell_entries = [
                 line
                 for line in codespell_output.splitlines()
-                if not handle_linguistic_checks(
-                    *self._parse_codespell_line(line), exceptions
-                )
+                if not handle_linguistic_checks(*self._parse_codespell_line(line), exceptions)
             ]
 
             for codespell_entry in codespell_entries:

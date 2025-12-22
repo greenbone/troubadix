@@ -31,9 +31,7 @@ class CheckWrongSetGetKBCallTestCase(PluginTestCase):
             '  get_kb_item("kb/key");\n'
             '  get_kb_list("kb/key");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckWrongSetGetKBCalls(fake_context)
 
         results = list(plugin.run())
@@ -49,9 +47,7 @@ class CheckWrongSetGetKBCallTestCase(PluginTestCase):
             '  replace_kb_item(name:"kbkey", name:"kbkey");\n'
             '  get_kb_item(name:"kbkey");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckWrongSetGetKBCalls(fake_context)
 
         results = list(plugin.run())

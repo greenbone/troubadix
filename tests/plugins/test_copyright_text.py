@@ -48,9 +48,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "right holder(s).\n"
             '  script_copyright("Copyright (C) 1234");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
 
         plugin = CheckCopyrightText(fake_context)
 
@@ -75,9 +73,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
             "# advisory, and are Copyright (C) the respective author(s)\n"
             '  script_copyright("Copyright (C) 134");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
 
         plugin = CheckCopyrightText(fake_context)
 
@@ -99,9 +95,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 f"{wrong_text}"
                 '  script_copyright("Copyright (C) 1234");\n'
             )
-            fake_context = self.create_file_plugin_context(
-                nasl_file=path, file_content=content
-            )
+            fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
 
             plugin = CheckCopyrightText(fake_context)
 
@@ -125,9 +119,7 @@ class CheckCopyrightTextTestCase(PluginTestCase):
                 )
                 path.write_text(content, encoding=CURRENT_ENCODING)
 
-                fake_context = self.create_file_plugin_context(
-                    nasl_file=path, file_content=content
-                )
+                fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
 
                 plugin = CheckCopyrightText(fake_context)
 
@@ -138,7 +130,6 @@ class CheckCopyrightTextTestCase(PluginTestCase):
 
                 self.assertIsInstance(results[0], LinterFix)
                 self.assertEqual(
-                    "The copyright statement has been updated to "
-                    f"{CORRECT_COPYRIGHT_PHRASE}",
+                    "The copyright statement has been updated to " f"{CORRECT_COPYRIGHT_PHRASE}",
                     results[0].message,
                 )

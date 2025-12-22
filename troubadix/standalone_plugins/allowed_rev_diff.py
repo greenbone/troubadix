@@ -29,8 +29,7 @@ def parse_arguments() -> Namespace:
         "--directory",
         default=Path.cwd(),
         type=Path,
-        help="The directory the repository to check is located in. "
-        "Defaults to 'pwd'",
+        help="The directory the repository to check is located in. " "Defaults to 'pwd'",
     )
 
     ignored_linestart_group = argument_parser.add_mutually_exclusive_group()
@@ -42,8 +41,7 @@ def parse_arguments() -> Namespace:
         nargs="*",
         type=str,
         default=DEFAULT_IGNORED_LINESTARTS,
-        help="A list of line starts which will make the line be ignored. "
-        "Default: %(default)s",
+        help="A list of line starts which will make the line be ignored. " "Default: %(default)s",
     )
 
     ignored_linestart_group.add_argument(
@@ -73,9 +71,7 @@ def parse_arguments() -> Namespace:
         "to check the diff for",
     )
 
-    argument_parser.add_argument(
-        "-s", "--source", type=str, required=True, help="The upstream rev"
-    )
+    argument_parser.add_argument("-s", "--source", type=str, required=True, help="The upstream rev")
 
     argument_parser.add_argument(
         "-t", "--target", type=str, required=True, help="The downstream rev"
@@ -84,14 +80,8 @@ def parse_arguments() -> Namespace:
     return argument_parser.parse_args()
 
 
-def check_diff_line_starts_with_ignored_linestart(
-    line: str, ignored_linestarts: List[str]
-) -> bool:
-    return any(
-        linestart
-        for linestart in ignored_linestarts
-        if line.startswith(linestart)
-    )
+def check_diff_line_starts_with_ignored_linestart(line: str, ignored_linestarts: List[str]) -> bool:
+    return any(linestart for linestart in ignored_linestarts if line.startswith(linestart))
 
 
 def check_diff_line_matches_pattern(line: str, patterns: List[Pattern]) -> bool:
@@ -104,9 +94,7 @@ def check_diff(
     return [
         line
         for line in lines
-        if not check_diff_line_starts_with_ignored_linestart(
-            line, ignored_linestarts
-        )
+        if not check_diff_line_starts_with_ignored_linestart(line, ignored_linestarts)
         and not check_diff_line_matches_pattern(line, patterns)
     ]
 
@@ -121,10 +109,7 @@ def read_ignored_linestarts(path: Path) -> List[str]:
 
 def read_patterns(path: Path) -> List[Pattern]:
     with open(path, "r", encoding="UTF-8") as file:
-        return [
-            re.compile(pattern.removesuffix("\n"))
-            for pattern in file.readlines()
-        ]
+        return [re.compile(pattern.removesuffix("\n")) for pattern in file.readlines()]
 
 
 def main() -> int:
@@ -140,9 +125,7 @@ def main() -> int:
 
     diff = repo.git.diff(target, merge_base, unified=0)
 
-    result = check_diff(
-        diff.splitlines(), arguments.ignored_linestarts, patterns
-    )
+    result = check_diff(diff.splitlines(), arguments.ignored_linestarts, patterns)
 
     if result:
         print("The following lines don't match the any pattern:")

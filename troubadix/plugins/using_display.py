@@ -63,9 +63,7 @@ class CheckUsingDisplay(FileContentPlugin):
 
             # Case 1: Not in any if statement - ERROR
             if not containing_if:
-                line_start = (
-                    comment_free_content.rfind("\n", 0, display_pos) + 1
-                )
+                line_start = comment_free_content.rfind("\n", 0, display_pos) + 1
                 line_end = comment_free_content.find("\n", display_pos)
                 if line_end == -1:
                     line_end = len(comment_free_content)
@@ -95,9 +93,7 @@ class CheckUsingDisplay(FileContentPlugin):
                 yield LinterWarning(
                     "VT is using a display() inside an if statement"
                     f" but without debug check at line {line}\n"
-                    + comment_free_content[
-                        containing_if.if_start : containing_if.if_end
-                    ],
+                    + comment_free_content[containing_if.if_start : containing_if.if_end],
                     file=nasl_file,
                     plugin=self.name,
                 )

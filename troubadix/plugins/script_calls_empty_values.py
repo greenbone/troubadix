@@ -64,9 +64,9 @@ class CheckScriptCallsEmptyValues(FileContentPlugin):
             )
 
         for call in SPECIAL_SCRIPT_TAG_LIST:
-            matches = _get_special_script_tag_pattern(
-                name=call.value, value=""
-            ).finditer(file_content)
+            matches = _get_special_script_tag_pattern(name=call.value, value="").finditer(
+                file_content
+            )
             for match in matches:
                 yield LinterError(
                     f"{match.group(0)} does not contain a value",

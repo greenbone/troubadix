@@ -11,9 +11,7 @@ def parse_date(date: str) -> datetime:
     return datetime.strptime(date[:25], "%Y-%m-%d %H:%M:%S %z")
 
 
-def check_date(
-    date: str, date_name: str, file: str, plugin: str
-) -> Iterator[LinterResult]:
+def check_date(date: str, date_name: str, file: str, plugin: str) -> Iterator[LinterResult]:
     """
     Checks if a given date string is correctly formatted.
     Example: "2017-11-29 13:56:41 +0100 (Wed, 29 Nov 2017)"
@@ -58,8 +56,7 @@ def check_date(
     elif week_day_str != week_day_parsed:
         formatted_date = week_day_parsed
         yield LinterError(
-            f"Wrong day of week. Please change it from '{week_day_str}"
-            f"' to '{formatted_date}'.",
+            f"Wrong day of week. Please change it from '{week_day_str}" f"' to '{formatted_date}'.",
             file=file,
             plugin=plugin,
         )
@@ -79,8 +76,7 @@ def compare_date_with_last_modification_date(
     try:
         if parse_date(date) > parse_date(last_mod_date):
             yield LinterError(
-                f"The {date_name} must not be greater than "
-                "last_modification date.",
+                f"The {date_name} must not be greater than " "last_modification date.",
                 file=file,
                 plugin=plugin,
             )

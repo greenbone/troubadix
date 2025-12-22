@@ -33,9 +33,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -58,9 +56,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "2021_07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -72,8 +68,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "VT is is using a wrong syntax for script_tag(name:"
-            '"last_modification".',
+            "VT is is using a wrong syntax for script_tag(name:" '"last_modification".',
             results[1].message,
         )
 
@@ -84,9 +79,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "$Date: 2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021) $");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -98,8 +91,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "VT is is using a wrong syntax for script_tag(name:"
-            '"last_modification".',
+            "VT is is using a wrong syntax for script_tag(name:" '"last_modification".',
             results[1].message,
         )
 
@@ -111,9 +103,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -132,17 +122,13 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
 
         self.assertEqual(1, len(results))
-        self.assertEqual(
-            results[0].message, "False or incorrectly formatted version."
-        )
+        self.assertEqual(results[0].message, "False or incorrectly formatted version.")
 
     def test_fix_last_modification_date(self):
         with self.create_directory() as testdir:
@@ -178,9 +164,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021x");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -198,9 +182,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "3021-07-19 '
             '12:32:02 +0000 (Mon, 19 Jul 2021)");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -218,9 +200,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name: "last_modification", value: "2021-07-19 '
             '12:32:02 +0000 (Tue, 19 Jul 2021)");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -238,9 +218,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name:"last_modification", value:"2021-07-19 '
             '112:32:02 +0000 (Mon, 19 Jul 2021");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -258,9 +236,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name:"last_modification", value:"2021-07-19 '
             '12:32:02s +0000 (Mon, 19 Jul 2021");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())
@@ -278,9 +254,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             '  script_tag(name:"last_modification", value:"2021-07-19D '
             '12:32:02 +0000 (Mon, 19 Jul 2021");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckScriptVersionAndLastModificationTags(fake_context)
 
         results = list(plugin.run())

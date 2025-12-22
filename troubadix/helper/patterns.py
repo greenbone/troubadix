@@ -42,9 +42,7 @@ _TAG_PATTERN = (
 )
 
 
-def _get_tag_pattern(
-    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
-) -> re.Pattern:
+def _get_tag_pattern(name: str, *, value: str = r".+?", flags: re.RegexFlag = 0) -> re.Pattern:
     """
     The returned pattern catches all
     `script_tags(name="{name}", value="{value}");`
@@ -89,8 +87,7 @@ __script_tag_pattern = None
 __DATE_VALUE = r"[A-Za-z0-9\:\-\+\,\s\(\)]{44}"
 __CVSS_V2_BASE_VECTOR = r"AV:[LAN]/AC:[HML]/Au:[NSM]/C:[NPC]/I:[NPC]/A:[NPC]"
 __CVSS_V3_BASE_VECTOR = (
-    r"CVSS:3.[01]/AV:[NALP]/AC:[LH]/PR:[NLH]/UI:[NR]/S:[UC]"
-    r"/C:[HLN]/I:[HLN]/A:[HLN]"
+    r"CVSS:3.[01]/AV:[NALP]/AC:[LH]/PR:[NLH]/UI:[NR]/S:[UC]" r"/C:[HLN]/I:[HLN]/A:[HLN]"
 )
 __CVSS_V4_BASE_VECTOR = (
     r"CVSS:4.0/AV:[NALP]/AC:[LH]/AT:[NP]/PR:[NLH]/UI:[NPA]"
@@ -102,9 +99,7 @@ __script_tag_values = {
     ScriptTag.CVSS_BASE: r"(10\.0|[0-9]\.[0-9])",
     ScriptTag.CVSS_BASE_VECTOR: __CVSS_V2_BASE_VECTOR,
     ScriptTag.SEVERITY_VECTOR: (
-        rf"({__CVSS_V2_BASE_VECTOR})|"
-        rf"({__CVSS_V3_BASE_VECTOR})|"
-        rf"({__CVSS_V4_BASE_VECTOR})"
+        rf"({__CVSS_V2_BASE_VECTOR})|" rf"({__CVSS_V3_BASE_VECTOR})|" rf"({__CVSS_V4_BASE_VECTOR})"
     ),
     ScriptTag.SEVERITY_ORIGIN: r"(NVD|Vendor|Third Party|Greenbone)",
     ScriptTag.SEVERITY_DATE: __DATE_VALUE,
@@ -127,9 +122,7 @@ def init_script_tag_patterns() -> None:
             value = r".+?"
             flags = re.MULTILINE | re.DOTALL
 
-        __script_tag_pattern[tag] = _get_tag_pattern(
-            name=tag.value, value=value, flags=flags
-        )
+        __script_tag_pattern[tag] = _get_tag_pattern(name=tag.value, value=value, flags=flags)
 
 
 def get_script_tag_patterns() -> Dict[ScriptTag, re.Pattern]:
@@ -162,9 +155,7 @@ _XREF_TAG_PATTERN = (
 )
 
 
-def get_xref_pattern(
-    name: str, *, value: str = r".+?", flags: re.RegexFlag = 0
-) -> re.Pattern:
+def get_xref_pattern(name: str, *, value: str = r".+?", flags: re.RegexFlag = 0) -> re.Pattern:
     """
     The returned pattern catches all
     `script_xref(name="{name}", value="{value}");`
@@ -186,8 +177,7 @@ def get_xref_pattern(
 
 
 _SPECIAL_TAG_PATTERN = (
-    r'script_(?P<name>{name})\s*\((?P<quote99>[\'"])?(?P<value>{value})'
-    r"(?P=quote99)?\s*\)\s*;"
+    r'script_(?P<name>{name})\s*\((?P<quote99>[\'"])?(?P<value>{value})' r"(?P=quote99)?\s*\)\s*;"
 )
 
 
@@ -228,9 +218,7 @@ def _get_special_script_tag_pattern(
     Returns
         `re.Pattern` object
     """
-    return re.compile(
-        _SPECIAL_TAG_PATTERN.format(name=name, value=value), flags=flags
-    )
+    return re.compile(_SPECIAL_TAG_PATTERN.format(name=name, value=value), flags=flags)
 
 
 __PORT_VALUE = r"\"(?P<service>[\w\s])+\", (?P<port>\d{1,5})"

@@ -12,9 +12,7 @@ from troubadix.standalone_plugins.common import get_merge_base, git
 CVE_PATTERN = re.compile(r"CVE-\d{4}-\d{4,}")
 
 
-def compare(
-    old_content: str, current_content: str
-) -> Tuple[List[str], List[str]]:
+def compare(old_content: str, current_content: str) -> Tuple[List[str], List[str]]:
     old_cves = get_cves_from_content(old_content)
     current_cves = get_cves_from_content(current_content)
 
@@ -25,9 +23,7 @@ def compare(
 
 
 def get_cves_from_content(content: str) -> Set[str]:
-    pattern = _get_special_script_tag_pattern(
-        name="cve_id", flags=re.MULTILINE | re.DOTALL
-    )
+    pattern = _get_special_script_tag_pattern(name="cve_id", flags=re.MULTILINE | re.DOTALL)
     match = pattern.search(content)
     if not match:
         return set()
@@ -72,18 +68,14 @@ def main():
     args = parse_args()
     terminal = ConsoleTerminal()
 
-    terminal.info(
-        f"Checking {len(args.files)} file(s) from {args.start_commit} to HEAD"
-    )
+    terminal.info(f"Checking {len(args.files)} file(s) from {args.start_commit} to HEAD")
 
     for file in args.files:
         try:
             old_content = git("show", f"{args.start_commit}:{file}")
             current_content = git("show", f"HEAD:{file}")
         except CalledProcessError:
-            terminal.error(
-                f"Could not find {file} at {args.start_commit} or HEAD"
-            )
+            terminal.error(f"Could not find {file} at {args.start_commit} or HEAD")
             continue
 
         missing_cves, added_cves = compare(old_content, current_content)

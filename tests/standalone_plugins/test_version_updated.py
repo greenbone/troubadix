@@ -115,44 +115,28 @@ class TestVersionChanged(unittest.TestCase):
             setupgit(tmpdir)
             change_nothing(tmpdir)
             parsed_args = parse_args(["-c", "HEAD~1"])
-            self.assertFalse(
-                check_version_updated(
-                    parsed_args.files, parsed_args.commit_range
-                )
-            )
+            self.assertFalse(check_version_updated(parsed_args.files, parsed_args.commit_range))
 
     def test_change_version(self):
         with tempgitdir() as tmpdir:
             setupgit(tmpdir)
             change_version(tmpdir)
             parsed_args = parse_args(["-c", "HEAD~1"])
-            self.assertFalse(
-                check_version_updated(
-                    parsed_args.files, parsed_args.commit_range
-                )
-            )
+            self.assertFalse(check_version_updated(parsed_args.files, parsed_args.commit_range))
 
     def test_change_last_modification(self):
         with tempgitdir() as tmpdir:
             setupgit(tmpdir)
             change_last_modification(tmpdir)
             parsed_args = parse_args(["-c", "HEAD~1"])
-            self.assertFalse(
-                check_version_updated(
-                    parsed_args.files, parsed_args.commit_range
-                )
-            )
+            self.assertFalse(check_version_updated(parsed_args.files, parsed_args.commit_range))
 
     def test_change_both(self):
         with tempgitdir() as tmpdir:
             setupgit(tmpdir)
             change_version_and_last_modification(tmpdir)
             parsed_args = parse_args(["-c", "HEAD~1"])
-            self.assertTrue(
-                check_version_updated(
-                    parsed_args.files, parsed_args.commit_range
-                )
-            )
+            self.assertTrue(check_version_updated(parsed_args.files, parsed_args.commit_range))
 
     def test_git_fail(self):
         with self.assertRaises(SubprocessError):

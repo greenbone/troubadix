@@ -20,10 +20,7 @@ def remove_comments(file_content: str) -> str:
     """
     string_state = StringState()
     return "\n".join(
-        [
-            _remove_comments_in_line(line, string_state)
-            for line in file_content.splitlines()
-        ]
+        [_remove_comments_in_line(line, string_state) for line in file_content.splitlines()]
     )
 
 

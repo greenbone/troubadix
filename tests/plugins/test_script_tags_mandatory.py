@@ -36,9 +36,7 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"10.0");\n'
             '  script_tag(name:"cvss_base_vector", value:"AV:N/AC:L/Au:N/C:C/I:C/A:C");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagsMandatory(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +54,7 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
 
     def test_missing_tags_calls(self):
         content = '  script_xref(name: "URL", value:"");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagsMandatory(fake_context)
 
         results = list(plugin.run())
@@ -74,9 +70,7 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
             "  script_family(FAMILY);\n"
             '  script_copyright("COPYRIGHT");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagsMandatory(fake_context)
 
         results = list(plugin.run())
@@ -86,9 +80,7 @@ class CheckScriptTagsMandatoryTestCase(PluginTestCase):
 
     def test_missing_calls(self):
         content = '  script_tag(name:"summary", value:"foo");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptTagsMandatory(fake_context)
 
         results = list(plugin.run())

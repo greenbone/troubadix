@@ -53,8 +53,7 @@ class CheckSolutionType(FileContentPlugin):
 
         has_severity = True
         cvss_detect = re.search(
-            r"script_tag\s*\(name\s*:\s*\"cvss_base\","
-            r"\s*value:\s*\"(\d{1,2}\.\d)\"\)",
+            r"script_tag\s*\(name\s*:\s*\"cvss_base\"," r"\s*value:\s*\"(\d{1,2}\.\d)\"\)",
             file_content,
         )
         if cvss_detect is not None and cvss_detect.group(1) == "0.0":

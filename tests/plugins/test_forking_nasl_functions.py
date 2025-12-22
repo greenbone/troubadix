@@ -34,9 +34,7 @@ class CheckForkingNaslFunctionsTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             'port = get_app_port_from_cpe_prefix("cpe:/o:foo:bar");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckForkingNaslFunctions(fake_context)
 
         results = list(plugin.run())
@@ -64,9 +62,7 @@ class CheckForkingNaslFunctionsTestCase(PluginTestCase):
             "if( ! infos = get_app_port_from_cpe_prefix( cpe:CPE_PREFIX, "
             'service:"www" ) )\nexit( 0 );\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckForkingNaslFunctions(fake_context)
 
         results = list(plugin.run())
@@ -95,9 +91,7 @@ class CheckForkingNaslFunctionsTestCase(PluginTestCase):
             ")\nexit(0);\n"
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckForkingNaslFunctions(fake_context)
 
         results = list(plugin.run())

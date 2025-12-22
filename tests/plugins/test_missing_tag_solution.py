@@ -32,9 +32,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckMissingTagSolution(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +54,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"4.0");\n'
             '  script_tag(name:"summary", value:"Foo Bar...");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckMissingTagSolution(fake_context)
 
         results = list(plugin.run())
@@ -72,9 +68,7 @@ class CheckDoubleEndPointsTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar...");'
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckMissingTagSolution(fake_context)
 
         results = list(plugin.run())

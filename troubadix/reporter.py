@@ -77,9 +77,7 @@ class Reporter:
         self._term.ok(message)
         self._log_append(f"\t\t{message}".replace("\n", "\n\t\t"))
 
-    def _process_plugin_results(
-        self, plugin_name: str, plugin_results: Iterable[LinterResult]
-    ):
+    def _process_plugin_results(self, plugin_name: str, plugin_results: Iterable[LinterResult]):
         """Process the results of a plugin: Print/Log results if
         verbosity/logging fits and count the results"""
         if plugin_results and self._verbose > 0:
@@ -123,9 +121,7 @@ class Reporter:
             with self._term.indent():
                 self._process_plugin_results(plugin_name, plugin_results)
 
-    def report_by_file_plugin(
-        self, file_results: FileResults, pos: int
-    ) -> None:
+    def report_by_file_plugin(self, file_results: FileResults, pos: int) -> None:
         """Print/log the results of all plugins for a specific file
 
         Arguments:
@@ -135,12 +131,8 @@ class Reporter:
         """
         if file_results and self._verbose > 0 or self._verbose > 1:
             # only print the part "common/some_nasl.nasl"
-            from_root_path = get_path_from_root(
-                file_results.file_path, self._root
-            )
-            self._report_bold_info(
-                f"Checking {from_root_path} ({pos}/{self._files_count})"
-            )
+            from_root_path = get_path_from_root(file_results.file_path, self._root)
+            self._report_bold_info(f"Checking {from_root_path} ({pos}/{self._files_count})")
 
         with self._term.indent():
             for (
@@ -164,9 +156,7 @@ class Reporter:
             if included:
                 self.report_info(f"Included Plugins: {', '.join(included)}")
 
-            self.report_info(
-                f"Running plugins: {', '.join([p.name for p in plugins])}"
-            )
+            self.report_info(f"Running plugins: {', '.join([p.name for p in plugins])}")
 
     def report_statistic(self) -> None:
         """Print a Error/Warning summary from the different plugins"""
@@ -195,10 +185,7 @@ class Reporter:
             if self._fix and self._ignore_warnings:
                 line = f"{plugin:48} {count['error']:8} {count['fix']:8}"
             elif self._fix:
-                line = (
-                    f"{plugin:48} {count['error']:8} {count['warning']:8}"
-                    f" {count['fix']:8}"
-                )
+                line = f"{plugin:48} {count['error']:8} {count['warning']:8}" f" {count['fix']:8}"
             elif self._ignore_warnings:
                 line = f"{plugin:48} {count['error']:8}"
             else:

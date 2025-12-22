@@ -50,9 +50,7 @@ class CheckScriptCopyright(FileContentPlugin):
         ):
             return
 
-        if not re.search(
-            r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content
-        ):
+        if not re.search(r'script_copyright\("Copyright \(C\) [0-9]{4}', file_content):
             yield LinterError(
                 "The VT is using an incorrect syntax for its "
                 "copyright statement. Please start (EXACTLY) with: "

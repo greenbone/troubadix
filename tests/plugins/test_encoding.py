@@ -55,9 +55,7 @@ class CheckEncodingTestCase(PluginTestCase):
 
             # All valid ISO-8859-1 characters (0-255)
             # ASCII printable characters (32-126) + Latin-1 supplement (160-255)
-            latin1_chars = "".join(
-                [chr(i) for i in list(range(32, 127)) + list(range(160, 256))]
-            )
+            latin1_chars = "".join([chr(i) for i in list(range(32, 127)) + list(range(160, 256))])
 
             path.write_text(
                 latin1_chars,

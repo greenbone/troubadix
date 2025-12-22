@@ -31,9 +31,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 
         results = list(plugin.run())
@@ -48,9 +46,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
             '  display("FOO");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 
         results = list(plugin.run())
@@ -70,9 +66,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
             'if (0) display("FOO");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 
         results = list(plugin.run())
@@ -93,9 +87,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
             '# display("FOO");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 
         results = list(plugin.run())
@@ -106,13 +98,8 @@ class CheckUsingDisplayTestCase(PluginTestCase):
     def test_using_debug_if_display(self):
         """Test that display() inside a debug if statement is allowed"""
         path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            'if (debug) display("FOO");\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        content = '  script_tag(name:"cvss_base", value:"4.0");\n' 'if (debug) display("FOO");\n'
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 
         results = list(plugin.run())
@@ -123,9 +110,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
     def test_display_in_string_ignored(self):
         path = Path("some/file.nasl")
         content = "str = 'display(\"FOO\")';\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 
         results = list(plugin.run())

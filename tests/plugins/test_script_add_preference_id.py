@@ -39,9 +39,7 @@ script_add_preference(name:"Foo", type:"radio", value:"bar", id:3);
 
         for content in contents:
             with self.subTest(content=content):
-                fake_context = self.create_file_plugin_context(
-                    nasl_file=path, file_content=content
-                )
+                fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
                 plugin = CheckScriptAddPreferenceId(fake_context)
 
                 results = list(plugin.run())
@@ -103,9 +101,7 @@ script_add_preference(name:"Foo", type:"radio", value:"bar", id:3);
 
         for content, expected_id in contents:
             with self.subTest(content=content):
-                fake_context = self.create_file_plugin_context(
-                    nasl_file=path, file_content=content
-                )
+                fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
                 plugin = CheckScriptAddPreferenceId(fake_context)
 
                 results = list(plugin.run())
@@ -131,9 +127,7 @@ script_add_preference(name:"Foo", type:"radio", value:"bar", id:8);
 """
         expected_ids = [2, 2, 1, 3, 8]
         path = Path("some/file.nasl")
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceId(fake_context)
 
         results = list(plugin.run())

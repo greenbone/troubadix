@@ -28,9 +28,7 @@ class CheckNewlinesTestCase(PluginTestCase):
     def test_ok(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckNewlines(fake_context)
 
         results = list(plugin.run())
@@ -38,13 +36,9 @@ class CheckNewlinesTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_newline_in_name(self):
-        nasl_file = (
-            Path(__file__).parent / "test_files" / "fail_name_newline.nasl"
-        )
+        nasl_file = Path(__file__).parent / "test_files" / "fail_name_newline.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckNewlines(fake_context)
 
         results = list(plugin.run())
@@ -57,15 +51,9 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
 
     def test_newline_in_name_and_copyright(self):
-        nasl_file = (
-            Path(__file__).parent
-            / "test_files"
-            / "fail_name_and_copyright_newline.nasl"
-        )
+        nasl_file = Path(__file__).parent / "test_files" / "fail_name_and_copyright_newline.nasl"
         content = nasl_file.read_text(encoding=CURRENT_ENCODING)
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckNewlines(fake_context)
 
         results = list(plugin.run())
@@ -83,19 +71,13 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
 
     def test_whitespaces_in_name_and_copyright(self):
-        nasl_file = (
-            Path(__file__).parent
-            / "test_files"
-            / "fail_name_and_copyright_newline.nasl"
-        )
+        nasl_file = Path(__file__).parent / "test_files" / "fail_name_and_copyright_newline.nasl"
         content = (
             '  script_name( "foodetection");\n'
             '  script_copyright ( "Copyright(c) Greenbone AG" ) ; \n'
             '  script_copyright ("Copyright(c) Greenbone AG");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckNewlines(fake_context)
 
         results = list(plugin.run())
@@ -113,17 +95,13 @@ class CheckNewlinesTestCase(PluginTestCase):
         )
 
     def test_new_line(self):
-        nasl_file = (
-            Path(__file__).parent / "test_files" / "fail_bad_new_line.nasl"
-        )
+        nasl_file = Path(__file__).parent / "test_files" / "fail_bad_new_line.nasl"
         content = (
             '  script_name("foo detection");'
             '  script_copyright("Copyright(c) Greenbone AG");\r\n'
             '  script_copyright("Copyrigh(c) Greenbone AG");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckNewlines(fake_context)
 
         results = list(plugin.run())

@@ -29,9 +29,7 @@ here = Path(__file__).parent
 class CheckDuplicateOIDTestCase(PluginTestCase):
     def test_ok(self):
         file1 = here / "test_files" / "nasl" / "21.04" / "fail.nasl"
-        file2 = (
-            here / "test_files" / "nasl" / "21.04" / "fail_name_newline.nasl"
-        )
+        file2 = here / "test_files" / "nasl" / "21.04" / "fail_name_newline.nasl"
         context = MagicMock()
         context.nasl_files = [file1, file2]
         context.root = here
@@ -42,9 +40,7 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         self.assertEqual(len(results), 0)
 
     def test_ok_no_script_oid(self):
-        file1 = (
-            here / "test_files" / "nasl" / "21.04" / "fail_name_newline.nasl"
-        )
+        file1 = here / "test_files" / "nasl" / "21.04" / "fail_name_newline.nasl"
         file2 = here / "test_files" / "nasl" / "21.04" / "fail_badwords.nasl"
         context = MagicMock()
         context.nasl_files = [file1, file2]
@@ -56,8 +52,7 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Could not find an OID"
-            " in 'test_files/nasl/21.04/fail_badwords.nasl'.",
+            "Could not find an OID" " in 'test_files/nasl/21.04/fail_badwords.nasl'.",
             results[0].message,
         )
 
@@ -82,13 +77,7 @@ class CheckDuplicateOIDTestCase(PluginTestCase):
         )
 
     def test_invalid_oid(self):
-        file2 = (
-            here
-            / "test_files"
-            / "nasl"
-            / "21.04"
-            / "fail_name_and_copyright_newline.nasl"
-        )
+        file2 = here / "test_files" / "nasl" / "21.04" / "fail_name_and_copyright_newline.nasl"
         context = MagicMock()
         context.nasl_files = [file2]
         context.root = here

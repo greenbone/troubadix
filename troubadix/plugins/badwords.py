@@ -140,20 +140,14 @@ class CheckBadwords(LineContentPlugin):
             if any(badword in line for badword in DEFAULT_BADWORDS):
                 if (
                     not any(exception in line for exception in EXCEPTIONS)
+                    and not any(line.startswith(start) for start in STARTS_WITH_EXCEPTIONS)
                     and not any(
-                        line.startswith(start)
-                        for start in STARTS_WITH_EXCEPTIONS
-                    )
-                    and not any(
-                        nasl_file.name == filename and value in line
-                        for filename, value in COMBINED
+                        nasl_file.name == filename and value in line for filename, value in COMBINED
                     )
                 ):
                     report = f"Badword in line {i:5}: {line}"
                     if "NVT" in line:
-                        report += (
-                            '\nNote/Hint: Please use the term "VT" instead.'
-                        )
+                        report += '\nNote/Hint: Please use the term "VT" instead.'
                     yield LinterError(
                         report,
                         plugin=self.name,

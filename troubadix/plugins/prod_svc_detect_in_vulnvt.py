@@ -97,10 +97,7 @@ class CheckProdSvcDetectInVulnvt(FilePlugin):
         )
         if matches:
             for match in matches:
-                if all(
-                    det not in match.group("body")
-                    for det in ["detected_by", "detected_at"]
-                ):
+                if all(det not in match.group("body") for det in ["detected_by", "detected_at"]):
                     yield LinterError(
                         "VT has a severity but is using the function '"
                         f"{match.group('function')}' which is not allowed for "

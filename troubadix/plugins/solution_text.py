@@ -98,11 +98,9 @@ class CheckSolutionText(FilePlugin):
         )
         file_content = self.context.file_content
 
-        if _get_tag_pattern(
-            name=ScriptTag.SOLUTION_TYPE.value, value="NoneAvailable"
-        ).search(file_content) and not re.search(
-            correct_none_available_pattern, file_content
-        ):
+        if _get_tag_pattern(name=ScriptTag.SOLUTION_TYPE.value, value="NoneAvailable").search(
+            file_content
+        ) and not re.search(correct_none_available_pattern, file_content):
             yield LinterError(
                 "The VT with solution type 'NoneAvailable' is using an "
                 "incorrect syntax in the solution text. Please use "
@@ -110,11 +108,9 @@ class CheckSolutionText(FilePlugin):
                 file=self.context.nasl_file,
                 plugin=self.name,
             )
-        elif _get_tag_pattern(
-            name=ScriptTag.SOLUTION_TYPE.value, value="WillNotFix"
-        ).search(file_content) and not re.search(
-            correct_will_not_fix_pattern, file_content
-        ):
+        elif _get_tag_pattern(name=ScriptTag.SOLUTION_TYPE.value, value="WillNotFix").search(
+            file_content
+        ) and not re.search(correct_will_not_fix_pattern, file_content):
             yield LinterError(
                 "The VT with solution type 'WillNotFix' is using an incorrect "
                 "syntax in the solution text. Please use one of these "

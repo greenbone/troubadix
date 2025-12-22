@@ -25,13 +25,9 @@ class CheckSeverityDate(FileContentPlugin):
             return
 
         severity_date_pattern = get_script_tag_pattern(ScriptTag.SEVERITY_DATE)
-        last_modification_pattern = get_script_tag_pattern(
-            ScriptTag.LAST_MODIFICATION
-        )
+        last_modification_pattern = get_script_tag_pattern(ScriptTag.LAST_MODIFICATION)
 
-        if not (
-            match_severity_date := severity_date_pattern.search(file_content)
-        ):
+        if not (match_severity_date := severity_date_pattern.search(file_content)):
             return
 
         yield from check_date(
@@ -41,9 +37,7 @@ class CheckSeverityDate(FileContentPlugin):
             self.name,
         )
 
-        if match_last_mod_date := last_modification_pattern.search(
-            file_content
-        ):
+        if match_last_mod_date := last_modification_pattern.search(file_content):
             yield from compare_date_with_last_modification_date(
                 match_severity_date.group("value"),
                 "severity_date",

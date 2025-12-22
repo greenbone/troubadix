@@ -95,13 +95,8 @@ class CheckValidOID(FileContentPlugin):
         # Vendor-specific OIDs
         if "1.3.6.1.4.1.25623.1.1." in oid:
             family = family_match.group("value")
-            vendor_number_match = re.search(
-                r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid
-            )
-            if (
-                vendor_number_match is None
-                or vendor_number_match.group(1) is None
-            ):
+            vendor_number_match = re.search(r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.([0-9]+)\.", oid)
+            if vendor_number_match is None or vendor_number_match.group(1) is None:
                 yield LinterError(
                     f"script_oid() {invalid_oid} '{str(oid)}' (last digits)",
                     file=nasl_file,
@@ -114,8 +109,7 @@ class CheckValidOID(FileContentPlugin):
             if vendor_number == "1":
                 if family != f"Debian {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Debian "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Debian " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -124,8 +118,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "2":
                 if family != f"Huawei EulerOS {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} EulerOS "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} EulerOS " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -133,8 +126,7 @@ class CheckValidOID(FileContentPlugin):
 
                 # Fixed OID-scheme for (Huawei) Euler OS OIDs
                 euler_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.2\.20[0-4][0-9]\.[0-9]{"
-                    r"4}$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.2\.20[0-4][0-9]\.[0-9]{" r"4}$",
                     oid,
                 )
                 if euler_sa_match is None:
@@ -150,8 +142,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "4":
                 if family != f"SuSE {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} SUSE SLES "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} SUSE SLES " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -159,8 +150,7 @@ class CheckValidOID(FileContentPlugin):
 
                 # Fixed OID-scheme for SUSE SLES OS OIDs
                 sles_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.20[0-4][0-9]\.[0-9]{"
-                    r"4,5}\.[0-9]$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.4\.20[0-4][0-9]\.[0-9]{" r"4,5}\.[0-9]$",
                     oid,
                 )
                 if sles_sa_match is None:
@@ -176,8 +166,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "5":
                 if family != f"Amazon Linux {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Amazon Linux "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Amazon Linux " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -200,8 +189,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "6":
                 if family != f"Gentoo {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Gentoo "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Gentoo " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -210,8 +198,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "7":
                 if family != "FreeBSD Local Security Checks":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} FreeBSD "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} FreeBSD " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -220,8 +207,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "8":
                 if family != f"Oracle Linux {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Oracle Linux "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Oracle Linux " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -230,8 +216,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "9":
                 if family != f"Fedora {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Fedora "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Fedora " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -240,16 +225,14 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "10":
                 if family != f"Mageia Linux {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Mageia Linux "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Mageia Linux " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
                     return
 
                 mageia_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.10\.20[0-4][0-9]\.["
-                    r"0-9]{4}$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.10\.20[0-4][0-9]\.[" r"0-9]{4}$",
                     oid,
                 )
                 if mageia_sa_match is None:
@@ -265,8 +248,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "11":
                 if family != f"Red Hat {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Red Hat "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Red Hat " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -275,8 +257,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "12":
                 if family != f"Ubuntu {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Ubuntu "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Ubuntu " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -285,14 +266,12 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "13":
                 if family != f"Slackware {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Slackware "
-                        f"'{str(oid)}'"
+                        f"script_oid() {is_using_reserved} Slackware " f"'{str(oid)}'"
                     )
                     return
 
                 slackware_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.13\.20[0-4][0-9]\.[0-9]"
-                    r"{3,4}\.[0-9]{2}$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.1\.13\.20[0-4][0-9]\.[0-9]" r"{3,4}\.[0-9]{2}$",
                     oid,
                 )
                 if slackware_sa_match is None:
@@ -306,8 +285,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "14":
                 if family != f"Rocky Linux {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} Rocky Linux "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} Rocky Linux " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -316,8 +294,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "15":
                 if family != f"AlmaLinux {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} AlmaLinux "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} AlmaLinux " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -325,8 +302,7 @@ class CheckValidOID(FileContentPlugin):
             elif vendor_number == "18":
                 if family != f"openSUSE {family_template}":
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} openSUSE "
-                        f"'{str(oid)}'",
+                        f"script_oid() {is_using_reserved} openSUSE " f"'{str(oid)}'",
                         file=nasl_file,
                         plugin=self.name,
                     )
@@ -361,16 +337,14 @@ class CheckValidOID(FileContentPlugin):
             if "1.3.6.1.4.1.25623.1.2.1." in oid:
                 if not name.startswith(f"Mozilla Firefox {security_template}"):
                     yield LinterError(
-                        f"script_oid() {is_using_reserved} 'Firefox' ("
-                        f"{str(oid)})",
+                        f"script_oid() {is_using_reserved} 'Firefox' (" f"{str(oid)})",
                         file=nasl_file,
                         plugin=self.name,
                     )
                     return
 
                 firefox_sa_match = re.search(
-                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.2\.1\.20[1-4][0-9]\.[0-9]{"
-                    r"2,3}$",
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.2\.1\.20[1-4][0-9]\.[0-9]{" r"2,3}$",
                     oid,
                 )
                 if not firefox_sa_match:
@@ -389,8 +363,7 @@ class CheckValidOID(FileContentPlugin):
         if "1.3.6.1.4.1.25623.1.3." in oid:
             if family_match.group("value") != f"Windows {family_template}":
                 yield LinterError(
-                    f"script_oid() {is_using_reserved} 'Windows' ("
-                    f"{str(oid)})",
+                    f"script_oid() {is_using_reserved} 'Windows' (" f"{str(oid)})",
                     file=nasl_file,
                     plugin=self.name,
                 )
@@ -411,9 +384,7 @@ class CheckValidOID(FileContentPlugin):
                 return
             return
 
-        oid_digit_match = re.search(
-            r"^1\.3\.6\.1\.4\.1\.25623\.1\.0\.([0-9]+)", oid
-        )
+        oid_digit_match = re.search(r"^1\.3\.6\.1\.4\.1\.25623\.1\.0\.([0-9]+)", oid)
         if oid_digit_match is None or oid_digit_match.group(1) is None:
             yield LinterError(
                 f"script_oid() {invalid_oid} '{str(oid)}' (last digits)",
@@ -424,8 +395,7 @@ class CheckValidOID(FileContentPlugin):
 
         exceptions = [
             "ossim_server_detect.nasl",
-            "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_"
-            + "stack_memory_usage_vuln_macosx.nasl",
+            "gsf/2018/vmware/gb_vmware_fusion_vmxnet3_" + "stack_memory_usage_vuln_macosx.nasl",
             "2008/asterisk_sdp_header_overflow.nasl",
             "2008/cisco_ios_ftp_server_auth_bypass.nasl",
             "2008/qk_smtp_server_dos.nasl",
@@ -465,8 +435,7 @@ class CheckValidOID(FileContentPlugin):
             return
 
         yield LinterError(
-            f"script_oid() {invalid_oid} "
-            f"'{str(oid)}' (unassigned OID range)",
+            f"script_oid() {invalid_oid} " f"'{str(oid)}' (unassigned OID range)",
             file=nasl_file,
             plugin=self.name,
         )

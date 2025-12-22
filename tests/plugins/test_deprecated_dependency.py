@@ -47,9 +47,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             "  script_category(ACT_ATTACK);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -72,9 +70,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             '  script_tag(name:"summary", value:"Foo Bar.");\n'
             "  script_category(ACT_ATTACK);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -89,9 +85,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "  script_category(ACT_ATTACK);\n"
             "exit(66);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -106,9 +100,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
             "  script_category(ACT_ATTACK);\n"
             '  script_tag(name:"deprecated", value:TRUE);\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckDeprecatedDependency(fake_context)
 
         results = list(plugin.run())
@@ -135,8 +127,7 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The script dependency {dependency} could "
-            "not be found within the VTs.",
+            f"The script dependency {dependency} could " "not be found within the VTs.",
             results[0].message,
         )
 

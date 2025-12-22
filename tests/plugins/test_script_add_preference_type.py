@@ -37,9 +37,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
                 'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
                 f'  script_add_preference(type: "{pref_type.value}");\n'
             )
-            fake_context = self.create_file_plugin_context(
-                nasl_file=path, file_content=content
-            )
+            fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
             plugin = CheckScriptAddPreferenceType(fake_context)
 
             results = list(plugin.run())
@@ -62,9 +60,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceType(fake_context)
 
         results = list(plugin.run())
@@ -80,9 +76,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             '  script_name("Foo Bar");\n'
             f"{add_pref}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceType(fake_context)
 
         results = list(plugin.run())
@@ -107,9 +101,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             '  script_name("Foo Bar");\n'
             f"{add_pref}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceType(fake_context)
 
         results = list(plugin.run())
@@ -131,9 +123,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
             '  script_name("Foo Bar");\n'
             f"{add_pref}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceType(fake_context)
 
         results = list(plugin.run())

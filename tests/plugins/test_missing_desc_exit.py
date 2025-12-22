@@ -34,9 +34,7 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             "  exit(0);\n"
             "}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMissingDescExit(fake_context)
 
         results = list(plugin.run())
@@ -62,9 +60,7 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             "}\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMissingDescExit(fake_context)
 
         results = list(plugin.run())
@@ -84,9 +80,7 @@ class CheckMissingDescExitTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckMissingDescExit(fake_context)
 
         results = list(plugin.run())

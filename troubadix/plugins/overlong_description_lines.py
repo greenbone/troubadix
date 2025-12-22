@@ -56,9 +56,7 @@ class CheckOverlongDescriptionLines(FileContentPlugin):
 
     name = "check_overlong_description_lines"
 
-    def check_content(
-        self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
+    def check_content(self, nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
         if nasl_file.suffix == ".inc":
             return
 
@@ -87,9 +85,7 @@ class CheckOverlongDescriptionLines(FileContentPlugin):
                     continue
 
                 yield LinterWarning(
-                    f"Line {i} is too long"
-                    f" with {len(line)} characters. "
-                    f"Max 100",
+                    f"Line {i} is too long" f" with {len(line)} characters. " f"Max 100",
                     plugin=self.name,
                     file=nasl_file,
                     line=i,

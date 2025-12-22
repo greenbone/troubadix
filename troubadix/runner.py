@@ -86,9 +86,7 @@ class Runner:
     def _check_file(self, file_path: Path) -> FileResults:
         """Run all file plugins on a single file and collect the results"""
         results = FileResults(file_path, ignore_warnings=self._ignore_warnings)
-        context = FilePluginContext(
-            root=self._root, nasl_file=file_path.resolve()
-        )
+        context = FilePluginContext(root=self._root, nasl_file=file_path.resolve())
 
         for plugin_class in self.plugins.file_plugins:
             plugin = plugin_class(context)
@@ -105,8 +103,7 @@ class Runner:
                 # run files plugins
                 context = FilesPluginContext(root=self._root, nasl_files=files)
                 files_plugins = [
-                    plugin_class(context)
-                    for plugin_class in self.plugins.files_plugins
+                    plugin_class(context) for plugin_class in self.plugins.files_plugins
                 ]
 
                 for results in pool.imap_unordered(
@@ -116,14 +113,10 @@ class Runner:
 
                 # run file plugins
                 for i, results in enumerate(
-                    iterable=pool.imap_unordered(
-                        self._check_file, files, chunksize=CHUNKSIZE
-                    ),
+                    iterable=pool.imap_unordered(self._check_file, files, chunksize=CHUNKSIZE),
                     start=1,
                 ):
-                    self._reporter.report_by_file_plugin(
-                        file_results=results, pos=i
-                    )
+                    self._reporter.report_by_file_plugin(file_results=results, pos=i)
 
             except KeyboardInterrupt:
                 pool.terminate()
@@ -145,9 +138,7 @@ class Runner:
         start = datetime.datetime.now()
         self._run_pooled(files)
 
-        self._reporter.report_info(
-            f"Time elapsed: {datetime.datetime.now() - start}"
-        )
+        self._reporter.report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         self._reporter.report_statistic()
 
         # Return true if no error exists

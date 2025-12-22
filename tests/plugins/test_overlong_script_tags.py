@@ -34,9 +34,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             '  script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
             '  script_tag(name:"solution", value:"Shorter than 1000");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -55,9 +53,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
     def test_no_nasl_file(self):
         path = Path("some/file.inc")
         content = 'script_tag(name:"summary", value:"Shorter than 1000");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -73,9 +69,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             '  script_tag(name:"insight", value:"Shorter than 1000");\n'
             '  script_tag(name:"vuldetect", value:"Shorter than 1000");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -138,9 +132,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -255,9 +247,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())
@@ -562,9 +552,7 @@ class CheckOverlongScriptTagsTestCase(PluginTestCase):
             "oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo"
             'oooooooooooooooooooooooooooooooooooooooooooooooooonger");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckOverlongScriptTags(fake_context)
 
         results = list(plugin.run())

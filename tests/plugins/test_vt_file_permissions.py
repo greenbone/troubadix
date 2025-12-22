@@ -26,9 +26,7 @@ from . import PluginTestCase
 class CheckVTFilePermissionsTestCase(PluginTestCase):
     def test_ok(self):
         fake_context = self.create_file_plugin_context(
-            nasl_file=Path(__file__).parent
-            / "test_files"
-            / "ok_permissions.nasl"
+            nasl_file=Path(__file__).parent / "test_files" / "ok_permissions.nasl"
         )
 
         plugin = CheckVTFilePermissions(fake_context)
@@ -39,9 +37,7 @@ class CheckVTFilePermissionsTestCase(PluginTestCase):
 
     def test_nok(self):
         fake_context = self.create_file_plugin_context(
-            nasl_file=Path(__file__).parent
-            / "test_files"
-            / "fail_permissions.nasl"
+            nasl_file=Path(__file__).parent / "test_files" / "fail_permissions.nasl"
         )
 
         plugin = CheckVTFilePermissions(fake_context)

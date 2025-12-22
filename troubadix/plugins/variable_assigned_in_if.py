@@ -57,9 +57,7 @@ class CheckVariableAssignedInIf(FileContentPlugin):
         #
         # if((foo =~ "bar || bar =~ "foo") || foobar = "foo")
         #   bar = "foo"; (no ending {)
-        matches = re.finditer(
-            r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE
-        )
+        matches = re.finditer(r"^\s*(if|}?\s*else if)\s*\(([^)]+)", file_content, re.MULTILINE)
         if matches is None:
             return
 
@@ -76,10 +74,7 @@ class CheckVariableAssignedInIf(FileContentPlugin):
                     r'[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*("|\'|TRUE|0|1)',
                     match.group(0),
                 )
-                if (
-                    var_assign_match is not None
-                    and var_assign_match.group(1) is not None
-                ):
+                if var_assign_match is not None and var_assign_match.group(1) is not None:
                     # nb: Can't be fixed because it would mean a change
                     # of a default behavior.
                     if (

@@ -59,12 +59,8 @@ class CheckCopyrightYear(FileContentPlugin):
 
     name = "check_copyright_year"
 
-    def check_content(
-        self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
-        if nasl_file.suffix == ".inc" or is_ignore_file(
-            nasl_file, _IGNORE_FILES
-        ):
+    def check_content(self, nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+        if nasl_file.suffix == ".inc" or is_ignore_file(nasl_file, _IGNORE_FILES):
             return
         # extract creation year from script tag
         creation_date_pattern = get_script_tag_pattern(ScriptTag.CREATION_DATE)
@@ -79,9 +75,7 @@ class CheckCopyrightYear(FileContentPlugin):
         creation_year = int(creation_date_match.group("value")[:4])
 
         # extract year in value of script_copyright tag
-        script_copyright_pattern = get_special_script_tag_pattern(
-            SpecialScriptTag.COPYRIGHT
-        )
+        script_copyright_pattern = get_special_script_tag_pattern(SpecialScriptTag.COPYRIGHT)
         script_copyright_match = script_copyright_pattern.search(file_content)
         if not script_copyright_match:
             yield LinterError(
@@ -91,9 +85,7 @@ class CheckCopyrightYear(FileContentPlugin):
             )
             return
         copyright_tag_value = script_copyright_match.group("value")
-        copyright_tag_match = SPDX_OR_COPYRIGHT_PATTERN.search(
-            copyright_tag_value
-        )
+        copyright_tag_match = SPDX_OR_COPYRIGHT_PATTERN.search(copyright_tag_value)
         if not copyright_tag_match:
             yield LinterError(
                 "Unable to extract year from script_copyright tag in VT",

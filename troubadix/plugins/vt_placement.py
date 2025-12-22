@@ -71,17 +71,11 @@ class CheckVTPlacement(FileContentPlugin):
         if match is not None:
             return
 
-        if any(
-            (root / vers / nasl_file.name) == nasl_file
-            for vers in FEED_VERSIONS
-        ):
+        if any((root / vers / nasl_file.name) == nasl_file for vers in FEED_VERSIONS):
             return
 
         for folder in chain(["attic"], ENTERPRISE_FOLDERS):
-            if any(
-                (root / vers / folder / nasl_file.name) == nasl_file
-                for vers in FEED_VERSIONS
-            ):
+            if any((root / vers / folder / nasl_file.name) == nasl_file for vers in FEED_VERSIONS):
                 return
 
         yield LinterError(

@@ -53,9 +53,7 @@ MONTH_AS_DAYS = 365 / 12
 def parse_solution_date(date_string: str) -> datetime:
     """Convert date string to date trying different formats"""
 
-    date_string = re.sub(
-        r"(?P<date>.\d{1,2})(st|nd|rd|th)", r"\g<date>", date_string
-    )
+    date_string = re.sub(r"(?P<date>.\d{1,2})(st|nd|rd|th)", r"\g<date>", date_string)
 
     for strptime in SOLUTION_DATE_FORMATS:
         try:
@@ -99,8 +97,7 @@ def parse_args() -> Namespace:
         dest="threshold",
         type=int,
         default=12,
-        help="The threshold after which to assume no solution "
-        "will be provided anymore",
+        help="The threshold after which to assume no solution " "will be provided anymore",
     )
 
     parser.add_argument(
@@ -118,10 +115,7 @@ def parse_args() -> Namespace:
 
 def check_skip_script(file_content: str) -> bool:
     solution_type = SOLUTION_TYPE_PATTERN.search(file_content)
-    if (
-        solution_type
-        and solution_type.group("value") != SOLUTION_TYPE_NONE_AVAILABLE
-    ):
+    if solution_type and solution_type.group("value") != SOLUTION_TYPE_NONE_AVAILABLE:
         return True
 
     cvss = CVSS_PATTERN.search(file_content)
@@ -148,9 +142,7 @@ def extract_tags(content: str) -> Optional[Tuple[str, datetime, datetime]]:
     if not creation_match:
         return None
 
-    creation_date = datetime.strptime(
-        creation_match.group("value")[:10], CREATION_DATE_FORMAT
-    )
+    creation_date = datetime.strptime(creation_match.group("value")[:10], CREATION_DATE_FORMAT)
 
     oid_match = OID_PATTERN.search(content)
     if not oid_match:
@@ -164,9 +156,7 @@ def extract_tags(content: str) -> Optional[Tuple[str, datetime, datetime]]:
 def get_no_solution_vts(
     files: Iterable[Path],
 ) -> Iterable[Tuple[Path, str, datetime, datetime]]:
-    file_contents = (
-        (file, file.read_text(encoding=CURRENT_ENCODING)) for file in files
-    )
+    file_contents = ((file, file.read_text(encoding=CURRENT_ENCODING)) for file in files)
     return (
         (file, *extract_tags(content))
         for file, content in file_contents
@@ -191,22 +181,17 @@ def check_no_solutions(
             (
                 milestone
                 for milestone in milestones
-                if solution_date
-                < creation_date + timedelta(days=milestone * MONTH_AS_DAYS)
-                and milestone * MONTH_AS_DAYS
-                <= (datetime.now() - creation_date).days
+                if solution_date < creation_date + timedelta(days=milestone * MONTH_AS_DAYS)
+                and milestone * MONTH_AS_DAYS <= (datetime.now() - creation_date).days
             ),
             None,
         )
 
-        if solution_date > creation_date + timedelta(
-            days=last_milestone * MONTH_AS_DAYS
-        ):
+        if solution_date > creation_date + timedelta(days=last_milestone * MONTH_AS_DAYS):
             milestone = last_milestone
 
         if not milestone or (
-            milestone == last_milestone
-            and (datetime.now() - solution_date) < snooze_duration
+            milestone == last_milestone and (datetime.now() - solution_date) < snooze_duration
         ):
             continue
 
@@ -255,8 +240,7 @@ def print_report(
             )
         else:
             term.bold_info(
-                f"{len(vts)} VTs with no solution for "
-                f"more than {milestone} month(s)"
+                f"{len(vts)} VTs with no solution for " f"more than {milestone} month(s)"
             )
 
         for vt, oid, creation, solution in vts:
@@ -265,9 +249,7 @@ def print_report(
             with term.indent():
                 term.print(f"OID: {oid}")
                 term.print(f"Created: {creation.strftime('%Y-%m-%d')}")
-                term.print(
-                    f"Last solution update: {solution.strftime('%Y-%m-%d')}"
-                )
+                term.print(f"Last solution update: {solution.strftime('%Y-%m-%d')}")
 
         term.print()
 
@@ -284,9 +266,7 @@ def main():
 
         term = ConsoleTerminal()
 
-        print_info(
-            term, milestones, arguments.threshold, arguments.snooze, root
-        )
+        print_info(term, milestones, arguments.threshold, arguments.snooze, root)
 
         summary = check_no_solutions(files, milestones, arguments.snooze)
 

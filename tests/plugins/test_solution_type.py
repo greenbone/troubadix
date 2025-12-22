@@ -27,9 +27,7 @@ class CheckSolutionTypeTestCase(PluginTestCase):
     def test_ok(self):
         path = Path("some/file.nasl")
         content = '  script_tag(name:"cvss_base", value:"0.0");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())
@@ -51,9 +49,7 @@ class CheckSolutionTypeTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"1.0");\n'
             '  script_tag(name:"solution_type", value:"Workaround");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())
@@ -63,9 +59,7 @@ class CheckSolutionTypeTestCase(PluginTestCase):
     def test_no_solution_type(self):
         path = Path("some/file.nasl")
         content = '  script_tag(name:"cvss_base", value:"1.0");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())
@@ -84,9 +78,7 @@ class CheckSolutionTypeTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base", value:"1.0");\n'
             '  script_tag(name:"solution_type", value:"Wrong solution");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckSolutionType(fake_context)
 
         results = list(plugin.run())

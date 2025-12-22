@@ -38,9 +38,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -57,9 +55,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# is prone to a security bypass vulnerabilities\n"
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -84,9 +80,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             "# refer the Reference\n"
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -119,9 +113,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             'prone a to denial of service (DoS) vulnerability.");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -147,9 +139,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             'open redirect vulnerability.");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -175,9 +165,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             'request and checks the responses.");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -202,9 +190,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -229,9 +215,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -256,9 +240,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -283,9 +265,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -310,9 +290,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -337,9 +315,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -363,9 +339,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -389,9 +363,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -409,9 +381,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -427,9 +397,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -445,9 +413,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())
@@ -466,9 +432,7 @@ class CheckNewlinesTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckGrammar(fake_context)
 
         results = list(plugin.run())

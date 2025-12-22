@@ -58,8 +58,7 @@ class CheckDeprecatedFunctions(FilePlugin):
         for description, pattern in deprecated_functions.items():
             if re.search(pattern, self.context.file_content, re.MULTILINE):
                 yield LinterError(
-                    "Found a deprecated function call / description item: "
-                    f"{description}",
+                    "Found a deprecated function call / description item: " f"{description}",
                     file=self.context.nasl_file,
                     plugin=self.name,
                 )

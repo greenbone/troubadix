@@ -44,17 +44,13 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        tag_matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(
+        tag_matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(file_content)
+
+        name_matches = _get_special_script_tag_pattern(name=SpecialScriptTag.NAME.value).finditer(
             file_content
         )
 
-        name_matches = _get_special_script_tag_pattern(
-            name=SpecialScriptTag.NAME.value
-        ).finditer(file_content)
-
-        xref_matches = get_xref_pattern(name=r".+?", flags=re.S).finditer(
-            file_content
-        )
+        xref_matches = get_xref_pattern(name=r".+?", flags=re.S).finditer(file_content)
 
         matches = chain(tag_matches, name_matches, xref_matches)
 

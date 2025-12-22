@@ -42,9 +42,7 @@ class CheckDoubleEndPoints(FilePlugin):
         if self.context.nasl_file.suffix == ".inc":
             return
 
-        tag_matches = get_common_tag_patterns().finditer(
-            self.context.file_content
-        )
+        tag_matches = get_common_tag_patterns().finditer(self.context.file_content)
 
         if tag_matches is not None:
             for tag_match in tag_matches:
@@ -56,10 +54,7 @@ class CheckDoubleEndPoints(FilePlugin):
                     )
                     if doubled_end_points_match:
                         # Valid string used in a few VTs.
-                        if (
-                            'and much more...");'
-                            in doubled_end_points_match.group(0)
-                        ):
+                        if 'and much more...");' in doubled_end_points_match.group(0):
                             continue
 
                         yield LinterError(

@@ -31,9 +31,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 
         results = list(plugin.run())
@@ -56,9 +54,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 
         results = list(plugin.run())
@@ -72,13 +68,8 @@ class CheckCVSSFormatTestCase(PluginTestCase):
 
     def test_missing_base(self):
         path = Path("some/file.nasl")
-        content = (
-            '  script_tag(name:"cvss_base_vector", '
-            'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
-        )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        content = '  script_tag(name:"cvss_base_vector", ' 'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 
         results = list(plugin.run())
@@ -97,9 +88,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 
         results = list(plugin.run())
@@ -114,9 +103,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
     def test_missing_vector(self):
         path = Path("some/file.nasl")
         content = '  script_tag(name:"cvss_base", value:"4.0");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 
         results = list(plugin.run())
@@ -135,9 +122,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
             '  script_tag(name:"cvss_base_vector", '
             'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 
         results = list(plugin.run())

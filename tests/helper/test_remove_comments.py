@@ -13,9 +13,7 @@ class RemoveCommentsTestCase(unittest.TestCase):
         self.assertEqual(remove_comments(input_content), expected_output)
 
     def test_no_comments(self):
-        input_content = (
-            "function detect_archlinux(sock, port, SCRIPT_DESC, is_pfsense) {"
-        )
+        input_content = "function detect_archlinux(sock, port, SCRIPT_DESC, is_pfsense) {"
         expected_output = input_content
         self.assertEqual(remove_comments(input_content), expected_output)
 
@@ -25,14 +23,14 @@ class RemoveCommentsTestCase(unittest.TestCase):
         self.assertEqual(remove_comments(input_content), expected_output)
 
     def test_inline_comments(self):
-        input_content = (
-            "function hello(){ # A function\n    return 42; # The answer"
-        )
+        input_content = "function hello(){ # A function\n    return 42; # The answer"
         expected_output = "function hello(){ \n    return 42; "
         self.assertEqual(remove_comments(input_content), expected_output)
 
     def test_hash_in_strings(self):
-        input_content = "message = 'This # is not a comment';\nurl = \"http://example.com/#anchor\";"
+        input_content = (
+            "message = 'This # is not a comment';\nurl = \"http://example.com/#anchor\";"
+        )
         expected_output = input_content
         self.assertEqual(remove_comments(input_content), expected_output)
 
@@ -41,9 +39,7 @@ class RemoveCommentsTestCase(unittest.TestCase):
             "display('Hash: #'); # Real comment\n"
             's = "My string with # character"; # Another comment'
         )
-        expected_output = (
-            "display('Hash: #'); \ns = \"My string with # character\"; "
-        )
+        expected_output = "display('Hash: #'); \ns = \"My string with # character\"; "
         self.assertEqual(remove_comments(input_content), expected_output)
 
     def test_complex_scenario(self):
@@ -69,9 +65,7 @@ class RemoveCommentsTestCase(unittest.TestCase):
         self.assertEqual(remove_comments(input_content), expected_output)
 
     def test_indented_comments(self):
-        input_content = (
-            "function func() {\n    # Indented comment\n    return 0;\n}"
-        )
+        input_content = "function func() {\n    # Indented comment\n    return 0;\n}"
         expected_output = "function func() {\n\n    return 0;\n}"
         self.assertEqual(remove_comments(input_content), expected_output)
 

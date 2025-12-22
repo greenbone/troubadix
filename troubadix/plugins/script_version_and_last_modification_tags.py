@@ -84,9 +84,7 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         self.old_script_version_value = match_script_version_any.group("value")
 
         # script_version("2019-03-21T12:19:01+0000");")
-        version_pattern = get_special_script_tag_pattern(
-            SpecialScriptTag.VERSION
-        )
+        version_pattern = get_special_script_tag_pattern(SpecialScriptTag.VERSION)
         version_match = version_pattern.search(file_content)
 
         if not version_match:
@@ -122,22 +120,17 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
             return
 
         self.old_last_modification = match_last_modification_any_value.group(0)
-        self.old_last_modification_value = (
-            match_last_modification_any_value.group("value")
-        )
+        self.old_last_modification_value = match_last_modification_any_value.group("value")
 
         # script_tag(name:"last_modification",
         # value:"2019-03-21 12:19:01 +0000 (Thu, 21 Mar 2019)");
-        last_modification_pattern = get_script_tag_pattern(
-            ScriptTag.LAST_MODIFICATION
-        )
+        last_modification_pattern = get_script_tag_pattern(ScriptTag.LAST_MODIFICATION)
         match_last_modified = last_modification_pattern.search(file_content)
 
         if not match_last_modified:
             self.fix_last_modification_and_version = True
             yield LinterError(
-                "VT is is using a wrong syntax for script_tag("
-                'name:"last_modification".',
+                "VT is is using a wrong syntax for script_tag(" 'name:"last_modification".',
                 file=nasl_file,
                 plugin=self.name,
             )
@@ -198,18 +191,14 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
 
         # get that last modification date formatted correctly:
         # "2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)"
-        correctly_formatted_last_modification = (
-            f"{now:%Y-%m-%d %H:%M:%S %z (%a, %d %b %Y)}"
-        )
+        correctly_formatted_last_modification = f"{now:%Y-%m-%d %H:%M:%S %z (%a, %d %b %Y)}"
 
         file_content = file_content.replace(
             self.old_last_modification,
             tag_template.format(date=correctly_formatted_last_modification),
         )
 
-        self.context.nasl_file.write_text(
-            file_content, encoding=CURRENT_ENCODING
-        )
+        self.context.nasl_file.write_text(file_content, encoding=CURRENT_ENCODING)
 
         yield LinterFix(
             f"Replaced last_modification {self.old_last_modification_value} "

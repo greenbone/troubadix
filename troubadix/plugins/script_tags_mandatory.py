@@ -69,16 +69,13 @@ class CheckScriptTagsMandatory(FileContentPlugin):
         for tag in MANDATORY_TAGS:
             if not get_script_tag_pattern(tag).search(file_content):
                 yield LinterError(
-                    "VT does not contain the following mandatory tag: "
-                    f"'script_{tag.value}'",
+                    "VT does not contain the following mandatory tag: " f"'script_{tag.value}'",
                     file=nasl_file,
                     plugin=self.name,
                 )
 
         for special_tag in MANDATORY_SPECIAL_TAGS:
-            if not get_special_script_tag_pattern(special_tag).search(
-                file_content
-            ):
+            if not get_special_script_tag_pattern(special_tag).search(file_content):
                 yield LinterError(
                     "VT does not contain the following mandatory tag: "
                     f"'script_{special_tag.value}'",

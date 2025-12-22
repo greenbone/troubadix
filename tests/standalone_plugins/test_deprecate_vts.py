@@ -222,8 +222,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
             ]
             deprecate(out_dir, to_deprecate, "NOTUS")
             self.assertLogs(
-                "Unable to deprecate testfile1.nasl. There are still KB keys "
-                "remaining."
+                "Unable to deprecate testfile1.nasl. There are still KB keys " "remaining."
             )
 
     def test_get_summary(self):

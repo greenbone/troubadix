@@ -56,9 +56,7 @@ class TestBadwords(PluginTestCase):
         path = Path("some/find_service3.nasl")
         content = "  OpenVAS-8 and probably prior\nOpenVAS-9"
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content.splitlines()
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, lines=content.splitlines())
 
         plugin = CheckBadwords(fake_context)
         results = list(plugin.run())
@@ -72,9 +70,7 @@ class TestBadwords(PluginTestCase):
             "https://www.invt.com/software-download\n"
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, lines=content.splitlines()
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, lines=content.splitlines())
 
         plugin = CheckBadwords(fake_context)
         results = list(plugin.run())

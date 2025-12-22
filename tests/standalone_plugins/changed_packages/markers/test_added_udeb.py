@@ -40,9 +40,7 @@ class AddedUdebTestCase(TestCase):
                 "DEB11",
                 {Reasons.ADDED_UDEB: Direction.ACTIVE},
             ),
-            Package(
-                "bar", "4.5-6", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}
-            ),
+            Package("bar", "4.5-6", "DEB11", {Reasons.ADDED_UDEB: Direction.ACTIVE}),
             Package(
                 "baz",
                 "2:1.3.3.7",

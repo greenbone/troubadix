@@ -47,9 +47,7 @@ class CheckDeprecatedDependency(FilePlugin):
         ):
             return
 
-        dependencies_pattern = get_special_script_tag_pattern(
-            SpecialScriptTag.DEPENDENCIES
-        )
+        dependencies_pattern = get_special_script_tag_pattern(SpecialScriptTag.DEPENDENCIES)
         matches = dependencies_pattern.finditer(file_content)
         if not matches:
             return
@@ -70,9 +68,7 @@ class CheckDeprecatedDependency(FilePlugin):
             if match:
                 # Remove single and/or double quotes, spaces
                 # and create a list by using the comma as a separator
-                dependencies = re.sub(
-                    r'[\'"\s]', "", match.group("value")
-                ).split(",")
+                dependencies = re.sub(r'[\'"\s]', "", match.group("value")).split(",")
 
                 for dep in dependencies:
                     dependency_path = None
@@ -82,23 +78,17 @@ class CheckDeprecatedDependency(FilePlugin):
 
                     if not dependency_path:
                         yield LinterError(
-                            f"The script dependency {dep} could not "
-                            "be found within the VTs.",
+                            f"The script dependency {dep} could not " "be found within the VTs.",
                             file=self.context.nasl_file,
                             plugin=self.name,
                         )
                     else:
-                        dependency_content = dependency_path.read_text(
-                            encoding=CURRENT_ENCODING
-                        )
+                        dependency_content = dependency_path.read_text(encoding=CURRENT_ENCODING)
 
-                        dependency_deprecated = deprecated_pattern.search(
-                            dependency_content
-                        )
+                        dependency_deprecated = deprecated_pattern.search(dependency_content)
                         if dependency_deprecated:
                             yield LinterError(
-                                f"VT depends on {dep}, which is marked "
-                                "as deprecated.",
+                                f"VT depends on {dep}, which is marked " "as deprecated.",
                                 file=self.context.nasl_file,
                                 plugin=self.name,
                             )

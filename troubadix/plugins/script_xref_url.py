@@ -30,10 +30,8 @@ ALLOWED_URLS = [
     + "fbd2dac042934e49288b476d5f6a649e5da2@<announce.tomcat.apache.org>",
     "https://m0ze.ru/vulnerability/[2021-05-26]-[WordPress]-[C"
     + "WE-79]-WP-Reset-WordPress-Plugin-v1.86.txt",
-    "http://yehg.net/lab/pr0js/advisories/joomla/core/[joomla_"
-    + "1.0.x~15]_cross_site_scripting",
-    "http://yehg.net/lab/pr0js/advisories/eclipse/[eclipse_hel"
-    + "p_server]_cross_site_scripting",
+    "http://yehg.net/lab/pr0js/advisories/joomla/core/[joomla_" + "1.0.x~15]_cross_site_scripting",
+    "http://yehg.net/lab/pr0js/advisories/eclipse/[eclipse_hel" + "p_server]_cross_site_scripting",
     "http://core.yehg.net/lab/pr0js/advisories/dll_hijacking/["
     + "flash_player]_10.1.x_insecure_dll_hijacking_(dwmapi.dll)",
     "https://lists.apache.org/thread.html/773c93c2d8a6a52bbe9"
@@ -62,9 +60,7 @@ class CheckScriptXrefUrl(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        matches = get_xref_pattern(name="URL", value=r".+?").finditer(
-            file_content
-        )
+        matches = get_xref_pattern(name="URL", value=r".+?").finditer(file_content)
         for match in matches:
             if match:
                 url_value = match.group("value")

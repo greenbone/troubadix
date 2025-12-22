@@ -32,9 +32,7 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  script_tag(name:"vuldetect", value:"Without newline");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckValidScriptTagNames(fake_context)
 
         results = list(plugin.run())
@@ -50,9 +48,7 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  script_tag(name:"vuldetect", value:"With\nnewline");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckValidScriptTagNames(fake_context)
 
         results = list(plugin.run())
@@ -68,9 +64,7 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  script_tag(name:"vulndetect", value:"Without newline");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckValidScriptTagNames(fake_context)
 
         results = list(plugin.run())
@@ -91,9 +85,7 @@ class CheckValidScriptTagNamesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  script_tag(name:"vulndetect", value:"With\nnewline");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckValidScriptTagNames(fake_context)
 
         results = list(plugin.run())

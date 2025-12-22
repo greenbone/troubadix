@@ -57,9 +57,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
 
         if _get_special_script_tag_pattern(
             name=r"category", value=r"ACT_(SETTINGS|SCANNER|INIT)"
-        ).search(file_content) or _get_tag_pattern(
-            name=r"deprecated", value=r"TRUE"
-        ).search(
+        ).search(file_content) or _get_tag_pattern(name=r"deprecated", value=r"TRUE").search(
             file_content
         ):
             return
@@ -84,12 +82,11 @@ class CheckScriptCallsRecommended(FileContentPlugin):
                 plugin=self.name,
             )
         for call in recommended_single_call:
-            if not _get_special_script_tag_pattern(
-                name=call, value=".*", flags=re.DOTALL
-            ).search(file_content):
+            if not _get_special_script_tag_pattern(name=call, value=".*", flags=re.DOTALL).search(
+                file_content
+            ):
                 yield LinterWarning(
-                    "VT does not contain the following recommended call: "
-                    f"'script_{call}'",
+                    "VT does not contain the following recommended call: " f"'script_{call}'",
                     file=nasl_file,
                     plugin=self.name,
                 )

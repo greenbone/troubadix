@@ -30,9 +30,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.0.100376");\n'
             '  script_family("Huawei EulerOS Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -51,9 +49,7 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_empty_tag(self):
         path = Path("some/file.nasl")
         content = "  script_oid();\n"
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -69,9 +65,7 @@ class CheckValidOIDTestCase(PluginTestCase):
     def test_invalid_oid(self):
         path = Path("some/file.nasl")
         content = '  script_oid("1.3.6.1.4.1.25623.2.0.100376");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -80,19 +74,14 @@ class CheckValidOIDTestCase(PluginTestCase):
 
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            (
-                "script_oid() is using an invalid "
-                "OID '1.3.6.1.4.1.25623.2.0.100376'"
-            ),
+            ("script_oid() is using an invalid " "OID '1.3.6.1.4.1.25623.2.0.100376'"),
             results[0].message,
         )
 
     def test_missing__script_family(self):
         path = Path("some/file.nasl")
         content = '  script_oid("1.3.6.1.4.1.25623.1.1.100376");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -108,9 +97,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.2.2025.5555");\n'
             '  script_family("Huawei EulerOS Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -124,9 +111,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_family("Huawei EulerOS Local Security Checks");\n'
         )
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -149,9 +134,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.4.2025.55555.5");\n'
             '  script_family("SuSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -164,9 +147,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.4.2025.555755.5");\n'
             '  script_family("SuSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -189,9 +170,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.1.2256");\n'
             '  script_family("Debian Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -204,9 +183,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.1.2256");\n'
             '  script_family("Suse Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -228,9 +205,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.3.2256");\n'
             '  script_family("Suse Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -252,9 +227,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.4.2012.2256.1");\n'
             '  script_family("SuSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -267,9 +240,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.4.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -291,9 +262,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.5.2012.2256");\n'
             '  script_family("Amazon Linux Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -306,9 +275,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.5.1.2012.2256");\n'
             '  script_family("Amazon Linux Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -321,9 +288,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.5.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -345,9 +310,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.6.2256");\n'
             '  script_family("Gentoo Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -360,9 +323,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.6.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -384,9 +345,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.7.2256");\n'
             '  script_family("FreeBSD Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -399,9 +358,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.7.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -423,9 +380,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.8.2256");\n'
             '  script_family("Oracle Linux Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -438,9 +393,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.8.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -462,9 +415,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.9.2256");\n'
             '  script_family("Fedora Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -477,9 +428,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.9.2256");\n'
             '  script_family("Debian Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -501,9 +450,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.10.2012.2256");\n'
             '  script_family("Mageia Linux Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -516,9 +463,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.10.2256");\n'
             '  script_family("Debian Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -540,9 +485,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.11.2256");\n'
             '  script_family("Red Hat Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -555,9 +498,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.11.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -579,9 +520,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.12.2012.2256.1");\n'
             '  script_family("Ubuntu Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -594,9 +533,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.12.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -618,9 +555,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");\n'
             '  script_family("Slackware Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -633,9 +568,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.13.2022.123.01");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -657,9 +590,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");\n'
             '  script_family("Rocky Linux Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -672,9 +603,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.14.2022.123");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -696,9 +625,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.18.2022.123");\n'
             '  script_family("openSUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -711,9 +638,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.18.2022.123");\n'
             '  script_family("HCE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -735,9 +660,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_oid("1.3.6.1.4.1.25623.1.1.99.2256");\n'
             '  script_family("SUSE Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -760,9 +683,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_family("Huawei EulerOS Local Security Checks");\n'
             '  script_name("AdaptBB Detection (HTTP)");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -784,9 +705,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_name("Mozilla Firefox Security Advisory");\n'
             '  script_family("General");'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -800,9 +719,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             '  script_name("AdaptBB Detection (HTTP)");\n'
             '  script_family("General");'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -824,9 +741,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             "\n"
             '  script_family("Windows Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -840,9 +755,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             "\n"
             '  script_family("Windows : Microsoft Bulletin ");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -862,9 +775,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             "\n"
             '  script_family("Windows Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
 
         results = list(plugin.run())
@@ -878,9 +789,7 @@ class CheckValidOIDTestCase(PluginTestCase):
             "\n"
             '  script_family("Windows Local Security Checks");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckValidOID(fake_context)
         results = list(plugin.run())
 

@@ -23,9 +23,7 @@ from typing import Iterator
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
 
-DEPENDENCY_ENTRY_PATTERN = re.compile(
-    r'(?P<quote>[\'"])(?P<value>[^\'"]*)(?P=quote)'
-)
+DEPENDENCY_ENTRY_PATTERN = re.compile(r'(?P<quote>[\'"])(?P<value>[^\'"]*)(?P=quote)')
 WHITESPACE_PATTERN = re.compile(r"\s")
 
 
@@ -55,9 +53,7 @@ class CheckMalformedDependencies(FilePlugin):
             if not match:
                 continue
 
-            tag_value = (
-                f'"{match.group("value")}"' if match.group("value") else ""
-            )
+            tag_value = f'"{match.group("value")}"' if match.group("value") else ""
 
             dependency_entries = DEPENDENCY_ENTRY_PATTERN.finditer(tag_value)
 

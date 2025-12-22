@@ -33,9 +33,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             '  log_message("hello test");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckLogMessages(fake_context)
 
         results = list(plugin.run())
@@ -60,9 +58,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             "min_key_size2 + ' bits (key-size:algorithm:serial:issuer):\n' + "
             "report );\n\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckLogMessages(fake_context)
 
         results = list(plugin.run())
@@ -85,9 +81,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             "the following certificate(s) with a ECC key with less than ' + "
             "min_key_size + ' bits (key-size:algorithm:serial:issuer)');"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckLogMessages(fake_context)
 
         results = list(plugin.run())
@@ -108,9 +102,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             "  log_message(  );"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckLogMessages(fake_context)
 
         results = list(plugin.run())
@@ -135,9 +127,7 @@ class CheckLogMessagesTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             "  log_message(\t);\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckLogMessages(fake_context)
 
         results = list(plugin.run())

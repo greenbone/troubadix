@@ -31,9 +31,7 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckTrailingSpacesTabs(fake_context)
 
         results = list(plugin.run())
@@ -49,9 +47,7 @@ class CheckTrailingSpacesTabsTestCase(PluginTestCase):
             '  script_tag(name:"solution", value:"meh");\n'
             "  \t "
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckTrailingSpacesTabs(fake_context)
 
         results = list(plugin.run())

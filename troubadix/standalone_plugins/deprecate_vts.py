@@ -42,9 +42,7 @@ KB_ITEMS_PATTERN = re.compile(r"set_kb_item\(.+\);")
 
 
 def load_transition_oid_mapping(transition_file: Path) -> dict[str, str]:
-    spec = importlib.util.spec_from_file_location(
-        "transition_layer", transition_file
-    )
+    spec = importlib.util.spec_from_file_location("transition_layer", transition_file)
     transition_layer = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(transition_layer)
 
@@ -151,9 +149,7 @@ def find_replacement_oid(
         file.content,
     )
     if not oid_match:
-        raise ValueError(
-            f"No OID found in {file.name}. Cannot map to replacement OID."
-        )
+        raise ValueError(f"No OID found in {file.name}. Cannot map to replacement OID.")
     oid = oid_match.group("value")
     replacement_oid = oid_mapping.get(oid)
     if not replacement_oid:
@@ -181,9 +177,7 @@ def deprecate(
     output_path.mkdir(parents=True, exist_ok=True)
     for file in to_deprecate:
         if re.findall(KB_ITEMS_PATTERN, file.content):
-            logger.warning(
-                f"Unable to deprecate {file.name}. There are still KB keys remaining."
-            )
+            logger.warning(f"Unable to deprecate {file.name}. There are still KB keys remaining.")
             continue
 
         replacement_oid = find_replacement_oid(file, oid_mapping)

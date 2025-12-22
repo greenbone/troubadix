@@ -69,9 +69,7 @@ def check_oid(args: Namespace) -> bool:
     if not args.files:
         args.files += [
             Path(f)
-            for f in git(
-                "diff", "--name-only", "--diff-filter=d", args.commit_range
-            ).splitlines()
+            for f in git("diff", "--name-only", "--diff-filter=d", args.commit_range).splitlines()
         ]
 
     rcode = False
@@ -125,9 +123,7 @@ def main() -> int:
         git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.rstrip("\n"))
     except subprocess.SubprocessError:
-        print(
-            "Your current working directory doesn't belong to a git repository"
-        )
+        print("Your current working directory doesn't belong to a git repository")
         return 1
 
     if check_oid(parse_args(args)):

@@ -58,8 +58,7 @@ class CheckNewlines(FilePlugin):
                         break
 
             newline_match = re.search(
-                rf'(script_{tag}\((?P<quote>[\'"])[^\'"\n;]*)[\n]+\s*'
-                r'([^\'"\n;]*(?P=quote)\);)',
+                rf'(script_{tag}\((?P<quote>[\'"])[^\'"\n;]*)[\n]+\s*' r'([^\'"\n;]*(?P=quote)\);)',
                 file_content,
             )
             if newline_match:

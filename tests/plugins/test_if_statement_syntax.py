@@ -27,9 +27,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         }
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -44,9 +42,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         }
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -63,9 +59,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         # Missing closing brace
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -80,9 +74,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         # No statement follows
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -99,9 +91,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         }
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -116,9 +106,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         # No semicolon at end of expression
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -136,9 +124,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         }
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())
@@ -155,9 +141,7 @@ class CheckIfStatementSyntaxTestCase(PluginTestCase):
         }
         """
 
-        fake_context = self.create_file_plugin_context(
-            nasl_file=nasl_file, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
         plugin = CheckIfStatementSyntax(fake_context)
 
         results = list(plugin.run())

@@ -31,9 +31,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
             '  script_tag(name: "foo"'
             ", value:'foobar');\n"
         )
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -51,9 +49,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_name(self):
         content = '  script_xref(nammmme: "foo", value:"bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -68,9 +64,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_value(self):
         content = '  script_xref(name: "foo", valueeeee:"bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -80,9 +74,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_missing_parameters(self):
         content = '  script_xref("foo", "bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -92,9 +84,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_missing_name_parameter(self):
         content = '  script_xref("foo", value:"bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())
@@ -104,9 +94,7 @@ class CheckScriptXrefFormTestCase(PluginTestCase):
 
     def test_wrong_missing_value_parameter(self):
         content = '  script_xref(name:"foo", "bar");\n'
-        fake_context = self.create_file_plugin_context(
-            nasl_file=self.path, file_content=content
-        )
+        fake_context = self.create_file_plugin_context(nasl_file=self.path, file_content=content)
         plugin = CheckScriptXrefForm(fake_context)
 
         results = list(plugin.run())

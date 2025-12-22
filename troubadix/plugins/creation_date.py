@@ -41,13 +41,9 @@ class CheckCreationDate(FileContentPlugin):
             return
 
         creation_date_pattern = get_script_tag_pattern(ScriptTag.CREATION_DATE)
-        last_modification_pattern = get_script_tag_pattern(
-            ScriptTag.LAST_MODIFICATION
-        )
+        last_modification_pattern = get_script_tag_pattern(ScriptTag.LAST_MODIFICATION)
 
-        if not (
-            match_creation_date := creation_date_pattern.search(file_content)
-        ):
+        if not (match_creation_date := creation_date_pattern.search(file_content)):
             yield LinterError(
                 "No creation_date has been found.",
                 file=nasl_file,
@@ -62,9 +58,7 @@ class CheckCreationDate(FileContentPlugin):
             self.name,
         )
 
-        if match_last_mod_date := last_modification_pattern.search(
-            file_content
-        ):
+        if match_last_mod_date := last_modification_pattern.search(file_content):
             yield from compare_date_with_last_modification_date(
                 match_creation_date.group("value"),
                 "creation_date",

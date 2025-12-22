@@ -26,20 +26,13 @@ def iter_script_add_preference_values(
 class CheckScriptAddPreferenceId(FileContentPlugin):
     name = "check_script_add_preference_id"
 
-    def check_content(
-        self, nasl_file: Path, file_content: str
-    ) -> Iterator[LinterResult]:
-        if (
-            nasl_file.suffix == ".inc"
-            or "script_add_preference" not in file_content
-        ):
+    def check_content(self, nasl_file: Path, file_content: str) -> Iterator[LinterResult]:
+        if nasl_file.suffix == ".inc" or "script_add_preference" not in file_content:
             return
 
         seen_ids: set[int] = set()
 
-        for index, value in enumerate(
-            iter_script_add_preference_values(file_content), 1
-        ):
+        for index, value in enumerate(iter_script_add_preference_values(file_content), 1):
             id_match = ID_PATTERN.search(value)
             pref_id = int(id_match.group("id")) if id_match else index
 

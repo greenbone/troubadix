@@ -132,9 +132,7 @@ class LinguisticExceptionHandlerTestCase(unittest.TestCase):
         self.assertEqual(check.execute("test", "hello3hello"), False)
 
     def test_patterns_tuple_in_file_check(self):
-        check = PatternsInFileCheck(
-            "test", [(r"test\d", re.IGNORECASE), (r"hello\dtest", 0)]
-        )
+        check = PatternsInFileCheck("test", [(r"test\d", re.IGNORECASE), (r"hello\dtest", 0)])
 
         self.assertEqual(check.execute("test", "test1"), True)
         self.assertEqual(check.execute("test", "TEST2"), True)
@@ -158,9 +156,7 @@ class LinguisticExceptionHandlerTestCase(unittest.TestCase):
         self.assertEqual(check.execute("foo1", "test1"), False)
 
     def test_pattern_in_file_pattern_flags_check(self):
-        check = PatternInFilePatternCheck(
-            r"test|hello", r"foo|bar", re.IGNORECASE, re.IGNORECASE
-        )
+        check = PatternInFilePatternCheck(r"test|hello", r"foo|bar", re.IGNORECASE, re.IGNORECASE)
 
         self.assertEqual(check.execute("test1", "foo1"), True)
         self.assertEqual(check.execute("test1", "FOO2"), True)
@@ -200,15 +196,7 @@ class LinguisticExceptionHandlerTestCase(unittest.TestCase):
     def test_linguistic_exception_handler(self):
         checks = [FileCheck("test"), TextCheck("foo")]
 
-        self.assertEqual(
-            handle_linguistic_checks("test1", "foo1", checks), True
-        )
-        self.assertEqual(
-            handle_linguistic_checks("test1", "bar1", checks), True
-        )
-        self.assertEqual(
-            handle_linguistic_checks("hello1", "foo1", checks), True
-        )
-        self.assertEqual(
-            handle_linguistic_checks("hello1", "bar1", checks), False
-        )
+        self.assertEqual(handle_linguistic_checks("test1", "foo1", checks), True)
+        self.assertEqual(handle_linguistic_checks("test1", "bar1", checks), True)
+        self.assertEqual(handle_linguistic_checks("hello1", "foo1", checks), True)
+        self.assertEqual(handle_linguistic_checks("hello1", "bar1", checks), False)

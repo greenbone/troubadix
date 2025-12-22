@@ -98,9 +98,7 @@ def parse_args(
         "-f",
         "--full",
         action="store_true",
-        help=(
-            "Checking the complete VT directory and not only the added/changed scripts"
-        ),
+        help=("Checking the complete VT directory and not only the added/changed scripts"),
     )
 
     parser.add_argument(
@@ -167,9 +165,7 @@ def parse_args(
     parser.add_argument(
         "--non-recursive",
         action="store_true",
-        help=(
-            'Don\'t run the script recursive. Only usable with "-f"/"--full" or "-d"/"--dirs"'
-        ),
+        help=('Don\'t run the script recursive. Only usable with "-f"/"--full" or "-d"/"--dirs"'),
     )
 
     parser.add_argument(
@@ -233,9 +229,7 @@ def parse_args(
         dest="n_jobs",
         default=max(1, cpu_count() // 2),
         type=check_cpu_count,
-        help=(
-            "Define number of jobs, that should run simultaneously. Default: %(default)s"
-        ),
+        help=("Define number of jobs, that should run simultaneously. Default: %(default)s"),
     )
 
     parser.add_argument(
@@ -262,11 +256,7 @@ def parse_args(
         )
         sys.exit(1)
 
-    if (
-        not parsed_args.full
-        and not parsed_args.dirs
-        and parsed_args.non_recursive
-    ):
+    if not parsed_args.full and not parsed_args.dirs and parsed_args.non_recursive:
         terminal.warning(
             "'Argument '--non-recursive' is only usable with '-f'/'--full' or '-d'/'--dirs'"
         )
