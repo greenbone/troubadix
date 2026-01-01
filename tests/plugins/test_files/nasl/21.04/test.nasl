@@ -7,7 +7,7 @@
 # Dr. Who <dr@who.org>
 #
 # Copyright:
-# Copyright (C) 2016 Greenbone Networks GmbH
+# SPDX-FileCopyrightText: 2016-2026 Greenbone AG
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

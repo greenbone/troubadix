@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# SPDX-FileCopyrightText: 2024 Greenbone AG
+# SPDX-FileCopyrightText: 2024-2026 Greenbone AG
 
 import importlib.util
 import logging
