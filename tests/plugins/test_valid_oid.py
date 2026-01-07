@@ -868,3 +868,15 @@ class CheckValidOIDTestCase(PluginTestCase):
             "(Compliance pattern: 1.3.6.1.4.1.25623.1.4.[0-4]",
             results[0].message,
         )
+
+    def test_oid_compliance_long_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.4.0.123456.7890");\n  script_family("Policy");\n'
+        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)

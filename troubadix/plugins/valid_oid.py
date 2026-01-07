@@ -393,7 +393,7 @@ class CheckValidOID(FileContentPlugin):
                 return
 
             compliance_oid_match = re.search(
-                r"^1\.3\.6\.1\.4\.1\.25623\.1\.4\.[0-4](.\d+)+",
+                r"^1\.3\.6\.1\.4\.1\.25623\.1\.4\.[0-4](\.\d+)+",
                 oid,
             )
             if not compliance_oid_match:
