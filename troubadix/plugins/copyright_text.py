@@ -101,7 +101,7 @@ class CheckCopyrightText(FileContentPlugin):
         nasl_file.write_text(data=self.new_file_content, encoding=CURRENT_ENCODING)
 
         yield LinterFix(
-            f"The copyright statement has been updated to " f"{CORRECT_COPYRIGHT_PHRASE}",
+            f"The copyright statement has been updated to {CORRECT_COPYRIGHT_PHRASE}",
             file=nasl_file,
             plugin=self.name,
         )

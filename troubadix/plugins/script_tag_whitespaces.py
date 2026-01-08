@@ -59,8 +59,7 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
                 r".*\s+$", match.group("value"), flags=re.S
             ):
                 yield LinterError(
-                    f"{match.group(0)}: value contains a leading or"
-                    " trailing whitespace character",
+                    f"{match.group(0)}: value contains a leading or trailing whitespace character",
                     file=nasl_file,
                     plugin=self.name,
                 )

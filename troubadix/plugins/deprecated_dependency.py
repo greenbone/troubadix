@@ -78,7 +78,7 @@ class CheckDeprecatedDependency(FilePlugin):
 
                     if not dependency_path:
                         yield LinterError(
-                            f"The script dependency {dep} could not " "be found within the VTs.",
+                            f"The script dependency {dep} could not be found within the VTs.",
                             file=self.context.nasl_file,
                             plugin=self.name,
                         )
@@ -88,7 +88,7 @@ class CheckDeprecatedDependency(FilePlugin):
                         dependency_deprecated = deprecated_pattern.search(dependency_content)
                         if dependency_deprecated:
                             yield LinterError(
-                                f"VT depends on {dep}, which is marked " "as deprecated.",
+                                f"VT depends on {dep}, which is marked as deprecated.",
                                 file=self.context.nasl_file,
                                 plugin=self.name,
                             )

@@ -20,7 +20,6 @@ class CheckSeverityDate(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-
         if nasl_file.suffix == ".inc":
             return
 

@@ -65,7 +65,7 @@ exceptions = [
     # nb: Valid sentence
     TextInFileCheck(
         "2012/gb_VMSA-2010-0007.nasl",
-        "e. VMware VMnc Codec heap overflow vulnerabilities\n\n" "  Vulnerabilities in the",
+        "e. VMware VMnc Codec heap overflow vulnerabilities\n\n  Vulnerabilities in the",
     ),
     TextInFileCheck("gb_opensuse_2018_1900_1.nasl", "(Note that"),
     # e.g.:
@@ -135,10 +135,9 @@ def get_grammer_pattern() -> re.Pattern:
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
         # e.g. "this flaws"
-        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file|" r"request)s)|"
+        r"this\s+(vulnerabilities|(flaw|error|problem|issue|feature|file|request)s)|"
         # e.g. "these flaw "
-        r"these\s+(vulnerability|(flaw|error|problem|issue|feature|file|"
-        r"request)\s+)|"
+        r"these\s+(vulnerability|(flaw|error|problem|issue|feature|file|request)\s+)|"
         r"\s+or\s+not\.?(\"\);)?$|"
         r"from(\s+the)?(\s+below)?mentioned\s+References?\s+link|"
         r"software\s+it\s+fail|"
@@ -200,7 +199,7 @@ def get_grammer_pattern() -> re.Pattern:
         r"in the in the|to an? to a|prior to prior to|to version to version|"
         r"update to update to|"
         # e.g. "is prone to a security bypass vulnerabilities"
-        r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities" r").*",
+        r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities).*",
         re.IGNORECASE,
     )
 
@@ -221,7 +220,6 @@ class CheckGrammar(FilePlugin):
 
         for match in pattern.finditer(self.context.file_content):
             if match:
-
                 # nb: No strip() here for so that the exclusions can be handled
                 # more strict with e.g. leading or trailing newlines.
                 full_line = match.group(0)

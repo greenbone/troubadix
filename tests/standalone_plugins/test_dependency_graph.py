@@ -112,7 +112,6 @@ class TestCLIArgs(unittest.TestCase):
 
 
 class TestDependencyGraph(unittest.TestCase):
-
     def setUp(self) -> None:
         self.local_root = "tests/standalone_plugins/nasl"
         self.script_content = """

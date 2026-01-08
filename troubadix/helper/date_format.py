@@ -56,7 +56,7 @@ def check_date(date: str, date_name: str, file: str, plugin: str) -> Iterator[Li
     elif week_day_str != week_day_parsed:
         formatted_date = week_day_parsed
         yield LinterError(
-            f"Wrong day of week. Please change it from '{week_day_str}" f"' to '{formatted_date}'.",
+            f"Wrong day of week. Please change it from '{week_day_str}' to '{formatted_date}'.",
             file=file,
             plugin=plugin,
         )
@@ -65,7 +65,6 @@ def check_date(date: str, date_name: str, file: str, plugin: str) -> Iterator[Li
 def compare_date_with_last_modification_date(
     date: str, date_name: str, last_mod_date: str, file: str, plugin: str
 ) -> Iterator[LinterResult]:
-
     yield from check_date(
         last_mod_date,
         "last_modification",
@@ -76,7 +75,7 @@ def compare_date_with_last_modification_date(
     try:
         if parse_date(date) > parse_date(last_mod_date):
             yield LinterError(
-                f"The {date_name} must not be greater than " "last_modification date.",
+                f"The {date_name} must not be greater than last_modification date.",
                 file=file,
                 plugin=plugin,
             )

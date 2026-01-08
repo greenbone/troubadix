@@ -86,7 +86,7 @@ class CheckScriptXrefUrlTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            'script_xref(name:"URL", value:"www.example.com");: Invalid URL' " value",
+            'script_xref(name:"URL", value:"www.example.com");: Invalid URL value',
             results[0].message,
         )
 

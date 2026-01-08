@@ -127,6 +127,6 @@ class CheckVTPlacementTestCase(PluginTestCase):
                 self.assertEqual(len(results), 1)
                 self.assertIsInstance(results[0], LinterError)
                 self.assertEqual(
-                    "VT should be " f"placed in the root directory ({tempdir}).",
+                    f"VT should be placed in the root directory ({tempdir}).",
                     results[0].message,
                 )

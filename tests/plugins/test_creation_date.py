@@ -24,7 +24,6 @@ from . import PluginTestCase
 
 
 class CheckCreationDateTestCase(PluginTestCase):
-
     def test_ok(self):
         path = Path("some/file.nasl")
         content = (

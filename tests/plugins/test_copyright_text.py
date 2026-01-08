@@ -130,6 +130,6 @@ class CheckCopyrightTextTestCase(PluginTestCase):
 
                 self.assertIsInstance(results[0], LinterFix)
                 self.assertEqual(
-                    "The copyright statement has been updated to " f"{CORRECT_COPYRIGHT_PHRASE}",
+                    f"The copyright statement has been updated to {CORRECT_COPYRIGHT_PHRASE}",
                     results[0].message,
                 )

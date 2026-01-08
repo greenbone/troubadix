@@ -16,7 +16,6 @@ class CheckSeverityFormat(FileContentPlugin):
         nasl_file: Path,
         file_content: str,
     ) -> Iterator[LinterResult]:
-
         if nasl_file.suffix == ".inc" or "severity_vector" not in file_content:
             return
 
