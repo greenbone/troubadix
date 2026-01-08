@@ -130,7 +130,7 @@ class CheckScriptFamily(FileContentPlugin):
 
         if matches[0].group("value") not in VALID_FAMILIES:
             yield LinterError(
-                "Invalid or misspelled script family " f"'{matches[0].group('value')}'",
+                f"Invalid or misspelled script family '{matches[0].group('value')}'",
                 file=nasl_file,
                 plugin=self.name,
             )

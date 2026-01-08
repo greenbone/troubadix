@@ -59,8 +59,7 @@ class CheckSecurityMessages(FileContentPlugin):
 
         if not _file_contains_security_message(file_content):
             yield LinterError(
-                "VT is missing a security_message or implementing"
-                " function in a VT with severity",
+                "VT is missing a security_message or implementing function in a VT with severity",
                 file=nasl_file,
                 plugin=self.name,
             )
@@ -81,8 +80,7 @@ class CheckSecurityMessages(FileContentPlugin):
 
         if _file_contains_security_message(file_content):
             yield LinterError(
-                "VT is using a security_message or implementing"
-                " function in a VT without severity",
+                "VT is using a security_message or implementing function in a VT without severity",
                 file=nasl_file,
                 plugin=self.name,
             )

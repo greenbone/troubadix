@@ -49,8 +49,7 @@ def parse_args(args: Iterable[str]) -> Namespace:
         type=file_type_existing,
         default=[],
         help=(
-            "List of files to diff. "
-            "If empty use all files added or modified in the commit range."
+            "List of files to diff. If empty use all files added or modified in the commit range."
         ),
     )
     return parser.parse_args(args=args)

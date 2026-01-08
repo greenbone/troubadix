@@ -86,7 +86,7 @@ class CheckScriptCallsRecommended(FileContentPlugin):
                 file_content
             ):
                 yield LinterWarning(
-                    "VT does not contain the following recommended call: " f"'script_{call}'",
+                    f"VT does not contain the following recommended call: 'script_{call}'",
                     file=nasl_file,
                     plugin=self.name,
                 )

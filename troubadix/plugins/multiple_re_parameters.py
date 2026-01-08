@@ -24,7 +24,6 @@ class CheckMultipleReParameters(LineContentPlugin):
     name = "check_multiple_re_parameters"
 
     def check_lines(self, nasl_file: Path, lines: Iterable[str]) -> Iterator[LinterResult]:
-
         if self.context.nasl_file.suffix == ".inc":
             return
 

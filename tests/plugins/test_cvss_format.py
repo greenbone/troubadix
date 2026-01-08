@@ -68,7 +68,7 @@ class CheckCVSSFormatTestCase(PluginTestCase):
 
     def test_missing_base(self):
         path = Path("some/file.nasl")
-        content = '  script_tag(name:"cvss_base_vector", ' 'value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
+        content = '  script_tag(name:"cvss_base_vector", value:"AV:N/AC:L/Au:S/C:N/I:P/A:N");\n'
         fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckCVSSFormat(fake_context)
 

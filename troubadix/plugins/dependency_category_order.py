@@ -132,7 +132,7 @@ class CheckDependencyCategoryOrder(FileContentPlugin):
 
                     if not dependency_path:
                         yield LinterError(
-                            f"The script dependency {dep} could not " "be found within the VTs.",
+                            f"The script dependency {dep} could not be found within the VTs.",
                             file=nasl_file,
                             plugin=self.name,
                         )

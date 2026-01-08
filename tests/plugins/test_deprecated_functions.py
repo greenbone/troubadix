@@ -55,10 +55,9 @@ class CheckDeprecatedDependencyTestCase(PluginTestCase):
 
     def test_deprecated_functions(self):
         deprecated_output = {
-            'script_summary();, use script_tag(name:"'
-            'summary", value:""); instead': "  script_"
+            'script_summary();, use script_tag(name:"summary", value:""); instead': "  script_"
             'summary("deprecated");',
-            "script_id();, use script_oid(); with " "the full OID instead": "  script_id(123345);",
+            "script_id();, use script_oid(); with the full OID instead": "  script_id(123345);",
             "security_note();": '  security_note("deprecated");',
             "security_warning();": '  security_warning("deprecated");',
             "security_hole();": '  security_hole("deprecated");',

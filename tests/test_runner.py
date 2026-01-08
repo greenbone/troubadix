@@ -184,7 +184,7 @@ class TestRunner(unittest.TestCase):
             output,
         )
         self.assertIn(
-            "Results for plugin " "check_script_version_and_last_modification_tags",
+            "Results for plugin check_script_version_and_last_modification_tags",
             output,
         )
         # CI terminal formats for 80 chars per line
@@ -243,7 +243,7 @@ class TestRunner(unittest.TestCase):
 
         output = f.getvalue()
         self.assertIn(
-            "Checking " f"{get_path_from_root(nasl_file, self.root)}",
+            f"Checking {get_path_from_root(nasl_file, self.root)}",
             output,
         )
         self.assertNotIn("No results for plugin check_missing_desc_exit", output)

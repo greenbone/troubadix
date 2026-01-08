@@ -71,8 +71,7 @@ class UpdateTestCase(unittest.TestCase):
         terminal = MagicMock()
         with TemporaryDirectory() as tempdir:
             content = (
-                '  script_version("foo");\n'
-                '  script_tag(name: "last_modification", value: "bar");\n'
+                '  script_version("foo");\n  script_tag(name: "last_modification", value: "bar");\n'
             )
             testfile1 = tempdir / "testfile1.nasl"
             testfile1.write_text(content, encoding="utf8")

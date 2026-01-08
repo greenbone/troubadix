@@ -68,7 +68,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "VT is is using a wrong syntax for script_tag(name:" '"last_modification".',
+            'VT is is using a wrong syntax for script_tag(name:"last_modification".',
             results[1].message,
         )
 
@@ -91,7 +91,7 @@ class CheckScriptVersionAndLastModificationTagsTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "VT is is using a wrong syntax for script_tag(name:" '"last_modification".',
+            'VT is is using a wrong syntax for script_tag(name:"last_modification".',
             results[1].message,
         )
 

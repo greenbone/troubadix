@@ -10,7 +10,6 @@ from . import PluginTestCase
 
 
 class CheckSeverityOriginTestCase(PluginTestCase):
-
     def test_severity_origin_nvd(self):
         path = Path("some/file.nasl")
         content = '  script_tag(name:"severity_origin", value:"NVD");\n'

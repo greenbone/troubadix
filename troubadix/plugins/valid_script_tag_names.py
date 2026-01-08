@@ -94,7 +94,7 @@ class CheckValidScriptTagNames(FileContentPlugin):
             for match in matches:
                 if match.group("name") not in allowed_script_tag_names:
                     yield LinterError(
-                        f"The script_tag name '{match.group('name')}' " "is not allowed.",
+                        f"The script_tag name '{match.group('name')}' is not allowed.",
                         file=nasl_file,
                         plugin=self.name,
                     )

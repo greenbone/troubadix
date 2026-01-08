@@ -185,7 +185,7 @@ class Reporter:
             if self._fix and self._ignore_warnings:
                 line = f"{plugin:48} {count['error']:8} {count['fix']:8}"
             elif self._fix:
-                line = f"{plugin:48} {count['error']:8} {count['warning']:8}" f" {count['fix']:8}"
+                line = f"{plugin:48} {count['error']:8} {count['warning']:8} {count['fix']:8}"
             elif self._ignore_warnings:
                 line = f"{plugin:48} {count['error']:8}"
             else:
@@ -203,8 +203,7 @@ class Reporter:
 
         if self._fix and self._ignore_warnings:
             line = (
-                f"{'sum':48} {self._result_counts.error_count:8}"
-                f" {self._result_counts.fix_count:8}"
+                f"{'sum':48} {self._result_counts.error_count:8} {self._result_counts.fix_count:8}"
             )
         elif self._fix:
             line = (
