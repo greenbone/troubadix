@@ -81,8 +81,7 @@ class CheckDuplicatedScriptTags(FilePlugin):
                 match = list(match)
                 if len(match) > 1:
                     yield LinterError(
-                        f"The VT is using the script tag '{tag.value}' "
-                        "multiple number of times.",
+                        f"The VT is using the script tag '{tag.value}' multiple number of times.",
                         file=self.context.nasl_file,
                         plugin=self.name,
                     )

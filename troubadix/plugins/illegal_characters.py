@@ -106,8 +106,7 @@ class CheckIllegalCharacters(FilePlugin):
                         for forbidden_char in found_forbidden_characters:
                             result, _ = FORBIDDEN_CHARS[forbidden_char]
                             yield result(
-                                f"Found illegal character '{forbidden_char}' "
-                                f"in {match.group(0)}",
+                                f"Found illegal character '{forbidden_char}' in {match.group(0)}",
                                 file=self.context.nasl_file,
                                 plugin=self.name,
                             )

@@ -21,7 +21,6 @@ CREATION_DATE_BASE_PATTERN = (
 
 
 def parse_arguments() -> Namespace:
-
     parser = ArgumentParser(
         description="Check for changed creation date",
     )
@@ -43,8 +42,7 @@ def parse_arguments() -> Namespace:
         type=file_type_existing,
         default=[],
         help=(
-            "List of files to diff. "
-            "If empty use all files added or modified in the commit range."
+            "List of files to diff. If empty use all files added or modified in the commit range."
         ),
     )
     args = parser.parse_args()
@@ -69,7 +67,6 @@ def check_changed_creation_date(commit_range: str, nasl_files: list[Path]) -> bo
     creation_date_changed = False
 
     for nasl_file in nasl_files:
-
         if not nasl_file.exists():
             continue
 
@@ -116,7 +113,6 @@ def check_changed_creation_date(commit_range: str, nasl_files: list[Path]) -> bo
 
 
 def main() -> int:
-
     try:
         git_base = git("rev-parse", "--show-toplevel")
         os.chdir(git_base.rstrip("\n"))

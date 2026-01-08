@@ -97,7 +97,7 @@ def parse_args() -> Namespace:
         dest="threshold",
         type=int,
         default=12,
-        help="The threshold after which to assume no solution " "will be provided anymore",
+        help="The threshold after which to assume no solution will be provided anymore",
     )
 
     parser.add_argument(
@@ -239,9 +239,7 @@ def print_report(
                 "No solution should be expected at this point. "
             )
         else:
-            term.bold_info(
-                f"{len(vts)} VTs with no solution for " f"more than {milestone} month(s)"
-            )
+            term.bold_info(f"{len(vts)} VTs with no solution for more than {milestone} month(s)")
 
         for vt, oid, creation, solution in vts:
             term.info(str(vt.relative_to(root)))

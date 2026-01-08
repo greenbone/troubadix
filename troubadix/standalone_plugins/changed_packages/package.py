@@ -75,12 +75,12 @@ class Package:
         return False
 
     def __str__(self) -> str:
-        result = f"{self.name : <50} {self.version : <40} {self.release : <10}"
+        result = f"{self.name: <50} {self.version: <40} {self.release: <10}"
 
         reasons = ", ".join(
-            f"{change}" f"{' in new package' if direction == Direction.PASSIVE else ''}"
+            f"{change}{' in new package' if direction == Direction.PASSIVE else ''}"
             for change, direction in self.reasons.items()
         )
-        result += f"{reasons : <10}"
+        result += f"{reasons: <10}"
 
         return result

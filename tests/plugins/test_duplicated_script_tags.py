@@ -62,7 +62,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT is using the script tag " "'script_name' multiple number of times.",
+            "The VT is using the script tag 'script_name' multiple number of times.",
             results[0].message,
         )
 
@@ -80,7 +80,7 @@ class CheckDuplicatedScriptTagsTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "The VT is using the script tag " "'cvss_base' multiple number of times.",
+            "The VT is using the script tag 'cvss_base' multiple number of times.",
             results[0].message,
         )
 

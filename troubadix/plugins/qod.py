@@ -101,7 +101,6 @@ class CheckQod(FilePlugin):
 
             # Check if the value is enclosed in double quotes
             if full_value.startswith('"') and full_value.endswith('"'):
-
                 # Compare against valid values
                 if value not in VALID_QOD_NUM_VALUES:
                     yield LinterError(

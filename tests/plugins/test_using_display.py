@@ -98,7 +98,7 @@ class CheckUsingDisplayTestCase(PluginTestCase):
     def test_using_debug_if_display(self):
         """Test that display() inside a debug if statement is allowed"""
         path = Path("some/file.nasl")
-        content = '  script_tag(name:"cvss_base", value:"4.0");\n' 'if (debug) display("FOO");\n'
+        content = '  script_tag(name:"cvss_base", value:"4.0");\nif (debug) display("FOO");\n'
         fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckUsingDisplay(fake_context)
 

@@ -85,7 +85,7 @@ class CheckOverlongDescriptionLines(FileContentPlugin):
                     continue
 
                 yield LinterWarning(
-                    f"Line {i} is too long" f" with {len(line)} characters. " f"Max 100",
+                    f"Line {i} is too long with {len(line)} characters. Max 100",
                     plugin=self.name,
                     file=nasl_file,
                     line=i,

@@ -10,7 +10,6 @@ from . import PluginTestCase
 
 
 class CheckSeverityFormatTestCase(PluginTestCase):
-
     def test_cvss_3_0_vector_ok(self):
         path = Path("some/file.nasl")
         content = (

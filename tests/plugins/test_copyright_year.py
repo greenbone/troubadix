@@ -180,7 +180,7 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             results[0].message,
         )
         self.assertEqual(
-            "a pre2008 vt has a copyright value in the fileheader" " newer than the creation_year",
+            "a pre2008 vt has a copyright value in the fileheader newer than the creation_year",
             results[1].message,
         )
 

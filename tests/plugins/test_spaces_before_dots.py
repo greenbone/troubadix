@@ -10,7 +10,6 @@ from troubadix.plugins.spaces_before_dots import CheckSpacesBeforeDots
 
 
 class TestSpacesBeforeDots(PluginTestCase):
-
     def test_ok(self):
         nasl_file = Path("/some/fake/directory/test.nasl")
         content = """

@@ -101,7 +101,6 @@ class CheckSpacesBeforeDots(FileContentPlugin):
                 )
 
     def fix(self) -> Iterator[LinterResult]:
-
         if not self.matches:
             return
 

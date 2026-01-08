@@ -11,11 +11,9 @@ from troubadix.standalone_plugins.changed_creation_date import git
 
 @contextmanager
 def temporary_git_directory():
-
     cwd = Path.cwd()
 
     with TemporaryDirectory() as tempdir:
-
         try:
             chdir(tempdir)
             git("init", "-b", "main")

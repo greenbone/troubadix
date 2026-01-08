@@ -88,7 +88,7 @@ class CheckDependenciesTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            f"The script dependency {dependency} could " "not be found within the VTs.",
+            f"The script dependency {dependency} could not be found within the VTs.",
             results[0].message,
         )
 
@@ -187,7 +187,7 @@ class CheckDependenciesTestCase(PluginTestCase):
             self.assertEqual(len(results), 1)
             self.assertIsInstance(results[0], LinterError)
             self.assertEqual(
-                "The script dependency example2.nasl could " "not be found within the VTs.",
+                "The script dependency example2.nasl could not be found within the VTs.",
                 results[0].message,
             )
 
