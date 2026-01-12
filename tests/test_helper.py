@@ -91,7 +91,7 @@ class GetPathFromRootTestCase(unittest.TestCase):
     # pylint: disable=expression-not-assigned
     def test_no_root_path(self):
         with self.assertRaises(ValueError):
-            get_path_from_root(Path("nasl/foo/bar"), Path("nasl/baz/bar")),
+            get_path_from_root(Path("nasl/foo/bar"), Path("nasl/baz/bar"))
 
         with self.assertRaises(ValueError):
-            get_path_from_root(Path("/nasl/foo/bar"), Path("/nasl/baz/bar")),
+            get_path_from_root(Path("/nasl/foo/bar"), Path("/nasl/baz/bar"))

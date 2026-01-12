@@ -7,7 +7,6 @@ from troubadix.helper.date_format import check_date
 
 
 class CheckCreationDateTestCase(TestCase):
-
     def test_ok(self):
         results = list(
             check_date(

@@ -130,7 +130,7 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         if not match_last_modified:
             self.fix_last_modification_and_version = True
             yield LinterError(
-                "VT is is using a wrong syntax for script_tag(" 'name:"last_modification".',
+                'VT is is using a wrong syntax for script_tag(name:"last_modification".',
                 file=nasl_file,
                 plugin=self.name,
             )

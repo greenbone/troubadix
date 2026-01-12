@@ -29,7 +29,7 @@ def parse_arguments() -> Namespace:
         "--directory",
         default=Path.cwd(),
         type=Path,
-        help="The directory the repository to check is located in. " "Defaults to 'pwd'",
+        help="The directory the repository to check is located in. Defaults to 'pwd'",
     )
 
     ignored_linestart_group = argument_parser.add_mutually_exclusive_group()
@@ -41,7 +41,7 @@ def parse_arguments() -> Namespace:
         nargs="*",
         type=str,
         default=DEFAULT_IGNORED_LINESTARTS,
-        help="A list of line starts which will make the line be ignored. " "Default: %(default)s",
+        help="A list of line starts which will make the line be ignored. Default: %(default)s",
     )
 
     ignored_linestart_group.add_argument(

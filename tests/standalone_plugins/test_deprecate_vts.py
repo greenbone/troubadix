@@ -154,8 +154,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
             self.assertNotIn(result, "script_dependencies")
             self.assertNotIn(result, 'include("revisions-lib.inc");')
             assert (
-                "\n\n  Note: This VT has been deprecated and replaced by "
-                "a Notus scanner based one."
+                "\n\n  Note: This VT has been deprecated and replaced by a Notus scanner based one."
             ) in result
 
     def test_deprecate_with_oid_mapping(self):
@@ -222,7 +221,7 @@ class DeprecateVTsTestCase(unittest.TestCase):
             ]
             deprecate(out_dir, to_deprecate, "NOTUS")
             self.assertLogs(
-                "Unable to deprecate testfile1.nasl. There are still KB keys " "remaining."
+                "Unable to deprecate testfile1.nasl. There are still KB keys remaining."
             )
 
     def test_get_summary(self):
@@ -235,7 +234,6 @@ class DeprecateVTsTestCase(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_finalize_content(self):
-
         result = _finalize_content(NASL_CONTENT)
         expected = (
             '...if(description)\n{\n  script_oid("1.3.6.1.4.1.25623.1.0.910673");\n  '

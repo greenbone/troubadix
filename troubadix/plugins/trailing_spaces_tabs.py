@@ -44,7 +44,7 @@ class CheckTrailingSpacesTabs(FilePlugin):
                 continue
 
             yield LinterError(
-                "The VT has one or more trailing spaces " f"and/or tabs in line {line_number}!",
+                f"The VT has one or more trailing spaces and/or tabs in line {line_number}!",
                 file=self.context.nasl_file,
                 plugin=self.name,
             )

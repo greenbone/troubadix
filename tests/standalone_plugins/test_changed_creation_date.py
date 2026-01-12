@@ -21,11 +21,9 @@ TEST_FILES = [Path("test.nasl")]
 
 
 class TestChangedCreationDate(unittest.TestCase):
-
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_check_creation_date_ok(self, mock_git, mock_exists):
-
         mock_git.return_value = (
             '-script_tag(name:"creation_date",'
             ' value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\n'
@@ -40,7 +38,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_check_creation_date_fail(self, mock_git, mock_exists):
-
         mock_git.return_value = (
             '-script_tag(name:"creation_date",'
             ' value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\n'
@@ -54,7 +51,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_creation_date_not_modified_lines_added(self, mock_git, mock_exists):
-
         mock_git.return_value = (
             '-script_tag(name:"creation_date",'
             ' value:"2025-03-04 10:00:00 +0200 (Tue, 04 Mar 2025)");\n'
@@ -69,7 +65,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_creation_date_not_modified_lines_removed(self, mock_git, mock_exists):
-
         mock_git.return_value = '-script_tag(name:"This got removed", value:"Nothing");'
         mock_exists.return_value = True
 
@@ -78,7 +73,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.Path.exists")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_creation_date_added_not_removed(self, mock_git, mock_exists):
-
         mock_git.return_value = (
             '+script_tag(name:"This got added", value:"Something");\n'
             '+script_tag(name:"creation_date", '
@@ -98,7 +92,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     @patch("troubadix.standalone_plugins.changed_creation_date.ArgumentParser.parse_args")
     def test_args_ok(self, mock_parse_args, mock_git):
-
         mock_parse_args.return_value = Namespace(commit_range="main..test", files=[])
         mock_git.return_value = "test1.nasl\ntest2.nasl\ntest3.txt"
 
@@ -121,7 +114,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.os.chdir")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_main_check_creation_date_ok(self, mock_git, _, mock_check_creation_date, __):
-
         mock_git.return_value = "test_directory"
         mock_check_creation_date.return_value = 0
 
@@ -132,7 +124,6 @@ class TestChangedCreationDate(unittest.TestCase):
     @patch("troubadix.standalone_plugins.changed_creation_date.os.chdir")
     @patch("troubadix.standalone_plugins.changed_creation_date.git")
     def test_main_check_creation_date_fail(self, mock_git, _, mock_check_creation_date, __):
-
         mock_git.return_value = "test_directory"
         mock_check_creation_date.return_value = 2
 

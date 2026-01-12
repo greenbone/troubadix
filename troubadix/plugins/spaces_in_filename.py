@@ -13,7 +13,7 @@ class CheckSpacesInFilename(FilePlugin):
     def run(self) -> Iterator[LinterResult]:
         if re.search(r"\s", self.context.nasl_file.name):
             yield LinterError(
-                f"The VT {self.context.nasl_file}" " contains whitespace in the filename",
+                f"The VT {self.context.nasl_file} contains whitespace in the filename",
                 file=self.context.nasl_file,
                 plugin=self.name,
             )

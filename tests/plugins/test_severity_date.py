@@ -10,7 +10,6 @@ from . import PluginTestCase
 
 
 class CheckSeverityDateTestCase(PluginTestCase):
-
     def test_severity_date_ok(self):
         path = Path("some/file.nasl")
         content = (

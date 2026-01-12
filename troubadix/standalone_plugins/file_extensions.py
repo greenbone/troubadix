@@ -73,7 +73,7 @@ def main() -> int:
             print(file.relative_to(args.dir))
         return 0
 
-    print(f"{len(unwanted_files)} " "Files with unwanted file extension were found:")
+    print(f"{len(unwanted_files)} Files with unwanted file extension were found:")
     for file in unwanted_files:
         print(file)
     return 1

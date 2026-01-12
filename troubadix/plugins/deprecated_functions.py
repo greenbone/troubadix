@@ -44,8 +44,7 @@ class CheckDeprecatedFunctions(FilePlugin):
         deprecated_functions = {
             'script_summary();, use script_tag(name:"summary", value:""); '
             "instead": r"script_summary\s*\([^)]*\);",
-            "script_id();, use script_oid(); with "
-            "the full OID instead": r"script_id\s*\([0-9]+\);",
+            "script_id();, use script_oid(); with the full OID instead": r"script_id\s*\([0-9]+\);",
             "security_note();": r"security_note\s*\([^)]*\);",
             "security_warning();": r"security_warning\s*\([^)]*\);",
             "security_hole();": r"security_hole\s*\([^)]*\);",
@@ -58,7 +57,7 @@ class CheckDeprecatedFunctions(FilePlugin):
         for description, pattern in deprecated_functions.items():
             if re.search(pattern, self.context.file_content, re.MULTILINE):
                 yield LinterError(
-                    "Found a deprecated function call / description item: " f"{description}",
+                    f"Found a deprecated function call / description item: {description}",
                     file=self.context.nasl_file,
                     plugin=self.name,
                 )

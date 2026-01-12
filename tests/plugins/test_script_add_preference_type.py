@@ -97,9 +97,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         )
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_name("Foo Bar");\n'
-            f"{add_pref}\n"
+            f'  script_tag(name:"cvss_base", value:"4.0");\n  script_name("Foo Bar");\n{add_pref}\n'
         )
         fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceType(fake_context)
@@ -119,9 +117,7 @@ class CheckScriptAddPreferenceTypeTestCase(PluginTestCase):
         add_pref = 'script_add_preference(name:"File or Directory Name", value:"/home", id:1);'
         path = Path("some/file.nasl")
         content = (
-            '  script_tag(name:"cvss_base", value:"4.0");\n'
-            '  script_name("Foo Bar");\n'
-            f"{add_pref}\n"
+            f'  script_tag(name:"cvss_base", value:"4.0");\n  script_name("Foo Bar");\n{add_pref}\n'
         )
         fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
         plugin = CheckScriptAddPreferenceType(fake_context)
