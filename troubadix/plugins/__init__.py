@@ -15,153 +15,61 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""
+This package contains all linter plugins.
+Plugins are discovered dynamically at runtime. To add a new plugin:
+1. Create a new .py file in this directory.
+2. Define a class that inherits from FilePlugin or FilesPlugin.
+
+The discovery logic only searches the top-level of this package.
+Nested sub-packages are currently not supported for plugin discovery.
+"""
+
 import difflib
-from typing import Iterable, List
+import importlib
+import pkgutil
+from typing import Iterable, Type
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
-from troubadix.plugins.spaces_before_dots import CheckSpacesBeforeDots
 
-from .badwords import CheckBadwords
-from .copyright_text import CheckCopyrightText
-from .copyright_year import CheckCopyrightYear
-from .creation_date import CheckCreationDate
-from .cve_format import CheckCVEFormat
-from .cvss_format import CheckCVSSFormat
-from .dependencies import CheckDependencies
-from .dependency_category_order import CheckDependencyCategoryOrder
-from .deprecated_dependency import CheckDeprecatedDependency
-from .deprecated_functions import CheckDeprecatedFunctions
-from .double_end_points import CheckDoubleEndPoints
-from .duplicate_oid import CheckDuplicateOID
-from .duplicated_script_tags import CheckDuplicatedScriptTags
-from .encoding import CheckEncoding
-from .forking_nasl_functions import CheckForkingNaslFunctions
-from .get_kb_on_services import CheckGetKBOnServices
-from .grammar import CheckGrammar
-from .http_links_in_tags import CheckHttpLinksInTags
-from .if_statement_syntax import CheckIfStatementSyntax
-from .illegal_characters import CheckIllegalCharacters
-from .infos_array_keys import CheckInfosArrayKeys
-from .log_messages import CheckLogMessages
-from .malformed_dependencies import CheckMalformedDependencies
-from .misplaced_compare_in_if import CheckMisplacedCompareInIf
-from .missing_desc_exit import CheckMissingDescExit
-from .missing_tag_solution import CheckMissingTagSolution
-from .multiple_re_parameters import CheckMultipleReParameters
-from .newlines import CheckNewlines
-from .overlong_description_lines import CheckOverlongDescriptionLines
-from .overlong_script_tags import CheckOverlongScriptTags
-from .prod_svc_detect_in_vulnvt import CheckProdSvcDetectInVulnvt
-from .qod import CheckQod
-from .reporting_consistency import CheckReportingConsistency
-from .script_add_preference_id import CheckScriptAddPreferenceId
-from .script_add_preference_type import CheckScriptAddPreferenceType
-from .script_calls_empty_values import CheckScriptCallsEmptyValues
-from .script_calls_recommended import CheckScriptCallsRecommended
-from .script_category import CheckScriptCategory
-from .script_copyright import CheckScriptCopyright
-from .script_family import CheckScriptFamily
-from .script_tag_form import CheckScriptTagForm
-from .script_tag_whitespaces import CheckScriptTagWhitespaces
-from .script_tags_mandatory import CheckScriptTagsMandatory
-from .script_version_and_last_modification_tags import (
-    CheckScriptVersionAndLastModificationTags,
-)
-from .script_xref_form import CheckScriptXrefForm
-from .script_xref_url import CheckScriptXrefUrl
-from .security_messages import CheckSecurityMessages
-from .set_get_kb_calls import CheckWrongSetGetKBCalls
-from .severity_date import CheckSeverityDate
-from .severity_format import CheckSeverityFormat
-from .severity_origin import CheckSeverityOrigin
-from .solution_text import CheckSolutionText
-from .solution_type import CheckSolutionType
-from .spaces_in_filename import CheckSpacesInFilename
-from .spelling import CheckSpelling
-from .tabs import CheckTabs
-from .todo_tbd import CheckTodoTbd
-from .trailing_spaces_tabs import CheckTrailingSpacesTabs
-from .using_display import CheckUsingDisplay
-from .valid_oid import CheckValidOID
-from .valid_script_tag_names import CheckValidScriptTagNames
-from .variable_assigned_in_if import CheckVariableAssignedInIf
-from .variable_redefinition_in_foreach import CheckVariableRedefinitionInForeach
-from .vt_file_permissions import CheckVTFilePermissions
-from .vt_placement import CheckVTPlacement
 
-# plugins checking single files
-_FILE_PLUGINS = [
-    CheckBadwords,
-    CheckCopyrightText,
-    CheckCopyrightYear,
-    CheckCreationDate,
-    CheckCVEFormat,
-    CheckCVSSFormat,
-    CheckDependencies,
-    CheckDependencyCategoryOrder,
-    CheckDeprecatedDependency,
-    CheckDeprecatedFunctions,
-    CheckDoubleEndPoints,
-    CheckDuplicatedScriptTags,
-    CheckEncoding,
-    CheckForkingNaslFunctions,
-    CheckGetKBOnServices,
-    CheckGrammar,
-    CheckHttpLinksInTags,
-    CheckIllegalCharacters,
-    CheckLogMessages,
-    CheckMalformedDependencies,
-    CheckMisplacedCompareInIf,
-    CheckMissingDescExit,
-    CheckMissingTagSolution,
-    CheckMultipleReParameters,
-    CheckNewlines,
-    CheckOverlongDescriptionLines,
-    CheckOverlongScriptTags,
-    CheckProdSvcDetectInVulnvt,
-    CheckQod,
-    CheckReportingConsistency,
-    CheckScriptAddPreferenceType,
-    CheckScriptCallsEmptyValues,
-    CheckScriptCallsRecommended,
-    CheckScriptCategory,
-    CheckScriptCopyright,
-    CheckScriptFamily,
-    CheckScriptTagForm,
-    CheckScriptTagsMandatory,
-    CheckScriptTagWhitespaces,
-    CheckScriptVersionAndLastModificationTags,
-    CheckScriptXrefForm,
-    CheckScriptXrefUrl,
-    CheckSecurityMessages,
-    CheckSeverityDate,
-    CheckSeverityFormat,
-    CheckSeverityOrigin,
-    CheckSolutionText,
-    CheckSolutionType,
-    CheckSpacesInFilename,
-    CheckTabs,
-    CheckTodoTbd,
-    CheckTrailingSpacesTabs,
-    CheckUsingDisplay,
-    CheckValidOID,
-    CheckValidScriptTagNames,
-    CheckVariableAssignedInIf,
-    CheckVariableRedefinitionInForeach,
-    CheckVTFilePermissions,
-    CheckVTPlacement,
-    CheckWrongSetGetKBCalls,
-    CheckSpacesBeforeDots,
-    CheckIfStatementSyntax,
-    CheckScriptAddPreferenceId,
-    CheckInfosArrayKeys,
-]
+def _get_all_subclasses(cls: Type) -> Iterable[Type]:
+    """Recursively find all subclasses of a given class."""
+    for subclass in cls.__subclasses__():
+        yield from _get_all_subclasses(subclass)
+        yield subclass
 
-# plugins checking all files
-_FILES_PLUGINS = [
-    CheckDuplicateOID,
-    CheckSpelling,
-]
+
+def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]]:
+    """
+    Dynamically discover all concrete plugin classes in this package.
+
+    It works by:
+    1. Iterating through all Python modules in the current directory.
+    2. Importing each module to register its classes.
+    3. Using subclass tracking on FilePlugin and FilesPlugin to find implementations
+       within this package.
+
+    Returns:
+        A tuple containing (list of file plugins, list of files plugins).
+    """
+    for _loader, module_name, _is_pkg in pkgutil.iter_modules(__path__):
+        importlib.import_module(f"{__name__}.{module_name}")
+
+    file_plugins: list[Type[FilePlugin]] = [
+        cls for cls in _get_all_subclasses(FilePlugin) if cls.__module__.startswith(__name__)
+    ]
+    files_plugins: list[Type[FilesPlugin]] = [
+        cls for cls in _get_all_subclasses(FilesPlugin) if cls.__module__.startswith(__name__)
+    ]
+
+    return (
+        sorted(file_plugins, key=lambda x: x.__name__),
+        sorted(files_plugins, key=lambda x: x.__name__),
+    )
+
+
+_FILE_PLUGINS, _FILES_PLUGINS = _discover_plugins()
 
 
 class Plugins:
@@ -183,8 +91,8 @@ class Plugins:
 class StandardPlugins(Plugins):
     def __init__(
         self,
-        excluded_plugins: List[str] = None,
-        included_plugins: List[str] = None,
+        excluded_plugins: list[str] = None,
+        included_plugins: list[str] = None,
     ) -> None:
         file_plugins = _FILE_PLUGINS
         files_plugins = _FILES_PLUGINS
@@ -204,7 +112,7 @@ class StandardPlugins(Plugins):
         super().__init__(file_plugins=file_plugins, files_plugins=files_plugins)
 
     @staticmethod
-    def _exclude_plugins(excluded: Iterable[str], plugins: Iterable[Plugin]) -> List[Plugin]:
+    def _exclude_plugins(excluded: Iterable[str], plugins: Iterable[Plugin]) -> list[Plugin]:
         return [
             plugin
             for plugin in plugins
@@ -212,7 +120,7 @@ class StandardPlugins(Plugins):
         ]
 
     @staticmethod
-    def _include_plugins(included: Iterable[str], plugins: Iterable[Plugin]) -> List[Plugin]:
+    def _include_plugins(included: Iterable[str], plugins: Iterable[Plugin]) -> list[Plugin]:
         return [
             plugin for plugin in plugins if plugin.__name__ in included or plugin.name in included
         ]
