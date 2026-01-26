@@ -18,7 +18,7 @@
 from pathlib import Path
 
 from troubadix.plugin import LinterWarning
-from troubadix.plugins import CheckTodoTbd
+from troubadix.plugins.todo_tbd import CheckTodoTbd
 
 from . import PluginTestCase
 
