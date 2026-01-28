@@ -74,6 +74,15 @@ class Package:
 
         return False
 
+    def __le__(self, other: "Package") -> bool:
+        # Sort by release first, then the other fields
+        if self.release != other.release:
+            return self.release < other.release
+        if self.name != other.name:
+            return self.name < other.name
+
+        return self.version <= other.version
+
     def __str__(self) -> str:
         result = f"{self.name: <50} {self.version: <40} {self.release: <10}"
 

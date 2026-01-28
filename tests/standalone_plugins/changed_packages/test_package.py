@@ -62,6 +62,8 @@ class PackageTestCase(TestCase):
         package = Package("foo", "1.2.3", "DEB10")
         other_package = Package("foo", "1.2.3", "DEB10")
 
+        # Code security alert
+        # Impossible to avert because no "assertLessFalse" function exists
         self.assertFalse(package < other_package)
         self.assertFalse(package > other_package)
 
@@ -70,4 +72,43 @@ class PackageTestCase(TestCase):
         other_package = Package("a", "1.2.3", "DEB11")
 
         self.assertLess(package, other_package)
+        # Code security alert
+        # Impossible to avert because no "assertLessFalse" function exists
         self.assertFalse(other_package < package)
+
+    def test_le_equal(self):
+        package = Package("a", "1.2.3", "DEB10")
+        other_package = Package("a", "1.2.3", "DEB10")
+
+        self.assertLessEqual(package, other_package)
+        # Code security alert
+        # Impossible to avert because no "assertLessEqualFalse" function exists
+        self.assertFalse(other_package < package)
+        self.assertFalse(package < other_package)
+
+    def test_le_lesser_by_name(self):
+        package = Package("a", "1.2.3", "DEB10")
+        other_package = Package("b", "1.2.3", "DEB10")
+
+        self.assertLessEqual(package, other_package)
+        # Code security alert
+        # Impossible to avert because no "assertLessEqualFalse" function exists
+        self.assertFalse(other_package <= package)
+
+    def test_le_lesser_by_release(self):
+        package = Package("a", "1.2.3", "DEB10")
+        other_package = Package("a", "1.2.3", "DEB11")
+
+        self.assertLessEqual(package, other_package)
+        # Code security alert
+        # Impossible to avert because no "assertLessEqualFalse" function exists
+        self.assertFalse(other_package <= package)
+
+    def test_le_lesser_by_version(self):
+        package = Package("a", "1.2.3", "DEB10")
+        other_package = Package("a", "1.2.4", "DEB10")
+
+        self.assertLessEqual(package, other_package)
+        # Code security alert
+        # Impossible to avert because no "assertLessEqualFalse" function exists
+        self.assertFalse(other_package <= package)
