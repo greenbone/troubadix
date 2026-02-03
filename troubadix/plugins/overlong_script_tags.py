@@ -1,19 +1,6 @@
-# Copyright (C) 2022 Greenbone AG
+# SPDX-FileCopyrightText: 2022 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
 from typing import Iterator
@@ -27,8 +14,16 @@ from ..plugin import FileContentPlugin, LinterError, LinterResult
 VALUE_LIMIT = 3000
 
 IGNORE_FILES = [
+    # This has so many vulnerabilities, and we want at least mention each of them, so no way to
+    # shorten it down.
     "monstra_cms_mult_vuln",
+    # Same as previously
+    "2017/gb_generic_http_web_app_params_dir_trav.nasl",
+    "2017/gb_generic_http_web_root_dir_trav.nasl",
+    "2021/gb_generic_http_web_dirs_dir_trav.nasl",
+    # These have auto-generated affected tags which we don't want to shorten down.
     "gb_huawei-sa-",
+    # Needs a description for each option which we don't want to shorten down.
     "lsc_options.nasl",
 ]
 
