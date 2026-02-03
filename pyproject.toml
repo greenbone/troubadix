@@ -84,6 +84,7 @@ troubadix-allowed-rev-diff = 'troubadix.standalone_plugins.allowed_rev_diff:main
 troubadix-file-extensions = 'troubadix.standalone_plugins.file_extensions:main'
 troubadix-deprecate-vts = 'troubadix.standalone_plugins.deprecate_vts:main'
 troubadix-dependency-graph = 'troubadix.standalone_plugins.dependency_graph.dependency_graph:main'
+troubadix-affected-scripts = 'troubadix.standalone_plugins.dependency_graph.affected_scripts:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

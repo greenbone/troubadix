@@ -11,13 +11,15 @@ from troubadix.plugins.dependency_category_order import VTCategory
 from troubadix.standalone_plugins.dependency_graph.cli import parse_args
 from troubadix.standalone_plugins.dependency_graph.dependency_graph import (
     Reporter,
+    main,
+)
+from troubadix.standalone_plugins.dependency_graph.graph_builder import (
     create_graph,
     determine_feed,
     extract_category,
     extract_dependencies,
     get_feed,
     get_scripts,
-    main,
 )
 from troubadix.standalone_plugins.dependency_graph.models import (
     Dependency,
