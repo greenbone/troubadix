@@ -5,4 +5,5 @@ if(description)
   exit(0);
 }
 
+include("lib.inc");
 script_dependencies( "missing.nasl" );

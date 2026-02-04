@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# SPDX-FileCopyrightText: 2025 Greenbone AG
+# SPDX-FileCopyrightText: 2026 Greenbone AG
 
 
 import logging
@@ -10,7 +10,6 @@ import networkx as nx
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.helper import is_enterprise_folder
-from troubadix.helper.if_block_parser import find_if_statements
 from troubadix.helper.patterns import (
     ScriptTag,
     SpecialScriptTag,
@@ -29,8 +28,10 @@ INCLUDE_PATTERN = re.compile(r'include\s*\(\s*(?P<quote>[\'"])(?P<value>.*?)(?P=
 CATEGORY_PATTERN = get_special_script_tag_pattern(SpecialScriptTag.CATEGORY)
 DEPRECATED_PATTERN = get_script_tag_pattern(ScriptTag.DEPRECATED)
 
-# Matches specific if conditions used to gate code to run only for enterprise feeds
-ENTERPRISE_CONDITION_PATTERN = re.compile(r'FEED_NAME\s*==\s*"(GSF|GEF|SCM)"')
+ENTERPRISE_FEED_CHECK_PATTERN = re.compile(
+    r'if\s*\(FEED_NAME\s*==\s*"GSF"\s*\|\|\s*FEED_NAME\s*==\s*"GEF"\s*\|\|\s*FEED_NAME\s*==\s*"SCM"\)\s*'
+    r"(?:\{[^}]*\}\s*|[^\{;]*;)"
+)  # Matches specific if blocks used to gate code to run only for enterprise feeds
 
 NASL_EXTENSIONS = (".nasl", ".inc")
 
@@ -81,11 +82,8 @@ def determine_feed(script_relative_path: Path) -> str:
 def extract_dependencies(content: str) -> list[Dependency]:
     dependencies = []
 
-    if_statements = find_if_statements(content).statements
     if_blocks = [
-        (stmt.if_start, stmt.if_end)
-        for stmt in if_statements
-        if ENTERPRISE_CONDITION_PATTERN.search(stmt.condition)
+        (match.start(), match.end()) for match in ENTERPRISE_FEED_CHECK_PATTERN.finditer(content)
     ]
 
     for match in DEPENDENCY_PATTERN.finditer(content):

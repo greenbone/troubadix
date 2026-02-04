@@ -127,20 +127,21 @@ if(description)
 
   exit(0);
 }
+include("lib.inc");
         """
 
     def test_get_feed(self):
         feed = Feed.FEED_22_04
         scripts = get_feed(Path(self.local_root), feed)
-        self.assertEqual(len(scripts), 5)
+        self.assertEqual(len(scripts), 7)
 
     @patch("pathlib.Path.read_text")
     def test_get_scripts(self, mock_read_text):
         mock_read_text.return_value = self.script_content
         scripts = get_scripts(Path(self.local_root) / "common")
-        self.assertEqual(len(scripts), 4)
+        self.assertEqual(len(scripts), 5)  # Added lib.inc
         self.assertEqual(scripts[0].feed, "community")
-        self.assertEqual(len(scripts[0].dependencies), 3)
+        self.assertEqual(len(scripts[0].dependencies), 4)
         self.assertEqual(scripts[0].category, VTCategory.ACT_GATHER_INFO)
         self.assertEqual(scripts[0].deprecated, False)
 
@@ -153,13 +154,15 @@ if(description)
 
     def test_extract_dependencies(self):
         dependencies = extract_dependencies(self.script_content)
-        self.assertEqual(len(dependencies), 3)
+        self.assertEqual(len(dependencies), 4)
         self.assertEqual(dependencies[0].name, "foo.nasl")
         self.assertEqual(dependencies[1].name, "foo.nasl")
         self.assertEqual(dependencies[2].name, "gsf/enterprise_script.nasl")
+        self.assertEqual(dependencies[3].name, "lib.inc")
         self.assertEqual(dependencies[0].is_enterprise_feed, False)
         self.assertEqual(dependencies[1].is_enterprise_feed, False)
         self.assertEqual(dependencies[2].is_enterprise_feed, True)
+        self.assertEqual(dependencies[3].is_enterprise_feed, False)
 
     def test_extract_category(self):
         category = extract_category(self.script_content)
