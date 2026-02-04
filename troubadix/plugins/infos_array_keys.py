@@ -9,11 +9,15 @@ from troubadix.helper.remove_comments import remove_comments
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult, LinterWarning
 
 FN_CALL_EXPRESSION = "get_app_version_and_location"
-ALLOWED_KEYS = ("cpe", "port", "version", "location", "proto")
+ALLOWED_KEYS = {"cpe", "port", "version", "location", "proto"}
+ALLOWED_VARS = {"infos"}
 
 # Matches variable assignments: var = get_app_version_and_location
 # Also matches: if (!var = get_app_version_and_location(...))
 ASSIGN_RE = re.compile(rf"(?P<var_name>\w+)\s*=\s*{FN_CALL_EXPRESSION}")
+
+# Matches array access: var[key]
+ACCESS_PATTERN = r"\b{var_name}\s*\[(?P<key>[^\]]+)\]"
 
 
 class CheckInfosArrayKeys(FileContentPlugin):
@@ -33,10 +37,10 @@ class CheckInfosArrayKeys(FileContentPlugin):
         for match in ASSIGN_RE.finditer(clean_content):
             var_name = match.group("var_name")
             found_vars.add(var_name)
-            if var_name != "infos":
+            if var_name not in ALLOWED_VARS:
                 yield LinterWarning(
                     f'Unexpected variable name "{var_name}" assigned from {FN_CALL_EXPRESSION}. '
-                    'The standard name is "infos".',
+                    f'The standard names are {"|".join(ALLOWED_VARS)}.',
                     file=nasl_file,
                     plugin=self.name,
                 )
@@ -44,14 +48,14 @@ class CheckInfosArrayKeys(FileContentPlugin):
         if not found_vars:
             yield LinterError(
                 f"Missing assignment from {FN_CALL_EXPRESSION}. "
-                'The result must be assigned to a variable named "infos".',
+                f'The result must be assigned to a variable named {"|".join(ALLOWED_VARS)}.',
                 file=nasl_file,
                 plugin=self.name,
             )
             return
 
         for var_name in found_vars:
-            access_re = re.compile(rf"\b{var_name}\s*\[(?P<key>[^\]]+)\]")
+            access_re = re.compile(ACCESS_PATTERN.format(var_name=var_name))
             for match in access_re.finditer(clean_content):
                 key = match.group("key").strip(" \"'")
 
