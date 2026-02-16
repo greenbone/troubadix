@@ -41,6 +41,7 @@ from .grammar import CheckGrammar
 from .http_links_in_tags import CheckHttpLinksInTags
 from .if_statement_syntax import CheckIfStatementSyntax
 from .illegal_characters import CheckIllegalCharacters
+from .infos_array_keys import CheckInfosArrayKeys
 from .log_messages import CheckLogMessages
 from .malformed_dependencies import CheckMalformedDependencies
 from .misplaced_compare_in_if import CheckMisplacedCompareInIf
@@ -153,6 +154,7 @@ _FILE_PLUGINS = [
     CheckSpacesBeforeDots,
     CheckIfStatementSyntax,
     CheckScriptAddPreferenceId,
+    CheckInfosArrayKeys,
 ]
 
 # plugins checking all files
