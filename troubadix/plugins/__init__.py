@@ -43,30 +43,15 @@ def _get_all_subclasses(cls: Type) -> Iterable[Type]:
 
 def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]]:
     """
-    Dynamically discover all concrete plugin classes in this package.
+    Dynamically discover all concrete plugin classes.
 
-    It works by:
-    1. Iterating through all Python modules in the current directory.
-    2. Importing each module to register its classes.
-    3. Using subclass tracking on FilePlugin and FilesPlugin to find implementations
-       within this package.
-
-    Returns:
         A tuple containing (list of file plugins, list of files plugins).
     """
-    # Does not walk into subdirectories. Only top-level modules are considered.
     for _loader, module_name, _is_pkg in pkgutil.iter_modules(__path__):
         importlib.import_module(f"{__name__}.{module_name}")
 
-    # __subclasses__() returns ALL subclasses currently loaded in the
-    # Python interpreter, includes external libs.
-    # Filter by module_name to only include those defined in this package.
-    file_plugins: list[Type[FilePlugin]] = [
-        cls for cls in _get_all_subclasses(FilePlugin) if cls.__module__.startswith(__name__)
-    ]
-    files_plugins: list[Type[FilesPlugin]] = [
-        cls for cls in _get_all_subclasses(FilesPlugin) if cls.__module__.startswith(__name__)
-    ]
+    file_plugins = _get_all_subclasses(FilePlugin)
+    files_plugins = _get_all_subclasses(FilesPlugin)
 
     return (
         sorted(file_plugins, key=lambda x: x.__name__),
