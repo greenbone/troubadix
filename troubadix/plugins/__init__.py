@@ -50,8 +50,14 @@ def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]
     for _loader, module_name, _is_pkg in pkgutil.iter_modules(__path__):
         importlib.import_module(f"{__name__}.{module_name}")
 
-    file_plugins = _get_all_subclasses(FilePlugin)
-    files_plugins = _get_all_subclasses(FilesPlugin)
+    # Only include plugins defined in this package,
+    # excludes the plugins baseclasses and external plugins.
+    file_plugins = [
+        cls for cls in _get_all_subclasses(FilePlugin) if cls.__module__.startswith(__name__)
+    ]
+    files_plugins = [
+        cls for cls in _get_all_subclasses(FilesPlugin) if cls.__module__.startswith(__name__)
+    ]
 
     return (
         sorted(file_plugins, key=lambda x: x.__name__),
