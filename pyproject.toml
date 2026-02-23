@@ -25,10 +25,10 @@ packages = [{ include = "troubadix" }, { include = "tests", format = "sdist" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pontos = ">=22.7,<26.0"
+pontos = ">=22.7,<27.0"
 codespell = "2.4.1"
 python-magic = "^0.4.25"
-chardet = ">=4,<6"
+chardet = ">=4,<7"
 validators = "^0.34.0"
 gitpython = "^3.1.31"
 charset-normalizer = "^3.2.0"
