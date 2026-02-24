@@ -132,3 +132,67 @@ def create_graph(scripts: list[Script]):
                 is_enterprise_feed=dependency.is_enterprise_feed,
             )
     return graph
+
+
+def create_barebones_dependency_graph(root: Path, feed: Feed) -> nx.DiGraph:
+    """
+    Build a dependency graph with only script names and dependency edges.
+    Skips category, deprecated, and enterprise feed checks for speed.
+    """
+    graph = nx.DiGraph()
+
+    script_dirs = [root / "common"]
+    if feed != Feed.COMMON:
+        script_dirs.append(root / feed.value)
+
+    for directory in script_dirs:
+        for path in directory.rglob("*"):
+            if path.suffix not in NASL_EXTENSIONS or not path.is_file():
+                continue
+            try:
+                content = path.read_text(encoding=CURRENT_ENCODING)
+                relative_path = path.relative_to(directory)
+                name = str(relative_path)
+
+                for match in INCLUDE_PATTERN.finditer(content):
+                    dep_name = match.group("value")
+                    graph.add_edge(name, dep_name)
+                for match in DEPENDENCY_PATTERN.finditer(content):
+                    dep_list = split_dependencies(match.group("value"))
+                    for dep in dep_list:
+                        graph.add_edge(name, dep)
+            except Exception as e:
+                logger.error(f"Error processing {path}: {e}")
+                raise
+    return graph
+
+
+def create_barebones_dependency_graph_from_root(root: Path) -> nx.DiGraph:
+    """
+    Build a dependency graph scanning a single root directory where all
+    NASL files already live (e.g. generated feed layout under vt-data/nasl).
+    This is a slimmed-down scanner that only extracts dependency and include
+    relationships and does not perform any feed-specific logic.
+    """
+    graph = nx.DiGraph()
+
+    for path in Path(root).rglob("*"):
+        if path.suffix not in NASL_EXTENSIONS or not path.is_file():
+            continue
+        try:
+            content = path.read_text(encoding=CURRENT_ENCODING)
+            relative_path = path.relative_to(root)
+            name = str(relative_path)
+
+            for match in INCLUDE_PATTERN.finditer(content):
+                dep_name = match.group("value")
+                graph.add_edge(name, dep_name)
+            for match in DEPENDENCY_PATTERN.finditer(content):
+                dep_list = split_dependencies(match.group("value"))
+                for dep in dep_list:
+                    graph.add_edge(name, dep)
+        except Exception as e:
+            logger.error(f"Error processing {path}: {e}")
+            raise
+
+    return graph

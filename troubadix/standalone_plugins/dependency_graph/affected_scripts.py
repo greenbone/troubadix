@@ -3,24 +3,24 @@
 
 
 import argparse
+import re
 from pathlib import Path
 
 import networkx as nx
 
 from troubadix.argparser import directory_type_existing, file_type, file_type_existing
 
-from .graph_builder import create_graph, get_feed
-from .models import Feed
+from .graph_builder import create_barebones_dependency_graph_from_root
 
 
 def run(
-    root: Path,
+    feed_root: Path,
     input_file: Path,
     output_file: Path,
-    feed: Feed = Feed.COMMON,
     max_distance: int = None,
 ):
-    graph = create_graph(get_feed(root, feed))
+    # feed_root is expected to point to the generated feed NASL directory
+    graph = create_barebones_dependency_graph_from_root(feed_root)
     changed_files = input_file.read_text().splitlines()
 
     affected = set()
@@ -35,15 +35,10 @@ def run(
         if not line:
             continue
 
-        # Simple prefix stripping to match node names
-        path = Path(line)
-        parts = list(path.parts)
-        if parts and parts[0] == "nasl":
-            parts.pop(0)
-        if parts and (parts[0] == "common" or parts[0] == feed.value):
-            parts.pop(0)
-
-        name = str(Path(*parts))
+        # Examples of changed lines: nasl/common/foo.nasl or nasl/21.04/foo.nasl
+        # Replaces ^nasl/(common|21\.04|22\.04)/ with an empty string,
+        # leaving the relative feed path.
+        name = re.sub(r"^nasl/(common|21\.04|22\.04)/", "", line)
 
         if name in graph:
             affected.add(name)
@@ -65,30 +60,31 @@ def run(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Find scripts affected by changes based on dependency graph."
+        description=(
+            "Purpose-built tool for the PR QA checks workflow. Finds scripts affected by "
+            "changes based on dependency graph (generated-feed layout)."
+        )
     )
     parser.add_argument(
-        "root",
+        "feed_root",
         type=directory_type_existing,
-        help="Root directory of the NASL repository",
+        help="Root directory of the generated feed NASL tree (e.g., vt-data/nasl)",
     )
     parser.add_argument(
         "input_file",
         type=file_type_existing,
-        help="Path to the file containing the list of changed scripts",
+        help=(
+            "Path to the file containing the list of changed scripts in repository "
+            "layout (e.g., nasl/common/foo.nasl)"
+        ),
     )
     parser.add_argument(
         "output_file",
         type=file_type,
-        help="Path to the file where affected scripts will be written",
-    )
-    parser.add_argument(
-        "feed",
-        type=Feed,
-        choices=Feed,
-        nargs="?",
-        default=Feed.COMMON,
-        help="Feed selection (e.g., common, 22.04)",
+        help=(
+            "Path to the file where affected scripts will be written in relative "
+            "feed layout (e.g., gsf/2020/foo.nasl)"
+        ),
     )
     parser.add_argument(
         "--max-distance",
@@ -101,10 +97,9 @@ def main():
     args = parser.parse_args()
 
     run(
-        args.root,
+        args.feed_root,
         args.input_file,
         args.output_file,
-        args.feed,
         args.max_distance,
     )
 
