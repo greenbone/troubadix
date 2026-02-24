@@ -22,8 +22,9 @@ Plugins are discovered dynamically at runtime. To add a new plugin:
 2. Define a class that inherits from FilePlugin or FilesPlugin.
 
 The discovery logic only searches the top-level of this package.
-Nested sub-packages are currently not supported for plugin discovery.
-To permanently disable a plugin, move it to a "disabled" subfolder.
+Nested sub-packages are currently not supported for plugin discovery,
+which excludes plugins in subfolders as a byproduct. However, the
+intended way to disable a plugin is to add `is_disabled = True` to its class.
 """
 
 import difflib
@@ -37,8 +38,8 @@ from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
 def _get_all_subclasses(cls: Type) -> Iterable[Type]:
     """Recursively find all subclasses of a given class."""
     for subclass in cls.__subclasses__():
-        yield from _get_all_subclasses(subclass)
         yield subclass
+        yield from _get_all_subclasses(subclass)
 
 
 def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]]:
@@ -50,14 +51,13 @@ def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]
     for _loader, module_name, _is_pkg in pkgutil.iter_modules(__path__):
         importlib.import_module(f"{__name__}.{module_name}")
 
-    # Only include plugins defined in this package,
+    def _is_valid_plugin(cls: Type) -> bool:
+        return cls.__module__.startswith(__name__) and not getattr(cls, "is_disabled", False)
+
+    # Only include plugins defined in this package and that are not disabled.
     # excludes the plugins baseclasses and external plugins.
-    file_plugins = [
-        cls for cls in _get_all_subclasses(FilePlugin) if cls.__module__.startswith(__name__)
-    ]
-    files_plugins = [
-        cls for cls in _get_all_subclasses(FilesPlugin) if cls.__module__.startswith(__name__)
-    ]
+    file_plugins = [cls for cls in _get_all_subclasses(FilePlugin) if _is_valid_plugin(cls)]
+    files_plugins = [cls for cls in _get_all_subclasses(FilesPlugin) if _is_valid_plugin(cls)]
 
     return (
         sorted(file_plugins, key=lambda x: x.__name__),
