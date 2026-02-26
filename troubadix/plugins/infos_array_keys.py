@@ -40,7 +40,7 @@ class CheckInfosArrayKeys(FileContentPlugin):
             if var_name not in ALLOWED_VARS:
                 yield LinterWarning(
                     f'Unexpected variable name "{var_name}" assigned from {FN_CALL_EXPRESSION}. '
-                    f'The standard names are {"|".join(ALLOWED_VARS)}.',
+                    f"The standard names are {'|'.join(ALLOWED_VARS)}.",
                     file=nasl_file,
                     plugin=self.name,
                 )
@@ -48,7 +48,7 @@ class CheckInfosArrayKeys(FileContentPlugin):
         if not found_vars:
             yield LinterError(
                 f"Missing assignment from {FN_CALL_EXPRESSION}. "
-                f'The result must be assigned to a variable named {"|".join(ALLOWED_VARS)}.',
+                f"The result must be assigned to a variable named {'|'.join(ALLOWED_VARS)}.",
                 file=nasl_file,
                 plugin=self.name,
             )
