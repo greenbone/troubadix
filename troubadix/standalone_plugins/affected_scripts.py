@@ -46,6 +46,9 @@ def run(root: Path, input_file: Path, output_file: Path, max_distance: int = Non
     changed_files = input_file.read_text().splitlines()
     affected = set()
 
+    # needed for fast shortest path calculation of ancestors
+    # if max distance is not given, we can just use the ancestors method
+    # else use reversed graph and single source shortest path going out from given changed files
     rev_graph = graph.reverse() if max_distance is not None else None
 
     for line in changed_files:
@@ -81,13 +84,23 @@ def run(root: Path, input_file: Path, output_file: Path, max_distance: int = Non
 
 def main():
     parser = argparse.ArgumentParser(description="Find scripts affected by changes.")
-    parser.add_argument("root", help="Root directory where NASL files live")
-    parser.add_argument("input_file", help="File with changed filenames")
-    parser.add_argument("output_file", help="File to write affected scripts")
-    parser.add_argument("--max-distance", "-d", type=int, default=None)
+    parser.add_argument("feed_root", help="Root directory where NASL files live post feed_gen")
+    parser.add_argument(
+        "input_file",
+        help="File with changed filenames. "
+        "Paths relative to repo root or feed root. Newline separated.",
+    )
+    parser.add_argument("output_file", help="File to write affected scripts. Newline separated.")
+    parser.add_argument(
+        "--max-distance",
+        "-d",
+        type=int,
+        default=None,
+        help="Maximum distance to search for affected scripts. 1 means only direct dependencies.",
+    )
 
     args = parser.parse_args()
-    run(Path(args.root), Path(args.input_file), Path(args.output_file), args.max_distance)
+    run(Path(args.feed_root), Path(args.input_file), Path(args.output_file), args.max_distance)
 
 
 if __name__ == "__main__":

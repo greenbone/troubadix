@@ -29,11 +29,11 @@ class TestAffectedScriptsStandalone(unittest.TestCase):
         self.assertEqual(affected, ["standalone.nasl"])
 
     def test_foo_changed(self):
-        self.input_file.write_text("foo.nasl\n")
+        self.input_file.write_text("nasl/22.04/gsf/foo.nasl\n")
         run(self.root, self.input_file, self.output_file)
         affected = self.output_file.read_text().splitlines()
         # Only foo.nasl should be affected
-        self.assertEqual(affected, ["foo.nasl"])
+        self.assertEqual(affected, ["gsf/foo.nasl"])
 
     def test_bar_changed(self):
         self.input_file.write_text("bar.nasl\n")
@@ -41,16 +41,16 @@ class TestAffectedScriptsStandalone(unittest.TestCase):
         affected = self.output_file.read_text().splitlines()
         # bar.nasl and foo.nasl should be affected (foo depends on bar)
         self.assertIn("bar.nasl", affected)
-        self.assertIn("foo.nasl", affected)
+        self.assertIn("gsf/foo.nasl", affected)
         self.assertEqual(len(affected), 2)
 
     def test_foobar_changed(self):
-        self.input_file.write_text("foobar.nasl\n")
+        self.input_file.write_text("nasl/common/gsf/foobar.nasl\n")
         run(self.root, self.input_file, self.output_file)
         affected = self.output_file.read_text().splitlines()
         # foobar.nasl and foo.nasl should be affected (foo depends on foobar)
-        self.assertIn("foobar.nasl", affected)
-        self.assertIn("foo.nasl", affected)
+        self.assertIn("gsf/foobar.nasl", affected)
+        self.assertIn("gsf/foo.nasl", affected)
         self.assertEqual(len(affected), 2)
 
     def test_barfoo_changed(self):
@@ -61,7 +61,7 @@ class TestAffectedScriptsStandalone(unittest.TestCase):
         # foo depends on bar, bar depends on barfoo
         self.assertIn("barfoo.nasl", affected)
         self.assertIn("bar.nasl", affected)
-        self.assertIn("foo.nasl", affected)
+        self.assertIn("gsf/foo.nasl", affected)
         self.assertEqual(len(affected), 3)
 
     def test_lib_inc_include(self):
@@ -70,7 +70,7 @@ class TestAffectedScriptsStandalone(unittest.TestCase):
         affected = self.output_file.read_text().splitlines()
         # lib.inc is included by foo.nasl and barfoo.nasl, which propagate up
         self.assertIn("lib.inc", affected)
-        self.assertIn("foo.nasl", affected)
+        self.assertIn("gsf/foo.nasl", affected)
         self.assertIn("barfoo.nasl", affected)
         self.assertIn("bar.nasl", affected)  # bar depends on barfoo
         self.assertEqual(len(affected), 4)
@@ -104,5 +104,5 @@ class TestAffectedScriptsStandalone(unittest.TestCase):
         affected = self.output_file.read_text().splitlines()
         self.assertIn("barfoo.nasl", affected)
         self.assertIn("bar.nasl", affected)
-        self.assertIn("foo.nasl", affected)
+        self.assertIn("gsf/foo.nasl", affected)
         self.assertEqual(len(affected), 3)
