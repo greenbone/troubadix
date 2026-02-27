@@ -203,6 +203,7 @@ class CheckSpelling(FilesPlugin):
                 str(nasl_file) for nasl_file in self.context.nasl_files[i : i + batch_size]
             ]
             codespell_arguments = [
+                "--quiet-level=1",
                 "--dictionary=-",
                 f"--dictionary={codespell_additions}",
                 f"--exclude-file={codespell_exclude}",
