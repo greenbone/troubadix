@@ -32,6 +32,15 @@ class CheckSpellingTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
+    def test_ok_iso_8859_1(self):
+        nasl_file = Path(__file__).parent / "test_files" / "ok_spelling_iso_8859_1.nasl"
+        fake_context = self.create_files_plugin_context(nasl_files=[nasl_file])
+        plugin = CheckSpelling(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
     def test_nok(self):
         nasl_file = Path(__file__).parent / "test_files" / "fail_spelling.nasl"
         fake_context = self.create_files_plugin_context(nasl_files=[nasl_file])
@@ -57,6 +66,21 @@ class CheckSpellingTestCase(PluginTestCase):
         self.assertEqual(
             f"{nasl_file}:2: upated ==> updated",
             results[2].message,
+        )
+
+    def test_nok_iso_8859_1(self):
+        nasl_file = Path(__file__).parent / "test_files" / "fail_spelling_iso_8859_1.nasl"
+        fake_context = self.create_files_plugin_context(nasl_files=[nasl_file])
+        plugin = CheckSpelling(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            f"{nasl_file}:2: aray ==> array",
+            results[0].message,
         )
 
     def test_local_files_nok(self):
