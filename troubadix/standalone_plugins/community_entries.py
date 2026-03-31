@@ -19,7 +19,7 @@ def parse_arguments() -> Namespace:
     parser.add_argument("ref_b", help="The ref to diff to")
 
     parser.add_argument(
-        "-d", "--directory", help="The directory containing the repositry to work in"
+        "-d", "--directory", help="The directory containing the repository to work in"
     )
 
     parser.add_argument(
