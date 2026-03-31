@@ -55,7 +55,8 @@ def main():
 
     arguments = parse_arguments()
 
-    os.chdir(arguments.directory)
+    if arguments.directory:
+        os.chdir(arguments.directory)
 
     files = git(
         "diff", arguments.ref_b, arguments.ref_a, "--name-only", "--diff-filter=A", "--no-renames"
