@@ -95,6 +95,7 @@
   accessible from a public WAN (Internet) / public LAN.");
   access to the pCOWeb service ports from WAN (if port-forwarding is enabled to allow remote
   - ACI - DO not encode query_string
+  ACI mode could allow an unauthenticated, adjacent attacker to cause a denial of service (DoS)
   (ACI) mode could allow an unauthenticated, remote attacker to unexpectedly restart the device,
   - ACI modules - Fix non-signature authentication
 Add back sibling paca poiter to paca (bsc#1055117).
@@ -107,7 +108,7 @@ Add more important informations
  * Add suppor... [Please see the references for more information on the vulnerabilities]");
   a denial of service. (CVE-2016-4429) Tim Ruehsen discovered that the
   - A division by zero in the CAF demuxer
-"admin:admin:huawei,3com,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp,ibm,intel,ivanti:all,http,ssh,ftp",
+"admin:admin:3com,adtran,allied,alteon,amitech,billon,checkpoint,cisco,com3,davox,dell,dlink,draytek,dynalink,everfocus,flowpoint,foundry networks,hp,huawei,ibm,intel,ivanti,microhard:all,http,ssh,ftp",
   Admin endpoints to a public WAN (Internet) / public LAN without authentication.
 "Administrator:admin:cisco,conexant,corecess,gvc:all",
   admin:[Password]:0:0:Adminstrator:/:/bin/sh
@@ -215,6 +216,7 @@ cgis[i++] = "/cgi-bin/fom/fom.cgi";
 "chage --inactive <DAYS> <USER> for existing users.';
         check_matches = re.finditer('[^\r\n]*[#]+[ ]*([Tt]hunderbird|[Ss]ea[Mm]onkey|[Hh]ot[Ff]ix|[Ff]irefox|[Pp]ower[Pp]oint( Viewer)?)[ ]*[Cc]heck[^\r\n]*\n', text)
 check_pattern = '^([Aa]ccept|[Cc]ontent)-[Ee]ncoding\\s*:[^\r\n]*(gzip|deflate)';
+check_urls = make_list( "/olt/Login.do", "/otm/logon.do" );
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt (server auth)
 China_Internet_Network_Information_Center_EV_Certificates_Ro ot:2.4.72.159.0.1.crt server auth
 Christian Loos discovered an information disclosure flaw which may reveal RSS feeds URLs, and thus ticket data.
@@ -335,6 +337,7 @@ CVE-2019-17012: Fixed multiple memmory issues (bmo#1449736, bmo#1533957,
 CVE-2019-19063: Fixe... [Please see the references for more information on the vulnerabilities]");
 CVE-2019-19319: A slab-out-of-bounds write access could have occured
 CVE-2019-19927: A slab-out-of-bounds read access occured when mounting a
+  - CVE-2019-25466: Local SEH overflow
 CVE-2019-3816: Fixed a vulnerability in openwsmand deamon which could
 CVE-2019-3838: Fixed various bugs which allows to reenable and misuse
 CVE-2019-3863: Fixed an Integer overflow in user authenicate keyboard
@@ -808,6 +811,7 @@ Ned Williamson discovered a way to escape the sandbox.
 # Nidesoft MP3 Converter SEH Local Buffer Overflow Vulnerability (Windows)
 nname[count]    = "Agobot.FO";
         ## NO CPE Name found, using cpe:/a:netsparker:wass: CPE Name
+  - No CVE: Remote SEH based overflow");
 No descriptio ...
                          "NOTIC: iSCSI:", "INFOR: iSCSI:", "ERROR: iSCSI:", # DELL TL2000/TL4000 iSCSI-SAS Bridge on 1234/tcp
 not properly check the user's permissions while modifying CAs in Dogtag. An
@@ -993,7 +997,9 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Privilege Escalation Vulnerability (cisco-sa-naci-mdvul-vrKVgNU)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Mode Queue Wedge DoS Vulnerability (cisco-sa-n9kaci-queue-wedge-cLDDEfKF)");
   script_name("Cisco Nexus 9000 Series Fabric Switches ACI Multi-Site CloudSec Encryption Information Disclosure Vulnerability (cisco-sa-aci-cloudsec-enc-Vs5Wn2sX)");
+  script_name("Cisco Nexus 9000 Series Fabric Switches in ACI Mode Denial of Service Vulnerability (cisco-sa-nxos-cpdos-qLsv6pFD)");
   script_name("Cisco Nexus 9000 Series Fabric Switches in ACI Mode Link Layer Discovery Protocol Memory Leak Denial of Service Vulnerability (cisco-sa-aci-lldp-dos-ySCNZOpX)");
+  script_name("Cisco Nexus 9000 Series Fabric Switches in ACI Mode SNMP Denial of Service Vulnerability (cisco-sa-nxos-dsnmp-cNN39Uh)");
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Authenticated Remote Code Execution Vulnerabilities (cisco-sa-sb-rv34x-rce-8bfG2h6b)");
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers Local Privilege Escalation Vulnerability (cisco-sa-rv-34x-privesc-GLN8ZAQE)");
   script_name("Cisco RV340, RV340W, RV345, and RV345P Dual WAN Gigabit VPN Routers SSL Denial of Service Vulnerability");
@@ -1309,9 +1315,11 @@ smelastsys:x:2999:2999:sme last system user marker:/tmp:/bin/false
 sndReq = http_get(item:"/olt/Login.do", port:oatPort);
   sndReq = http_get(item:string(dir , "/doc/catalogue.html"), port:openPort);
   sndReq = http_get(item:string(dir, "/LiveTime/WebObjects/LiveTime.woa"), port:novPort);
+  (SNMP) subsystem of Cisco Nexus 9000 Series Fabric Switches in ACI mode could allow an
   # SNPP, HylaFAX FTP, HylaFAX SPP, agobot.fo, IRC bots, WinSock server,
+  "soket.io",
   - soket.io, soket.js, foever
-                                "soket.io", "soket.js", "foever", "npm-script-demo", "regenraotr", "regenrator", "axois" );
+  "soket.js",
 solution = "Ensure the SSLCipherSuite includes all of the following:!NULL:!SSLv2:!RC4:!aNULL:!3DES:!IDEA values.
 solution = "Ensure the SSLCipherSuite includes all of the following:!NULL:!SSLv2:!RC4:!aNULL values.
 solution = "Installieren Sie Microsoft Windows 8.1 in der 64-Bit Variante.";
@@ -1522,6 +1530,7 @@ url = "/UE/welcome_login.html";
  used to cause a redirect to any URI of an attackers choise (bsc#1110850).");
     user32_file_id = 'oval:org.mitre.oval:obj:390';
     user32_file_variable_id = 'oval:org.mitre.oval:var:200';
+username = "iwu@fbt&ND";
   users into executing downloads as reported by Jordi Chancel.
   USG9520, USG9560, USG9580, ViewPoint 9030 and eSpace U1981.");
  using a PCI passthrough device, was not preemptable, which allowed local
@@ -1621,4 +1630,3 @@ xml += string( '<oval_system_characteristics xmlns="http://oval.mitre.org/XMLSch
   - XSS via a crafted WAN name on the General Setup screen (CVE-2019-16534)");
   "^[Xx]-[Aa]dobe-[Cc]ontent\s*:\s*AEM" );
   Zhongling Wen discovered that the h323 conntrack handler did not correctly
-check_urls = make_list( "/olt/Login.do", "/otm/logon.do" );
