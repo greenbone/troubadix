@@ -108,6 +108,6 @@ class CheckMissingDescExitTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "No description block extracted/found.",
+            "Unable to locate description block.",
             results[0].message,
         )
