@@ -19,10 +19,7 @@ import re
 from pathlib import Path
 from typing import Iterator
 
-from troubadix.helper.if_block_parser import IfParser
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
-
-EXIT_PATTERN = re.compile(r"exit\s*\(\s*0\s*\)\s*;$")
 
 
 class CheckMissingDescExit(FileContentPlugin):
@@ -58,27 +55,24 @@ class CheckMissingDescExit(FileContentPlugin):
         ):
             return
 
-        description_results = [
-            block
-            for block in IfParser(file_content).find_if_statements().statements
-            if block.condition == "description"
-        ]
+        match = re.search(
+            r"^if\s*\(\s*description\s*\)\s*\{(.+?)^\}",
+            file_content,
+            re.MULTILINE | re.DOTALL,
+        )
+        if match and match.group(1):
+            submatch = re.search(r"^\s*exit\s*\(\s*0\s*\)\s*;", match.group(1), re.MULTILINE)
+            if not submatch:
+                yield LinterError(
+                    "No mandatory exit(0); found in the description block.",
+                    file=nasl_file,
+                    plugin=self.name,
+                )
 
-        if not description_results:
-            yield LinterError(
-                "Unable to locate description block.",
-                file=nasl_file,
-                plugin=self.name,
-            )
             return
 
-        description_if = description_results[0]
-        match = EXIT_PATTERN.search(description_if.outcome)
-
-        if not match:
-            yield LinterError(
-                "No mandatory exit(0); found in the description block.",
-                file=nasl_file,
-                plugin=self.name,
-            )
-            return
+        yield LinterError(
+            "No description block extracted/found.",
+            file=nasl_file,
+            plugin=self.name,
+        )
