@@ -56,7 +56,7 @@ class CheckMissingDescExit(FileContentPlugin):
             return
 
         match = re.search(
-            r"^if\s*\(\s*description\s*\)\s*\{(.+?)^\}",
+            r"^if\s*\(\s*description\s*\)\s*\{(.+?)(?=^\}\s*$)",
             file_content,
             re.MULTILINE | re.DOTALL,
         )
