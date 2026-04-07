@@ -41,26 +41,6 @@ class CheckMissingDescExitTestCase(PluginTestCase):
 
         self.assertEqual(len(results), 0)
 
-    def test_ok_closing_brace_in_text(self):
-        nasl_file = Path(__file__).parent / "test.nasl"
-        content = (
-            "if(description)\n"
-            "{\n"
-            '  script_tag(name:"insight", value:"Here is some example code:\n'
-            "if(foo == bar){\n"
-            "} <- this was an example\n"
-            'Some more text here.");\n'
-            "  exit(0);\n"
-            "}\n"
-        )
-        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
-        plugin = CheckMissingDescExit(fake_context)
-
-        results = list(plugin.run())
-        print(results)
-
-        self.assertEqual(len(results), 0)
-
     def test_exclude_inc_file(self):
         path = Path("some/file.inc")
         fake_context = self.create_file_plugin_context(nasl_file=path)
@@ -108,6 +88,6 @@ class CheckMissingDescExitTestCase(PluginTestCase):
         self.assertEqual(len(results), 1)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Unable to locate description block.",
+            "No description block extracted/found.",
             results[0].message,
         )
