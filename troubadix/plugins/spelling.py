@@ -160,6 +160,11 @@ exceptions = [
     PatternInFileCheck("tomcat", r"JULI\s+==>\s+JULY"),
     # Some valid abbreviation for e.g. Cisco or VLC VTs
     PatternInFileCheck("caf", r"CAF\s+==>\s+CALF"),
+    # Valid "PerFact" product name in these
+    PatternInFilePatternCheck(
+        r"gb_(perfact_openvpn-client_smb_login_detect|openvpn-client_icsa-21-056-01)\.nasl",
+        r"[Pp]er[Ff]act\s+==>\s+prefect, perfect",
+    ),
 ]
 
 
