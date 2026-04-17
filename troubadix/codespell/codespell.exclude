@@ -338,6 +338,9 @@ CVE-2019-19063: Fixe... [Please see the references for more information on the v
 CVE-2019-19319: A slab-out-of-bounds write access could have occured
 CVE-2019-19927: A slab-out-of-bounds read access occured when mounting a
   - CVE-2019-25466: Local SEH overflow
+  - CVE-2019-25629: Local SEH BOF triggered via malicious CSV log file path in Hardware Monitoring
+  - CVE-2019-25631: Local SEH BOF triggered via EggHunter payload injection in the SMTP display
+  - CVE-2019-25633: Local SEH BOF triggered via EggHunter payload injection in the email preferences
 CVE-2019-3816: Fixed a vulnerability in openwsmand deamon which could
 CVE-2019-3838: Fixed various bugs which allows to reenable and misuse
 CVE-2019-3863: Fixed an Integer overflow in user authenicate keyboard
@@ -854,6 +857,7 @@ or potentially have unspecified futher impact.
 paths = ssh_find_bin(prog_name:"stap", sock:sock);
                     pattern:'<title>DNP LAN/WAN Status</title>','Electro Industries/GaugeTech',
 Paulo Bonzini discovered that the KVM implemen ...
+p_data_tf_types["00221049"] = "Pre-Selected for Implantation";
 p_data_tf_types["00720073"] = "Selector OD Value";
 					phpipam was unable to connnect to the database. This will check for connection errors.</div>
 Plugin Page: https://wordpress.org/plugins/mailin/
@@ -985,7 +989,7 @@ SAML/CAS tokens in the session database, an attacker can open an anonymous
   script_name("Acronis Cyber Infrastructure (ACI) RCE Vulnerability (SEC-6452)");
   script_name("Adobe LiveCycle Designer Detection (Windows SMB Login)");
   script_name("Adobe LiveCycle Designer Untrusted Search Path Vulnerability - Windows");
-  script_name("AIDA64 <= 6.25.5400 SEH Buffer Overflow Vulnerability");
+  script_name("AIDA64 <= 6.25.5400 Multiple SEH BOF Vulnerabilities");
   script_name("Apache James Server Web Admin Public WAN (Internet) / Public LAN Accessible without Authentication");
   script_name("Apache JServ Protocol (AJP) Public WAN (Internet) / Public LAN Accessible");
   script_name("CAS CommServer UA Version Detection (Windows)");
@@ -1259,6 +1263,7 @@ Security researcher laf.intel reported a buffer overflow and
  Security researchers Jordi Chancel and Eddy Bordi reported that they could short-circuit page loads to show the address of a different site than what is loaded in the ... [Please see the references for more information on the vulnerabilities]");
 Security vulnerability addresed:
  Segment.cpp that may cause a denial of serivce (bsc#1084850).");
+  (SEH) buffer overflow (BOF) vulnerabilities");
     seh  = raw_string(0x67,0x1a,0x48);
     send(socket:soc,data:string("ALLO ",buff,"\r\n"));
 send(socket: soc, data: triggerD);
@@ -1507,6 +1512,7 @@ url = dir + "/cds.php?interpret=%22><script>alert(document.cookie)</script>&tite
   url = dir + "/CoupleDB.php?Parametre=0&DataDirectory=xyz/VT-RemoteFileInclusion.txt";
   url = dir + "/fom.cgi?cmd=<script>foo</script>&file=1&keywords=vt-test";
     url = dir +'/includes/wysiwyg/spaw/editor/plugins/imgpopup/img_popup.php?'+
+url = dir + '/index.php?option=com_multicalendar&task=editevent&calid=1";' +
 url = dir + "/obj/autorisation.class.php?path_om=../../../../../../../../vt-rfi.txt";
   url = dir + "/product.comparision.php?cat=null%20union%20all%20select%201,concat_ws(0x3a,0x4f,0x70,0x65,0x6e,0x56,0x41,0x53),3,4,5%20from%20daype_users_tb%20--&name=GSM";
 url = dir + "/profiles/index.php?gud=<script>alert(document.cookie)</script>";
