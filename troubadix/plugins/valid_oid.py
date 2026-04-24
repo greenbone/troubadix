@@ -429,7 +429,7 @@ class CheckValidOID(FileContentPlugin):
             "2016/gb_adobe_air_mult_vuln_feb16_macosx.nasl",
             "attic/gb_cybozu_garoon_mult_vuln_aug16.nasl",
             "2017/gb_openssh_mult_vuln_jan17_lin.nasl",
-            "2017/gb_xenserver_ctx219378.nasl",
+            "2017/citrix/gb_xenserver_ctx219378.nasl",
         ]
         # nb: Those are using invalid OID ranges but are already in
         # the feed since longer time and can't be fixed / changed.

@@ -64,7 +64,7 @@ exceptions = [
     ),
     # nb: Valid sentence
     TextInFileCheck(
-        "2012/gb_VMSA-2010-0007.nasl",
+        "2012/vmware/gb_VMSA-2010-0007.nasl",
         "e. VMware VMnc Codec heap overflow vulnerabilities\n\n  Vulnerabilities in the",
     ),
     TextInFileCheck("gb_opensuse_2018_1900_1.nasl", "(Note that"),
