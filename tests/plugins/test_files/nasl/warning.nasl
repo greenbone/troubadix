@@ -9,7 +9,7 @@ if(description)
   script_tag(name:"last_modification", value:"2021-03-02 10:48:07 +0000 (Tue, 02 Mar 2021)");
   script_tag(name:"creation_date", value:"2017-02-27 11:48:20 +0100 (Mon, 27 Feb 2017)");
   script_name("Apache HTTP Server End of Life (EOL) Detection (Windows)");
-  script_copyright("Copyright (C) 2017 Greenbone Networks GmbH");
+  script_copyright("Copyright (C) 2017 Greenbone AG");
   script_category(ACT_GATHER_INFO);
   script_family("Web Servers");
   script_dependencies("gb_apache_http_server_consolidation.nasl", "os_detection.nasl");
