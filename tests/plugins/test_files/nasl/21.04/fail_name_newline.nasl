@@ -7,7 +7,7 @@
 # Dr. Who <dr@who.org>
 #
 # Copyright:
-# Copyright (C) 2016 Greenbone Networks GmbH
+# Copyright (C) 2016 Greenbone AG
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ if(description)
   script_name("foo 
   detection");
   script_category(ACT_GATHER_INFO);
-  script_copyright("Copyright (c) Greenbone Networks GmbH");
+  script_copyright("Copyright (c) Greenbone AG");
   script_family("FreeBSD Local Security Checks");
   script_dependencies("gather-package-list.nasl");
   script_mandatory_keys("foo/bar", "bar/baz");

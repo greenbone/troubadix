@@ -35,7 +35,7 @@ if(description)
   ction");
   script_category(ACT_GATHER_INFO);
   script_copyright("Copyright (c) Greenbone
-   Networks GmbH");
+   AG");
   script_family("FreeBSD Local Security Checks");
   script_dependencies("gather-package-list.nasl");
   script_mandatory_keys("foo/bar", "bar/baz");
