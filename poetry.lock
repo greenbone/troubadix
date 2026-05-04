@@ -371,14 +371,14 @@ smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
-version = "3.1.47"
+version = "3.1.49"
 description = "GitPython is a Python library used to interact with Git repositories"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "gitpython-3.1.47-py3-none-any.whl", hash = "sha256:489f590edfd6d20571b2c0e72c6a6ac6915ee8b8cd04572330e3842207a78905"},
-    {file = "gitpython-3.1.47.tar.gz", hash = "sha256:dba27f922bd2b42cb54c87a8ab3cb6beb6bf07f3d564e21ac848913a05a8a3cd"},
+    {file = "gitpython-3.1.49-py3-none-any.whl", hash = "sha256:024b0422d7f84d15cd794844e029ffebd4c5d42a7eb9b936b458697ef550a02c"},
+    {file = "gitpython-3.1.49.tar.gz", hash = "sha256:42f9399c9eb33fc581014bedd76049dfbaf6375aa2a5754575966387280315e1"},
 ]
 
 [package.dependencies]
@@ -764,14 +764,14 @@ files = [
 
 [[package]]
 name = "pontos"
-version = "26.4.1"
+version = "26.4.3"
 description = "Common utilities and tools maintained by Greenbone Networks"
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main", "dev"]
 files = [
-    {file = "pontos-26.4.1-py3-none-any.whl", hash = "sha256:fa80bf6c30add509ffc47e2b739da326c4f76925d051143fc5d5b6c1aebecfe6"},
-    {file = "pontos-26.4.1.tar.gz", hash = "sha256:6f873ee4d209709f2765a509befd7e4f177d383382fa64e507dab6ef39693442"},
+    {file = "pontos-26.4.3-py3-none-any.whl", hash = "sha256:7d82da7b594388979ec56dcb98c6b1eb4540f49bf54e5b08d9cfccf806a901d9"},
+    {file = "pontos-26.4.3.tar.gz", hash = "sha256:259ab9cb1f6b354b76466a943aee18aa83b27fffc609e1f9bfde0cb998aaca15"},
 ]
 
 [package.dependencies]
