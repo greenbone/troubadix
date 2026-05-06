@@ -13,7 +13,6 @@ updates:
     patterns:
       - "*"
     multi-ecosystem-group: dependencies
-    open-pull-requests-limit: 10
     allow:
       - dependency-type: direct
       - dependency-type: indirect
