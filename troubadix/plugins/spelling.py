@@ -180,7 +180,7 @@ class CheckSpelling(FilesPlugin):
         return file, correction.strip()
 
     def run(self) -> Iterator[LinterResult]:
-        """This script checks, via the codespell library, wether
+        """This script checks, via the codespell library, whether
         the provided nasl files contain spelling errors.
         Certain errors are ignored based on listed exceptions
 
