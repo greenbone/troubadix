@@ -30,7 +30,7 @@ class LinguisticCheck(ABC):
 
 
 class FileCheck(LinguisticCheck):
-    """Checks wether the given file contains the specified file path"""
+    """Checks whether the given file contains the specified file path"""
 
     def __init__(self, file: str) -> None:
         self.file = file
@@ -40,7 +40,7 @@ class FileCheck(LinguisticCheck):
 
 
 class FilesCheck(LinguisticCheck):
-    """Checks wether the given file contains any of the specified file paths"""
+    """Checks whether the given file contains any of the specified file paths"""
 
     def __init__(self, files: List[str]) -> None:
         self.files = files
@@ -50,7 +50,7 @@ class FilesCheck(LinguisticCheck):
 
 
 class FilePatternCheck(LinguisticCheck):
-    """Checks wether the given file matches the specified pattern"""
+    """Checks whether the given file matches the specified pattern"""
 
     def __init__(self, file_pattern: str, flags: re.RegexFlag = 0) -> None:
         self.file_pattern = re.compile(file_pattern, flags=flags)
@@ -60,7 +60,7 @@ class FilePatternCheck(LinguisticCheck):
 
 
 class TextCheck(LinguisticCheck):
-    """Checks wether the correction contains the specified text"""
+    """Checks whether the correction contains the specified text"""
 
     def __init__(self, text: str) -> None:
         self.text = text
@@ -70,7 +70,7 @@ class TextCheck(LinguisticCheck):
 
 
 class PatternCheck(LinguisticCheck):
-    """Checks wether the correction matches the specified pattern"""
+    """Checks whether the correction matches the specified pattern"""
 
     def __init__(self, pattern: str, flags: re.RegexFlag = 0) -> None:
         self.pattern = re.compile(pattern, flags=flags)
@@ -80,7 +80,7 @@ class PatternCheck(LinguisticCheck):
 
 
 class PatternsCheck(LinguisticCheck):
-    """Checks wether the correction matches any of the specified patterns"""
+    """Checks whether the correction matches any of the specified patterns"""
 
     def __init__(
         self,
@@ -112,7 +112,7 @@ class CompositeCheck(LinguisticCheck):
 
 
 class TextInFileCheck(CompositeCheck):
-    """Checks wether the correction contains the specified text
+    """Checks whether the correction contains the specified text
     and the given file contains the specified file path
     """
 
@@ -121,7 +121,7 @@ class TextInFileCheck(CompositeCheck):
 
 
 class PatternInFileCheck(CompositeCheck):
-    """Checks wether the correction matches the specified pattern
+    """Checks whether the correction matches the specified pattern
     and the file contains the specified file path
     """
 
@@ -130,7 +130,7 @@ class PatternInFileCheck(CompositeCheck):
 
 
 class PatternsInFileCheck(CompositeCheck):
-    """Checks wether the correction matches any of the specified patterns
+    """Checks whether the correction matches any of the specified patterns
     and the file contains the specified file_path
     """
 
@@ -143,7 +143,7 @@ class PatternsInFileCheck(CompositeCheck):
 
 
 class PatternInFilesCheck(CompositeCheck):
-    """Checks wether the correction matches the specified pattern
+    """Checks whether the correction matches the specified pattern
     and the file matches any of the specified file paths
     """
 
@@ -152,7 +152,7 @@ class PatternInFilesCheck(CompositeCheck):
 
 
 class PatternInFilePatternCheck(CompositeCheck):
-    """Checks wether the correction matches the specified pattern
+    """Checks whether the correction matches the specified pattern
     and the file matches the specified file pattern
     """
 
@@ -170,7 +170,7 @@ class PatternInFilePatternCheck(CompositeCheck):
 
 
 class PatternsInFilePatternCheck(CompositeCheck):
-    """Checks wether the correction matches any of the specified patterns
+    """Checks whether the correction matches any of the specified patterns
     and the file matches the specified file pattern
     """
 
@@ -187,7 +187,7 @@ class PatternsInFilePatternCheck(CompositeCheck):
 
 
 def handle_linguistic_checks(file: str, correction: str, checks: Iterable[LinguisticCheck]) -> bool:
-    """Determinates if any of the provided checks pass
+    """Determines if any of the provided checks pass
     for the provided file and correction
 
     Args:
@@ -196,6 +196,6 @@ def handle_linguistic_checks(file: str, correction: str, checks: Iterable[Lingui
         checks (Iterable[LinguisticCheck]): The checks that have to be passed
 
     Returns:
-        bool: Wether any check was passed by the provided file and correction
+        bool: whether any check was passed by the provided file and correction
     """
     return any(check.execute(file, correction) for check in checks)

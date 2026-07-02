@@ -29,7 +29,7 @@ SECURITY_MESSAGE_IMPLEMENTATIONS = [
 
 
 def _file_contains_security_message(file_content: str) -> bool:
-    """Checks wether a VT content contains a call to security_message
+    """Checks whether a VT content contains a call to security_message
     or any function known to implement it
 
     Args:
@@ -86,7 +86,7 @@ class CheckSecurityMessages(FileContentPlugin):
             )
 
     def _determinate_security_message_by_severity(self, file_content: str) -> bool:
-        """Determinates wether a VT requires a
+        """Determines whether a VT requires a
         security_message or implementing function
         call
 
