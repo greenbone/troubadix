@@ -354,6 +354,54 @@ class CheckNewlinesTestCase(PluginTestCase):
             results[0].message,
         )
 
+    def test_grammar13(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"affected", value:"MyProduct version prior to'
+            ' version 1.2.3.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: version prior to version\n"
+            '- Full line: script_tag(name:"affected", value:"MyProduct version'
+            ' prior to version 1.2.3.");',
+            results[0].message,
+        )
+
+    def test_grammar14(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"affected", value:"MyProduct versions prior to'
+            ' version 1.2.3.");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+        )
+
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "VT/Include has the following grammar problem:\n"
+            "- Hit: versions prior to version\n"
+            '- Full line: script_tag(name:"affected", value:"MyProduct versions'
+            ' prior to version 1.2.3.");',
+            results[0].message,
+        )
+
     def test_grammar_fp(self):
         nasl_file = Path(__file__).parent / "test.nasl"
         content = (
@@ -429,6 +477,21 @@ class CheckNewlinesTestCase(PluginTestCase):
             "executable on\n  the exported filesystem of the remote NFS "
             "server.  If this filesystem\n  was mounted with the default "
             'hosts map, it would allow the user to\n  *snip*");\n'
+            '  script_tag(name:"solution_type", value:"VendorFix");\n'
+            '  script_tag(name:"solution", value:"meh");\n'
+        )
+        fake_context = self.create_file_plugin_context(nasl_file=nasl_file, file_content=content)
+        plugin = CheckGrammar(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_grammar_fp5(self):
+        nasl_file = Path(__file__).parent / "test.nasl"
+        content = (
+            '  script_tag(name:"cvss_base", value:"4.0");\n'
+            '  script_tag(name:"affected", value:"Subersion prior to version 1.2.3.");\n'
             '  script_tag(name:"solution_type", value:"VendorFix");\n'
             '  script_tag(name:"solution", value:"meh");\n'
         )
