@@ -70,7 +70,6 @@ def execute_git_diff(arguments: Namespace) -> list[str]:
         arguments.ref_from,
         "--name-only",
         "--diff-filter=A",
-        "--no-renames",
         "--",
         *file_extension_wildcards,
     ).splitlines()
