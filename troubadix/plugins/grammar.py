@@ -198,6 +198,15 @@ def get_grammer_pattern() -> re.Pattern:
         # Update to version to version 1.2.3
         r"in the in the|to an? to a|prior to prior to|to version to version|"
         r"update to update to|"
+        # e.g.:
+        #
+        # MyProduct versions prior to version 1.2.3.
+        # MyProduct version prior to version 1.2.3.
+        #
+        # but NOT:
+        #
+        # Subversion prior to version 1.2.3.
+        r"\s+versions? prior to version|"
         # e.g. "is prone to a security bypass vulnerabilities"
         r"is\s+prone\s+to\s+an?\s+[^\s]+\s+([^\s]+\s+)?vulnerabilities).*",
         re.IGNORECASE,
