@@ -21,6 +21,7 @@ IGNORE_FILES = [
     "2017/gb_generic_http_web_app_params_dir_trav.nasl",
     "2017/gb_generic_http_web_root_dir_trav.nasl",
     "2021/gb_generic_http_web_dirs_dir_trav.nasl",
+    "2018/gb_malicious_javascript_packages.nasl",
     # These have auto-generated affected tags which we don't want to shorten down.
     "gb_huawei-sa-",
     # Needs a description for each option which we don't want to shorten down.
