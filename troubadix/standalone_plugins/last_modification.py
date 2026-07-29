@@ -51,7 +51,7 @@ def update(nasl_file: Path, terminal: Terminal):
         terminal.warning(f'Ignoring "{nasl_file}" because it is missing a last_modification tag.')
         return
 
-    now = datetime.datetime.now(datetime.timezone.utc)
+    now = datetime.datetime.now(datetime.UTC)
     # get that date formatted correctly:
     # "2021-03-24 10:08:26 +0000 (Wed, 24 Mar 2021)"
     correctly_formatted_datetime = f"{now:%Y-%m-%d %H:%M:%S %z (%a, %d %b %Y)}"
