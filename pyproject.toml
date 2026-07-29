@@ -14,7 +14,6 @@ classifiers = [
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)", # pylint: disable=line-too-long
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Operating System :: OS Independent",
@@ -24,7 +23,7 @@ classifiers = [
 packages = [{ include = "troubadix" }, { include = "tests", format = "sdist" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 pontos = ">=22.7,<27.0"
 codespell = "2.4.3"
 python-magic = "^0.4.25"
@@ -40,7 +39,7 @@ autohooks-plugin-ruff = ">=24.1,<26.0"
 
 [tool.black]
 line-length = 100
-target-version = ['py310', 'py311', 'py312']
+target-version = ['py311', 'py312']
 exclude = '''
 /(
     \.git
@@ -58,9 +57,10 @@ exclude = '''
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 lint.extend-select = ["I", "E", "W"]
-lint.ignore = ["SIM",
+lint.ignore = [
+  "SIM",
   "PERF",
   "UP045" # allow Optional[] syntax
 ]
