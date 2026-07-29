@@ -18,9 +18,9 @@
 
 import re
 from argparse import ArgumentParser, Namespace
+from collections.abc import Iterable
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import Iterable, List
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -60,17 +60,17 @@ def compare(old_content: str, content: str):
     return missing_packages, new_packages
 
 
-def filter_reasons(packages: List[Package], reasons: Iterable[Reasons]):
+def filter_reasons(packages: list[Package], reasons: Iterable[Reasons]):
     return [
         package
         for package in packages
-        if not package.reasons or any([reason not in reasons for reason in package.reasons])
+        if not package.reasons or any(reason not in reasons for reason in package.reasons)
     ]
 
 
 def print_results(
-    missing_packages: List[Package],
-    new_packages: List[Package],
+    missing_packages: list[Package],
+    new_packages: list[Package],
     file: Path,
     terminal: ConsoleTerminal,
 ):
@@ -86,7 +86,7 @@ def print_results(
 
 
 def print_packages(
-    packages: List[Package],
+    packages: list[Package],
     terminal: ConsoleTerminal,
 ):
     with terminal.indent():

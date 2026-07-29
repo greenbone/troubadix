@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from collections.abc import Iterator
 from itertools import chain
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper import SpecialScriptTag
 from troubadix.helper.patterns import (
@@ -44,19 +44,19 @@ class CheckScriptTagWhitespaces(FileContentPlugin):
         if nasl_file.suffix == ".inc":
             return
 
-        tag_matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(file_content)
+        tag_matches = _get_tag_pattern(name=r".+?", flags=re.DOTALL).finditer(file_content)
 
         name_matches = _get_special_script_tag_pattern(name=SpecialScriptTag.NAME.value).finditer(
             file_content
         )
 
-        xref_matches = get_xref_pattern(name=r".+?", flags=re.S).finditer(file_content)
+        xref_matches = get_xref_pattern(name=r".+?", flags=re.DOTALL).finditer(file_content)
 
         matches = chain(tag_matches, name_matches, xref_matches)
 
         for match in matches:
             if re.match(r"^\s+.*", match.group("value")) or re.match(
-                r".*\s+$", match.group("value"), flags=re.S
+                r".*\s+$", match.group("value"), flags=re.DOTALL
             ):
                 yield LinterError(
                     f"{match.group(0)}: value contains a leading or trailing whitespace character",

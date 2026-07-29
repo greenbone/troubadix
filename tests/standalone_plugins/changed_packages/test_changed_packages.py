@@ -74,7 +74,7 @@ class ChangedPackagesTestCase(TestCase):
         ...some more NASL...
         """
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception):  # ruff:ignore[B017]
             get_packages(content)
 
     def test_filter_reasons(self):

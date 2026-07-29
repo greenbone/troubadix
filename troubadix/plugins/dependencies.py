@@ -18,8 +18,8 @@
 # pylint: disable=fixme
 
 import re
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper.helper import FEED_VERSIONS, is_enterprise_folder
 from troubadix.helper.patterns import _get_special_script_tag_pattern

@@ -20,8 +20,8 @@ import re
 import subprocess
 import sys
 from argparse import ArgumentParser, Namespace
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 from troubadix.argparser import file_type_existing
 from troubadix.standalone_plugins.common import git

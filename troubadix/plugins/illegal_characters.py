@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import Iterator, List
+from collections.abc import Iterator
 
 from troubadix.helper import CURRENT_ENCODING
 from troubadix.helper.patterns import get_common_tag_patterns
@@ -43,7 +43,7 @@ FORBIDDEN_CHARS = {
 }
 
 
-def check_forbidden(match: re.match) -> List[str]:
+def check_forbidden(match: re.match) -> list[str]:
     """Check the given tag for forbidden characters
 
     Args:
@@ -55,7 +55,7 @@ def check_forbidden(match: re.match) -> List[str]:
     return [char for char in FORBIDDEN_CHARS if char in match.group("value")]
 
 
-def fix_forbidden(match: re.Match, found_forbidden_characters: List[str]) -> str:
+def fix_forbidden(match: re.Match, found_forbidden_characters: list[str]) -> str:
     """Returns the fixed version of the tag with
        the forbidden characters replaced
 

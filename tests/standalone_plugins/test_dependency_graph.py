@@ -79,9 +79,8 @@ class TestCLIArgs(unittest.TestCase):
 
     @patch("sys.argv", ["prog", "--root", "not_real_dir"])
     def test_parse_args_no_dir(self):
-        with redirect_stderr(io.StringIO()) as f:
-            with self.assertRaises(SystemExit):
-                parse_args()
+        with redirect_stderr(io.StringIO()) as f, self.assertRaises(SystemExit):
+            parse_args()
         self.assertRegex(f.getvalue(), "invalid directory_type")
 
     @patch(

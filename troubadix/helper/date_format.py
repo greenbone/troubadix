@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
+from collections.abc import Iterator
 from datetime import datetime
-from typing import Iterator
 
 from troubadix.plugin import LinterError, LinterResult
 
@@ -30,7 +30,7 @@ def check_date(date: str, date_name: str, file: str, plugin: str) -> Iterator[Li
         date_left = parse_date(date)
 
         # Wed, 29 Nov 2017
-        date_right = datetime.strptime(date[27:43], "%a, %d %b %Y")
+        date_right = datetime.strptime(date[27:43], "%a, %d %b %Y")  # ruff:ignore[DTZ007]
 
         week_day_parsed = date_right.strftime("%a")
 

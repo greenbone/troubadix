@@ -18,9 +18,9 @@
 # pylint: disable=fixme
 
 import re
+from collections.abc import Iterator
 from enum import Enum
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper.patterns import (
     SpecialScriptTag,

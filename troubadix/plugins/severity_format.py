@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult

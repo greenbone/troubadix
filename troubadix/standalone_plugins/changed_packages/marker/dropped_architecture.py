@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 
 from troubadix.standalone_plugins.changed_packages.package import (
     Direction,
@@ -28,7 +27,7 @@ from .marker import Marker
 
 class DroppedArchitecture(Marker):
     @classmethod
-    def mark(cls, missing_packages: List[Package], new_packages: List[Package]):
+    def mark(cls, missing_packages: list[Package], new_packages: list[Package]):
         for package in missing_packages:
             if ":" not in package.name:
                 continue

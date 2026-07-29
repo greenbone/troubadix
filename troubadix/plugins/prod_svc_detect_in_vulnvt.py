@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
-from typing import Iterator
+from collections.abc import Iterator
 
 from troubadix.helper import ScriptTag, SpecialScriptTag, is_ignore_file
 from troubadix.helper.patterns import (

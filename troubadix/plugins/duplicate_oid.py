@@ -16,7 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import Iterator
+from collections.abc import Iterator
 
 from troubadix.helper import (
     CURRENT_ENCODING,
@@ -35,7 +35,7 @@ class CheckDuplicateOID(FilesPlugin):
     def run(self) -> Iterator[LinterResult]:
         """Run PRE_RUN_COLLECTOR."""
 
-        mapping = dict()
+        mapping = {}
 
         for nasl_file in self.context.nasl_files:
             if not nasl_file.suffix == ".nasl":

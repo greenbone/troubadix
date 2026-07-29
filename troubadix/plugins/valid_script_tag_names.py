@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper.patterns import _get_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult
@@ -88,7 +88,7 @@ class CheckValidScriptTagNames(FileContentPlugin):
             "solution_method",
         ]
 
-        matches = _get_tag_pattern(name=r".+?", flags=re.S).finditer(file_content)
+        matches = _get_tag_pattern(name=r".+?", flags=re.DOTALL).finditer(file_content)
 
         if matches:
             for match in matches:

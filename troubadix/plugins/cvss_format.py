@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult

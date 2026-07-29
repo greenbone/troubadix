@@ -21,8 +21,8 @@ import datetime
 import re
 import sys
 from argparse import ArgumentParser, Namespace
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Iterable, Sequence
 
 from pontos.terminal import Terminal
 from pontos.terminal.terminal import ConsoleTerminal
@@ -84,7 +84,7 @@ def update(nasl_file: Path, terminal: Terminal):
     nasl_file.write_text(new_file_content, encoding=CURRENT_ENCODING)
 
 
-def parse_args(args: Sequence[str] = None) -> Namespace:
+def parse_args(args: Sequence[str] | None = None) -> Namespace:
     parser = ArgumentParser(description="Update script_version and last_modification tags")
     what_group = parser.add_mutually_exclusive_group(required=True)
     what_group.add_argument(

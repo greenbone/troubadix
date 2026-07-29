@@ -1,7 +1,7 @@
 # Copyright (C) 2022 Greenbone AG
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from typing import Iterator
+from collections.abc import Iterator
 
 import magic
 

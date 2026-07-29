@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper.helper import SCRIPT_CATEGORIES
 from troubadix.plugin import FileContentPlugin, LinterError, LinterResult

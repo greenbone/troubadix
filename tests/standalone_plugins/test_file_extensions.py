@@ -114,20 +114,18 @@ class TestFileExtensions(unittest.TestCase):
 
     def test_parse_args_no_dir(self):
         test_args = ["prog", "not_real_dir"]
-        with redirect_stderr(io.StringIO()) as f:
+        with redirect_stderr(io.StringIO()) as f, patch.object(sys, "argv", test_args):
+            with self.assertRaises(SystemExit):
+                parse_args()
+            self.assertRegex(f.getvalue(), "invalid directory_type")
+
+    def test_parse_args_no_file(self):
+        with redirect_stderr(io.StringIO()) as f, tempfile.TemporaryDirectory() as tmpdir:
+            test_args = ["prog", tmpdir, "--ignore-file", "not_real_file"]
             with patch.object(sys, "argv", test_args):
                 with self.assertRaises(SystemExit):
                     parse_args()
-                self.assertRegex(f.getvalue(), "invalid directory_type")
-
-    def test_parse_args_no_file(self):
-        with redirect_stderr(io.StringIO()) as f:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                test_args = ["prog", tmpdir, "--ignore-file", "not_real_file"]
-                with patch.object(sys, "argv", test_args):
-                    with self.assertRaises(SystemExit):
-                        parse_args()
-                    self.assertRegex(f.getvalue(), "invalid file_type")
+                self.assertRegex(f.getvalue(), "invalid file_type")
 
     def test_main_ok(self):
         with tempfile.TemporaryDirectory() as tmpdir:

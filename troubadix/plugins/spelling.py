@@ -17,9 +17,9 @@
 
 import io
 import re
+from collections.abc import Iterator
 from contextlib import redirect_stdout
 from pathlib import Path
-from typing import Iterator, Tuple
 
 from codespell_lib import main as codespell_main
 
@@ -171,7 +171,7 @@ exceptions = [
 class CheckSpelling(FilesPlugin):
     name = "check_spelling"
 
-    def _parse_codespell_line(self, line: str) -> Tuple[str, str]:
+    def _parse_codespell_line(self, line: str) -> tuple[str, str]:
         if "==>" not in line:
             raise ValueError("Invalid codespell line")
 

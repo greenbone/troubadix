@@ -18,7 +18,7 @@
 
 import re
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Tuple, Union
+from collections.abc import Iterable
 
 
 class LinguisticCheck(ABC):
@@ -42,7 +42,7 @@ class FileCheck(LinguisticCheck):
 class FilesCheck(LinguisticCheck):
     """Checks whether the given file contains any of the specified file paths"""
 
-    def __init__(self, files: List[str]) -> None:
+    def __init__(self, files: list[str]) -> None:
         self.files = files
 
     def execute(self, file_path: str, correction: str):
@@ -84,12 +84,12 @@ class PatternsCheck(LinguisticCheck):
 
     def __init__(
         self,
-        patterns: Union[List[str], List[Tuple[str, re.RegexFlag]]],
+        patterns: list[str] | list[tuple[str, re.RegexFlag]],
     ) -> None:
         # Originally I tried isinstance(patterns, Tuple[...]) for testing,
         # but that throws an exception because Tuple[...]
         # is only valid for type hinting :/
-        if isinstance(patterns[0], Tuple):
+        if isinstance(patterns[0], tuple):
             self.patterns = [re.compile(pattern, flags=flags) for pattern, flags in patterns]
         else:
             self.patterns = [re.compile(pattern) for pattern in patterns]
@@ -137,7 +137,7 @@ class PatternsInFileCheck(CompositeCheck):
     def __init__(
         self,
         file: str,
-        patterns: Union[List[str], List[Tuple[str, re.RegexFlag]]],
+        patterns: list[str] | list[tuple[str, re.RegexFlag]],
     ) -> None:
         super().__init__(FileCheck(file), PatternsCheck(patterns))
 
@@ -147,7 +147,7 @@ class PatternInFilesCheck(CompositeCheck):
     and the file matches any of the specified file paths
     """
 
-    def __init__(self, files: List[str], pattern: str, flags: re.RegexFlag = 0) -> None:
+    def __init__(self, files: list[str], pattern: str, flags: re.RegexFlag = 0) -> None:
         super().__init__(FilesCheck(files), PatternCheck(pattern, flags))
 
 
@@ -177,7 +177,7 @@ class PatternsInFilePatternCheck(CompositeCheck):
     def __init__(
         self,
         file_pattern: str,
-        patterns: Union[List[str], List[Tuple[str, re.RegexFlag]]],
+        patterns: list[str] | list[tuple[str, re.RegexFlag]],
         file_pattern_flags: re.RegexFlag = 0,
     ) -> None:
         super().__init__(

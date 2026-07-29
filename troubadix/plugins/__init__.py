@@ -30,19 +30,20 @@ intended way to disable a plugin is to add `is_disabled = True` to its class.
 import difflib
 import importlib
 import pkgutil
-from typing import Iterable, Type
+from collections.abc import Iterable, Iterator
+from typing import Optional
 
 from troubadix.plugin import FilePlugin, FilesPlugin, Plugin
 
 
-def _get_all_subclasses(cls: Type) -> Iterable[Type]:
+def _get_all_subclasses(cls: type) -> Iterable[type]:
     """Recursively find all subclasses of a given class."""
     for subclass in cls.__subclasses__():
         yield subclass
         yield from _get_all_subclasses(subclass)
 
 
-def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]]:
+def _discover_plugins() -> tuple[list[type[FilePlugin]], list[type[FilesPlugin]]]:
     """
     Dynamically discover all concrete plugin classes.
 
@@ -51,7 +52,7 @@ def _discover_plugins() -> tuple[list[Type[FilePlugin]], list[Type[FilesPlugin]]
     for _loader, module_name, _is_pkg in pkgutil.iter_modules(__path__):
         importlib.import_module(f"{__name__}.{module_name}")
 
-    def _is_valid_plugin(cls: Type) -> bool:
+    def _is_valid_plugin(cls: type) -> bool:
         return cls.__module__.startswith(__name__) and not getattr(cls, "is_disabled", False)
 
     # Only include plugins defined in this package and that are not disabled.
@@ -71,24 +72,24 @@ _FILE_PLUGINS, _FILES_PLUGINS = _discover_plugins()
 class Plugins:
     def __init__(
         self,
-        file_plugins: Iterable[FilePlugin] = None,
-        files_plugins: Iterable[FilesPlugin] = None,
+        file_plugins: Optional[Iterable[FilePlugin]] = None,
+        files_plugins: Optional[Iterable[FilesPlugin]] = None,
     ):
-        self.file_plugins = tuple(file_plugins) or tuple()
-        self.files_plugins = tuple(files_plugins) or tuple()
+        self.file_plugins = tuple(file_plugins) or ()
+        self.files_plugins = tuple(files_plugins) or ()
 
     def __len__(self) -> int:
         return len(self.files_plugins + self.file_plugins)
 
-    def __iter__(self) -> Iterable[Plugin]:
+    def __iter__(self) -> Iterator[Plugin]:
         return iter(self.files_plugins + self.file_plugins)
 
 
 class StandardPlugins(Plugins):
     def __init__(
         self,
-        excluded_plugins: list[str] = None,
-        included_plugins: list[str] = None,
+        excluded_plugins: Optional[list[str]] = None,
+        included_plugins: Optional[list[str]] = None,
     ) -> None:
         file_plugins = _FILE_PLUGINS
         files_plugins = _FILES_PLUGINS

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from troubadix.plugin import LinterError, LinterWarning
@@ -123,7 +123,7 @@ class CheckCVEFormatTestCase(PluginTestCase):
             results[0].message,
         )
 
-        current_year = datetime.now().year
+        current_year = datetime.now(tz=UTC).year
         content = (
             '  script_tag(name:"cvss_base", value:"7.5");\n'
             f'  script_cve_id("CVE-{current_year + 1}-3807");\n'

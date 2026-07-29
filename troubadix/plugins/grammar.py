@@ -16,7 +16,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import Iterator
+from collections.abc import Iterator
 
 from troubadix.helper.linguistic_exception_handler import (
     PatternCheck,
@@ -130,7 +130,6 @@ def get_grammer_pattern() -> re.Pattern:
         r"\s+(with\s+with|and\s+and|this\s+this|for\s+for|as\s+as|a\s+a"
         r"|of\s+of|to\s+to|an\s+an|the\s+the|is\s+is|in\s+in|are\s+are|have"
         r"\s+have|has\s+has|that\s+that|or\s+or|and\s+or|or\s+and)\s+|"
-        #
         r"vulnerabilit(y|ies)\s+vulnerabilit(y|ies)|"
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"

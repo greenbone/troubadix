@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from datetime import datetime
+from collections.abc import Iterator
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper import ScriptTag, get_script_tag_pattern
 from troubadix.plugin import (
@@ -63,7 +63,7 @@ class CheckCVEFormat(FileContentPlugin):
 
         found_cves = []
         matches = match_result.group(0).split(",")
-        current_year = datetime.now().year
+        current_year = datetime.now(tz=UTC).year
         for match in matches:
             result = re.search(r'"CVE-\d{4}-\d{4,7}"', match)
             if result is None or result.group(0) is None:
