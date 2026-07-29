@@ -180,7 +180,7 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         tag_template = 'script_tag(name:"last_modification", value:"{date}");'
         version_template = 'script_version("{date}");'
 
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.UTC)
 
         file_content = self.context.file_content
 
