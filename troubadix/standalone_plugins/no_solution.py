@@ -15,12 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# ruff: file-ignore[DTZ007, DTZ005] # ignore timezone awareness
+
 import re
 import sys
 from argparse import ArgumentParser, Namespace
 from collections import defaultdict
 from collections.abc import Iterable
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from pontos.terminal.terminal import ConsoleTerminal
@@ -57,7 +59,7 @@ def parse_solution_date(date_string: str) -> datetime:
 
     for strptime in SOLUTION_DATE_FORMATS:
         try:
-            date = datetime.strptime(date_string, strptime)  # ruff:ignore[DTZ007]
+            date = datetime.strptime(date_string, strptime)
 
             return date
         except ValueError:
@@ -142,9 +144,7 @@ def extract_tags(content: str) -> tuple[str, datetime, datetime] | None:
     if not creation_match:
         return None
 
-    creation_date = datetime.strptime(  # ruff:ignore[DTZ007]
-        creation_match.group("value")[:10], CREATION_DATE_FORMAT
-    )
+    creation_date = datetime.strptime(creation_match.group("value")[:10], CREATION_DATE_FORMAT)
 
     oid_match = OID_PATTERN.search(content)
     if not oid_match:
@@ -184,7 +184,7 @@ def check_no_solutions(
                 milestone
                 for milestone in milestones
                 if solution_date < creation_date + timedelta(days=milestone * MONTH_AS_DAYS)
-                and milestone * MONTH_AS_DAYS <= (datetime.now(tz=UTC) - creation_date).days
+                and milestone * MONTH_AS_DAYS <= (datetime.now() - creation_date).days
             ),
             None,
         )
@@ -193,7 +193,7 @@ def check_no_solutions(
             milestone = last_milestone
 
         if not milestone or (
-            milestone == last_milestone and (datetime.now(tz=UTC) - solution_date) < snooze_duration
+            milestone == last_milestone and (datetime.now() - solution_date) < snooze_duration
         ):
             continue
 
