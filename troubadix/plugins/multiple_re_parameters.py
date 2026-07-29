@@ -2,8 +2,8 @@
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 
 import re
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Iterable, Iterator
 
 from troubadix.helper.patterns import (
     SpecialScriptTag,

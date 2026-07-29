@@ -19,9 +19,9 @@ import re
 import sys
 from argparse import ArgumentParser, Namespace
 from collections import defaultdict
-from datetime import datetime, timedelta
+from collections.abc import Iterable
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Iterable, Optional, Tuple
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -57,7 +57,7 @@ def parse_solution_date(date_string: str) -> datetime:
 
     for strptime in SOLUTION_DATE_FORMATS:
         try:
-            date = datetime.strptime(date_string, strptime)
+            date = datetime.strptime(date_string, strptime)  # ruff:ignore[DTZ007]
 
             return date
         except ValueError:
@@ -125,7 +125,7 @@ def check_skip_script(file_content: str) -> bool:
     return False
 
 
-def extract_tags(content: str) -> Optional[Tuple[str, datetime, datetime]]:
+def extract_tags(content: str) -> tuple[str, datetime, datetime] | None:
     solution_match = SOLUTION_PATTERN.search(content)
     if not solution_match:
         return None
@@ -142,7 +142,9 @@ def extract_tags(content: str) -> Optional[Tuple[str, datetime, datetime]]:
     if not creation_match:
         return None
 
-    creation_date = datetime.strptime(creation_match.group("value")[:10], CREATION_DATE_FORMAT)
+    creation_date = datetime.strptime(  # ruff:ignore[DTZ007]
+        creation_match.group("value")[:10], CREATION_DATE_FORMAT
+    )
 
     oid_match = OID_PATTERN.search(content)
     if not oid_match:
@@ -155,7 +157,7 @@ def extract_tags(content: str) -> Optional[Tuple[str, datetime, datetime]]:
 
 def get_no_solution_vts(
     files: Iterable[Path],
-) -> Iterable[Tuple[Path, str, datetime, datetime]]:
+) -> Iterable[tuple[Path, str, datetime, datetime]]:
     file_contents = ((file, file.read_text(encoding=CURRENT_ENCODING)) for file in files)
     return (
         (file, *extract_tags(content))
@@ -165,10 +167,10 @@ def get_no_solution_vts(
 
 
 def check_no_solutions(
-    files: Iterable[Tuple[Path, str, datetime, datetime]],
+    files: Iterable[tuple[Path, str, datetime, datetime]],
     milestones: list[int],
     snooze_duration: int,
-) -> list[Tuple[int, list[Tuple[Path, str, datetime, datetime]]]]:
+) -> list[tuple[int, list[tuple[Path, str, datetime, datetime]]]]:
     last_milestone = milestones[-1]
     snooze_duration = timedelta(days=snooze_duration * MONTH_AS_DAYS)
 
@@ -182,7 +184,7 @@ def check_no_solutions(
                 milestone
                 for milestone in milestones
                 if solution_date < creation_date + timedelta(days=milestone * MONTH_AS_DAYS)
-                and milestone * MONTH_AS_DAYS <= (datetime.now() - creation_date).days
+                and milestone * MONTH_AS_DAYS <= (datetime.now(tz=UTC) - creation_date).days
             ),
             None,
         )
@@ -191,7 +193,7 @@ def check_no_solutions(
             milestone = last_milestone
 
         if not milestone or (
-            milestone == last_milestone and (datetime.now() - solution_date) < snooze_duration
+            milestone == last_milestone and (datetime.now(tz=UTC) - solution_date) < snooze_duration
         ):
             continue
 
@@ -222,7 +224,7 @@ def print_info(
 
 def print_report(
     term: ConsoleTerminal,
-    summary: Iterable[Tuple[int, list[Tuple[Path, str, datetime, datetime]]]],
+    summary: Iterable[tuple[int, list[tuple[Path, str, datetime, datetime]]]],
     threshold: int,
     root: Path,
     total: int,
@@ -274,8 +276,7 @@ def main():
 
         sys.exit(1 if found_vts > 0 else 0)
 
-    # pylint: disable=broad-except
-    except Exception as e:
+    except Exception as e:  # ruff:ignore[BLE001]
         print(f"troubadix-no-solution encountered an error: {e}")
 
         sys.exit(2)

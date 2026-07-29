@@ -2,8 +2,8 @@
 # SPDX-FileCopyrightText: 2024 Greenbone AG
 
 import re
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.plugin import FileContentPlugin, LinterResult, LinterWarning
 

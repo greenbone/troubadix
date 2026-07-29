@@ -7,7 +7,6 @@ import re
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from re import Pattern
-from typing import List
 
 from git.repo.base import Repo
 
@@ -80,17 +79,17 @@ def parse_arguments() -> Namespace:
     return argument_parser.parse_args()
 
 
-def check_diff_line_starts_with_ignored_linestart(line: str, ignored_linestarts: List[str]) -> bool:
+def check_diff_line_starts_with_ignored_linestart(line: str, ignored_linestarts: list[str]) -> bool:
     return any(linestart for linestart in ignored_linestarts if line.startswith(linestart))
 
 
-def check_diff_line_matches_pattern(line: str, patterns: List[Pattern]) -> bool:
+def check_diff_line_matches_pattern(line: str, patterns: list[Pattern]) -> bool:
     return any(pattern for pattern in patterns if pattern.match(line))
 
 
 def check_diff(
-    lines: List[str], ignored_linestarts: List[str], patterns: List[Pattern]
-) -> List[str]:
+    lines: list[str], ignored_linestarts: list[str], patterns: list[Pattern]
+) -> list[str]:
     return [
         line
         for line in lines
@@ -99,17 +98,17 @@ def check_diff(
     ]
 
 
-def read_ignored_linestarts(path: Path) -> List[str]:
+def read_ignored_linestarts(path: Path) -> list[str]:
     if not path:
         return None
 
     with open(path, "r", encoding="UTF-8") as file:
-        return [line.removesuffix("\n") for line in file.readlines()]
+        return [line.removesuffix("\n") for line in file]
 
 
-def read_patterns(path: Path) -> List[Pattern]:
+def read_patterns(path: Path) -> list[Pattern]:
     with open(path, "r", encoding="UTF-8") as file:
-        return [re.compile(pattern.removesuffix("\n")) for pattern in file.readlines()]
+        return [re.compile(pattern.removesuffix("\n")) for pattern in file]
 
 
 def main() -> int:

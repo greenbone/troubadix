@@ -160,7 +160,6 @@ class CheckCopyrightYearTestCase(PluginTestCase):
             "VT header is missing a copyright text",
             results[0].message,
         )
-        return
 
     def test_pre2008_fail(self):
         path = Path("some/pre2008/file.nasl")

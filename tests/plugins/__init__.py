@@ -17,8 +17,8 @@
 
 import tempfile
 import unittest
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 from unittest.mock import MagicMock
 
 from troubadix.plugin import FilePluginContext, FilesPluginContext
@@ -52,10 +52,10 @@ class PluginTestCase(unittest.TestCase):
     def create_file_plugin_context(
         self,
         *,
-        nasl_file: Path = None,
-        file_content: str = None,
-        lines: Iterable[str] = None,
-        root: Path = None,
+        nasl_file: Path | None = None,
+        file_content: str | None = None,
+        lines: Iterable[str] | None = None,
+        root: Path | None = None,
     ) -> FilePluginContext:
         """Create a FilePluginContext mock"""
         fake_context = MagicMock()
@@ -68,8 +68,8 @@ class PluginTestCase(unittest.TestCase):
     def create_files_plugin_context(
         self,
         *,
-        nasl_files: Iterable[Path] = None,
-        root: Path = None,
+        nasl_files: Iterable[Path] | None = None,
+        root: Path | None = None,
     ) -> FilesPluginContext:
         """Create a FilePluginContext mock"""
         fake_context = MagicMock()

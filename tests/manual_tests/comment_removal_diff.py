@@ -18,7 +18,7 @@ def test_comment_removal(input_file):
     try:
         with open(input_file, "r", encoding=CURRENT_ENCODING) as f:
             original_content = f.read()
-    except Exception as e:
+    except Exception as e:  # ruff:ignore[BLE001]
         print(f"Error reading file: {e}")
         return
 

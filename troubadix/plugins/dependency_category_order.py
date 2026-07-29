@@ -18,9 +18,9 @@
 # pylint: disable=fixme
 
 import re
+from collections.abc import Iterator
 from enum import IntEnum
 from pathlib import Path
-from typing import Iterator, Union
 
 from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag
 from troubadix.helper.helper import FEED_VERSIONS
@@ -47,9 +47,7 @@ class CategoryError(Exception):
     pass
 
 
-def check_category(
-    content: str, pattern: re.Pattern, script: str
-) -> Union[LinterError, VTCategory]:
+def check_category(content: str, pattern: re.Pattern, script: str) -> LinterError | VTCategory:
     """Check if the content contains a script category
     Arguments:
         content         the content to check

@@ -26,7 +26,7 @@ from troubadix.results import FileResults
 class TestResults(unittest.TestCase):
     def test_has_no_results(self):
         fresults = FileResults(file_path=Path("some/file.nasl"))
-        fresults.add_plugin_results(plugin_name="test", results=list())
+        fresults.add_plugin_results(plugin_name="test", results=[])
 
         self.assertFalse(fresults)
 

@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
-from typing import List
 
 from troubadix.standalone_plugins.changed_packages.marker.marker import Marker
 from troubadix.standalone_plugins.changed_packages.package import (
@@ -30,7 +29,7 @@ PACKAGE_EPOCH_PATTERN = re.compile(r"^(?P<epoch>\d+):")
 
 class AddedEpoch(Marker):
     @classmethod
-    def mark(cls, missing_packages: List[Package], new_packages: List[Package]):
+    def mark(cls, missing_packages: list[Package], new_packages: list[Package]):
         for package in new_packages:
             match = PACKAGE_EPOCH_PATTERN.search(package.version)
             if not match:

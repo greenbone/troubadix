@@ -17,7 +17,7 @@
 import os
 from pathlib import Path
 from subprocess import PIPE, Popen
-from typing import AnyStr, List, Optional, Tuple, Union
+from typing import AnyStr
 
 # Script categories
 SCRIPT_CATEGORIES = {
@@ -35,7 +35,7 @@ SCRIPT_CATEGORIES = {
 }
 
 
-def is_ignore_file(file_name: Union[Path, str], ignore_files: Union[List[Path], List[str]]) -> bool:
+def is_ignore_file(file_name: Path | str, ignore_files: list[Path] | list[str]) -> bool:
     for ignore_file in ignore_files:
         if str(ignore_file) in str(file_name):
             return True
@@ -51,7 +51,7 @@ ENTERPRISE_FOLDERS = (
 FEED_VERSIONS = ["common", "21.04", "22.04", ""]
 
 
-def is_enterprise_folder(folder: Union[Path, str]) -> bool:
+def is_enterprise_folder(folder: Path | str) -> bool:
     return str(folder) in ENTERPRISE_FOLDERS
 
 
@@ -61,7 +61,7 @@ def get_path_from_root(file_name: Path, root: Path):
 
 
 # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
-def which(program: Union[Path, str]) -> Optional[Path]:
+def which(program: Path | str) -> Path | None:
     def is_exe(fpath: Path):
         if isinstance(fpath, str):
             fpath = Path(fpath)
@@ -78,7 +78,7 @@ def which(program: Union[Path, str]) -> Optional[Path]:
     return None
 
 
-def subprocess_cmd(command: str, encoding="UTF-8") -> Tuple[AnyStr, AnyStr]:
+def subprocess_cmd(command: str, encoding="UTF-8") -> tuple[AnyStr, AnyStr]:
     def any2str(str_input: AnyStr) -> str:
         if isinstance(str_input, bytes):
             return str_input.decode(encoding).strip()

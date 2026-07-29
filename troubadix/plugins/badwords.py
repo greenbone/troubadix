@@ -17,8 +17,8 @@
 
 """checking badwords in NASL scripts with the NASLinter"""
 
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Iterable, Iterator
 
 from troubadix.helper import is_ignore_file
 from troubadix.plugin import LineContentPlugin, LinterError, LinterResult

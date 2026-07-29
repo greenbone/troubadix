@@ -17,7 +17,6 @@
 
 import re
 from enum import Enum
-from typing import Dict
 
 from troubadix.helper.helper import SCRIPT_CATEGORIES
 
@@ -112,7 +111,7 @@ def init_script_tag_patterns() -> None:
     # pylint: disable=global-statement
     global __script_tag_pattern
 
-    __script_tag_pattern = dict()
+    __script_tag_pattern = {}
 
     for tag in ScriptTag:
         flags = 0
@@ -125,7 +124,7 @@ def init_script_tag_patterns() -> None:
         __script_tag_pattern[tag] = _get_tag_pattern(name=tag.value, value=value, flags=flags)
 
 
-def get_script_tag_patterns() -> Dict[ScriptTag, re.Pattern]:
+def get_script_tag_patterns() -> dict[ScriptTag, re.Pattern]:
     """Returns a dict that contains all precompiled script tag patterns"""
     if not __script_tag_pattern:
         init_script_tag_patterns()
@@ -242,7 +241,7 @@ def init_special_script_tag_patterns() -> None:
     # pylint: disable=global-statement
     global __special_script_tag_patterns
 
-    __special_script_tag_patterns = dict()
+    __special_script_tag_patterns = {}
     for tag in SpecialScriptTag:
         flags = 0
         value = __special_script_tag_values.get(tag)
@@ -256,7 +255,7 @@ def init_special_script_tag_patterns() -> None:
         )
 
 
-def get_special_script_tag_patterns() -> Dict[SpecialScriptTag, re.Pattern]:
+def get_special_script_tag_patterns() -> dict[SpecialScriptTag, re.Pattern]:
     """Returns a dict that contains all precompiled special
     script tag patterns"""
     if not __special_script_tag_patterns:

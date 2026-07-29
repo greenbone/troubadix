@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from collections.abc import Iterable, Iterator
 from pathlib import Path
-from typing import Iterable, Iterator
 
 from ..helper import is_ignore_file
 from ..plugin import LineContentPlugin, LinterResult, LinterWarning

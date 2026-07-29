@@ -18,7 +18,7 @@
 # pylint: disable=fixme
 
 import re
-from typing import Iterator
+from collections.abc import Iterator
 
 from troubadix.helper import CURRENT_ENCODING, SpecialScriptTag
 from troubadix.helper.helper import FEED_VERSIONS

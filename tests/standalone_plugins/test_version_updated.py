@@ -18,10 +18,10 @@
 import os
 import tempfile
 import unittest
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
 from subprocess import SubprocessError
-from typing import Generator
 from unittest.mock import MagicMock, patch
 
 from troubadix.standalone_plugins.version_updated import (

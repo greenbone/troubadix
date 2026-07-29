@@ -5,7 +5,6 @@ import re
 import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import List
 
 from troubadix.argparser import directory_type_existing, file_type_existing
 
@@ -36,9 +35,9 @@ def create_exclusions(ignore_file: Path) -> set[Path]:
         return {Path(line.strip()) for line in file if not re.match(r"^\s*#", line)}
 
 
-def check_extensions(args: Namespace) -> List[Path]:
+def check_extensions(args: Namespace) -> list[Path]:
     """This script checks for any non .nasl or .inc file."""
-    unwanted_files: List[Path] = []
+    unwanted_files: list[Path] = []
     allowed_extensions = [".inc", ".nasl"]
     exclusions = create_exclusions(args.ignore_file)
 

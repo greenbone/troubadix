@@ -71,7 +71,7 @@ def get_scripts(directory: Path) -> list[Script]:
     for path in directory.rglob("*.nasl"):
         try:
             content = path.read_text(encoding=CURRENT_ENCODING)
-        except Exception as e:
+        except Exception as e:  # ruff:ignore[BLE001]
             logger.error(f"Error reading file {path}: {e}")
             continue
 
@@ -83,7 +83,7 @@ def get_scripts(directory: Path) -> list[Script]:
             category = extract_category(content)
             deprecated = bool(DEPRECATED_PATTERN.search(content))
             scripts.append(Script(name, feed, dependencies, category, deprecated))
-        except Exception as e:
+        except Exception as e:  # ruff:ignore[BLE001]
             logger.error(f"Error processing {path}: {e}")
 
     return scripts

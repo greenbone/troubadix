@@ -19,7 +19,6 @@
 from argparse import ArgumentError
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict
 
 
 class Direction(Enum):
@@ -50,7 +49,7 @@ class Package:
     name: str
     version: str
     release: str
-    reasons: Dict[Reasons, Direction] = field(default_factory=dict)
+    reasons: dict[Reasons, Direction] = field(default_factory=dict)
 
     def __hash__(self) -> int:
         return hash((self.name, self.version, self.release))

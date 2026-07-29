@@ -20,8 +20,8 @@ import re
 import subprocess
 import sys
 from argparse import ArgumentParser, Namespace
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, List
 
 from troubadix.argparser import file_type_existing
 from troubadix.helper import is_ignore_file
@@ -74,7 +74,7 @@ def parse_args(args: Iterable[str]) -> Namespace:
     return parser.parse_args(args=args)
 
 
-def check_version_updated(files: List[Path], commit_range: str) -> bool:
+def check_version_updated(files: list[Path], commit_range: str) -> bool:
     """The script checks (via git diff) if the passed VT has changed the
     the following tags:
 

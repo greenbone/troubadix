@@ -2,8 +2,8 @@
 # SPDX-FileCopyrightText: 2025 Greenbone AG
 
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from troubadix.helper.if_block_parser import find_if_statements
 from troubadix.helper.remove_comments import remove_comments

@@ -5,10 +5,10 @@ import importlib.util
 import logging
 import re
 from argparse import ArgumentParser, Namespace
+from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Iterable
 
 from pontos.terminal.terminal import ConsoleTerminal
 
@@ -92,7 +92,7 @@ def _finalize_content(content: str) -> str:
     )
 
 
-def get_files_from_path(dir_path: Path = None) -> list:
+def get_files_from_path(dir_path: Path | None = None) -> list:
     """Get a list of files from the input path provided
 
     Args:
@@ -187,7 +187,7 @@ def deprecate(
 
         # Drop any unnecessary script tags like script_dependencies(),
         # script_require_udp_ports() or script_mandatory_keys()
-        tags_to_remove = list()
+        tags_to_remove = []
 
         if dependencies := re.search(
             get_special_script_tag_pattern(SpecialScriptTag.DEPENDENCIES),
@@ -217,7 +217,7 @@ def deprecate(
             f.truncate()
 
 
-def parse_args(args: Iterable[str] = None) -> Namespace:
+def parse_args(args: Iterable[str] | None = None) -> Namespace:
     parser = ArgumentParser(description="Deprecate VTs")
     parser.add_argument(
         "-o",

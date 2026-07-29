@@ -16,8 +16,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+from collections.abc import Iterator
 from itertools import chain
-from typing import AnyStr, Iterator
+from typing import AnyStr
 
 from troubadix.helper import SpecialScriptTag, get_common_tag_patterns
 from troubadix.helper.patterns import get_special_script_tag_pattern

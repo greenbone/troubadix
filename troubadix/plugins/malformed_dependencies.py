@@ -18,7 +18,7 @@
 # pylint: disable=fixme
 
 import re
-from typing import Iterator
+from collections.abc import Iterator
 
 from troubadix.helper.patterns import _get_special_script_tag_pattern
 from troubadix.plugin import FilePlugin, LinterError, LinterResult
