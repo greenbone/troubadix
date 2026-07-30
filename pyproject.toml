@@ -62,7 +62,8 @@ lint.extend-select = ["I", "E", "W"]
 lint.ignore = [
   "SIM",
   "PERF",
-  "UP045" # allow Optional[] syntax
+  "UP045", # allow Optional[] syntax
+  "RUF010" # do not use !s syntax over str()
 ]
 
 [tool.autohooks]
