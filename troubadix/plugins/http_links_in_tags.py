@@ -179,6 +179,8 @@ class CheckHttpLinksInTags(FilePlugin):
             "https://target",
             "http://target",
             "https://TOKEN@host/",
+            "`http://`",
+            "`https://`",
         ]
 
         return any(exclusion in http_link_match_group for exclusion in exclusions)
