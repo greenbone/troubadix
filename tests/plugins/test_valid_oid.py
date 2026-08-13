@@ -895,3 +895,39 @@ class CheckValidOIDTestCase(PluginTestCase):
         results = list(plugin.run())
 
         self.assertEqual(len(results), 0)
+
+    def test_script_name__product_fortinet_ok(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.2.2.2.23.490");\n'
+            '  script_name("Fortinet Security Advisory");\n'
+            '  script_family("FortiOS Local Security Checks");'
+        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 0)
+
+    def test_script_name__product_fortinet(self):
+        path = Path("some/file.nasl")
+        content = (
+            '  script_oid("1.3.6.1.4.1.25623.1.2.2.23.490");\n'
+            '  script_name("Fortinet Security Advisory");\n'
+            '  script_family("General");'
+        )
+        fake_context = self.create_file_plugin_context(nasl_file=path, file_content=content)
+        plugin = CheckValidOID(fake_context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            (
+                "script_oid() is using an OID that is reserved for 'Fortinet' "
+                "(1.3.6.1.4.1.25623.1.2.2.23.490)"
+            ),
+            results[0].message,
+        )

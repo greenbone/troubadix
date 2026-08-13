@@ -357,6 +357,32 @@ class CheckValidOID(FileContentPlugin):
 
                 return
 
+            # Fixed OID-scheme for Fortinet OIDs
+            if "1.3.6.1.4.1.25623.1.2.2." in oid:
+                if family_match.group("value") != f"FortiOS {family_template}":
+                    yield LinterError(
+                        f"script_oid() {is_using_reserved} 'Fortinet' ({str(oid)})",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+                fortinet_sa_match = re.search(
+                    r"^1\.3\.6\.1\.4\.1\.25623\.1\.2\.2\.[0-9]+\.[0-9]{2}\.[0-9]+",
+                    oid,
+                )
+                if not fortinet_sa_match:
+                    yield LinterError(
+                        f"script_oid() {invalid_oid} '{str(oid)}' "
+                        "(Fortinet pattern: 1.3.6.1.4.1.25623.1.2.2.[PRODUCT_ID]."
+                        "[ADVISORY_YEAR].[ADVISORY_ID])",
+                        file=nasl_file,
+                        plugin=self.name,
+                    )
+                    return
+
+                return
+
         # Fixed OID-scheme for Windows OIDs
         if "1.3.6.1.4.1.25623.1.3." in oid:
             if family_match.group("value") != f"Windows {family_template}":
