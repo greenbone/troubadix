@@ -109,3 +109,10 @@ class MaliciousNaslCheckTestCase(TestCase):
         self.assertEqual(result, 1)
         self.assertIn("1 Files with unexpected NASL methods were found:", stdout.getvalue())
         self.assertIn(str(vt_file), stdout.getvalue())
+
+    def test_full_nasl_file(self):
+        here = Path(__file__).parent
+        with patch("sys.argv", ["prog", "--vt-dir", str(here / "nasl/21.04")]):
+            result = main()
+
+        self.assertEqual(result, 0)
