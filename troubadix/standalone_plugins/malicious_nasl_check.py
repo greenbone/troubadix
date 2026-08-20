@@ -16,22 +16,9 @@ WHITELISTED_FILES = [
     "version_func",
 ]
 WHITELISTED_COMMANDS = [
-    "if",
-    "include",
-    "source",  # not a real method
-    "holder",  # not a real method
     "script_tag",
     "script_version",
-    "script_oid",
-    "script_name",
-    "script_cve_id",
-    "script_category",
-    "script_copyright",
-    "script_mandatory_keys",
-    "script_family",
-    "script_dependencies",
     "script_xref",
-    "exit",
     "get_app_full",
     "get_app_port",
     "get_app_version",
@@ -47,7 +34,6 @@ WHITELISTED_COMMANDS = [
     "report_fixed_ver",
     "get_app_version_and_location",
     "dpkg_get_ssh_release",
-    "get_kb_item",
     "rpm_get_ssh_release",
     "slk_get_ssh_release",
 ]
@@ -56,11 +42,12 @@ logger = logging.getLogger(__name__)
 DEFAULT_VTS_DIR = Path("vts")
 
 INCLUDE_PATTERN = re.compile(r'include\("(?P<include_name>[a-zA-Z0-9_-]+)\.inc"\);')
-COMMANDS_PATTERN = re.compile(r"\b(?P<method>[A-Za-z_][A-Za-z0-9_]*)\(")
+# characters before a `(` with more characters and then a `:`
+COMMANDS_PATTERN = re.compile(r"\b(?P<method>[A-Za-z_][A-Za-z0-9_]*)\([A-Za-z_]*:")
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser("")
+    parser = argparse.ArgumentParser("Check for unexpected files or commands in NASL scripts.")
 
     parser.add_argument(
         "-d", "--vt-dir", default=Path("vts"), type=Path, help="Root location of the VTS repository"

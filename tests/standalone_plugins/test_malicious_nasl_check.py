@@ -58,13 +58,13 @@ class MaliciousNaslCheckTestCase(TestCase):
         with TemporaryDirectory() as tempdir:
             vt_file = tempdir / "unexpected_command.nasl"
             vt_file.write_text(
-                'include("version_func.inc");\n' 'system("id");\n',
+                'include("version_func.inc");\n' 'system(id: "id");\n',
                 encoding="LATIN-1",
             )
 
             result = parse_vts(tempdir)
 
-        self.assertEqual(result, [vt_file])
+        self.assertEqual(result, [(vt_file, "system")])
 
     def test_parse_vts_scans_nested_nasl_files_only(self):
         with TemporaryDirectory() as tempdir:
@@ -72,14 +72,14 @@ class MaliciousNaslCheckTestCase(TestCase):
             nested_dir.mkdir()
 
             vt_file = nested_dir / "unexpected.nasl"
-            vt_file.write_text('exec("sh");\n', encoding="LATIN-1")
+            vt_file.write_text('exec(arg: "sh");\n', encoding="LATIN-1")
 
             ignored_file = tempdir / "unexpected.txt"
-            ignored_file.write_text('exec("sh");\n', encoding="LATIN-1")
+            ignored_file.write_text('exec(arg: "sh");\n', encoding="LATIN-1")
 
             result = parse_vts(tempdir)
 
-        self.assertEqual(result, [vt_file])
+        self.assertEqual(result, [(vt_file, "exec")])
 
     def test_main_returns_zero_without_errors(self):
         with TemporaryDirectory() as tempdir:
@@ -100,14 +100,14 @@ class MaliciousNaslCheckTestCase(TestCase):
     def test_main_returns_one_and_prints_files_with_errors(self):
         with TemporaryDirectory() as tempdir:
             vt_file = tempdir / "blocked.nasl"
-            vt_file.write_text('system("id");\n', encoding="LATIN-1")
+            vt_file.write_text('system(id: "id");\n', encoding="LATIN-1")
 
             stdout = io.StringIO()
             with redirect_stdout(stdout), patch("sys.argv", ["prog", "--vt-dir", str(tempdir)]):
                 result = main()
 
         self.assertEqual(result, 1)
-        self.assertIn("1 Files with unexpected NASL methods were found:", stdout.getvalue())
+        self.assertIn("1 file(s) with unexpected NASL methods found:", stdout.getvalue())
         self.assertIn(str(vt_file), stdout.getvalue())
 
     def test_full_nasl_file(self):
