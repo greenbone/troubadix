@@ -14,11 +14,16 @@ WHITELISTED_FILES = [
     "revisions-lib",
     "version_func",
 ]
-WHITELISTED_COMMANDS = [
+WHITELISTED_WORDS = [
+    # words that match the regex incidentally
     "if",
     "include",
     "source",
     "holder",
+    "exit",
+    "package",
+]
+WHITELISTED_COMMANDS = [
     "script_tag",
     "script_version",
     "script_oid",
@@ -30,8 +35,6 @@ WHITELISTED_COMMANDS = [
     "script_family",
     "script_dependencies",
     "script_xref",
-    "exit",
-    "package",
     "script_tag",
     "script_version",
     "script_xref",
@@ -84,11 +87,10 @@ def parse_vts(vt_dir: Path) -> list[Path]:
         content_without_insight = re.sub(
             r"name:\"insight\".*?name:\"affected\"", "", content, flags=re.DOTALL
         )
-
         for match in COMMAND_PATTERN.finditer(content_without_insight):
-            method = match.group("function_name")
-            if method not in WHITELISTED_COMMANDS:
-                files_with_errors.append((vt, method))
+            function_name = match.group("function_name")
+            if function_name not in WHITELISTED_COMMANDS + WHITELISTED_WORDS:
+                files_with_errors.append((vt, function_name))
 
     return files_with_errors
 
