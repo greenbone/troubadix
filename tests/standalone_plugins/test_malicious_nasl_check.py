@@ -34,7 +34,7 @@ class MaliciousNaslCheckTestCase(TestCase):
             vt_file.write_text(
                 'include("version_func.inc");\n'
                 "if (!infos = get_app_version_and_location(cpe: CPE, exit_no_version: TRUE))\n"
-                '  get_kb_item(name:"Settings/OS");\n',
+                '  script_xref(name:"Settings/OS");\n',
                 encoding="LATIN-1",
             )
 
@@ -52,7 +52,7 @@ class MaliciousNaslCheckTestCase(TestCase):
 
             result = parse_vts(tempdir)
 
-        self.assertEqual(result, [vt_file])
+        self.assertEqual(result, [(vt_file, "unknown_file")])
 
     def test_parse_vts_reports_unexpected_command(self):
         with TemporaryDirectory() as tempdir:
@@ -87,7 +87,7 @@ class MaliciousNaslCheckTestCase(TestCase):
             vt_file.write_text(
                 'include("version_func.inc");\n'
                 "if (TRUE) {\n"
-                '  get_kb_item(name:"Settings/OS");\n'
+                '  script_xref(name:"Settings/OS");\n'
                 "}\n",
                 encoding="LATIN-1",
             )
