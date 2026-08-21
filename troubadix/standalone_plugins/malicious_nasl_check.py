@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: 2026 Greenbone AG
 
 import argparse
-import logging
 import re
 import sys
 from pathlib import Path
@@ -37,12 +36,10 @@ WHITELISTED_COMMANDS = [
     "rpm_get_ssh_release",
     "slk_get_ssh_release",
 ]
-logger = logging.getLogger(__name__)
+
 
 DEFAULT_VTS_DIR = Path("vts")
-
 INCLUDE_PATTERN = re.compile(r'include\("(?P<include_name>[a-zA-Z0-9_-]+)\.inc"\);')
-
 # matches words (with boundary) before a `(` with an arg and then a `:`
 COMMANDS_PATTERN = re.compile(r"\b(?P<method>[A-Za-z_][A-Za-z0-9_]*)\([A-Za-z_]*:")
 
