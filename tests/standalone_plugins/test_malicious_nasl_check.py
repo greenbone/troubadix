@@ -54,7 +54,7 @@ class MaliciousNaslCheckTestCase(TestCase):
 
         self.assertEqual(result, [(vt_file, "unknown_file")])
 
-    def test_parse_vts_reports_unexpected_command(self):
+    def test_parse_vts_reports_unexpected_command_named_arg(self):
         with TemporaryDirectory() as tempdir:
             vt_file = tempdir / "unexpected_command.nasl"
             vt_file.write_text(
@@ -71,6 +71,18 @@ class MaliciousNaslCheckTestCase(TestCase):
             vt_file = tempdir / "unexpected_command.nasl"
             vt_file.write_text(
                 'include("version_func.inc");\n' "ssh_kb_privpassword();\n",
+                encoding="LATIN-1",
+            )
+
+            result = parse_vts(tempdir)
+
+        self.assertEqual(result, [(vt_file, "ssh_kb_privpassword")])
+
+    def test_parse_vts_reports_unexpected_command_unnamed_arg(self):
+        with TemporaryDirectory() as tempdir:
+            vt_file = tempdir / "unexpected_command.nasl"
+            vt_file.write_text(
+                'include("version_func.inc");\n' "ssh_kb_privpassword(something);\n",
                 encoding="LATIN-1",
             )
 
