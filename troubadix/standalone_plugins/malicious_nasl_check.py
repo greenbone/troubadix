@@ -15,6 +15,23 @@ WHITELISTED_FILES = [
     "version_func",
 ]
 WHITELISTED_COMMANDS = [
+    "if",
+    "include",
+    "source",
+    "holder",
+    "script_tag",
+    "script_version",
+    "script_oid",
+    "script_name",
+    "script_cve_id",
+    "script_category",
+    "script_copyright",
+    "script_mandatory_keys",
+    "script_family",
+    "script_dependencies",
+    "script_xref",
+    "exit",
+    "package",
     "script_tag",
     "script_version",
     "script_xref",
@@ -40,8 +57,7 @@ WHITELISTED_COMMANDS = [
 
 DEFAULT_VTS_DIR = Path("vts")
 INCLUDE_PATTERN = re.compile(r'include\("(?P<include_name>[a-zA-Z0-9_-]+)\.inc"\);')
-# matches words (with boundary) before a `(` with an arg and then a `:`
-COMMANDS_PATTERN = re.compile(r"\b(?P<method>[A-Za-z_][A-Za-z0-9_]*)\([A-Za-z_]*:")
+COMMAND_PATTERN = re.compile(r'^(?!["#]).*?(?P<function_name>\w+)\([^\)]+\)', re.MULTILINE)
 
 
 def parse_arguments():
@@ -65,8 +81,12 @@ def parse_vts(vt_dir: Path) -> list[Path]:
             if include_name not in WHITELISTED_FILES:
                 files_with_errors.append((vt, include_name))
 
-        for match in COMMANDS_PATTERN.finditer(content):
-            method = match.group("method")
+        content_without_insight = re.sub(
+            r"name:\"insight\".*?name:\"affected\"", "", content, flags=re.DOTALL
+        )
+
+        for match in COMMAND_PATTERN.finditer(content_without_insight):
+            method = match.group("function_name")
             if method not in WHITELISTED_COMMANDS:
                 files_with_errors.append((vt, method))
 
