@@ -76,7 +76,7 @@ class MaliciousNaslCheckTestCase(TestCase):
 
             result = parse_vts(tempdir)
 
-        self.assertEqual(result, [(vt_file, "system")])
+        self.assertEqual(result, [(vt_file, "ssh_kb_privpassword")])
 
     def test_parse_vts_scans_nested_nasl_files_only(self):
         with TemporaryDirectory() as tempdir:

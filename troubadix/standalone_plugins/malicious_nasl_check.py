@@ -57,7 +57,7 @@ WHITELISTED_COMMANDS = [
 
 DEFAULT_VTS_DIR = Path("vts")
 INCLUDE_PATTERN = re.compile(r'include\("(?P<include_name>[a-zA-Z0-9_-]+)\.inc"\);')
-COMMAND_PATTERN = re.compile(r'^(?!["#]).*?(?P<function_name>\w+)\([^\)]+\)', re.MULTILINE)
+COMMAND_PATTERN = re.compile(r'^(?!["#]).*?(?P<function_name>\w+)\([^\)]*\)', re.MULTILINE)
 
 
 def parse_arguments():
