@@ -67,7 +67,11 @@ def parse_arguments():
     parser = argparse.ArgumentParser("Check for unexpected files or commands in NASL scripts.")
 
     parser.add_argument(
-        "-d", "--vt-dir", default=DEFAULT_VTS_DIR, type=Path, help="Root location of the VTS repository"
+        "-d",
+        "--vt-dir",
+        default=DEFAULT_VTS_DIR,
+        type=Path,
+        help="Root location of the VTS repository",
     )
 
     return parser.parse_args()
