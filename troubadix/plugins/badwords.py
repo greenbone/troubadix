@@ -104,6 +104,7 @@ EXCEPTIONS = [
     # immutable and shouldn't be changed / require separate exclusions for each
     "https://",
     "http://",
+    "openvt",
 ]
 
 STARTS_WITH_EXCEPTIONS = [
@@ -137,20 +138,24 @@ class CheckBadwords(LineContentPlugin):
             return
 
         for i, line in enumerate(lines, 1):
-            if any(badword in line for badword in DEFAULT_BADWORDS):
-                if (
-                    not any(exception in line for exception in EXCEPTIONS)
-                    and not any(line.startswith(start) for start in STARTS_WITH_EXCEPTIONS)
-                    and not any(
-                        nasl_file.name == filename and value in line for filename, value in COMBINED
-                    )
-                ):
-                    report = f"Badword in line {i:5}: {line}"
-                    if "NVT" in line:
-                        report += '\nNote/Hint: Please use the term "VT" instead.'
-                    yield LinterError(
-                        report,
-                        plugin=self.name,
-                        file=nasl_file,
-                        line=i,
-                    )
+            found_badwords = [badword for badword in DEFAULT_BADWORDS if badword in line]
+
+            if not found_badwords:
+                continue
+
+            if (
+                not any(exception in line for exception in EXCEPTIONS)
+                and not any(line.startswith(start) for start in STARTS_WITH_EXCEPTIONS)
+                and not any(
+                    nasl_file.name == filename and value in line for filename, value in COMBINED
+                )
+            ):
+                report = f"Badword(s): '{','.join(found_badwords)}' in line {i:5}: {line}"
+                if "NVT" in line:
+                    report += '\nNote/Hint: Please use the term "VT" instead.'
+                yield LinterError(
+                    report,
+                    plugin=self.name,
+                    file=nasl_file,
+                    line=i,
+                )

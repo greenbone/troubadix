@@ -40,16 +40,33 @@ class TestBadwords(PluginTestCase):
         self.assertEqual(len(results), 3)
         self.assertIsInstance(results[0], LinterError)
         self.assertEqual(
-            "Badword in line     1: openvas is a bad word",
+            "Badword(s): 'openvas' in line     1: openvas is a bad word",
             results[0].message,
         )
         self.assertEqual(
-            "Badword in line     6: # OpenVAS Vulnerability Test",
+            "Badword(s): 'OpenVAS' in line     6: # OpenVAS Vulnerability Test",
             results[1].message,
         )
         self.assertEqual(
-            "Badword in line    10: OpenVAS is a scanner",
+            "Badword(s): 'OpenVAS' in line    10: OpenVAS is a scanner",
             results[2].message,
+        )
+
+    def test_files_multiple_badwords(self):
+        nasl_file = root / "fail_badwords_multiple.nasl"
+        context = self.create_file_plugin_context(
+            nasl_file=nasl_file,
+            lines=nasl_file.read_text(encoding=CURRENT_ENCODING).splitlines(),
+        )
+        plugin = CheckBadwords(context)
+
+        results = list(plugin.run())
+
+        self.assertEqual(len(results), 1)
+        self.assertIsInstance(results[0], LinterError)
+        self.assertEqual(
+            "Badword(s): 'openvas,nvt' in line     1: openvas is a bad word nvt",
+            results[0].message,
         )
 
     def test_combined(self):
