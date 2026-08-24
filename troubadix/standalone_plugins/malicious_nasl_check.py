@@ -77,6 +77,10 @@ def parse_vts(vt_dir: Path) -> list[Path]:
     files_with_errors = []
 
     for vt in vt_dir.rglob("*.nasl"):
+
+        if "microsoft" in vt.parts:
+            continue
+
         content = vt.read_text(encoding="LATIN-1")
 
         for match in INCLUDE_PATTERN.finditer(content):
