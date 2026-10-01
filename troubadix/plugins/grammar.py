@@ -129,7 +129,7 @@ def get_grammer_pattern() -> re.Pattern:
         # Update to version 7.2.8, 7.3.1 or or later.
         r"\s+(with\s+with|and\s+and|this\s+this|for\s+for|as\s+as|a\s+a"
         r"|of\s+of|to\s+to|an\s+an|the\s+the|is\s+is|in\s+in|are\s+are|have"
-        r"\s+have|has\s+has|that\s+that|or\s+or|and\s+or|or\s+and)\s+|"
+        r"\s+have|has\s+has|that\s+that|or\s+or|and\s+or|or\s+and|on\s+on)\s+|"
         r"vulnerabilit(y|ies)\s+vulnerabilit(y|ies)|"
         r"links\s+mentioned\s+in(\s+the)?\s+reference|"
         r"\s+an?(\s+remote)?(\s+(un)?authenticated)?\s+attackers|"
