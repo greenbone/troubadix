@@ -135,12 +135,10 @@ class Runner:
             included=self._included_plugins,
         )
 
-        start = datetime.datetime.now()  # ruff:ignore[DTZ005]
+        start = datetime.datetime.now()
         self._run_pooled(files)
 
-        self._reporter.report_info(
-            f"Time elapsed: {datetime.datetime.now() - start}"  # ruff:ignore[DTZ005]
-        )
+        self._reporter.report_info(f"Time elapsed: {datetime.datetime.now() - start}")
         self._reporter.report_statistic()
 
         # Return true if no error exists
