@@ -97,7 +97,7 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         else:
             version_str = version_match.group("value")
             try:
-                datetime.datetime.strptime(version_str, VERSION_FORMAT)  # ruff:ignore[DTZ007]
+                datetime.datetime.strptime(version_str, VERSION_FORMAT)
             except ValueError:
                 yield LinterError(
                     "False or incorrectly formatted version.",
@@ -140,12 +140,8 @@ class CheckScriptVersionAndLastModificationTags(FileContentPlugin):
         format_left = "%Y-%m-%d %H:%M:%S %z "
         format_right = "(%a, %d %b %Y)"
         try:
-            date_left = datetime.datetime.strptime(  # ruff:ignore[DTZ007]
-                date_str[:26], format_left
-            )
-            date_right = datetime.datetime.strptime(  # ruff:ignore[DTZ007]
-                date_str[26:], format_right
-            )
+            date_left = datetime.datetime.strptime(date_str[:26], format_left)
+            date_right = datetime.datetime.strptime(date_str[26:], format_right)
             week_day_parsed = date_right.strftime("%a")
         except ValueError:
             yield LinterError(
