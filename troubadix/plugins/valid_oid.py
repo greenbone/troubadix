@@ -467,6 +467,7 @@ class CheckValidOID(FileContentPlugin):
         if (
             (10000 <= oid_digit <= 29999)
             or (50000 <= oid_digit <= 210999)
+            or (220000 <= oid_digit <= 220999)
             or (700000 <= oid_digit <= 919999)
             or (1020000 <= oid_digit <= 1029999)
         ):
